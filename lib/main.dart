@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/home/home_screen.dart';
+import 'package:my_office/home/user_home_screen.dart';
 import 'package:my_office/login/login_screen.dart';
+import 'package:my_office/util/main_template.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'introduction/intro_screen.dart';
@@ -29,10 +31,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Admin Console',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        scaffoldBackgroundColor: ConstantColor.backgroundColor
+        primarySwatch: Colors.purple,
+        scaffoldBackgroundColor: ConstantColor.backgroundColor,
+          fontFamily: 'PoppinsRegular',
       ),
       home:  const InitialScreen(),
     );
@@ -45,20 +49,22 @@ class InitialScreen extends StatefulWidget {
   const InitialScreen({super.key});
 
   @override
-  InitialScreenState createState() => new InitialScreenState();
+  InitialScreenState createState() =>  InitialScreenState();
 }
 
 class InitialScreenState extends State<InitialScreen> with AfterLayoutMixin<InitialScreen> {
+
   Future checkFirstSeen() async {
+    final navigation=Navigator.of(context);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool seen = (prefs.getBool('seen') ?? false);
 
     if (seen) {
-      Navigator.of(context).pushReplacement(
+     navigation .pushReplacement(
            MaterialPageRoute(builder: (context) =>  const AuthenticationScreen()));
     } else {
       await prefs.setBool('seen', true);
-      Navigator.of(context).pushReplacement(
+      navigation.pushReplacement(
            MaterialPageRoute(builder: (context) =>  const IntroductionScreen()));
     }
   }
@@ -89,7 +95,8 @@ class AuthenticationScreen extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             // print('iam inside of home ');
-            return const HomeScreen();
+            // return const HomeScreen();
+            return const  UserHomeScreen();
           } else {
             // print('iam inside of login ');
             return const LoginScreen();

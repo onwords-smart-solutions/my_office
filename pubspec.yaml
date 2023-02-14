@@ -48,6 +48,7 @@ dependencies:
   shared_preferences: ^2.0.17
   after_layout: ^1.2.0
   intl: ^0.17.0
+  iconsax:
 
 
 

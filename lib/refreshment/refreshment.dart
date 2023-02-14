@@ -37,9 +37,9 @@ class _RefreshmentsScreenState extends State<RefreshmentsScreen> {
       body: Stack(
         children: [
           Positioned(
-            top: height * 0.0,
-            left: width * 0.0,
-            right: width * 0.0,
+            top:  0.0,
+            left: 0.0,
+            right: 0.0,
             bottom: height * 0.06,
             child: Container(
               height: height * 0.95,
@@ -100,7 +100,7 @@ class _RefreshmentsScreenState extends State<RefreshmentsScreen> {
                     right: width * 0.05,
                     child: GestureDetector(
                       onTap: () {
-                        setState(() {
+
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
@@ -142,7 +142,7 @@ class _RefreshmentsScreenState extends State<RefreshmentsScreen> {
                               ],
                             ),
                           );
-                        });
+
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
