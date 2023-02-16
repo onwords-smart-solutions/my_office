@@ -1,12 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:my_office/database/hive_operations.dart';
 import 'package:my_office/login/singIn_screen.dart';
+import 'package:my_office/models/staff_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 import '../home/home_screen.dart';
+import '../home/user_home_screen.dart';
 import 'forget_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -327,7 +331,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> submitForm() async {
     final valid = _formKey.currentState!.validate();
     if (valid) {
-      if(!mounted)return;
+      if (!mounted) return;
       setState(() {
         _isLoading = true;
       });
@@ -337,18 +341,17 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> signIn() async {
-    final navigator = Navigator.of(context);
     try {
-      await _auth.signInWithEmailAndPassword(
+      await _auth
+          .signInWithEmailAndPassword(
         email: _email,
         password: _password,
-      );
-
-      navigator.pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const HomeScreen()),
-          (route) => false);
+      )
+          .then((value) {
+        getStaffDetails(userCredential: value);
+      });
     } on FirebaseAuthException catch (e) {
-      if(!mounted)return;
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
       });
@@ -362,6 +365,36 @@ class _LoginScreenState extends State<LoginScreen> {
         showErrorSnackbar(message: 'Something went wrong. try again!');
       }
     }
+  }
+
+  void getStaffDetails({required UserCredential userCredential}) {
+    final navigator = Navigator.of(context);
+    final staffLocation = FirebaseDatabase.instance.ref().child("staff");
+    staffLocation.child(userCredential.user!.uid).once().then((details) async {
+      if (details.snapshot.value != null) {
+        Map<Object?, Object?> data =
+            details.snapshot.value as Map<Object?, Object?>;
+        final staffInfo = StaffModel(
+          name: data['name'].toString(),
+          uid: userCredential.user!.uid,
+          email: data['email'].toString(),
+          department: data['department'].toString(),
+        );
+
+        await HiveOperations().addStaffDetail(staff: staffInfo);
+        //Moving to home-screen
+        navigator.pushAndRemoveUntil(
+            MaterialPageRoute(builder: (_) => const UserHomeScreen()),
+            (route) => false);
+      } else {
+        showErrorSnackbar(message: 'Something went wrong. Try again later!');
+        try {
+          FirebaseAuth.instance.signOut();
+        } catch (e) {
+          print('user not logged in $e');
+        }
+      }
+    });
   }
 
   //SNACK BAR

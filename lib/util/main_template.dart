@@ -1,23 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
+import 'package:my_office/database/hive_operations.dart';
+import 'package:my_office/models/staff_model.dart';
+import 'package:my_office/staff/staff_detail.dart';
 import '../Constant/fonts/constant_font.dart';
 
-class MainTemplate extends StatelessWidget {
+class MainTemplate extends StatefulWidget {
   final Widget templateBody;
-  final String name;
   final String subtitle;
   final Color bgColor;
   final Widget? bottomImage;
 
   const MainTemplate(
       {Key? key,
-      required this.name,
       required this.subtitle,
       required this.templateBody,
       required this.bgColor,
       this.bottomImage})
       : super(key: key);
+
+  @override
+  State<MainTemplate> createState() => _MainTemplateState();
+}
+
+class _MainTemplateState extends State<MainTemplate> {
+  @override
+  void initState() {
+    HiveOperations().getUStaffDetail();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +48,7 @@ class MainTemplate extends StatelessWidget {
                 padding: EdgeInsets.only(
                     top: MediaQuery.of(context).viewPadding.top * 1.5),
                 decoration: BoxDecoration(
-                  color: bgColor,
+                  color: widget.bgColor,
                   borderRadius: const BorderRadius.only(
                     bottomRight: Radius.circular(40.0),
                     bottomLeft: Radius.circular(40.0),
@@ -46,56 +59,77 @@ class MainTemplate extends StatelessWidget {
                     bottomRight: Radius.circular(40.0),
                     bottomLeft: Radius.circular(40.0),
                   ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: ValueListenableBuilder(
+                      valueListenable: staffDetails,
+                      builder: (BuildContext ctx, List<StaffModel> staffInfo,
+                          Widget? child) {
+                        return Column(
                           children: [
-                            //Name and subtitle
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Hi $name',
-                                  style: TextStyle(
-                                    fontFamily: ConstantFonts.poppinsMedium,
-                                    fontSize: 24.0,
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  //Name and subtitle
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        staffInfo.isEmpty
+                                            ? 'Hi'
+                                            : 'Hi ${staffInfo[0].name}',
+                                        style: TextStyle(
+                                          fontFamily:
+                                              ConstantFonts.poppinsMedium,
+                                          fontSize: 24.0,
+                                        ),
+                                      ),
+                                      Text(
+                                        widget.subtitle,
+                                        style: TextStyle(
+                                          fontFamily:
+                                              ConstantFonts.poppinsMedium,
+                                          fontSize: 14.0,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                Text(
-                                  subtitle,
-                                  style: TextStyle(
-                                    fontFamily: ConstantFonts.poppinsMedium,
-                                    fontSize: 14.0,
-                                  ),
-                                ),
-                              ],
-                            ),
 
-                            //Profile icon
-                            const CircleAvatar(
-                              radius: 20.0,
-                              backgroundColor: ConstantColor.backgroundColor,
-                              foregroundColor: Colors.white,
-                              child: Icon(Iconsax.user),
+                                  //Profile icon
+                                  GestureDetector(
+                                    onTap: () {
+                                      HapticFeedback.mediumImpact();
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (_) => StaffDetail(
+                                                  details: staffInfo[0])));
+                                    },
+                                    child: const CircleAvatar(
+                                      radius: 20.0,
+                                      backgroundColor:
+                                          ConstantColor.backgroundColor,
+                                      foregroundColor: Colors.white,
+                                      child: Icon(Iconsax.user),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
+                            const SizedBox(height: 25.0),
+
+                            //Custom widget section
+                            Expanded(child: widget.templateBody),
                           ],
-                        ),
-                      ),
-                      const SizedBox(height: 25.0),
-
-                      //Custom widget section
-                      Expanded(child: templateBody),
-                    ],
-                  ),
+                        );
+                      }),
                 ),
               ),
             ),
             //Illustration at the bottom
-            if(bottomImage!=null)
-            bottomImage!,
+            if (widget.bottomImage != null) widget.bottomImage!,
           ],
         ),
       ),

@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
@@ -12,6 +15,68 @@ class RefreshmentDetails extends StatefulWidget {
 }
 
 class _RefreshmentDetailsState extends State<RefreshmentDetails> {
+  String _dayTime = 'Morning';
+  int _coffeeCount = 0;
+  int _teaCount = 0;
+  int _foodCount = 0;
+  late Timer _timer;
+  var _data;
+  var _foodData;
+  final _today = DateTime.now();
+
+  Future<void> getData() async {
+    final day = _today.day < 10 ? '0${_today.day}' : _today.day;
+    final month = _today.month < 10 ? '0${_today.month}' : _today.month;
+    final String format = '${_today.year}-$month-$day';
+    String mode = '';
+
+    setState(() {
+      if (_today.hour <= 11) {
+        _dayTime = 'Morning';
+        mode = 'FN';
+      } else {
+        _dayTime = 'Evening';
+        mode = 'AN';
+      }
+    });
+
+    final ref = FirebaseDatabase.instance.ref();
+    final snapshot = await ref.child('/refreshments/$format/$mode').get();
+    if (snapshot.exists) {
+      if (!mounted) return;
+      setState(() {
+        _data = snapshot.value;
+        _coffeeCount = _data['coffee_count'] ?? 0;
+        _teaCount = _data['tea_count'] ?? 0;
+      });
+    }
+
+    //Food section
+    final foodSnapshot = await ref.child('/refreshments/$format/Lunch').get();
+    if (foodSnapshot.exists) {
+      if (!mounted) return;
+      setState(() {
+        _foodData = foodSnapshot.value;
+        _foodCount = _foodData['lunch_count'] ?? 0;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    getData();
+    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
+      getData();
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -29,13 +94,13 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                 borderRadius: BorderRadius.circular(15.0)),
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(0.0),
                 child: Column(
                   children: [
                     buildHeadSection(),
-                    buildTeaSection(),
-                    buildCoffeeSection(),
-                    buildFoodSection(),
+                    // buildTeaSection(),
+                    // buildCoffeeSection(),
+                    // buildFoodSection(),
                   ],
                 ),
               ),
@@ -51,7 +116,7 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
       alignment: AlignmentDirectional.topEnd,
       children: [
         Container(
-      width: double.infinity,
+          width: double.infinity,
           padding: const EdgeInsets.all(10.0),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15.0),
@@ -71,12 +136,19 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                     fontSize: 16.0,
                     fontFamily: ConstantFonts.poppinsMedium),
               ),
+              Text(
+                _dayTime,
+                style: TextStyle(
+                    color: const Color(0xff8355B7),
+                    fontSize: 16.0,
+                    fontFamily: ConstantFonts.poppinsMedium),
+              ),
               const SizedBox(height: 20.0),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
-             physics: const BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width*.8,
+                  width: MediaQuery.of(context).size.width * .8,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -90,7 +162,7 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                           ),
                           const SizedBox(width: 5.0),
                           Text(
-                            'Tea 34',
+                            'Tea $_teaCount',
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 14.0,
@@ -108,7 +180,7 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                             scale: 3,
                           ),
                           const SizedBox(width: 5.0),
-                          Text('Coffee 04',
+                          Text('Coffee $_coffeeCount',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 14.0,
@@ -124,7 +196,7 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                             'assets/food.png',
                             scale: 3.5,
                           ),
-                          Text('Food 24',
+                          Text('Food $_foodCount',
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 14.0,
@@ -139,8 +211,8 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
           ),
         ),
         IconButton(
-          onPressed: () =>Navigator.of(context).pop(),
-          icon:const Icon(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: const Icon(
             Iconsax.close_square5,
             color: Colors.redAccent,
           ),
@@ -151,7 +223,16 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
   }
 
   Widget buildTeaSection() {
-    List<String> teaNames = ['Jibin', 'Mohan', 'Vinith', 'Ganesh'];
+    List<String> listOfTea = [];
+
+    if (_teaCount > 0) {
+      final Map<dynamic, dynamic> tea = _data['tea'];
+      final teaKeys = tea.keys;
+      for (var i in teaKeys) {
+        listOfTea.add(tea[i]);
+      }
+    }
+
     return Container(
       margin: const EdgeInsets.only(top: 25.0, left: 30.0),
       child: Column(
@@ -170,11 +251,11 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
               children: [
                 Expanded(
                   child: ListView.builder(
-                      itemCount: teaNames.length,
+                      itemCount: listOfTea.length,
                       padding: const EdgeInsets.symmetric(vertical: 5.0),
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (ctx, index) {
-                        return Text(teaNames[index]);
+                        return Text(listOfTea[index]);
                       }),
                 ),
                 Image.asset(
@@ -190,15 +271,14 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
   }
 
   Widget buildCoffeeSection() {
-    List<String> teaNames = [
-      'Jeeva',
-      'Ram',
-      'Koushik',
-      'Jyothi',
-      'Kavin',
-      'Anitha',
-      'Bala'
-    ];
+    List<String> listOfCoffee = [];
+    if (_coffeeCount > 0) {
+      final Map<dynamic, dynamic> coffee = _data['coffee'];
+      final coffeeKeys = coffee.keys;
+      for (var i in coffeeKeys) {
+        listOfCoffee.add(coffee[i]);
+      }
+    }
     return Container(
       margin: const EdgeInsets.only(top: 15.0, left: 30.0),
       child: Column(
@@ -217,11 +297,11 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
               children: [
                 Expanded(
                   child: ListView.builder(
-                      itemCount: teaNames.length,
+                      itemCount: listOfCoffee.length,
                       padding: const EdgeInsets.symmetric(vertical: 5.0),
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (ctx, index) {
-                        return Text(teaNames[index]);
+                        return Text(listOfCoffee[index]);
                       }),
                 ),
                 Image.asset(
@@ -237,15 +317,14 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
   }
 
   Widget buildFoodSection() {
-    List<String> teaNames = [
-      'Jeeva',
-      'Ram',
-      'Koushik',
-      'Jyothi',
-      'Kavin',
-      'Anitha',
-      'Bala'
-    ];
+    List<String> listOfFood = [];
+    if (_foodCount > 0) {
+      final Map<dynamic, dynamic> food = _foodData['lunch_list'];
+      final foodKeys = food.keys;
+      for (var i in foodKeys) {
+        listOfFood.add(food[i]);
+      }
+    }
     return Container(
       margin: const EdgeInsets.only(top: 15.0, left: 30.0),
       child: Column(
@@ -264,17 +343,17 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
               children: [
                 Expanded(
                   child: ListView.builder(
-                      itemCount: teaNames.length,
+                      itemCount: listOfFood.length,
                       padding: const EdgeInsets.symmetric(vertical: 5.0),
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (ctx, index) {
-                        return Text(teaNames[index]);
+                        return Text(listOfFood[index]);
                       }),
                 ),
-                Image.asset(
-                  'assets/coffee_design.png',
-                  scale: 4.0,
-                ),
+                // Image.asset(
+                //   'assets/coffee_design.png',
+                //   scale: 4.0,
+                // ),
               ],
             ),
           )

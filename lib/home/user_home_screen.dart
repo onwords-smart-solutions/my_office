@@ -2,16 +2,18 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
-import 'package:my_office/refreshment/refreshement_screen.dart';
+import 'package:my_office/PR/customer_detail_screen.dart';
+import 'package:my_office/models/staff_model.dart';
+import 'package:my_office/refreshment/refreshment_screen.dart';
 import 'package:my_office/util/main_template.dart';
 
 import '../Absentees/absentees.dart';
 import '../Constant/fonts/constant_font.dart';
+import '../database/hive_operations.dart';
 import '../leads/search_leads.dart';
 import '../leave_apply/leave_apply_screen.dart';
 import '../leave_approval/leave_request.dart';
 import '../onyx/announcement.dart';
-import '../refreshment/refreshment.dart';
 import '../work_done/work_complete.dart';
 import '../work_manager/work_entry.dart';
 
@@ -24,9 +26,14 @@ class UserHomeScreen extends StatefulWidget {
 
 class _UserHomeScreenState extends State<UserHomeScreen> {
   @override
+  void initState() {
+    HiveOperations().getUStaffDetail();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MainTemplate(
-      name: 'Test Admin',
       subtitle: 'Choose your destination here!',
       templateBody: buildMenuGrid(),
       bgColor: ConstantColor.background1Color,
@@ -34,77 +41,87 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   }
 
   Widget buildMenuGrid() {
-    return GridView(
-      physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10.0,
-          mainAxisSpacing: 10.0,
-          mainAxisExtent: 230
-          // childAspectRatio: 3.0
+    return ValueListenableBuilder(
+        valueListenable: staffDetails,
+        builder: (BuildContext ctx, List<StaffModel> staffInfo, Widget? child) {
+          return staffInfo.isNotEmpty
+              ? GridView(
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10.0,
+                      mainAxisSpacing: 10.0,
+                      mainAxisExtent: 230),
+                  children: [
+                    buildButton(
+                      name: 'Work Manager',
+                      image: Image.asset(
+                        'assets/work_entry.png',
+                        scale: 3.5,
+                      ),
+                      page: const WorkEntryScreen(),
+                    ),
+                    buildButton(
+                        name: 'Refreshment',
+                        image: Image.asset(
+                          'assets/refreshment.png',
+                          scale: 3.8,
+                        ),
+                        page: RefreshmentScreen(
+                          uid: staffInfo[0].uid,
+                          name: staffInfo[0].name,
+                        )),
+                    // buildButton(
+                    //     name: 'Leave form',
+                    //     image: Image.asset('assets/leave_apply.png'),
+                    //     page: const LeaveApplyScreen()),
+                    // buildButton(
+                    //     name: 'Search leads',
+                    //     image: Image.asset(
+                    //       'assets/lead search.png',
+                    //       scale: 3.0,
+                    //     ),
+                    //     page: const SearchLeadsScreen()),
+                    // buildButton(
+                    //     name: 'Onyx',
+                    //     image: Image.asset(
+                    //       'assets/onxy.png',
+                    //       scale: 3.4,
+                    //     ),
+                    //     page: const AnnouncementScreen()),
+                    buildButton(
+                        name: 'Work done',
+                        image: Image.asset(
+                          'assets/work_entry.png',
+                          scale: 3.5,
+                        ),
+                        page: const WorkCompleteViewScreen()),
+                    // buildButton(
+                    //     name: 'Absent Details',
+                    //     image: Image.asset(
+                    //       'assets/lead search.png',
+                    //       scale: 3.0,
+                    //     ),
+                    //     page: const AbsenteeScreen()),
 
-          ),
-      children: [
-        buildButton(
-          name: 'Work Manager',
-          image: Image.asset(
-            'assets/work_entry.png',
-            scale: 3.5,
-          ),
-          page: const WorkEntryScreen(),
-        ),
-        buildButton(
-            name: 'Refreshment',
-            image: Image.asset(
-              'assets/refreshment.png',
-              scale: 3.8,
-            ),
-            page: const RefreshmentScreen()),
-        buildButton(
-            name: 'Leave form',
-            image: Image.asset('assets/leave_apply.png'),
-            page: const LeaveApplyScreen()),
-        buildButton(
-            name: 'Search leads',
-            image: Image.asset(
-              'assets/lead search.png',
-              scale: 3.0,
-            ),
-            page: const SearchLeadsScreen()),
-        buildButton(
-            name: 'Onyx',
-            image: Image.asset(
-              'assets/onxy.png',
-              scale: 3.4,
-            ),
-            page: const AnnouncementScreen()),
-        buildButton(
-            name: 'Work done',
-            image: Image.asset(
-              'assets/work_entry.png',
-              scale: 3.5,
-            ),
-            page: const WorkCompleteViewScreen()),
-        buildButton(
-            name: 'Absent Details',
-            image: Image.asset(
-              'assets/lead search.png',
-              scale: 3.0,
-            ),
-            page: const AbsenteeScreen()),
-        buildButton(
-          name: 'Leave Approval page',
-          image: Image.asset(
-            'assets/leave form.png',
-            scale: 4.0,
-          ),
-          page: const LeaveApprovalScreen(),
-        ),
-      ],
-    );
+                    // if(staffInfo[0].department=='PR')
+                    if(staffInfo[0].department=='APP')
+                    buildButton(
+                      name: 'Customer Details',
+                      image: Image.asset(
+                        'assets/leave form.png',
+                        scale: 4.0,
+                      ),
+                      page: const CustomerDetailScreen(),
+                    ),
+                  ],
+                )
+              : const Center(
+                  child: CircularProgressIndicator(strokeWidth: 2.5));
+        });
   }
 
   Widget buildButton(
@@ -113,9 +130,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       onTap: () {
         HapticFeedback.heavyImpact();
 
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => page));
-
+        Navigator.push(context, MaterialPageRoute(builder: (context) => page));
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20.0),
