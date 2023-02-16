@@ -1,18 +1,22 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/animate.dart';
+import 'package:flutter_animate/effects/fade_effect.dart';
 import 'package:intl/intl.dart';
+import 'package:my_office/util/main_template.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 
 class WorkEntryScreen extends StatefulWidget {
-  const WorkEntryScreen({Key? key}) : super(key: key);
+  final String userId;
+  final String staffName;
+
+  const WorkEntryScreen({Key? key, required this.userId, required this.staffName}) : super(key: key);
 
   @override
   State<WorkEntryScreen> createState() => _WorkEntryScreenState();
@@ -23,22 +27,21 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   TabController? _tabController;
 
   final staff = FirebaseDatabase.instance.ref().child("staff");
-  final user = FirebaseAuth.instance.currentUser;
+
+  // final user = FirebaseAuth.instance.currentUser;
   final fingerPrint = FirebaseDatabase.instance.ref().child("fingerPrint");
 
-  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _workController = TextEditingController();
+  final TextEditingController _percentController = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
 
   double percent = 0;
-
-  var startTime;
-  var endTime;
+  bool isSubmit = false;
 
   var formattedDate;
   var formattedMonth;
   var formattedYear;
-
   String? formattedTime;
 
   todayDate() {
@@ -50,34 +53,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
     formattedDate = formatterDate.format(now);
     formattedYear = formatterYear.format(now);
     formattedMonth = formatterMonth.format(now);
-    // print(formattedTime);
-    // print(formattedDate);
   }
-
-  String userName = '';
-  String mailID = '';
-  String department = '';
-
-  SharedPreferences? preferences;
-
-  late SharedPreferences logData;
-
-  Future getSharedPreference() async {
-    preferences = await SharedPreferences.getInstance();
-    String? name = preferences?.getString('name');
-    String? emailId = preferences?.getString('email');
-    String? dep = preferences?.getString('department');
-    if (name == null) return;
-    setState(() {
-      userName = name;
-      mailID = emailId!;
-      department = dep!;
-    });
-  }
-
-
-
-
 
   String? currentUser;
   var fbData;
@@ -87,64 +63,110 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   List startTimeList = [];
   List workDoneList = [];
   List workPercentageList = [];
-  List totalWorkingTimeList = [];
-  List dayTotalWrk = [];
+  // List totalWorkingTimeList = [];
 
-  viewWorkDone() {
+  getWorkDone() {
     nameList.clear();
-    totalWorkingTimeList.clear();
+    // totalWorkingTimeList.clear();
     startTimeList.clear();
     endTimeList.clear();
     workPercentageList.clear();
     workDoneList.clear();
-    staff.once().then((value) {
-      for (var step1 in value.snapshot.children) {
-        fbData = step1.value;
-        if (fbData['email'] == currentUser) {
-          for (var step2 in step1.children) {
-            if (step2.key == "workManager") {
-              for (var step3 in step2.children) {
-                for (var step4 in step3.children) {
-                  if (step4.key == formattedYear) {
-                    for (var step5 in step4.children) {
-                      if (step5.key == formattedMonth) {
-                        for (var step6 in step5.children) {
-                          if (step6.key == formattedDate) {
-                            for (var step7 in step6.children) {
-                              fbData = step7.value;
-                              if (fbData['to'] != null) {
-                                nameList.remove(fbData['to']);
-                                setState(() {
-                                  startTimeList.add(fbData['from']);
-                                  endTimeList.add(fbData['to']);
-                                  workPercentageList.add(fbData['workPercentage']);
-                                  workDoneList.add(fbData['workDone']);
-                                  totalWorkingTimeList.add(fbData['time_in_hours']);
-                                  nameList.add(fbData['name']);
-                                  // print(nameView);
-                                });
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+    staff
+        .child(
+            "${widget.userId}/workManager/timeSheet/$formattedYear/$formattedMonth/$formattedDate")
+        .once()
+        .then((value) {
+      for (var loop in value.snapshot.children) {
+        fbData = loop.value;
+        if(!mounted) return;
+        setState(() {
+          startTimeList.add(fbData['from']);
+          endTimeList.add(fbData['to']);
+          workPercentageList.add(fbData['workPercentage']);
+          workDoneList.add(fbData['workDone']);
+          // totalWorkingTimeList.add(fbData['time_in_hours']);
+        });
       }
     });
+  }
+
+  String timeOfStart = '';
+  String timeOfEnd = '';
+  String percentage = '';
+
+  String? from;
+  String? to;
+  var wrkDone;
+
+  createNewWork() {
+    staff.child(
+        "${widget.userId}/workManager/timeSheet/$formattedYear/$formattedMonth/$formattedDate/${timeOfStart.toString().trim()} To ${timeOfEnd.toString().trim()}")
+      .set({
+        "from": timeOfStart.toString().trim(),
+        "to": timeOfEnd.toString().trim(),
+        "workDone": _workController.text.toString().trim(),
+        "workPercentage": "${_percentController.text.toString().trim()}%",
+        'name': widget.staffName.toString().trim(),
+      }).then((value) {
+        timeOfStart = '';
+        timeOfEnd = '';
+        _workController.clear();
+        _percentController.clear();
+        getWorkDone();
+    });
+  }
+
+  startTime() async {
+    TimeOfDay? pickedTime = await showTimePicker(
+      initialTime: TimeOfDay.now(),
+      context: context,
+    );
+
+    if (pickedTime != null) {
+      DateTime parsedTime =
+          DateFormat.jm().parse(pickedTime.format(context).toString());
+
+      ///converting to DateTime so that we can further format on different pattern.
+      String formattedTime = DateFormat('HH:mm').format(parsedTime);
+
+      ///DateFormat() is from intl package, you can format the time on any pattern you need.
+      setState(() {
+        timeOfStart = formattedTime;
+        // print(timeOfStart);
+      });
+    }
+  }
+
+  endTime() async {
+    TimeOfDay? pickedTime = await showTimePicker(
+      initialTime: TimeOfDay.now(),
+      context: context,
+    );
+
+    if (pickedTime != null) {
+      DateTime parsedTime =
+          DateFormat.jm().parse(pickedTime.format(context).toString());
+
+      ///converting to DateTime so that we can further format on different pattern.
+      // String formattedTime = DateFormat('HH:mm:ss').format(parsedTime);
+      String formattedTime = DateFormat('HH:mm').format(parsedTime);
+
+      ///DateFormat() is from intl package, you can format the time on any pattern you need.
+      setState(() {
+        timeOfEnd = formattedTime;
+        // print(timeOfEnd);
+      });
+    } else {
+      // print("Time is not selected");
+    }
   }
 
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
-    getSharedPreference();
     todayDate();
-    viewWorkDone();
+    getWorkDone();
     super.initState();
   }
 
@@ -152,103 +174,59 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: Stack(
-        children: [
-          Positioned(
-            top: height * 0.0,
-            left: width * 0.0,
-            right: width * 0.0,
-            bottom: height * 0.05,
-            child: Container(
-              height: height * 0.95,
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                  color: ConstantColor.background1Color,
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(30),
-                      bottomRight: Radius.circular(30))),
-              child: Stack(
-                children: [
-                  /// Top circle
-                  Positioned(
-                    top: height * 0.05,
-                    // left: width * 0.05,
-                    right: width * 0.05,
-                    child: const CircleAvatar(
-                      backgroundColor: ConstantColor.backgroundColor,
-                      radius: 20,
-                      child: Icon(
-                        Icons.person_rounded,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
+    return MainTemplate(
+      subtitle: 'Update your works here !',
+      templateBody: bodyContent(height, width),
+      bgColor: ConstantColor.background1Color,
 
-                  ///Top Text...
-                  Positioned(
-                    top: height * 0.05,
-                    left: width * 0.05,
-                    // right: width*0.0,
-                    child: RichText(
-                      text: TextSpan(children: [
-                        TextSpan(
-                          text: 'Hi Ganesh\n',
-                          style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsMedium,
-                            color: ConstantColor.blackColor,
-                            fontSize: height * 0.030,
-                          ),
-                        ),
-                        TextSpan(
-                          text: 'Update your works here !',
-                          style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsMedium,
-                            color: ConstantColor.blackColor,
-                            fontSize: height * 0.020,
-                          ),
-                        ),
-                      ]),
-                    ),
-                  ),
+    );
+  }
 
-                  /// TabBar...
-                  Positioned(
-                    top: height * 0.15,
-                    left: width * 0.05,
-                    right: width * 0.05,
-                    // bottom: height * 0.0,
-                    child: Container(
-                      padding: const EdgeInsets.all(5),
-                      height: height * 0.08,
-                      decoration: BoxDecoration(
-                        color: ConstantColor.background1Color,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: const [
-                          BoxShadow(
-                              color: Colors.black12,
-                              offset: Offset(-6.0, 6.0),
-                              blurRadius: 5),
-                        ],
-                      ),
-                      child: tabBarContainer(height, width),
-                    ),
+  Widget bodyContent(double height, double width) {
+    return Stack(
+      children: [
+        Positioned(
+          top: height * 0.0,
+          left: width * 0.0,
+          right: width * 0.0,
+          bottom: height * 0.05,
+          child: Stack(
+            children: [
+              /// TabBar...
+              Positioned(
+                top: height * 0.01,
+                left: width * 0.05,
+                right: width * 0.05,
+                // bottom: height * 0.0,
+                child: Container(
+                  padding: const EdgeInsets.all(5),
+                  height: height * 0.08,
+                  decoration: BoxDecoration(
+                    color: ConstantColor.background1Color,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                          color: Colors.black12,
+                          offset: Offset(-6.0, 6.0),
+                          blurRadius: 5),
+                    ],
                   ),
-
-                  /// TabBarView...
-                  Positioned(
-                    top: height * 0.25,
-                    left: width * 0.01,
-                    right: width * 0.01,
-                    bottom: height * 0.01,
-                    child: tabViewContainer(height, width),
-                  ),
-                ],
+                  child: tabBarContainer(height, width),
+                ),
               ),
-            ),
+
+              /// TabBarView...
+              Positioned(
+                top: height * 0.13,
+                left: width * 0.01,
+                right: width * 0.01,
+                bottom: height * 0.01,
+                child: tabViewContainer(height, width),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -324,56 +302,154 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                         blurRadius: 5),
                   ]),
               child: textFiledWidget(height, TextInputType.text,
-                  TextInputAction.done, 'Enter Work', _addressController),
+                  TextInputAction.done, 'Enter Work', _workController),
             ),
 
             /// 3 Buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                timeAndPercentageButtonWidget(height, width,
-                    const Icon(Icons.timer_outlined), 'Start', startTime()),
-                timeAndPercentageButtonWidget(height, width,
-                    const Icon(Icons.timer_outlined), 'End', endTime()),
-                timeAndPercentageButtonWidget(height, width,
-                    const Icon(Icons.percent), 'Percent', endTime()),
+                ButtonWidget(
+                  text: 'Start Time',
+                  onClicked: () {
+                    startTime();
+                  },
+                  icon: const Icon(Icons.alarm),
+                  val: isSubmit == true ?  '--' : timeOfStart,
+                ),
+                ButtonWidget(
+                  text: 'End Time',
+                  onClicked: () {
+                    endTime();
+                  },
+                  icon: const Icon(Icons.alarm),
+                  val:  isSubmit == true ? '--' : timeOfEnd,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      AwesomeDialog(
+                        context: context,
+                        animType: AnimType.bottomSlide,
+                        headerAnimationLoop: false,
+                        // dialogType: DialogType.success,
+                        customHeader: Image.asset(
+                          'assets/man_with_laptop.png',
+                          scale: 6.0,
+                        ).animate(effects: [
+                          const FadeEffect(duration: Duration(seconds: 1))
+                        ]),
+                        showCloseIcon: true,
+                        body: TextFormField(
+                          style:  TextStyle(
+                              color: Colors.black, fontFamily: ConstantFonts.poppinsMedium),
+                          controller: _percentController,
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.done,
+                          decoration: InputDecoration(
+                            // fillColor: const Color(0xffFBF8FF),
+                            hintStyle: TextStyle(
+                                fontFamily: ConstantFonts.poppinsMedium,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 16,
+                                color: Colors.black54
+                                // (0xffFBF8FF)
+                                ),
+                            contentPadding: const EdgeInsets.all(20),
+                            hintText: '       Percent of Completed',
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value.toString().isEmpty) {
+                              return 'Enter value';
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
+                        btnOkColor: Colors.black87,
+                        btnOkText: 'Done',
+                        buttonsTextStyle: TextStyle(
+                            // color: ConstantColor.blackColor,
+                            fontWeight: FontWeight.w900,
+                            fontFamily: ConstantFonts.poppinsMedium),
+                        btnOkOnPress: () {
+                          setState(() {
+                            // debugPrint(_percentController.text.toString());
+                            // percentField.clear();
+                          });
+                        },
+                        onDismissCallback: (type) {
+                          debugPrint('Dialog Dismiss from callback $type');
+                        },
+                      ).show();
+                    });
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(top: height * 0.03),
+                    height: height * 0.15,
+                    width: width * 0.25,
+                    decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.05),
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        const Icon(Icons.percent),
+                        Text(isSubmit == true ? '' : _percentController.text.trim(),
+                          style: TextStyle(
+                            fontFamily: ConstantFonts.poppinsMedium,
+                          ),
+                        ),
+                        Text(
+                          'percent',
+                          style: TextStyle(
+                            fontFamily: ConstantFonts.poppinsMedium,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
 
             /// Submit Button
-            Container(
-              margin: EdgeInsets.only(top: height * 0.04),
-              height: height * 0.07,
-              width: width * 0.9,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                gradient: const LinearGradient(
-                  colors: [
-                    Color(0xffD136D4),
-                    Color(0xff7652B2),
-                  ],
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  createNewWork();
+                  isSubmit = true;
+                });
+              },
+              child: Container(
+                margin: EdgeInsets.only(top: height * 0.04),
+                height: height * 0.07,
+                width: width * 0.9,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  gradient: const LinearGradient(
+                    colors: [
+                      Color(0xffD136D4),
+                      Color(0xff7652B2),
+                    ],
+                  ),
                 ),
-              ),
-              child: Center(
-                child: Text(
-                  'Submit',
-                  style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsMedium,
-                      fontSize: height * 0.025,
-                      color: Colors.white),
+                child: Center(
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(
+                        fontFamily: ConstantFonts.poppinsMedium,
+                        fontSize: height * 0.025,
+                        color: Colors.white),
+                  ),
                 ),
               ),
             ),
-
-            /// Bottom Image
-            Padding(
-              padding: EdgeInsets.only(top: height * 0.023,left: width*0.1),
-              child: Center(
-                  child: Image.asset(
-                'assets/man_with_laptop.png',
-                scale: 6.5,
-              )),
-            )
           ],
         ),
       ),
@@ -381,84 +457,110 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   }
 
   Widget tabBarViewSecondScreen(double height, double width) {
-    return GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 1,
-            mainAxisSpacing: 1 / 0.1,
-            mainAxisExtent: 25 / 0.1),
-        itemCount: 3,
-        itemBuilder: (BuildContext context, int index) {
-          return Container(
-            height: height * 0.1,
-            margin: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: ConstantColor.background1Color,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  offset: const Offset(-0.0, 5.0),
-                  blurRadius: 8,
-                )
-              ],
-              borderRadius: BorderRadius.circular(11),
+    return workDoneList.isNotEmpty
+        ? GridView.builder(
+            physics: const BouncingScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 1,
+              childAspectRatio: 3 / 1.8,
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: height * 0.02),
-                  padding: const EdgeInsets.all(8),
-                  height: height * 0.15,
-                  width: width * 0.88,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    // color: ConstantColor.backgroundColor.withOpacity(0.09),
-                    gradient: LinearGradient(
-                      colors: [
-                        const Color(0xffD136D4).withOpacity(0.09),
-                        const Color(0xff7652B2).withOpacity(0.3),
+            itemCount: workDoneList.length,
+            itemBuilder: (BuildContext ctx, index) {
+              return Container(
+                // padding: EdgeInsets.only(right: width * 0.05, left: width * 0.05),
+                margin: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: ConstantColor.background1Color,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      offset: const Offset(-0.0, 5.0),
+                      blurRadius: 8,
+                    )
+                  ],
+                  borderRadius: BorderRadius.circular(11),
+                ),
+                child: Column(
+                  children: [
+                    /// Work Details Container...
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: height * 0.02),
+                      padding: const EdgeInsets.all(8),
+                      height: height * 0.10,
+                      width: width * 0.88,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        // color: ConstantColor.backgroundColor.withOpacity(0.09),
+                        gradient: LinearGradient(
+                          colors: [
+                            const Color(0xffD136D4).withOpacity(0.09),
+                            const Color(0xff7652B2).withOpacity(0.3),
+                          ],
+                        ),
+                      ),
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: textWidget(
+                          height,
+                          workDoneList[index],
+                          height * 0.02,
+                        ),
+                      ),
+                    ),
+
+                    /// Time....
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        textWidget(height, 'Start : ${startTimeList[index]}',
+                            height * 0.020),
+                        textWidget(height, 'End : ${endTimeList[index]}',
+                            height * 0.020),
+                        textWidget(
+                            height,
+                            'Percent : ${workPercentageList[index]}',
+                            height * 0.020),
                       ],
                     ),
-                  ),
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: textWidget(
-                      height,
-                      workDoneList[index],
-                      height * 0.02,
-                    ),
-                  ),
-                ),
-                percentIndicator(height,workPercentageList[index]),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    textWidget(height, 'Start : 9:30', height * 0.020),
-                    textWidget(height, 'End : 9:30', height * 0.020),
-                    textWidget(height, 'Hours : 1:00', height * 0.020),
+
+                    /// Percentage......
+                    Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: percentIndicator(
+                            height,
+                            percent = double.parse(workPercentageList[index]
+                                    .replaceAll(RegExp(r'.$'), "")) /
+                                100,
+                            "${workPercentageList[index]}")),
                   ],
                 ),
-              ],
+              );
+            })
+        : Center(
+            child: Text(
+              'No Works Completed',
+              style: TextStyle(
+                  fontFamily: ConstantFonts.poppinsMedium,
+                  color: ConstantColor.blackColor,
+                  fontWeight: FontWeight.bold),
             ),
           );
-        });
   }
 
-  Widget percentIndicator(double height,int index) {
+  Widget percentIndicator(double height, double val, String percentage) {
     return LinearPercentIndicator(
       animation: true,
       animationDuration: 1000,
-      lineHeight: height * 0.022,
-      percent: percent = double.parse(workPercentageList[index]
-          .replaceAll(RegExp(r'.$'), "")) /
-          100,
-      // percent: 50 / 100,
+      lineHeight: height * 0.023,
+      percent: val,
       backgroundColor: Colors.black.withOpacity(0.05),
       // progressColor: Colors.cyan,
       linearGradient:
           const LinearGradient(colors: [Color(0xffD136D4), Color(0xff7652B2)]),
       center: Text(
-        '50 %',
+        percentage,
         style: TextStyle(
             fontFamily: ConstantFonts.poppinsMedium,
             color: Colors.white,
@@ -468,42 +570,14 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   }
 
   Widget textWidget(double height, String name, double size) {
-    return AutoSizeText(
-      name,
-      style: TextStyle(
-          fontSize: size,
-          fontFamily: ConstantFonts.poppinsRegular,
-          color: ConstantColor.blackColor),
-    );
-  }
-
-  Widget timeAndPercentageButtonWidget(double height, double width, Icon icon,
-      String name, CallbackAction? function) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          function;
-        });
-      },
-      child: Container(
-        margin: EdgeInsets.only(top: height * 0.03),
-        height: height * 0.09,
-        width: width * 0.25,
-        decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.05),
-            borderRadius: BorderRadius.circular(10)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            icon,
-            Text(
-              name,
-              style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium,
-              ),
-            ),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: AutoSizeText(
+        name,
+        style: TextStyle(
+            fontSize: size,
+            fontFamily: ConstantFonts.poppinsMedium,
+            color: ConstantColor.blackColor),
       ),
     );
   }
@@ -522,6 +596,11 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
         maxLines: 5,
         autofocus: false,
         keyboardType: textInputType,
+        onTap: (){
+          setState(() {
+            isSubmit = false;
+          });
+        },
         style: TextStyle(
             fontSize: height * 0.02,
             color: Colors.black,
@@ -541,6 +620,56 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
             borderSide: const BorderSide(color: Colors.transparent),
             borderRadius: BorderRadius.circular(10.0),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class ButtonWidget extends StatelessWidget {
+  final String text;
+  final VoidCallback onClicked;
+  final Icon icon;
+  final String val;
+
+  const ButtonWidget({
+    Key? key,
+    required this.text,
+    required this.onClicked,
+    required this.icon,
+    required this.val,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+    return GestureDetector(
+      onTap: onClicked,
+      child: Container(
+        margin: EdgeInsets.only(top: height * 0.03),
+        height: height * 0.15,
+        width: width * 0.25,
+        decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.05),
+            borderRadius: BorderRadius.circular(10)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            icon,
+            Text(
+              val,
+              style: TextStyle(
+                fontFamily: ConstantFonts.poppinsMedium,
+              ),
+            ),
+            Text(
+              text,
+              style: TextStyle(
+                fontFamily: ConstantFonts.poppinsMedium,
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -2,12 +2,13 @@
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:my_office/util/main_template.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 import 'package:intl/intl.dart';
-
 
 class AbsenteeScreen extends StatefulWidget {
   const AbsenteeScreen({Key? key}) : super(key: key);
@@ -17,8 +18,6 @@ class AbsenteeScreen extends StatefulWidget {
 }
 
 class _AbsenteeScreenState extends State<AbsenteeScreen> {
-
-
   final staff = FirebaseDatabase.instance.ref().child("staff");
   final fingerPrint = FirebaseDatabase.instance.ref().child("fingerPrint");
 
@@ -42,10 +41,11 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
       lastDate: DateTime(2050),
     );
     if (newDate == null) return;
+    if (!mounted) return;
     setState(() {
       selectedDate = formatterDate.format(newDate);
       if (selectedDate != null) {
-        // loadData();
+        getAbsentsName();
       }
     });
   }
@@ -66,76 +66,23 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
     formattedMonth = formatterMonth.format(now);
   }
 
-
-
-  // loadData() {
-  //   staff.once().then((value) {
-  //     for (var element in value.snapshot.children) {
-  //       // print(element.value);
-  //       firebaseData = element.value;
-  //       setState(() {
-  //         notEntry.add(firebaseData['name']);
-  //         notEntry = notEntry.toSet().toList();
-  //         if (firebaseData['department'] == "ADMIN") {
-  //           setState(() {
-  //             notEntry.remove(firebaseData['name']);
-  //           });
-  //         }
-  //       });
-  //       for (var element1 in element.children) {
-  //         if (element1.key == "workManager") {
-  //           for (var element2 in element1.children) {
-  //             for (var element3 in element2.children) {
-  //               if (element3.key == formattedYear) {
-  //                 for (var element4 in element3.children) {
-  //                   if (element4.key == formattedMonth) {
-  //                     for (var element5 in element4.children) {
-  //                       if (element5.key == selectedDate) {
-  //                         if (firebaseData['name'] != notEntry) {
-  //                           setState(() {
-  //                             notEntry.remove(firebaseData['name']);
-  //                           });
-  //                         }
-  //                       }
-  //                     }
-  //                   }
-  //                 }
-  //               }
-  //             }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   });
-  // }
-
-  absentData() {
+  getAbsentsName() {
+    notEntry.clear();
     fingerPrint.once().then((value) {
-      for (var element in value.snapshot.children) {
-        // firebaseData = element.value;
-
-        // print(element.value);
-          for(var element1 in element.children){
-            // print(element1.key);
-            if(element1.key == 'name'){
-              firebaseData = element.value;
-              notEntry.add(firebaseData['name']);
-              // print(notEntry);
+      for (var val in value.snapshot.children) {
+        if (val.value.runtimeType
+            .toString()
+            .contains("_InternalLinkedHashMap<Object?, Object?>")) {
+          firebaseData = val.value;
+          notEntry.add(firebaseData['name']);
+          for (var val1 in val.children) {
+            if (val1.key == selectedDate) {
+              if (!mounted) return;
+              setState(() {
+                notEntry.remove(firebaseData['name']);
+              });
             }
-           if(element1.key == selectedDate){
-             for(var element2 in element1.children){
-               for(var element3 in element2.children){
-                 // print(element3.key);
-                 if(element3.key == 'Time'){
-                   setState(() {
-                     notEntry.remove(firebaseData['name']);
-                     // print(notEntry);
-                  });
-                }
-               }
-             }
-           }
-
+          }
         }
       }
     });
@@ -150,18 +97,19 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
     preferences = await SharedPreferences.getInstance();
     String? name = preferences?.getString('name');
     if (name == null) return;
+    if (!mounted) return;
     setState(() {
       userName = name;
     });
   }
-
 
   @override
   void initState() {
     getUserDetails();
     selectedDate = formatterDate.format(now);
     todayDate();
-    absentData();
+    // loadData();
+    getAbsentsName();
     super.initState();
   }
 
@@ -169,61 +117,40 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: Container(
-        height: height * 0.95,
-        width: double.infinity,
-        decoration: const BoxDecoration(
-            color: ConstantColor.background1Color,
-            borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30))),
-        child: Stack(
-          children: [
+    return MainTemplate(
+        subtitle: 'Absentees',
+        templateBody: bodyContent(height, width),
+        bgColor: ConstantColor.background1Color);
+  }
 
-            ///Top Text...
-            Positioned(
-              top: height * 0.05,
-              left: width * 0.05,
-              right: width*0.30,
-              child: RichText(
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: userName.isEmpty ? 'Hii \n' :'Hii $userName\n',
-                    style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsMedium,
-                      color: ConstantColor.blackColor,
-                      fontSize: height * 0.030,
-                    ),
+  Widget bodyContent(
+    double height,
+    double width,
+  ) {
+    return Stack(
+      children: [
+        /// Grid View
+        Positioned(
+          top: height * 0.01,
+          left: 0,
+          right: 0,
+          bottom: height * 0.01,
+          child: notEntry.isEmpty
+              ? Center(
+                  child: Lottie.asset(
+                    "assets/animations/loading.json",
                   ),
-                  TextSpan(
-                    text: 'Absentees',
-                    style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsMedium,
-                      color: ConstantColor.blackColor,
-                      fontSize: height * 0.020,
-                    ),
-                  ),
-                ]),
-              ),
-            ),
-
-            /// Grid View
-            Positioned(
-              top: height * 0.15,
-              left: 0,
-              right: 0,
-              bottom: height * 0.01,
-              child: GridView.builder(
+                )
+              : GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1,
-                      // mainAxisSpacing: 1 / 0.1,
-                      mainAxisExtent: 10 / 0.1,
+                    crossAxisCount: 1,
+                    // mainAxisSpacing: 1 / 0.1,
+                    mainAxisExtent: 7.5 / 0.1,
                   ),
                   itemCount: notEntry.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
-                      height: height * 0.1,
+                      // height: height * 0.1,
                       margin: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: ConstantColor.background1Color,
@@ -238,67 +165,52 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
                       ),
                       child: Center(
                         child: ListTile(
-                          leading: const CircleAvatar(
-                            radius: 20,
-                            backgroundColor: ConstantColor.backgroundColor,
-                            child: Icon(Icons.person),
-                          ),
-                          title: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                    text: '${notEntry[index]}\n',
-                                    style: TextStyle(
-                                        fontFamily:
-                                            ConstantFonts.poppinsMedium,
-                                        color: ConstantColor.blackColor,
-                                        fontSize: height * 0.025),
-                                ),
-                                TextSpan(
-                                  text: 'Department',
-                                    style: TextStyle(
-                                        fontFamily:
-                                        ConstantFonts.poppinsMedium,
-                                        color: ConstantColor.blackColor,
-                                        fontSize: height * 0.020),
-                                ),
-                              ],
+                            leading: CircleAvatar(
+                              radius: 20,
+                              backgroundColor: ConstantColor.backgroundColor,
+                              child: Icon(Icons.person),
                             ),
-                          ),
-                        ),
+                            title: Text(
+                              '${notEntry[index]}',
+                              style: TextStyle(
+                                  fontFamily: ConstantFonts.poppinsMedium,
+                                  color: ConstantColor.blackColor,
+                                  fontSize: height * 0.020),
+                            )),
                       ),
                     );
                   }),
-            ),
-
-            /// Date Picker
-            Positioned(
-                top: height * 0.083,
-                left: width * 0.58,
-                right: 0,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text('$selectedDate   ',
-                        style:  TextStyle(
-                            fontFamily: ConstantFonts.poppinsMedium,
-                            fontSize: 15,
-                            color: ConstantColor.blackColor)),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          datePicker();
-                          notEntry.clear();
-                          // newData();
-                        });
-                      },
-                      child: Image.asset('assets/calender.png',scale: 3.3,)
-                    ),
-                  ],
-                )),
-          ],
         ),
-      ),
+
+        /// Date Picker
+        Positioned(
+            top: height * -0.0,
+            left: width * 0.58,
+            right: 0,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text('$selectedDate   ',
+                    style: TextStyle(
+                        fontFamily: ConstantFonts.poppinsMedium,
+                        fontSize: 15,
+                        color: ConstantColor.blackColor)),
+                GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        datePicker();
+                        notEntry.clear();
+
+                        getAbsentsName();
+                      });
+                    },
+                    child: Image.asset(
+                      'assets/calender.png',
+                      scale: 3.3,
+                    )),
+              ],
+            )),
+      ],
     );
   }
 }
