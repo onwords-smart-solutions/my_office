@@ -3,13 +3,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:lottie/lottie.dart';
 import 'package:my_office/database/hive_operations.dart';
 import 'package:my_office/login/singIn_screen.dart';
 import 'package:my_office/models/staff_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
-import '../home/home_screen.dart';
 import '../home/user_home_screen.dart';
 import 'forget_password_screen.dart';
 
@@ -22,6 +22,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+
   late SharedPreferences logData;
   bool _showPassword = false;
   bool _isLoading = false;
@@ -254,9 +255,8 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           child: Center(
             child: _isLoading
-                ? const CircularProgressIndicator(
-                    color: Colors.white,
-                    strokeWidth: 2.5,
+                ? Lottie.asset(
+                    "assets/animations/loading.json",
                   )
                 : Text(
                     'Login',

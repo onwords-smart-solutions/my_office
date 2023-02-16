@@ -1,6 +1,12 @@
+import 'dart:async';
+
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/PR/customer_detail_screen.dart';
 import 'package:my_office/models/staff_model.dart';
@@ -25,6 +31,26 @@ class UserHomeScreen extends StatefulWidget {
 }
 
 class _UserHomeScreenState extends State<UserHomeScreen> {
+
+
+
+  late StreamSubscription subscription;
+  var isDeviceConnected = false;
+  bool isAlertSet = false;
+
+  getConnectivity() {
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) async {
+      isDeviceConnected = await InternetConnectionChecker().hasConnection;
+      if (!isDeviceConnected && isAlertSet == false) {
+        showDialogBox();
+        setState(() {
+          isAlertSet = true;
+        });
+      }
+    });
+  }
   @override
   void initState() {
     HiveOperations().getUStaffDetail();
@@ -33,14 +59,16 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final height =  MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return MainTemplate(
       subtitle: 'Choose your destination here!',
-      templateBody: buildMenuGrid(),
+      templateBody: buildMenuGrid(height, width),
       bgColor: ConstantColor.background1Color,
     );
   }
 
-  Widget buildMenuGrid() {
+  Widget buildMenuGrid(double height,double width) {
     return ValueListenableBuilder(
         valueListenable: staffDetails,
         builder: (BuildContext ctx, List<StaffModel> staffInfo, Widget? child) {
@@ -62,7 +90,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         'assets/work_entry.png',
                         scale: 3.5,
                       ),
-                      page: const WorkEntryScreen(),
+                      page:  WorkEntryScreen(userId: staffInfo[0].uid,staffName: staffInfo[0].name,),
                     ),
                     buildButton(
                         name: 'Refreshment',
@@ -74,24 +102,24 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           uid: staffInfo[0].uid,
                           name: staffInfo[0].name,
                         )),
-                    // buildButton(
-                    //     name: 'Leave form',
-                    //     image: Image.asset('assets/leave_apply.png'),
-                    //     page: const LeaveApplyScreen()),
-                    // buildButton(
-                    //     name: 'Search leads',
-                    //     image: Image.asset(
-                    //       'assets/lead search.png',
-                    //       scale: 3.0,
-                    //     ),
-                    //     page: const SearchLeadsScreen()),
-                    // buildButton(
-                    //     name: 'Onyx',
-                    //     image: Image.asset(
-                    //       'assets/onxy.png',
-                    //       scale: 3.4,
-                    //     ),
-                    //     page: const AnnouncementScreen()),
+                    buildButton(
+                        name: 'Leave form',
+                        image: Image.asset('assets/leave_apply.png'),
+                        page: const LeaveApplyScreen()),
+                    buildButton(
+                        name: 'Search leads',
+                        image: Image.asset(
+                          'assets/lead search.png',
+                          scale: 3.0,
+                        ),
+                        page: const SearchLeadsScreen()),
+                    buildButton(
+                        name: 'Onyx',
+                        image: Image.asset(
+                          'assets/onxy.png',
+                          scale: 3.4,
+                        ),
+                        page: const AnnouncementScreen()),
                     buildButton(
                         name: 'Work done',
                         image: Image.asset(
@@ -99,16 +127,13 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           scale: 3.5,
                         ),
                         page: const WorkCompleteViewScreen()),
-                    // buildButton(
-                    //     name: 'Absent Details',
-                    //     image: Image.asset(
-                    //       'assets/lead search.png',
-                    //       scale: 3.0,
-                    //     ),
-                    //     page: const AbsenteeScreen()),
-
-                    // if(staffInfo[0].department=='PR')
-                    if(staffInfo[0].department=='APP')
+                    buildButton(
+                        name: 'Absent Details',
+                        image: Image.asset(
+                          'assets/lead search.png',
+                          scale: 3.0,
+                        ),
+                        page: const AbsenteeScreen()),
                     buildButton(
                       name: 'Customer Details',
                       image: Image.asset(
@@ -117,10 +142,21 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       ),
                       page: const CustomerDetailScreen(),
                     ),
+                    buildButton(
+                      name: 'Leave Request',
+                      image: Image.asset(
+                        'assets/leave form.png',
+                        scale: 4.0,
+                      ),
+                      page: const LeaveApprovalScreen(),
+                    ),
+                     SizedBox(height: height *0.02),
                   ],
                 )
-              : const Center(
-                  child: CircularProgressIndicator(strokeWidth: 2.5));
+              : Center(
+                  child:  Lottie.asset(
+                    "assets/animations/loading.json",
+                  ),);
         });
   }
 
@@ -153,6 +189,36 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             )
           ],
         ),
+      ),
+    );
+  }
+
+
+  showDialogBox() {
+    showCupertinoDialog(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text("No Connection"),
+        content: const Text("Please check your internet connection"),
+        actions: [
+          TextButton(
+            onPressed: () async {
+              Navigator.pop(context, 'Cancel');
+              setState(() {
+                isAlertSet = false;
+              });
+              isDeviceConnected =
+              await InternetConnectionChecker().hasConnection;
+              if (!isDeviceConnected) {
+                showDialogBox();
+                setState(() {
+                  isAlertSet = true;
+                });
+              }
+            },
+            child: const Text("OK"),
+          ),
+        ],
       ),
     );
   }
