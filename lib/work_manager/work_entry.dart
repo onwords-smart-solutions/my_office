@@ -97,7 +97,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
     endTimeList.clear();
     workPercentageList.clear();
     workDoneList.clear();
-    staff.once().then((value) {
+    staff.child('path') .once().then((value) {
       for (var step1 in value.snapshot.children) {
         fbData = step1.value;
         if (fbData['email'] == currentUser) {

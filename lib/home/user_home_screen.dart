@@ -74,24 +74,15 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           uid: staffInfo[0].uid,
                           name: staffInfo[0].name,
                         )),
-                    // buildButton(
-                    //     name: 'Leave form',
-                    //     image: Image.asset('assets/leave_apply.png'),
-                    //     page: const LeaveApplyScreen()),
-                    // buildButton(
-                    //     name: 'Search leads',
-                    //     image: Image.asset(
-                    //       'assets/lead search.png',
-                    //       scale: 3.0,
-                    //     ),
-                    //     page: const SearchLeadsScreen()),
-                    // buildButton(
-                    //     name: 'Onyx',
-                    //     image: Image.asset(
-                    //       'assets/onxy.png',
-                    //       scale: 3.4,
-                    //     ),
-                    //     page: const AnnouncementScreen()),
+
+                    buildButton(
+                        name: 'Search leads',
+                        image: Image.asset(
+                          'assets/lead search.png',
+                          scale: 3.0,
+                        ),
+                        page:  SearchLeadsScreen(staffInfo: staffInfo[0],)),
+
                     buildButton(
                         name: 'Work done',
                         image: Image.asset(
@@ -99,24 +90,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           scale: 3.5,
                         ),
                         page: const WorkCompleteViewScreen()),
-                    // buildButton(
-                    //     name: 'Absent Details',
-                    //     image: Image.asset(
-                    //       'assets/lead search.png',
-                    //       scale: 3.0,
-                    //     ),
-                    //     page: const AbsenteeScreen()),
 
-                    // if(staffInfo[0].department=='PR')
-                    if(staffInfo[0].department=='APP')
-                    buildButton(
-                      name: 'Customer Details',
-                      image: Image.asset(
-                        'assets/leave form.png',
-                        scale: 4.0,
-                      ),
-                      page: const CustomerDetailScreen(),
-                    ),
+
+
+
                   ],
                 )
               : const Center(

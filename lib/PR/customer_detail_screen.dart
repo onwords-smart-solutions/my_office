@@ -23,8 +23,10 @@ class CustomerDetailScreen extends StatelessWidget {
     return Column(
       children: [
         Container(
+
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
+            border: Border.all(width: 2.0,color: Color(0xffA4A1A6)),
           ),
           child: Row(
             children: [
@@ -34,6 +36,8 @@ class CustomerDetailScreen extends StatelessWidget {
                 ),
               ),
               Image.asset('assets/search.png',scale: 3.0,),
+
+              Container(width: 2.0,height:30.0,color: Colors.black87),
               Image.asset('assets/filter.png',scale: 3.0,),
             ],
           ),

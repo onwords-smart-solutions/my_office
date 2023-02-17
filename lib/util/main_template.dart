@@ -37,6 +37,7 @@ class _MainTemplateState extends State<MainTemplate> {
     return Scaffold(
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
         child: Stack(
           alignment: AlignmentDirectional.bottomCenter,
           children: [
