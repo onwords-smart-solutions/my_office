@@ -8,50 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:566962550940:android:20271eeae1f1a21b9e5559",
-        "android_client_info": {
-          "package_name": "com.example.my_office"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "566962550940-ai8oql8c34q8ei3le81dkgok35jrqpfu.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.my_office",
-            "certificate_hash": "99ff8e10045d008e9d453b521601c344ff85e4a7"
-          }
-        },
-        {
-          "client_id": "566962550940-l5vh3lqrsl1duk503ufk2ndir3h1v3pb.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCCTeiCYTB_npcWKKxl-Oj0StQLTmaFOaE"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "566962550940-l5vh3lqrsl1duk503ufk2ndir3h1v3pb.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "566962550940-endjunsltc7nk2a0424qb37ag8efgal5.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.nikhil.nikhil"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:566962550940:android:0eca75a46d46e9769e5559",
         "android_client_info": {
           "package_name": "com.onwords.admin_console"
@@ -108,6 +64,50 @@
           "android_info": {
             "package_name": "com.onwords.invoice_app",
             "certificate_hash": "475f7ff6ae8b397ffe987f2ed9829994d0f9e1a6"
+          }
+        },
+        {
+          "client_id": "566962550940-l5vh3lqrsl1duk503ufk2ndir3h1v3pb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCTeiCYTB_npcWKKxl-Oj0StQLTmaFOaE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "566962550940-l5vh3lqrsl1duk503ufk2ndir3h1v3pb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "566962550940-endjunsltc7nk2a0424qb37ag8efgal5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nikhil.nikhil"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:566962550940:android:a6990ea93cd84de59e5559",
+        "android_client_info": {
+          "package_name": "com.onwords.my_office"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "566962550940-1ru38h04avgqitv9v266323fho0fh20k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.onwords.my_office",
+            "certificate_hash": "99ff8e10045d008e9d453b521601c344ff85e4a7"
           }
         },
         {
