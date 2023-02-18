@@ -25,13 +25,6 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
   var formatterDate = DateFormat('yyyy-MM-dd');
   String? selectedDate;
 
-  var firebaseData;
-
-  List notEntry = [];
-  List allData = [];
-  List nameData = [];
-  List depData = [];
-
   datePicker() async {
     selectedDate = formatterDate.format(now);
     DateTime? newDate = await showDatePicker(
@@ -65,6 +58,16 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
     formattedYear = formatterYear.format(now);
     formattedMonth = formatterMonth.format(now);
   }
+
+
+  var firebaseData;
+
+  List notEntry = [];
+  List allData = [];
+  List nameData = [];
+  List depData = [];
+
+
 
   getAbsentsName() {
     notEntry.clear();

@@ -45,6 +45,7 @@ class _MainTemplateState extends State<MainTemplate> {
               top: 0,
               child: Container(
                 height: height * 0.95,
+
                 width: width,
                 padding: EdgeInsets.only(
                     top: MediaQuery.of(context).viewPadding.top * 1.5),
@@ -62,8 +63,7 @@ class _MainTemplateState extends State<MainTemplate> {
                   ),
                   child: ValueListenableBuilder(
                       valueListenable: staffDetails,
-                      builder: (BuildContext ctx, List<StaffModel> staffInfo,
-                          Widget? child) {
+                      builder: (BuildContext ctx, List<StaffModel> staffInfo, Widget? child) {
                         return Column(
                           children: [
                             Padding(
@@ -105,8 +105,7 @@ class _MainTemplateState extends State<MainTemplate> {
                                       HapticFeedback.mediumImpact();
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
-                                              builder: (_) => AccountScreen(
-                                                  staffDetails:  staffInfo[0])));
+                                              builder: (_) => AccountScreen(staffDetails:  staffInfo[0])));
                                     },
                                     child: const CircleAvatar(
                                       radius: 20.0,
@@ -119,7 +118,7 @@ class _MainTemplateState extends State<MainTemplate> {
                                 ],
                               ),
                             ),
-                             SizedBox(height: height * 0.03),
+                             SizedBox(height: height * 0.01),
 
                             //Custom widget section
                             Expanded(child: widget.templateBody),

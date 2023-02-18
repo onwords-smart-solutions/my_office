@@ -102,31 +102,31 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           uid: staffInfo[0].uid,
                           name: staffInfo[0].name,
                         )),
-                    buildButton(
-                        name: 'Leave form',
-                        image: Image.asset('assets/leave_apply.png'),
-                        page: const LeaveApplyScreen()),
-                    buildButton(
-                        name: 'Search leads',
-                        image: Image.asset(
-                          'assets/lead search.png',
-                          scale: 3.0,
-                        ),
-                        page: const SearchLeadsScreen()),
-                    buildButton(
-                        name: 'Onyx',
-                        image: Image.asset(
-                          'assets/onxy.png',
-                          scale: 3.4,
-                        ),
-                        page: const AnnouncementScreen()),
+                    // buildButton(
+                    //     name: 'Leave form',
+                    //     image: Image.asset('assets/leave_apply.png'),
+                    //     page: const LeaveApplyScreen()),
+                    // buildButton(
+                    //     name: 'Search leads',
+                    //     image: Image.asset(
+                    //       'assets/lead search.png',
+                    //       scale: 3.0,
+                    //     ),
+                    //     page: const SearchLeadsScreen()),
+                    // buildButton(
+                    //     name: 'Onyx',
+                    //     image: Image.asset(
+                    //       'assets/onxy.png',
+                    //       scale: 3.4,
+                    //     ),
+                    //     page: const AnnouncementScreen()),
                     buildButton(
                         name: 'Work done',
                         image: Image.asset(
                           'assets/work_entry.png',
                           scale: 3.5,
                         ),
-                        page: const WorkCompleteViewScreen()),
+                        page:  WorkCompleteViewScreen(userDetails: staffInfo[0],)),
                     buildButton(
                         name: 'Absent Details',
                         image: Image.asset(
@@ -142,14 +142,14 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       ),
                       page: const CustomerDetailScreen(),
                     ),
-                    buildButton(
-                      name: 'Leave Request',
-                      image: Image.asset(
-                        'assets/leave form.png',
-                        scale: 4.0,
-                      ),
-                      page: const LeaveApprovalScreen(),
-                    ),
+                    // buildButton(
+                    //   name: 'Leave Request',
+                    //   image: Image.asset(
+                    //     'assets/leave form.png',
+                    //     scale: 4.0,
+                    //   ),
+                    //   page: const LeaveApprovalScreen(),
+                    // ),
                      SizedBox(height: height *0.02),
                   ],
                 )

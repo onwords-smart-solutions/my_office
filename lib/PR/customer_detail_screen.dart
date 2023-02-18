@@ -1,5 +1,4 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/PR/customer_item.dart';
@@ -28,7 +27,7 @@ class CustomerDetailScreen extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Expanded(
+              const Expanded(
                 child: TextField(
                   decoration: InputDecoration(hintText: 'Search'),
                 ),

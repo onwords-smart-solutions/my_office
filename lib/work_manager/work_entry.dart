@@ -16,7 +16,9 @@ class WorkEntryScreen extends StatefulWidget {
   final String userId;
   final String staffName;
 
-  const WorkEntryScreen({Key? key, required this.userId, required this.staffName}) : super(key: key);
+  const WorkEntryScreen(
+      {Key? key, required this.userId, required this.staffName})
+      : super(key: key);
 
   @override
   State<WorkEntryScreen> createState() => _WorkEntryScreenState();
@@ -28,7 +30,6 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
 
   final staff = FirebaseDatabase.instance.ref().child("staff");
 
-  // final user = FirebaseAuth.instance.currentUser;
   final fingerPrint = FirebaseDatabase.instance.ref().child("fingerPrint");
 
   final TextEditingController _workController = TextEditingController();
@@ -63,7 +64,6 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   List startTimeList = [];
   List workDoneList = [];
   List workPercentageList = [];
-  // List totalWorkingTimeList = [];
 
   getWorkDone() {
     nameList.clear();
@@ -79,7 +79,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
         .then((value) {
       for (var loop in value.snapshot.children) {
         fbData = loop.value;
-        if(!mounted) return;
+        if (!mounted) return;
         setState(() {
           startTimeList.add(fbData['from']);
           endTimeList.add(fbData['to']);
@@ -91,29 +91,31 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
     });
   }
 
-  String timeOfStart = '';
-  String timeOfEnd = '';
-  String percentage = '';
+  String? timeOfStart = '';
+  String? timeOfEnd = '';
+  String? percentage = '';
 
   String? from;
   String? to;
   var wrkDone;
 
   createNewWork() {
-    staff.child(
-        "${widget.userId}/workManager/timeSheet/$formattedYear/$formattedMonth/$formattedDate/${timeOfStart.toString().trim()} To ${timeOfEnd.toString().trim()}")
-      .set({
-        "from": timeOfStart.toString().trim(),
-        "to": timeOfEnd.toString().trim(),
-        "workDone": _workController.text.toString().trim(),
-        "workPercentage": "${_percentController.text.toString().trim()}%",
-        'name': widget.staffName.toString().trim(),
-      }).then((value) {
-        timeOfStart = '';
-        timeOfEnd = '';
-        _workController.clear();
-        _percentController.clear();
-        getWorkDone();
+    staff
+        .child(
+            "${widget.userId}/workManager/timeSheet/$formattedYear/$formattedMonth/$formattedDate/${timeOfStart.toString().trim()} To ${timeOfEnd.toString().trim()}")
+        .set({
+      "from": timeOfStart.toString().trim(),
+      "to": timeOfEnd.toString().trim(),
+      "workDone": _workController.text.toString().trim(),
+      "workPercentage": "${_percentController.text.toString().trim()}%",
+      'name': widget.staffName.toString().trim(),
+    }).then((value) {
+      timeOfStart = '';
+      timeOfEnd = '';
+      _workController.clear();
+      _percentController.clear();
+      getWorkDone();
+      showSnackBar(message: 'Work updated successfully', color: Colors.green);
     });
   }
 
@@ -123,6 +125,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       context: context,
     );
 
+    if (!mounted) return;
     if (pickedTime != null) {
       DateTime parsedTime =
           DateFormat.jm().parse(pickedTime.format(context).toString());
@@ -131,6 +134,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       String formattedTime = DateFormat('HH:mm').format(parsedTime);
 
       ///DateFormat() is from intl package, you can format the time on any pattern you need.
+
       setState(() {
         timeOfStart = formattedTime;
         // print(timeOfStart);
@@ -144,6 +148,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       context: context,
     );
 
+    if (!mounted) return;
     if (pickedTime != null) {
       DateTime parsedTime =
           DateFormat.jm().parse(pickedTime.format(context).toString());
@@ -162,6 +167,9 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
     }
   }
 
+  bool a = true;
+  bool b = true;
+
   @override
   void initState() {
     _tabController = TabController(length: 2, vsync: this);
@@ -175,10 +183,10 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return MainTemplate(
+      key: formKey,
       subtitle: 'Update your works here !',
       templateBody: bodyContent(height, width),
       bgColor: ConstantColor.background1Color,
-
     );
   }
 
@@ -189,7 +197,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
           top: height * 0.0,
           left: width * 0.0,
           right: width * 0.0,
-          bottom: height * 0.05,
+          bottom: height * 0.0,
           child: Stack(
             children: [
               /// TabBar...
@@ -220,7 +228,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                 top: height * 0.13,
                 left: width * 0.01,
                 right: width * 0.01,
-                bottom: height * 0.01,
+                bottom: height * 0.0,
                 child: tabViewContainer(height, width),
               ),
             ],
@@ -268,7 +276,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
 
   Widget tabViewContainer(double height, double width) {
     return Container(
-      height: height * 0.7,
+      height: height * 0.9,
       color: Colors.transparent,
       child: TabBarView(
         physics: const BouncingScrollPhysics(),
@@ -286,15 +294,20 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
 
   Widget tabBarViewFirstScreen(double height, double width) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(08),
       child: SingleChildScrollView(
         child: Column(
           children: [
             /// Text Field
             Container(
+              margin: EdgeInsets.symmetric(horizontal: width * 0.025),
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                      color: _workController.text.isEmpty
+                          ? Colors.black26
+                          : Colors.green),
                   boxShadow: const [
                     BoxShadow(
                         color: Colors.black12,
@@ -306,128 +319,151 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
             ),
 
             /// 3 Buttons
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ButtonWidget(
-                  text: 'Start Time',
-                  onClicked: () {
-                    startTime();
-                  },
-                  icon: const Icon(Icons.alarm),
-                  val: isSubmit == true ?  '--' : timeOfStart,
-                ),
-                ButtonWidget(
-                  text: 'End Time',
-                  onClicked: () {
-                    endTime();
-                  },
-                  icon: const Icon(Icons.alarm),
-                  val:  isSubmit == true ? '--' : timeOfEnd,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      AwesomeDialog(
-                        context: context,
-                        animType: AnimType.bottomSlide,
-                        headerAnimationLoop: false,
-                        // dialogType: DialogType.success,
-                        customHeader: Image.asset(
-                          'assets/man_with_laptop.png',
-                          scale: 6.0,
-                        ).animate(effects: [
-                          const FadeEffect(duration: Duration(seconds: 1))
-                        ]),
-                        showCloseIcon: true,
-                        body: TextFormField(
-                          style:  TextStyle(
-                              color: Colors.black, fontFamily: ConstantFonts.poppinsMedium),
-                          controller: _percentController,
-                          keyboardType: TextInputType.number,
-                          textInputAction: TextInputAction.done,
-                          decoration: InputDecoration(
-                            // fillColor: const Color(0xffFBF8FF),
-                            hintStyle: TextStyle(
-                                fontFamily: ConstantFonts.poppinsMedium,
-                                fontWeight: FontWeight.w900,
-                                fontSize: 16,
-                                color: Colors.black54
-                                // (0xffFBF8FF)
-                                ),
-                            contentPadding: const EdgeInsets.all(20),
-                            hintText: '       Percent of Completed',
-                            filled: true,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide.none,
+            Padding(
+              padding: EdgeInsets.only(top: height * 0.05),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ButtonWidget(
+                      title: 'Start Time',
+                      onClicked: () {
+                        startTime();
+                      },
+                      colorValue:
+                          timeOfStart.toString().isEmpty ? a = false : a = true,
+                      icon: const Icon(Icons.alarm),
+                      val: "${timeOfStart!.isEmpty ? '--' : timeOfStart}"),
+                  ButtonWidget(
+                      title: 'End Time',
+                      onClicked: () {
+                        endTime();
+                      },
+                      colorValue:
+                          timeOfEnd.toString().isEmpty ? b = false : b = true,
+                      icon: const Icon(Icons.alarm),
+                      val: "${timeOfEnd!.isEmpty ? '--' : timeOfEnd}"),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        AwesomeDialog(
+                          context: context,
+                          animType: AnimType.bottomSlide,
+                          headerAnimationLoop: false,
+                          // dialogType: DialogType.success,
+                          customHeader: Image.asset(
+                            'assets/man_with_laptop.png',
+                            scale: 6.0,
+                          ).animate(effects: [
+                            const FadeEffect(duration: Duration(seconds: 1))
+                          ]),
+                          showCloseIcon: true,
+                          body: TextFormField(
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: ConstantFonts.poppinsMedium),
+                            controller: _percentController,
+                            keyboardType: TextInputType.number,
+                            textInputAction: TextInputAction.done,
+                            decoration: InputDecoration(
+                              // fillColor: const Color(0xffFBF8FF),
+                              hintStyle: TextStyle(
+                                  fontFamily: ConstantFonts.poppinsMedium,
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 16,
+                                  color: Colors.black54
+                                  // (0xffFBF8FF)
+                                  ),
+                              contentPadding: const EdgeInsets.all(20),
+                              hintText: '       Percent of Completed',
+                              filled: true,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide.none,
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value.toString().isEmpty) {
+                                return 'Enter value';
+                              } else {
+                                return null;
+                              }
+                            },
+                          ),
+                          btnOkColor: Colors.black87,
+                          btnOkText: 'Done',
+                          buttonsTextStyle: TextStyle(
+                              // color: ConstantColor.blackColor,
+                              fontWeight: FontWeight.w900,
+                              fontFamily: ConstantFonts.poppinsMedium),
+                          btnOkOnPress: () {
+                            setState(() {
+                              // debugPrint(_percentController.text.toString());
+                              // percentField.clear();
+                            });
+                          },
+                          onDismissCallback: (type) {
+                            // debugPrint('Dialog Dismiss from callback $type');
+                          },
+                        ).show();
+                      });
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(top: height * 0.03),
+                      height: height * 0.15,
+                      width: width * 0.25,
+                      decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.05),
+                          border: Border.all(
+                              color: _percentController.text.isEmpty
+                                  ? Colors.black26
+                                  : Colors.green),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          const Icon(Icons.percent),
+                          Text(
+                            _percentController.text.isEmpty
+                                ? '--'
+                                : _percentController.text,
+                            style: TextStyle(
+                              fontFamily: ConstantFonts.poppinsMedium,
                             ),
                           ),
-                          validator: (value) {
-                            if (value.toString().isEmpty) {
-                              return 'Enter value';
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                        btnOkColor: Colors.black87,
-                        btnOkText: 'Done',
-                        buttonsTextStyle: TextStyle(
-                            // color: ConstantColor.blackColor,
-                            fontWeight: FontWeight.w900,
-                            fontFamily: ConstantFonts.poppinsMedium),
-                        btnOkOnPress: () {
-                          setState(() {
-                            // debugPrint(_percentController.text.toString());
-                            // percentField.clear();
-                          });
-                        },
-                        onDismissCallback: (type) {
-                          debugPrint('Dialog Dismiss from callback $type');
-                        },
-                      ).show();
-                    });
-                  },
-                  child: Container(
-                    margin: EdgeInsets.only(top: height * 0.03),
-                    height: height * 0.15,
-                    width: width * 0.25,
-                    decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.05),
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        const Icon(Icons.percent),
-                        Text(isSubmit == true ? '' : _percentController.text.trim(),
-                          style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsMedium,
-                          ),
-                        ),
-                        Text(
-                          'percent',
-                          style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsMedium,
-                          ),
-                        )
-                      ],
+                          Text(
+                            'percent',
+                            style: TextStyle(
+                              fontFamily: ConstantFonts.poppinsMedium,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
 
             /// Submit Button
             GestureDetector(
               onTap: () {
                 setState(() {
-                  createNewWork();
-                  isSubmit = true;
+                  if (timeOfStart!.isNotEmpty &&
+                      timeOfEnd!.isNotEmpty &&
+                      _percentController.text.isNotEmpty &&
+                      _workController.text.isNotEmpty) {
+                    setState(() {
+                      createNewWork();
+                    });
+                  } else {
+                    showSnackBar(
+                        message: 'Please Fill All Fields',
+                        color: Colors.red.shade500);
+                  }
                 });
               },
               child: Container(
-                margin: EdgeInsets.only(top: height * 0.04),
+                margin: EdgeInsets.only(top: height * 0.15),
                 height: height * 0.07,
                 width: width * 0.9,
                 decoration: BoxDecoration(
@@ -590,13 +626,13 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       TextEditingController textEditingController) {
     return Padding(
       padding: const EdgeInsets.all(10),
-      child: TextField(
+      child: TextFormField(
         controller: textEditingController,
         textInputAction: textInputAction,
         maxLines: 5,
         autofocus: false,
         keyboardType: textInputType,
-        onTap: (){
+        onTap: () {
           setState(() {
             isSubmit = false;
           });
@@ -624,20 +660,44 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       ),
     );
   }
+
+  void showSnackBar({required String message, required Color color}) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        padding: const EdgeInsets.all(0.0),
+        content: Container(
+          height: 50.0,
+          color: color,
+          child: Center(
+            child: Text(
+              message,
+              style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class ButtonWidget extends StatelessWidget {
-  final String text;
+  final String title;
+
   final VoidCallback onClicked;
   final Icon icon;
   final String val;
+  final bool colorValue;
 
   const ButtonWidget({
     Key? key,
-    required this.text,
+    required this.title,
     required this.onClicked,
     required this.icon,
     required this.val,
+    required this.colorValue,
   }) : super(key: key);
 
   @override
@@ -651,6 +711,8 @@ class ButtonWidget extends StatelessWidget {
         height: height * 0.15,
         width: width * 0.25,
         decoration: BoxDecoration(
+            border:
+                Border.all(color: colorValue ? Colors.green : Colors.black26),
             color: Colors.black.withOpacity(0.05),
             borderRadius: BorderRadius.circular(10)),
         child: Column(
@@ -664,7 +726,7 @@ class ButtonWidget extends StatelessWidget {
               ),
             ),
             Text(
-              text,
+              title,
               style: TextStyle(
                 fontFamily: ConstantFonts.poppinsMedium,
               ),
