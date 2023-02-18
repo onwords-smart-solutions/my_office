@@ -441,7 +441,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
   Widget buildCustomerList() {
     return query == ''
         ? isLoading
-            ? Center(child: Lottie.asset("assets/animation/loading.json"))
+            ? Center(child: Lottie.asset("assets/animations/loading.json"))
             : currentCustomerList.isNotEmpty
                 ? Column(
                     children: [
