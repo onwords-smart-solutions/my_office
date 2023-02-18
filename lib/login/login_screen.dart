@@ -22,6 +22,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+
   late SharedPreferences logData;
   bool _showPassword = false;
   bool _isLoading = false;
@@ -253,16 +254,21 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           child: Center(
-              child: _isLoading
-                  ? Center(child: Lottie.asset("assets/animation/loading.json"))
-                  : Text(
-                      'Login',
-                      style: TextStyle(
-                        fontFamily: ConstantFonts.poppinsMedium,
-                        color: ConstantColor.background1Color,
-                        fontSize: height * 0.030,
-                      ),
-                    ))),
+
+            child: _isLoading
+                ? Lottie.asset(
+                    "assets/animations/loading.json",
+                  )
+                : Text(
+                    'Login',
+                    style: TextStyle(
+                      fontFamily: ConstantFonts.poppinsMedium,
+                      color: ConstantColor.background1Color,
+                      fontSize: height * 0.030,
+                    ),
+                  ),
+          )),
+
     );
   }
 

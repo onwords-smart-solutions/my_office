@@ -196,6 +196,7 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
     } else {
       mode = 'AN';
     }
+
     if (item == 'Food') {
       int foodCount = 0;
       bool isFoodBooked = false;

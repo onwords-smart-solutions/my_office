@@ -4,7 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/database/hive_operations.dart';
 import 'package:my_office/models/staff_model.dart';
-import 'package:my_office/staff/staff_detail.dart';
+import '../Account/account_screen.dart';
 import '../Constant/fonts/constant_font.dart';
 
 class MainTemplate extends StatefulWidget {
@@ -34,36 +34,40 @@ class _MainTemplateState extends State<MainTemplate> {
 
   @override
   Widget build(BuildContext context) {
+   final height =  MediaQuery.of(context).size.height;
+   final width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SizedBox(
+
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
+
         child: Stack(
           alignment: AlignmentDirectional.bottomCenter,
           children: [
             Positioned(
               top: 0,
               child: Container(
-                height: MediaQuery.of(context).size.height * .93,
-                width: MediaQuery.of(context).size.width,
+                height: height * 0.95,
+
+                width: width,
                 padding: EdgeInsets.only(
                     top: MediaQuery.of(context).viewPadding.top * 1.5),
                 decoration: BoxDecoration(
                   color: widget.bgColor,
                   borderRadius: const BorderRadius.only(
-                    bottomRight: Radius.circular(40.0),
-                    bottomLeft: Radius.circular(40.0),
+                    bottomRight: Radius.circular(30.0),
+                    bottomLeft: Radius.circular(30.0),
                   ),
                 ),
                 child: ClipRRect(
                   borderRadius: const BorderRadius.only(
-                    bottomRight: Radius.circular(40.0),
-                    bottomLeft: Radius.circular(40.0),
+                    bottomRight: Radius.circular(30.0),
+                    bottomLeft: Radius.circular(30.0),
                   ),
                   child: ValueListenableBuilder(
                       valueListenable: staffDetails,
-                      builder: (BuildContext ctx, List<StaffModel> staffInfo,
-                          Widget? child) {
+                      builder: (BuildContext ctx, List<StaffModel> staffInfo, Widget? child) {
                         return Column(
                           children: [
                             Padding(
@@ -105,8 +109,7 @@ class _MainTemplateState extends State<MainTemplate> {
                                       HapticFeedback.mediumImpact();
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
-                                              builder: (_) => StaffDetail(
-                                                  details: staffInfo[0])));
+                                              builder: (_) => AccountScreen(staffDetails:  staffInfo[0])));
                                     },
                                     child: const CircleAvatar(
                                       radius: 20.0,
@@ -119,10 +122,11 @@ class _MainTemplateState extends State<MainTemplate> {
                                 ],
                               ),
                             ),
-                            const SizedBox(height: 25.0),
+                             SizedBox(height: height * 0.01),
 
                             //Custom widget section
                             Expanded(child: widget.templateBody),
+
                           ],
                         );
                       }),

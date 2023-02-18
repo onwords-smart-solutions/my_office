@@ -1,4 +1,3 @@
-
 import 'package:hive_flutter/adapters.dart';
 part 'staff_model.g.dart';
 
