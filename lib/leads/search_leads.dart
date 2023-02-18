@@ -20,15 +20,16 @@ class SearchLeadsScreen extends StatefulWidget {
 
 class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
   final ref = FirebaseDatabase.instance.ref();
-  final List<Map<Object?, Object?>> customerInfo = [];
+  late TextEditingController searchTextController;
+  List<Map<Object?, Object?>> allCustomer = [];
+  List<Map<Object?, Object?>> currentCustomerList = [];
   List<Map<Object?, Object?>> searchCustomerInfo = [];
 
-  late TextEditingController searchTextController;
   List<String> staffs = ['All'];
   List<String> sortList = [
     'Following Up',
     'Delayed',
-    'ONWORDS',
+    'Onwords',
     'Advanced',
     'Product',
     'B2B',
@@ -44,11 +45,32 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
   bool isAscending = false;
 
   //Function to fetch customer detail from firebase
+  void getCustomerFromFirebase() {
+    allCustomer.clear();
+    ref.child('customer').once().then((customerSnapshot) {
+      for (var customer in customerSnapshot.snapshot.children) {
+        final Map<Object?, Object?> data =
+            customer.value as Map<Object?, Object?>;
+        allCustomer.add(data);
+      }
+
+      getCustomerDetail(
+          createdBy:
+              selectedStaff == '' ? widget.staffInfo.name : selectedStaff,
+          sortChoice: sortOption,
+          ascending: isAscending);
+      //For disabling loading screen
+      if (!mounted) return;
+      setState(() {
+        isLoading = false;
+      });
+    });
+  }
+
   void getCustomerDetail(
       {required String createdBy,
       required String sortChoice,
       required bool ascending}) {
-
     bool isSame = false;
     if (createdBy.toLowerCase() ==
         widget.staffInfo.name.toString().toLowerCase()) {
@@ -57,8 +79,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
     //For enabling loading screen
     if (!mounted) return;
     setState(() {
-      customerInfo.clear();
-      isLoading = true;
+      currentCustomerList.clear();
       selectedStaff = isSame ? '' : createdBy;
       sortOption = sortChoice;
       if (ascending) {
@@ -71,59 +92,53 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
     //Splitting name to get first name
     final splitName = createdBy.split(' ');
 
-    ref.child('customer').once().then((customerSnapshot) {
-      for (var customer in customerSnapshot.snapshot.children) {
-        final Map<Object?, Object?> data =
-            customer.value as Map<Object?, Object?>;
-        final createdName = createdBy == 'All' ? '' : createdBy;
-        if (data['LeadIncharge']
+    for (var customer in allCustomer) {
+      final Map<Object?, Object?> data = customer;
+      final createdName = createdBy == 'All' ? '' : createdBy;
+      if (data['LeadIncharge']
+              .toString()
+              .toLowerCase()
+              .contains(createdName.toLowerCase()) ||
+          data['LeadIncharge']
+              .toString()
+              .toLowerCase()
+              .contains(splitName[0].toLowerCase())) {
+        if (sortOption.isNotEmpty) {
+          //sorting list
+          if (sortOption == 'Onwords') {
+            if (data['customer_state']
                 .toString()
                 .toLowerCase()
-                .contains(createdName.toLowerCase()) ||
-            data['LeadIncharge']
-                .toString()
-                .toLowerCase()
-                .contains(splitName[0].toLowerCase())) {
-          if (sortOption.isNotEmpty) {
-            //sorting list
-            if (sortOption == 'ONWORDS') {
-              if (data['customer_state']
-                  .toString()
-                  .toLowerCase()
-                  .contains('rejected')) {
-                customerInfo.add(data);
-              }
-            } else if (data['customer_state']
-                .toString()
-                .toLowerCase()
-                .contains(sortChoice.toLowerCase())) {
-              customerInfo.add(data);
+                .contains('rejected')) {
+              currentCustomerList.add(data);
             }
-          } else {
-            customerInfo.add(data);
+          } else if (data['customer_state']
+              .toString()
+              .toLowerCase()
+              .contains(sortChoice.toLowerCase())) {
+            currentCustomerList.add(data);
           }
+        } else {
+          currentCustomerList.add(data);
         }
       }
+    }
 
-      //Sorting list based on created date
-      if (ascending) {
-        customerInfo.sort((a, b) => (a['created_date'])
-            .toString()
-            .compareTo(b['created_date'].toString()));
-      } else {
-        customerInfo.sort((a, b) => (b['created_date'])
-            .toString()
-            .compareTo(a['created_date'].toString()));
-      }
+    //Sorting list based on created date
+    if (ascending) {
+      currentCustomerList.sort((a, b) => (a['created_date'])
+          .toString()
+          .compareTo(b['created_date'].toString()));
+    } else {
+      currentCustomerList.sort((a, b) => (b['created_date'])
+          .toString()
+          .compareTo(a['created_date'].toString()));
+    }
 
-      //For disabling loading screen
-      if (!mounted) return;
-      setState(() {
-        isLoading = false;
-      });
-    });
+    //For disabling loading screen
+    if (!mounted) return;
+    setState(() {});
   }
-
 
   //Fetching PR Staff Names from firebase database
   void getPRStaffNames() {
@@ -144,10 +159,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
   @override
   void initState() {
     searchTextController = TextEditingController();
-    getCustomerDetail(
-        createdBy: widget.staffInfo.name,
-        sortChoice: sortOption,
-        ascending: isAscending);
+    getCustomerFromFirebase();
     getPRStaffNames();
     super.initState();
   }
@@ -171,20 +183,23 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
     final width = MediaQuery.of(context).size.width;
     return Column(
       children: [
-        buildSearchBar(width: width, height: height),
+        buildSearchBar(width: width),
+        Container(
+            height: height * .05,
+            width: width,
+            alignment: AlignmentDirectional.center,
+            padding: const EdgeInsets.symmetric(vertical: 5.0),
+            child: buildSortHint()),
         if (selectedStaff != '') buildFilterHint(),
-        if (sortOption != '') buildSortHint(),
         Expanded(child: buildCustomerList()),
       ],
     );
   }
 
-
-
-  Widget buildSearchBar({required double width, required double height}) {
+  Widget buildSearchBar({required double width}) {
     //search method
     void searchUser(String query) {
-      final searchedCustomer = customerInfo.where((customer) {
+      final searchedCustomer = currentCustomerList.where((customer) {
         final nameLower = customer['name'].toString().toLowerCase();
         final phone = customer['phone_number'].toString();
         final location = customer['city'].toString().toLowerCase();
@@ -201,77 +216,69 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
 
     return Container(
       width: width,
-      margin: const EdgeInsets.only(right: 15.0),
-      child: Row(
-        children: [
-          //Filter button
-          IconButton(
-            onPressed: () {
-              getCustomerDetail(
-                  createdBy: selectedStaff == ''
-                      ? widget.staffInfo.name
-                      : selectedStaff,
-                  sortChoice: sortOption,
-                  ascending: !isAscending);
-            },
-            icon: Icon(
-              isAscending
-                  ? Icons.arrow_upward_rounded
-                  : Icons.arrow_downward_rounded,
-              size: 20.0,
-            ),
-            color: const Color(0xffB13FC8),
-          ),
-
-          Expanded(
-            child: Container(
-              height: 40.0,
-              padding: const EdgeInsets.only(left: 10.0),
-              decoration: BoxDecoration(
-                  color: ConstantColor.background1Color,
-                  borderRadius: BorderRadius.circular(10),
-                  border:
-                      Border.all(color: const Color(0xffA4A1A6), width: 1.0)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  //Search bar
-                  Expanded(
-                    child: CupertinoSearchTextField(
-                      backgroundColor: const Color(0xffF1F2F8),
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      prefixIcon: Image.asset(
-                        'assets/search.png',
-                        scale: 4.5,
-                      ),
-                      controller: searchTextController,
-                      placeholder: 'Search leads',
-                      onSubmitted: (value) {
-                        FocusScope.of(context).unfocus();
-                      },
-                      onChanged: (value) {
-                        searchUser(value.toString());
-                      },
-                      style: TextStyle(
-                          fontFamily: ConstantFonts.poppinsMedium,
-                          fontSize: 15,
-                          color: Colors.black),
-                    ),
-                  ),
-                  const VerticalDivider(
-                    thickness: 1,
-                    indent: 5.0,
-                    endIndent: 5.0,
-                    color: Color(0xffA4A1A6),
-                  ),
-                  buildDropDown(),
-                  buildSortDropDown(),
-                ],
+      margin: const EdgeInsets.only(right: 15.0, left: 15.0, bottom: 10.0),
+      child: Container(
+        height: 40.0,
+        padding: const EdgeInsets.only(left: 10.0),
+        decoration: BoxDecoration(
+            color: ConstantColor.background1Color,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: const Color(0xffA4A1A6), width: 1.0)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            //Search bar
+            Expanded(
+              child: CupertinoSearchTextField(
+                backgroundColor: const Color(0xffF1F2F8),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                prefixIcon: Image.asset(
+                  'assets/search.png',
+                  scale: 4.5,
+                ),
+                controller: searchTextController,
+                placeholder: 'Search leads',
+                onSubmitted: (value) {
+                  FocusScope.of(context).unfocus();
+                },
+                onChanged: (value) {
+                  searchUser(value.toString());
+                },
+                style: TextStyle(
+                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontSize: 15,
+                    color: Colors.black),
               ),
             ),
-          ),
-        ],
+            const VerticalDivider(
+              thickness: 1,
+              indent: 5.0,
+              endIndent: 5.0,
+              color: Color(0xffA4A1A6),
+            ),
+            buildDropDown(),
+
+            IconButton(
+              onPressed: () {
+                getCustomerDetail(
+                    createdBy: selectedStaff == ''
+                        ? widget.staffInfo.name
+                        : selectedStaff,
+                    sortChoice: sortOption,
+                    ascending: !isAscending);
+              },
+              icon: Icon(
+                isAscending
+                    ? Icons.arrow_upward_rounded
+                    : Icons.arrow_downward_rounded,
+                size: 20.0,
+              ),
+              color: const Color(0xffB13FC8),
+            ),
+            // buildSortDropDown(),
+          ],
+        ),
       ),
     );
   }
@@ -352,95 +359,167 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
   }
 
   Widget buildFilterHint() {
+    // return Container(
+    //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
+    //   height: 40.0,
+    //   child: Row(
+    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //     children: [
+    //       Text(
+    //         'Leads of $selectedStaff',
+    //         style: TextStyle(
+    //             fontFamily: ConstantFonts.poppinsMedium, fontSize: 13.0),
+    //       ),
+    //       TextButton(
+    //         onPressed: () {
+    //           getCustomerDetail(
+    //               createdBy: widget.staffInfo.name,
+    //               sortChoice: sortOption,
+    //               ascending: isAscending);
+    //         },
+    //         style: TextButton.styleFrom(foregroundColor: Colors.redAccent),
+    //         child: Text(
+    //           'Clear',
+    //           style: TextStyle(
+    //               fontFamily: ConstantFonts.poppinsMedium, fontSize: 13.0),
+    //         ),
+    //       )
+    //     ],
+    //   ),
+    // );
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-      height: 40.0,
+      margin: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 5.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            'Leads of $selectedStaff',
-            style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium, fontSize: 13.0),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
+
+            decoration: BoxDecoration(
+              color: const Color(0xff8355B7),
+              borderRadius: BorderRadius.circular(50.0),
+            ),
+            child: Text(
+              'Leads of $selectedStaff',
+              style: TextStyle(
+                  fontFamily: ConstantFonts.poppinsMedium, fontSize: 14.0,color: Color(0xffF1F2F8)),
+            ),
           ),
-          TextButton(
+          IconButton(
             onPressed: () {
               getCustomerDetail(
                   createdBy: widget.staffInfo.name,
                   sortChoice: sortOption,
                   ascending: isAscending);
             },
-            style: TextButton.styleFrom(foregroundColor: Colors.redAccent),
-            child: Text(
-              'Clear',
-              style: TextStyle(
-                  fontFamily: ConstantFonts.poppinsMedium, fontSize: 13.0),
-            ),
-          )
+            icon: const Icon(Icons.cancel,size: 20.0,),
+
+            color: Colors.red,
+          ),
         ],
       ),
     );
   }
 
   Widget buildSortHint() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-      height: 40.0,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            'Sorted by $sortOption',
-            style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium, fontSize: 13.0),
-          ),
-          TextButton(
-            onPressed: () {
+    // return Container(
+    //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
+    //   height: 40.0,
+    //   child: Row(
+    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //     children: [
+    //       Text(
+    //         'Sorted by $sortOption',
+    //         style: TextStyle(
+    //             fontFamily: ConstantFonts.poppinsMedium, fontSize: 13.0),
+    //       ),
+    //       TextButton(
+    //         onPressed: () {
+    //           getCustomerDetail(
+    //               createdBy: selectedStaff == ''
+    //                   ? widget.staffInfo.name
+    //                   : selectedStaff,
+    //               sortChoice: '',
+    //               ascending: isAscending);
+    //         },
+    //         style: TextButton.styleFrom(foregroundColor: Colors.redAccent),
+    //         child: Text(
+    //           'Clear',
+    //           style: TextStyle(
+    //               fontFamily: ConstantFonts.poppinsMedium, fontSize: 13.0),
+    //         ),
+    //       )
+    //     ],
+    //   ),
+    // );
+    return ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: sortList.length,
+        physics: const BouncingScrollPhysics(),
+        itemBuilder: (ctx, i) {
+          Color containerColor = sortOption == sortList[i]
+              ? const Color(0xff8355B7)
+              : const Color(0xffF1F2F8);
+          Color textColor = sortOption == sortList[i]
+              ? Colors.white
+              : const Color(0xff8355B7);
+
+          return GestureDetector(
+            onTap: () {
               getCustomerDetail(
                   createdBy: selectedStaff == ''
                       ? widget.staffInfo.name
                       : selectedStaff,
-                  sortChoice: '',
+                  sortChoice: sortOption == sortList[i] ? '' : sortList[i],
                   ascending: isAscending);
             },
-            style: TextButton.styleFrom(foregroundColor: Colors.redAccent),
-            child: Text(
-              'Clear',
-              style: TextStyle(
-                  fontFamily: ConstantFonts.poppinsMedium, fontSize: 13.0),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              margin: const EdgeInsets.symmetric(horizontal: 5.0),
+              decoration: BoxDecoration(
+                  color: containerColor,
+                  borderRadius: BorderRadius.circular(50.0),
+                  border:
+                      Border.all(width: 1.0, color: const Color(0xff8355B7))),
+              child: Center(
+                child: Text(
+                  sortList[i],
+                  style: TextStyle(
+                      fontFamily: ConstantFonts.poppinsBold,
+                      fontSize: 10.0,
+                      color: textColor),
+                ),
+              ),
             ),
-          )
-        ],
-      ),
-    );
+          );
+        });
   }
 
   Widget buildCustomerList() {
     return query == ''
         ? isLoading
             ? Center(child: Lottie.asset("assets/animation/loading.json"))
-            : customerInfo.isNotEmpty
+            : currentCustomerList.isNotEmpty
                 ? Column(
                     children: [
                       Text(
-                        'Total Count :${customerInfo.length}',
+                        'Total Count :${currentCustomerList.length}',
                         style: TextStyle(fontFamily: ConstantFonts.poppinsBold),
                       ),
                       Expanded(
                         child: ListView.builder(
                             physics: const BouncingScrollPhysics(),
-                            itemCount: customerInfo.length,
+                            itemCount: currentCustomerList.length,
                             itemBuilder: (c, index) {
                               return CustomerItem(
-                                  index: index,
-                                  customerInfo: customerInfo[index]);
+                                  customerInfo: currentCustomerList[index]);
                             }),
                       )
                     ],
                   )
                 : Center(
                     child: Text(
-                      'No detail found!',
+                      'No leads found!',
                       style: TextStyle(
                           fontFamily: ConstantFonts.poppinsMedium,
                           fontSize: 16.0),
@@ -451,7 +530,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
             itemCount: searchCustomerInfo.length,
             itemBuilder: (c, index) {
               return CustomerItem(
-                  index: index, customerInfo: searchCustomerInfo[index]);
+                  customerInfo: searchCustomerInfo[index]);
             });
   }
 }
