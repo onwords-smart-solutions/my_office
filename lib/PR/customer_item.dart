@@ -177,7 +177,7 @@ class CustomerItem extends StatelessWidget {
     return TimelineTile(
       nodePosition: .35,
       oppositeContents: Container(
-        padding: const EdgeInsets.only(left: 8.0),
+        padding: const EdgeInsets.only(left: 8.0, top: 5.0),
         width: size.width * .3,
         child: Text(
           field,
@@ -186,7 +186,7 @@ class CustomerItem extends StatelessWidget {
         ),
       ),
       contents: Container(
-        padding: const EdgeInsets.only(left: 8.0, top: 5.0),
+        padding: const EdgeInsets.only(left: 8.0, top: 5.0,right: 5.0),
         width: size.width * .7,
         // height: 20.0,
         child: Text(

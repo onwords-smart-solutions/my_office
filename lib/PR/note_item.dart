@@ -24,7 +24,6 @@ class NoteItem extends StatelessWidget {
 
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
-          border: Border.all(width: 1.5, color: Colors.grey.withOpacity(.5)),
           boxShadow: [
             BoxShadow(color: Colors.black.withOpacity(.3), blurRadius: 5.0)
           ],

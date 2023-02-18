@@ -55,7 +55,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         Container(
             width: size.width,
             height: size.height * .35,
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
                 color: widget.containerColor),
@@ -65,7 +65,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         Expanded(
             child: SizedBox(
           width: size.width,
-          child: buildNotes(),
+          child: buildNotes()
         )),
       ],
     );
@@ -127,6 +127,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(height: 10.0),
         //title
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -138,12 +139,12 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
             ),
 
             //note add button
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.add_circle_rounded),
-              color: const Color(0xff8355B7),
-              splashRadius: 20.0,
-            ),
+            // IconButton(
+            //   onPressed: () {},
+            //   icon: const Icon(Icons.add_circle_rounded),
+            //   color: const Color(0xff8355B7),
+            //   splashRadius: 20.0,
+            // ),
           ],
         ),
         //Notes list
@@ -180,7 +181,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     return TimelineTile(
       nodePosition: .38,
       oppositeContents: Container(
-        padding: const EdgeInsets.only(left: 8.0),
+        padding: const EdgeInsets.only(left: 8.0, top: 5.0),
         height: 30.0,
         width: size.width * .35,
         child: Text(
@@ -190,7 +191,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         ),
       ),
       contents: Container(
-        padding: const EdgeInsets.only(left: 8.0, top: 5.0),
+        padding: const EdgeInsets.only(left: 8.0, top: 5.0,right: 5.0),
         width: size.width * .7,
         height: 30.0,
         // height: 20.0,

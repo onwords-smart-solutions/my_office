@@ -71,6 +71,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
       {required String createdBy,
       required String sortChoice,
       required bool ascending}) {
+
     bool isSame = false;
     if (createdBy.toLowerCase() ==
         widget.staffInfo.name.toString().toLowerCase()) {
@@ -359,34 +360,6 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
   }
 
   Widget buildFilterHint() {
-    // return Container(
-    //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
-    //   height: 40.0,
-    //   child: Row(
-    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //     children: [
-    //       Text(
-    //         'Leads of $selectedStaff',
-    //         style: TextStyle(
-    //             fontFamily: ConstantFonts.poppinsMedium, fontSize: 13.0),
-    //       ),
-    //       TextButton(
-    //         onPressed: () {
-    //           getCustomerDetail(
-    //               createdBy: widget.staffInfo.name,
-    //               sortChoice: sortOption,
-    //               ascending: isAscending);
-    //         },
-    //         style: TextButton.styleFrom(foregroundColor: Colors.redAccent),
-    //         child: Text(
-    //           'Clear',
-    //           style: TextStyle(
-    //               fontFamily: ConstantFonts.poppinsMedium, fontSize: 13.0),
-    //         ),
-    //       )
-    //     ],
-    //   ),
-    // );
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 5.0),
@@ -422,36 +395,6 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
   }
 
   Widget buildSortHint() {
-    // return Container(
-    //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
-    //   height: 40.0,
-    //   child: Row(
-    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //     children: [
-    //       Text(
-    //         'Sorted by $sortOption',
-    //         style: TextStyle(
-    //             fontFamily: ConstantFonts.poppinsMedium, fontSize: 13.0),
-    //       ),
-    //       TextButton(
-    //         onPressed: () {
-    //           getCustomerDetail(
-    //               createdBy: selectedStaff == ''
-    //                   ? widget.staffInfo.name
-    //                   : selectedStaff,
-    //               sortChoice: '',
-    //               ascending: isAscending);
-    //         },
-    //         style: TextButton.styleFrom(foregroundColor: Colors.redAccent),
-    //         child: Text(
-    //           'Clear',
-    //           style: TextStyle(
-    //               fontFamily: ConstantFonts.poppinsMedium, fontSize: 13.0),
-    //         ),
-    //       )
-    //     ],
-    //   ),
-    // );
     return ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: sortList.length,
@@ -525,12 +468,15 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                           fontSize: 16.0),
                     ),
                   )
-        : ListView.builder(
+        : searchCustomerInfo.isNotEmpty? ListView.builder(
             physics: const BouncingScrollPhysics(),
             itemCount: searchCustomerInfo.length,
             itemBuilder: (c, index) {
               return CustomerItem(
                   customerInfo: searchCustomerInfo[index]);
-            });
+            }):Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: Text('No result for $query',style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),),
+            );
   }
 }
