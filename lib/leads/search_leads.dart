@@ -1,363 +1,482 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:timelines/timelines.dart';
-
+import 'package:lottie/lottie.dart';
+import 'package:my_office/models/staff_model.dart';
+import 'package:my_office/util/main_template.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
+import '../PR/customer_item.dart';
 
 class SearchLeadsScreen extends StatefulWidget {
-  const SearchLeadsScreen({Key? key}) : super(key: key);
+  final StaffModel staffInfo;
+
+  const SearchLeadsScreen({Key? key, required this.staffInfo})
+      : super(key: key);
 
   @override
   State<SearchLeadsScreen> createState() => _SearchLeadsScreenState();
 }
 
 class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
+  final ref = FirebaseDatabase.instance.ref();
+  late TextEditingController searchTextController;
+  List<Map<Object?, Object?>> allCustomer = [];
+  List<Map<Object?, Object?>> currentCustomerList = [];
+  List<Map<Object?, Object?>> searchCustomerInfo = [];
 
-
-  TextEditingController numberEditingController = TextEditingController();
-
-  String? selectedValue;
-  List<String> items = [
-    'Item1',
-    'Item2',
-    'Item3',
-    'Item4',
-    'Item5',
-    'Item6',
-    'Item7',
-    'Item8',
+  List<String> staffs = ['All'];
+  List<String> sortList = [
+    'Following Up',
+    'Delayed',
+    'Onwords',
+    'Advanced',
+    'Product',
+    'B2B',
+    'Under Construction',
+    'Installation Completed',
+    'Others',
   ];
+
+  String selectedStaff = '';
+  String sortOption = '';
+  String query = '';
+  bool isLoading = true;
+  bool isAscending = false;
+
+  //Function to fetch customer detail from firebase
+  void getCustomerFromFirebase() {
+    allCustomer.clear();
+    ref.child('customer').once().then((customerSnapshot) {
+      for (var customer in customerSnapshot.snapshot.children) {
+        final Map<Object?, Object?> data =
+            customer.value as Map<Object?, Object?>;
+        allCustomer.add(data);
+      }
+
+      getCustomerDetail(
+          createdBy:
+              selectedStaff == '' ? widget.staffInfo.name : selectedStaff,
+          sortChoice: sortOption,
+          ascending: isAscending);
+      //For disabling loading screen
+      if (!mounted) return;
+      setState(() {
+        isLoading = false;
+      });
+    });
+  }
+
+  void getCustomerDetail(
+      {required String createdBy,
+      required String sortChoice,
+      required bool ascending}) {
+
+    bool isSame = false;
+    if (createdBy.toLowerCase() ==
+        widget.staffInfo.name.toString().toLowerCase()) {
+      isSame = true;
+    }
+    //For enabling loading screen
+    if (!mounted) return;
+    setState(() {
+      currentCustomerList.clear();
+      selectedStaff = isSame ? '' : createdBy;
+      sortOption = sortChoice;
+      if (ascending) {
+        isAscending = true;
+      } else {
+        isAscending = false;
+      }
+    });
+
+    //Splitting name to get first name
+    final splitName = createdBy.split(' ');
+
+    for (var customer in allCustomer) {
+      final Map<Object?, Object?> data = customer;
+      final createdName = createdBy == 'All' ? '' : createdBy;
+      if (data['LeadIncharge']
+              .toString()
+              .toLowerCase()
+              .contains(createdName.toLowerCase()) ||
+          data['LeadIncharge']
+              .toString()
+              .toLowerCase()
+              .contains(splitName[0].toLowerCase())) {
+        if (sortOption.isNotEmpty) {
+          //sorting list
+          if (sortOption == 'Onwords') {
+            if (data['customer_state']
+                .toString()
+                .toLowerCase()
+                .contains('rejected')) {
+              currentCustomerList.add(data);
+            }
+          } else if (data['customer_state']
+              .toString()
+              .toLowerCase()
+              .contains(sortChoice.toLowerCase())) {
+            currentCustomerList.add(data);
+          }
+        } else {
+          currentCustomerList.add(data);
+        }
+      }
+    }
+
+    //Sorting list based on created date
+    if (ascending) {
+      currentCustomerList.sort((a, b) => (a['created_date'])
+          .toString()
+          .compareTo(b['created_date'].toString()));
+    } else {
+      currentCustomerList.sort((a, b) => (b['created_date'])
+          .toString()
+          .compareTo(a['created_date'].toString()));
+    }
+
+    //For disabling loading screen
+    if (!mounted) return;
+    setState(() {});
+  }
+
+  //Fetching PR Staff Names from firebase database
+  void getPRStaffNames() {
+    ref.child('staff').once().then((staffSnapshot) {
+      for (var data in staffSnapshot.snapshot.children) {
+        var fbData = data.value as Map<Object?, Object?>;
+        if (fbData['department'] == 'PR') {
+          final name = fbData['name'].toString();
+          staffs.add(name);
+        }
+      }
+
+      if (!mounted) return;
+      setState(() {});
+    });
+  }
+
+  @override
+  void initState() {
+    searchTextController = TextEditingController();
+    getCustomerFromFirebase();
+    getPRStaffNames();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    searchTextController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    return MainTemplate(
+        subtitle: 'Search leads here!',
+        templateBody: buildScreen(),
+        bgColor: ConstantColor.background1Color);
+  }
+
+  Widget buildScreen() {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: Stack(
-        children: [
-          Positioned(
-            top: height * 0.0,
-            left: width * 0.0,
-            right: width * 0.0,
-            bottom: height * 0.06,
-            child: Container(
-              height: height * 0.95,
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                  color: ConstantColor.background1Color,
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(30),
-                      bottomRight: Radius.circular(30))),
-              child: Stack(
-                children: [
-                  /// Top circle
-                  Positioned(
-                    top: height * 0.05,
-                    // left: width * 0.05,
-                    right: width * 0.05,
-                    child: const CircleAvatar(
-                      backgroundColor: ConstantColor.backgroundColor,
-                      radius: 20,
-                      child: Icon(
-                        Icons.person_rounded,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
+    return Column(
+      children: [
+        buildSearchBar(width: width),
+        Container(
+            height: height * .05,
+            width: width,
+            alignment: AlignmentDirectional.center,
+            padding: const EdgeInsets.symmetric(vertical: 5.0),
+            child: buildSortHint()),
+        if (selectedStaff != '') buildFilterHint(),
+        Expanded(child: buildCustomerList()),
+      ],
+    );
+  }
 
-                  ///Top Text...
-                  Positioned(
-                    top: height * 0.05,
-                    left: width * 0.05,
-                    // right: width*0.0,
-                    child: RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: 'Hi Ganesh\n',
-                            style: TextStyle(
-                              fontFamily: ConstantFonts.poppinsMedium,
-                              color: ConstantColor.blackColor,
-                              fontSize: height * 0.030,
-                            ),
-                          ),
-                          TextSpan(
-                            text: 'Search leads here!',
-                            style: TextStyle(
-                              fontFamily: ConstantFonts.poppinsMedium,
-                              color: ConstantColor.blackColor,
-                              fontSize: height * 0.020,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+  Widget buildSearchBar({required double width}) {
+    //search method
+    void searchUser(String query) {
+      final searchedCustomer = currentCustomerList.where((customer) {
+        final nameLower = customer['name'].toString().toLowerCase();
+        final phone = customer['phone_number'].toString();
+        final location = customer['city'].toString().toLowerCase();
+        final searchQuery = query.toLowerCase();
+        return nameLower.contains(searchQuery) ||
+            phone.contains(searchQuery) ||
+            location.contains(searchQuery);
+      }).toList();
+      setState(() {
+        this.query = query;
+        searchCustomerInfo = searchedCustomer;
+      });
+    }
 
-                  /// Search Fields
-                  Positioned(
-                    top: height * 0.14,
-                    left: width * 0.05,
-                    right: width*0.05,
-                    child: Container(
-                      height: height*0.08,
-                      width: width*0.5,
-                      decoration: BoxDecoration(
-                        color: ConstantColor.background1Color,
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.black.withOpacity(0.3),width: width*0.005)
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Container(
-                            height: height*0.08,
-                            width: width*0.7,
-                            color: Colors.transparent,
-                            child: Center(
-                              child: TextFormField(
-                                controller: numberEditingController,
-                                keyboardType: TextInputType.number,
-                                textInputAction: TextInputAction.done,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontFamily: ConstantFonts.poppinsMedium,fontSize: height*0.03,color: Colors.black),
-                                inputFormatters: [
-                                  LengthLimitingTextInputFormatter(10),
-                                ],
-                                decoration: InputDecoration(
-                                  suffixIcon: Image.asset('assets/search.png',scale: 3.5,),
-                                  border: InputBorder.none,
-                                  hintText: 'Search via phone number',
-                                  hintStyle: TextStyle(fontFamily: ConstantFonts.poppinsMedium,fontSize: height*0.02,color: Colors.black.withOpacity(0.3))
-                                ),
-                              ),
-                            ),
-                          ),
-                          VerticalDivider(
-                            thickness: 1,
-                            indent: height*0.02,
-                            endIndent: height*0.02,
-                            color: Colors.black,
-                          ),
-                         GestureDetector(
-                             onTap: (){
-                               setState(() {
-                                 setState(() {
-                                   showDialog(
-                                     context: context,
-                                     builder: (BuildContext context) {
-                                       return AlertDialog(
-                                         insetPadding: EdgeInsets.zero,
-                                         backgroundColor: Colors.transparent,
-                                         elevation: 0,
-                                         content: StatefulBuilder(builder:
-                                             (BuildContext context, StateSetter setState) {
-                                           return Container(
-                                             margin: EdgeInsets.only(top: height * 0.0),
-                                             height: height * 0.6,
-                                             width: width * 0.95,
-                                             decoration: BoxDecoration(
-                                               color: ConstantColor.background1Color,
-                                                 borderRadius: BorderRadius.circular(20),
-                                                ),
-                                             child: Column(
-                                               children: [
-                                                 Padding(
-                                                   padding: EdgeInsets.only(top: height*0.03),
-                                                   child: DropdownButtonHideUnderline(
-                                                     child: DropdownButton2(
-                                                       isExpanded: true,
-                                                       hint: Row(
-                                                         children:  [
-                                                           Icon(
-                                                             Icons.list,
-                                                             size: height*0.03,
-                                                             color: ConstantColor.blackColor,
-                                                           ),
-                                                           SizedBox(
-                                                             width: width*0.06,
-                                                           ),
-                                                           AutoSizeText(
-                                                             'Select Item',
-                                                             style: TextStyle(
-                                                               fontSize: height*0.02,
-                                                               fontFamily: ConstantFonts.poppinsMedium,
-                                                               color: ConstantColor.blackColor,
-                                                             ),
-                                                             // overflow: TextOverflow.ellipsis,
-                                                           ),
-                                                         ],
-                                                       ),
-                                                       items: items
-                                                           .map((item) =>
-                                                           DropdownMenuItem<String>(
-                                                             value: item,
-                                                             alignment: Alignment.center,
-                                                             child: AutoSizeText(
-                                                               item,
-                                                               style: TextStyle(
-                                                                   fontSize: height*0.02,
-                                                                   color: ConstantColor.blackColor,
-                                                                   fontFamily: ConstantFonts.poppinsMedium
-                                                               ),
-                                                               // overflow: TextOverflow.ellipsis,
-                                                             ),
-                                                           ),
-                                                       )
-                                                           .toList(),
-                                                       value: selectedValue,
-                                                       onChanged: (value) {
-                                                         setState(() {
-                                                           selectedValue = value as String;
-                                                         });
-                                                       },
-                                                       icon: const Icon(
-                                                         Icons.arrow_forward_ios,
-                                                       ),
-                                                       iconSize: height*0.02,
-                                                       iconEnabledColor: ConstantColor.blackColor,
-                                                       iconDisabledColor: Colors.grey,
-                                                       buttonHeight: height*0.08,
-                                                       buttonWidth: width*0.6,
-                                                       buttonPadding: const EdgeInsets.only(left: 10, right: 10),
-                                                       buttonDecoration: BoxDecoration(
-                                                         borderRadius: BorderRadius.circular(14),
-                                                         border: Border.all(
-                                                           color: Colors.black26,
-                                                         ),
-                                                         color: ConstantColor.background1Color,
-                                                       ),
-                                                       itemHeight: height*0.05,
-                                                       itemPadding:  EdgeInsets.only(left: width*0.2, right: width*0.2),
-                                                       dropdownMaxHeight: height*0.5,
-                                                       dropdownWidth: width*0.63,
-                                                       dropdownPadding: null,
-                                                       dropdownDecoration: BoxDecoration(
-                                                           borderRadius: BorderRadius.circular(20)
-                                                       ),
-                                                       //
-                                                       // elevation: 8,
-                                                       style: TextStyle(fontFamily: ConstantFonts.poppinsMedium,fontSize: height*0.02,color: Colors.black.withOpacity(0.3)),
-                                                       scrollbarRadius: const Radius.circular(20),
-                                                       scrollbarThickness: 5,
-                                                       scrollbarAlwaysShow: true,
-                                                       offset: const Offset(-6, 0),
-                                                     ),
-                                                   ),
-                                                 ),
-                                               ],
-                                             ),
-                                           );
-                                         }),
-                                       );
-                                     },
-                                   );
-                                 });
-                               });
-                         },
-                             child: Image.asset('assets/filter.png',scale: 3.5,))
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  Positioned(
-                    top: height * 0.25,
-                    left: width * 0.01,
-                    right: width*0.01,
-                    bottom: height * 0.008,
-                    child: contentContainer(height, width),
-                  ),
-
-
-                ],
+    return Container(
+      width: width,
+      margin: const EdgeInsets.only(right: 15.0, left: 15.0, bottom: 10.0),
+      child: Container(
+        height: 40.0,
+        padding: const EdgeInsets.only(left: 10.0),
+        decoration: BoxDecoration(
+            color: ConstantColor.background1Color,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: const Color(0xffA4A1A6), width: 1.0)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            //Search bar
+            Expanded(
+              child: CupertinoSearchTextField(
+                backgroundColor: const Color(0xffF1F2F8),
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                prefixIcon: Image.asset(
+                  'assets/search.png',
+                  scale: 4.5,
+                ),
+                controller: searchTextController,
+                placeholder: 'Search leads',
+                onSubmitted: (value) {
+                  FocusScope.of(context).unfocus();
+                },
+                onChanged: (value) {
+                  searchUser(value.toString());
+                },
+                style: TextStyle(
+                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontSize: 15,
+                    color: Colors.black),
               ),
             ),
+            const VerticalDivider(
+              thickness: 1,
+              indent: 5.0,
+              endIndent: 5.0,
+              color: Color(0xffA4A1A6),
+            ),
+            buildDropDown(),
+
+            IconButton(
+              onPressed: () {
+                getCustomerDetail(
+                    createdBy: selectedStaff == ''
+                        ? widget.staffInfo.name
+                        : selectedStaff,
+                    sortChoice: sortOption,
+                    ascending: !isAscending);
+              },
+              icon: Icon(
+                isAscending
+                    ? Icons.arrow_upward_rounded
+                    : Icons.arrow_downward_rounded,
+                size: 20.0,
+              ),
+              color: const Color(0xffB13FC8),
+            ),
+            // buildSortDropDown(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildDropDown() {
+    return PopupMenuButton(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        position: PopupMenuPosition.under,
+        elevation: 10.0,
+        itemBuilder: (ctx) => List.generate(
+              staffs.length,
+              (index) {
+                if (staffs[index] == 'All') {
+                  return PopupMenuItem(
+                    child: Text(
+                      staffs[index],
+                      style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+                    ),
+                    onTap: () {
+                      getCustomerDetail(
+                          createdBy: 'All',
+                          sortChoice: sortOption,
+                          ascending: isAscending);
+                    },
+                  );
+                }
+                return PopupMenuItem(
+                  child: Text(
+                    staffs[index],
+                    style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+                  ),
+                  onTap: () {
+                    getCustomerDetail(
+                        createdBy: staffs[index],
+                        sortChoice: sortOption,
+                        ascending: isAscending);
+                  },
+                );
+              },
+            ),
+        icon: Image.asset(
+          'assets/filter.png',
+          scale: 4.5,
+        ));
+  }
+
+  Widget buildSortDropDown() {
+    return PopupMenuButton(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        position: PopupMenuPosition.under,
+        elevation: 10.0,
+        itemBuilder: (ctx) => List.generate(
+              sortList.length,
+              (index) {
+                return PopupMenuItem(
+                  child: Text(
+                    sortList[index],
+                    style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+                  ),
+                  onTap: () {
+                    getCustomerDetail(
+                        createdBy: selectedStaff == ''
+                            ? widget.staffInfo.name
+                            : selectedStaff,
+                        sortChoice: sortList[index],
+                        ascending: isAscending);
+                  },
+                );
+              },
+            ),
+        icon: const Icon(
+          Icons.filter_list_rounded,
+          color: Color(0xffB93DCB),
+          size: 25.0,
+        ));
+  }
+
+  Widget buildFilterHint() {
+
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 5.0),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
+
+            decoration: BoxDecoration(
+              color: const Color(0xff8355B7),
+              borderRadius: BorderRadius.circular(50.0),
+            ),
+            child: Text(
+              'Leads of $selectedStaff',
+              style: TextStyle(
+                  fontFamily: ConstantFonts.poppinsMedium, fontSize: 14.0,color: Color(0xffF1F2F8)),
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              getCustomerDetail(
+                  createdBy: widget.staffInfo.name,
+                  sortChoice: sortOption,
+                  ascending: isAscending);
+            },
+            icon: const Icon(Icons.cancel,size: 20.0,),
+
+            color: Colors.red,
           ),
         ],
       ),
     );
   }
 
-  GridView contentContainer(double height, double width) {
-    return GridView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      physics: const BouncingScrollPhysics(),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 1,
-                          mainAxisSpacing: 1 / 0.1,
-                          mainAxisExtent: 40 / 0.1,
+  Widget buildSortHint() {
+    return ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: sortList.length,
+        physics: const BouncingScrollPhysics(),
+        itemBuilder: (ctx, i) {
+          Color containerColor = sortOption == sortList[i]
+              ? const Color(0xff8355B7)
+              : const Color(0xffF1F2F8);
+          Color textColor = sortOption == sortList[i]
+              ? Colors.white
+              : const Color(0xff8355B7);
+
+          return GestureDetector(
+            onTap: () {
+              getCustomerDetail(
+                  createdBy: selectedStaff == ''
+                      ? widget.staffInfo.name
+                      : selectedStaff,
+                  sortChoice: sortOption == sortList[i] ? '' : sortList[i],
+                  ascending: isAscending);
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              margin: const EdgeInsets.symmetric(horizontal: 5.0),
+              decoration: BoxDecoration(
+                  color: containerColor,
+                  borderRadius: BorderRadius.circular(50.0),
+                  border:
+                      Border.all(width: 1.0, color: const Color(0xff8355B7))),
+              child: Center(
+                child: Text(
+                  sortList[i],
+                  style: TextStyle(
+                      fontFamily: ConstantFonts.poppinsBold,
+                      fontSize: 10.0,
+                      color: textColor),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  Widget buildCustomerList() {
+    return query == ''
+        ? isLoading
+            ? Center(child: Lottie.asset("assets/animation/loading.json"))
+            : currentCustomerList.isNotEmpty
+                ? Column(
+                    children: [
+                      Text(
+                        'Total Count :${currentCustomerList.length}',
+                        style: TextStyle(fontFamily: ConstantFonts.poppinsBold),
                       ),
-                      itemCount: 3,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Container(
-
-                          height: height * 0.3,
-                          margin: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: ConstantColor.background1Color,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                offset: const Offset(-0.0, 5.0),
-                                blurRadius: 8,
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(11),
-                          ),
-                          child: SingleChildScrollView(
-                            padding: EdgeInsets.symmetric(vertical: height*0.02),
+                      Expanded(
+                        child: ListView.builder(
                             physics: const BouncingScrollPhysics(),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                FixedTimeline.tileBuilder(
-                                  theme: TimelineThemeData(color: ConstantColor.backgroundColor.withOpacity(0.8),connectorTheme: ConnectorThemeData(color: ConstantColor.blackColor.withOpacity(0.3))),
-                                  builder: TimelineTileBuilder.connectedFromStyle(
-                                    contentsAlign: ContentsAlign.basic,
-                                    contentsBuilder: (context, index) =>  Container(
-                                      margin: EdgeInsets.only(top: height*0.01,left: width*0.02),
-                                      width: width*0.4,
-                                      height: height*0.038,
-                                      color: Colors.transparent,
-                                      child: AutoSizeText(
-                                        'opposite contents', style: TextStyle(
-                                        fontFamily: ConstantFonts.poppinsMedium,
-                                        color: ConstantColor.blackColor,
-                                      ),
-                                        maxFontSize: 18,
-                                        minFontSize: 10,
-                                      ),
-                                    ),
-                                    oppositeContentsBuilder: (context, index) => Container(
-                                      margin: EdgeInsets.only(top: height*0.01),
-                                    width: width*0.4,
-                                    height: height*0.038,
-                                    color: Colors.transparent,
-                                    child: AutoSizeText(
-                                    'opposite contents', style: TextStyle(
-                                    fontFamily: ConstantFonts.poppinsMedium,
-                                    color: ConstantColor.blackColor,
-                                    ),
-                                      maxFontSize: 18,
-                                      minFontSize: 10,
-                                    ),
-                                  ),
-                                    connectorStyleBuilder: (context, index) => ConnectorStyle.solidLine,
-                                    indicatorStyleBuilder: (context, index) => IndicatorStyle.outlined,
-
-                                    itemCount: 10,
-                                ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      });
+                            itemCount: currentCustomerList.length,
+                            itemBuilder: (c, index) {
+                              return CustomerItem(
+                                  customerInfo: currentCustomerList[index]);
+                            }),
+                      )
+                    ],
+                  )
+                : Center(
+                    child: Text(
+                      'No leads found!',
+                      style: TextStyle(
+                          fontFamily: ConstantFonts.poppinsMedium,
+                          fontSize: 16.0),
+                    ),
+                  )
+        : searchCustomerInfo.isNotEmpty? ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            itemCount: searchCustomerInfo.length,
+            itemBuilder: (c, index) {
+              return CustomerItem(
+                  customerInfo: searchCustomerInfo[index]);
+            }):Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: Text('No result for $query',style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),),
+            );
   }
 }
-

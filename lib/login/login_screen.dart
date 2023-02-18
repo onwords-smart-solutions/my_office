@@ -254,6 +254,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           child: Center(
+
             child: _isLoading
                 ? Lottie.asset(
                     "assets/animations/loading.json",
@@ -267,6 +268,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
           )),
+
     );
   }
 
