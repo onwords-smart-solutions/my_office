@@ -11,6 +11,7 @@ import 'package:my_office/models/staff_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'introduction/intro_screen.dart';
+import 'models/visit_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +21,8 @@ void main() async {
   await Hive.initFlutter();
   if (!Hive.isAdapterRegistered(StaffModelAdapter().typeId)) {
     Hive.registerAdapter(StaffModelAdapter());
+  }if (!Hive.isAdapterRegistered(VisitModelAdapter().typeId)) {
+    Hive.registerAdapter(VisitModelAdapter());
   }
 
   SystemChrome.setPreferredOrientations([
