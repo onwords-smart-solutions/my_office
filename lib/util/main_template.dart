@@ -26,9 +26,19 @@ class MainTemplate extends StatefulWidget {
 }
 
 class _MainTemplateState extends State<MainTemplate> {
+  final HiveOperations _hiveOperations = HiveOperations();
+  StaffModel? staffInfo;
+
+  void getStaffDetail() async {
+    final data = await _hiveOperations.getStaffDetail();
+    setState(() {
+      staffInfo = data;
+    });
+  }
+
   @override
   void initState() {
-    HiveOperations().getUStaffDetail();
+ getStaffDetail();
     super.initState();
   }
 
@@ -38,7 +48,6 @@ class _MainTemplateState extends State<MainTemplate> {
    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SizedBox(
-
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
 
@@ -65,10 +74,7 @@ class _MainTemplateState extends State<MainTemplate> {
                     bottomRight: Radius.circular(30.0),
                     bottomLeft: Radius.circular(30.0),
                   ),
-                  child: ValueListenableBuilder(
-                      valueListenable: staffDetails,
-                      builder: (BuildContext ctx, List<StaffModel> staffInfo, Widget? child) {
-                        return Column(
+                  child:  Column(
                           children: [
                             Padding(
                               padding:
@@ -83,9 +89,9 @@ class _MainTemplateState extends State<MainTemplate> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        staffInfo.isEmpty
+                                        staffInfo==null
                                             ? 'Hi'
-                                            : 'Hi ${staffInfo[0].name}',
+                                            : 'Hi ${staffInfo!.name}',
                                         style: TextStyle(
                                           fontFamily:
                                               ConstantFonts.poppinsMedium,
@@ -109,7 +115,7 @@ class _MainTemplateState extends State<MainTemplate> {
                                       HapticFeedback.mediumImpact();
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
-                                              builder: (_) => AccountScreen(staffDetails:  staffInfo[0])));
+                                              builder: (_) => AccountScreen(staffDetails:  staffInfo!)));
                                     },
                                     child: const CircleAvatar(
                                       radius: 20.0,
@@ -128,8 +134,8 @@ class _MainTemplateState extends State<MainTemplate> {
                             Expanded(child: widget.templateBody),
 
                           ],
-                        );
-                      }),
+                        ),
+
                 ),
               ),
             ),
