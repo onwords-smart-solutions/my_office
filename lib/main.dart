@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'My Office',
       debugShowCheckedModeBanner: false,
+
       theme: ThemeData(
         primarySwatch: Colors.purple,
         scaffoldBackgroundColor: ConstantColor.backgroundColor,

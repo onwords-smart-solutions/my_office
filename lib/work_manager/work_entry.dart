@@ -58,16 +58,17 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
 
   String? currentUser;
   var fbData;
-  var totalTime;
+  var totalWorkingTime;
   List nameList = [];
   List endTimeList = [];
   List startTimeList = [];
   List workDoneList = [];
   List workPercentageList = [];
+  List workingHoursList = [];
 
   getWorkDone() {
     nameList.clear();
-    // totalWorkingTimeList.clear();
+    workingHoursList.clear();
     startTimeList.clear();
     endTimeList.clear();
     workPercentageList.clear();
@@ -85,12 +86,13 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
           endTimeList.add(fbData['to']);
           workPercentageList.add(fbData['workPercentage']);
           workDoneList.add(fbData['workDone']);
-          // totalWorkingTimeList.add(fbData['time_in_hours']);
+          workingHoursList.add(fbData['time_in_hours']);
         });
       }
     });
   }
 
+  var timeDifference;
   String? timeOfStart = '';
   String? timeOfEnd = '';
   String? percentage = '';
@@ -102,13 +104,14 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   createNewWork() {
     staff
         .child(
-            "${widget.userId}/workManager/timeSheet/$formattedYear/$formattedMonth/$formattedDate/${timeOfStart.toString().trim()} To ${timeOfEnd.toString().trim()}")
+            "${widget.userId}/workManager/timeSheet/$formattedYear/$formattedMonth/$formattedDate/${timeOfStart.toString().trim()} to ${timeOfEnd.toString().trim()}")
         .set({
       "from": timeOfStart.toString().trim(),
       "to": timeOfEnd.toString().trim(),
       "workDone": _workController.text.toString().trim(),
       "workPercentage": "${_percentController.text.toString().trim()}%",
       'name': widget.staffName.toString().trim(),
+      'time_in_hours' : totalWorkingTime.toString(),
     }).then((value) {
       timeOfStart = '';
       timeOfEnd = '';
@@ -448,6 +451,35 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
             GestureDetector(
               onTap: () {
                 setState(() {
+                  String st = timeOfStart.toString().replaceAll(RegExp(r'[^0-9]'), ':');
+                  String et = timeOfEnd.toString().replaceAll(RegExp(r'[^0-9]'), ':');
+                  //
+                  String startTime = st.toString(); // or if '24:00'
+                  String endTime = et.toString(); // or if '12:00
+
+                  var format = DateFormat("HH:mm");
+                  var start = format.parse(startTime);
+                  var end = format.parse(endTime);
+
+                  if (end.isAfter(start)) {
+                    timeDifference = end.difference(start);
+                  }
+                  var s = timeDifference.toString().length;
+
+                  if(timeDifference.toString().length == 14) {
+
+                    setState(() {
+                      totalWorkingTime = timeDifference.toString().substring(0, s-10);
+                      // print(totalWorkingTime);
+                    });
+                  }else {
+                    setState(() {
+                      totalWorkingTime = timeDifference.toString().substring(0, s-10);
+                      // print(totalWorkingTime);
+                    });
+
+                  }
+                  ///
                   if (timeOfStart!.isNotEmpty &&
                       timeOfEnd!.isNotEmpty &&
                       _percentController.text.isNotEmpty &&
@@ -557,7 +589,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                             height * 0.020),
                         textWidget(
                             height,
-                            'Percent : ${workPercentageList[index]}',
+                            'Duration : ${workingHoursList[index]}',
                             height * 0.020),
                       ],
                     ),
