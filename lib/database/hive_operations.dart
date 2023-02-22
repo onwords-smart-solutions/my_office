@@ -5,9 +5,7 @@ import '../models/visit_model.dart';
 
 ValueNotifier<List<VisitModel>> prVisits = ValueNotifier([]);
 
-
-class HiveOperations with ChangeNotifier{
-
+class HiveOperations with ChangeNotifier {
   Future<void> addStaffDetail({required StaffModel staff}) async {
     final userDB = await Hive.openBox<StaffModel>('user_db');
     await userDB.add(staff);
@@ -26,9 +24,19 @@ class HiveOperations with ChangeNotifier{
   }
 
   //ADDING DATA FOR PR VISIT
-Future<void> addVisitEntry({required String phoneNumber}) async {
-  final userDB = await Hive.openBox<StaffModel>('pr_db');
-}
-}
+  Future<void> addVisitEntry({required VisitModel visit}) async {
+    final userDB = await Hive.openBox<VisitModel>('pr_db');
+    await userDB.add(visit);
 
+    prVisits.value.add(visit);
+    prVisits. notifyListeners();
+  }
 
+  //GETTING DATA FOR PR VISIT
+  Future<void> getVisitEntry() async {
+    final userDB = await Hive.openBox<VisitModel>('pr_db');
+ prVisits.value.clear();
+    prVisits.value.addAll(userDB.values);
+    prVisits.notifyListeners();
+  }
+}

@@ -100,9 +100,9 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                 child: Column(
                   children: [
                     buildHeadSection(),
-                    // buildTeaSection(),
-                    // buildCoffeeSection(),
-                    // buildFoodSection(),
+                    buildTeaSection(),
+                    buildCoffeeSection(),
+                    buildFoodSection(),
                   ],
                 ),
               ),

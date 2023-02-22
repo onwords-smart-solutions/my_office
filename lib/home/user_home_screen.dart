@@ -11,6 +11,7 @@ import 'package:my_office/PR/visit/visit_form_screen.dart';
 import 'package:my_office/models/staff_model.dart';
 import 'package:my_office/refreshment/refreshment_screen.dart';
 import 'package:my_office/util/main_template.dart';
+import 'package:my_office/util/notification_services.dart';
 import '../Absentees/absentees.dart';
 import '../Constant/fonts/constant_font.dart';
 import '../database/hive_operations.dart';
@@ -30,6 +31,7 @@ class UserHomeScreen extends StatefulWidget {
 
 class _UserHomeScreenState extends State<UserHomeScreen> {
   final HiveOperations _hiveOperations = HiveOperations();
+  final NotificationService _notificationService = NotificationService();
   StaffModel? staffInfo;
   late StreamSubscription subscription;
   var isDeviceConnected = false;
@@ -60,6 +62,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   void initState() {
     getConnectivity();
     getStaffDetail();
+    // _notificationService.showDailyNotification();
     super.initState();
   }
 
@@ -77,7 +80,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   Widget buildMenuGrid(double height, double width) {
     return staffInfo != null
         ? staffInfo!.department == 'ADMIN'
-            ?GridView(
+            ? GridView(
                 physics: const BouncingScrollPhysics(),
                 padding: const EdgeInsets.symmetric(
                     horizontal: 10.0, vertical: 20.0),
@@ -117,7 +120,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       page: const AbsenteeScreen()),
                 ],
               )
-            :staffInfo!.department == 'PR'
+            : staffInfo!.department == 'PR'
                 ? GridView(
                     physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.symmetric(
@@ -244,9 +247,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             ),
                             page: const VisitFromScreen(),
                           ),
+
+
                         ],
                       )
-                    :GridView(
+                    : GridView(
                         physics: const BouncingScrollPhysics(),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10.0, vertical: 20.0),

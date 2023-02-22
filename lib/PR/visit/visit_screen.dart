@@ -4,6 +4,8 @@ import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
 import 'package:my_office/PR/visit/product_detail_screen.dart';
+import 'package:my_office/database/hive_operations.dart';
+import 'package:my_office/models/visit_model.dart';
 
 import '../../util/screen_template.dart';
 
@@ -287,9 +289,20 @@ class _VisitScreenState extends State<VisitScreen> {
       height: 38.0,
       width: 120.0,
       child: ElevatedButton(
-          onPressed: (){
-            Navigator.of(context).push(MaterialPageRoute(builder: (_)=>ProductDetailScreen()));
+          onPressed: () async {
+            final nav = Navigator.of(context);
+            final today = DateTime.now();
+            final date = '${today.year}-${today.month}-${today.day}';
+            final time = '${today.hour}:${today.minute}';
+            final visitData = VisitModel(
+                date: date,
+                time: time,
+                customerPhoneNumber: phoneNumber,
+                customerName: customerData['name'].toString(),stage: 'visitScreen');
 
+            await HiveOperations().addVisitEntry(visit: visitData);
+            nav.push(
+                MaterialPageRoute(builder: (_) => const ProductDetailScreen()));
           },
           style: ElevatedButton.styleFrom(
               disabledBackgroundColor: ConstantColor.backgroundColor,

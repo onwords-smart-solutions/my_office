@@ -11,30 +11,36 @@ class VisitModel {
   @HiveField(2)
   late String customerPhoneNumber;
   @HiveField(3)
-  late List<Map<String, List<Uint8List>>>? prDetails;
+  late String customerName;
   @HiveField(4)
-  late Uint8List? startKmImage;
+  late List<Map<String, List<Uint8List>>>? prDetails;
   @HiveField(5)
-  late Uint8List? endKmImage;
+  late Uint8List? startKmImage;
   @HiveField(6)
-  late String? totalKm;
+  late Uint8List? endKmImage;
   @HiveField(7)
-  late List<String>? productName;
+  late String? totalKm;
   @HiveField(8)
-  late Uint8List? productImage;
+  late List<String>? productName;
   @HiveField(9)
-  late String? quotationNumber;
+  late Uint8List? productImage;
   @HiveField(10)
-  late String? invoiceNumber;
+  late String? quotationNumber;
   @HiveField(11)
-  late String? note;
+  late String? invoiceNumber;
   @HiveField(12)
+  late String? note;
+  @HiveField(13)
   late String? dateOfInstallation;
+  @HiveField(14)
+  late String stage;
 
   VisitModel(
       {required this.date,
       required this.time,
       required this.customerPhoneNumber,
+        required this.customerName,
+        required this.stage,
       this.prDetails,
       this.startKmImage,
       this.endKmImage,

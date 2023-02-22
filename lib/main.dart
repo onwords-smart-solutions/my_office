@@ -8,10 +8,15 @@ import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/home/user_home_screen.dart';
 import 'package:my_office/login/login_screen.dart';
 import 'package:my_office/models/staff_model.dart';
+import 'package:my_office/util/notification_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'introduction/intro_screen.dart';
 import 'models/visit_model.dart';
+
+
+
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,10 +40,22 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final NotificationService _notificationService = NotificationService();
+
+  @override
+  void initState() {
+    _notificationService.initializePlatformNotifications();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
