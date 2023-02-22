@@ -23,6 +23,8 @@ class WorkCompleteViewScreen extends StatefulWidget {
 }
 
 class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
+
+
   final staff = FirebaseDatabase.instance.ref().child("staff");
 
   double percent = 0;
@@ -52,7 +54,6 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
       selectedDate = formatterDate.format(newDate);
       selectedMonth = newDate.toString().substring(5, 7);
       selectedYear = newDate.toString().substring(0, 4);
-      // print(selectedYear);
       if (selectedDate != null) {
         getWorkDetails();
       }
@@ -67,9 +68,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
   List workDetailsList = [];
   List percentList = [];
   List totalTimeList = [];
-
-  // List dayTotalWork = [];
-
+  List workingHoursList = [];
   var fbData;
 
   getWorkDetails() {
@@ -84,6 +83,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
     endTimeList.clear();
     workDetailsList.clear();
     percentList.clear();
+    workingHoursList.clear();
     staff.once().then((value) {
       for (var element in value.snapshot.children) {
         for (var element1 in element.children) {
@@ -116,6 +116,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                                 nameList.add(fbData['name']);
                                 startTimeList.add(fbData['to']);
                                 endTimeList.add(fbData['from']);
+                                workingHoursList.add(fbData['time_in_hours']);
                               });
                             }
                           }
@@ -127,37 +128,11 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
               }
             }
           }
-          // for (var element2 in element1.children) {
-          //
-          //   for (var element3 in element2.children) {
-          //
-          //     // if (element3.key == selectedDate) {
-          //     //   for (var element4 in element3.children) {
-          // //     //     // print(element4.value);
-          //     //     fbData = element4.value;
-          //     //     setState(() {
-          //     //       allData.add(fbData);
-          // //     //       // print("allData......${allData}");
-          //     //       nameData.add(fbData['name']);
-          //     //       nameData = nameData.toSet().toList();
-          // //     //       // print('data2 ..................${nameData}');
-          //     //       name.add(fbData['name']);
-          //     //       to.add(fbData['to']);
-          //     //       from.add(fbData['from']);
-          //     //       workDone.add(fbData['workDone']);
-          //     //       workPercentage.add(fbData['workPercentage']);
-          //     //       totalTime.add(fbData["time_in_hours"]);
-          //     //     });
-          //     //   }
-          //     // }
-          //   }
-          // }
         }
       }
       if (!mounted) return;
       setState(() {
         isLoading = false;
-        // print('bottom  value $isLoading');
       });
     });
   }
@@ -421,7 +396,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                                 height * 0.010),
                             textWidget(
                                 height,
-                                'Percent : ${allData[ind]['workPercentage']}',
+                                'Duration : ${workingHoursList[index]}',
                                 height * 0.010),
                           ],
                         ),
