@@ -18,6 +18,8 @@ import 'models/visit_model.dart';
 
 
 
+/// version: 1.0.0+3 Updated On (21/02/2023)
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

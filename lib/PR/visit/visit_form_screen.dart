@@ -27,7 +27,7 @@ class _VisitFromScreenState extends State<VisitFromScreen> {
   }
 
   Widget buildScreen() {
-    return Column(
+    return Column(  
       children: [
         buildNewFormButton(),
         const Divider(height: 0.0),

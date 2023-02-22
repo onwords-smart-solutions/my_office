@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
+import 'package:my_office/PR/visit/summary_notes.dart';
 import 'package:my_office/util/screen_template.dart';
 
 class ProductDetailScreen extends StatefulWidget {
@@ -14,6 +15,7 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final TextEditingController _invoiceController = TextEditingController();
   final TextEditingController _quotationController = TextEditingController();
+
   Map<String, bool> products = {
     'Smart Home': false,
     'Gate': false,
@@ -134,7 +136,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             const Text('Invoice'),
             const SizedBox(width: 20.0),
             SizedBox(
-              width: MediaQuery.of(context).size.width * .65,
+              width: MediaQuery.of(context).size.width * .63,
               child: TextField(
                   controller: _invoiceController,
                   textInputAction: TextInputAction.done,
@@ -156,19 +158,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         color: Colors.purple,
                       ),
                     ),
-                  )),
+                  ),
+              ),
             )
           ],
         ),
         const SizedBox(height: 10.0),
         //quotation
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             const Text('Quotation'),
             const SizedBox(width: 20.0),
             SizedBox(
-              width: MediaQuery.of(context).size.width * .65,
+              width: MediaQuery.of(context).size.width * .63,
               child: TextField(
                   controller: _quotationController,
                   textInputAction: TextInputAction.done,
@@ -204,7 +207,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       width: 120.0,
       child: ElevatedButton(
           onPressed: () {
-            // Navigator.of(context).push(MaterialPageRoute(builder: (_)=>ProductDetailScreen()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (_)=>const SummaryAndNotes()));
           },
           style: ElevatedButton.styleFrom(
               disabledBackgroundColor: ConstantColor.backgroundColor,

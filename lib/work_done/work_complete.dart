@@ -396,7 +396,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                                 height * 0.010),
                             textWidget(
                                 height,
-                                'Duration : ${workingHoursList[index]}',
+                                'Duration : ${allData[ind]['time_in_hours']}',
                                 height * 0.010),
                           ],
                         ),
