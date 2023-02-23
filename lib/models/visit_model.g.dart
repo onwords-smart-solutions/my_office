@@ -20,7 +20,7 @@ class VisitModelAdapter extends TypeAdapter<VisitModel> {
       dateTime: fields[0] as DateTime,
       customerPhoneNumber: fields[1] as String,
       customerName: fields[2] as String,
-      stage: fields[10] as String,
+      stage: fields[9] as String,
       startKm: fields[5] as int?,
       prDetails: (fields[3] as List?)
           ?.map((dynamic e) => (e as Map).map(
@@ -29,15 +29,14 @@ class VisitModelAdapter extends TypeAdapter<VisitModel> {
       startKmImage: fields[4] as Uint8List?,
       productName: (fields[6] as List?)?.cast<String>(),
       productImage: (fields[7] as List?)?.cast<Uint8List>(),
-      invoiceNumber: fields[9] as String?,
-      quotationNumber: fields[8] as String?,
+      quotationInvoiceNumber: fields[8] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, VisitModel obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.dateTime)
       ..writeByte(1)
@@ -55,10 +54,8 @@ class VisitModelAdapter extends TypeAdapter<VisitModel> {
       ..writeByte(7)
       ..write(obj.productImage)
       ..writeByte(8)
-      ..write(obj.quotationNumber)
+      ..write(obj.quotationInvoiceNumber)
       ..writeByte(9)
-      ..write(obj.invoiceNumber)
-      ..writeByte(10)
       ..write(obj.stage);
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/PR/visit/product_detail_screen.dart';
 import 'package:my_office/PR/visit/summary_notes.dart';
+import 'package:my_office/PR/visit/verification_screen.dart';
 import 'package:my_office/database/hive_operations.dart';
 import 'package:my_office/models/visit_model.dart';
 
@@ -32,9 +33,15 @@ class ResumeVisitFormItem extends StatelessWidget {
               switch (visitDetail.stage) {
                 case 'visitScreen':
                   Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => VerificationScreen(
+                          name: visitDetail.customerName,
+                          phone: visitDetail.customerPhoneNumber)));
+                  break;
+
+                case 'verificationScreen':
+                  Navigator.of(context).push(MaterialPageRoute(
                       builder: (_) => ProductDetailScreen(
-                            name: visitDetail.customerName,
-                            phone: visitDetail.customerPhoneNumber,
+                            visiData: visitDetail,
                           )));
                   break;
                 case 'productScreen':

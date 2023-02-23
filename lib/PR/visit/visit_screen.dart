@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
 import 'package:my_office/PR/visit/product_detail_screen.dart';
+import 'package:my_office/PR/visit/verification_screen.dart';
 import 'package:my_office/database/hive_operations.dart';
 import 'package:my_office/models/visit_model.dart';
 
@@ -297,7 +298,7 @@ class _VisitScreenState extends State<VisitScreen> {
 
         await HiveOperations().addVisitEntry(visit: visitData);
         nav.push(MaterialPageRoute(
-            builder: (_) => ProductDetailScreen(
+            builder: (_) => VerificationScreen(
                 phone: phoneNumber, name: customerData['name'].toString())));
       },
       child: Container(

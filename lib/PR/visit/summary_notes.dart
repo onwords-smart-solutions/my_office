@@ -29,7 +29,6 @@ class SummaryAndNotes extends StatefulWidget {
 class _SummaryAndNotesState extends State<SummaryAndNotes> {
   File? image;
   int totalKm = 0;
-  int startKm = 300;
   bool isLoading = false;
   TextEditingController summaryController = TextEditingController();
   TextEditingController dateController = TextEditingController();
@@ -355,12 +354,13 @@ class _SummaryAndNotesState extends State<SummaryAndNotes> {
                   textInputAction: TextInputAction.done,
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.center,
-                  maxLength: 3,
+                  maxLength: 6,
                   onChanged: (value) {
                     final end = int.parse(value);
+                    final start = widget.visitInfo.startKm;
                     setState(() {
-                      if (end > startKm) {
-                        totalKm = end - startKm;
+                      if (end > start!) {
+                        totalKm = end - start;
                       } else {
                         totalKm = 0;
                       }
@@ -483,7 +483,6 @@ class _SummaryAndNotesState extends State<SummaryAndNotes> {
           message: 'Please upload your KM readings', color: Colors.red);
     } else {
       //Enabling loading indication
-
       setState(() {
         isLoading = true;
       });
@@ -491,9 +490,10 @@ class _SummaryAndNotesState extends State<SummaryAndNotes> {
       //adding all details into firebase
       await uploadToFirebase();
 
-      //delete visit from local db
+      // delete visit from local db
       if (isLoading) {
-        showSnackBar(message: "Visit entry submitted successfully", color: Colors.green);
+        showSnackBar(
+            message: "Visit entry submitted successfully", color: Colors.green);
         await HiveOperations().deleteVisitEntry(
             phoneNumber: widget.visitInfo.customerPhoneNumber);
         nav.pushAndRemoveUntil(
@@ -508,6 +508,7 @@ class _SummaryAndNotesState extends State<SummaryAndNotes> {
     String inChargeImageLink = '';
     String supportImageLink = '';
     List<String> productImageUrls = [];
+    List<String> prImageUrls = [];
 
     final today = DateTime.now();
     final ref = FirebaseDatabase.instance.ref();
@@ -515,6 +516,22 @@ class _SummaryAndNotesState extends State<SummaryAndNotes> {
         'visit/${today.year}/${today.month}/${today.day}/${widget.visitInfo.customerPhoneNumber}/');
     final storageRef = FirebaseStorage.instance.ref().child(
         'VISIT/${today.year}/${today.month}/${today.day}/${widget.visitInfo.customerPhoneNumber}/$today');
+
+    final data = widget.visitInfo.prDetails ?? [];
+    String inchargeName = '';
+    List<String> support = [];
+
+    for (int i = 0; i < data.length; i++) {
+      if (data[i].keys.first.contains('/incharge')) {
+        inchargeName = data[i].keys.first.replaceAll('/incharge', '');
+      } else {
+        support.add(data[i].keys.first.toString());
+      }
+    }
+
+    //uploading pr images
+    prImageUrls = await uploadPrImages(
+        images: widget.visitInfo.prDetails ?? [], storageRef: storageRef);
 
     //uploading travel images
     travelImageUrls = await uploadTravelImages(storageRef: storageRef);
@@ -529,14 +546,20 @@ class _SummaryAndNotesState extends State<SummaryAndNotes> {
     if (isLoading) {
       dbPath.set({
         'verification': {
-          'startKM': startKm,
+          'startKM': widget.visitInfo.startKm,
           'endKM': totalKMController.text,
           'MeterReadings': travelImageUrls,
           'totalKM': totalKm,
         },
+        'prDetails': {
+          'incharge': inchargeName,
+          'prImages': prImageUrls,
+          'supports': support,
+        },
         'productDetails': {
           'products': widget.visitInfo.productName,
           'productImages': productImageUrls,
+          'quotationInvoiceNumber':widget.visitInfo.quotationInvoiceNumber,
         },
         'summary': {
           'note': summaryController.text,
@@ -544,6 +567,43 @@ class _SummaryAndNotesState extends State<SummaryAndNotes> {
         }
       });
     }
+  }
+
+  //UPLOADING PR IMAGES
+  Future<List<String>> uploadPrImages(
+      {required dynamic storageRef,
+      required List<Map<String, Uint8List>> images}) async {
+    List<String> imageUrls = [];
+    imageUrls = await Future.wait(
+        images.map((image) => uploadPRImage(image: image, ref: storageRef)));
+    return imageUrls;
+  }
+
+  Future<String> uploadPRImage(
+      {required Map<String, Uint8List> image, required dynamic ref}) async {
+    String url = '';
+
+    try {
+      String fileName = image.keys.first;
+      if (image.keys.first.contains('/incharge')) {
+        fileName = image.keys.first.replaceAll('/incharge', '');
+      }
+
+      final path = ref.child('PR/${fileName}_image.jpeg');
+      UploadTask uploadTask = path.putData(image.values.first);
+      await uploadTask.whenComplete(() async {
+        url = await path.getDownloadURL();
+      });
+    } catch (e) {
+      print(e);
+      setState(() {
+        isLoading = false;
+      });
+      showSnackBar(
+          message: 'Something went wrong. Unable to submit visit entry',
+          color: Colors.red);
+    }
+    return url;
   }
 
   //UPLOADING TRAVEL KM IMAGES
@@ -554,7 +614,7 @@ class _SummaryAndNotesState extends State<SummaryAndNotes> {
       //START KM IMAGE
       storageRef
           .child('TRAVEL/startKM.jpeg')
-          .putFile(image!)
+          .putData(widget.visitInfo.startKmImage)
           .whenComplete(() async {
         final endKmUrl =
             await storageRef.child('TRAVEL/startKM.jpeg').getDownloadURL();

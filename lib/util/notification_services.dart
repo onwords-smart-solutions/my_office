@@ -42,6 +42,20 @@ class NotificationService {
 
   //showing notification function
   Future<void> showDailyNotification() async {
+    final now = DateTime.now();
+    final isWeekend = now.weekday == DateTime.sunday;
+    if (isWeekend) {
+      // Don't schedule notification on weekends
+      return;
+    }
 
+    const channelId = 'my_channel_id';
+    const channelName = 'My channel';
+    const channelDescription = 'My channel description';
+    const importance = Importance.max;
+
+    const title = 'My Notification Title';
+    const body = 'This is my notification message';
+    final scheduledDate = DateTime(now.year, now.month, now.day, 10, 0, 0); // 10 AM
   }
 }

@@ -22,10 +22,8 @@ class VisitModel {
   @HiveField(7)
   late List<Uint8List>? productImage;
   @HiveField(8)
-  late String? quotationNumber;
+  late String? quotationInvoiceNumber;
   @HiveField(9)
-  late String? invoiceNumber;
-  @HiveField(10)
   late String stage;
 
   VisitModel({
@@ -38,7 +36,6 @@ class VisitModel {
     this.startKmImage,
     this.productName,
     this.productImage,
-    this.invoiceNumber,
-    this.quotationNumber,
+    this.quotationInvoiceNumber
   });
 }

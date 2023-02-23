@@ -12,10 +12,9 @@ import 'package:my_office/models/visit_model.dart';
 import 'package:my_office/util/screen_template.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  final String phone;
-  final String name;
+  final VisitModel visiData;
 
-  const ProductDetailScreen({Key? key, required this.name, required this.phone})
+  const ProductDetailScreen({Key? key, required this.visiData})
       : super(key: key);
 
   @override
@@ -45,6 +44,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return ScreenTemplate(bodyTemplate: buildScreen(), title: 'Product Detail');
   }
 
@@ -111,37 +111,37 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   Widget buildQuotation() {
-    final size=MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15.0),
       child: Column(
         children: [
           SizedBox(
-            height: size.height*.05,
-            width: size.width*.65,
+            height: size.height * .05,
+            width: size.width * .65,
             child: ElevatedButton(
                 onPressed: () async {
-await LaunchApp.openApp(
+                  await LaunchApp.openApp(
                     androidPackageName: 'com.onwords.invoice_app',
                   );
-
                 },
                 style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xff8355B7)),
                 child: const Text('Generate Quotation/Invoice')),
           ),
-         const  Text('or',style: TextStyle(color: Colors.grey),),
+          const Text(
+            'or',
+            style: TextStyle(color: Colors.grey),
+          ),
           SizedBox(
-            height: size.height*.06,
-            width: size.width*.65,
-
+              height: size.height * .06,
+              width: size.width * .65,
               child: TextField(
                   controller: _textController,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
                     hintText: 'Quotation/Invoice number',
                     enabledBorder: OutlineInputBorder(
-
                       borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide(
                         width: 1,
@@ -389,6 +389,8 @@ await LaunchApp.openApp(
           message: 'Please select at least one product', color: Colors.red);
     } else if (productImages.isEmpty) {
       showSnackBar(message: 'Please upload product image', color: Colors.red);
+    }else if (_textController.text.isEmpty) {
+      showSnackBar(message: 'Please enter quotation or invoice number', color: Colors.red);
     } else {
       //converting selected images into Uint8list to store in local db
       if (productImages.length > productImagesBytes.length) {
@@ -401,10 +403,14 @@ await LaunchApp.openApp(
 
       final visitData = VisitModel(
           dateTime: DateTime.now(),
-          customerPhoneNumber: widget.phone,
-          customerName: widget.name,
+          customerPhoneNumber: widget.visiData.customerPhoneNumber,
+          customerName: widget.visiData.customerName,
+          startKmImage: widget.visiData.startKmImage,
+          startKm: widget.visiData.startKm,
+          prDetails: widget.visiData.prDetails,
           productName: selectedProducts,
           productImage: productImagesBytes,
+          quotationInvoiceNumber: _textController.value.text,
           stage: 'productScreen');
       await HiveOperations().updateVisitEntry(newVisitEntry: visitData);
 
