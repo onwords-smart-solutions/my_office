@@ -1,3 +1,4 @@
+import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,8 +23,7 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  final TextEditingController _invoiceController = TextEditingController();
-  final TextEditingController _quotationController = TextEditingController();
+  final TextEditingController _textController = TextEditingController();
   List<File> productImages = [];
   List<Uint8List> productImagesBytes = [];
   List<String> selectedProducts = [];
@@ -39,8 +39,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   void dispose() {
-    _invoiceController.dispose();
-    _quotationController.dispose();
+    _textController.dispose();
     super.dispose();
   }
 
@@ -57,6 +56,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           SizedBox(
               height: MediaQuery.of(context).size.height * .35,
               child: buildProductSelection()),
+          const Divider(height: 0.0),
+          buildQuotation(),
           const Divider(height: 0.0),
           buildProductImage(),
           buildNextButton(),
@@ -106,6 +107,57 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget buildQuotation() {
+    final size=MediaQuery.of(context).size;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 15.0),
+      child: Column(
+        children: [
+          SizedBox(
+            height: size.height*.05,
+            width: size.width*.65,
+            child: ElevatedButton(
+                onPressed: () async {
+await LaunchApp.openApp(
+                    androidPackageName: 'com.onwords.invoice_app',
+                  );
+
+                },
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xff8355B7)),
+                child: const Text('Generate Quotation/Invoice')),
+          ),
+         const  Text('or',style: TextStyle(color: Colors.grey),),
+          SizedBox(
+            height: size.height*.06,
+            width: size.width*.65,
+
+              child: TextField(
+                  controller: _textController,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    hintText: 'Quotation/Invoice number',
+                    enabledBorder: OutlineInputBorder(
+
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: BorderSide(
+                        width: 1,
+                        color: Colors.grey.withOpacity(.3),
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8),
+                      borderSide: const BorderSide(
+                        width: 1.5,
+                        color: Colors.purple,
+                      ),
+                    ),
+                  ))),
+        ],
+      ),
     );
   }
 
@@ -339,7 +391,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       showSnackBar(message: 'Please upload product image', color: Colors.red);
     } else {
       //converting selected images into Uint8list to store in local db
-
       if (productImages.length > productImagesBytes.length) {
         productImagesBytes.clear();
         for (var i in productImages) {

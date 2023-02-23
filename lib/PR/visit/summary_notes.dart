@@ -510,13 +510,11 @@ class _SummaryAndNotesState extends State<SummaryAndNotes> {
     List<String> productImageUrls = [];
 
     final today = DateTime.now();
-    final uid = FirebaseAuth.instance.currentUser!.uid;
-
     final ref = FirebaseDatabase.instance.ref();
     final dbPath = ref.child(
         'visit/${today.year}/${today.month}/${today.day}/${widget.visitInfo.customerPhoneNumber}/');
     final storageRef = FirebaseStorage.instance.ref().child(
-        'VISIT/${today.year}/${today.month}/${today.day}/$uid/Visit_$today');
+        'VISIT/${today.year}/${today.month}/${today.day}/${widget.visitInfo.customerPhoneNumber}/$today');
 
     //uploading travel images
     travelImageUrls = await uploadTravelImages(storageRef: storageRef);
@@ -621,7 +619,7 @@ class _SummaryAndNotesState extends State<SummaryAndNotes> {
     return url;
   }
 
-  //-----------SNACKBAR---------------//
+  //-----------SNACK BAR---------------//
   void showSnackBar({required String message, required Color color}) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
