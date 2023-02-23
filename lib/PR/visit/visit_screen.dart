@@ -285,31 +285,43 @@ class _VisitScreenState extends State<VisitScreen> {
   }
 
   Widget buildNextButton() {
-    return SizedBox(
-      height: 38.0,
-      width: 120.0,
-      child: ElevatedButton(
-          onPressed: () async {
-            final nav = Navigator.of(context);
-            final today = DateTime.now();
-            final date = '${today.year}-${today.month}-${today.day}';
-            final time = '${today.hour}:${today.minute}';
-            final visitData = VisitModel(
-                date: date,
-                time: time,
-                customerPhoneNumber: phoneNumber,
-                customerName: customerData['name'].toString(),stage: 'visitScreen');
+    final size = MediaQuery.of(context).size;
+    return GestureDetector(
+      onTap: () async {
+        final nav = Navigator.of(context);
+        final visitData = VisitModel(
+            dateTime: DateTime.now(),
+            customerPhoneNumber: phoneNumber,
+            customerName: customerData['name'].toString(),
+            stage: 'visitScreen');
 
-            await HiveOperations().addVisitEntry(visit: visitData);
-            nav.push(
-                MaterialPageRoute(builder: (_) => const ProductDetailScreen()));
-          },
-          style: ElevatedButton.styleFrom(
-              disabledBackgroundColor: ConstantColor.backgroundColor,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0)),
-              backgroundColor: ConstantColor.backgroundColor),
-          child: const Text('Next')),
+        await HiveOperations().addVisitEntry(visit: visitData);
+        nav.push(MaterialPageRoute(
+            builder: (_) => ProductDetailScreen(
+                phone: phoneNumber, name: customerData['name'].toString())));
+      },
+      child: Container(
+        height: size.height * 0.07,
+        width: size.width * 0.9,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          gradient: const LinearGradient(
+            colors: [
+              Color(0xffD136D4),
+              Color(0xff7652B2),
+            ],
+          ),
+        ),
+        child: Center(
+          child: Text(
+            'Next',
+            style: TextStyle(
+                fontFamily: ConstantFonts.poppinsMedium,
+                fontSize: size.height * 0.025,
+                color: Colors.white),
+          ),
+        ),
+      ),
     );
   }
 

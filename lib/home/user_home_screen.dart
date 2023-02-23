@@ -247,6 +247,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             ),
                             page: const VisitFromScreen(),
                           ),
+                          ElevatedButton(onPressed: ()async{
+                           await HiveOperations().clearPREntry();
+                          }, child: Text('Delete PR DISK'))
 
 
                         ],

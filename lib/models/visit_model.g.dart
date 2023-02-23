@@ -17,60 +17,48 @@ class VisitModelAdapter extends TypeAdapter<VisitModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return VisitModel(
-      date: fields[0] as String,
-      time: fields[1] as String,
-      customerPhoneNumber: fields[2] as String,
-      customerName: fields[3] as String,
-      stage: fields[14] as String,
-      prDetails: (fields[4] as List?)
-          ?.map((dynamic e) => (e as Map).map((dynamic k, dynamic v) =>
-              MapEntry(k as String, (v as List).cast<Uint8List>())))
+      dateTime: fields[0] as DateTime,
+      customerPhoneNumber: fields[1] as String,
+      customerName: fields[2] as String,
+      stage: fields[10] as String,
+      startKm: fields[5] as int?,
+      prDetails: (fields[3] as List?)
+          ?.map((dynamic e) => (e as Map).map(
+              (dynamic k, dynamic v) => MapEntry(k as String, v as Uint8List)))
           .toList(),
-      startKmImage: fields[5] as Uint8List?,
-      endKmImage: fields[6] as Uint8List?,
-      totalKm: fields[7] as String?,
-      productName: (fields[8] as List?)?.cast<String>(),
-      productImage: fields[9] as Uint8List?,
-      invoiceNumber: fields[11] as String?,
-      quotationNumber: fields[10] as String?,
-      dateOfInstallation: fields[13] as String?,
-      note: fields[12] as String?,
+      startKmImage: fields[4] as Uint8List?,
+      productName: (fields[6] as List?)?.cast<String>(),
+      productImage: (fields[7] as List?)?.cast<Uint8List>(),
+      invoiceNumber: fields[9] as String?,
+      quotationNumber: fields[8] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, VisitModel obj) {
     writer
-      ..writeByte(15)
-      ..writeByte(0)
-      ..write(obj.date)
-      ..writeByte(1)
-      ..write(obj.time)
-      ..writeByte(2)
-      ..write(obj.customerPhoneNumber)
-      ..writeByte(3)
-      ..write(obj.customerName)
-      ..writeByte(4)
-      ..write(obj.prDetails)
-      ..writeByte(5)
-      ..write(obj.startKmImage)
-      ..writeByte(6)
-      ..write(obj.endKmImage)
-      ..writeByte(7)
-      ..write(obj.totalKm)
-      ..writeByte(8)
-      ..write(obj.productName)
-      ..writeByte(9)
-      ..write(obj.productImage)
-      ..writeByte(10)
-      ..write(obj.quotationNumber)
       ..writeByte(11)
+      ..writeByte(0)
+      ..write(obj.dateTime)
+      ..writeByte(1)
+      ..write(obj.customerPhoneNumber)
+      ..writeByte(2)
+      ..write(obj.customerName)
+      ..writeByte(3)
+      ..write(obj.prDetails)
+      ..writeByte(4)
+      ..write(obj.startKmImage)
+      ..writeByte(5)
+      ..write(obj.startKm)
+      ..writeByte(6)
+      ..write(obj.productName)
+      ..writeByte(7)
+      ..write(obj.productImage)
+      ..writeByte(8)
+      ..write(obj.quotationNumber)
+      ..writeByte(9)
       ..write(obj.invoiceNumber)
-      ..writeByte(12)
-      ..write(obj.note)
-      ..writeByte(13)
-      ..write(obj.dateOfInstallation)
-      ..writeByte(14)
+      ..writeByte(10)
       ..write(obj.stage);
   }
 

@@ -27,7 +27,7 @@ class _VisitFromScreenState extends State<VisitFromScreen> {
   }
 
   Widget buildScreen() {
-    return Column(  
+    return Column(
       children: [
         buildNewFormButton(),
         const Divider(height: 0.0),
@@ -60,21 +60,52 @@ class _VisitFromScreenState extends State<VisitFromScreen> {
         valueListenable: prVisits,
         builder: (BuildContext ctx, List<VisitModel> visitList, Widget? child) {
           return visitList.isNotEmpty
-              ? ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: visitList.length,
-                  itemBuilder: (ctx, i) {
-                    return ResumeVisitFormItem(
-                        name: visitList[i].customerName,
-                        date: visitList[i].date,
-                        time: visitList[i].time,
-                        number: visitList[i].customerPhoneNumber);
-                  })
+              ? buildUnfinishedVisitEntries(visitList: visitList)
               : Center(
-                  child: Text('No pending visit entry',
-                      style: TextStyle(
-                          fontFamily: ConstantFonts.poppinsMedium,
-                          fontSize: 16.0)));
+                  child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0, vertical: 5.0),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10.0),
+                      border:
+                          Border.all(width: 1, color: const Color(0xff8355B7))),
+                  child: Text(
+                    'No pending visit entry',
+                    style: TextStyle(
+                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontSize: 14.0,color: const Color(0xff8355B7)
+                    ),
+                  ),
+                ));
         });
+  }
+
+  Widget buildUnfinishedVisitEntries({required List<VisitModel> visitList}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+          margin: const EdgeInsets.only(top: 15.0, left: 5.0),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.0),
+              color: const Color(0xff8355B7)),
+          child: Text(
+            'Incomplete visit forms',
+            style: TextStyle(
+                fontFamily: ConstantFonts.poppinsMedium,
+                fontSize: 14.0,
+                color: Colors.white),
+          ),
+        ),
+        Expanded(
+            child: ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                itemCount: visitList.length,
+                itemBuilder: (ctx, i) {
+                  return ResumeVisitFormItem(visitDetail: visitList[i]);
+                }))
+      ],
+    );
   }
 }
