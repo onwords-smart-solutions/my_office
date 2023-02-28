@@ -1,3 +1,4 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ class NotificationService {
   Future<void> initializePlatformNotifications() async {
     tz.initializeTimeZones();
     const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('@drawable/suitcase');
+        AndroidInitializationSettings('@drawable/suitcase');
     const InitializationSettings settings = InitializationSettings(
       android: initializationSettingsAndroid,
     );
@@ -22,40 +23,98 @@ class NotificationService {
 
   Future<NotificationDetails> _notificationDetails() async {
     AndroidNotificationDetails androidNotificationDetails =
-    const AndroidNotificationDetails('My Office', 'Refreshment',
-        groupKey: 'com.onwords.my_office',
-        channelDescription: 'Notifications for refreshment reminder',
-        importance: Importance.max,
-        priority: Priority.high,
-        enableLights: true,
-        sound: RawResourceAndroidNotificationSound('alarm'),
-        autoCancel: false,
-        audioAttributesUsage: AudioAttributesUsage.notificationRingtone,
-        playSound: true,
-        fullScreenIntent: true,
-        onlyAlertOnce: false,
-        enableVibration: true,
-        channelAction: AndroidNotificationChannelAction.createIfNotExists,
-        color: Color(0xff8355B7));
+        const AndroidNotificationDetails('My Office', 'Refreshment',
+            groupKey: 'com.onwords.my_office',
+            channelDescription: 'Notifications for refreshment reminder',
+            importance: Importance.max,
+            priority: Priority.high,
+            enableLights: true,
+            sound: RawResourceAndroidNotificationSound('alarm'),
+            autoCancel: false,
+            audioAttributesUsage: AudioAttributesUsage.notificationRingtone,
+            playSound: true,
+            fullScreenIntent: true,
+            onlyAlertOnce: false,
+            enableVibration: true,
+            channelAction: AndroidNotificationChannelAction.createIfNotExists,
+            color: Color(0xff8355B7));
     return NotificationDetails(android: androidNotificationDetails);
   }
 
   //showing notification function
-  Future<void> showDailyNotification() async {
-    final now = DateTime.now();
-    final isWeekend = now.weekday == DateTime.sunday;
-    if (isWeekend) {
-      // Don't schedule notification on weekends
-      return;
+  Future<void> showDailyNotification({required String setTime}) async {
+    //Notification setting main function
+    setNotification() async {
+      final pref = await SharedPreferences.getInstance();
+      final currentTime = DateTime.now();
+      final notTimeMng = DateTime(
+          currentTime.year, currentTime.month, currentTime.day, 10, 00);
+      final notTimeEvg = DateTime(
+          currentTime.year, currentTime.month, currentTime.day, 14, 00);
+
+      final detail = await _notificationDetails();
+
+      const title = 'Refreshment reminder';
+      const body = 'Don\'t forget to update your refreshment preferences.';
+      // 10 AM
+
+      for (int i = 0; i < 8; i++) {
+        final notificationTimeMorning = notTimeMng.add(Duration(days: i));
+        final notificationTimeEvening = notTimeEvg.add(Duration(days: i));
+
+        //Morning notification
+        if (notificationTimeMorning.weekday != 7) {
+          if (currentTime.hour >= 10 && i == 0) {
+            print('Morining time already passed');
+          } else {
+            _notifications.zonedSchedule(
+              i,
+              title,
+              body,
+              tz.TZDateTime.from(notificationTimeMorning, tz.local),
+              detail,
+              uiLocalNotificationDateInterpretation:
+                  UILocalNotificationDateInterpretation.absoluteTime,
+              androidAllowWhileIdle: true,
+            );
+          }
+        }
+
+        //Evening notificaiton
+        if (notificationTimeEvening.weekday != 7) {
+          if (currentTime.hour >= 14 && i == 0) {
+            print('Evening time already passed');
+          } else {
+            _notifications.zonedSchedule(
+              i,
+              title,
+              body,
+              tz.TZDateTime.from(notificationTimeEvening, tz.local),
+              detail,
+              uiLocalNotificationDateInterpretation:
+                  UILocalNotificationDateInterpretation.absoluteTime,
+              androidAllowWhileIdle: true,
+            );
+          }
+        }
+      }
+
+      //Setting time in shared preference
+      await pref.setString('NotificationSetTime', currentTime.toString());
     }
 
-    const channelId = 'my_channel_id';
-    const channelName = 'My channel';
-    const channelDescription = 'My channel description';
-    const importance = Importance.max;
-
-    const title = 'My Notification Title';
-    const body = 'This is my notification message';
-    final scheduledDate = DateTime(now.year, now.month, now.day, 10, 0, 0); // 10 AM
+    DateTime currentTime = DateTime.now();
+    if (setTime.isNotEmpty) {
+      final notificationSetTime = DateTime.parse(setTime);
+      if (currentTime
+              .compareTo(notificationSetTime.add(const Duration(days: 6))) >
+          0) {
+        //notification set time is passed
+        setNotification();
+      }
+    } else {
+      //first time notification setting
+      setNotification();
+    }
   }
 }

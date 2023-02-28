@@ -12,6 +12,7 @@ import 'package:my_office/models/staff_model.dart';
 import 'package:my_office/refreshment/refreshment_screen.dart';
 import 'package:my_office/util/main_template.dart';
 import 'package:my_office/util/notification_services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Absentees/absentees.dart';
 import '../Constant/fonts/constant_font.dart';
 import '../database/hive_operations.dart';
@@ -37,6 +38,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   var isDeviceConnected = false;
   bool isAlertSet = false;
 
+
   getConnectivity() {
     subscription = Connectivity()
         .onConnectivityChanged
@@ -58,11 +60,18 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     });
   }
 
+  //Notification set
+  setNotification()async{
+    final pref=await SharedPreferences.getInstance();
+    final isNotificationSet=pref.getString('NotificationSetTime')??'';
+    _notificationService.showDailyNotification(setTime: isNotificationSet);
+  }
+
   @override
   void initState() {
     getConnectivity();
     getStaffDetail();
-    // _notificationService.showDailyNotification();
+    setNotification();
     super.initState();
   }
 
@@ -159,6 +168,15 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           name: 'Search leads',
                           image: Image.asset('assets/leave_apply.png'),
                           page: SearchLeadsScreen(staffInfo: staffInfo!)),
+
+                      // buildButton(
+                      //   name: 'Visit',
+                      //   image: Image.asset(
+                      //     'assets/leave form.png',
+                      //     scale: 4.0,
+                      //   ),
+                      //   page: const VisitFromScreen(),
+                      // ),
                     ],
                   )
                 : staffInfo!.department == 'APP'
@@ -247,9 +265,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             ),
                             page: const VisitFromScreen(),
                           ),
-                          ElevatedButton(onPressed: ()async{
-                           await HiveOperations().clearPREntry();
-                          }, child: Text('Delete PR DISK'))
+                          // ElevatedButton(onPressed: ()async{
+                          //
+                          // }, child: Text('show notificaiton'))
 
 
                         ],

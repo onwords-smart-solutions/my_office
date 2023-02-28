@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
-import 'package:my_office/database/hive_operations.dart';
 import 'package:my_office/refreshment/refreshment_details.dart';
 import 'package:my_office/util/custom_rect_tween.dart';
 import 'package:my_office/util/hero_dialog_route.dart';
@@ -31,9 +31,9 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
 
   void checkMorningTime() {
     final mngStart = DateTime(
-        currentDateTime.year, currentDateTime.month, currentDateTime.day, 9, 0);
+        currentDateTime.year, currentDateTime.month, currentDateTime.day, 9, 30);
     final mngEnd = DateTime(currentDateTime.year, currentDateTime.month,
-        currentDateTime.day, 11, 30);
+        currentDateTime.day, 11, 0);
     if (currentDateTime.isBefore(mngEnd) && currentDateTime.isAfter(mngStart)) {
       setState(() {
         isMngTea = true;
@@ -143,10 +143,26 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
         if (!isMngTea && !isEvgTea)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Text(
-              'Selection will display according to time only. Come and visit again!',
-              style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
-              textAlign: TextAlign.center,
+            child: Column(
+              children: [
+                Lottie.asset('assets/animations/Time anime.json',height: 200),
+                const SizedBox(height: 15.0),
+                Text(
+                  'Wait until refreshment portal opens...',
+                  style: TextStyle(fontFamily: ConstantFonts.poppinsBold,color: Colors.deepPurple,fontSize: 16.0),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 25.0),
+                Text(
+                  'Morning refreshment and food time: 9:30 AM - 11:00 AM',
+                  style: TextStyle(fontFamily: ConstantFonts.poppinsMedium,color: Colors.deepPurple,fontSize: 12.0),
+                  textAlign: TextAlign.center,
+                ),Text(
+                  'Evening refreshment time: 1:30 PM - 3:30 PM',
+                  style: TextStyle(fontFamily: ConstantFonts.poppinsMedium,color: Colors.deepPurple,fontSize: 12.0),
+                  textAlign: TextAlign.center,
+                ),
+              ],
             ),
           )
       ],
