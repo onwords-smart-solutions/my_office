@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
@@ -67,6 +69,7 @@ class NotificationService {
           if (currentTime.hour >= 10 && i == 0) {
             print('Morining time already passed');
           } else {
+            log("Notification set for mng $notificationTimeMorning");
             _notifications.zonedSchedule(
               i,
               title,
@@ -85,6 +88,7 @@ class NotificationService {
           if (currentTime.hour >= 14 && i == 0) {
             print('Evening time already passed');
           } else {
+            log("Notification set for Evg $notificationTimeEvening");
             _notifications.zonedSchedule(
               i,
               title,

@@ -32,8 +32,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     'Gate': false,
     'Door': false,
     'Tank': false,
-    'Server': false,
-    'Window': false,
+    'Others': false,
   };
 
   @override
@@ -74,36 +73,108 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
         ),
         Expanded(
-          child: ListView(
-            padding: const EdgeInsets.all(0.0),
+          child: GridView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
             physics: const BouncingScrollPhysics(),
-            children: products.keys.map((String key) {
-              return SizedBox(
-                height: 38.0,
-                child: CheckboxListTile(
-                  checkboxShape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5.0)),
-                  enableFeedback: true,
-                  title: Text(
-                    key,
-                    style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
-                  ),
-                  value: products[key],
-                  onChanged: (data) {
-                    setState(() {
-                      products.update(key, (value) => data!);
-                      if (data == true) {
-                        selectedProducts.add(key);
-                      } else {
-                        if (selectedProducts.contains(key)) {
-                          selectedProducts.remove(key);
+            shrinkWrap: true,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 4,
+                crossAxisSpacing: 1.0,
+                childAspectRatio: 1,
+                mainAxisSpacing: 1.0),
+            itemCount: products.length,
+
+            itemBuilder: (BuildContext context, int i) {
+              final productName = products.keys.toList()[i].toString();
+              final isSelected = products.values.toList()[i];
+
+              String imagePath = 'assets/visit/default.jpg';
+
+              switch (productName.toLowerCase()) {
+                case 'smart home':
+                  imagePath = 'assets/visit/smart_home.jpg';
+                  break;
+                case 'gate':
+                  imagePath = 'assets/visit/gate.jpg';
+                  break;
+                case 'tank':
+                  imagePath = 'assets/visit/tank.jpg';
+                  break;
+                case 'door':
+                  imagePath = 'assets/visit/door.jpg';
+                  break;
+              }
+
+              return GestureDetector(
+                onTap: () {
+                  setState(() {
+                    products.update(productName, (value) {
+                      if (value == true) {
+                        if (selectedProducts.contains(productName)) {
+                          selectedProducts.remove(productName);
                         }
+                      } else {
+                        selectedProducts.add(productName);
                       }
+                      return !value;
                     });
-                  },
+                  });
+                },
+                child: Container(
+                  margin: const EdgeInsets.all(4.0),
+                  decoration: BoxDecoration(
+                      gradient:isSelected?null:const LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Colors.black, Colors.black],
+                        stops:  [0.1, 0.9],
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                      image: DecorationImage(
+                          colorFilter:isSelected?null: ColorFilter.mode(
+                              Colors.black.withOpacity(.3), BlendMode.dstATop),
+                          image: AssetImage(imagePath),
+                          fit: BoxFit.cover)),
+                  child: Align(
+                    alignment: AlignmentDirectional.bottomCenter,
+                      child:isSelected?const SizedBox.shrink(): Text(
+                    productName,
+                    style: TextStyle(
+                        fontSize: 12.0,
+                        color: Colors.white,
+                        fontFamily: ConstantFonts.poppinsBold),
+                  )),
                 ),
               );
-            }).toList(),
+            },
+
+            // children: products.keys.map((String key) {
+            //   return SizedBox(
+            //     height: 38.0,
+            //     child: CheckboxListTile(
+            //       checkboxShape: RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.circular(5.0)),
+            //       enableFeedback: true,
+            //       title: Text(
+            //         key,
+            //         style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+            //       ),
+            //       value: products[key],
+            //       onChanged: (data) {
+            //         setState(() {
+            //           products.update(key, (value) => data!);
+            //           if (data == true) {
+            //             selectedProducts.add(key);
+            //           } else {
+            //             if (selectedProducts.contains(key)) {
+            //               selectedProducts.remove(key);
+            //             }
+            //           }
+            //         });
+            //       },
+            //     ),
+            //   );
+            // }).toList(),
           ),
         ),
       ],
@@ -389,8 +460,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           message: 'Please select at least one product', color: Colors.red);
     } else if (productImages.isEmpty) {
       showSnackBar(message: 'Please upload product image', color: Colors.red);
-    }else if (_textController.text.isEmpty) {
-      showSnackBar(message: 'Please enter quotation or invoice number', color: Colors.red);
+    } else if (_textController.text.isEmpty) {
+      showSnackBar(
+          message: 'Please enter quotation or invoice number',
+          color: Colors.red);
     } else {
       //converting selected images into Uint8list to store in local db
       if (productImages.length > productImagesBytes.length) {
