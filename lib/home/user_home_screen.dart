@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,11 +36,13 @@ class UserHomeScreen extends StatefulWidget {
 class _UserHomeScreenState extends State<UserHomeScreen> {
   final HiveOperations _hiveOperations = HiveOperations();
   final NotificationService _notificationService = NotificationService();
+
+
+  final String currentAppVersion = '1.0.0+7';
   StaffModel? staffInfo;
   late StreamSubscription subscription;
   var isDeviceConnected = false;
   bool isAlertSet = false;
-
 
   getConnectivity() {
     subscription = Connectivity()
@@ -61,14 +66,30 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   }
 
   //Notification set
-  setNotification()async{
-    final pref=await SharedPreferences.getInstance();
-    final isNotificationSet=pref.getString('NotificationSetTime')??'';
+  setNotification() async {
+    final pref = await SharedPreferences.getInstance();
+    final isNotificationSet = pref.getString('NotificationSetTime') ?? '';
     _notificationService.showDailyNotification(setTime: isNotificationSet);
+  }
+
+  //Checking app version
+  Future<void> checkAppVersion() async {
+    final ref = FirebaseDatabase.instance.ref();
+
+    ref.child('myOffice').once().then((value) {
+      if (value.snapshot.exists) {
+        final data = value.snapshot.value as Map<Object?, Object?>;
+        final updatedVersion = data['versionNumber'];
+        if (currentAppVersion != updatedVersion) {
+          showUpdateAppDialog();
+        }
+      }
+    });
   }
 
   @override
   void initState() {
+    checkAppVersion();
     getConnectivity();
     getStaffDetail();
     setNotification();
@@ -260,16 +281,16 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           buildButton(
                             name: 'Visit',
                             image: Image.asset(
-                              'assets/leave form.png',
-                              scale: 4.0,
+                              'assets/visit.png',
+                              scale: 3.0,
                             ),
                             page: const VisitFromScreen(),
                           ),
-                          // ElevatedButton(onPressed: ()async{
-                          //
-                          // }, child: Text('show notificaiton'))
-
-
+                          // ElevatedButton(
+                          //     onPressed: () async {
+                          //      // showUpdateAppDialog();
+                          //     },
+                          //     child: Text('Check Version'))
                         ],
                       )
                     : GridView(
@@ -373,6 +394,48 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  showUpdateAppDialog() {
+    showCupertinoDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) => WillPopScope(child: CupertinoAlertDialog(
+        title: Text(
+          "New Update Available!",
+          style: TextStyle(
+            fontFamily: ConstantFonts.poppinsBold,
+          ),
+        ),
+        content: Text(
+          "You are currently using an outdated version. Please update to a newer version to continue",
+          style: TextStyle(
+            fontFamily: ConstantFonts.poppinsMedium,
+          ),
+        ),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            textStyle: TextStyle(
+              fontFamily: ConstantFonts.poppinsMedium,
+            ),
+            onPressed: () async {
+              final url = Uri.parse(
+                  'https://play.google.com/store/apps/details?id=com.onwords.my_office');
+              if (await canLaunchUrl(url)) {
+                await launchUrl(url,
+                    mode: LaunchMode.externalNonBrowserApplication);
+              } else {
+                throw 'Could not launch $url';
+              }
+            },
+            child: const Text("Update Now"),
+          ),
+        ],
+      ), onWillPop:  () async {
+        return false;
+      },),
     );
   }
 }
