@@ -70,12 +70,12 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
 
 
   getAbsentsName() {
+
     notEntry.clear();
     fingerPrint.once().then((value) {
       for (var val in value.snapshot.children) {
-        if (val.value.runtimeType
-            .toString()
-            .contains("_InternalLinkedHashMap<Object?, Object?>")) {
+        if (val.value.runtimeType.toString().contains("_Map<Object?, Object?>")) {
+
           firebaseData = val.value;
           notEntry.add(firebaseData['name']);
           for (var val1 in val.children) {
@@ -83,6 +83,7 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
               if (!mounted) return;
               setState(() {
                 notEntry.remove(firebaseData['name']);
+                notEntry.removeWhere((value) => value == null);
               });
             }
           }
@@ -168,13 +169,13 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
                       ),
                       child: Center(
                         child: ListTile(
-                            leading: CircleAvatar(
+                            leading: const CircleAvatar(
                               radius: 20,
                               backgroundColor: ConstantColor.backgroundColor,
                               child: Icon(Icons.person),
                             ),
                             title: Text(
-                              '${notEntry[index]}',
+                              notEntry[index],
                               style: TextStyle(
                                   fontFamily: ConstantFonts.poppinsMedium,
                                   color: ConstantColor.blackColor,
