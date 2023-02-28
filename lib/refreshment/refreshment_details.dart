@@ -21,6 +21,7 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
   int _coffeeCount = 0;
   int _teaCount = 0;
   int _foodCount = 0;
+  bool isFoodShow=true;
   late Timer _timer;
   var _data;
   var _foodData;
@@ -81,6 +82,14 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
 
   @override
   Widget build(BuildContext context) {
+
+    final currentTime=DateTime.now();
+    final foodEndTime=DateTime(currentTime.year,currentTime.month,currentTime.day,14,0);
+
+    if(currentTime.isAfter(foodEndTime)){
+      isFoodShow=false;
+    }
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -95,16 +104,16 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0)),
             child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: Column(
-                  children: [
-                    buildHeadSection(),
-                    buildTeaSection(),
-                    buildCoffeeSection(),
+              physics:const BouncingScrollPhysics(),
+              child: Column(
+                children: [
+                  buildHeadSection(),
+                  buildTeaSection(),
+                  buildCoffeeSection(),
+                  if(isFoodShow)
                     buildFoodSection(),
-                  ],
-                ),
+              
+                ],
               ),
             ),
           ),
@@ -226,7 +235,6 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
 
   Widget buildTeaSection() {
     List<String> listOfTea = [];
-
     if (_teaCount > 0) {
       final Map<dynamic, dynamic> tea = _data['tea'];
       final teaKeys = tea.keys;
@@ -246,13 +254,13 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                   fontSize: 26.0,
                   fontFamily: ConstantFonts.poppinsMedium)),
           Container(
-            height: MediaQuery.of(context).size.height * .18,
             margin: const EdgeInsets.only(left: 25.0, right: 5.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: ListView.builder(
+                    shrinkWrap: true,
                       itemCount: listOfTea.length,
                       padding: const EdgeInsets.symmetric(vertical: 5.0),
                       physics: const BouncingScrollPhysics(),
@@ -292,18 +300,20 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                   fontSize: 26.0,
                   fontFamily: ConstantFonts.poppinsMedium)),
           Container(
-            height: MediaQuery.of(context).size.height * .18,
+            // height: MediaQuery.of(context).size.height * .18,
             margin: const EdgeInsets.only(left: 25.0, right: 5.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: ListView.builder(
-                      itemCount: listOfCoffee.length,
+                      itemCount:listOfCoffee.length,
+                      shrinkWrap: true,
                       padding: const EdgeInsets.symmetric(vertical: 5.0),
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (ctx, index) {
                         return Text(listOfCoffee[index]);
+
                       }),
                 ),
                 Image.asset(
@@ -338,13 +348,14 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                   fontSize: 26.0,
                   fontFamily: ConstantFonts.poppinsMedium)),
           Container(
-            height: MediaQuery.of(context).size.height * .18,
+            // height: MediaQuery.of(context).size.height * .18,
             margin: const EdgeInsets.only(left: 25.0, right: 5.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: ListView.builder(
+                    shrinkWrap: true,
                       itemCount: listOfFood.length,
                       padding: const EdgeInsets.symmetric(vertical: 5.0),
                       physics: const BouncingScrollPhysics(),
