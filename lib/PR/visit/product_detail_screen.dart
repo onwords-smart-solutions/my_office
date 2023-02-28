@@ -31,7 +31,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     'Smart Home': false,
     'Gate': false,
     'Door': false,
-    'Tank': false,
+    'Water Tank': false,
     'Others': false,
   };
 
@@ -96,7 +96,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 case 'gate':
                   imagePath = 'assets/visit/gate.jpg';
                   break;
-                case 'tank':
+                case 'water tank':
                   imagePath = 'assets/visit/tank.jpg';
                   break;
                 case 'door':
@@ -119,61 +119,53 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     });
                   });
                 },
-                child: Container(
-                  margin: const EdgeInsets.all(4.0),
-                  decoration: BoxDecoration(
-                      gradient:isSelected?null:const LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [Colors.black, Colors.black],
-                        stops:  [0.1, 0.9],
-                      ),
-                      borderRadius: BorderRadius.circular(10.0),
-                      image: DecorationImage(
-                          colorFilter:isSelected?null: ColorFilter.mode(
-                              Colors.black.withOpacity(.3), BlendMode.dstATop),
-                          image: AssetImage(imagePath),
-                          fit: BoxFit.cover)),
-                  child: Align(
-                    alignment: AlignmentDirectional.bottomCenter,
-                      child:isSelected?const SizedBox.shrink(): Text(
-                    productName,
-                    style: TextStyle(
-                        fontSize: 12.0,
-                        color: Colors.white,
-                        fontFamily: ConstantFonts.poppinsBold),
-                  )),
+                child: Stack(
+                  children: [
+                    //main
+                    Container(
+                      margin: const EdgeInsets.all(3.0),
+                      decoration: BoxDecoration(
+                          gradient: isSelected
+                              ? null
+                              : const LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [Colors.black, Colors.black],
+                                  stops: [0.1, 0.9],
+                                ),
+                          borderRadius: BorderRadius.circular(10.0),
+                          image: DecorationImage(
+                              colorFilter: isSelected
+                                  ? null
+                                  : ColorFilter.mode(
+                                      Colors.black.withOpacity(.3),
+                                      BlendMode.dstATop),
+                              image: AssetImage(imagePath),
+                              fit: BoxFit.cover)),
+                      child: Align(
+                          alignment: AlignmentDirectional.bottomCenter,
+                          child: isSelected
+                              ? const SizedBox.shrink()
+                              : Text(
+                                  productName,
+                                  style: TextStyle(
+                                      fontSize: 12.0,
+                                      color: Colors.white,
+                                      fontFamily: ConstantFonts.poppinsBold),
+                                )),
+                    ),
+                    if (isSelected)
+                    const  CircleAvatar(
+                        radius: 13.0,
+                        backgroundColor: Colors.green,
+                        child: Icon(Icons.check_rounded,color: Colors.white,),
+                      )
+                  ],
                 ),
               );
             },
 
-            // children: products.keys.map((String key) {
-            //   return SizedBox(
-            //     height: 38.0,
-            //     child: CheckboxListTile(
-            //       checkboxShape: RoundedRectangleBorder(
-            //           borderRadius: BorderRadius.circular(5.0)),
-            //       enableFeedback: true,
-            //       title: Text(
-            //         key,
-            //         style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
-            //       ),
-            //       value: products[key],
-            //       onChanged: (data) {
-            //         setState(() {
-            //           products.update(key, (value) => data!);
-            //           if (data == true) {
-            //             selectedProducts.add(key);
-            //           } else {
-            //             if (selectedProducts.contains(key)) {
-            //               selectedProducts.remove(key);
-            //             }
-            //           }
-            //         });
-            //       },
-            //     ),
-            //   );
-            // }).toList(),
+
           ),
         ),
       ],
