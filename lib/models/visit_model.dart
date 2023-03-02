@@ -12,19 +12,25 @@ class VisitModel {
   @HiveField(2)
   late String customerName;
   @HiveField(3)
-  late List<Map<String, Uint8List>>? prDetails;
+  late Map<String, String>? inChargeDetail;
   @HiveField(4)
-  late Uint8List? startKmImage;
+  late List<String>? supportCrewNames;
   @HiveField(5)
-  late int? startKm;
+  late List<String>? supportCrewImageLinks;
   @HiveField(6)
-  late List<String>? productName;
+  late String? startKmImageLink;
   @HiveField(7)
-  late List<Uint8List>? productImage;
+  late int? startKm;
   @HiveField(8)
-  late String? quotationInvoiceNumber;
+  late List<String>? productName;
   @HiveField(9)
+  late List<String>? productImageLinks;
+  @HiveField(10)
+  late String? quotationInvoiceNumber;
+  @HiveField(11)
   late String stage;
+  @HiveField(12)
+  late String? storagePath;
 
   VisitModel({
     required this.dateTime,
@@ -32,10 +38,13 @@ class VisitModel {
     required this.customerName,
     required this.stage,
     this.startKm,
-    this.prDetails,
-    this.startKmImage,
+    this.inChargeDetail,
+    this.supportCrewNames,
+    this.supportCrewImageLinks,
+    this.productImageLinks,
+    this.startKmImageLink,
     this.productName,
-    this.productImage,
-    this.quotationInvoiceNumber
+    this.quotationInvoiceNumber,
+    this.storagePath,
   });
 }

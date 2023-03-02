@@ -281,8 +281,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           buildButton(
                             name: 'Visit',
                             image: Image.asset(
-                              'assets/leave form.png',
-                              scale: 4.0,
+                              'assets/visit.png',
+                              scale: 3.0,
                             ),
                             page: const VisitFromScreen(),
                           ),

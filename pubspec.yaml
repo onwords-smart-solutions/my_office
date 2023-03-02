@@ -63,6 +63,8 @@ dependencies:
   firebase_storage: ^11.0.14
   external_app_launcher: ^3.1.0
   url_launcher: ^6.1.10
+  image: ^4.0.15
+  cached_network_image: ^3.2.3
 
 
 

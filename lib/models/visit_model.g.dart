@@ -20,23 +20,23 @@ class VisitModelAdapter extends TypeAdapter<VisitModel> {
       dateTime: fields[0] as DateTime,
       customerPhoneNumber: fields[1] as String,
       customerName: fields[2] as String,
-      stage: fields[9] as String,
-      startKm: fields[5] as int?,
-      prDetails: (fields[3] as List?)
-          ?.map((dynamic e) => (e as Map).map(
-              (dynamic k, dynamic v) => MapEntry(k as String, v as Uint8List)))
-          .toList(),
-      startKmImage: fields[4] as Uint8List?,
-      productName: (fields[6] as List?)?.cast<String>(),
-      productImage: (fields[7] as List?)?.cast<Uint8List>(),
-      quotationInvoiceNumber: fields[8] as String?,
+      stage: fields[11] as String,
+      startKm: fields[7] as int?,
+      inChargeDetail: (fields[3] as Map?)?.cast<String, String>(),
+      supportCrewNames: (fields[4] as List?)?.cast<String>(),
+      supportCrewImageLinks: (fields[5] as List?)?.cast<String>(),
+      productImageLinks: (fields[9] as List?)?.cast<String>(),
+      startKmImageLink: fields[6] as String?,
+      productName: (fields[8] as List?)?.cast<String>(),
+      quotationInvoiceNumber: fields[10] as String?,
+      storagePath: fields[12] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, VisitModel obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.dateTime)
       ..writeByte(1)
@@ -44,19 +44,25 @@ class VisitModelAdapter extends TypeAdapter<VisitModel> {
       ..writeByte(2)
       ..write(obj.customerName)
       ..writeByte(3)
-      ..write(obj.prDetails)
+      ..write(obj.inChargeDetail)
       ..writeByte(4)
-      ..write(obj.startKmImage)
+      ..write(obj.supportCrewNames)
       ..writeByte(5)
-      ..write(obj.startKm)
+      ..write(obj.supportCrewImageLinks)
       ..writeByte(6)
-      ..write(obj.productName)
+      ..write(obj.startKmImageLink)
       ..writeByte(7)
-      ..write(obj.productImage)
+      ..write(obj.startKm)
       ..writeByte(8)
-      ..write(obj.quotationInvoiceNumber)
+      ..write(obj.productName)
       ..writeByte(9)
-      ..write(obj.stage);
+      ..write(obj.productImageLinks)
+      ..writeByte(10)
+      ..write(obj.quotationInvoiceNumber)
+      ..writeByte(11)
+      ..write(obj.stage)
+      ..writeByte(12)
+      ..write(obj.storagePath);
   }
 
   @override

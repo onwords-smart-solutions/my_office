@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
-import 'package:my_office/PR/visit/product_detail_screen.dart';
-import 'package:my_office/PR/visit/verification_screen.dart';
+import 'package:my_office/PR/visit/visit_verification_screen.dart';
 import 'package:my_office/database/hive_operations.dart';
 import 'package:my_office/models/visit_model.dart';
 
@@ -51,69 +50,64 @@ class _VisitScreenState extends State<VisitScreen> {
     return Form(
       key: _formKey,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Customer Phone No :',
+            Text('Customer Phone No',
                 style: TextStyle(
                   fontFamily: ConstantFonts.poppinsMedium,
                 )),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  key: const ValueKey('password'),
-                  textInputAction: TextInputAction.done,
-                  keyboardType: TextInputType.phone,
-                  //validator
-                  validator: (data) {
-                    if (data!.trim().isEmpty) {
-                      return 'Enter a phone number';
-                    } else if (data.trim().length < 10) {
-                      return 'Enter a valid phone number';
-                    }
-                    return null;
-                  },
-                  onSaved: (value) {
-                    phoneNumber = value.toString().trim();
-                  },
-                  style: const TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500),
+            TextFormField(
+              textInputAction: TextInputAction.done,
+              keyboardType: TextInputType.phone,
+              //validator
+              validator: (data) {
+                if (data!.trim().isEmpty) {
+                  return 'Enter a phone number';
+                } else if (data.trim().length < 10) {
+                  return 'Enter a valid phone number';
+                }
+                return null;
+              },
+              onSaved: (value) {
+                phoneNumber = value.toString().trim();
+              },
+              style: const TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500),
 
-                  //decoration
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 15),
-                    hintText: 'Phone number',
-                    hintStyle: const TextStyle(
-                      color: Colors.grey,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: BorderSide(
-                        width: 1,
-                        color: Colors.grey.withOpacity(.3),
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(
-                        width: 1.5,
-                        color: Colors.purple,
-                      ),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(width: 1, color: Colors.red),
-                    ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                      borderSide: const BorderSide(
-                        width: 1.5,
-                        color: Colors.purple,
-                      ),
-                    ),
+              //decoration
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+                hintText: 'Phone number',
+                hintStyle: const TextStyle(
+                  color: Colors.grey,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(
+                    width: 1,
+                    color: Colors.grey.withOpacity(.3),
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(
+                    width: 1.5,
+                    color: Colors.purple,
+                  ),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(width: 1, color: Colors.red),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: const BorderSide(
+                    width: 1.5,
+                    color: Colors.purple,
                   ),
                 ),
               ),
@@ -298,8 +292,10 @@ class _VisitScreenState extends State<VisitScreen> {
 
         await HiveOperations().addVisitEntry(visit: visitData);
         nav.push(MaterialPageRoute(
-            builder: (_) => VerificationScreen(
-                phone: phoneNumber, name: customerData['name'].toString())));
+
+            // VerificationScreen(
+            //     phone: phoneNumber, name: customerData['name'].toString())
+            builder: (_) => VisitVerificationScreen(customerData: visitData,)));
       },
       child: Container(
         height: size.height * 0.07,
