@@ -7,10 +7,12 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/models/staff_model.dart';
+import 'package:my_office/work_done/individual_work_complete.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../Account/account_screen.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
+import '../util/main_template.dart';
 
 class WorkCompleteViewScreen extends StatefulWidget {
   final StaffModel userDetails;
@@ -23,8 +25,6 @@ class WorkCompleteViewScreen extends StatefulWidget {
 }
 
 class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
-
-
   final staff = FirebaseDatabase.instance.ref().child("staff");
 
   double percent = 0;
@@ -96,15 +96,6 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                       for (var element5 in element4.children) {
                         if (element5.key == selectedDate) {
                           for (var element6 in element5.children) {
-                            // // print(element6.key);
-                            // if(element6.key == 'totalWorkingTime'){
-                            //   // for(var element7 in element6.children){
-                            //   //   setState(() {
-                            //   //     dayTotalWork.add(element7.value);
-                            // //   //     print(dayTotalWork);
-                            //   //   });
-                            //   // }
-                            // }
                             fbData = element6.value;
                             if (fbData['name'] != null) {
                               nameList.remove(fbData['name']);
@@ -150,170 +141,182 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      backgroundColor: ConstantColor.background1Color,
-      body: Stack(
-        children: [
-          /// Top circle
-          Positioned(
-            top: height * 0.05,
-            // left: width * 0.05,
-            right: width * 0.05,
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  HapticFeedback.mediumImpact();
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) =>
-                          AccountScreen(staffDetails: widget.userDetails)));
-                });
-              },
-              child: const CircleAvatar(
-                backgroundColor: ConstantColor.backgroundColor,
-                radius: 20,
-                child: Icon(
-                  Icons.person_rounded,
-                  color: Colors.white,
+    return MainTemplate(
+        subtitle: 'Staff Work Details',
+        templateBody: buildStackWidget(height, width),
+        bgColor: ConstantColor.background1Color);
+  }
+
+  Widget buildStackWidget(double height, double width) {
+    return Stack(
+      alignment: AlignmentDirectional.center,
+      children: [
+        isLoading
+            ? Center(
+                child: Lottie.asset(
+                  "assets/animations/loading.json",
+                ),
+              )
+            : nameData.isNotEmpty
+                ? Expanded(
+                  child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      physics: const BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: nameData.length,
+                      itemBuilder: (BuildContext context, int index) {
+
+                        return Container(
+                          // height: height * 0.1,
+                          margin: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: ConstantColor.background1Color,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                offset: const Offset(-0.0, 5.0),
+                                blurRadius: 8,
+                              )
+                            ],
+                            borderRadius: BorderRadius.circular(11),
+                          ),
+                          child: Center(
+                            child: ListTile(
+                              onTap: (){
+                                var workDone;
+                                if (allData[index]['name']
+                                    .contains(nameData[index])) {
+                                  workDone = allData[index]['workDone'];
+                                }
+                                workDone = allData
+                                    .where((element) =>
+                                element['name'] ==
+                                    nameData[index])
+                                ;
+                                print(workDone);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          IndividualWorkDone(workDetails: workDone.toList(),employeeName: nameData[index]),),
+                                );
+                              },
+                                leading: const CircleAvatar(
+                                  radius: 20,
+                                  backgroundColor: ConstantColor.backgroundColor,
+                                  child: Icon(Icons.person),
+                                ),
+                                title: Text(
+                                  '${nameData[index]}',
+                                  style: TextStyle(
+                                      fontFamily: ConstantFonts.poppinsMedium,
+                                      color: ConstantColor.blackColor,
+                                      fontSize: height * 0.020),
+                                )),
+                          ),
+                        );
+
+                        return Container(
+                          margin: EdgeInsets.symmetric(
+                              horizontal: height * 0.05,
+                              vertical: height * 0.001),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextButton(
+                                onPressed: () {
+
+                                },
+                                style: TextButton.styleFrom(
+                                  backgroundColor: Colors.lightBlueAccent,
+                                ),
+                                child: textWidget(height,
+                                    '${nameData[index]}', height * 0.015),
+                              ),
+                            ],
+                          ),
+                          //   border: Border.all(
+                          //       color: Colors.white.withOpacity(0.6),
+                          //       width: width * 0.008),
+                          //   boxShadow: [
+                          //     BoxShadow(
+                          //       color: Colors.black.withOpacity(0.2),
+                          //       offset: const Offset(-0.0, 3.0),
+                          //       blurRadius: 5,
+                          //     )
+                          //   ],
+                          //   borderRadius: BorderRadius.circular(11),
+                          // ),
+                          // child: Column(
+                          //   mainAxisAlignment:
+                          //       MainAxisAlignment.spaceAround,
+                          //   children: [
+                          //     Row(
+                          //       mainAxisAlignment: MainAxisAlignment.end,
+                          //       children: [
+                          //         textWidget(height, '${nameData[index]}  ',
+                          //             height * 0.018),
+                          //       ],
+                          //     ),
+                          //     Container(
+                          //       height: height * 0.38,
+                          //       color: Colors.transparent,
+                          //       child: SingleChildScrollView(
+                          //         physics: const BouncingScrollPhysics(),
+                          //         child: Column(
+                          //           children: [
+                          //             workDetailsContainer(
+                          //                 height, width, index)
+                          //     //       ],
+                          //     //     ),
+                          //     //   ),
+                          //     // ),
+                          //   ],
+                          // ),
+                        );
+                      },
+                    ),
+                )
+                : Center(
+                    child: Text(
+                      'No Data',
+                      style: TextStyle(
+                        fontFamily: ConstantFonts.poppinsMedium,
+                        color: ConstantColor.blackColor,
+                        fontSize: height * 0.030,
+                      ),
+                    ),
+                  ),
+
+        /// Date Picker
+        Positioned(
+          top: 10,right: 25,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text('$selectedDate   ',
+                  style: TextStyle(
+                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontSize: 15,
+                      color: ConstantColor.blackColor)),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    allData.clear();
+                    nameData.clear();
+                    datePicker();
+                    getWorkDetails();
+                  });
+                },
+                child: Image.asset(
+                  'assets/calender.png',
+                  scale: 3.3,
                 ),
               ),
-            ),
+            ],
           ),
-
-          ///Top Text...
-          Positioned(
-            top: height * 0.05,
-            left: width * 0.05,
-            // right: width*0.0,
-            child: RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: 'Hi Admin\n',
-                    style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsMedium,
-                      color: ConstantColor.blackColor,
-                      fontSize: height * 0.030,
-                    ),
-                  ),
-                  TextSpan(
-                    text: 'Staff Works Details',
-                    style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsMedium,
-                      color: ConstantColor.blackColor,
-                      fontSize: height * 0.020,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-              top: height * 0.18,
-              left: width * 0.0,
-              right: width * 0.0,
-              bottom: height * 0.0,
-              child: isLoading
-                  ? Center(
-                      child: Lottie.asset(
-                        "assets/animations/loading.json",
-                      ),
-                    )
-                  : nameData.isNotEmpty
-                      ? ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          physics: const BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: nameData.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: width * 0.05,
-                                    vertical: height * 0.02),
-                                decoration: BoxDecoration(
-                                  color: ConstantColor.background1Color,
-                                  border: Border.all(
-                                      color: Colors.white.withOpacity(0.6),
-                                      width: width * 0.008),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.2),
-                                      offset: const Offset(-0.0, 3.0),
-                                      blurRadius: 5,
-                                    )
-                                  ],
-                                  borderRadius: BorderRadius.circular(11),
-                                ),
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        textWidget(
-                                            height,
-                                            '${nameData[index]}  ',
-                                            height * 0.018),
-                                      ],
-                                    ),
-                                    Container(
-                                      height: height * 0.38,
-                                      color: Colors.transparent,
-                                      child: SingleChildScrollView(
-                                        physics: const BouncingScrollPhysics(),
-                                        child: Column(
-                                          children: [
-                                            workDetailsContainer(
-                                                height, width, index)
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ));
-                          },
-                        )
-                      : Center(
-                          child: Text(
-                            'No Data',
-                            style: TextStyle(
-                              fontFamily: ConstantFonts.poppinsMedium,
-                              color: ConstantColor.blackColor,
-                              fontSize: height * 0.030,
-                            ),
-                          ),
-                        )),
-
-          /// Date Picker
-          Positioned(
-              top: height * 0.12,
-              left: width * 0.58,
-              right: 0,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text('$selectedDate   ',
-                      style: TextStyle(
-                          fontFamily: ConstantFonts.poppinsMedium,
-                          fontSize: 15,
-                          color: ConstantColor.blackColor)),
-                  GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          allData.clear();
-                          nameData.clear();
-                          datePicker();
-                          getWorkDetails();
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/calender.png',
-                        scale: 3.3,
-                      )),
-                ],
-              )),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
