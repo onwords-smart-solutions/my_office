@@ -2,6 +2,7 @@ import 'package:delayed_display/delayed_display.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:my_office/Constant/fonts/constant_font.dart';
 import 'package:my_office/models/staff_model.dart';
 import 'package:widget_circular_animator/widget_circular_animator.dart';
 
@@ -18,6 +19,7 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
+  final String currentAppVersion = '1.1.0';
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -132,9 +134,22 @@ class _AccountScreenState extends State<AccountScreen> {
                       ),
                     ),
                   ),
+                  Positioned(
+                    top: height * 0.88,
+                    left: 165,
+                    child: DelayedDisplay(
+                      delay: 1.9.seconds,
+                      child: Text('Version $currentAppVersion',
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontFamily: ConstantFonts.poppinsMedium,
+                        fontWeight: FontWeight.w500,
+                      ),),
+                    ),
+                  )
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
