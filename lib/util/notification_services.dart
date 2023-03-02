@@ -17,7 +17,8 @@ class NotificationService {
     const InitializationSettings settings = InitializationSettings(
       android: initializationSettingsAndroid,
     );
-
+    _notifications.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>()!.requestPermission();
     await _notifications.initialize(
       settings,
     );
@@ -71,7 +72,7 @@ class NotificationService {
           } else {
             log("Notification set for mng $notificationTimeMorning");
             _notifications.zonedSchedule(
-              i,
+              i+1,
               title,
               body,
               tz.TZDateTime.from(notificationTimeMorning, tz.local),
@@ -90,7 +91,7 @@ class NotificationService {
           } else {
             log("Notification set for Evg $notificationTimeEvening");
             _notifications.zonedSchedule(
-              i,
+              i+10,
               title,
               body,
               tz.TZDateTime.from(notificationTimeEvening, tz.local),
