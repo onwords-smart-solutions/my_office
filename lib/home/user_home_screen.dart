@@ -38,7 +38,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   final NotificationService _notificationService = NotificationService();
 
 
-  final String currentAppVersion = '1.0.0+7';
+  final String currentAppVersion = '1.1.0+8';
   StaffModel? staffInfo;
   late StreamSubscription subscription;
   var isDeviceConnected = false;
@@ -247,7 +247,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               name: 'Onyx',
                               image: Image.asset(
                                 'assets/onxy.png',
-                                scale: 3.4,
+                                scale: 2.8,
                               ),
                               page: const AnnouncementScreen()),
                           buildButton(
