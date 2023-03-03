@@ -167,8 +167,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       buildButton(
                         name: 'Work Manager',
                         image: Image.asset(
-                          'assets/work_entry.png',
-                          scale: 3.5,
+                          'assets/work_manager.png',
+                          scale: 1.5,
                         ),
                         page: WorkEntryScreen(
                           userId: staffInfo!.uid,
@@ -186,18 +186,22 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             name: staffInfo!.name,
                           )),
                       buildButton(
-                          name: 'Search leads',
-                          image: Image.asset('assets/leave_apply.png'),
-                          page: SearchLeadsScreen(staffInfo: staffInfo!)),
+                        name: 'Search Leads',
+                        image: Image.asset(
+                          'assets/search_leads.png',
+                          scale: 2.0,
+                        ),
+                        page: SearchLeadsScreen(staffInfo: staffInfo!),
+                      ),
 
-                      // buildButton(
-                      //   name: 'Visit',
-                      //   image: Image.asset(
-                      //     'assets/leave form.png',
-                      //     scale: 4.0,
-                      //   ),
-                      //   page: const VisitFromScreen(),
-                      // ),
+                      buildButton(
+                        name: 'Visit',
+                        image: Image.asset(
+                          'assets/visit.png',
+                          scale: 1.8,
+                        ),
+                        page: const VisitFromScreen(),
+                      ),
                     ],
                   )
                 : staffInfo!.department == 'APP'
@@ -217,8 +221,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           buildButton(
                             name: 'Work Manager',
                             image: Image.asset(
-                              'assets/work_entry.png',
-                              scale: 3.5,
+                              'assets/work_manager.png',
+                              scale: 1.5,
                             ),
                             page: WorkEntryScreen(
                               userId: staffInfo!.uid,
@@ -265,8 +269,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           buildButton(
                             name: 'Search Leads',
                             image: Image.asset(
-                              'assets/leave form.png',
-                              scale: 4.0,
+                              'assets/search_leads.png',
+                              scale: 2.0,
                             ),
                             page: SearchLeadsScreen(staffInfo: staffInfo!),
                           ),
@@ -282,7 +286,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             name: 'Visit',
                             image: Image.asset(
                               'assets/visit.png',
-                              scale: 3.0,
+                              scale: 1.8,
                             ),
                             page: const VisitFromScreen(),
                           ),
@@ -309,8 +313,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           buildButton(
                             name: 'Work Manager',
                             image: Image.asset(
-                              'assets/work_entry.png',
-                              scale: 3.5,
+                              'assets/work_manager.png',
+                              scale: 1.5,
                             ),
                             page: WorkEntryScreen(
                               userId: staffInfo!.uid,
