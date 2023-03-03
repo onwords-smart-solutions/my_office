@@ -1,11 +1,9 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
-
+import 'dart:developer';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/util/main_template.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 import 'package:intl/intl.dart';
@@ -59,7 +57,6 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
     formattedMonth = formatterMonth.format(now);
   }
 
-
   var firebaseData;
 
   List notEntry = [];
@@ -67,25 +64,24 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
   List nameData = [];
   List depData = [];
 
-
-
   getAbsentsName() {
-
     notEntry.clear();
     fingerPrint.once().then((value) {
       for (var val in value.snapshot.children) {
-        if (val.value.runtimeType.toString().contains("_Map<Object?, Object?>")) {
-
-          firebaseData = val.value;
+        firebaseData = val.value;
+        try {
           notEntry.add(firebaseData['name']);
-          for (var val1 in val.children) {
-            if (val1.key == selectedDate) {
-              if (!mounted) return;
-              setState(() {
-                notEntry.remove(firebaseData['name']);
-                notEntry.removeWhere((value) => value == null);
-              });
-            }
+        } catch (e) {
+          log(e.toString());
+        }
+
+        for (var val1 in val.children) {
+          if (val1.key == selectedDate) {
+            if (!mounted) return;
+            setState(() {
+              notEntry.remove(firebaseData['name']);
+              notEntry.removeWhere((value) => value == null);
+            });
           }
         }
       }
@@ -97,19 +93,11 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
 
   late SharedPreferences logData;
 
-  Future getUserDetails() async {
-    preferences = await SharedPreferences.getInstance();
-    String? name = preferences?.getString('name');
-    if (name == null) return;
-    if (!mounted) return;
-    setState(() {
-      userName = name;
-    });
-  }
+
 
   @override
   void initState() {
-    getUserDetails();
+    // getUserDetails();
     selectedDate = formatterDate.format(now);
     todayDate();
     // loadData();
@@ -128,9 +116,9 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
   }
 
   Widget bodyContent(
-      double height,
-      double width,
-      ) {
+    double height,
+    double width,
+  ) {
     return Stack(
       children: [
         /// Grid View
@@ -141,49 +129,49 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
           bottom: height * 0.01,
           child: notEntry.isEmpty
               ? Center(
-            child: Lottie.asset(
-              "assets/animations/loading.json",
-            ),
-          )
+                  child: Lottie.asset(
+                    "assets/animations/loading.json",
+                  ),
+                )
               : GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 1,
-                // mainAxisSpacing: 1 / 0.1,
-                mainAxisExtent: 7.5 / 0.1,
-              ),
-              itemCount: notEntry.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  // height: height * 0.1,
-                  margin: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: ConstantColor.background1Color,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        offset: const Offset(-0.0, 5.0),
-                        blurRadius: 8,
-                      )
-                    ],
-                    borderRadius: BorderRadius.circular(11),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 1,
+                    // mainAxisSpacing: 1 / 0.1,
+                    mainAxisExtent: 7.5 / 0.1,
                   ),
-                  child: Center(
-                    child: ListTile(
-                        leading: const CircleAvatar(
-                          radius: 20,
-                          backgroundColor: ConstantColor.backgroundColor,
-                          child: Icon(Icons.person),
-                        ),
-                        title: Text(
-                          notEntry[index],
-                          style: TextStyle(
-                              fontFamily: ConstantFonts.poppinsMedium,
-                              color: ConstantColor.blackColor,
-                              fontSize: height * 0.020),
-                        )),
-                  ),
-                );
-              }),
+                  itemCount: notEntry.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      // height: height * 0.1,
+                      margin: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: ConstantColor.background1Color,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            offset: const Offset(-0.0, 5.0),
+                            blurRadius: 8,
+                          )
+                        ],
+                        borderRadius: BorderRadius.circular(11),
+                      ),
+                      child: Center(
+                        child: ListTile(
+                            leading: const CircleAvatar(
+                              radius: 20,
+                              backgroundColor: ConstantColor.backgroundColor,
+                              child: Icon(Icons.person),
+                            ),
+                            title: Text(
+                              notEntry[index],
+                              style: TextStyle(
+                                  fontFamily: ConstantFonts.poppinsMedium,
+                                  color: ConstantColor.blackColor,
+                                  fontSize: height * 0.020),
+                            )),
+                      ),
+                    );
+                  }),
         ),
 
         /// Date Picker
