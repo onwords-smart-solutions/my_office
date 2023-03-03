@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:my_office/PR/invoice/invoice.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -289,6 +290,15 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               scale: 1.8,
                             ),
                             page: const VisitFromScreen(),
+                          ),
+                          buildButton(
+                            name: 'Invoice Generator',
+                            image: Image.asset(
+                              'assets/invoice.png',
+                              scale:2,
+                            ),
+                            page: const Invoice(),
+
                           ),
                           // ElevatedButton(
                           //     onPressed: () async {

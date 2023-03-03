@@ -264,9 +264,10 @@ class _VisitSubmitScreenState extends State<VisitSubmitScreen> {
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (ctx, i) {
-                      return SizedBox(
+                      return Container(
                         height: 80,
                         width: 80,
+                        margin: const EdgeInsets.only(right: 5.0),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10.0),
                           child: CachedNetworkImage(
