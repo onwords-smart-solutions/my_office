@@ -39,7 +39,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   final NotificationService _notificationService = NotificationService();
 
 
-  final String currentAppVersion = '1.1.0+8';
+  final String currentAppVersion = '1.1.0+9';
   StaffModel? staffInfo;
   late StreamSubscription subscription;
   var isDeviceConnected = false;
