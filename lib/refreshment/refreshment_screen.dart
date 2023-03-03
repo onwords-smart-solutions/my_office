@@ -173,7 +173,7 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
       bottom: 10.0,
       child: Image.asset(
         'assets/man_with_laptop.png',
-        scale: 5.0,
+   height: MediaQuery.of(context).size.height*.25,
       ));
 
   Widget buildSlider({
