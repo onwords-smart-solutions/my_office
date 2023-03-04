@@ -195,13 +195,13 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         page: SearchLeadsScreen(staffInfo: staffInfo!),
                       ),
 
-                      buildButton(
+                      buildButtonWithNameRoute(
                         name: 'Visit',
                         image: Image.asset(
                           'assets/visit.png',
                           scale: 1.8,
                         ),
-                        page: const VisitFromScreen(),
+                        routeName:'/visitResume',
                       ),
                     ],
                   )
@@ -283,26 +283,26 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             ),
                             page: const LeaveApprovalScreen(),
                           ),
-                          buildButton(
+                          buildButtonWithNameRoute(
                             name: 'Visit',
                             image: Image.asset(
                               'assets/visit.png',
                               scale: 1.8,
                             ),
-                            page: const VisitFromScreen(),
+                           routeName:'/visitResume',
                           ),
-                          buildButton(
+                          buildButtonWithNameRoute(
                             name: 'Invoice Generator',
                             image: Image.asset(
                               'assets/invoice.png',
                               scale:2,
                             ),
-                            page: const Invoice(),
+                           routeName: '/invoiceGenerator',
 
                           ),
                           // ElevatedButton(
                           //     onPressed: () async {
-                          //      // showUpdateAppDialog();
+                          //     Navigator.of(context).pushNamed('/visitResume');
                           //     },
                           //     child: Text('Check Version'))
                         ],
@@ -356,6 +356,38 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       onTap: () {
         HapticFeedback.heavyImpact();
         Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 20.0),
+        decoration: BoxDecoration(
+          color: const Color(0xffDAD6EE),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Center(child: image),
+            AutoSizeText(
+              name,
+              style: TextStyle(
+                fontFamily: ConstantFonts.poppinsMedium,
+                color: ConstantColor.blackColor,
+              ),
+              maxFontSize: 18,
+              minFontSize: 12,
+            )
+          ],
+        ),
+      ),
+    );
+  } 
+  
+  Widget buildButtonWithNameRoute(
+      {required String name, required Image image, required String routeName}) {
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.heavyImpact();
+       Navigator.of(context).pushNamed(routeName);
       },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20.0),

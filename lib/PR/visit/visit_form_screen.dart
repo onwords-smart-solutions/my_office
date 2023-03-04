@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
 import 'package:my_office/PR/visit/resume_visit_form_item.dart';
 import 'package:my_office/PR/visit/visit_screen.dart';
@@ -40,7 +39,7 @@ class _VisitFromScreenState extends State<VisitFromScreen> {
 
   Widget buildNewFormButton() {
     return TextButton.icon(
-      onPressed: () => Navigator.of(context)
+      onPressed: () =>        Navigator.of(context)
           .push(MaterialPageRoute(builder: (_) => const VisitScreen())),
       style: TextButton.styleFrom(foregroundColor: const Color(0xff8355B7)),
       label: Text(

@@ -269,9 +269,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
                   fontSize: 14.0,
                   color: Colors.grey),
             ),
-            onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (_) => const VisitFromScreen()),
-                (route) => false)),
+            onPressed: () => Navigator.of(context).popUntil (
+                ModalRoute.withName('/visitResume')),
+               ),
       ],
     );
   }
