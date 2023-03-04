@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:my_office/PR/invoice/invoice.dart';
@@ -38,8 +37,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   final HiveOperations _hiveOperations = HiveOperations();
   final NotificationService _notificationService = NotificationService();
 
-
+//TODO update this whenever release new update
   final String currentAppVersion = '1.1.0+9';
+
   StaffModel? staffInfo;
   late StreamSubscription subscription;
   var isDeviceConnected = false;
