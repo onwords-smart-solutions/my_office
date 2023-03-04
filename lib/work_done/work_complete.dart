@@ -208,7 +208,6 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
             ),
           )
         : Column(
-
             children: [
               //calender button
               Padding(
@@ -240,23 +239,27 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
               ),
               nameData.isNotEmpty
                   ? Expanded(
-                    child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      child: Column(children: workDoneNames),
-                    ),
-                  )
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: Column(children: workDoneNames),
+                      ),
+                    )
                   : Expanded(
-                    child: Align(
-                      alignment: AlignmentDirectional.center,
-                      child: Text(
-                          'No Data',
-                          style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsMedium,
-                            color: ConstantColor.blackColor,
-                            fontSize: height * 0.030,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Lottie.asset('assets/animations/no_data.json',
+                              height: 250.0),
+                          Text(
+                            'No work done yet',
+                            style: TextStyle(
+                              fontFamily: ConstantFonts.poppinsMedium,
+                              color: ConstantColor.blackColor,fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
                           ),
-                        ),
-                    ),
+                        ],
+                      ),
                   ),
             ],
           );
