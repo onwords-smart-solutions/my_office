@@ -1,4 +1,6 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
 import 'package:timelines/timelines.dart';
 
@@ -6,6 +8,7 @@ import 'note_item.dart';
 
 class CustomerDetailScreen extends StatefulWidget {
   final Map<Object?, Object?> customerInfo;
+  final String currentStaffName;
   final Color containerColor;
   final Color nobColor;
 
@@ -13,6 +16,7 @@ class CustomerDetailScreen extends StatefulWidget {
       {Key? key,
       required this.customerInfo,
       required this.containerColor,
+      required this.currentStaffName,
       required this.nobColor})
       : super(key: key);
 
@@ -21,10 +25,11 @@ class CustomerDetailScreen extends StatefulWidget {
 }
 
 class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
+  TextEditingController notesController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
+    print(widget.currentStaffName);
     return Scaffold(
       backgroundColor: const Color(0xffF1F2F8),
       appBar: AppBar(
@@ -62,11 +67,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
             child: buildCustomerDetail(size: size)),
 
         //Customer notes section
-        Expanded(
-            child: SizedBox(
-          width: size.width,
-          child: buildNotes()
-        )),
+        Expanded(child: SizedBox(width: size.width, child: buildNotes())),
       ],
     );
   }
@@ -101,28 +102,32 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     ];
 
     return ListView.builder(
-        physics: const BouncingScrollPhysics(),
-        itemCount: fieldName.length,
-        itemBuilder: (ctx, i) {
-          return buildField(
-              field: fieldName[i], value: customerValue[i], size: size);
-        });
+      physics: const BouncingScrollPhysics(),
+      itemCount: fieldName.length,
+      itemBuilder: (ctx, i) {
+        return buildField(
+            field: fieldName[i], value: customerValue[i], size: size);
+      },
+    );
   }
 
   Widget buildNotes() {
-    List noteKeys = [];
-    Map<Object?, Object?> allNotes = {};
-
-    if (widget.customerInfo['notes'] != null) {
-      //Getting all notes from customer data
-      allNotes = widget.customerInfo['notes'] as Map<Object?, Object?>;
-      noteKeys = allNotes.keys.toList();
-
-      //Checking if key is empty or not
-      if (noteKeys.isNotEmpty) {
-        noteKeys.sort((a, b) => b.toString().compareTo(a.toString()));
-      }
-    }
+    // List noteKeys = [];
+    // Map<Object?, Object?> allNotes = {};
+    final stream = FirebaseDatabase.instance
+        .ref()
+        .child('customer/${widget.customerInfo['phone_number'].toString()}/notes');
+    //
+    // if (widget.customerInfo['notes'] != null) {
+    //   //Getting all notes from customer data
+    //   allNotes = widget.customerInfo['notes'] as Map<Object?, Object?>;
+    //   noteKeys = allNotes.keys.toList();
+    //
+    //   //Checking if key is empty or not
+    //   if (noteKeys.isNotEmpty) {
+    //     noteKeys.sort((a, b) => b.toString().compareTo(a.toString()));
+    //   }
+    // }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,41 +143,134 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                   fontFamily: ConstantFonts.poppinsMedium, fontSize: 20.0),
             ),
 
-            //note add button
-            // IconButton(
-            //   onPressed: () {},
-            //   icon: const Icon(Icons.add_circle_rounded),
-            //   color: const Color(0xff8355B7),
-            //   splashRadius: 20.0,
-            // ),
+            // note add button
+            IconButton(
+              onPressed: () {
+                addNotes();
+              },
+              icon: const Icon(Icons.add_circle_rounded),
+              color: const Color(0xff8355B7),
+              splashRadius: 20.0,
+            ),
           ],
         ),
         //Notes list
-        Expanded(
-          child: ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              itemCount: noteKeys.length,
-              itemBuilder: (ctx, i) {
-                final Map<Object?, Object?> singleNote =
-                    allNotes[noteKeys[i]] as Map<Object?, Object?>;
+        StreamBuilder(
+            stream: stream.onValue,
+            builder: ( context, snapshot) {
+              if (snapshot.hasData) {
+                List<dynamic> _notes=[];
+                for(var i in snapshot.data!.snapshot.children){
+                  _notes.add(i.value);
+                }
 
-                final name = singleNote['entered_by'] ?? 'Not mentioned';
-                final date = singleNote['date'] ?? 'Not mentioned';
-                final time = singleNote['time'] ?? 'Not mentioned';
-                final note = singleNote['note'] ?? 'No notes added';
+             return   Expanded(
+                  child: ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: _notes.length,
+                    reverse: true,
 
-                return Container(
-                  margin: const EdgeInsets.symmetric(vertical: 5.0),
-                  child: NoteItem(
-                    note: note.toString(),
-                    updatedDate: date.toString(),
-                    updatedStaff: name.toString(),
-                    updatedTime: time.toString(),
+                    itemBuilder: (ctx, i) {
+
+                      final Map<Object?, Object?> singleNote =
+                      _notes[i] as Map<Object?,Object?>;
+
+                      final name = singleNote['entered_by'] ?? 'Not mentioned';
+                      final date = singleNote['date'] ?? 'Not mentioned';
+                      final time = singleNote['time'] ?? 'Not mentioned';
+                      final note = singleNote['note'] ?? 'No notes added';
+
+                      return Container(
+                        margin: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: NoteItem(
+                          note: note.toString(),
+                          updatedDate: date.toString(),
+                          updatedStaff: name.toString(),
+                          updatedTime: time.toString(),
+                        ),
+                      );
+                    },
                   ),
                 );
-              }),
-        ),
+                print(snapshot.data?.snapshot.children.length);
+              } else if (snapshot.hasError) {
+
+              }
+              return const SizedBox();
+            }),
       ],
+    );
+  }
+
+  //adding notes
+  void addNotes() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(
+                20.0,
+              ),
+            ),
+          ),
+          contentPadding: const EdgeInsets.only(
+            top: 10.0,
+          ),
+          content: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.4,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      "Add notes",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      controller: notesController,
+                      maxLines: 7,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Enter your notes here',
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: double.infinity,
+                    height: 60,
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        addNoteToDatabase();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xff8355B7),
+                        // fixedSize: Size(250, 50),
+                      ),
+                      child: const Text(
+                        "Submit",
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -191,7 +289,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         ),
       ),
       contents: Container(
-        padding: const EdgeInsets.only(left: 8.0, top: 5.0,right: 5.0),
+        padding: const EdgeInsets.only(left: 8.0, top: 5.0, right: 5.0),
         width: size.width * .7,
         height: 30.0,
         // height: 20.0,
@@ -210,5 +308,29 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         endConnector: SolidLineConnector(color: widget.nobColor),
       ),
     );
+  }
+
+  void addNoteToDatabase() async {
+    if (notesController.text.trim().isEmpty) {
+      const snackBar = SnackBar(content: Center(child: Text('Enter some notes')),backgroundColor: Colors.red,);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      print('no data');
+    } else {
+      DateTime now = DateTime.now();
+      var timeStamp = DateFormat('yyyy-MM-dd_kk:mm:ss').format(now);
+      final ref = FirebaseDatabase.instance.ref();
+      ref
+          .child(
+              'customer/${widget.customerInfo['phone_number'].toString()}/notes/$timeStamp')
+          .update(
+        {
+          'date': DateFormat('yyyy-MM-dd').format(now),
+          'entered_by': widget.currentStaffName,
+          'note': notesController.text.trim(),
+          'time': DateFormat('kk:mm').format(now)
+        },
+      );
+      notesController.clear();
+    }
   }
 }

@@ -136,15 +136,20 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                   Positioned(
                     top: height * 0.88,
-                    left: 165,
-                    child: DelayedDisplay(
-                      delay: 1.9.seconds,
-                      child: Text('Version $currentAppVersion',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontFamily: ConstantFonts.poppinsMedium,
-                        fontWeight: FontWeight.w500,
-                      ),),
+                    left: 0,
+                    right: 0,
+                    child: Center(
+                      child: DelayedDisplay(
+                        delay: 1.9.seconds,
+                        child: Text(
+                          'Version $currentAppVersion',
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontFamily: ConstantFonts.poppinsMedium,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
                     ),
                   )
                 ],

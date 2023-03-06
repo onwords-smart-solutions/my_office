@@ -7,8 +7,9 @@ import '../Constant/colors/constant_colors.dart';
 
 class CustomerItem extends StatelessWidget {
   final Map<Object?, Object?> customerInfo;
+  final String currentStaffName;
 
-  const CustomerItem({Key? key, required this.customerInfo}) : super(key: key);
+  const CustomerItem({Key? key, required this.customerInfo, required this.currentStaffName}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +105,7 @@ class CustomerItem extends StatelessWidget {
 
     return GestureDetector(
       onTap: () => Navigator.of(context).push(MaterialPageRoute(
-          builder: (_) => CustomerDetailScreen(customerInfo: customerInfo,containerColor: tileColor,nobColor: nobColor,))),
+          builder: (_) => CustomerDetailScreen(customerInfo: customerInfo,containerColor: tileColor,nobColor: nobColor, currentStaffName: currentStaffName))),
       child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
           decoration: BoxDecoration(
