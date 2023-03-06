@@ -16,21 +16,6 @@ class AbsenteeScreen extends StatefulWidget {
 }
 
 class _AbsenteeScreenState extends State<AbsenteeScreen> {
-  bool isLoading = true;
-  bool isFuture = false;
-
-  var firebaseData;
-
-  List notEntry = [];
-  List allData = [];
-  List nameData = [];
-  List depData = [];
-
-  String? formattedTime;
-  var formattedDate;
-  var formattedMonth;
-  var formattedYear;
-
   final staff = FirebaseDatabase.instance.ref().child("staff");
   final fingerPrint = FirebaseDatabase.instance.ref().child("fingerPrint");
 
@@ -50,16 +35,16 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
     if (!mounted) return;
     setState(() {
       selectedDate = formatterDate.format(newDate);
-      if (newDate.isAfter(DateTime.now())) {
-        notEntry.clear();
-        isFuture = true;
-      } else {
-        if (selectedDate != null) {
-          getAbsentsName();
-        }
+      if (selectedDate != null) {
+        getAbsentsName();
       }
     });
   }
+
+  String? formattedTime;
+  var formattedDate;
+  var formattedMonth;
+  var formattedYear;
 
   todayDate() {
     var now = DateTime.now();
@@ -72,9 +57,14 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
     formattedMonth = formatterMonth.format(now);
   }
 
+  var firebaseData;
+
+  List notEntry = [];
+  List allData = [];
+  List nameData = [];
+  List depData = [];
+
   getAbsentsName() {
-    isLoading = true;
-    isFuture = false;
     notEntry.clear();
     fingerPrint.once().then((value) {
       for (var val in value.snapshot.children) {
@@ -87,133 +77,132 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
 
         for (var val1 in val.children) {
           if (val1.key == selectedDate) {
-            notEntry.remove(firebaseData['name']);
-            notEntry.removeWhere((value) => value == null);
+            if (!mounted) return;
+            setState(() {
+              notEntry.remove(firebaseData['name']);
+              notEntry.removeWhere((value) => value == null);
+            });
           }
         }
       }
-      setState(() {
-        isLoading = false;
-      });
     });
   }
 
+  String userName = '';
+  SharedPreferences? preferences;
+
+  late SharedPreferences logData;
+
+
+
   @override
   void initState() {
+    // getUserDetails();
     selectedDate = formatterDate.format(now);
     todayDate();
+    // loadData();
     getAbsentsName();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return MainTemplate(
         subtitle: 'Absentees',
-        templateBody: bodyContent(),
+        templateBody: bodyContent(height, width),
         bgColor: ConstantColor.background1Color);
   }
 
-  Widget bodyContent() {
-
-    List<Widget> absentNames=[];
-
-    for(int i=0;i<notEntry.length;i++){
-      final widget = Container(
-        // height: height * 0.1,
-        margin: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: ConstantColor.background1Color,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              offset: const Offset(-0.0, 5.0),
-              blurRadius: 8,
-            )
-          ],
-          borderRadius: BorderRadius.circular(11),
-        ),
-        child: Center(
-          child: ListTile(
-              leading: const CircleAvatar(
-                radius: 20,
-                backgroundColor:
-                ConstantColor.backgroundColor,
-                child: Icon(Icons.person),
-              ),
-              title: Text(
-                notEntry[i],
-                style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium,
-                    color: ConstantColor.blackColor,
-                    fontSize:16),
-              )),
-        ),
-      );
-
-      absentNames.add(widget);
-    }
-
-    return isLoading
-        ? Center(
+  Widget bodyContent(
+      double height,
+      double width,
+      ) {
+    return Stack(
+      children: [
+        /// Grid View
+        Positioned(
+          top: height * 0.01,
+          left: 0,
+          right: 0,
+          bottom: height * 0.01,
+          child: notEntry.isEmpty
+              ? Center(
             child: Lottie.asset(
               "assets/animations/loading.json",
             ),
           )
-        : Column(
-            children: [
-              //calender button
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text('$selectedDate   ',
-                        style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsMedium,
-                            fontSize: 15,
-                            color: ConstantColor.blackColor)),
-                    GestureDetector(
-                      onTap:datePicker,
-                      child: Image.asset(
-                        'assets/calender.png',
-                        scale: 3.3,
-                      ),
-                    ),
-                  ],
-                ),
+              : GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1,
+                // mainAxisSpacing: 1 / 0.1,
+                mainAxisExtent: 7.5 / 0.1,
               ),
-              notEntry.isNotEmpty
-                  ? Expanded(
-                    child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                      child: Column(
-                          children: absentNames,
+              itemCount: notEntry.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Container(
+                  // height: height * 0.1,
+                  margin: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: ConstantColor.background1Color,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        offset: const Offset(-0.0, 5.0),
+                        blurRadius: 8,
+                      )
+                    ],
+                    borderRadius: BorderRadius.circular(11),
+                  ),
+                  child: Center(
+                    child: ListTile(
+                        leading: const CircleAvatar(
+                          radius: 20,
+                          backgroundColor: ConstantColor.backgroundColor,
+                          child: Icon(Icons.person),
                         ),
-                    ),
-                  )
-                  : isFuture
-                      ? errorMessage('Not available right now')
-                      : errorMessage('Everyone present today'),
-            ],
-          );
-  }
-
-  Widget errorMessage(String message) => Expanded(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Lottie.asset('assets/animations/no_data.json',height: 250.0),
-            Text(
-              message,
-              style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium,
-                color: ConstantColor.blackColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-          ],
+                        title: Text(
+                          notEntry[index],
+                          style: TextStyle(
+                              fontFamily: ConstantFonts.poppinsMedium,
+                              color: ConstantColor.blackColor,
+                              fontSize: height * 0.020),
+                        )),
+                  ),
+                );
+              }),
         ),
-      );
+
+        /// Date Picker
+        Positioned(
+            top: height * -0.0,
+            left: width * 0.58,
+            right: 0,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text('$selectedDate   ',
+                    style: TextStyle(
+                        fontFamily: ConstantFonts.poppinsMedium,
+                        fontSize: 15,
+                        color: ConstantColor.blackColor)),
+                GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        datePicker();
+                        notEntry.clear();
+
+                        getAbsentsName();
+                      });
+                    },
+                    child: Image.asset(
+                      'assets/calender.png',
+                      scale: 3.3,
+                    )),
+              ],
+            )),
+      ],
+    );
+  }
 }

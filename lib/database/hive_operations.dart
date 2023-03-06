@@ -14,7 +14,8 @@ class HiveOperations with ChangeNotifier {
 //GETTING STAFF DATA
   Future<StaffModel> getStaffDetail() async {
     final staff = await Hive.openBox<StaffModel>('user_db');
-    return staff.values.first;
+    final data = staff.values.first;
+    return data;
   }
 
 //CLEARING DATA

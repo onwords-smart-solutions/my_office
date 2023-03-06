@@ -68,7 +68,7 @@ class NotificationService {
         //Morning notification
         if (notificationTimeMorning.weekday != 7) {
           if (currentTime.hour >= 10 && i == 0) {
-            print('Morining time already passed');
+            // print('Morining time already passed');
           } else {
             log("Notification set for mng $notificationTimeMorning");
             _notifications.zonedSchedule(
@@ -87,7 +87,7 @@ class NotificationService {
         //Evening notificaiton
         if (notificationTimeEvening.weekday != 7) {
           if (currentTime.hour >= 14 && i == 0) {
-            print('Evening time already passed');
+            // print('Evening time already passed');
           } else {
             log("Notification set for Evg $notificationTimeEvening");
             _notifications.zonedSchedule(
