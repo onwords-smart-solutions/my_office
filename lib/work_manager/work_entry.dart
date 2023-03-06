@@ -38,7 +38,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   final formKey = GlobalKey<FormState>();
 
   double percent = 0;
-  bool isSubmit = false;
+  bool isLoding = false;
 
   var formattedDate;
   var formattedMonth;
@@ -119,6 +119,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       _percentController.clear();
       getWorkDone();
       showSnackBar(message: 'Work updated successfully', color: Colors.green);
+      isLoding = false;
     });
   }
 
@@ -296,7 +297,9 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   }
 
   Widget tabBarViewFirstScreen(double height, double width) {
-    return Padding(
+    return isLoding
+        ? const Center(child: CircularProgressIndicator())
+        :Padding(
       padding: const EdgeInsets.all(08),
       child: SingleChildScrollView(
         child: Column(
@@ -451,6 +454,8 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
             GestureDetector(
               onTap: () {
                 setState(() {
+                  isLoding = true;
+
                   String st = timeOfStart.toString().replaceAll(RegExp(r'[^0-9]'), ':');
                   String et = timeOfEnd.toString().replaceAll(RegExp(r'[^0-9]'), ':');
                   //
@@ -667,7 +672,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
         keyboardType: textInputType,
         onTap: () {
           setState(() {
-            isSubmit = false;
+
           });
         },
         style: TextStyle(

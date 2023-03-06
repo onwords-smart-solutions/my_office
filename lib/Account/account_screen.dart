@@ -20,7 +20,8 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  final String currentAppVersion = '1.1.0';
+  final String currentAppVersion = '1.1.1';
+
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +67,8 @@ class _AccountScreenState extends State<AccountScreen> {
                             ],
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(
+                          child:
+                          const Icon(
                             Icons.person,
                             size: 50,
                           ),

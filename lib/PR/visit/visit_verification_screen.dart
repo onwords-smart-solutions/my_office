@@ -614,6 +614,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
     String error = '';
     return showModalBottomSheet(
         context: context,
+        isScrollControlled: true,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
@@ -622,6 +623,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
             return SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               child: Container(
+                height: MediaQuery.of(context).size.height*.7,
                 margin: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(

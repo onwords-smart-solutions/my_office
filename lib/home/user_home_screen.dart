@@ -40,7 +40,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   final NotificationService _notificationService = NotificationService();
 
 
-  final String currentAppVersion = '1.1.0+9';
+  final String currentAppVersion = '1.1.1+11';
+
   StaffModel? staffInfo;
   late StreamSubscription subscription;
   var isDeviceConnected = false;
@@ -82,6 +83,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       if (value.snapshot.exists) {
         final data = value.snapshot.value as Map<Object?, Object?>;
         final updatedVersion = data['versionNumber'];
+
         if (currentAppVersion != updatedVersion) {
           showUpdateAppDialog();
         }
@@ -203,6 +205,15 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             scale: 1.8,
           ),
           page: const VisitFromScreen(),
+        ),
+        buildButton(
+          name: 'Invoice Generator',
+          image: Image.asset(
+            'assets/invoice.png',
+            scale:2,
+          ),
+          page: const CustomerDetails(),
+
         ),
       ],
     )

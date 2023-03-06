@@ -32,7 +32,7 @@ class NotificationService {
             importance: Importance.max,
             priority: Priority.high,
             enableLights: true,
-            sound: RawResourceAndroidNotificationSound('alarm'),
+            // sound: RawResourceAndroidNotificationSound('alarm'),
             autoCancel: false,
             audioAttributesUsage: AudioAttributesUsage.notificationRingtone,
             playSound: true,

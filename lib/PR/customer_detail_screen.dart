@@ -240,7 +240,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: TextField(
                       controller: notesController,
-                      maxLines: 7,
+                      maxLines: 4,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
                         hintText: 'Enter your notes here',
@@ -312,9 +312,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
 
   void addNoteToDatabase() async {
     if (notesController.text.trim().isEmpty) {
-      const snackBar = SnackBar(content: Center(child: Text('Enter some notes')),backgroundColor: Colors.red,);
+      const snackBar = SnackBar(content: Text('Enter some notes',textAlign: TextAlign.center,),backgroundColor: Colors.red,);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      print('no data');
+      // print('no data');
     } else {
       DateTime now = DateTime.now();
       var timeStamp = DateFormat('yyyy-MM-dd_kk:mm:ss').format(now);
