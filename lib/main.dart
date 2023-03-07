@@ -5,14 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
+import 'package:my_office/PR/visit/visit_form_screen.dart';
 import 'package:my_office/home/user_home_screen.dart';
 import 'package:my_office/login/login_screen.dart';
 import 'package:my_office/models/staff_model.dart';
 import 'package:my_office/util/notification_services.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'PR/invoice/image_saving/user_preference.dart';
-import 'PR/invoice/provider_page.dart';
 import 'introduction/intro_screen.dart';
 import 'models/visit_model.dart';
 
@@ -20,12 +18,11 @@ import 'models/visit_model.dart';
 
 
 
-/// version: 1.0.0+3 Updated On (21/02/2023)
+/// version: 1.1.0+9 Updated On (21/02/2023)
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  await UserPreferences.init();
 
   //Hive database Setup
   await Hive.initFlutter();
@@ -63,19 +60,20 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => TaskData(),
-      child: MaterialApp(
-        title: 'My Office',
-        debugShowCheckedModeBanner: false,
+    return MaterialApp(
+      title: 'My Office',
+      debugShowCheckedModeBanner: false,
 
-        theme: ThemeData(
-          primarySwatch: Colors.purple,
-          scaffoldBackgroundColor: ConstantColor.backgroundColor,
-          fontFamily: 'PoppinsRegular',
-        ),
-        home: const InitialScreen(),
+      theme: ThemeData(
+        primarySwatch: Colors.purple,
+        scaffoldBackgroundColor: ConstantColor.backgroundColor,
+        fontFamily: 'PoppinsRegular',
       ),
+      home: const InitialScreen(),
+      routes: {
+        '/visitResume': (_) => const VisitFromScreen(),
+        // '/invoiceGenerator': (_) => const Invoice(),
+      },
     );
   }
 }
