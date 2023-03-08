@@ -8,6 +8,7 @@ ValueNotifier<List<VisitModel>> prVisits = ValueNotifier([]);
 class HiveOperations with ChangeNotifier {
   Future<void> addStaffDetail({required StaffModel staff}) async {
     final userDB = await Hive.openBox<StaffModel>('user_db');
+    await userDB.clear();
     await userDB.add(staff);
   }
 

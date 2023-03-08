@@ -383,6 +383,7 @@ class _LoginScreenState extends State<LoginScreen> {
           uid: userCredential.user!.uid,
           email: data['email'].toString(),
           department: data['department'].toString(),
+          profilePic: data['profileImage'].toString(),
         );
 
         await HiveOperations().addStaffDetail(staff: staffInfo);

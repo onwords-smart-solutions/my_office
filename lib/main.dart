@@ -10,7 +10,9 @@ import 'package:my_office/home/user_home_screen.dart';
 import 'package:my_office/login/login_screen.dart';
 import 'package:my_office/models/staff_model.dart';
 import 'package:my_office/util/notification_services.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'PR/invoice/provider_page.dart';
 import 'introduction/intro_screen.dart';
 import 'models/visit_model.dart';
 
@@ -60,20 +62,23 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'My Office',
-      debugShowCheckedModeBanner: false,
+    return ChangeNotifierProvider(
+        create: (context) => TaskData(),
+      child: MaterialApp(
+        title: 'My Office',
+        debugShowCheckedModeBanner: false,
 
-      theme: ThemeData(
-        primarySwatch: Colors.purple,
-        scaffoldBackgroundColor: ConstantColor.backgroundColor,
-        fontFamily: 'PoppinsRegular',
+        theme: ThemeData(
+          primarySwatch: Colors.purple,
+          scaffoldBackgroundColor: ConstantColor.backgroundColor,
+          fontFamily: 'PoppinsRegular',
+        ),
+        home: const InitialScreen(),
+        routes: {
+          '/visitResume': (_) => const VisitFromScreen(),
+          // '/invoiceGenerator': (_) => const Invoice(),
+        },
       ),
-      home: const InitialScreen(),
-      routes: {
-        '/visitResume': (_) => const VisitFromScreen(),
-        // '/invoiceGenerator': (_) => const Invoice(),
-      },
     );
   }
 }

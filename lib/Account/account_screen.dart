@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:delayed_display/delayed_display.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
 import 'package:my_office/models/staff_model.dart';
 import 'package:provider/provider.dart';
@@ -22,11 +27,47 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   final String currentAppVersion = '1.1.1';
 
+  final firebaseStorage = FirebaseStorage.instance;
+
+  String url = '';
+
+  void pickUploadImage() async {
+    final image = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      //   imageQuality: 75,
+      // maxHeight: 512,
+      // maxWidth: 512,
+    );
+
+    var profileImage = await firebaseStorage
+        .ref()
+        .child('PROFILE IMAGE/${widget.staffDetails.uid}/');
+
+    profileImage.putFile(File(image!.path)).whenComplete(() async {
+      url = await profileImage.getDownloadURL();
+      FirebaseDatabase.instance
+          .ref()
+          .child('staff/${widget.staffDetails.uid}/')
+          .update({
+        'profileImage': url,
+      });
+
+      final data = StaffModel(
+          uid: widget.staffDetails.uid,
+          name: widget.staffDetails.name,
+          department: widget.staffDetails.department,
+          email: widget.staffDetails.email,
+          profilePic: url);
+
+      await HiveOperations().addStaffDetail(staff: data);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    print(widget.staffDetails.profilePic.toString());
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -50,28 +91,38 @@ class _AccountScreenState extends State<AccountScreen> {
                       child: WidgetCircularAnimator(
                         innerColor: Colors.orange,
                         outerColor: Colors.black,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                offset: const Offset(2, 2),
-                                spreadRadius: 2,
-                                blurRadius: 0,
+                        child: GestureDetector(
+                          onTap: () {
+                            // pickUploadImage();
+                          },
+                          child: Container(
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    offset: const Offset(2, 2),
+                                    spreadRadius: 2,
+                                    blurRadius: 0,
+                                  ),
+                                  const BoxShadow(
+                                      color: Color(0xffEEF0FE),
+                                      offset: Offset(2, 2),
+                                      spreadRadius: 2,
+                                      blurRadius: 5),
+                                ],
+                                shape: BoxShape.circle,
                               ),
-                              const BoxShadow(
-                                  color: Color(0xffEEF0FE),
-                                  offset: Offset(2, 2),
-                                  spreadRadius: 2,
-                                  blurRadius: 5),
-                            ],
-                            shape: BoxShape.circle,
-                          ),
-                          child:
-                          const Icon(
-                            Icons.person,
-                            size: 50,
-                          ),
+                              child: CircleAvatar(
+                                child: Icon(Icons.person),
+                                  backgroundColor: Colors.transparent,
+                                  // backgroundImage:
+                                      // widget.staffDetails.profilePic == 'null'
+                                      //     ?
+                                      // const NetworkImage(
+                                      //         'https://t3.ftcdn.net/jpg/03/18/60/62/360_F_318606217_Hk8jo2MVoI33SQOkYrfOF929J7JgIP0P.jpg')
+                                          // : NetworkImage(
+                                          //     widget.staffDetails.profilePic).
+                              )),
                         ),
                       ),
                     ),
@@ -133,7 +184,6 @@ class _AccountScreenState extends State<AccountScreen> {
                                 MaterialPageRoute(
                                     builder: (_) => const LoginScreen()),
                                 (route) => false);
-
                           },
                           style: TextButton.styleFrom(
                               foregroundColor: Colors.black),
