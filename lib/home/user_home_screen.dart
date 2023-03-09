@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:my_office/PR/invoice/Screens/Customer_Details_Screen.dart';
+import 'package:my_office/app_version/version.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,7 +40,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   final NotificationService _notificationService = NotificationService();
 
 
-  final String currentAppVersion = '1.1.1+13';
+  // final String currentAppVersion = '1.1.1+13';
 
   StaffModel? staffInfo;
   late StreamSubscription subscription;
@@ -83,7 +84,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         final data = value.snapshot.value as Map<Object?, Object?>;
         final updatedVersion = data['versionNumber'];
 
-        if (currentAppVersion != updatedVersion) {
+        if (AppConstants.pubVersion != updatedVersion) {
           showUpdateAppDialog();
         }
       }
@@ -119,7 +120,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           horizontal: 10.0, vertical: 20.0),
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate:
+      const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 10.0,
           mainAxisSpacing: 10.0,
@@ -151,6 +153,36 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               scale: 3.0,
             ),
             page: const AbsenteeScreen()),
+        buildButton(
+          name: 'Search Leads',
+          image: Image.asset(
+            'assets/search_leads.png',
+            scale: 2.0,
+          ),
+          page: SearchLeadsScreen(staffInfo: staffInfo!),
+        ),
+        buildButton(
+          name: 'Visit',
+          image: Image.asset(
+            'assets/visit.png',
+            scale: 1.8,
+          ),
+          page: const VisitFromScreen(),
+        ),
+        buildButton(
+          name: 'Invoice Generator',
+          image: Image.asset(
+            'assets/invoice.png',
+            scale:2,
+          ),
+          page: const CustomerDetails(),
+
+        ),
+        // ElevatedButton(
+        //     onPressed: () async {
+        //      // showUpdateAppDialog();
+        //     },
+        //     child: Text('Check Version'))
       ],
     )
         : staffInfo!.department == 'PR'

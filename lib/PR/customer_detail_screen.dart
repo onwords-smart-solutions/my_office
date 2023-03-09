@@ -1,10 +1,23 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
 import 'package:timelines/timelines.dart';
 
 import 'note_item.dart';
+
+const List<String> list = [
+  'Following Up',
+  'Delayed',
+  'Onwords',
+  'Advanced',
+  'Product',
+  'B2B',
+  'Under Construction',
+  'Installation Completed',
+  'Others'
+];
 
 class CustomerDetailScreen extends StatefulWidget {
   final Map<Object?, Object?> customerInfo;
@@ -14,10 +27,10 @@ class CustomerDetailScreen extends StatefulWidget {
 
   const CustomerDetailScreen(
       {Key? key,
-      required this.customerInfo,
-      required this.containerColor,
-      required this.currentStaffName,
-      required this.nobColor})
+        required this.customerInfo,
+        required this.containerColor,
+        required this.currentStaffName,
+        required this.nobColor})
       : super(key: key);
 
   @override
@@ -26,6 +39,8 @@ class CustomerDetailScreen extends StatefulWidget {
 
 class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
   TextEditingController notesController = TextEditingController();
+
+  String dropDownValue = list.first;
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -73,6 +88,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
   }
 
   Widget buildCustomerDetail({required Size size}) {
+    final changeState = FirebaseDatabase.instance.ref().child(
+        'customer/${widget.customerInfo['phone_number'].toString()}');
     List<String> fieldName = [
       'City',
       'Lead in Charge',
@@ -87,36 +104,47 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
       'Rating',
     ];
 
-    List<String> customerValue = [
-      widget.customerInfo['city'].toString(),
-      widget.customerInfo['LeadIncharge'].toString(),
-      widget.customerInfo['created_by'].toString(),
-      widget.customerInfo['created_date'].toString(),
-      widget.customerInfo['created_time'].toString(),
-      widget.customerInfo['customer_state'].toString(),
-      widget.customerInfo['data_fetched_by'].toString(),
-      widget.customerInfo['email_id'].toString(),
-      widget.customerInfo['inquired_for'].toString(),
-      widget.customerInfo['phone_number'].toString(),
-      widget.customerInfo['rating'].toString(),
-    ];
 
-    return ListView.builder(
-      physics: const BouncingScrollPhysics(),
-      itemCount: fieldName.length,
-      itemBuilder: (ctx, i) {
-        return buildField(
-            field: fieldName[i], value: customerValue[i], size: size);
-      },
-    );
+
+    return StreamBuilder(
+        stream: changeState.onValue,
+        builder: (context, snapshot) {
+
+
+          if (snapshot.hasData) {
+            final data=snapshot.data!.snapshot.value as Map<Object?,Object?>;
+            List<String> customerValue = [
+              data['city'].toString(),
+              data['LeadIncharge'].toString(),
+              data['created_by'].toString(),
+              data['created_date'].toString(),
+              data['created_time'].toString(),
+              data['customer_state'].toString(),
+              data['data_fetched_by'].toString(),
+              data['email_id'].toString(),
+              data['inquired_for'].toString(),
+              data['phone_number'].toString(),
+              data['rating'].toString(),
+            ];
+
+            return ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              itemCount: fieldName.length,
+              itemBuilder: (ctx, i) {
+                return buildField(
+                    field: fieldName[i], value: customerValue[i], size: size);
+              },
+            );
+          } else if (snapshot.hasError) {}
+          return const SizedBox();
+        });
   }
 
   Widget buildNotes() {
     // List noteKeys = [];
     // Map<Object?, Object?> allNotes = {};
-    final stream = FirebaseDatabase.instance
-        .ref()
-        .child('customer/${widget.customerInfo['phone_number'].toString()}/notes');
+    final stream = FirebaseDatabase.instance.ref().child(
+        'customer/${widget.customerInfo['phone_number'].toString()}/notes');
     //
     // if (widget.customerInfo['notes'] != null) {
     //   //Getting all notes from customer data
@@ -152,28 +180,54 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
               color: const Color(0xff8355B7),
               splashRadius: 20.0,
             ),
+
+
+            //Dropdown to change "State" of customers
+            DropdownButton(
+              value: dropDownValue,
+              elevation: 15,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 17,
+                  fontFamily: ConstantFonts.poppinsMedium),
+              icon: const Icon(
+                Icons.arrow_drop_down_circle_outlined,
+                color: Colors.black,
+              ),
+              onChanged: (String? value) {
+                setState(() {
+                  dropDownValue = value!;
+                  addStateToFirebase();
+                });
+              },
+              items: list.map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(value),
+                );
+              }).toList(),
+            ),
           ],
         ),
+
         //Notes list
         StreamBuilder(
             stream: stream.onValue,
-            builder: ( context, snapshot) {
+            builder: (context, snapshot) {
               if (snapshot.hasData) {
-                List<dynamic> _notes=[];
-                for(var i in snapshot.data!.snapshot.children){
+                List<dynamic> _notes = [];
+                for (var i in snapshot.data!.snapshot.children) {
                   _notes.add(i.value);
                 }
 
-             return   Expanded(
+                return Expanded(
                   child: ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     itemCount: _notes.length,
                     reverse: true,
-
                     itemBuilder: (ctx, i) {
-
                       final Map<Object?, Object?> singleNote =
-                      _notes[i] as Map<Object?,Object?>;
+                      _notes[i] as Map<Object?, Object?>;
 
                       final name = singleNote['entered_by'] ?? 'Not mentioned';
                       final date = singleNote['date'] ?? 'Not mentioned';
@@ -192,12 +246,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                     },
                   ),
                 );
-                print(snapshot.data?.snapshot.children.length);
-              } else if (snapshot.hasError) {
-
-              }
+              } else if (snapshot.hasError) {}
               return const SizedBox();
-            }),
+            })
       ],
     );
   }
@@ -282,10 +333,12 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         padding: const EdgeInsets.only(left: 8.0, top: 5.0),
         height: 30.0,
         width: size.width * .35,
-        child: Text(
+        child: SelectableText(
           field,
+          cursorColor: Colors.purple,
+          scrollPhysics: const ClampingScrollPhysics(),
           style:
-              TextStyle(fontFamily: ConstantFonts.poppinsBold, fontSize: 13.0),
+          TextStyle(fontFamily: ConstantFonts.poppinsBold, fontSize: 13.0),
         ),
       ),
       contents: Container(
@@ -293,8 +346,10 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         width: size.width * .7,
         height: 30.0,
         // height: 20.0,
-        child: Text(
+        child: SelectableText(
           value,
+          cursorColor: Colors.purple,
+          scrollPhysics: const ClampingScrollPhysics(),
           style: TextStyle(
               fontFamily: ConstantFonts.poppinsMedium, fontSize: 14.0),
         ),
@@ -312,7 +367,13 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
 
   void addNoteToDatabase() async {
     if (notesController.text.trim().isEmpty) {
-      const snackBar = SnackBar(content: Text('Enter some notes',textAlign: TextAlign.center,),backgroundColor: Colors.red,);
+      const snackBar = SnackBar(
+        content: Text(
+          'Enter some notes',
+          textAlign: TextAlign.center,
+        ),
+        backgroundColor: Colors.red,
+      );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       // print('no data');
     } else {
@@ -321,7 +382,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
       final ref = FirebaseDatabase.instance.ref();
       ref
           .child(
-              'customer/${widget.customerInfo['phone_number'].toString()}/notes/$timeStamp')
+          'customer/${widget.customerInfo['phone_number'].toString()}/notes/$timeStamp')
           .update(
         {
           'date': DateFormat('yyyy-MM-dd').format(now),
@@ -331,6 +392,30 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         },
       );
       notesController.clear();
+    }
+  }
+
+  void addStateToFirebase() async {
+    if (dropDownValue.isEmpty) {
+      const snackBar = SnackBar(
+        content: Text(
+          'Select one state to change',
+          textAlign: TextAlign.center,
+        ),
+        backgroundColor: Colors.red,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      // print('no data');
+    } else {
+      final ref = FirebaseDatabase.instance.ref();
+      ref
+          .child(
+          'customer/${widget.customerInfo['phone_number'].toString()}')
+          .update(
+        {
+          'customer_state': dropDownValue,
+        },
+      );
     }
   }
 }

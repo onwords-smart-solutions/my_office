@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/database/hive_operations.dart';
 import 'package:my_office/models/staff_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Account/account_screen.dart';
 import '../Constant/fonts/constant_font.dart';
 
@@ -36,21 +39,37 @@ class _MainTemplateState extends State<MainTemplate> {
     });
   }
 
+
+  SharedPreferences? preferences;
+
+
+  String preferencesImageUrl = '';
+
+  Future getImageUrl() async {
+    preferences = await SharedPreferences.getInstance();
+    String? image = preferences?.getString('imageValue');
+    if (image == null) return;
+    setState(() {
+      preferencesImageUrl = image;
+      // print(preferencesImageUrl);
+    });
+  }
+
   @override
   void initState() {
- getStaffDetail();
+    getStaffDetail();
+    getImageUrl();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-   final height =  MediaQuery.of(context).size.height;
-   final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-
         child: Stack(
           alignment: AlignmentDirectional.bottomCenter,
           children: [
@@ -58,7 +77,6 @@ class _MainTemplateState extends State<MainTemplate> {
               top: 0,
               child: Container(
                 height: height * 0.95,
-
                 width: width,
                 padding: EdgeInsets.only(
                     top: MediaQuery.of(context).viewPadding.top * 1.5),
@@ -74,68 +92,63 @@ class _MainTemplateState extends State<MainTemplate> {
                     bottomRight: Radius.circular(30.0),
                     bottomLeft: Radius.circular(30.0),
                   ),
-                  child:  Column(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  //Name and subtitle
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        staffInfo==null
-                                            ? 'Hi'
-                                            : 'Hi ${staffInfo!.name}',
-                                        style: TextStyle(
-                                          fontFamily:
-                                              ConstantFonts.poppinsMedium,
-                                          fontSize: 24.0,
-                                        ),
-                                      ),
-                                      Text(
-                                        widget.subtitle,
-                                        style: TextStyle(
-                                          fontFamily:
-                                              ConstantFonts.poppinsMedium,
-                                          fontSize: 14.0,
-                                        ),
-                                      ),
-                                    ],
+                            //Name and subtitle
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  staffInfo == null
+                                      ? 'Hi'
+                                      : 'Hi ${staffInfo!.name}',
+                                  style: TextStyle(
+                                    fontFamily: ConstantFonts.poppinsMedium,
+                                    fontSize: 24.0,
                                   ),
+                                ),
+                                Text(
+                                  widget.subtitle,
+                                  style: TextStyle(
+                                    fontFamily: ConstantFonts.poppinsMedium,
+                                    fontSize: 14.0,
+                                  ),
+                                ),
+                              ],
+                            ),
 
-                                  //Profile icon
-                                  GestureDetector(
-                                    onTap: () {
-                                      HapticFeedback.mediumImpact();
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (_) => AccountScreen(staffDetails:  staffInfo!)));
-                                    },
-                                    child: const CircleAvatar(
-                                      radius: 20.0,
-                                      backgroundColor:
-                                          ConstantColor.backgroundColor,
-                                      foregroundColor: Colors.white,
-                                      child: Icon(Iconsax.user),
-                                    ),
-                                  ),
-                                ],
+                            //Profile icon
+                            GestureDetector(
+                              onTap: () {
+                                getImageUrl();
+                                HapticFeedback.mediumImpact();
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (_) => AccountScreen(
+                                        staffDetails: staffInfo!)));
+                              },
+                              child: SizedBox(
+                                height: height*0.08,
+                                width: height*0.08,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: preferencesImageUrl == '' ? Icon(Iconsax.user) : Image.file(File(preferencesImageUrl).absolute,fit: BoxFit.cover,),
+                                ),
                               ),
                             ),
-                             SizedBox(height: height * 0.01),
-
-                            //Custom widget section
-                            Expanded(child: widget.templateBody),
-
                           ],
                         ),
+                      ),
+                      SizedBox(height: height * 0.01),
 
+                      //Custom widget section
+                      Expanded(child: widget.templateBody),
+                    ],
+                  ),
                 ),
               ),
             ),

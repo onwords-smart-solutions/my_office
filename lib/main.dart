@@ -17,9 +17,6 @@ import 'introduction/intro_screen.dart';
 import 'models/visit_model.dart';
 
 
-
-
-
 /// version: 1.1.0+9 Updated On (21/02/2023)
 
 void main() async {
@@ -62,24 +59,27 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (context) => TaskData(),
-      child: MaterialApp(
-        title: 'My Office',
-        debugShowCheckedModeBanner: false,
+    return MultiProvider(
+      providers:[
+        ChangeNotifierProvider(
+        create: (context) => TaskData(),),
+      ],
+        child: MaterialApp(
+          title: 'My Office',
+          debugShowCheckedModeBanner: false,
 
-        theme: ThemeData(
-          primarySwatch: Colors.purple,
-          scaffoldBackgroundColor: ConstantColor.backgroundColor,
-          fontFamily: 'PoppinsRegular',
+          theme: ThemeData(
+            primarySwatch: Colors.purple,
+            scaffoldBackgroundColor: ConstantColor.backgroundColor,
+            fontFamily: 'PoppinsRegular',
+          ),
+          home: const InitialScreen(),
+          routes: {
+            '/visitResume': (_) => const VisitFromScreen(),
+            // '/invoiceGenerator': (_) => const Invoice(),
+          },
         ),
-        home: const InitialScreen(),
-        routes: {
-          '/visitResume': (_) => const VisitFromScreen(),
-          // '/invoiceGenerator': (_) => const Invoice(),
-        },
-      ),
-    );
+      );
   }
 }
 

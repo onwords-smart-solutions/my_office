@@ -8,30 +8,34 @@ import '../Constant/fonts/constant_font.dart';
 
 class IndividualWorkDone extends StatefulWidget {
   final String employeeName;
- final List<dynamic> workDetails;
-   const IndividualWorkDone({
-    Key? key, required this.workDetails, required this.employeeName
-  }) : super(key: key);
+  final List<dynamic> workDetails;
+
+  const IndividualWorkDone(
+      {Key? key, required this.workDetails, required this.employeeName})
+      : super(key: key);
 
   @override
   State<IndividualWorkDone> createState() => _IndividualWorkDoneState();
 }
 
 class _IndividualWorkDoneState extends State<IndividualWorkDone> {
-
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return ScreenTemplate(bodyTemplate: workDetailsContainer(height, width), title: widget.employeeName);
+    return ScreenTemplate(
+        bodyTemplate: workDetailsContainer(height, width),
+        title: widget.employeeName);
   }
 
   Widget workDetailsContainer(double height, double width) {
+    // print(widget.workDetails.length.bitLength);
+
     return ListView.builder(
         scrollDirection: Axis.vertical,
         physics: const BouncingScrollPhysics(),
         shrinkWrap: true,
-        itemCount: widget.workDetails.length,
+        itemCount: widget.workDetails.length.bitLength,
         itemBuilder: (BuildContext context, int ind) {
           return Container(
             height: height * 0.25,
@@ -54,8 +58,7 @@ class _IndividualWorkDoneState extends State<IndividualWorkDone> {
                 children: [
                   Container(
                     margin: EdgeInsets.symmetric(
-                        vertical: height * 0.02,
-                        horizontal: width * 0.02),
+                        vertical: height * 0.02, horizontal: width * 0.02),
                     padding: const EdgeInsets.all(8),
                     height: height * 0.1,
                     width: width * 0.88,
@@ -79,17 +82,16 @@ class _IndividualWorkDoneState extends State<IndividualWorkDone> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.symmetric(
-                        horizontal: width * 0.03),
+                    margin: EdgeInsets.symmetric(horizontal: width * 0.03),
                     child: percentIndicator(
-                      height *2,
+                      height * 2,
                       double.parse(widget.workDetails[ind]['workPercentage']
-                          .replaceAll(RegExp(r'.$'), "")) /
+                              .replaceAll(RegExp(r'.$'), "")) /
                           100,
                       widget.workDetails[ind]['workPercentage'],
                       double.parse(widget.workDetails[ind]['workPercentage']
-                          .replaceAll(RegExp(r'.$'), "")) <
-                          50
+                                  .replaceAll(RegExp(r'.$'), "")) <
+                              50
                           ? Colors.black
                           : ConstantColor.background1Color,
                     ),
@@ -104,7 +106,9 @@ class _IndividualWorkDoneState extends State<IndividualWorkDone> {
                           height,
                           'Start : ${widget.workDetails[ind]['from']}',
                           height * 0.010),
-                      textWidget(height, 'End : ${widget.workDetails[ind]['to']}',
+                      textWidget(
+                          height,
+                          'End : ${widget.workDetails[ind]['to']}',
                           height * 0.010),
                       textWidget(
                           height,
@@ -129,7 +133,7 @@ class _IndividualWorkDoneState extends State<IndividualWorkDone> {
       backgroundColor: Colors.black.withOpacity(0.05),
       // progressColor: Colors.cyan,
       linearGradient:
-      const LinearGradient(colors: [Color(0xffD136D4), Color(0xff7652B2)]),
+          const LinearGradient(colors: [Color(0xffD136D4), Color(0xff7652B2)]),
       center: Text(
         val,
         style: TextStyle(

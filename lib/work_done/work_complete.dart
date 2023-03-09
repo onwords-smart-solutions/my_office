@@ -147,6 +147,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
         bgColor: ConstantColor.background1Color);
   }
 
+
   Widget buildStackWidget(double height, double width) {
     List<Widget> workDoneNames = [];
 
@@ -203,65 +204,65 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
 
     return isLoading
         ? Center(
-            child: Lottie.asset(
-              "assets/animations/loading.json",
-            ),
-          )
+      child: Lottie.asset(
+        "assets/animations/loading.json",
+      ),
+    )
         : Column(
+      children: [
+        //calender button
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              //calender button
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text('$selectedDate   ',
-                        style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsMedium,
-                            fontSize: 15,
-                            color: ConstantColor.blackColor)),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          allData.clear();
-                          nameData.clear();
-                          datePicker();
-                          getWorkDetails();
-                        });
-                      },
-                      child: Image.asset(
-                        'assets/calender.png',
-                        scale: 3.3,
-                      ),
-                    ),
-                  ],
+              Text('$selectedDate   ',
+                  style: TextStyle(
+                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontSize: 15,
+                      color: ConstantColor.blackColor)),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    allData.clear();
+                    nameData.clear();
+                    datePicker();
+                    getWorkDetails();
+                  });
+                },
+                child: Image.asset(
+                  'assets/calender.png',
+                  scale: 3.3,
                 ),
               ),
-              nameData.isNotEmpty
-                  ? Expanded(
-                      child: SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(),
-                        child: Column(children: workDoneNames),
-                      ),
-                    )
-                  : Expanded(
-                    child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Lottie.asset('assets/animations/no_data.json',
-                              height: 250.0),
-                          Text(
-                            'No work done yet',
-                            style: TextStyle(
-                              fontFamily: ConstantFonts.poppinsMedium,
-                              color: ConstantColor.blackColor,fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
-                      ),
-                  ),
             ],
-          );
+          ),
+        ),
+        nameData.isNotEmpty
+            ? Expanded(
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(children: workDoneNames),
+          ),
+        )
+            : Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Lottie.asset('assets/animations/no_data.json',
+                  height: 250.0),
+              Text(
+                'No work done yet',
+                style: TextStyle(
+                  fontFamily: ConstantFonts.poppinsMedium,
+                  color: ConstantColor.blackColor,fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }
