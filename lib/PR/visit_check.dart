@@ -70,89 +70,84 @@ class _VisitCheckScreenState extends State<VisitCheckScreen> {
   }
 
   Widget buildScreen() {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  GestureDetector(
-                    onTap: (){
-                      allVisits.clear();
-                      datePicker();
-                    },
-                    child: Image.asset(
-                      'assets/calender.png',
-                      scale: 3,
-                    ),
-                  ),
-                  const SizedBox(width: 15),
-                  Text(
-                    '$selectedDate',
-                    style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsBold,
-                      fontSize: 17,
-                      color: ConstantColor.backgroundColor,
-                    ),
-                  ),
-                ],
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              GestureDetector(
+                onTap: (){
+                  allVisits.clear();
+                  datePicker();
+                },
+                child: Image.asset(
+                  'assets/calender.png',
+                  scale: 3,
+                ),
               ),
-            ),
-            const SizedBox(height: 10),
-            allVisits.isNotEmpty
-                ? Expanded(
-                    child: ListView.builder(
-                      itemCount: allVisits.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) =>
-                                    VisitList(visitList: allVisits[index])));
-                          },
-                          leading: const CircleAvatar(
-                            radius: 20,
-                            backgroundColor: ConstantColor.backgroundColor,
-                            child: Icon(Icons.person),
-                          ),
-                          title: Text(
-                            allVisits[index].inChargeDetail.keys.first,
-                            style: TextStyle(
-                                fontFamily: ConstantFonts.poppinsMedium,
-                                color: ConstantColor.blackColor,
-                                fontSize: 17),
-                          ),
-                        );
-                      },
-                    ),
-                  )
-                : Expanded(
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Lottie.asset('assets/animations/no_data.json',
-                              height: 200.0),
-                          Text(
-                            'No Visits available',
-                            style: TextStyle(
-                              fontFamily: ConstantFonts.poppinsMedium,
-                              color: ConstantColor.blackColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-          ],
+              const SizedBox(width: 15),
+              Text(
+                '$selectedDate',
+                style: TextStyle(
+                  fontFamily: ConstantFonts.poppinsBold,
+                  fontSize: 17,
+                  color: ConstantColor.backgroundColor,
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
+        const SizedBox(height: 10),
+        allVisits.isNotEmpty
+            ? Expanded(
+          child: ListView.builder(
+            itemCount: allVisits.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          VisitList(visitList: allVisits[index])));
+                },
+                leading: const CircleAvatar(
+                  radius: 20,
+                  backgroundColor: ConstantColor.backgroundColor,
+                  child: Icon(Icons.person),
+                ),
+                title: Text(
+                  allVisits[index].inChargeDetail.keys.first,
+                  style: TextStyle(
+                      fontFamily: ConstantFonts.poppinsMedium,
+                      color: ConstantColor.blackColor,
+                      fontSize: 17),
+                ),
+              );
+            },
+          ),
+        )
+            : Expanded(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Lottie.asset('assets/animations/no_data.json',
+                    height: 200.0),
+                Text(
+                  'No Visits available',
+                  style: TextStyle(
+                    fontFamily: ConstantFonts.poppinsMedium,
+                    color: ConstantColor.blackColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 

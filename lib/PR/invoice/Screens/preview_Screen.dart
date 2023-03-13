@@ -117,7 +117,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
   String supplierEmail = " ";
   String supplierWebsite = " ";
   String supplierGst = " ";
-  late User user;
+  // User? user;
   late DateTime currentPhoneDate;
   var dataJson;
   final formKey = GlobalKey<FormState>();
@@ -128,14 +128,14 @@ class _PreviewScreenState extends State<PreviewScreen> {
   readData() async {
     logData = await SharedPreferences.getInstance();
     setState(() {
-      user = UserPreferences.getUser();
-      supplierName = logData.getString('ownerName')!;
-      supplierStreet = logData.getString('ownerStreet')!;
-      supplierAddress = logData.getString('ownerAddress')!;
-      supplierWebsite = logData.getString('ownerWebsite')!;
-      supplierEmail = logData.getString('ownerEmail')!;
-      supplierGst = logData.getString('ownerGst')!;
-      supplierPhone = logData.getInt('ownerPhone')!;
+      // user = UserPreferences.getUser();
+      // supplierName = logData.getString('ownerName')!;
+      // supplierStreet = logData.getString('ownerStreet')!;
+      // supplierAddress = logData.getString('ownerAddress')!;
+      // supplierWebsite = logData.getString('ownerWebsite')!;
+      // supplierEmail = logData.getString('ownerEmail')!;
+      // supplierGst = logData.getString('ownerGst')!;
+      // supplierPhone = logData.getInt('ownerPhone')!;
       accountName.text = "Onwords";
       accountNo.text = "5020-0065-403656";
       ifsc.text = "HDFC0000787";
@@ -602,10 +602,9 @@ class _PreviewScreenState extends State<PreviewScreen> {
 
                                     final pdfFile = await PdfInvoiceApi
                                         .generate(
-                                        invoice, user, convertedImage!);
-
-
-
+                                        invoice,
+                                        // user!,
+                                        convertedImage!);
                                     PdfApi.openFile(pdfFile).then((
                                         value) async {
                                       // print(task.name);
@@ -631,7 +630,9 @@ class _PreviewScreenState extends State<PreviewScreen> {
 
                                       /// INSTALLATION-INVOICE......
                                       final installationPdfFile = await InstallationInvoicePdf.generate(
-                                          invoice, user,);
+                                          invoice,
+                                        // user,
+                                      );
 
                                         var snapshotInstallation = await firebaseStorage
                                             .ref()
@@ -692,11 +693,10 @@ class _PreviewScreenState extends State<PreviewScreen> {
 
                                     setState(() {
                                       // if(!mounted) return;
-                                    Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                    builder: (context) =>
-                                    const UserHomeScreen()));
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                        MaterialPageRoute(
+                                            builder: (_) => const UserHomeScreen()),
+                                            (route) => false);
                                     Provider.of<TaskData>(context, listen: false)
                                         .invoiceListData
                                         .clear();
@@ -707,9 +707,6 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                         .deleteCustomerDetails(1);
                                     }),
                                     });
-
-
-
                                   }
                                   else {
                                     showSnackBar(

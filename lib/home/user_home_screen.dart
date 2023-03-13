@@ -43,7 +43,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   final HiveOperations _hiveOperations = HiveOperations();
   final NotificationService _notificationService = NotificationService();
 
-  // final String currentAppVersion = '1.1.1+13';
 
   StaffModel? staffInfo;
   late StreamSubscription subscription;
@@ -87,9 +86,21 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       if (value.snapshot.exists) {
         final data = value.snapshot.value as Map<Object?, Object?>;
         final updatedVersion = data['versionNumber'];
+        final updatedAdminVersion = data['adminVersion'];
+        final updatedPrVersion = data['prVersion'];
 
-        if (AppConstants.pubVersion != updatedVersion) {
-          showUpdateAppDialog();
+        if(staffInfo?.department == 'ADMIN') {
+          if (AppConstants.adminDepVersion != updatedAdminVersion) {
+            showUpdateAppDialog();
+          }
+        }else if (staffInfo?.department == 'PR') {
+          if (AppConstants.prDepVersion != updatedPrVersion) {
+            showUpdateAppDialog();
+          }
+        }else {
+          if (AppConstants.pubVersion != updatedVersion) {
+            showUpdateAppDialog();
+          }
         }
       }
     });
@@ -165,6 +176,14 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     page: SearchLeadsScreen(staffInfo: staffInfo!),
                   ),
                   buildButton(
+                    name: 'Visit Check',
+                    image: Image.asset(
+                      'assets/visit_check.png',
+                      scale: 3.4,
+                    ),
+                    page:  const VisitCheckScreen(),
+                  ),
+                  buildButton(
                     name: 'Visit',
                     image: Image.asset(
                       'assets/visit.png',
@@ -196,6 +215,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             mainAxisSpacing: 10.0,
                             mainAxisExtent: 230),
                     children: [
+
+                      if(staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
+                       buildButton(
+                        name: 'Visit Check',
+                        image: Image.asset(
+                          'assets/visit_check.png',
+                          scale: 3.4,
+                        ),
+                        page:  const VisitCheckScreen(),
+                      ),
+
                       buildButton(
                         name: 'Work Manager',
                         image: Image.asset(
@@ -403,6 +433,13 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         decoration: BoxDecoration(
           color: const Color(0xffDAD6EE),
           borderRadius: BorderRadius.circular(20),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black26,
+              offset: Offset(3.0,3.0),
+              blurRadius: 3
+            )
+          ]
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -21,7 +21,9 @@ double total = 0;
 
 
 class InstallationInvoicePdf {
-  static Future<File> generate(Invoice invoice, User user,) async {
+  static Future<File> generate(Invoice invoice,
+      // User user
+      ) async {
     final pdf = Document();
     var assetImage = pw.MemoryImage(
         (await rootBundle.load('assets/logo1.png')).buffer.asUint8List());

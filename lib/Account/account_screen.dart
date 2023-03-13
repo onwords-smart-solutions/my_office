@@ -35,23 +35,23 @@ class _AccountScreenState extends State<AccountScreen> {
   Future saveValue() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      prefs.setString('imageValue', _image!.path.toString());
+        prefs.setString('imageValue', _image!.path.toString());
     });
   }
 
   getProfile(){
-    staff.child(widget.staffDetails.uid).once().then((value) {
-      var a;
-      a = value.snapshot.value;
-      // print(a['profileImage']);
+    staff.child(widget.staffDetails.uid).once().then((value) async {
+      var profilePic;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      profilePic = value.snapshot.value;
       setState(() {
         try{
-          imageUrl = a['profileImage'].toString();
+          imageUrl = profilePic['profileImage'].toString();
+          prefs.setString('imageValueNet', imageUrl);
+          print(imageUrl);
         } catch (e) {
           imageUrl = '';
         }
-
-        // print(imageUrl);
       });
     });
   }
@@ -65,26 +65,29 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Future pickerGalleryImage(BuildContext context) async {
     final pickedFile =
-        await picker.pickImage(source: ImageSource.gallery, imageQuality: 100);
+    await picker.pickImage(source: ImageSource.gallery, imageQuality: 100);
 
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
         pickUploadImage();
+
         saveValue();
+        getProfile();
       }
     });
   }
 
   Future pickerCameraImage(BuildContext context) async {
     final pickedFile =
-        await picker.pickImage(source: ImageSource.camera, imageQuality: 100);
+    await picker.pickImage(source: ImageSource.camera, imageQuality: 100);
 
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
         pickUploadImage();
         saveValue();
+        getProfile();
       }
     });
   }
@@ -152,7 +155,7 @@ class _AccountScreenState extends State<AccountScreen> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-   // print(imageUrl);
+    // print(imageUrl);
     return Scaffold(
         body: Container(
           decoration: const BoxDecoration(
@@ -203,14 +206,14 @@ class _AccountScreenState extends State<AccountScreen> {
                                     borderRadius: BorderRadius.circular(100),
                                     child: _image == null
                                         ? imageUrl == '' || imageUrl == 'null'
-                                            ? const Icon(Icons.person)
-                                            : CircleAvatar(
-                                            backgroundImage:
-                                                NetworkImage(imageUrl),
-                                          )
-                                    : CircleAvatar(
-                                            backgroundImage: FileImage(
-                                                File(_image!.path).absolute)),
+                                        ? const Icon(Icons.person)
+                                        : CircleAvatar(
+                                      backgroundImage:
+                                      NetworkImage(imageUrl),
+                                    )
+                                        : CircleAvatar(
+                                        backgroundImage: FileImage(
+                                            File(_image!.path).absolute)),
                                   ),
                                 ),
                               ),
@@ -220,15 +223,15 @@ class _AccountScreenState extends State<AccountScreen> {
                             delay: 1.seconds,
                             child: GestureDetector(
                               onTap: () {
-                                print('jiji');
+
                                 pickImage(context);
                               },
                               child: Container(
                                 width: width*0.3,
                                 margin: const EdgeInsets.only(top: 20),
                                 decoration:  BoxDecoration(
-                                  color: Colors.black.withOpacity(0.05),
-                                  borderRadius: BorderRadius.circular(20)
+                                    color: Colors.black.withOpacity(0.05),
+                                    borderRadius: BorderRadius.circular(20)
 
                                 ),
                                 child: Row(
@@ -258,7 +261,7 @@ class _AccountScreenState extends State<AccountScreen> {
                             horizontal: width * 0.10, vertical: height * 0.03),
                         height: height * 0.4,
                         decoration: BoxDecoration(
-                            // color: Colors.black,
+                          // color: Colors.black,
                             borderRadius: BorderRadius.circular(30)),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -293,6 +296,8 @@ class _AccountScreenState extends State<AccountScreen> {
                               final navigator = Navigator.of(context);
                               await FirebaseAuth.instance.signOut();
                               await HiveOperations().clearDetails();
+                              final pref = await SharedPreferences.getInstance();
+                              await pref.clear();
 
                               // Provider.of<TaskData>(context, listen: false)
                               //     .invoiceListData
@@ -305,7 +310,7 @@ class _AccountScreenState extends State<AccountScreen> {
                               navigator.pushAndRemoveUntil(
                                   MaterialPageRoute(
                                       builder: (_) => const LoginScreen()),
-                                  (route) => false);
+                                      (route) => false);
                             },
                             style: TextButton.styleFrom(
                                 foregroundColor: Colors.black),

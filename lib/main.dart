@@ -59,12 +59,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers:[
-        ChangeNotifierProvider(
-        create: (context) => TaskData(),),
-      ],
-        child: MaterialApp(
+    return ChangeNotifierProvider(
+      create: (context) => TaskData(),
+      child:  MaterialApp(
           title: 'My Office',
           debugShowCheckedModeBanner: false,
 

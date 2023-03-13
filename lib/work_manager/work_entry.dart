@@ -4,6 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/animate.dart';
 import 'package:flutter_animate/effects/fade_effect.dart';
 import 'package:intl/intl.dart';
@@ -36,6 +37,8 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   final TextEditingController _percentController = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
+
+  int above6 = 0;
 
   double percent = 0;
   bool isLoding = false;
@@ -96,7 +99,8 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   String? timeOfStart = '';
   String? timeOfEnd = '';
   String? percentage = '';
-
+  String? timeOfStartView = '';
+  String? timeOfEndView = '';
   String? from;
   String? to;
   var wrkDone;
@@ -111,10 +115,12 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       "workDone": _workController.text.toString().trim(),
       "workPercentage": "${_percentController.text.toString().trim()}%",
       'name': widget.staffName.toString().trim(),
-      'time_in_hours' : totalWorkingTime.toString(),
+      'time_in_hours': totalWorkingTime.toString(),
     }).then((value) {
       timeOfStart = '';
       timeOfEnd = '';
+      timeOfStartView = '';
+      timeOfEndView = '';
       _workController.clear();
       _percentController.clear();
       getWorkDone();
@@ -135,13 +141,14 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
           DateFormat.jm().parse(pickedTime.format(context).toString());
 
       ///converting to DateTime so that we can further format on different pattern.
-      String formattedTime = DateFormat('HH:mm').format(parsedTime);
+      String formattedTime = DateFormat('HH:MM').format(parsedTime);
 
       ///DateFormat() is from intl package, you can format the time on any pattern you need.
 
       setState(() {
         timeOfStart = formattedTime;
-        // print(timeOfStart);
+        timeOfStartView = DateFormat.jm()
+            .format(DateFormat("hh:mm:ss").parse("$formattedTime:00"));
       });
     }
   }
@@ -164,7 +171,8 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       ///DateFormat() is from intl package, you can format the time on any pattern you need.
       setState(() {
         timeOfEnd = formattedTime;
-        // print(timeOfEnd);
+        timeOfEndView = DateFormat.jm()
+            .format(DateFormat("hh:mm:ss").parse("$formattedTime:00"));
       });
     } else {
       // print("Time is not selected");
@@ -299,238 +307,295 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   Widget tabBarViewFirstScreen(double height, double width) {
     return isLoding
         ? const Center(child: CircularProgressIndicator())
-        :Padding(
-      padding: const EdgeInsets.all(08),
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            /// Text Field
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: width * 0.025),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                      color: _workController.text.isEmpty
-                          ? Colors.black26
-                          : Colors.green),
-                  boxShadow: const [
-                    BoxShadow(
-                        color: Colors.black12,
-                        offset: Offset(-0.0, 6.0),
-                        blurRadius: 5),
-                  ]),
-              child: textFiledWidget(height, TextInputType.text,
-                  TextInputAction.done, 'Enter Work', _workController),
-            ),
-
-            /// 3 Buttons
-            Padding(
-              padding: EdgeInsets.only(top: height * 0.05),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+        : Padding(
+            padding: const EdgeInsets.all(08),
+            child: SingleChildScrollView(
+              child: Column(
                 children: [
-                  ButtonWidget(
-                      title: 'Start Time',
-                      onClicked: () {
-                        startTime();
-                      },
-                      colorValue:
-                          timeOfStart.toString().isEmpty ? a = false : a = true,
-                      icon: const Icon(Icons.alarm),
-                      val: "${timeOfStart!.isEmpty ? '--' : timeOfStart}"),
-                  ButtonWidget(
-                      title: 'End Time',
-                      onClicked: () {
-                        endTime();
-                      },
-                      colorValue:
-                          timeOfEnd.toString().isEmpty ? b = false : b = true,
-                      icon: const Icon(Icons.alarm),
-                      val: "${timeOfEnd!.isEmpty ? '--' : timeOfEnd}"),
+                  /// Text Field
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: width * 0.025),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                            color: _workController.text.isEmpty
+                                ? Colors.black26
+                                : Colors.green),
+                        boxShadow: const [
+                          BoxShadow(
+                              color: Colors.black12,
+                              offset: Offset(-0.0, 6.0),
+                              blurRadius: 5),
+                        ]),
+                    child: textFiledWidget(height, TextInputType.text,
+                        TextInputAction.done, 'Enter Work', _workController),
+                  ),
+
+                  /// 3 Buttons
+                  Padding(
+                    padding: EdgeInsets.only(top: height * 0.05),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ButtonWidget(
+                            title: 'Start Time',
+                            onClicked: () {
+                              startTime();
+                            },
+                            colorValue: timeOfStart.toString().isEmpty
+                                ? a = false
+                                : a = true,
+                            icon: const Icon(Icons.alarm),
+                            val:
+                                "${timeOfStartView!.isEmpty ? '--' : timeOfStartView}"),
+                        ButtonWidget(
+                            title: 'End Time',
+                            onClicked: () {
+                              endTime();
+                            },
+                            colorValue: timeOfEnd.toString().isEmpty
+                                ? b = false
+                                : b = true,
+                            icon: const Icon(Icons.alarm),
+                            val:
+                                "${timeOfEndView!.isEmpty ? '--' : timeOfEndView}"),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              AwesomeDialog(
+                                context: context,
+                                animType: AnimType.bottomSlide,
+                                headerAnimationLoop: false,
+                                // dialogType: DialogType.success,
+                                customHeader: Image.asset(
+                                  'assets/man_with_laptop.png',
+                                  scale: 6.0,
+                                ).animate(effects: [
+                                  const FadeEffect(
+                                      duration: Duration(seconds: 1))
+                                ]),
+                                showCloseIcon: true,
+                                body: TextFormField(
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(3),
+                                  ],
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: ConstantFonts.poppinsMedium),
+                                  controller: _percentController,
+                                  keyboardType: TextInputType.number,
+                                  textInputAction: TextInputAction.done,
+                                  decoration: InputDecoration(
+                                    // fillColor: const Color(0xffFBF8FF),
+                                    hintStyle: TextStyle(
+                                        fontFamily: ConstantFonts.poppinsMedium,
+                                        fontWeight: FontWeight.w900,
+                                        fontSize: 16,
+                                        color: Colors.black54
+                                        // (0xffFBF8FF)
+                                        ),
+                                    contentPadding: const EdgeInsets.all(20),
+                                    hintText: '       Percent of Completed',
+                                    filled: true,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide.none,
+                                    ),
+                                  ),
+                                  validator: (value) {
+                                    if (value.toString().isEmpty) {
+                                      return 'Enter value';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                ),
+                                btnOkColor: Colors.black87,
+                                btnOkText: 'Done',
+                                buttonsTextStyle: TextStyle(
+                                    // color: ConstantColor.blackColor,
+                                    fontWeight: FontWeight.w900,
+                                    fontFamily: ConstantFonts.poppinsMedium),
+                                btnOkOnPress: () {
+                                  setState(() {
+                                    // debugPrint(_percentController.text.toString());
+                                    // percentField.clear();
+                                  });
+                                },
+                                onDismissCallback: (type) {
+                                  // debugPrint('Dialog Dismiss from callback $type');
+                                },
+                              ).show();
+                            });
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(top: height * 0.03),
+                            height: height * 0.15,
+                            width: width * 0.25,
+                            decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.05),
+                                border: Border.all(
+                                    color: _percentController.text.isEmpty
+                                        ? Colors.black26
+                                        : Colors.green),
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                const Icon(Icons.percent),
+                                Text(
+                                  _percentController.text.isEmpty
+                                      ? '--'
+                                      : _percentController.text,
+                                  style: TextStyle(
+                                    fontFamily: ConstantFonts.poppinsMedium,
+                                  ),
+                                ),
+                                Text(
+                                  'percent',
+                                  style: TextStyle(
+                                    fontFamily: ConstantFonts.poppinsMedium,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  /// Submit Button
                   GestureDetector(
                     onTap: () {
                       setState(() {
-                        AwesomeDialog(
-                          context: context,
-                          animType: AnimType.bottomSlide,
-                          headerAnimationLoop: false,
-                          // dialogType: DialogType.success,
-                          customHeader: Image.asset(
-                            'assets/man_with_laptop.png',
-                            scale: 6.0,
-                          ).animate(effects: [
-                            const FadeEffect(duration: Duration(seconds: 1))
-                          ]),
-                          showCloseIcon: true,
-                          body: TextFormField(
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: ConstantFonts.poppinsMedium),
-                            controller: _percentController,
-                            keyboardType: TextInputType.number,
-                            textInputAction: TextInputAction.done,
-                            decoration: InputDecoration(
-                              // fillColor: const Color(0xffFBF8FF),
-                              hintStyle: TextStyle(
-                                  fontFamily: ConstantFonts.poppinsMedium,
-                                  fontWeight: FontWeight.w900,
-                                  fontSize: 16,
-                                  color: Colors.black54
-                                  // (0xffFBF8FF)
-                                  ),
-                              contentPadding: const EdgeInsets.all(20),
-                              hintText: '       Percent of Completed',
-                              filled: true,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide.none,
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value.toString().isEmpty) {
-                                return 'Enter value';
-                              } else {
-                                return null;
+                        if (timeOfStart!.isNotEmpty &&
+                            timeOfEnd!.isNotEmpty &&
+                            _percentController.text.isNotEmpty &&
+                            _workController.text.isNotEmpty) {
+
+                          String? startString =
+                          timeOfStart.toString().replaceAll(RegExp(':'), '');
+                          String? endString =
+                          timeOfEnd.toString().replaceAll(RegExp(':'), '');
+
+                          int startInt = int.parse(startString);
+                          int endInt = int.parse(endString);
+                          int percent = int.parse(_percentController.text);
+
+                          if (startInt < endInt) {
+                            // print('correct time');
+                            if (percent <= 100) {
+                              // print('correct percent');
+                              String st = timeOfStart
+                                  .toString()
+                                  .replaceAll(RegExp(r'[^0-9]'), ':');
+                              String et = timeOfEnd
+                                  .toString()
+                                  .replaceAll(RegExp(r'[^0-9]'), ':');
+
+                              String startTime = st.toString(); // or if '24:00'
+                              String endTime = et.toString(); // or if '12:00
+
+                              var format = DateFormat("HH:mm");
+                              var start = format.parse(startTime);
+                              var end = format.parse(endTime);
+
+                              if (end.isAfter(start)) {
+                                timeDifference = end.difference(start);
                               }
-                            },
-                          ),
-                          btnOkColor: Colors.black87,
-                          btnOkText: 'Done',
-                          buttonsTextStyle: TextStyle(
-                              // color: ConstantColor.blackColor,
-                              fontWeight: FontWeight.w900,
-                              fontFamily: ConstantFonts.poppinsMedium),
-                          btnOkOnPress: () {
-                            setState(() {
-                              // debugPrint(_percentController.text.toString());
-                              // percentField.clear();
-                            });
-                          },
-                          onDismissCallback: (type) {
-                            // debugPrint('Dialog Dismiss from callback $type');
-                          },
-                        ).show();
+                              var s = timeDifference.toString().length;
+
+                              if (timeDifference.toString().length == 14) {
+                                setState(() {
+                                  totalWorkingTime = timeDifference
+                                      .toString()
+                                      .substring(0, s - 10);
+                                  above6 = int.parse(totalWorkingTime
+                                      .toString()
+                                      .substring(0, 1));
+                                });
+                              } else {
+                                setState(() {
+                                  totalWorkingTime = timeDifference
+                                      .toString()
+                                      .substring(0, s - 10);
+                                  above6 = int.parse(totalWorkingTime
+                                      .toString()
+                                      .substring(0, 2));
+                                });
+                              }
+
+                                if (above6 >= 5) {
+                                  // print(above6);
+                                  timeOfEnd = '';
+                                  timeOfEndView = '';
+                                  showSnackBar(
+                                      message:
+                                      "Work time exceeds 5 hours enter correctly",
+                                      color: Colors.red.shade500);
+                                } else {
+                                  // print(above6);
+                                  setState(() {
+                                    isLoding = true;
+                                    createNewWork();
+                                    // print('created');
+                                  });
+                                }
+
+                            }else{
+                              showSnackBar(message: 'enter correct percentage', color: Colors.red.shade500);
+                            }
+                          }
+                          else {
+                            timeOfStart = '';
+                            timeOfEnd = '';
+                            timeOfStartView = '';
+                            timeOfEndView = '';
+                            showSnackBar(
+                                message: 'Set the work time correctly',
+                                color: Colors.red.shade500);
+                          }
+                        }else{
+                          showSnackBar(
+                              message: 'Please Fill All Fields',
+                              color: Colors.red.shade500);
+                        }
+
                       });
                     },
                     child: Container(
-                      margin: EdgeInsets.only(top: height * 0.03),
-                      height: height * 0.15,
-                      width: width * 0.25,
+                      margin: EdgeInsets.only(top: height * 0.15),
+                      height: height * 0.07,
+                      width: width * 0.9,
                       decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.05),
-                          border: Border.all(
-                              color: _percentController.text.isEmpty
-                                  ? Colors.black26
-                                  : Colors.green),
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          const Icon(Icons.percent),
-                          Text(
-                            _percentController.text.isEmpty
-                                ? '--'
-                                : _percentController.text,
-                            style: TextStyle(
+                        borderRadius: BorderRadius.circular(20),
+                        gradient: const LinearGradient(
+                          colors: [
+                            Color(0xffD136D4),
+                            Color(0xff7652B2),
+                          ],
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Submit',
+                          style: TextStyle(
                               fontFamily: ConstantFonts.poppinsMedium,
-                            ),
-                          ),
-                          Text(
-                            'percent',
-                            style: TextStyle(
-                              fontFamily: ConstantFonts.poppinsMedium,
-                            ),
-                          )
-                        ],
+                              fontSize: height * 0.025,
+                              color: Colors.white),
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-
-            /// Submit Button
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  isLoding = true;
-
-                  String st = timeOfStart.toString().replaceAll(RegExp(r'[^0-9]'), ':');
-                  String et = timeOfEnd.toString().replaceAll(RegExp(r'[^0-9]'), ':');
-                  //
-                  String startTime = st.toString(); // or if '24:00'
-                  String endTime = et.toString(); // or if '12:00
-
-                  var format = DateFormat("HH:mm");
-                  var start = format.parse(startTime);
-                  var end = format.parse(endTime);
-
-                  if (end.isAfter(start)) {
-                    timeDifference = end.difference(start);
-                  }
-                  var s = timeDifference.toString().length;
-
-                  if(timeDifference.toString().length == 14) {
-
-                    setState(() {
-                      totalWorkingTime = timeDifference.toString().substring(0, s-10);
-                      // print(totalWorkingTime);
-                    });
-                  }else {
-                    setState(() {
-                      totalWorkingTime = timeDifference.toString().substring(0, s-10);
-                      // print(totalWorkingTime);
-                    });
-
-                  }
-                  ///
-                  if (timeOfStart!.isNotEmpty &&
-                      timeOfEnd!.isNotEmpty &&
-                      _percentController.text.isNotEmpty &&
-                      _workController.text.isNotEmpty) {
-                    setState(() {
-                      createNewWork();
-                    });
-                  } else {
-                    showSnackBar(
-                        message: 'Please Fill All Fields',
-                        color: Colors.red.shade500);
-                  }
-                });
-              },
-              child: Container(
-                margin: EdgeInsets.only(top: height * 0.15),
-                height: height * 0.07,
-                width: width * 0.9,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color(0xffD136D4),
-                      Color(0xff7652B2),
-                    ],
-                  ),
-                ),
-                child: Center(
-                  child: Text(
-                    'Submit',
-                    style: TextStyle(
-                        fontFamily: ConstantFonts.poppinsMedium,
-                        fontSize: height * 0.025,
-                        color: Colors.white),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 
   Widget tabBarViewSecondScreen(double height, double width) {
-
     return workDoneList.isNotEmpty
         ? GridView.builder(
             physics: const BouncingScrollPhysics(),
@@ -646,7 +711,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   Widget textWidget(double height, String name, double size) {
     return Padding(
       padding: const EdgeInsets.all(8),
-      child: AutoSizeText(
+      child: SelectableText(
         name,
         style: TextStyle(
             fontSize: size,
@@ -671,9 +736,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
         autofocus: false,
         keyboardType: textInputType,
         onTap: () {
-          setState(() {
-
-          });
+          setState(() {});
         },
         style: TextStyle(
             fontSize: height * 0.02,

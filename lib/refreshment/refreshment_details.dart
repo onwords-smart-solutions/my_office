@@ -313,7 +313,6 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (ctx, index) {
                         return Text(listOfCoffee[index]);
-
                       }),
                 ),
                 Image.asset(

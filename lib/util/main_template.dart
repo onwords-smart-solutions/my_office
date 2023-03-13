@@ -39,19 +39,20 @@ class _MainTemplateState extends State<MainTemplate> {
     });
   }
 
-
   SharedPreferences? preferences;
 
-
   String preferencesImageUrl = '';
+  // String preferencesImageUrl2 = '';
 
   Future getImageUrl() async {
     preferences = await SharedPreferences.getInstance();
-    String? image = preferences?.getString('imageValue');
-    if (image == null) return;
+    // String? image = preferences?.getString('imageValue');
+    String? imageNet = preferences?.getString('imageValueNet');
+    if (imageNet == null) return;
     setState(() {
-      preferencesImageUrl = image;
-      // print(preferencesImageUrl);
+      // preferencesImageUrl = image.toString();
+      preferencesImageUrl = imageNet;
+      // print(preferencesImageUrl2);
     });
   }
 
@@ -66,97 +67,116 @@ class _MainTemplateState extends State<MainTemplate> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        child: Stack(
-          alignment: AlignmentDirectional.bottomCenter,
-          children: [
-            Positioned(
-              top: 0,
-              child: Container(
-                height: height * 0.95,
-                width: width,
-                padding: EdgeInsets.only(
-                    top: MediaQuery.of(context).viewPadding.top * 1.5),
-                decoration: BoxDecoration(
-                  color: widget.bgColor,
-                  borderRadius: const BorderRadius.only(
-                    bottomRight: Radius.circular(30.0),
-                    bottomLeft: Radius.circular(30.0),
-                  ),
-                ),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    bottomRight: Radius.circular(30.0),
-                    bottomLeft: Radius.circular(30.0),
-                  ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            //Name and subtitle
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  staffInfo == null
-                                      ? 'Hi'
-                                      : 'Hi ${staffInfo!.name}',
-                                  style: TextStyle(
-                                    fontFamily: ConstantFonts.poppinsMedium,
-                                    fontSize: 24.0,
-                                  ),
-                                ),
-                                Text(
-                                  widget.subtitle,
-                                  style: TextStyle(
-                                    fontFamily: ConstantFonts.poppinsMedium,
-                                    fontSize: 14.0,
-                                  ),
-                                ),
-                              ],
-                            ),
+    return RefreshIndicator(
+      onRefresh: () async {
+        await Future.delayed(const Duration(seconds: 5));
+        setState(() {
+          _pageLoadController();
+        });
 
-                            //Profile icon
-                            GestureDetector(
-                              onTap: () {
-                                getImageUrl();
-                                HapticFeedback.mediumImpact();
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (_) => AccountScreen(
-                                        staffDetails: staffInfo!)));
-                              },
-                              child: SizedBox(
-                                height: height*0.08,
-                                width: height*0.08,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(100),
-                                  child: preferencesImageUrl == '' ? Icon(Iconsax.user) : Image.file(File(preferencesImageUrl).absolute,fit: BoxFit.cover,),
+      },
+      child: Scaffold(
+        body: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Stack(
+            alignment: AlignmentDirectional.bottomCenter,
+            children: [
+              Positioned(
+                top: 0,
+                child: Container(
+                  height: height * 0.95,
+                  width: width,
+                  padding: EdgeInsets.only(
+                      top: MediaQuery.of(context).viewPadding.top * 1.5),
+                  decoration: BoxDecoration(
+                    color: widget.bgColor,
+                    borderRadius: const BorderRadius.only(
+                      bottomRight: Radius.circular(30.0),
+                      bottomLeft: Radius.circular(30.0),
+                    ),
+                  ),
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.only(
+                      bottomRight: Radius.circular(30.0),
+                      bottomLeft: Radius.circular(30.0),
+                    ),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              //Name and subtitle
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    staffInfo == null
+                                        ? 'Hi'
+                                        : 'Hi ${staffInfo!.name}',
+                                    style: TextStyle(
+                                      fontFamily: ConstantFonts.poppinsMedium,
+                                      fontSize: 24.0,
+                                    ),
+                                  ),
+                                  Text(
+                                    widget.subtitle,
+                                    style: TextStyle(
+                                      fontFamily: ConstantFonts.poppinsMedium,
+                                      fontSize: 14.0,
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              //Profile icon
+                              GestureDetector(
+                                onTap: () {
+                                  // getImageUrl();
+                                  HapticFeedback.mediumImpact();
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (_) => AccountScreen(
+                                          staffDetails: staffInfo!)));
+                                },
+                                child: SizedBox(
+                                  height: height * 0.08,
+                                  width: height * 0.08,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child:  preferencesImageUrl == ''
+                                        ? const Icon(Iconsax.user) : Image.network(preferencesImageUrl,fit: BoxFit.cover,)
+                                        // : Image.file(
+                                        //     File(preferencesImageUrl).absolute,
+                                        //     fit: BoxFit.cover,
+                                        //   ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(height: height * 0.01),
-
-                      //Custom widget section
-                      Expanded(child: widget.templateBody),
-                    ],
+                        SizedBox(height: height * 0.01),
+                        //Custom widget section
+                        Expanded(child: widget.templateBody),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            //Illustration at the bottom
-            if (widget.bottomImage != null) widget.bottomImage!,
-          ],
+              //Illustration at the bottom
+              if (widget.bottomImage != null) widget.bottomImage!,
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  Future _pageLoadController() async {
+    setState(() {
+      getImageUrl();
+    });
   }
 }

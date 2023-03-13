@@ -18,11 +18,10 @@ class AddIterm extends StatefulWidget {
 class _AddItermState extends State<AddIterm> {
 
 
-
   final date = DateTime.now();
 
   final SingleValueDropDownController itermNameController = SingleValueDropDownController();
-  // TextEditingController itermNameController = TextEditingController();
+  TextEditingController itermNameController2 = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController quantityController = TextEditingController();
   TextEditingController vatController = TextEditingController();
@@ -55,7 +54,7 @@ class _AddItermState extends State<AddIterm> {
   final formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  List<DropDownValueModel> productList= const [
+  List<DropDownValueModel> productList = const [
     DropDownValueModel(name: 'Local Server (Offline)', value: '1'),
     DropDownValueModel(name: 'Light Module (4 Light Board)', value: '2'),
     DropDownValueModel(name: 'Fan 5 Speed Module', value: '3'),
@@ -67,20 +66,40 @@ class _AddItermState extends State<AddIterm> {
     DropDownValueModel(name: 'Water Tank Automation', value: '9'),
     DropDownValueModel(name: 'Motion Sensor', value: '10'),
     DropDownValueModel(name: 'Timer Module', value: '11'),
-    DropDownValueModel(name: '230V Curtain Motor + 2.2-meter\nfixing Accessories ', value: '12'),
-    DropDownValueModel(name: '230V Curtain Motor + 3.2-meter\nfixing Accessories', value: '13'),
-    DropDownValueModel(name: '230V Curtain Motor + 4.2-meter\nfixing Accessories', value: '14'),
-    DropDownValueModel(name: '230V Curtain Motor + 5.2-meter\nfixing Accessories', value: '15'),
-    DropDownValueModel(name: '230V Curtain Motor + 6.2-meter\nfixing Accessories', value: '16'),
-    DropDownValueModel(name: '230V Curtain Motor + 7.2-meter\nfixing Accessories', value: '17'),
-    DropDownValueModel(name: '230V Curtain Motor + 8.2-meter\nfixing Accessories', value: '18'),
-    DropDownValueModel(name: 'Smart Home Configuration, Wiring,\nLink Establishment between\nApp&Server and Labour Charges', value: '19'),
+    DropDownValueModel(
+        name: '230V Curtain Motor + 2.2-meter\nfixing Accessories ',
+        value: '12'),
+    DropDownValueModel(
+        name: '230V Curtain Motor + 3.2-meter\nfixing Accessories',
+        value: '13'),
+    DropDownValueModel(
+        name: '230V Curtain Motor + 4.2-meter\nfixing Accessories',
+        value: '14'),
+    DropDownValueModel(
+        name: '230V Curtain Motor + 5.2-meter\nfixing Accessories',
+        value: '15'),
+    DropDownValueModel(
+        name: '230V Curtain Motor + 6.2-meter\nfixing Accessories',
+        value: '16'),
+    DropDownValueModel(
+        name: '230V Curtain Motor + 7.2-meter\nfixing Accessories',
+        value: '17'),
+    DropDownValueModel(
+        name: '230V Curtain Motor + 8.2-meter\nfixing Accessories',
+        value: '18'),
+    DropDownValueModel(
+        name: 'Smart Home Configuration, Wiring,\nLink Establishment between\nApp&Server and Labour Charges',
+        value: '19'),
     DropDownValueModel(name: 'SLIDING GATE(Up to 600Kg)', value: '20'),
     DropDownValueModel(name: 'SLIDING GATE(Up to 1000Kg)', value: '21'),
-    DropDownValueModel(name: 'SWING GATE-ROLLER(Up to 500Kg Per Leaf)', value: '22'),
-    DropDownValueModel(name: 'SWING GATE-ARM(Up to 350Kg Per Leaf)', value: '23'),
+    DropDownValueModel(
+        name: 'SWING GATE-ROLLER(Up to 500Kg Per Leaf)', value: '22'),
+    DropDownValueModel(
+        name: 'SWING GATE-ARM(Up to 350Kg Per Leaf)', value: '23'),
     DropDownValueModel(name: 'Safety Sensor', value: '24'),
-    DropDownValueModel(name: 'App Control with Wi-Fi Module\nand Voice Integration', value: '25'),
+    DropDownValueModel(
+        name: 'App Control with Wi-Fi Module\nand Voice Integration',
+        value: '25'),
     DropDownValueModel(name: 'Safety Motion Sensor', value: '26'),
     DropDownValueModel(name: '3 Button Switch', value: '27'),
     DropDownValueModel(name: 'Wireless Keypad Lock', value: '28'),
@@ -89,16 +108,20 @@ class _AddItermState extends State<AddIterm> {
     DropDownValueModel(name: 'RFID C3200B Control Panel (RF)', value: '31'),
     DropDownValueModel(name: 'RFID UHF Price PerTag (RF)', value: '32'),
     DropDownValueModel(name: 'Extra Remote', value: '33'),
-    DropDownValueModel(name: 'Electrical & Civil Planning,\nLabour & Installation', value: '34'),
+    DropDownValueModel(
+        name: 'Electrical & Civil Planning,\nLabour & Installation',
+        value: '34'),
     DropDownValueModel(name: 'Extra Rack for Sliding Gate', value: '35'),
     DropDownValueModel(name: 'Smart Cupboard Lock SL - C01', value: '36'),
-    DropDownValueModel(name: 'Smart Digital Door lock Basic With WiFi SL- BW01', value: '37'),
+    DropDownValueModel(
+        name: 'Smart Digital Door lock Basic With WiFi SL- BW01', value: '37'),
     DropDownValueModel(name: 'Smart Glass Door Lock SL- G01', value: '38'),
     DropDownValueModel(name: 'Smart Door Lock Premium SL-P01', value: '39'),
     DropDownValueModel(name: 'Smart Door Lock Standard SL - S01', value: '40'),
     DropDownValueModel(name: 'Smart Indoor Lock Basic SI-B01', value: '41'),
     DropDownValueModel(name: 'Smart Indoor Lock Premium SI - P02', value: '42'),
-    DropDownValueModel(name: 'Smart Door Lock Basic with Bluetooth SL - BB02', value: '43'),
+    DropDownValueModel(
+        name: 'Smart Door Lock Basic with Bluetooth SL - BB02', value: '43'),
     DropDownValueModel(name: 'Hub', value: '44'),
     DropDownValueModel(name: 'Hub Plus', value: '45'),
     DropDownValueModel(name: 'Hub 2', value: '46'),
@@ -135,9 +158,13 @@ class _AddItermState extends State<AddIterm> {
     DropDownValueModel(name: 'Ajax Double Button', value: '77'),
   ];
 
+
+  bool isTextFiled = false;
+
   @override
   void initState() {
     itermNameController;
+    itermNameController2;
     priceController;
     quantityController;
     vatController;
@@ -153,6 +180,7 @@ class _AddItermState extends State<AddIterm> {
   @override
   void dispose() {
     itermNameController.dispose();
+    itermNameController2.dispose();
     priceController.dispose();
     quantityController.dispose();
     vatController.dispose();
@@ -166,12 +194,19 @@ class _AddItermState extends State<AddIterm> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery
+        .of(context)
+        .size
+        .height;
+    final width = MediaQuery
+        .of(context)
+        .size
+        .width;
     return Consumer<TaskData>(
-        builder: (context, taskData,child) {
+        builder: (context, taskData, child) {
           // print("taskData.tasks ${taskData.tasks.length}");
-          final task = taskData.tasks.length == 2 ? taskData.tasks[1]: taskData.tasks[0];
+          final task = taskData.tasks.length == 2 ? taskData.tasks[1] : taskData
+              .tasks[0];
           // final val = taskData.subTotalValue;
           // if(val.isEmpty){
           //   // print("aasswipe");
@@ -194,7 +229,7 @@ class _AddItermState extends State<AddIterm> {
                     fontSize: height * 0.018),
               ),
               centerTitle: true,
-              leading:   GestureDetector(
+              leading: GestureDetector(
                 child: Image.asset(
                   'assets/back arrow.png',
                   scale: 2.3,
@@ -271,7 +306,8 @@ class _AddItermState extends State<AddIterm> {
                             height: height * 0.01,
                           ),
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: width * 0.05),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: width * 0.05),
                             width: width * 0.9,
                             height: height * 0.05,
                             decoration: BoxDecoration(
@@ -309,14 +345,15 @@ class _AddItermState extends State<AddIterm> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Text("Add Item",style: TextStyle(
+                                Text("Add Item", style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: height * 0.012,
                                   fontFamily: 'Nexa',
                                 ),),
                                 IconButton(
                                   onPressed: () {
-                                    showAnotherAlertDialog(context,height,width);
+                                    showAnotherAlertDialog(
+                                        context, height, width);
                                   },
                                   icon: Image.asset(
                                     'assets/add.png',
@@ -330,12 +367,15 @@ class _AddItermState extends State<AddIterm> {
                             height: height * 0.01,
                           ),
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: width * 0.05),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: width * 0.05),
                             width: width * 0.9,
                             height: height * 0.08,
                             decoration: BoxDecoration(
                                 color: Colors.black.withOpacity(0.1),
-                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(20.0),topRight: Radius.circular(20.0))),
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(20.0),
+                                    topRight: Radius.circular(20.0))),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -416,25 +456,31 @@ class _AddItermState extends State<AddIterm> {
                             width: width * 0.9,
                             decoration: BoxDecoration(
                               color: Colors.black.withOpacity(0.1),
-                              borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(20.0),bottomRight:Radius.circular(20.0) ),
+                              borderRadius: const BorderRadius.only(
+                                  bottomLeft: Radius.circular(20.0),
+                                  bottomRight: Radius.circular(20.0)),
                             ),
-                            child:ListView.builder(
+                            child: ListView.builder(
                               // shrinkWrap: true,
                               scrollDirection: Axis.vertical,
                               physics: const BouncingScrollPhysics(),
                               itemCount: productName.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return GestureDetector(
-                                  onTap: (){
-                                    showDeleteDialog(context,index);
+                                  onTap: () {
+                                    showDeleteDialog(context, index);
                                   },
                                   child: Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10.0),
                                     child: Table(
                                       // border: TableBorder.all(),
                                       children: [
                                         buildRow([
-                                          '${productName[index]}','${productQuantity[index]}','${productPrice[index]}',]),
+                                          '${productName[index]}',
+                                          '${productQuantity[index]}',
+                                          '${productPrice[index]}',
+                                        ]),
                                       ],
                                     ),
                                   ),
@@ -446,7 +492,8 @@ class _AddItermState extends State<AddIterm> {
                             height: height * 0.01,
                           ),
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: width * 0.05),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: width * 0.05),
                             height: height * 0.27,
                             width: width * 0.9,
                             decoration: BoxDecoration(
@@ -458,9 +505,10 @@ class _AddItermState extends State<AddIterm> {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment
+                                        .spaceBetween,
                                     children: [
-                                      Text("Doc-Type",style: TextStyle(
+                                      Text("Doc-Type", style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: height * 0.012,
                                           fontFamily: 'Nexa',
@@ -469,7 +517,8 @@ class _AddItermState extends State<AddIterm> {
                                         value: dropdownValue,
                                         icon: const Icon(Icons.arrow_downward),
                                         elevation: 16,
-                                        style: const TextStyle(color: Colors.black),
+                                        style: const TextStyle(
+                                            color: Colors.black),
                                         // underline: Container(
                                         //   height: 0.5,
                                         //   color: Colors.black,
@@ -479,8 +528,9 @@ class _AddItermState extends State<AddIterm> {
                                             dropdownValue = newValue!;
                                           });
                                         },
-                                        items: <String>['QUOTATION','INVOICE']
-                                            .map<DropdownMenuItem<String>>((String value) {
+                                        items: <String>['QUOTATION', 'INVOICE']
+                                            .map<DropdownMenuItem<String>>((
+                                            String value) {
                                           return DropdownMenuItem<String>(
                                             value: value,
                                             child: Text(value),
@@ -490,9 +540,10 @@ class _AddItermState extends State<AddIterm> {
                                     ],
                                   ),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment
+                                        .spaceBetween,
                                     children: [
-                                      Text("Category",style: TextStyle(
+                                      Text("Category", style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: height * 0.012,
                                           fontFamily: 'Nexa',
@@ -501,14 +552,24 @@ class _AddItermState extends State<AddIterm> {
                                         value: category,
                                         icon: const Icon(Icons.arrow_downward),
                                         elevation: 16,
-                                        style: const TextStyle(color: Colors.black),
+                                        style: const TextStyle(
+                                            color: Colors.black),
                                         onChanged: (String? newValue) {
                                           setState(() {
                                             category = newValue!;
                                           });
                                         },
-                                        items: <String>['GA','SH','IT','DL','SS','WTA','AG']
-                                            .map<DropdownMenuItem<String>>((String value) {
+                                        items: <String>[
+                                          'GA',
+                                          'SH',
+                                          'IT',
+                                          'DL',
+                                          'SS',
+                                          'WTA',
+                                          'AG'
+                                        ]
+                                            .map<DropdownMenuItem<String>>((
+                                            String value) {
                                           return DropdownMenuItem<String>(
                                             value: value,
                                             child: Text(value),
@@ -518,36 +579,39 @@ class _AddItermState extends State<AddIterm> {
                                     ],
                                   ),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment
+                                        .spaceBetween,
                                     children: [
-                                      Text("GST Need : ",style: TextStyle(
+                                      Text("GST Need : ", style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: height * 0.012,
                                           fontFamily: 'Nexa',
                                           color: Colors.black),),
                                       Checkbox(
                                           value: gstNeed,
-                                          onChanged: (val){
-                                            setState((){
+                                          onChanged: (val) {
+                                            setState(() {
                                               gstNeed = val!;
                                             });
                                           }
                                       )
                                     ],
                                   ),
+
                                   ///NEED DISCOUNT
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment
+                                        .spaceBetween,
                                     children: [
-                                      Text("Discount : ",style: TextStyle(
+                                      Text("Discount : ", style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: height * 0.012,
                                           fontFamily: 'Nexa',
                                           color: Colors.black),),
                                       Checkbox(
                                           value: discountNeed,
-                                          onChanged: (val){
-                                            setState((){
+                                          onChanged: (val) {
+                                            setState(() {
                                               discountNeed = val!;
                                             });
                                           }
@@ -555,21 +619,22 @@ class _AddItermState extends State<AddIterm> {
                                     ],
                                   ),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment
+                                        .spaceBetween,
                                     children: [
-                                      (discountNeed)? Text("Give Discount : ",
+                                      (discountNeed) ? Text("Give Discount : ",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: height * 0.012,
                                             fontFamily: 'Nexa',
-                                            color: Colors.black),):const Text(""),
-                                      (discountNeed)? SizedBox(
-                                        width: width*0.40,
+                                            color: Colors.black),) : const Text(
+                                          ""),
+                                      (discountNeed) ? SizedBox(
+                                        width: width * 0.40,
                                         child: TextFormField(
-                                          onChanged: (val){
-                                            if(val.isNotEmpty)
-                                            {
-                                              setState((){
+                                          onChanged: (val) {
+                                            if (val.isNotEmpty) {
+                                              setState(() {
                                                 discountAmount = int.parse(val);
                                               });
                                             }
@@ -590,23 +655,25 @@ class _AddItermState extends State<AddIterm> {
                                           ),
                                           controller: discountController,
                                         ),
-                                      ):const Text(""),
+                                      ) : const Text(""),
                                     ],
                                   ),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment
+                                        .spaceBetween,
                                     children: [
-                                      dropdownValue=="INVOICE"? Text("Advance Amount",style: TextStyle(
+                                      dropdownValue == "INVOICE" ? Text(
+                                        "Advance Amount", style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: height * 0.012,
                                           fontFamily: 'Nexa',
-                                          color: Colors.black),):const Text(""),
-                                      dropdownValue=="INVOICE"? SizedBox(
-                                        width: width*0.40,
+                                          color: Colors.black),) : const Text(
+                                          ""),
+                                      dropdownValue == "INVOICE" ? SizedBox(
+                                        width: width * 0.40,
                                         child: TextFormField(
-                                          onChanged: (val){
-                                            if(val.isNotEmpty)
-                                            {
+                                          onChanged: (val) {
+                                            if (val.isNotEmpty) {
                                               setState(() {
                                                 advanceAmt = int.parse(val);
                                               });
@@ -628,7 +695,7 @@ class _AddItermState extends State<AddIterm> {
                                           ),
                                           controller: advancePaid,
                                         ),
-                                      ):const Text(""),
+                                      ) : const Text(""),
                                     ],
                                   ),
                                   SizedBox(
@@ -650,25 +717,28 @@ class _AddItermState extends State<AddIterm> {
                                 GestureDetector(
                                   onTap: () {
                                     setState(() {
-                                      if(productName.isEmpty){
-                                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                      if (productName.isEmpty) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
                                           backgroundColor: Colors.red,
-                                          content: Text('Please select product'),
+                                          content: Text(
+                                              'Please select product'),
                                           duration: Duration(seconds: 1),));
-                                      }else{
+                                      } else {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) => PreviewScreen(
-                                                  doctype: dropdownValue,
-                                                  category: category,
-                                                  advanceAmt: advanceAmt,
-                                                  // labAndInstall: labCharge,
-                                                  gstValue: gstNeed,
-                                                  discountAmount: discountAmount,
-                                                  discountNeed: discountNeed,
-                                                  // labValue: labNeed,
-                                                ))).then((value){
+                                                builder: (context) =>
+                                                    PreviewScreen(
+                                                      doctype: dropdownValue,
+                                                      category: category,
+                                                      advanceAmt: advanceAmt,
+                                                      // labAndInstall: labCharge,
+                                                      gstValue: gstNeed,
+                                                      discountAmount: discountAmount,
+                                                      discountNeed: discountNeed,
+                                                      // labValue: labNeed,
+                                                    ))).then((value) {
                                           setState(() {
                                             // labAndInstall.clear();
                                             advancePaid.clear();
@@ -687,7 +757,8 @@ class _AddItermState extends State<AddIterm> {
                                       borderRadius: BorderRadius.circular(15),
                                       boxShadow: [
                                         BoxShadow(
-                                            color: Colors.black.withOpacity(0.3),
+                                            color: Colors.black.withOpacity(
+                                                0.3),
                                             offset: const Offset(8, 8),
                                             blurRadius: 10,
                                             spreadRadius: 0)
@@ -720,34 +791,35 @@ class _AddItermState extends State<AddIterm> {
     );
   }
 
-  TableRow buildRow(List<String> cells,{bool isHeader = false}) => TableRow(
-    children: cells.map(
-          (cell) {
-        final style =TextStyle(
-          fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
-        );
-        return Padding(
-          padding: const EdgeInsets.all(10),
-          child: Center(
-            child: Text(cell,style: style,),
-          ),
-        );
-      },
-    ).toList(),
-  );
+  TableRow buildRow(List<String> cells, {bool isHeader = false}) =>
+      TableRow(
+        children: cells.map(
+              (cell) {
+            final style = TextStyle(
+              fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
+            );
+            return Padding(
+              padding: const EdgeInsets.all(10),
+              child: Center(
+                child: Text(cell, style: style,),
+              ),
+            );
+          },
+        ).toList(),
+      );
 
 
-  showDeleteDialog(BuildContext context,int index){
+  showDeleteDialog(BuildContext context, int index) {
     Widget okButton = TextButton(
       child: const Text(" ok "),
       onPressed: () {
-        setState((){
+        setState(() {
           productName.removeAt(index);
           productQuantity.removeAt(index);
           productVat.removeAt(index);
           productPrice.removeAt(index);
-          Provider.of<TaskData>(context,listen: false).deleteTask(index);
-          Provider.of<TaskData>(context,listen: false).clearSubtotal(index);
+          Provider.of<TaskData>(context, listen: false).deleteTask(index);
+          Provider.of<TaskData>(context, listen: false).clearSubtotal(index);
           Navigator.pop(context, false);
         });
       },
@@ -779,23 +851,29 @@ class _AddItermState extends State<AddIterm> {
   }
 
 
-  showAnotherAlertDialog(BuildContext context,height,width) {
+  showAnotherAlertDialog(BuildContext context, height, width) {
     // Create button
     Widget okButton = TextButton(
       child: const Text(" ok "),
       onPressed: () {
-        if(formKey.currentState!.validate()){
-          if(!mounted) return;
-          setState((){
-            productName.add(itermNameController.dropDownValue?.name);
+        if (formKey.currentState!.validate()) {
+          if (!mounted) return;
+          setState(() {
+            isTextFiled ? productName.add(itermNameController2.text): productName.add(itermNameController.dropDownValue?.name);
             productPrice.add(priceController.text);
             productQuantity.add(quantityController.text);
             productVat.add(vatController.text);
           });
-          Provider.of<TaskData>(context,listen: false).addInvoiceListData(itermNameController.dropDownValue!.name.toString(),int.parse(quantityController.text), double.parse(priceController.text));
-          Provider.of<TaskData>(context,listen: false).addSubTotal(int.parse(quantityController.text),double.parse(priceController.text));
+          Provider.of<TaskData>(context, listen: false).addInvoiceListData(
+             isTextFiled ?  itermNameController2.text.toString() : itermNameController.dropDownValue!.name.toString(),
+              int.parse(quantityController.text),
+              double.parse(priceController.text));
+          Provider.of<TaskData>(context, listen: false).addSubTotal(
+              int.parse(quantityController.text),
+              double.parse(priceController.text));
           Navigator.pop(context, false);
           itermNameController.clearDropDown();
+          itermNameController2.clear();
           priceController.clear();
           quantityController.clear();
           vatController.clear();
@@ -816,70 +894,105 @@ class _AddItermState extends State<AddIterm> {
         "  Data entry ",
         style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
       ),
-      content: Form(
-        key: formKey,
-        child: SizedBox(
-          height: height*0.40,
-          width: width*1.0,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                DropDownTextField(
-                  // initialValue: "name4",
-                  controller: itermNameController,
-                  clearOption: true,
-                  enableSearch: true,
-                  // dropDownIconProperty: IconProperty(icon: Icons.arrow_drop_down,color: Colors.black),
-                  clearIconProperty: IconProperty(color: Colors.black,icon: Icons.clear),
-                  // dropdownColor: Colors.orange,
-                  searchDecoration: const InputDecoration(
-                      hintText: "Select Product"),
-                  validator: (value) {
-                    if (value == null) {
-                      return "Required Product Name";
-                    } else {
-                      return null;
-                    }
-                  },
-                  dropDownItemCount: 6,
-                  dropDownList: productList,
-                  onChanged: (val) {},
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: TextFormField(
-                    textInputAction: TextInputAction.next,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter quantity';
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(hintText: 'quantity'),
-                    controller: quantityController,
+      content: StatefulBuilder(builder:
+          (BuildContext context, StateSetter setState) {
+        return Form(
+          key: formKey,
+          child: SizedBox(
+            height: height * 0.40,
+            width: width * 1.0,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              isTextFiled = !isTextFiled;
+                              // print(isTextFiled);
+                            });
+                          }, icon: Icon(isTextFiled ? Icons.arrow_drop_down_sharp : Icons.text_fields)),
+                      SizedBox(
+                        width: width * 0.5,
+                        child: isTextFiled != true ?  DropDownTextField(
+                          // initialValue: "name4",
+                          controller: itermNameController,
+                          clearOption: true,
+                          enableSearch: true,
+                          // dropDownIconProperty: IconProperty(icon: Icons.arrow_drop_down,color: Colors.black),
+                          clearIconProperty: IconProperty(
+                              color: Colors.black, icon: Icons.clear),
+                          // dropdownColor: Colors.orange,
+                          searchDecoration: const InputDecoration(
+                              hintText: "Select Product"),
+                          validator: (value) {
+                            if (value == null) {
+                              return "Required Product Name";
+                            } else {
+                              return null;
+                            }
+                          },
+                          dropDownItemCount: 6,
+                          dropDownList: productList,
+                          onChanged: (val) {},
+                        ) : Container(
+                          padding: const EdgeInsets.only(top: 20.0),
+                          child: TextFormField(
+                            textInputAction: TextInputAction.next,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter product name';
+                              }
+                              return null;
+                            },
+                            keyboardType: TextInputType.name,
+                            decoration: const InputDecoration(hintText: 'Product Name'),
+                            controller: itermNameController2,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.only(top: 20.0),
-                  child: TextFormField(
-                    textInputAction: TextInputAction.done,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter amount';
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(hintText: 'amount'),
-                    controller: priceController,
+
+                  Container(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: TextFormField(
+                      textInputAction: TextInputAction.next,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter quantity';
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(hintText: 'quantity'),
+                      controller: quantityController,
+                    ),
                   ),
-                ),
-              ],
+                  Container(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: TextFormField(
+                      textInputAction: TextInputAction.done,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter amount';
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(hintText: 'amount'),
+                      controller: priceController,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
+        );
+      },
       ),
+
       actions: [
         cancelButton,
         okButton,
@@ -890,8 +1003,15 @@ class _AddItermState extends State<AddIterm> {
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        return WillPopScope(onWillPop: () async { return false; },
-        child: alert);
+        return StatefulBuilder(
+            builder: (context, setState) {
+              return WillPopScope(onWillPop: () async {
+                return false;
+              },
+                child: alert,
+              );
+            }
+        );
       },
     );
   }

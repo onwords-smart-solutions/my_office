@@ -1,8 +1,8 @@
 import 'dart:async';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/refreshment/refreshment_details.dart';
@@ -53,8 +53,26 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
     }
   }
 
+  var formattedDate;
+  var formattedMonth;
+  var formattedYear;
+  String? formattedTime;
+
+  todayDate() {
+    var now = DateTime.now();
+    var formatterDate = DateFormat('yyy-MM-dd');
+    var formatterYear = DateFormat('yyy');
+    var formatterMonth = DateFormat('MM');
+    formattedTime = DateFormat('HH:mm').format(now);
+    formattedDate = formatterDate.format(now);
+    formattedYear = formatterYear.format(now);
+    formattedMonth = formatterMonth.format(now);
+
+  }
+
   @override
   void initState() {
+    todayDate();
     checkMorningTime();
     checkEveningTime();
     super.initState();
@@ -62,6 +80,9 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // print(formattedDate);
+    // print(formattedMonth);
+    // print(formattedYear);
     return MainTemplate(
       subtitle: 'Choose your Refreshment here !',
       templateBody: buildRefreshmentSection(),

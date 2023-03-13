@@ -16,7 +16,9 @@ double total = 0;
 
 
 class PdfInvoiceApi {
-  static Future<File> generate(Invoice invoice, User user,Uint8List pic) async {
+  static Future<File> generate(Invoice invoice,
+      // User user,
+      Uint8List pic) async {
     final pdf = Document();
     var assetImage = pw.MemoryImage(
         (await rootBundle.load('assets/logo1.png')).buffer.asUint8List());
