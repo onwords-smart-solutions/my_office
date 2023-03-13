@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
 import 'package:timelines/timelines.dart';
-
 import 'note_item.dart';
 
 const List<String> list = [
@@ -27,10 +26,10 @@ class CustomerDetailScreen extends StatefulWidget {
 
   const CustomerDetailScreen(
       {Key? key,
-        required this.customerInfo,
-        required this.containerColor,
-        required this.currentStaffName,
-        required this.nobColor})
+      required this.customerInfo,
+      required this.containerColor,
+      required this.currentStaffName,
+      required this.nobColor})
       : super(key: key);
 
   @override
@@ -88,8 +87,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
   }
 
   Widget buildCustomerDetail({required Size size}) {
-    final changeState = FirebaseDatabase.instance.ref().child(
-        'customer/${widget.customerInfo['phone_number'].toString()}');
+    final changeState = FirebaseDatabase.instance
+        .ref()
+        .child('customer/${widget.customerInfo['phone_number'].toString()}');
     List<String> fieldName = [
       'City',
       'Lead in Charge',
@@ -104,15 +104,11 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
       'Rating',
     ];
 
-
-
     return StreamBuilder(
         stream: changeState.onValue,
         builder: (context, snapshot) {
-
-
           if (snapshot.hasData) {
-            final data=snapshot.data!.snapshot.value as Map<Object?,Object?>;
+            final data = snapshot.data!.snapshot.value as Map<Object?, Object?>;
             List<String> customerValue = [
               data['city'].toString(),
               data['LeadIncharge'].toString(),
@@ -181,7 +177,6 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
               splashRadius: 20.0,
             ),
 
-
             //Dropdown to change "State" of customers
             DropdownButton(
               value: dropDownValue,
@@ -227,7 +222,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                     reverse: true,
                     itemBuilder: (ctx, i) {
                       final Map<Object?, Object?> singleNote =
-                      _notes[i] as Map<Object?, Object?>;
+                          _notes[i] as Map<Object?, Object?>;
 
                       final name = singleNote['entered_by'] ?? 'Not mentioned';
                       final date = singleNote['date'] ?? 'Not mentioned';
@@ -338,7 +333,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           cursorColor: Colors.purple,
           scrollPhysics: const ClampingScrollPhysics(),
           style:
-          TextStyle(fontFamily: ConstantFonts.poppinsBold, fontSize: 13.0),
+              TextStyle(fontFamily: ConstantFonts.poppinsBold, fontSize: 13.0),
         ),
       ),
       contents: Container(
@@ -382,7 +377,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
       final ref = FirebaseDatabase.instance.ref();
       ref
           .child(
-          'customer/${widget.customerInfo['phone_number'].toString()}/notes/$timeStamp')
+              'customer/${widget.customerInfo['phone_number'].toString()}/notes/$timeStamp')
           .update(
         {
           'date': DateFormat('yyyy-MM-dd').format(now),
@@ -409,8 +404,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     } else {
       final ref = FirebaseDatabase.instance.ref();
       ref
-          .child(
-          'customer/${widget.customerInfo['phone_number'].toString()}')
+          .child('customer/${widget.customerInfo['phone_number'].toString()}')
           .update(
         {
           'customer_state': dropDownValue,

@@ -244,7 +244,8 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                               'Take Photo',
                               style: TextStyle(
                                   fontFamily: ConstantFonts.poppinsMedium),
-                            )),
+                            ),
+                          ),
                   ),
                 ),
 
@@ -623,7 +624,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
             return SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               child: Container(
-                height: MediaQuery.of(context).size.height*.7,
+                height: MediaQuery.of(context).size.height * .7,
                 margin: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
@@ -738,8 +739,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                                         });
                                       }
                                     },
-                                    child:
-                                        Image.file(image!, fit: BoxFit.cover))
+                                    child: Image.file(image, fit: BoxFit.cover))
                                 : TextButton.icon(
                                     onPressed: () async {
                                       final pic = await takeImage();
@@ -788,7 +788,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                                     //Success validation
                                     supportCrewNames.add(
                                         _textEditingController.text.trim());
-                                    supportCrewImages.add(image!);
+                                    supportCrewImages.add(image);
                                     _textEditingController.clear();
                                     Navigator.of(ctx).pop('success');
                                   }

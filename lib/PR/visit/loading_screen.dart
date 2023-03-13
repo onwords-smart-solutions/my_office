@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image/image.dart' as ImageLib;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/PR/visit/visit_form_screen.dart';
 import 'package:my_office/home/user_home_screen.dart';
@@ -74,18 +75,19 @@ class _LoadingScreenState extends State<LoadingScreen> {
         'summary': {
           'note': widget.summaryNotes,
           'dateOfInstallation': widget.dateOfInstallation,
+          'customerName': widget.visitData.customerName,
+          'visitTime': DateFormat.jm().format(
+            DateTime.now(),
+          ),
         }
       });
 
-      await HiveOperations().deleteVisitEntry(
-          phoneNumber: widget.visitData.customerPhoneNumber);
+      await HiveOperations()
+          .deleteVisitEntry(phoneNumber: widget.visitData.customerPhoneNumber);
       setState(() {
         status = 'success';
       });
-
     }
-
-
   }
 
   Future<String> uploadImage(
@@ -262,16 +264,16 @@ class _LoadingScreenState extends State<LoadingScreen> {
                 MaterialPageRoute(builder: (_) => const UserHomeScreen()),
                 (route) => false)),
         CupertinoButton(
-            child: Text(
-              'Add another visit entry',
-              style: TextStyle(
-                  fontFamily: ConstantFonts.poppinsMedium,
-                  fontSize: 14.0,
-                  color: Colors.grey),
-            ),
-            onPressed: () => Navigator.of(context).popUntil (
-                ModalRoute.withName('/visitResume')),
-               ),
+          child: Text(
+            'Add another visit entry',
+            style: TextStyle(
+                fontFamily: ConstantFonts.poppinsMedium,
+                fontSize: 14.0,
+                color: Colors.grey),
+          ),
+          onPressed: () => Navigator.of(context)
+              .popUntil(ModalRoute.withName('/visitResume')),
+        ),
       ],
     );
   }

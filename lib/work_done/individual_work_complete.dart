@@ -120,7 +120,7 @@ class _IndividualWorkDoneState extends State<IndividualWorkDone> {
               ),
             ),
           );
-        });
+        },);
   }
 
   Widget percentIndicator(

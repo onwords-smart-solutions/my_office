@@ -67,11 +67,11 @@ dependencies:
   cached_network_image: ^3.2.3
   pdf: ^3.9.0
   open_file: ^3.2.1
-  upi_payment_qrcode_generator: ^1.1.2
   dropdown_textfield: ^1.0.8
   provider: ^6.0.5
   path_provider: ^2.0.13
   cloud_firestore: ^4.4.3
+  upi_payment_qrcode_generator: ^1.1.2
 
 
 
