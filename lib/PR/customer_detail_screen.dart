@@ -21,6 +21,7 @@ const List<String> list = [
 class CustomerDetailScreen extends StatefulWidget {
   final Map<Object?, Object?> customerInfo;
   final String currentStaffName;
+  final String customerStatus;
   final Color containerColor;
   final Color nobColor;
 
@@ -29,7 +30,8 @@ class CustomerDetailScreen extends StatefulWidget {
       required this.customerInfo,
       required this.containerColor,
       required this.currentStaffName,
-      required this.nobColor})
+      required this.nobColor,
+        required this.customerStatus})
       : super(key: key);
 
   @override
@@ -38,8 +40,19 @@ class CustomerDetailScreen extends StatefulWidget {
 
 class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
   TextEditingController notesController = TextEditingController();
+  late String dropDownValue;
+  @override
+  void initState() {
 
-  String dropDownValue = list.first;
+    if (widget.customerStatus.toLowerCase().contains('rejected')){
+      dropDownValue = 'Onwords';
+    }else{
+      dropDownValue = widget.customerStatus;
+      super.initState();
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;

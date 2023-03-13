@@ -111,7 +111,8 @@ class CustomerItem extends StatelessWidget {
               customerInfo: customerInfo,
               containerColor: tileColor,
               nobColor: nobColor,
-              currentStaffName: currentStaffName))),
+              currentStaffName: currentStaffName,
+            customerStatus:  customerInfo['customer_state'].toString(),),),),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
         decoration: BoxDecoration(
