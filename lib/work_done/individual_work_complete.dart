@@ -35,7 +35,7 @@ class _IndividualWorkDoneState extends State<IndividualWorkDone> {
         scrollDirection: Axis.vertical,
         physics: const BouncingScrollPhysics(),
         shrinkWrap: true,
-        itemCount: widget.workDetails.length.bitLength,
+        itemCount: widget.workDetails.length,
         itemBuilder: (BuildContext context, int ind) {
           return Container(
             height: height * 0.25,

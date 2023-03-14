@@ -17,7 +17,7 @@ import 'introduction/intro_screen.dart';
 import 'models/visit_model.dart';
 
 
-/// version: 1.1.0+9 Updated On (21/02/2023)
+/// version: 1.1.3+16 Updated On (14/03/2023)
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

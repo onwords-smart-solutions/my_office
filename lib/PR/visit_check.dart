@@ -25,7 +25,7 @@ class _VisitCheckScreenState extends State<VisitCheckScreen> {
   DatabaseReference visitCheck = FirebaseDatabase.instance.ref('visit');
   DateTime now = DateTime.now();
 
-  var formatterDate = DateFormat('dd-MM-yyyy');
+  var formatterDate = DateFormat('yyyy-MM-dd');
   var formatterMonth = DateFormat('MM');
   var formatterYear = DateFormat('yyyy');
   String? selectedDate;

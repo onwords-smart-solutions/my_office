@@ -168,18 +168,19 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text('$selectedDate   ',
-                  style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsMedium,
-                      fontSize: 15,
-                      color: ConstantColor.blackColor)),
               GestureDetector(
                 onTap:datePicker,
                 child: Image.asset(
                   'assets/calender.png',
-                  scale: 3.3,
+                  scale: 3,
                 ),
               ),
+              const SizedBox(width: 15),
+              Text('$selectedDate   ',
+                  style: TextStyle(
+                      fontFamily: ConstantFonts.poppinsBold,
+                      fontSize: 17,
+                      color: ConstantColor.backgroundColor)),
             ],
           ),
         ),
