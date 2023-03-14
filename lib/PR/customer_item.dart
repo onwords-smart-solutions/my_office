@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
 import 'package:my_office/PR/customer_detail_screen.dart';
 import 'package:timelines/timelines.dart';
 
 import '../Constant/colors/constant_colors.dart';
 
-class CustomerItem extends StatefulWidget {
+class CustomerItem extends StatelessWidget {
   final Map<Object?, Object?> customerInfo;
   final String currentStaffName;
 
@@ -15,24 +14,14 @@ class CustomerItem extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<CustomerItem> createState() => _CustomerItemState();
-}
-
-class _CustomerItemState extends State<CustomerItem> {
-  @override
   Widget build(BuildContext context) {
-
-
-
-
     String lastNote = 'Notes not updated';
     String lastNoteDate = '';
 
-
-    if (widget.customerInfo['notes'] != null) {
+    if (customerInfo['notes'] != null) {
       //Getting all notes from customer data
       final Map<Object?, Object?> allNotes =
-      widget.customerInfo['notes'] as Map<Object?, Object?>;
+      customerInfo['notes'] as Map<Object?, Object?>;
       final noteKeys = allNotes.keys.toList();
 
       //Checking if key is empty or not
@@ -44,12 +33,6 @@ class _CustomerItemState extends State<CustomerItem> {
         lastNoteDate = firstNote['date'].toString();
       }
     }
-
-
-
-
-
-
 
     Color tileColor = Colors.white;
     Color nobColor = ConstantColor.backgroundColor;
@@ -66,58 +49,58 @@ class _CustomerItemState extends State<CustomerItem> {
       'Note updated'
     ];
     List<String> values = [
-      widget.customerInfo['name'].toString(),
-      widget.customerInfo['phone_number'].toString(),
-      widget.customerInfo['city'].toString(),
-      widget.customerInfo['inquired_for'].toString(),
-      widget.customerInfo['created_date'].toString(),
-      widget.customerInfo['LeadIncharge'].toString(),
-      widget.customerInfo['customer_state'].toString(),
+      customerInfo['name'].toString(),
+      customerInfo['phone_number'].toString(),
+      customerInfo['city'].toString(),
+      customerInfo['inquired_for'].toString(),
+      customerInfo['created_date'].toString(),
+      customerInfo['LeadIncharge'].toString(),
+      customerInfo['customer_state'].toString(),
       lastNote,
       lastNoteDate,
     ];
 
     //Changing color based on customer state
-    if (widget.customerInfo['customer_state']
+    if (customerInfo['customer_state']
         .toString()
         .toLowerCase()
-        .contains('rejected')||widget.customerInfo['customer_state']
+        .contains('rejected') || customerInfo['customer_state']
         .toString()
         .toLowerCase()
         .contains('onwords')) {
       tileColor = const Color(0xffF55F5F);
       nobColor = Colors.white60;
-    } else if (widget.customerInfo['customer_state']
+    } else if (customerInfo['customer_state']
         .toString()
         .toLowerCase()
         .contains('following up')) {
       tileColor = const Color(0xff91F291);
       nobColor = Colors.white60;
-    } else if (widget.customerInfo['customer_state']
+    } else if (customerInfo['customer_state']
         .toString()
         .toLowerCase()
         .contains('delayed')) {
       tileColor = const Color(0xffFFA500);
       nobColor = Colors.white60;
-    } else if (widget.customerInfo['customer_state']
+    } else if (customerInfo['customer_state']
         .toString()
         .toLowerCase()
         .contains('advanced')) {
       tileColor = const Color(0xfff1f7b5);
       nobColor = Colors.black38;
-    } else if (widget.customerInfo['customer_state']
+    } else if (customerInfo['customer_state']
         .toString()
         .toLowerCase()
         .contains('b2b')) {
       tileColor = const Color(0xff9ea1d4);
       nobColor = Colors.white;
-    } else if (widget.customerInfo['customer_state']
+    } else if (customerInfo['customer_state']
         .toString()
         .toLowerCase()
         .contains('under construction')) {
       tileColor = const Color(0xffa8d1d1);
       nobColor = Colors.black38;
-    } else if (widget.customerInfo['customer_state']
+    } else if (customerInfo['customer_state']
         .toString()
         .toLowerCase()
         .contains('installation completed')) {
@@ -128,10 +111,11 @@ class _CustomerItemState extends State<CustomerItem> {
     return GestureDetector(
       onTap: () => Navigator.of(context).push(MaterialPageRoute(
           builder: (_) => CustomerDetailScreen(
-              customerInfo: widget.customerInfo,
+              customerInfo: customerInfo,
               containerColor: tileColor,
               nobColor: nobColor,
-              currentStaffName: widget.currentStaffName, customerStatus: widget.customerInfo['customer_state'].toString(),))),
+              currentStaffName: currentStaffName,
+            customerStatus:  customerInfo['customer_state'].toString(),),),),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
         decoration: BoxDecoration(
@@ -202,20 +186,6 @@ class _CustomerItemState extends State<CustomerItem> {
         required String value,
         required Color nobColor,
         required Size size}) {
-
-    bool isTimeToUpdate = false;
-    if(field == "Note updated" && value.isNotEmpty){
-      final lastNoteUpdate = DateTime.parse(value);
-      int calculateDifference(DateTime date) {
-        DateTime now = DateTime.now();
-        return DateTime(date.year, date.month, date.day)
-            .difference(DateTime(now.year, now.month, now.day))
-            .inDays;
-      }
-      if(calculateDifference(lastNoteUpdate) < -7){
-        isTimeToUpdate = true;
-      }
-    }
     return TimelineTile(
       nodePosition: .35,
       oppositeContents: Container(
@@ -231,20 +201,7 @@ class _CustomerItemState extends State<CustomerItem> {
         padding: const EdgeInsets.only(left: 8.0, top: 5.0, right: 5.0),
         width: size.width * .7,
         // height: 20.0,
-        child: isTimeToUpdate ?
-        Row(
-          children: [
-            Text(
-              '$value     ',
-              style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium, fontSize: 13.0,),
-            ),
-            const CircleAvatar(
-              radius: 8,
-              backgroundColor: Colors.black,
-            )
-          ],
-        ) : Text(
+        child: Text(
           value,
           style: TextStyle(
               fontFamily: ConstantFonts.poppinsMedium, fontSize: 13.0),
