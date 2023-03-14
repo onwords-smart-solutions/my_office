@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -490,10 +489,10 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                               // print('correct percent');
                               String st = timeOfStart
                                   .toString()
-                                  .replaceAll(RegExp(r'[^0-9]'), ':');
+                                  .replaceAll(RegExp(r'\D'), ':');
                               String et = timeOfEnd
                                   .toString()
-                                  .replaceAll(RegExp(r'[^0-9]'), ':');
+                                  .replaceAll(RegExp(r'\D'), ':');
 
                               String startTime = st.toString(); // or if '24:00'
                               String endTime = et.toString(); // or if '12:00
@@ -543,8 +542,8 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                                     // print('created');
                                   });
                                 }
-
                             }else{
+                              _percentController.clear();
                               showSnackBar(message: 'enter correct percentage', color: Colors.red.shade500);
                             }
                           }
@@ -672,7 +671,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                             percent = double.parse(workPercentageList[index]
                                     .replaceAll(RegExp(r'.$'), "")) /
                                 100,
-                            "${workPercentageList[index]}")),
+                            "${workPercentageList[index]}"),),
                   ],
                 ),
               );
