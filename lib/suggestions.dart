@@ -114,7 +114,8 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
         {
           'date': DateFormat('yyyy-MM-dd').format(now),
           'message': suggestionsController.text.trim(),
-          'time': DateFormat('kk:mm').format(now)
+          'time': DateFormat('kk:mm').format(now),
+          'isread': false,
         },
       );
       suggestionsController.clear();

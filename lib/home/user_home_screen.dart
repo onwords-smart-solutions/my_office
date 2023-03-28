@@ -21,6 +21,7 @@ import 'package:my_office/util/notification_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Absentees/absentees.dart';
 import '../Constant/fonts/constant_font.dart';
+import '../PR/attendance_screen.dart';
 import '../PR/visit/visit_screen.dart';
 import '../PR/visit/visit_verification_screen.dart';
 import '../PR/visit_check.dart';
@@ -302,7 +303,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           uid: staffInfo!.uid,
                           name: staffInfo!.name,
                         ),
-                      ),
+    ),
                     ],
                   )
                 : staffInfo!.department == 'APP'
@@ -422,6 +423,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               scale: 3,
                             ),
                             page: SuggestionScreen(
+                              uid: staffInfo!.uid,
+                              name: staffInfo!.name,
+                            ),
+                          ),
+                          buildButton(
+                            name: 'PR Attendance',
+                            image: Image.asset(
+                              'assets/attendance.png',
+                              scale: 3,
+                            ),
+                            page: AttendanceScreen(
                               uid: staffInfo!.uid,
                               name: staffInfo!.name,
                             ),

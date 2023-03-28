@@ -33,6 +33,7 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
 
   // final staff = FirebaseDatabase.instance.ref().child("staff");
   final fingerPrint = FirebaseDatabase.instance.ref().child("fingerPrint");
+  final prAttendance = FirebaseDatabase.instance.ref().child('prAttendance');
 
   DateTime now = DateTime.now();
   var formatterDate = DateFormat('yyyy-MM-dd');
