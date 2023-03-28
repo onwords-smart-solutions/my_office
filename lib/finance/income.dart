@@ -1,32 +1,30 @@
 import 'dart:developer';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:my_office/Constant/colors/constant_colors.dart';
+import 'package:my_office/finance/expense.dart';
+import 'package:my_office/finance/income_details.dart';
+import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
-import '../models/view_visit_model.dart';
 import '../util/screen_template.dart';
-import 'visitList.dart';
+import 'income_model.dart';
 
-class VisitCheckScreen extends StatefulWidget {
-  const VisitCheckScreen({
-    Key? key,
-  }) : super(key: key);
+class IncomeScreen extends StatefulWidget {
+  const IncomeScreen({Key? key}) : super(key: key);
 
   @override
-  State<VisitCheckScreen> createState() => _VisitCheckScreenState();
+  State<IncomeScreen> createState() => _IncomeScreenState();
 }
 
-class _VisitCheckScreenState extends State<VisitCheckScreen> {
-  List<VisitViewModel> allVisits = [];
+class _IncomeScreenState extends State<IncomeScreen> {
+  List<IncomeModel> allIncome = [];
   bool isLoading = true;
-  dynamic visitCheckData;
   final today = DateTime.now();
-  DatabaseReference visitCheck = FirebaseDatabase.instance.ref('visit');
-  DateTime now = DateTime.now();
+  DatabaseReference incomeDetails =
+      FirebaseDatabase.instance.ref('FinancialAnalyzing');
 
+  DateTime now = DateTime.now();
   var formatterDate = DateFormat('yyyy-MM-dd');
   var formatterMonth = DateFormat('MM');
   var formatterYear = DateFormat('yyyy');
@@ -46,8 +44,8 @@ class _VisitCheckScreenState extends State<VisitCheckScreen> {
       selectedDate = formatterDate.format(newDate);
       selectedMonth = formatterDate.format(newDate);
       selectedYear = formatterDate.format(newDate);
-      checkVisitData(newDate.year.toString(), newDate.month.toString(),
-          newDate.day.toString());
+      checkIncomeDetails(
+          today.year.toString(), today.month.toString());
     });
   }
 
@@ -56,20 +54,20 @@ class _VisitCheckScreenState extends State<VisitCheckScreen> {
     selectedDate = formatterDate.format(now);
     selectedMonth = formatterMonth.format(now);
     selectedYear = formatterYear.format(now);
-    checkVisitData(
-        today.year.toString(), today.month.toString(), today.day.toString());
+    checkIncomeDetails(
+        today.year.toString(), today.month.toString());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return ScreenTemplate(
-      bodyTemplate: buildScreen(),
-      title: 'Visit Incharge',
+      bodyTemplate: buildIncomeScreen(),
+      title: 'Income',
     );
   }
 
-  Widget buildScreen() {
+  Widget buildIncomeScreen() {
     return Column(
       children: [
         Padding(
@@ -79,7 +77,7 @@ class _VisitCheckScreenState extends State<VisitCheckScreen> {
             children: [
               GestureDetector(
                 onTap: () {
-                  allVisits.clear();
+                  allIncome.clear();
                   datePicker();
                 },
                 child: Image.asset(
@@ -100,16 +98,20 @@ class _VisitCheckScreenState extends State<VisitCheckScreen> {
           ),
         ),
         const SizedBox(height: 10),
-        allVisits.isNotEmpty
+        allIncome.isNotEmpty
             ? Expanded(
                 child: ListView.builder(
-                  itemCount: allVisits.length,
+                  itemCount: allIncome.length,
                   itemBuilder: (context, index) {
                     return ListTile(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                VisitList(visitList: allVisits[index])));
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => IncomeDetails(
+                              incomeDetails: allIncome[index],
+                            ),
+                          ),
+                        );
                       },
                       leading: const CircleAvatar(
                         radius: 20,
@@ -117,7 +119,7 @@ class _VisitCheckScreenState extends State<VisitCheckScreen> {
                         child: Icon(Icons.person),
                       ),
                       title: Text(
-                        allVisits[index].inChargeDetail.keys.first,
+                        allIncome[index].customerName,
                         style: TextStyle(
                             fontFamily: ConstantFonts.poppinsMedium,
                             color: ConstantColor.blackColor,
@@ -135,7 +137,7 @@ class _VisitCheckScreenState extends State<VisitCheckScreen> {
                       Lottie.asset('assets/animations/no_data.json',
                           height: 200.0),
                       Text(
-                        'No Visits available',
+                        'No Income made!!',
                         style: TextStyle(
                           fontFamily: ConstantFonts.poppinsMedium,
                           color: ConstantColor.blackColor,
@@ -151,56 +153,36 @@ class _VisitCheckScreenState extends State<VisitCheckScreen> {
     );
   }
 
-  checkVisitData(String year, String month, String day) {
-    allVisits.clear();
-    List<VisitViewModel> checkVisit = [];
-    visitCheck.child('$year/$month/$day').once().then(
-      (visit) {
-        for (var check in visit.snapshot.children) {
-          final data = check.value as Map<Object?, Object?>;
-          final summary = data['summary'] as Map<Object?, Object?>;
-          final prDetails = data['prDetails'] as Map<Object?, Object?>;
-          final verification = data['verification'] as Map<Object?, Object?>;
-          final productDetails =
-              data['productDetails'] as Map<Object?, Object?>;
-          List<Object?> crewDetails = [];
-          List<Object?> crewDetailsImage = [];
+  checkIncomeDetails(String year, String month) {
 
-          try {
-            crewDetails = prDetails['supports'] as List<Object?>;
-            crewDetailsImage = prDetails['supportImages'] as List<Object?>;
-          } catch (e) {}
-
-          final visitData = VisitViewModel(
-            dateTime:
-                DateTime(int.parse(year), int.parse(month), int.parse(day)),
-            customerPhoneNumber: check.key.toString(),
-            customerName: summary['customerName'].toString(),
-            endKm: int.parse(verification['endKM'].toString()),
-            totalKm: int.parse(verification['totalKM'].toString()),
-            endKmImage: verification['endMeterReading'].toString(),
-            startKm: int.parse(verification['startKM'].toString()),
-            inChargeDetail: {
-              prDetails['incharge'].toString():
-                  prDetails['inchargeImage'].toString()
-            },
-            supportCrewNames: crewDetails,
-            supportCrewImageLinks: crewDetailsImage,
-            productImageLinks: productDetails['productImages'] as List<Object?>,
-            startKmImageLink: verification['startMeterReading'].toString(),
-            productName: productDetails['products'] as List<Object?>,
-            quotationInvoiceNumber:
-                productDetails['quotationInvoiceNumber'].toString(),
-            dateOfInstallation: summary['dateOfInstallation'].toString(),
-            note: summary['note'].toString(),
-            visitTime: summary['visitTime'].toString(),
+    var year = DateFormat('yyyy').format(DateTime.now());
+    var month = DateFormat('MM').format(DateTime.now());
+    allIncome.clear();
+    List<IncomeModel> incomeCheck = [];
+    incomeDetails.child('Income/$year/$month').once().then((income) {
+      for (var check in income.snapshot.children) {
+        final data = check.value as Map<Object?, Object?>;
+        final key = check.key.toString().split('_').first;
+        if (key == selectedDate){
+          final incomeDetails = IncomeModel(
+            amount: int.parse(data['Amount'].toString()),
+            customerName: data['CustomerName'].toString(),
+            enteredBy: data['EnteredBy'].toString(),
+            enteredDate: data['EnteredDate'].toString(),
+            enteredTime: data['EnteredTime'].toString(),
+            invoiceNumber: data['InvoiceNumber'].toString(),
+            paidDate: data['PaidDate'].toString(),
+            paidTime: data['PaidTime'].toString(),
+            paymentMethod: data['PaymentMethod'].toString(),
+            productName: data['ProductName'].toString(),
           );
-          checkVisit.add(visitData);
+          incomeCheck.add(incomeDetails);
+          log('key is ${check.key}');
         }
-        setState(() {
-          allVisits.addAll(checkVisit);
-        });
-      },
-    );
+      }
+      setState(() {
+        allIncome.addAll(incomeCheck);
+      });
+    });
   }
 }

@@ -150,21 +150,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
   }
 
   Widget buildNotes() {
-    // List noteKeys = [];
-    // Map<Object?, Object?> allNotes = {};
     final stream = FirebaseDatabase.instance.ref().child(
         'customer/${widget.customerInfo['phone_number'].toString()}/notes');
-    //
-    // if (widget.customerInfo['notes'] != null) {
-    //   //Getting all notes from customer data
-    //   allNotes = widget.customerInfo['notes'] as Map<Object?, Object?>;
-    //   noteKeys = allNotes.keys.toList();
-    //
-    //   //Checking if key is empty or not
-    //   if (noteKeys.isNotEmpty) {
-    //     noteKeys.sort((a, b) => b.toString().compareTo(a.toString()));
-    //   }
-    // }
+
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

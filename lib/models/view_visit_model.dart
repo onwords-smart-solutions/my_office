@@ -1,7 +1,3 @@
-import 'dart:io';
-import 'dart:typed_data';
-import 'package:hive_flutter/adapters.dart';
-
 class VisitViewModel {
 
   final DateTime dateTime;

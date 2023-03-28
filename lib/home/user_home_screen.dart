@@ -25,6 +25,7 @@ import '../PR/visit/visit_screen.dart';
 import '../PR/visit/visit_verification_screen.dart';
 import '../PR/visit_check.dart';
 import '../database/hive_operations.dart';
+import '../finance/finance_analysis.dart';
 import '../leads/search_leads.dart';
 import '../leave_apply/leave_apply_screen.dart';
 import '../leave_approval/leave_request.dart';
@@ -374,6 +375,14 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               scale: 3.4,
                             ),
                             page:  const VisitCheckScreen(),
+                          ),
+                          buildButton(
+                            name: 'Finance',
+                            image: Image.asset(
+                              'assets/finance.png',
+                              scale: 1,
+                            ),
+                            page:  const FinanceScreen(),
                           ),
                         ],
                       )
