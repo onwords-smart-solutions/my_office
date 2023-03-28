@@ -155,8 +155,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
   checkIncomeDetails(String year, String month) {
 
-    var year = DateFormat('yyyy').format(DateTime.now());
-    var month = DateFormat('MM').format(DateTime.now());
+    var year = selectedDate.toString().split('-').first;
+    var month = selectedDate.toString().split('-')[1];
     allIncome.clear();
     List<IncomeModel> incomeCheck = [];
     incomeDetails.child('Income/$year/$month').once().then((income) {
@@ -177,7 +177,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
             productName: data['ProductName'].toString(),
           );
           incomeCheck.add(incomeDetails);
-          log('key is ${check.key}');
         }
       }
       setState(() {

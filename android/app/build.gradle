@@ -76,6 +76,9 @@ android {
         release {
             signingConfig signingConfigs.release
         }
+        debug{
+            buildConfigField("boolean","ENABLE_IMGMAPPER_LOG", "false")
+        }
     }
 }
 

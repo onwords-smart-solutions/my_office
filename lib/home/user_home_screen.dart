@@ -30,6 +30,7 @@ import '../leads/search_leads.dart';
 import '../leave_apply/leave_apply_screen.dart';
 import '../leave_approval/leave_request.dart';
 import '../onyx/announcement.dart';
+import '../suggestions.dart';
 import '../work_done/work_complete.dart';
 import '../work_manager/work_entry.dart';
 
@@ -200,6 +201,25 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     ),
                     page: const CustomerDetails(),
                   ),
+                  buildButton(
+                    name: 'Finance',
+                    image: Image.asset(
+                      'assets/finance.png',
+                      scale: 1,
+                    ),
+                    page:  const FinanceScreen(),
+                  ),
+                  buildButton(
+                    name: 'Suggestions',
+                    image: Image.asset(
+                      'assets/suggestions.png',
+                      scale: 3,
+                    ),
+                    page: SuggestionScreen(
+                      uid: staffInfo!.uid,
+                      name: staffInfo!.name,
+                    ),
+                  ),
                 ],
               )
             : staffInfo!.department == 'PR'
@@ -271,6 +291,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           scale: 2,
                         ),
                         page: const CustomerDetails(),
+                      ),
+                      buildButton(
+                        name: 'Suggestions',
+                        image: Image.asset(
+                          'assets/suggestions.png',
+                          scale: 3,
+                        ),
+                        page: SuggestionScreen(
+                          uid: staffInfo!.uid,
+                          name: staffInfo!.name,
+                        ),
                       ),
                     ],
                   )
@@ -384,6 +415,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             ),
                             page:  const FinanceScreen(),
                           ),
+                          buildButton(
+                            name: 'Suggestions',
+                            image: Image.asset(
+                              'assets/suggestions.png',
+                              scale: 3,
+                            ),
+                            page: SuggestionScreen(
+                              uid: staffInfo!.uid,
+                              name: staffInfo!.name,
+                            ),
+                          ),
                         ],
                       )
                     : GridView(
@@ -413,10 +455,21 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           buildButton(
                             name: 'Refreshment',
                             image: Image.asset(
-                              'assets/refreshment.png',
+                              'assets/suggestions.png',
                               scale: 3.8,
                             ),
                             page: RefreshmentScreen(
+                              uid: staffInfo!.uid,
+                              name: staffInfo!.name,
+                            ),
+                          ),
+                          buildButton(
+                            name: 'Suggestions',
+                            image: Image.asset(
+                              'assets/suggestions.png',
+                              scale: 3,
+                            ),
+                            page: SuggestionScreen(
                               uid: staffInfo!.uid,
                               name: staffInfo!.name,
                             ),

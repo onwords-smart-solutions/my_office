@@ -8,7 +8,6 @@ import '../Constant/fonts/constant_font.dart';
 import '../util/screen_template.dart';
 import 'expense_details.dart';
 import 'expense_model.dart';
-import 'income_model.dart';
 
 class ExpenseScreen extends StatefulWidget {
   const ExpenseScreen({Key? key}) : super(key: key);
@@ -116,7 +115,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                 leading: const CircleAvatar(
                   radius: 20,
                   backgroundColor: ConstantColor.backgroundColor,
-                  child: Icon(Icons.person),
+                  child: Icon(Icons.receipt_long),
                 ),
                 title: Text(
                   allExpense[index].productName,
@@ -138,7 +137,8 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                     height: 200.0),
                 Text(
                   'No Expense made!!',
-                  style: TextStyle(
+
+        style: TextStyle(
                     fontFamily: ConstantFonts.poppinsMedium,
                     color: ConstantColor.blackColor,
                     fontWeight: FontWeight.bold,
@@ -155,8 +155,8 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
 
   checkExpenseDetails(String year, String month) {
 
-    var year = DateFormat('yyyy').format(DateTime.now());
-    var month = DateFormat('MM').format(DateTime.now());
+    var year = selectedDate.toString().split('-').first;
+    var month = selectedDate.toString().split('-')[1];
     allExpense.clear();
     List<ExpenseModel> expenseCheck = [];
     expenseDetails.child('Expense/$year/$month').once().then((expense) {

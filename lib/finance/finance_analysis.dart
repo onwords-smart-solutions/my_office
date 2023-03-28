@@ -1,4 +1,6 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
 import '../util/screen_template.dart';
@@ -23,59 +25,66 @@ class _FinanceScreenState extends State<FinanceScreen> {
 
   Widget buildFinanceScreen() {
     return Padding(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(25),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              backgroundColor: ConstantColor.backgroundColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+          buildButton(
+            name: 'Income',
+            image: Image.asset(
+              'assets/income.png',
+              scale: 2,
             ),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const IncomeScreen(),
-                ),
-              );
-            },
-            child: Text(
-              "Income",
-              style: TextStyle(
-                color: ConstantColor.background1Color,
-                fontSize: 16,
-                fontFamily: ConstantFonts.poppinsMedium,
-              ),
-            ),
+            page:  const IncomeScreen(),
           ),
-          const SizedBox(height: 10),
-          OutlinedButton(
-            style: OutlinedButton.styleFrom(
-              backgroundColor: ConstantColor.backgroundColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+          buildButton(
+            name: 'Expense',
+            image: Image.asset(
+              'assets/expense.png',
+              scale: 2,
             ),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => const ExpenseScreen(),
-                ),
-              );
-            },
-            child: Text(
-              "Expense",
-              style: TextStyle(
-                color: ConstantColor.background1Color,
-                fontSize: 16,
-                fontFamily: ConstantFonts.poppinsMedium,
-              ),
-            ),
+            page:  const ExpenseScreen(),
           ),
         ],
       ),
     );
   }
+  Widget buildButton(
+      {required String name, required Image image, required Widget page}) {
+    return GestureDetector(
+      onTap: () {
+        HapticFeedback.vibrate();
+        Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 20.0),
+        decoration: BoxDecoration(
+            color: const Color(0xffDAD6EE),
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: const [
+              BoxShadow(
+                  color: Colors.black26,
+                  offset: Offset(3.0,3.0),
+                  blurRadius: 3
+              )
+            ]
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Center(child: image),
+            AutoSizeText(
+              name,
+              style: TextStyle(
+                fontFamily: ConstantFonts.poppinsMedium,
+                color: ConstantColor.blackColor,
+              ),
+              minFontSize: 22,
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
 }
