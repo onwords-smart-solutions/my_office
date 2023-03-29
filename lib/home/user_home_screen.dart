@@ -169,7 +169,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         'assets/lead search.png',
                         scale: 3.0,
                       ),
-                      page: const AbsenteeScreen()),
+                      page: const AbsenteeScreen(
+                      )),
                   buildButton(
                     name: 'Search Leads',
                     image: Image.asset(
@@ -367,7 +368,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                                 'assets/lead search.png',
                                 scale: 3.0,
                               ),
-                              page: const AbsenteeScreen()),
+                              page: const AbsenteeScreen(
+                              )),
                           buildButton(
                             name: 'Search Leads',
                             image: Image.asset(

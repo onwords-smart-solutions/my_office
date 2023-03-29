@@ -1,11 +1,15 @@
+import 'dart:developer';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:swipeable_button_view/swipeable_button_view.dart';
 import '../Constant/fonts/constant_font.dart';
 import '../util/main_template.dart';
+import 'confirm_attendance.dart';
 
 class AttendanceScreen extends StatefulWidget {
   final String uid;
@@ -21,6 +25,52 @@ class AttendanceScreen extends StatefulWidget {
 class _AttendanceScreenState extends State<AttendanceScreen> {
   String? _currentAddress;
   Position? _currentPosition;
+  bool isFinished = false;
+  bool isPresent = false;
+  bool isEntered = false;
+  bool isLoading = true;
+
+  check() {
+    final timeFormat = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    FirebaseDatabase.instance
+        .ref('fingerPrint')
+        .child('${widget.uid}/$timeFormat/')
+        .once()
+        .then((value) {
+      if (value.snapshot.value == null) {
+        checkPRAttendance();
+      } else {
+        setState(() {
+          isEntered = true;
+          isLoading = false;
+        });
+      }
+    });
+  }
+
+  checkPRAttendance() {
+    DateTime now = DateTime.now();
+    var timeStamp = DateFormat('yyyy-MM-dd').format(now);
+    var month = DateFormat('MM').format(now);
+    var year = DateFormat('yyyy').format(now);
+    final ref = FirebaseDatabase.instance.ref();
+    ref
+        .child('prAttendance/${widget.uid}/$year/$month/$timeStamp/')
+        .once()
+        .then((value) {
+          log('data is${value.snapshot.value}');
+      if (value.snapshot.value != null) {
+        setState(() {
+          isEntered = true;
+          isLoading = false;
+        });
+      }else{
+        setState(() {
+          isLoading = false;
+        });
+      }
+    });
+  }
 
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
@@ -68,7 +118,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         .then((Position position) {
       setState(() => _currentPosition = position);
       _getAddressFromLatLng(_currentPosition!);
-
     }).catchError((e) {
       debugPrint(e);
     });
@@ -89,8 +138,11 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     });
   }
 
-  final databaseReference =
-      FirebaseDatabase.instance.ref();
+  @override
+  void initState() {
+    check();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,50 +158,90 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('LAT: ${_currentPosition?.latitude ?? ""}'),
-            Text('LNG: ${_currentPosition?.longitude ?? ""}'),
-            Text('ADDRESS: ${_currentAddress ?? ""}'),
-            const SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: (){
-                _getCurrentPosition();
-              },
-              child: const Text("Get Current Location"),
+            const Image(
+              image: AssetImage('assets/entry.png'),
             ),
+            const SizedBox(height: 10),
+            isLoading
+                ? const CircularProgressIndicator()
+                : isEntered
+                    ? Column(
+                        children: [
+                          Text(
+                            'Your Entry has already Registered!!!',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: ConstantFonts.poppinsMedium,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            'Leave the Page...',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: ConstantFonts.poppinsMedium,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      )
+                    :
+            submitButton(),
           ],
         ),
       ),
     );
   }
 
-  void addAttendanceToDatabase()async {
-        DateTime now = DateTime.now();
-        var timeStamp = DateFormat('yyyy-MM-dd_kk:mm:ss').format(now);
-        var month = DateFormat('MM').format(now);
-        var year = DateFormat('yyyy').format(now);
-        final ref = FirebaseDatabase.instance.ref();
-       await ref.child('prAttendance/${widget.uid}/$year/$month/$timeStamp/').set(
-          {
-            'Time': DateFormat('kk:mm:ss').format(now),
-            'Name': widget.name,
-            'Latitude': _currentPosition?.latitude ?? "",
-            'Longitude': _currentPosition?.longitude ?? "",
-            'Address': _currentAddress ?? "",
-          },
-        );
-        final snackBar = SnackBar(
-          duration: const Duration(seconds: 3),
-          content: Text(
-            'Yay!! Your Attendance has been updated',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-              fontFamily: ConstantFonts.poppinsMedium,
-              fontWeight: FontWeight.w500,
-            ),
+  void addAttendanceToDatabase() async {
+    DateTime now = DateTime.now();
+    var timeStamp = DateFormat('yyyy-MM-dd').format(now);
+    var month = DateFormat('MM').format(now);
+    var year = DateFormat('yyyy').format(now);
+    final ref = FirebaseDatabase.instance.ref();
+    await ref.child('prAttendance/${widget.uid}/$year/$month/$timeStamp/').set(
+      {
+        'Name': widget.name,
+        'Latitude': _currentPosition?.latitude ?? "",
+        'Longitude': _currentPosition?.longitude ?? "",
+        'Address': _currentAddress ?? "",
+        'Time': DateFormat('kk:mm:ss').format(now),
+      },
+    );
+  }
+
+  Widget submitButton() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 25),
+      child: SwipeableButtonView(
+        buttonText: '      SLIDE TO MARK ATTENDANCE',
+        buttonWidget: Container(
+          child: const Icon(
+            Icons.arrow_forward_ios_rounded,
+            color: Colors.grey,
           ),
-          backgroundColor: Colors.green,
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      }
-    }
+        ),
+        activeColor: ConstantColor.backgroundColor,
+        isFinished: isFinished,
+        onWaitingProcess: () {
+          Future.delayed(const Duration(seconds: 1), () {
+            setState(() {
+              isFinished = true;
+            });
+          });
+        },
+        onFinish: () async {
+          _getCurrentPosition();
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const ConfirmAttendanceScreen(),
+            ),
+          );
+          setState(() {
+            isFinished = false;
+          });
+        },
+      ),
+    );
+  }
+}

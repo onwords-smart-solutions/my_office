@@ -9,7 +9,7 @@ import '../Constant/fonts/constant_font.dart';
 import 'package:intl/intl.dart';
 
 class AbsenteeScreen extends StatefulWidget {
-  const AbsenteeScreen({Key? key}) : super(key: key);
+  const AbsenteeScreen({Key? key,}) : super(key: key);
 
   @override
   State<AbsenteeScreen> createState() => _AbsenteeScreenState();
@@ -99,6 +99,7 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
     });
   }
 
+
   @override
   void initState() {
     selectedDate = formatterDate.format(now);
@@ -116,10 +117,9 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
   }
 
   Widget bodyContent() {
+    List<Widget> absentNames = [];
 
-    List<Widget> absentNames=[];
-
-    for(int i=0;i<notEntry.length;i++){
+    for (int i = 0; i < notEntry.length; i++) {
       final widget = Container(
         // height: height * 0.1,
         margin: const EdgeInsets.all(10),
@@ -138,8 +138,7 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
           child: ListTile(
             leading: const CircleAvatar(
               radius: 20,
-              backgroundColor:
-              ConstantColor.backgroundColor,
+              backgroundColor: ConstantColor.backgroundColor,
               child: Icon(Icons.person),
             ),
             title: Text(
@@ -147,8 +146,9 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
               style: TextStyle(
                   fontFamily: ConstantFonts.poppinsMedium,
                   color: ConstantColor.blackColor,
-                  fontSize:16),
-            ),),
+                  fontSize: 16),
+            ),
+          ),
         ),
       );
 
@@ -157,65 +157,64 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
 
     return isLoading
         ? Center(
-      child: Lottie.asset(
-        "assets/animations/loading.json",
-      ),
-    )
+            child: Lottie.asset(
+              "assets/animations/loading.json",
+            ),
+          )
         : Column(
-      children: [
-        //calender button
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              GestureDetector(
-                onTap:datePicker,
-                child: Image.asset(
-                  'assets/calender.png',
-                  scale: 3,
+              //calender button
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    GestureDetector(
+                      onTap: datePicker,
+                      child: Image.asset(
+                        'assets/calender.png',
+                        scale: 3,
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    Text('$selectedDate   ',
+                        style: TextStyle(
+                            fontFamily: ConstantFonts.poppinsBold,
+                            fontSize: 17,
+                            color: ConstantColor.backgroundColor)),
+                  ],
                 ),
               ),
-              const SizedBox(width: 15),
-              Text('$selectedDate   ',
-                  style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsBold,
-                      fontSize: 17,
-                      color: ConstantColor.backgroundColor)),
+              notEntry.isNotEmpty
+                  ? Expanded(
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: Column(
+                          children: absentNames,
+                        ),
+                      ),
+                    )
+                  : isFuture
+                      ? errorMessage('Not available right now')
+                      : errorMessage('Everyone present today'),
             ],
-          ),
-        ),
-        notEntry.isNotEmpty
-            ? Expanded(
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              children: absentNames,
-            ),
-          ),
-        )
-            : isFuture
-            ? errorMessage('Not available right now')
-            : errorMessage('Everyone present today'),
-      ],
-    );
+          );
   }
 
   Widget errorMessage(String message) => Expanded(
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Lottie.asset('assets/animations/no_data.json',height: 250.0),
-        Text(
-          message,
-          style: TextStyle(
-            fontFamily: ConstantFonts.poppinsMedium,
-            color: Colors.purple,
-            fontSize: 20,
-
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset('assets/animations/no_data.json', height: 250.0),
+            Text(
+              message,
+              style: TextStyle(
+                fontFamily: ConstantFonts.poppinsMedium,
+                color: Colors.purple,
+                fontSize: 20,
+              ),
+            ),
+          ],
         ),
-      ],
-    ),
-  );
+      );
 }
