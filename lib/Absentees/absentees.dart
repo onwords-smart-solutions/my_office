@@ -9,7 +9,9 @@ import '../Constant/fonts/constant_font.dart';
 import 'package:intl/intl.dart';
 
 class AbsenteeScreen extends StatefulWidget {
-  const AbsenteeScreen({Key? key,}) : super(key: key);
+  const AbsenteeScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<AbsenteeScreen> createState() => _AbsenteeScreenState();
@@ -45,7 +47,7 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2015),
-      lastDate: DateTime(2050),
+      lastDate: DateTime(2100),
     );
     if (newDate == null) return;
     if (!mounted) return;
@@ -64,8 +66,8 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
 
   todayDate() {
     var now = DateTime.now();
-    var formatterDate = DateFormat('yyy-MM-dd');
-    var formatterYear = DateFormat('yyy');
+    var formatterDate = DateFormat('yyyy-MM-dd');
+    var formatterYear = DateFormat('yyyy');
     var formatterMonth = DateFormat('MM');
     formattedTime = DateFormat('kk:mm:a').format(now);
     formattedDate = formatterDate.format(now);
@@ -77,28 +79,52 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
     isLoading = true;
     isFuture = false;
     notEntry.clear();
-    fingerPrint.once().then((value) {
+    fingerPrint.once().then((value) async {
       for (var val in value.snapshot.children) {
         firebaseData = val.value;
+
+        final staffName = firebaseData['name'];
+
         try {
-          notEntry.add(firebaseData['name']);
+          notEntry.add(staffName);
         } catch (e) {
           log(e.toString());
         }
 
-        for (var val1 in val.children) {
-          if (val1.key == selectedDate) {
-            notEntry.remove(firebaseData['name']);
-            notEntry.removeWhere((value) => value == null);
-          }
+        if (firebaseData[selectedDate] != null) {
+          notEntry.remove(staffName);
+        } else {
+          //CHECKING IN PR ATTENDANCE LOCATION IN FIREBASE
+          // WHETHER STAFF HAVE DATA OR NOT
+           checkInPRStorage(val.key!);
         }
       }
-      setState(() {
-        isLoading = false;
+
+      Future.delayed(const Duration(seconds: 1),(){
+        setState(() {
+          isLoading = false;
+        });
       });
+
     });
   }
 
+ checkInPRStorage(String uid)  {
+    prAttendance
+        .child('$uid/$formattedYear/$formattedMonth/$selectedDate/')
+        .once()
+        .then((value) {
+      Map<Object?, Object?> data = {};
+      try {
+        data = value.snapshot.value as Map<Object?, Object?>;
+        setState(() {
+          notEntry.remove(data['Name']);
+        });
+      } catch (e) {
+        log('ERROR FROM PR ATTENDANCE $e');
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -151,7 +177,6 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
           ),
         ),
       );
-
       absentNames.add(widget);
     }
 
