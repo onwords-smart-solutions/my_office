@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 // import 'package:my_office/PR/invoice/customer_detail_screen.dart';
-import 'package:my_office/PR/visit/summary_notes.dart';
+import 'package:my_office/PR/visit/visit_summary.dart';
 import 'package:my_office/models/visit_model.dart';
 import 'package:image/image.dart' as ImageLib;
 import '../../Constant/colors/constant_colors.dart';

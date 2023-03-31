@@ -40,7 +40,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   int above6 = 0;
 
   double percent = 0;
-  bool isLoding = false;
+  bool isLoading = false;
 
   var formattedDate;
   var formattedMonth;
@@ -124,7 +124,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       _percentController.clear();
       getWorkDone();
       showSnackBar(message: 'Work updated successfully', color: Colors.green);
-      isLoding = false;
+      isLoading = false;
     });
   }
 
@@ -140,7 +140,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
           DateFormat.jm().parse(pickedTime.format(context).toString());
 
       ///converting to DateTime so that we can further format on different pattern.
-      String formattedTime = DateFormat('HH:MM').format(parsedTime);
+      String formattedTime = DateFormat('HH:mm').format(parsedTime);
 
       ///DateFormat() is from intl package, you can format the time on any pattern you need.
 
@@ -304,7 +304,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   }
 
   Widget tabBarViewFirstScreen(double height, double width) {
-    return isLoding
+    return isLoading
         ? const Center(child: CircularProgressIndicator())
         : Padding(
             padding: const EdgeInsets.all(08),
@@ -537,7 +537,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                                 } else {
                                   // print(above6);
                                   setState(() {
-                                    isLoding = true;
+                                    isLoading = true;
                                     createNewWork();
                                     // print('created');
                                   });

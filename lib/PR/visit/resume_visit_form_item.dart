@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/PR/visit/product_detail_screen.dart';
-import 'package:my_office/PR/visit/summary_notes.dart';
+import 'package:my_office/PR/visit/visit_summary.dart';
 import 'package:my_office/PR/visit/visit_verification_screen.dart';
 import 'package:my_office/database/hive_operations.dart';
 import 'package:my_office/models/visit_model.dart';

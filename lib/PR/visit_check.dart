@@ -107,9 +107,13 @@ class _VisitCheckScreenState extends State<VisitCheckScreen> {
                   itemBuilder: (context, index) {
                     return ListTile(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                VisitList(visitList: allVisits[index])));
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => VisitList(
+                              visitList: allVisits[index],
+                            ),
+                          ),
+                        );
                       },
                       leading: const CircleAvatar(
                         radius: 20,

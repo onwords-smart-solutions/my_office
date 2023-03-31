@@ -63,8 +63,6 @@ class _MyAppState extends State<MyApp> {
       create: (context) => TaskData(),
       child:  MaterialApp(
           title: 'My Office',
-          debugShowCheckedModeBanner: false,
-
           theme: ThemeData(
             primarySwatch: Colors.purple,
             scaffoldBackgroundColor: ConstantColor.backgroundColor,

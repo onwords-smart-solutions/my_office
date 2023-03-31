@@ -9,18 +9,16 @@ import 'package:my_office/util/screen_template.dart';
 class VisitList extends StatefulWidget {
   final VisitViewModel visitList;
 
-  const VisitList(
-      {Key? key,
-        required this.visitList,})
-      : super(key: key);
+  const VisitList({
+    Key? key,
+    required this.visitList,
+  }) : super(key: key);
 
   @override
   State<VisitList> createState() => _VisitListState();
 }
 
 class _VisitListState extends State<VisitList> {
-
-
   @override
   Widget build(BuildContext context) {
     return ScreenTemplate(bodyTemplate: buildMain(), title: 'Visit Details');
@@ -163,8 +161,8 @@ class _VisitListState extends State<VisitList> {
                       child: textImage(
                           title: 'Support Crew ${i + 1}',
                           name: widget.visitList.supportCrewNames[i].toString(),
-                          imageLink:
-                          widget.visitList.supportCrewImageLinks[i].toString()),
+                          imageLink: widget.visitList.supportCrewImageLinks[i]
+                              .toString()),
                     );
                   })
             ],
@@ -260,17 +258,44 @@ class _VisitListState extends State<VisitList> {
                         margin: const EdgeInsets.only(right: 5.0),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10.0),
-                          child: CachedNetworkImage(
-                            imageUrl: widget.visitList.productImageLinks[i].toString(),
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) =>
-                                CircularProgressIndicator(
-                                  value: downloadProgress.progress,
-                                  strokeWidth: 1.5,
-                                  color: ConstantColor.backgroundColor,
+                          child: GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (_) => InteractiveViewer(
+                                  clipBehavior: Clip.none,
+                                  maxScale: 4,
+                                  minScale: 1,
+                                  child: CachedNetworkImage(
+                                    imageUrl: widget
+                                        .visitList.productImageLinks[i]
+                                        .toString(),
+                                    progressIndicatorBuilder: (context, url,
+                                            downloadProgress) =>
+                                        const Icon(Icons
+                                            .production_quantity_limits_outlined),
+                                    errorWidget: (context, url, error) =>
+                                        showError(),
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                            errorWidget: (context, url, error) => showError(),
-                            fit: BoxFit.cover,
+                              );
+                            },
+                            child: SizedBox(
+                              height: 80,
+                              width: 80,
+                              child: CachedNetworkImage(
+                                imageUrl: widget.visitList.productImageLinks[i]
+                                    .toString(),
+                                progressIndicatorBuilder: (context, url,
+                                        downloadProgress) =>
+                                    const Icon(Icons
+                                        .production_quantity_limits_outlined),
+                                errorWidget: (context, url, error) =>
+                                    showError(),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                         ),
                       );
@@ -366,8 +391,8 @@ class _VisitListState extends State<VisitList> {
 
   Widget textImage(
       {required String title,
-        required String name,
-        required String imageLink}) {
+      required String name,
+      required String imageLink}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -395,15 +420,36 @@ class _VisitListState extends State<VisitList> {
           width: 80,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10.0),
-            child: CachedNetworkImage(
-              imageUrl: imageLink,
-              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                  CircularProgressIndicator(
-                      strokeWidth: 1.5,
-                      color: ConstantColor.backgroundColor,
-                      value: downloadProgress.progress),
-              errorWidget: (context, url, error) => showError(),
-              fit: BoxFit.cover,
+            child: GestureDetector(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (_) => InteractiveViewer(
+                    clipBehavior: Clip.none,
+                    minScale: 1,
+                    maxScale: 4,
+                    child: CachedNetworkImage(
+                      imageUrl: imageLink,
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) =>
+                              const Icon(Icons.person_pin),
+                      errorWidget: (context, url, error) => showError(),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                );
+              },
+              child: SizedBox(
+                height: 80,
+                width: 80,
+                child: CachedNetworkImage(
+                  imageUrl: imageLink,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      const Icon(Icons.person_pin),
+                  errorWidget: (context, url, error) => showError(),
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
           ),
         ),
@@ -412,22 +458,22 @@ class _VisitListState extends State<VisitList> {
   }
 
   Widget showError() => Column(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      const Icon(
-        Icons.error,
-        color: Colors.red,
-        size: 15.0,
-      ),
-      Text(
-        'Unable to load image',
-        style: TextStyle(
-          fontFamily: ConstantFonts.poppinsMedium,
-          color: Colors.red,
-          fontSize: 8.0,
-        ),
-        textAlign: TextAlign.center,
-      ),
-    ],
-  );
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.error,
+            color: Colors.red,
+            size: 15.0,
+          ),
+          Text(
+            'Unable to load image',
+            style: TextStyle(
+              fontFamily: ConstantFonts.poppinsMedium,
+              color: Colors.red,
+              fontSize: 8.0,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      );
 }

@@ -31,7 +31,8 @@ import '../leads/search_leads.dart';
 import '../leave_apply/leave_apply_screen.dart';
 import '../leave_approval/leave_request.dart';
 import '../onyx/announcement.dart';
-import '../suggestions.dart';
+import '../suggestions/suggestions.dart';
+import '../suggestions/view_suggestions.dart';
 import '../work_done/work_complete.dart';
 import '../work_manager/work_entry.dart';
 
@@ -436,6 +437,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               scale: 3,
                             ),
                             page: AttendanceScreen(
+                              uid: staffInfo!.uid,
+                              name: staffInfo!.name,
+                            ),
+                          ),
+                          buildButton(
+                            name: 'View Suggestions',
+                            image: Image.asset(
+                              'assets/view_suggestions.png',
+                              scale: 15,
+                            ),
+                            page: ViewSuggestions(
                               uid: staffInfo!.uid,
                               name: staffInfo!.name,
                             ),

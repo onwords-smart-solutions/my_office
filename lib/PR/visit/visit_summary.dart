@@ -198,6 +198,10 @@ class _VisitSummaryScreenState extends State<VisitSummaryScreen> {
         setState(() {
           step3Error = 'Enter a valid meter reading';
         });
+      }else if (int.parse(_endKmController.text.trim())<=int.parse(widget.visitData.startKm.toString())){
+        setState(() {
+          step3Error = 'End Km should be greater than Start Km';
+        });
       }
 
       else if (endKmImage == null) {
@@ -494,10 +498,12 @@ class _VisitSummaryScreenState extends State<VisitSummaryScreen> {
       children: [
         const Icon(Icons.error_outline_rounded, color: Colors.red),
         const SizedBox(width: 5.0),
-        Text(
-          message,
-          style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium, color: Colors.red),
+        Expanded(
+          child: Text(
+            message,
+            style: TextStyle(
+                fontFamily: ConstantFonts.poppinsMedium, color: Colors.red),
+          ),
         ),
       ],
     );

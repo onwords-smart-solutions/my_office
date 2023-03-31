@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -55,10 +56,16 @@ class _VisitSubmitScreenState extends State<VisitSubmitScreen> {
             child: SizedBox(
               width: size.width,
               child: ElevatedButton(
-                  onPressed: (){
+                  onPressed: () {
                     Navigator.of(context).push(HeroDialogRoute(
                       builder: (ctx) {
-                        return  LoadingScreen(dateOfInstallation: widget.dateOfInstallation,endKm: widget.endKm,endKmImage: widget.endKmImage,summaryNotes: widget.summaryNotes,visitData: widget.visitData,);
+                        return LoadingScreen(
+                          dateOfInstallation: widget.dateOfInstallation,
+                          endKm: widget.endKm,
+                          endKmImage: widget.endKmImage,
+                          summaryNotes: widget.summaryNotes,
+                          visitData: widget.visitData,
+                        );
                       },
                     ));
                   },
@@ -436,10 +443,10 @@ class _VisitSubmitScreenState extends State<VisitSubmitScreen> {
             child: CachedNetworkImage(
               imageUrl: imageLink,
               progressIndicatorBuilder: (context, url, downloadProgress) =>
-                  CircularProgressIndicator(
-                      strokeWidth: 1.5,
-                      color: ConstantColor.backgroundColor,
-                      value: downloadProgress.progress),
+              CircularProgressIndicator(
+                  strokeWidth: 1.5,
+                  color: ConstantColor.backgroundColor,
+                  value: downloadProgress.progress),
               errorWidget: (context, url, error) => showError(),
               fit: BoxFit.cover,
             ),

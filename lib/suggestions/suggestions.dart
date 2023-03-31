@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
 import 'package:my_office/util/main_template.dart';
 
-import 'Constant/colors/constant_colors.dart';
+import '../Constant/colors/constant_colors.dart';
 
 class SuggestionScreen extends StatefulWidget {
   final String uid;
