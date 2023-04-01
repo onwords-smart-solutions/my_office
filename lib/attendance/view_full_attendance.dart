@@ -6,7 +6,9 @@ import '../util/main_template.dart';
 
 class ViewAllAttendance extends StatefulWidget {
   final Map<Object?, Object?> fullViewAttendance;
-   const ViewAllAttendance({Key? key, required this.fullViewAttendance}) : super(key: key);
+
+  const ViewAllAttendance({Key? key, required this.fullViewAttendance})
+      : super(key: key);
 
   @override
   State<ViewAllAttendance> createState() => _ViewAllAttendanceState();
@@ -21,7 +23,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
         bgColor: ConstantColor.background1Color);
   }
 
-  Widget viewFullAttendancePage(){
+  Widget viewFullAttendancePage() {
     return Column(
       children: [
         buildName(),
@@ -186,32 +188,33 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
         ),
         children: [
           TableRow(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Text(
+                  "Longitude",
+                  style: TextStyle(
+                    color: ConstantColor.backgroundColor,
+                    fontSize: 17,
+                    fontFamily: ConstantFonts.poppinsMedium,
+                  ),
+                ),
               ),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Text(
-                    "Longitude",
-                    style: TextStyle(
-                      color: ConstantColor.backgroundColor,
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: SelectableText(
+                  widget.fullViewAttendance['Longitude'].toString(),
+                  style: TextStyle(
+                      color: ConstantColor.headingTextColor,
                       fontSize: 17,
-                      fontFamily: ConstantFonts.poppinsMedium,
-                    ),
-                  ),
+                      fontFamily: ConstantFonts.poppinsMedium),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: SelectableText(
-                    widget.fullViewAttendance['Longitude'].toString(),
-                    style: TextStyle(
-                        color: ConstantColor.headingTextColor,
-                        fontSize: 17,
-                        fontFamily: ConstantFonts.poppinsMedium),
-                  ),
-                ),
-              ])
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -232,32 +235,33 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
         ),
         children: [
           TableRow(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Text(
+                  "Time",
+                  style: TextStyle(
+                    color: ConstantColor.backgroundColor,
+                    fontSize: 17,
+                    fontFamily: ConstantFonts.poppinsMedium,
+                  ),
+                ),
               ),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Text(
-                    "Time",
-                    style: TextStyle(
-                      color: ConstantColor.backgroundColor,
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: SelectableText(
+                  widget.fullViewAttendance['Time'].toString(),
+                  style: TextStyle(
+                      color: ConstantColor.headingTextColor,
                       fontSize: 17,
-                      fontFamily: ConstantFonts.poppinsMedium,
-                    ),
-                  ),
+                      fontFamily: ConstantFonts.poppinsMedium),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: SelectableText(
-                    widget.fullViewAttendance['Time'].toString(),
-                    style: TextStyle(
-                        color: ConstantColor.headingTextColor,
-                        fontSize: 17,
-                        fontFamily: ConstantFonts.poppinsMedium),
-                  ),
-                ),
-              ])
+              ),
+            ],
+          )
         ],
       ),
     );

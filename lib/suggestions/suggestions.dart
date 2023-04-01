@@ -19,6 +19,23 @@ class SuggestionScreen extends StatefulWidget {
 
 class _SuggestionScreenState extends State<SuggestionScreen> {
   TextEditingController suggestionsController = TextEditingController();
+  int characterCount = 0;
+
+  @override
+  void initState() {
+    suggestionsController.addListener(() {
+      setState(() {
+        characterCount = suggestionsController.text.length;
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    suggestionsController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,16 +50,26 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
       children: [
         Container(
           padding: const EdgeInsets.all(12),
-          child: TextField(
-            textInputAction: TextInputAction.done,
-            controller: suggestionsController,
-            scrollPhysics: const BouncingScrollPhysics(),
-            maxLines: 5,
-            decoration: InputDecoration(
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-              hintText: 'Fill up your suggestions!!',
-            ),
+          child: Column(
+            children: [
+              TextField(
+                textInputAction: TextInputAction.done,
+                controller: suggestionsController,
+                scrollPhysics: const BouncingScrollPhysics(),
+                maxLines: 5,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  hintText: 'Fill up your suggestions!!',
+                ),
+              ),
+              const SizedBox(height: 5),
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: Text('  Character count: $characterCount'),
+              ),
+            ],
           ),
         ),
         Container(
