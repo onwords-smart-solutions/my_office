@@ -74,7 +74,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
+                  child: SelectableText(
                     widget.expenseDetails.amount.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
@@ -121,7 +121,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
+                  child: SelectableText(
                     widget.expenseDetails.enteredBy.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
@@ -168,7 +168,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
+                  child: SelectableText(
                     widget.expenseDetails.enteredDate.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
@@ -215,7 +215,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
+                  child: SelectableText(
                     widget.expenseDetails.enteredTime.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
@@ -262,7 +262,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
+                  child: SelectableText(
                     widget.expenseDetails.productName.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
@@ -309,7 +309,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
+                  child: SelectableText(
                     widget.expenseDetails.purchasedDate.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
@@ -356,7 +356,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
+                  child: SelectableText(
                     widget.expenseDetails.purchasedFor.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
@@ -403,7 +403,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
+                  child: SelectableText(
                     widget.expenseDetails.purchasedTime.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
@@ -450,7 +450,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
+                  child: SelectableText(
                     widget.expenseDetails.service.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,

@@ -37,7 +37,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         .once()
         .then((value) {
       if (value.snapshot.value == null) {
-        checkPRAttendance();
+        checkVirtualAttendance();
       } else {
         setState(() {
           isEntered = true;
@@ -47,14 +47,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     });
   }
 
-  checkPRAttendance() {
+  checkVirtualAttendance() {
     DateTime now = DateTime.now();
     var timeStamp = DateFormat('yyyy-MM-dd').format(now);
     var month = DateFormat('MM').format(now);
     var year = DateFormat('yyyy').format(now);
     final ref = FirebaseDatabase.instance.ref();
     ref
-        .child('prAttendance/${widget.uid}/$year/$month/$timeStamp/')
+        .child('virtualAttendance/${widget.uid}/$year/$month/$timeStamp/')
         .once()
         .then((value) {
           log('data is${value.snapshot.value}');
@@ -198,7 +198,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     var month = DateFormat('MM').format(now);
     var year = DateFormat('yyyy').format(now);
     final ref = FirebaseDatabase.instance.ref();
-    await ref.child('prAttendance/${widget.uid}/$year/$month/$timeStamp/').set(
+    await ref.child('virtualAttendance/${widget.uid}/$year/$month/$timeStamp/').set(
       {
         'Name': widget.name,
         'Latitude': _currentPosition?.latitude ?? "",

@@ -3,7 +3,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/util/main_template.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 import 'package:intl/intl.dart';
@@ -35,7 +34,8 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
 
   // final staff = FirebaseDatabase.instance.ref().child("staff");
   final fingerPrint = FirebaseDatabase.instance.ref().child("fingerPrint");
-  final prAttendance = FirebaseDatabase.instance.ref().child('prAttendance');
+  final virtualAttendance =
+      FirebaseDatabase.instance.ref().child('virtualAttendance');
 
   DateTime now = DateTime.now();
   var formatterDate = DateFormat('yyyy-MM-dd');
@@ -79,51 +79,59 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
     isLoading = true;
     isFuture = false;
     notEntry.clear();
-    fingerPrint.once().then((value) async {
-      for (var val in value.snapshot.children) {
-        firebaseData = val.value;
+    fingerPrint.once().then(
+      (value) async {
+        for (var val in value.snapshot.children) {
+          firebaseData = val.value;
 
-        final staffName = firebaseData['name'];
+          final staffName = firebaseData['name'];
 
-        try {
-          notEntry.add(staffName);
-        } catch (e) {
-          log(e.toString());
+          try {
+            notEntry.add(staffName);
+          } catch (e) {
+            log(e.toString());
+          }
+
+          if (firebaseData[selectedDate] != null) {
+            notEntry.remove(staffName);
+          } else {
+            //CHECKING IN PR ATTENDANCE LOCATION IN FIREBASE
+            // WHETHER STAFF HAVE DATA OR NOT
+            checkInVirtualStorage(val.key!);
+          }
         }
 
-        if (firebaseData[selectedDate] != null) {
-          notEntry.remove(staffName);
-        } else {
-          //CHECKING IN PR ATTENDANCE LOCATION IN FIREBASE
-          // WHETHER STAFF HAVE DATA OR NOT
-           checkInPRStorage(val.key!);
-        }
-      }
-
-      Future.delayed(const Duration(seconds: 1),(){
-        setState(() {
-          isLoading = false;
-        });
-      });
-
-    });
+        Future.delayed(
+          const Duration(seconds: 1),
+          () {
+            setState(
+              () {
+                isLoading = false;
+              },
+            );
+          },
+        );
+      },
+    );
   }
 
- checkInPRStorage(String uid)  {
-    prAttendance
+  checkInVirtualStorage(String uid) {
+    virtualAttendance
         .child('$uid/$formattedYear/$formattedMonth/$selectedDate/')
         .once()
-        .then((value) {
-      Map<Object?, Object?> data = {};
-      try {
-        data = value.snapshot.value as Map<Object?, Object?>;
-        setState(() {
-          notEntry.remove(data['Name']);
-        });
-      } catch (e) {
-        log('ERROR FROM PR ATTENDANCE $e');
-      }
-    });
+        .then(
+      (value) {
+        Map<Object?, Object?> data = {};
+        try {
+          data = value.snapshot.value as Map<Object?, Object?>;
+          setState(() {
+            notEntry.remove(data['Name']);
+          });
+        } catch (e) {
+          log('ERROR FROM VIRTUAL ATTENDANCE $e');
+        }
+      },
+    );
   }
 
   @override

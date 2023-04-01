@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:my_office/PR/invoice/Screens/Customer_Details_Screen.dart';
 import 'package:my_office/app_version/version.dart';
-import 'package:my_office/models/visit_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,10 +19,9 @@ import 'package:my_office/util/notification_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Absentees/absentees.dart';
 import '../Constant/fonts/constant_font.dart';
-import '../PR/attendance_screen.dart';
-import '../PR/visit/visit_screen.dart';
-import '../PR/visit/visit_verification_screen.dart';
+import '../attendance/attendance_screen.dart';
 import '../PR/visit_check.dart';
+import '../attendance/view_attendance.dart';
 import '../database/hive_operations.dart';
 import '../finance/finance_analysis.dart';
 import '../leads/search_leads.dart';
@@ -47,12 +44,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   final HiveOperations _hiveOperations = HiveOperations();
   final NotificationService _notificationService = NotificationService();
 
-
   StaffModel? staffInfo;
   late StreamSubscription subscription;
   var isDeviceConnected = false;
   bool isAlertSet = false;
-
 
   getConnectivity() {
     subscription = Connectivity()
@@ -93,15 +88,15 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         final updatedAdminVersion = data['adminVersion'];
         final updatedPrVersion = data['prVersion'];
 
-        if(staffInfo?.department == 'ADMIN') {
+        if (staffInfo?.department == 'ADMIN') {
           if (AppConstants.adminDepVersion != updatedAdminVersion) {
             showUpdateAppDialog();
           }
-        }else if (staffInfo?.department == 'PR') {
+        } else if (staffInfo?.department == 'PR') {
           if (AppConstants.prDepVersion != updatedPrVersion) {
             showUpdateAppDialog();
           }
-        }else {
+        } else {
           if (AppConstants.pubVersion != updatedVersion) {
             showUpdateAppDialog();
           }
@@ -170,8 +165,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         'assets/lead search.png',
                         scale: 3.0,
                       ),
-                      page: const AbsenteeScreen(
-                      )),
+                      page: const AbsenteeScreen()),
                   buildButton(
                     name: 'Search Leads',
                     image: Image.asset(
@@ -186,7 +180,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       'assets/visit_check.png',
                       scale: 3.4,
                     ),
-                    page:  const VisitCheckScreen(),
+                    page: const VisitCheckScreen(),
                   ),
                   buildButton(
                     name: 'Visit',
@@ -210,7 +204,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       'assets/finance.png',
                       scale: 1,
                     ),
-                    page:  const FinanceScreen(),
+                    page: const FinanceScreen(),
                   ),
                   buildButton(
                     name: 'Suggestions',
@@ -219,6 +213,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       scale: 3,
                     ),
                     page: SuggestionScreen(
+                      uid: staffInfo!.uid,
+                      name: staffInfo!.name,
+                    ),
+                  ),
+                  buildButton(
+                    name: 'View Suggestions',
+                    image: Image.asset(
+                      'assets/view_suggestions.png',
+                      scale: 15,
+                    ),
+                    page: ViewSuggestions(
                       uid: staffInfo!.uid,
                       name: staffInfo!.name,
                     ),
@@ -239,17 +244,15 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             mainAxisSpacing: 10.0,
                             mainAxisExtent: 230),
                     children: [
-
-                      if(staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
-                       buildButton(
-                        name: 'Visit Check',
-                        image: Image.asset(
-                          'assets/visit_check.png',
-                          scale: 3.4,
+                      if (staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
+                        buildButton(
+                          name: 'Visit Check',
+                          image: Image.asset(
+                            'assets/visit_check.png',
+                            scale: 3.4,
+                          ),
+                          page: const VisitCheckScreen(),
                         ),
-                        page:  const VisitCheckScreen(),
-                      ),
-
                       buildButton(
                         name: 'Work Manager',
                         image: Image.asset(
@@ -305,7 +308,18 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           uid: staffInfo!.uid,
                           name: staffInfo!.name,
                         ),
-    ),
+                      ),
+                      buildButton(
+                        name: 'Virtual Attendance',
+                        image: Image.asset(
+                          'assets/attendance.png',
+                          scale: 3,
+                        ),
+                        page: AttendanceScreen(
+                          uid: staffInfo!.uid,
+                          name: staffInfo!.name,
+                        ),
+                      ),
                     ],
                   )
                 : staffInfo!.department == 'APP'
@@ -369,8 +383,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                                 'assets/lead search.png',
                                 scale: 3.0,
                               ),
-                              page: const AbsenteeScreen(
-                              )),
+                              page: const AbsenteeScreen()),
                           buildButton(
                             name: 'Search Leads',
                             image: Image.asset(
@@ -409,7 +422,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               'assets/visit_check.png',
                               scale: 3.4,
                             ),
-                            page:  const VisitCheckScreen(),
+                            page: const VisitCheckScreen(),
                           ),
                           buildButton(
                             name: 'Finance',
@@ -417,7 +430,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               'assets/finance.png',
                               scale: 1,
                             ),
-                            page:  const FinanceScreen(),
+                            page: const FinanceScreen(),
                           ),
                           buildButton(
                             name: 'Suggestions',
@@ -431,7 +444,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             ),
                           ),
                           buildButton(
-                            name: 'PR Attendance',
+                            name: 'Virtual Attendance',
                             image: Image.asset(
                               'assets/attendance.png',
                               scale: 3,
@@ -450,6 +463,15 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             page: ViewSuggestions(
                               uid: staffInfo!.uid,
                               name: staffInfo!.name,
+                            ),
+                          ),
+                          buildButton(
+                            name: 'View Attendance',
+                            image: Image.asset(
+                              'assets/view_attendance.png',
+                              scale: 3,
+                            ),
+                            page: const ViewAttendanceScreen(
                             ),
                           ),
                         ],
@@ -481,7 +503,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           buildButton(
                             name: 'Refreshment',
                             image: Image.asset(
-                              'assets/suggestions.png',
+                              'assets/refreshment.png',
                               scale: 3.8,
                             ),
                             page: RefreshmentScreen(
@@ -496,6 +518,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               scale: 3,
                             ),
                             page: SuggestionScreen(
+                              uid: staffInfo!.uid,
+                              name: staffInfo!.name,
+                            ),
+                          ),
+                          buildButton(
+                            name: 'Virtual Attendance',
+                            image: Image.asset(
+                              'assets/attendance.png',
+                              scale: 3,
+                            ),
+                            page: AttendanceScreen(
                               uid: staffInfo!.uid,
                               name: staffInfo!.name,
                             ),
@@ -519,16 +552,14 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20.0),
         decoration: BoxDecoration(
-          color: const Color(0xffDAD6EE),
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black26,
-              offset: Offset(3.0,3.0),
-              blurRadius: 3
-            )
-          ]
-        ),
+            color: const Color(0xffDAD6EE),
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: const [
+              BoxShadow(
+                  color: Colors.black26,
+                  offset: Offset(3.0, 3.0),
+                  blurRadius: 3)
+            ]),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

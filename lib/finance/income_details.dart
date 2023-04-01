@@ -75,7 +75,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
+                  child: SelectableText(
                     widget.incomeDetails.amount.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
@@ -122,7 +122,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
+                  child: SelectableText(
                     widget.incomeDetails.customerName.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
@@ -169,7 +169,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
+                  child: SelectableText(
                     widget.incomeDetails.enteredBy.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
@@ -216,7 +216,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
+                  child: SelectableText(
                     widget.incomeDetails.enteredDate.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
@@ -263,7 +263,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
+                  child: SelectableText(
                     widget.incomeDetails.enteredTime.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
@@ -310,7 +310,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
+                  child: SelectableText(
                     widget.incomeDetails.invoiceNumber.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
@@ -357,7 +357,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
+                  child: SelectableText(
                     widget.incomeDetails.paidDate.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
@@ -404,7 +404,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
+                  child: SelectableText(
                     widget.incomeDetails.paidTime.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
@@ -451,7 +451,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
+                  child: SelectableText(
                     widget.incomeDetails.paymentMethod.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
@@ -498,7 +498,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
+                  child: SelectableText(
                     widget.incomeDetails.productName.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,

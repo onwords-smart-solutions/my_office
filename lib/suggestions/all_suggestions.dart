@@ -70,7 +70,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
               ),
               Padding(
                 padding: const EdgeInsets.all(10),
-                child: Text(
+                child: SelectableText(
                   widget.fullSuggestions['date'].toString(),
                   style: TextStyle(
                       color: ConstantColor.backgroundColor,
@@ -118,7 +118,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
               ),
               Padding(
                 padding: const EdgeInsets.all(10),
-                child: Text(
+                child: SelectableText(
                   widget.fullSuggestions['isread'].toString(),
                   style: TextStyle(
                       color: ConstantColor.backgroundColor,
@@ -166,7 +166,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
               ),
               Padding(
                 padding: const EdgeInsets.all(10),
-                child: Text(
+                child: SelectableText(
                   widget.fullSuggestions['time'].toString(),
                   style: TextStyle(
                       color: ConstantColor.backgroundColor,
@@ -222,7 +222,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(10),
-                  child: Text(
+                  child: SelectableText(
                     widget.fullSuggestions['message'].toString(),
                     style: TextStyle(
                       color: ConstantColor.backgroundColor,
