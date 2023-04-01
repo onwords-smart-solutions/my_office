@@ -228,6 +228,15 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       name: staffInfo!.name,
                     ),
                   ),
+                  buildButton(
+                    name: 'View Attendance',
+                    image: Image.asset(
+                      'assets/view_attendance.png',
+                      scale: 3,
+                    ),
+                    page: const ViewAttendanceScreen(
+                    ),
+                  ),
                 ],
               )
             : staffInfo!.department == 'PR'

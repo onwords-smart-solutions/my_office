@@ -62,7 +62,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                 child: Text(
                   "Date",
                   style: TextStyle(
-                    color: ConstantColor.headingTextColor,
+                    color: ConstantColor.backgroundColor,
                     fontSize: 17,
                     fontFamily: ConstantFonts.poppinsMedium,
                   ),
@@ -73,7 +73,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                 child: SelectableText(
                   widget.fullSuggestions['date'].toString(),
                   style: TextStyle(
-                      color: ConstantColor.backgroundColor,
+                      color: ConstantColor.headingTextColor,
                       fontSize: 17,
                       fontFamily: ConstantFonts.poppinsMedium),
                 ),
@@ -110,7 +110,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                 child: Text(
                   "Is Read",
                   style: TextStyle(
-                    color: ConstantColor.headingTextColor,
+                    color: ConstantColor.backgroundColor,
                     fontSize: 17,
                     fontFamily: ConstantFonts.poppinsMedium,
                   ),
@@ -121,7 +121,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                 child: SelectableText(
                   widget.fullSuggestions['isread'].toString(),
                   style: TextStyle(
-                      color: ConstantColor.backgroundColor,
+                      color: ConstantColor.headingTextColor,
                       fontSize: 17,
                       fontFamily: ConstantFonts.poppinsMedium),
                 ),
@@ -158,7 +158,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                 child: Text(
                   "Time",
                   style: TextStyle(
-                    color: ConstantColor.headingTextColor,
+                    color: ConstantColor.backgroundColor,
                     fontSize: 17,
                     fontFamily: ConstantFonts.poppinsMedium,
                   ),
@@ -169,7 +169,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                 child: SelectableText(
                   widget.fullSuggestions['time'].toString(),
                   style: TextStyle(
-                      color: ConstantColor.backgroundColor,
+                      color: ConstantColor.headingTextColor,
                       fontSize: 17,
                       fontFamily: ConstantFonts.poppinsMedium),
                 ),
@@ -206,7 +206,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                   child: Text(
                     "Message:",
                     style: TextStyle(
-                      color: ConstantColor.headingTextColor,
+                      color: ConstantColor.backgroundColor,
                       fontSize: 17,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
@@ -225,7 +225,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                   child: SelectableText(
                     widget.fullSuggestions['message'].toString(),
                     style: TextStyle(
-                      color: ConstantColor.backgroundColor,
+                      color: ConstantColor.headingTextColor,
                       fontSize: 17,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),

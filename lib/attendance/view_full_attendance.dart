@@ -57,7 +57,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   child: Text(
                     "Name",
                     style: TextStyle(
-                      color: ConstantColor.headingTextColor,
+                      color: ConstantColor.backgroundColor,
                       fontSize: 17,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
@@ -68,7 +68,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   child: SelectableText(
                     widget.fullViewAttendance['Name'].toString(),
                     style: TextStyle(
-                        color: ConstantColor.backgroundColor,
+                        color: ConstantColor.headingTextColor,
                         fontSize: 17,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
@@ -103,7 +103,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   child: Text(
                     "Address",
                     style: TextStyle(
-                      color: ConstantColor.headingTextColor,
+                      color: ConstantColor.backgroundColor,
                       fontSize: 17,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
@@ -114,7 +114,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   child: SelectableText(
                     widget.fullViewAttendance['Address'].toString(),
                     style: TextStyle(
-                        color: ConstantColor.backgroundColor,
+                        color: ConstantColor.headingTextColor,
                         fontSize: 17,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
@@ -149,7 +149,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   child: Text(
                     "Latitude",
                     style: TextStyle(
-                      color: ConstantColor.headingTextColor,
+                      color: ConstantColor.backgroundColor,
                       fontSize: 17,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
@@ -160,7 +160,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   child: SelectableText(
                     widget.fullViewAttendance['Latitude'].toString(),
                     style: TextStyle(
-                        color: ConstantColor.backgroundColor,
+                        color: ConstantColor.headingTextColor,
                         fontSize: 17,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
@@ -195,7 +195,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   child: Text(
                     "Longitude",
                     style: TextStyle(
-                      color: ConstantColor.headingTextColor,
+                      color: ConstantColor.backgroundColor,
                       fontSize: 17,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
@@ -206,7 +206,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   child: SelectableText(
                     widget.fullViewAttendance['Longitude'].toString(),
                     style: TextStyle(
-                        color: ConstantColor.backgroundColor,
+                        color: ConstantColor.headingTextColor,
                         fontSize: 17,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
@@ -241,7 +241,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   child: Text(
                     "Time",
                     style: TextStyle(
-                      color: ConstantColor.headingTextColor,
+                      color: ConstantColor.backgroundColor,
                       fontSize: 17,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
@@ -252,7 +252,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   child: SelectableText(
                     widget.fullViewAttendance['Time'].toString(),
                     style: TextStyle(
-                        color: ConstantColor.backgroundColor,
+                        color: ConstantColor.headingTextColor,
                         fontSize: 17,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
