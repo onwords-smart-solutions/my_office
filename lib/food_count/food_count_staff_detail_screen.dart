@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
-import 'package:my_office/util/main_template.dart';
 import 'package:my_office/util/screen_template.dart';
 
 import '../Constant/fonts/constant_font.dart';

@@ -1,11 +1,11 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:my_office/foodCount/food_count_staff_detail_screen.dart';
 import 'package:my_office/util/main_template.dart';
 
 import '../Constant/fonts/constant_font.dart';
 import '../constant/colors/constant_colors.dart';
+import 'food_count_staff_detail_screen.dart';
 
 class FoodCountScreen extends StatefulWidget {
   const FoodCountScreen({Key? key}) : super(key: key);
@@ -74,9 +74,13 @@ class _FoodCountScreenState extends State<FoodCountScreen> {
                 ),
                 child: Center(
                   child: ListTile(
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
                         builder: (_) => FoodCountStaffDetailScreen(
-                            staffName: staffNames[i]))),
+                          staffName: staffNames[i],
+                        ),
+                      ),
+                    ),
                     leading: const CircleAvatar(
                       radius: 20,
                       backgroundColor: ConstantColor.backgroundColor,
@@ -92,6 +96,7 @@ class _FoodCountScreenState extends State<FoodCountScreen> {
                   ),
                 ),
               );
-            });
+            },
+    );
   }
 }

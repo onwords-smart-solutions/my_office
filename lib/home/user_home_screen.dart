@@ -3,7 +3,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:my_office/PR/invoice/Screens/Customer_Details_Screen.dart';
 import 'package:my_office/app_version/version.dart';
-import 'package:my_office/foodCount/food_count_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,11 +24,11 @@ import '../PR/visit_check.dart';
 import '../attendance/view_attendance.dart';
 import '../database/hive_operations.dart';
 import '../finance/finance_analysis.dart';
+import '../food_count/food_count_screen.dart';
 import '../leads/search_leads.dart';
 import '../leave_apply/leave_apply_screen.dart';
 import '../leave_approval/leave_request.dart';
 import '../onyx/announcement.dart';
-import '../refreshment/view_food_count.dart';
 import '../suggestions/suggestions.dart';
 import '../suggestions/view_suggestions.dart';
 import '../work_done/work_complete.dart';
@@ -369,13 +368,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             ),
                           ),
                           buildButton(
-                            name: 'View Food Count',
+                            name: 'Food Count',
                             image: Image.asset(
                               'assets/food_count.png',
                               scale: 3,
                             ),
-                            page: const ViewFoodCount(
-                            ),
+                            page: const FoodCountScreen(),
                           ),
                           buildButton(
                               name: 'Leave form',
@@ -493,14 +491,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             ),
                             page: const ViewAttendanceScreen(),
                           ),
-                          buildButton(
-                            name: 'Food Count',
-                            image: Image.asset(
-                              'assets/food_count.png',
-                              scale: 3,
-                            ),
-                            page: const FoodCountScreen(),
-                          )
                         ],
                       )
                     : GridView(
