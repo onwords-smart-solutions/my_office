@@ -60,15 +60,12 @@ class _FoodCountStaffDetailScreenState
               //CHECKING FOR STAFF
               final lunchData = data['Lunch'] as Map<Object?, Object?>;
               final lunchList =
-              lunchData['lunch_list'] as Map<Object?, Object?>;
+                  lunchData['lunch_list'] as Map<Object?, Object?>;
               final isContain = lunchList.containsValue(widget.staffName);
-
-              for(var staff in lunchList.values){
-                if (staff.toString().contains(widget.staffName)) {
-                  staffLunchData.add(detail.key);
-                }
+              log('isContain $isContain');
+              if (isContain) {
+                staffLunchData.add(detail.key);
               }
-
             }
           }
         }
@@ -102,63 +99,63 @@ class _FoodCountStaffDetailScreenState
         Expanded(
           child: isLoading
               ? Center(
-            child: Lottie.asset(
-              "assets/animations/loading.json",
-            ),
-          )
+                  child: Lottie.asset(
+                    "assets/animations/loading.json",
+                  ),
+                )
               : staffLunchSummary.isEmpty
-              ? Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Lottie.asset('assets/animations/no_data.json',
-                  height: 250.0),
-              Text(
-                'Food details not found',
-                style: TextStyle(
-                  fontFamily: ConstantFonts.poppinsMedium,
-                  color: ConstantColor.blackColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-            ],
-          )
-              : Column(
-            children: [
-              Text(
-                'Total Count : ${staffLunchSummary.length}',
-                style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium,
-                    color: ConstantColor.blackColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0),
-              ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: staffLunchSummary.length,
-                  physics: const BouncingScrollPhysics(),
-                  itemBuilder: (ctx, i) {
-                    return ListTile(
-                      leading: const Icon(
-                        Icons.calendar_month_rounded,
-                        size: 30.0,
-                        color: ConstantColor.backgroundColor,
-                      ),
-                      title: Text(
-                        staffLunchSummary[i].toString(),
-                        style: TextStyle(
-                          fontFamily: ConstantFonts.poppinsMedium,
-                          color: ConstantColor.blackColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Lottie.asset('assets/animations/no_data.json',
+                            height: 250.0),
+                        Text(
+                          'Food details not found',
+                          style: TextStyle(
+                            fontFamily: ConstantFonts.poppinsMedium,
+                            color: ConstantColor.blackColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-              )
-            ],
-          ),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        Text(
+                          'Total Count : ${staffLunchSummary.length}',
+                          style: TextStyle(
+                              fontFamily: ConstantFonts.poppinsMedium,
+                              color: ConstantColor.blackColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20.0),
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: staffLunchSummary.length,
+                            physics: const BouncingScrollPhysics(),
+                            itemBuilder: (ctx, i) {
+                              return ListTile(
+                                leading: const Icon(
+                                  Icons.calendar_month_rounded,
+                                  size: 30.0,
+                                  color: ConstantColor.backgroundColor,
+                                ),
+                                title: Text(
+                                  staffLunchSummary[i].toString(),
+                                  style: TextStyle(
+                                    fontFamily: ConstantFonts.poppinsMedium,
+                                    color: ConstantColor.blackColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      ],
+                    ),
         )
       ],
     );
@@ -177,7 +174,7 @@ class _FoodCountStaffDetailScreenState
             elevation: 10.0,
             itemBuilder: (ctx) => List.generate(
               month.length,
-                  (index) {
+              (index) {
                 return PopupMenuItem(
                   child: Text(
                     month.keys.toList()[index],
