@@ -3,7 +3,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:my_office/PR/invoice/Screens/Customer_Details_Screen.dart';
 import 'package:my_office/app_version/version.dart';
-import 'package:my_office/foodCount/food_count_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,6 +24,7 @@ import '../PR/visit_check.dart';
 import '../attendance/view_attendance.dart';
 import '../database/hive_operations.dart';
 import '../finance/finance_analysis.dart';
+import '../food_count/food_count_screen.dart';
 import '../leads/search_leads.dart';
 import '../leave_apply/leave_apply_screen.dart';
 import '../leave_approval/leave_request.dart';
@@ -357,15 +357,24 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             ),
                           ),
                           buildButton(
-                              name: 'Refreshment',
-                              image: Image.asset(
-                                'assets/refreshment.png',
-                                scale: 3.8,
-                              ),
-                              page: RefreshmentScreen(
-                                uid: staffInfo!.uid,
-                                name: staffInfo!.name,
-                              )),
+                            name: 'Refreshment',
+                            image: Image.asset(
+                              'assets/refreshment.png',
+                              scale: 3.8,
+                            ),
+                            page: RefreshmentScreen(
+                              uid: staffInfo!.uid,
+                              name: staffInfo!.name,
+                            ),
+                          ),
+                          buildButton(
+                            name: 'Food Count',
+                            image: Image.asset(
+                              'assets/food_count.png',
+                              scale: 3,
+                            ),
+                            page: const FoodCountScreen(),
+                          ),
                           buildButton(
                               name: 'Leave form',
                               image: Image.asset('assets/leave_apply.png'),
@@ -482,14 +491,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             ),
                             page: const ViewAttendanceScreen(),
                           ),
-                          buildButton(
-                            name: 'Food Count',
-                            image: Image.asset(
-                              'assets/food_count.png',
-                              scale: 3,
-                            ),
-                            page: const FoodCountScreen(),
-                          )
                         ],
                       )
                     : GridView(

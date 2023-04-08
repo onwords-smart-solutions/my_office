@@ -54,7 +54,6 @@ class _ViewAttendanceScreenState extends State<ViewAttendanceScreen> {
     viewAttendance.once().then(
       (attendList) {
         for (var data in attendList.snapshot.children) {
-          log('TOTAL DATA IS ${data.key}');
           final newAttendance = data.value as Map<Object?, Object?>;
           Map<Object?, Object?> monthData = {};
           Map<Object?, Object?> dayData = {};
@@ -64,7 +63,6 @@ class _ViewAttendanceScreenState extends State<ViewAttendanceScreen> {
             monthData = newAttendance[selectedYear] as Map<Object?, Object?>;
             dayData = monthData[selectedMonth] as Map<Object?, Object?>;
             currentData = dayData[selectedDate] as Map<Object?, Object?>;
-            log('currentData is $currentData');
           } catch (err) {
             err;
           }
@@ -100,7 +98,6 @@ class _ViewAttendanceScreenState extends State<ViewAttendanceScreen> {
   }
 
   Widget viewAttendancePage() {
-    log('ENTIRE DATA IS $fullAttendance');
     return Column(
       children: [
         Padding(

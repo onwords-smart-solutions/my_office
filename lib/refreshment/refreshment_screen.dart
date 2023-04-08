@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,8 +31,8 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
   bool isEvgTea = false;
 
   void checkMorningTime() {
-    final mngStart = DateTime(
-        currentDateTime.year, currentDateTime.month, currentDateTime.day, 9, 30);
+    final mngStart = DateTime(currentDateTime.year, currentDateTime.month,
+        currentDateTime.day, 9, 30);
     final mngEnd = DateTime(currentDateTime.year, currentDateTime.month,
         currentDateTime.day, 11, 0);
     if (currentDateTime.isBefore(mngEnd) && currentDateTime.isAfter(mngStart)) {
@@ -67,8 +68,8 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
     formattedDate = formatterDate.format(now);
     formattedYear = formatterYear.format(now);
     formattedMonth = formatterMonth.format(now);
-
   }
+
 
   @override
   void initState() {
@@ -80,9 +81,6 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // print(formattedDate);
-    // print(formattedMonth);
-    // print(formattedYear);
     return MainTemplate(
       subtitle: 'Choose your Refreshment here !',
       templateBody: buildRefreshmentSection(),
@@ -105,11 +103,13 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
             children: [
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(HeroDialogRoute(
-                    builder: (ctx) {
-                      return const RefreshmentDetails();
-                    },
-                  ));
+                  Navigator.of(context).push(
+                    HeroDialogRoute(
+                      builder: (ctx) {
+                        return const RefreshmentDetails();
+                      },
+                    ),
+                  );
                 },
                 child: Hero(
                   tag: 'details',
@@ -122,11 +122,6 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
                   ),
                 ),
               ),
-              // Text(
-              //   '34',
-              //   style: TextStyle(
-              //       fontFamily: ConstantFonts.poppinsRegular, fontSize: 15),
-              // )
             ],
           ),
         ),
@@ -166,21 +161,31 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
               children: [
-                Lottie.asset('assets/animations/Time anime.json',height: 200),
+                Lottie.asset('assets/animations/Time anime.json', height: 200),
                 const SizedBox(height: 15.0),
                 Text(
                   'Wait until refreshment portal opens...',
-                  style: TextStyle(fontFamily: ConstantFonts.poppinsBold,color: Colors.deepPurple,fontSize: 16.0),
+                  style: TextStyle(
+                      fontFamily: ConstantFonts.poppinsBold,
+                      color: Colors.deepPurple,
+                      fontSize: 16.0),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 25.0),
                 Text(
                   'Morning refreshment and food time: 9:30 AM - 11:00 AM',
-                  style: TextStyle(fontFamily: ConstantFonts.poppinsMedium,color: Colors.deepPurple,fontSize: 12.0),
+                  style: TextStyle(
+                      fontFamily: ConstantFonts.poppinsMedium,
+                      color: Colors.deepPurple,
+                      fontSize: 12.0),
                   textAlign: TextAlign.center,
-                ),Text(
+                ),
+                Text(
                   'Evening refreshment time: 1:30 PM - 3:30 PM',
-                  style: TextStyle(fontFamily: ConstantFonts.poppinsMedium,color: Colors.deepPurple,fontSize: 12.0),
+                  style: TextStyle(
+                      fontFamily: ConstantFonts.poppinsMedium,
+                      color: Colors.deepPurple,
+                      fontSize: 12.0),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -194,7 +199,7 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
       bottom: 10.0,
       child: Image.asset(
         'assets/man_with_laptop.png',
-   height: MediaQuery.of(context).size.height*.25,
+        height: MediaQuery.of(context).size.height * .25,
       ));
 
   Widget buildSlider({
@@ -315,7 +320,6 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
               teaCount: teaCount,
               date: format,
               mode: mode);
-
         } else {
           orderTeaOrCoffee(
               item: item,
@@ -391,17 +395,22 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
 
   void showSnackBar({required String message, required Color color}) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         padding: const EdgeInsets.all(0.0),
         content: Container(
-            height: 50.0,
-            color: color,
-            child: Center(
-                child: Text(
+          height: 50.0,
+          color: color,
+          child: Center(
+            child: Text(
               message,
               style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
-            )))));
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -142,32 +142,33 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
         ),
         children: [
           TableRow(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Text(
+                  "Latitude",
+                  style: TextStyle(
+                    color: ConstantColor.backgroundColor,
+                    fontSize: 17,
+                    fontFamily: ConstantFonts.poppinsMedium,
+                  ),
+                ),
               ),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Text(
-                    "Latitude",
-                    style: TextStyle(
-                      color: ConstantColor.backgroundColor,
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: SelectableText(
+                  widget.fullViewAttendance['Latitude'].toString(),
+                  style: TextStyle(
+                      color: ConstantColor.headingTextColor,
                       fontSize: 17,
-                      fontFamily: ConstantFonts.poppinsMedium,
-                    ),
-                  ),
+                      fontFamily: ConstantFonts.poppinsMedium),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: SelectableText(
-                    widget.fullViewAttendance['Latitude'].toString(),
-                    style: TextStyle(
-                        color: ConstantColor.headingTextColor,
-                        fontSize: 17,
-                        fontFamily: ConstantFonts.poppinsMedium),
-                  ),
-                ),
-              ])
+              ),
+            ],
+          ),
         ],
       ),
     );

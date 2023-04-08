@@ -21,7 +21,7 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
   int _coffeeCount = 0;
   int _teaCount = 0;
   int _foodCount = 0;
-  bool isFoodShow=true;
+  bool isFoodShow = true;
   late Timer _timer;
   var _data;
   var _foodData;
@@ -82,12 +82,12 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
 
   @override
   Widget build(BuildContext context) {
+    final currentTime = DateTime.now();
+    final foodEndTime =
+        DateTime(currentTime.year, currentTime.month, currentTime.day, 14, 0);
 
-    final currentTime=DateTime.now();
-    final foodEndTime=DateTime(currentTime.year,currentTime.month,currentTime.day,14,0);
-
-    if(currentTime.isAfter(foodEndTime)){
-      isFoodShow=false;
+    if (currentTime.isAfter(foodEndTime)) {
+      isFoodShow = false;
     }
 
     return Center(
@@ -104,15 +104,13 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0)),
             child: SingleChildScrollView(
-              physics:const BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               child: Column(
                 children: [
                   buildHeadSection(),
                   buildTeaSection(),
                   buildCoffeeSection(),
-                  if(isFoodShow)
-                    buildFoodSection(),
-              
+                  if (isFoodShow) buildFoodSection(),
                 ],
               ),
             ),
@@ -260,7 +258,7 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
               children: [
                 Expanded(
                   child: ListView.builder(
-                    shrinkWrap: true,
+                      shrinkWrap: true,
                       itemCount: listOfTea.length,
                       padding: const EdgeInsets.symmetric(vertical: 5.0),
                       physics: const BouncingScrollPhysics(),
@@ -307,7 +305,7 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
               children: [
                 Expanded(
                   child: ListView.builder(
-                      itemCount:listOfCoffee.length,
+                      itemCount: listOfCoffee.length,
                       shrinkWrap: true,
                       padding: const EdgeInsets.symmetric(vertical: 5.0),
                       physics: const BouncingScrollPhysics(),
@@ -355,12 +353,13 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                 Expanded(
                   child: ListView.builder(
                     shrinkWrap: true,
-                      itemCount: listOfFood.length,
-                      padding: const EdgeInsets.symmetric(vertical: 5.0),
-                      physics: const BouncingScrollPhysics(),
-                      itemBuilder: (ctx, index) {
-                        return Text(listOfFood[index]);
-                      }),
+                    itemCount: listOfFood.length,
+                    padding: const EdgeInsets.symmetric(vertical: 5.0),
+                    physics: const BouncingScrollPhysics(),
+                    itemBuilder: (ctx, index) {
+                      return Text(listOfFood[index]);
+                    },
+                  ),
                 ),
                 // Image.asset(
                 //   'assets/coffee_design.png',
@@ -368,7 +367,7 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                 // ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
