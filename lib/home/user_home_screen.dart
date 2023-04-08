@@ -28,6 +28,7 @@ import '../leads/search_leads.dart';
 import '../leave_apply/leave_apply_screen.dart';
 import '../leave_approval/leave_request.dart';
 import '../onyx/announcement.dart';
+import '../refreshment/view_food_count.dart';
 import '../suggestions/suggestions.dart';
 import '../suggestions/view_suggestions.dart';
 import '../work_done/work_complete.dart';
@@ -234,8 +235,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       'assets/view_attendance.png',
                       scale: 3,
                     ),
-                    page: const ViewAttendanceScreen(
-                    ),
+                    page: const ViewAttendanceScreen(),
                   ),
                 ],
               )
@@ -357,15 +357,25 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             ),
                           ),
                           buildButton(
-                              name: 'Refreshment',
-                              image: Image.asset(
-                                'assets/refreshment.png',
-                                scale: 3.8,
-                              ),
-                              page: RefreshmentScreen(
-                                uid: staffInfo!.uid,
-                                name: staffInfo!.name,
-                              )),
+                            name: 'Refreshment',
+                            image: Image.asset(
+                              'assets/refreshment.png',
+                              scale: 3.8,
+                            ),
+                            page: RefreshmentScreen(
+                              uid: staffInfo!.uid,
+                              name: staffInfo!.name,
+                            ),
+                          ),
+                          buildButton(
+                            name: 'View Food Count',
+                            image: Image.asset(
+                              'assets/food_count.png',
+                              scale: 3,
+                            ),
+                            page: const ViewFoodCount(
+                            ),
+                          ),
                           buildButton(
                               name: 'Leave form',
                               image: Image.asset('assets/leave_apply.png'),
@@ -480,8 +490,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               'assets/view_attendance.png',
                               scale: 3,
                             ),
-                            page: const ViewAttendanceScreen(
-                            ),
+                            page: const ViewAttendanceScreen(),
                           ),
                         ],
                       )
