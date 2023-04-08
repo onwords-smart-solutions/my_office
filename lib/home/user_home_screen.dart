@@ -3,6 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:my_office/PR/invoice/Screens/Customer_Details_Screen.dart';
 import 'package:my_office/app_version/version.dart';
+import 'package:my_office/foodCount/food_count_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -234,8 +235,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       'assets/view_attendance.png',
                       scale: 3,
                     ),
-                    page: const ViewAttendanceScreen(
-                    ),
+                    page: const ViewAttendanceScreen(),
                   ),
                 ],
               )
@@ -480,9 +480,16 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               'assets/view_attendance.png',
                               scale: 3,
                             ),
-                            page: const ViewAttendanceScreen(
-                            ),
+                            page: const ViewAttendanceScreen(),
                           ),
+                          buildButton(
+                            name: 'Food Count',
+                            image: Image.asset(
+                              'assets/food_count.png',
+                              scale: 3,
+                            ),
+                            page: const FoodCountScreen(),
+                          )
                         ],
                       )
                     : GridView(
