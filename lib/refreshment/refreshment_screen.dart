@@ -70,7 +70,6 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
     formattedMonth = formatterMonth.format(now);
   }
 
-
   @override
   void initState() {
     todayDate();
@@ -242,30 +241,33 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
     if (item == 'Food') {
       int foodCount = 0;
       bool isFoodBooked = false;
-      getFoodDetails(date: format).then((value) {
-        if (value != null) {
-          Map<Object?, Object?> foodList =
-              value['lunch_list'] as Map<Object?, Object?>;
+      getFoodDetails(date: format).then(
+        (value) {
+          if (value != null) {
+            Map<Object?, Object?> foodList =
+                value['lunch_list'] as Map<Object?, Object?>;
 
-          //Checking whether already booked food or not
-          if (foodList.isNotEmpty) {
-            // isFoodBooked = foodList.containsValue(widget.name);
-            foodCount = value['lunch_count'];
+            //Checking whether already booked food or not
+            if (foodList.isNotEmpty) {
+              isFoodBooked = foodList.containsValue(widget.name);
+              foodCount = value['lunch_count'];
+            }
+
+            if (isFoodBooked) {
+              showSnackBar(
+                  message: 'You have already ordered your Food',
+                  color: Colors.red);
+            } else {
+              bookFood(foodCount: foodCount, date: format);
+            }
+
+            //   bookFood(foodCount: foodCount, date: format);
+            // } else {
+            //   bookFood(foodCount: foodCount, date: format);
+            // }
           }
-
-          // if (isFoodBooked) {
-          //   showSnackBar(
-          //       message: 'You have already ordered your Food',
-          //       color: Colors.red);
-          // } else {
-          //   bookFood(foodCount: foodCount, date: format);
-          // }
-
-          bookFood(foodCount: foodCount, date: format);
-        } else {
-          bookFood(foodCount: foodCount, date: format);
-        }
-      });
+        },
+      );
     } else {
       getRefreshmentDetails(date: format, mode: mode).then((value) {
         Map<Object?, Object?> teaList = {};
