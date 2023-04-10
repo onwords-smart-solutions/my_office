@@ -142,15 +142,24 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     mainAxisExtent: 230),
                 children: [
                   buildButton(
-                      name: 'Refreshment',
-                      image: Image.asset(
-                        'assets/refreshment.png',
-                        scale: 3.8,
-                      ),
-                      page: RefreshmentScreen(
-                        uid: staffInfo!.uid,
-                        name: staffInfo!.name,
-                      )),
+                    name: 'Refreshment',
+                    image: Image.asset(
+                      'assets/refreshment.png',
+                      scale: 3.8,
+                    ),
+                    page: RefreshmentScreen(
+                      uid: staffInfo!.uid,
+                      name: staffInfo!.name,
+                    ),
+                  ),
+                  buildButton(
+                    name: 'Food Count',
+                    image: Image.asset(
+                      'assets/food_count.png',
+                      scale: 3,
+                    ),
+                    page: const FoodCountScreen(),
+                  ),
                   buildButton(
                       name: 'Work done',
                       image: Image.asset(
@@ -166,7 +175,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         'assets/lead search.png',
                         scale: 3.0,
                       ),
-                      page: const AbsenteeScreen()),
+                      page: const AbsenteeScreen(),
+                  ),
                   buildButton(
                     name: 'Search Leads',
                     image: Image.asset(
