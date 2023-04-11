@@ -168,7 +168,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       ),
                       page: WorkCompleteViewScreen(
                         userDetails: staffInfo!,
-                      )),
+                      ),
+                  ),
                   buildButton(
                       name: 'Absent Details',
                       image: Image.asset(
