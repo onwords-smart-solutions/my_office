@@ -261,11 +261,11 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
               bookFood(foodCount: foodCount, date: format);
             }
 
-            //   bookFood(foodCount: foodCount, date: format);
-            // } else {
-            //   bookFood(foodCount: foodCount, date: format);
-            // }
-          }
+            // bookFood(foodCount: foodCount, date: format);
+            } else {
+              bookFood(foodCount: foodCount, date: format);
+            }
+
         },
       );
     } else {
