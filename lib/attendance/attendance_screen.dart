@@ -7,6 +7,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:swipeable_button_view/swipeable_button_view.dart';
 import '../Constant/fonts/constant_font.dart';
+import '../home/user_home_screen.dart';
 import '../util/main_template.dart';
 import 'confirm_attendance.dart';
 
@@ -22,8 +23,6 @@ class AttendanceScreen extends StatefulWidget {
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
-  String? _currentAddress;
-  Position? _currentPosition;
   bool isFinished = false;
   bool isPresent = false;
   bool isEntered = false;
@@ -118,28 +117,25 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   }
 
   Future<void> _getCurrentPosition() async {
+    log('called getCurrentPosition');
     final hasPermission = await _handleLocationPermission();
 
     if (!hasPermission) return;
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-        .then((Position position) {
-      setState(() => _currentPosition = position);
-      _getAddressFromLatLng(_currentPosition!);
+        .then((Position position) async {
+      await _getAddressFromLatLng(position);
     }).catchError((e) {
-      debugPrint(e);
+      log('error is $e');
     });
   }
 
   Future<void> _getAddressFromLatLng(Position position) async {
-    await placemarkFromCoordinates(
-            _currentPosition!.latitude, _currentPosition!.longitude)
-        .then((List<Placemark> placemarks) {
+    log('called address function');
+    await placemarkFromCoordinates(position.latitude, position.longitude)
+        .then((List<Placemark> placemarks) async {
       Placemark place = placemarks[0];
-      setState(() {
-        _currentAddress =
-            '${place.street}, ${place.locality}, ${place.postalCode}';
-      });
-      addAttendanceToDatabase();
+      final address = '${place.street}, ${place.locality}, ${place.postalCode}';
+      await addAttendanceToDatabase(address, position);
     }).catchError((e) {
       debugPrint(e);
     });
@@ -194,15 +190,16 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                           ),
                         ],
                       )
-                    :
-            submitButton(),
+                    : submitButton(),
           ],
         ),
       ),
     );
   }
 
-  void addAttendanceToDatabase() async {
+  Future<void> addAttendanceToDatabase(
+      String address, Position position) async {
+    log('called firebase add');
     if (reasonController.text.trim().isEmpty) {
       final snackBar = SnackBar(
         duration: const Duration(seconds: 3),
@@ -219,6 +216,22 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       // print('no data');
+    } else if (position.latitude.toString().contains("10.673") &&
+        position.longitude.toString().contains("76.976")) {
+      final snackBar = SnackBar(
+        duration: const Duration(seconds: 3),
+        content: Text(
+          'You are not allowed to put Virtual Attendance inside Office premises!!',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 18,
+            fontFamily: ConstantFonts.poppinsMedium,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        backgroundColor: Colors.red,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
       DateTime now = DateTime.now();
       var timeStamp = DateFormat('yyyy-MM-dd').format(now);
@@ -230,9 +243,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           .set(
         {
           'Name': widget.name,
-          'Latitude': _currentPosition?.latitude ?? "",
-          'Longitude': _currentPosition?.longitude ?? "",
-          'Address': _currentAddress ?? "",
+          'Latitude': position.latitude ?? "",
+          'Longitude': position.longitude ?? "",
+          'Address': address ?? "",
           'Time': DateFormat('kk:mm:ss').format(now),
           'Reason': reasonController.text.trim(),
         },
@@ -252,12 +265,18 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
+    Future.delayed(const Duration(seconds: 3)).then((value) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => const UserHomeScreen(),
+          ),
+          (route) => false);
+    });
   }
 
   Widget submitButton() {
     return Column(
       children: [
-
         Padding(
           padding: const EdgeInsets.all(12),
           child: TextField(
@@ -272,7 +291,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               ),
               hintText: 'Reason for Virtual Entry..',
               hintStyle: TextStyle(color: Colors.grey.shade500),
-              
             ),
           ),
         ),
@@ -280,11 +298,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 25),
           child: SwipeableButtonView(
             buttonText: '      SLIDE TO MARK ATTENDANCE',
-            buttonWidget: Container(
-              child: const Icon(
-                Icons.arrow_forward_ios_rounded,
-                color: Colors.grey,
-              ),
+            buttonWidget: const Icon(
+              Icons.arrow_forward_ios_rounded,
+              color: Colors.grey,
             ),
             activeColor: ConstantColor.backgroundColor,
             isFinished: isFinished,
@@ -302,7 +318,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             },
             onFinish: () async {
               _getCurrentPosition();
-              await Navigator.of(context).push(
+              Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) => const ConfirmAttendanceScreen(),
                 ),
