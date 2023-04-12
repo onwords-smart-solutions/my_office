@@ -31,6 +31,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
         buildLatitude(),
         buildLongitude(),
         buildTime(),
+        buildReason(),
       ],
     );
   }
@@ -255,6 +256,53 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                 padding: const EdgeInsets.all(10),
                 child: SelectableText(
                   widget.fullViewAttendance['Time'].toString(),
+                  style: TextStyle(
+                      color: ConstantColor.headingTextColor,
+                      fontSize: 17,
+                      fontFamily: ConstantFonts.poppinsMedium),
+                ),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget buildReason() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: Table(
+        columnWidths: const {
+          0: FlexColumnWidth(3),
+          1: FlexColumnWidth(3),
+        },
+        border: TableBorder.all(
+          borderRadius: BorderRadius.circular(10),
+          color: ConstantColor.backgroundColor,
+          width: 1.5,
+        ),
+        children: [
+          TableRow(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Text(
+                  "Reason",
+                  style: TextStyle(
+                    color: ConstantColor.backgroundColor,
+                    fontSize: 17,
+                    fontFamily: ConstantFonts.poppinsMedium,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: SelectableText(
+                  widget.fullViewAttendance['Reason'].toString(),
                   style: TextStyle(
                       color: ConstantColor.headingTextColor,
                       fontSize: 17,

@@ -1,13 +1,10 @@
-import 'dart:developer';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:my_office/finance/expense.dart';
-import 'package:my_office/finance/income_details.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 import '../util/screen_template.dart';
+import 'income_details.dart';
 import 'income_model.dart';
 
 class IncomeScreen extends StatefulWidget {
@@ -22,40 +19,11 @@ class _IncomeScreenState extends State<IncomeScreen> {
   bool isLoading = true;
   final today = DateTime.now();
   DatabaseReference incomeDetails =
-      FirebaseDatabase.instance.ref('FinancialAnalyzing');
-
-  DateTime now = DateTime.now();
-  var formatterDate = DateFormat('yyyy-MM-dd');
-  var formatterMonth = DateFormat('MM');
-  var formatterYear = DateFormat('yyyy');
-  String? selectedDate;
-  String? selectedMonth;
-  String? selectedYear;
-
-  datePicker() async {
-    DateTime? newDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2015),
-      lastDate: DateTime(2100),
-    );
-    if (newDate == null) return;
-    setState(() {
-      selectedDate = formatterDate.format(newDate);
-      selectedMonth = formatterDate.format(newDate);
-      selectedYear = formatterDate.format(newDate);
-      checkIncomeDetails(
-          today.year.toString(), today.month.toString());
-    });
-  }
+  FirebaseDatabase.instance.ref('FinancialAnalyzing');
 
   @override
   void initState() {
-    selectedDate = formatterDate.format(now);
-    selectedMonth = formatterMonth.format(now);
-    selectedYear = formatterYear.format(now);
-    checkIncomeDetails(
-        today.year.toString(), today.month.toString());
+    checkIncomeDetails();
     super.initState();
   }
 
@@ -68,119 +36,91 @@ class _IncomeScreenState extends State<IncomeScreen> {
   }
 
   Widget buildIncomeScreen() {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  allIncome.clear();
-                  datePicker();
-                },
-                child: Image.asset(
-                  'assets/calender.png',
-                  scale: 3,
+    return isLoading
+        ? Center(
+      child: Lottie.asset(
+        "assets/animations/loading.json",
+      ),
+    )
+        : allIncome.isNotEmpty
+        ? ListView.builder(
+      physics: const BouncingScrollPhysics(),
+      itemCount: allIncome.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => IncomeDetails(
+                  incomeDetails: allIncome[index],
                 ),
               ),
-              const SizedBox(width: 15),
-              Text(
-                '$selectedDate',
-                style: TextStyle(
-                  fontFamily: ConstantFonts.poppinsBold,
-                  fontSize: 17,
-                  color: ConstantColor.backgroundColor,
-                ),
-              ),
-            ],
+            );
+          },
+          leading: const CircleAvatar(
+            radius: 20,
+            backgroundColor: ConstantColor.backgroundColor,
+            child: Icon(Icons.receipt_long),
           ),
-        ),
-        const SizedBox(height: 10),
-        allIncome.isNotEmpty
-            ? Expanded(
-                child: ListView.builder(
-                  itemCount: allIncome.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => IncomeDetails(
-                              incomeDetails: allIncome[index],
-                            ),
-                          ),
-                        );
-                      },
-                      leading: const CircleAvatar(
-                        radius: 20,
-                        backgroundColor: ConstantColor.backgroundColor,
-                        child: Icon(Icons.person),
-                      ),
-                      title: Text(
-                        allIncome[index].customerName,
-                        style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsMedium,
-                            color: ConstantColor.blackColor,
-                            fontSize: 17),
-                      ),
-                    );
-                  },
-                ),
-              )
-            : Expanded(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Lottie.asset('assets/animations/no_data.json',
-                          height: 200.0),
-                      Text(
-                        'No Income made!!',
-                        style: TextStyle(
-                          fontFamily: ConstantFonts.poppinsMedium,
-                          color: ConstantColor.blackColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-      ],
+          title: Text(
+            allIncome[index].paidDate,
+            style: TextStyle(
+                fontFamily: ConstantFonts.poppinsMedium,
+                color: ConstantColor.blackColor,
+                fontSize: 17),
+          ),
+        );
+      },
+    )
+        : Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset('assets/animations/no_data.json',
+              height: 200.0),
+          Text(
+            'No Income made!!',
+            style: TextStyle(
+              fontFamily: ConstantFonts.poppinsMedium,
+              color: ConstantColor.blackColor,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  checkIncomeDetails(String year, String month) {
-
-    var year = selectedDate.toString().split('-').first;
-    var month = selectedDate.toString().split('-')[1];
+  checkIncomeDetails() {
     allIncome.clear();
     List<IncomeModel> incomeCheck = [];
-    incomeDetails.child('Income/$year/$month').once().then((income) {
+    incomeDetails.child('Income').once().then((income) {
       for (var check in income.snapshot.children) {
-        final data = check.value as Map<Object?, Object?>;
-        final key = check.key.toString().split('_').first;
-        if (key == selectedDate){
-          final incomeDetails = IncomeModel(
-            amount: int.parse(data['Amount'].toString()),
-            customerName: data['CustomerName'].toString(),
-            enteredBy: data['EnteredBy'].toString(),
-            enteredDate: data['EnteredDate'].toString(),
-            enteredTime: data['EnteredTime'].toString(),
-            invoiceNumber: data['InvoiceNumber'].toString(),
-            paidDate: data['PaidDate'].toString(),
-            paidTime: data['PaidTime'].toString(),
-            paymentMethod: data['PaymentMethod'].toString(),
-            productName: data['ProductName'].toString(),
-          );
-          incomeCheck.add(incomeDetails);
+        for (var monthData in check.children) {
+          for (var dateData in monthData.children) {
+            final data = dateData.value as Map<Object?, Object?>;
+            final incomeDetails = IncomeModel(
+              amount: int.parse(data['Amount'].toString()),
+              customerName: data['CustomerName'].toString(),
+              enteredBy: data['EnteredBy'].toString(),
+              enteredDate: data['EnteredDate'].toString(),
+              enteredTime: data['EnteredTime'].toString(),
+              invoiceNumber: data['InvoiceNumber'].toString(),
+              paidDate: data['PaidDate'].toString(),
+              paidTime: data['PaidTime'].toString(),
+              paymentMethod: data['PaymentMethod'].toString(),
+              productName: data['ProductName'].toString(),
+            );
+            incomeCheck.add(incomeDetails);
+          }
         }
       }
+      incomeCheck.sort((a, b) => b.enteredDate.compareTo(a.enteredDate));
+      if (!mounted) return;
       setState(() {
         allIncome.addAll(incomeCheck);
+        isLoading = false;
       });
     });
   }

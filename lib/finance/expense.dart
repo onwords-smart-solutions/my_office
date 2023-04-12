@@ -19,7 +19,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
   bool isLoading = true;
   final today = DateTime.now();
   DatabaseReference expenseDetails =
-      FirebaseDatabase.instance.ref('FinancialAnalyzing');
+  FirebaseDatabase.instance.ref('FinancialAnalyzing');
 
   @override
   void initState() {
@@ -38,58 +38,58 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
   Widget buildExpenseScreen() {
     return isLoading
         ? Center(
-            child: Lottie.asset(
-              "assets/animations/loading.json",
-            ),
-          )
+      child: Lottie.asset(
+        "assets/animations/loading.json",
+      ),
+    )
         : allExpense.isNotEmpty
-            ? ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: allExpense.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => ExpenseDetails(
-                            expenseDetails: allExpense[index],
-                          ),
-                        ),
-                      );
-                    },
-                    leading: const CircleAvatar(
-                      radius: 20,
-                      backgroundColor: ConstantColor.backgroundColor,
-                      child: Icon(Icons.receipt_long),
-                    ),
-                    title: Text(
-                      allExpense[index].enteredDate,
-                      style: TextStyle(
-                          fontFamily: ConstantFonts.poppinsMedium,
-                          color: ConstantColor.blackColor,
-                          fontSize: 17),
-                    ),
-                  );
-                },
-              )
-            : Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Lottie.asset('assets/animations/no_data.json',
-                        height: 200.0),
-                    Text(
-                      'No Expense made!!',
-                      style: TextStyle(
-                        fontFamily: ConstantFonts.poppinsMedium,
-                        color: ConstantColor.blackColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
+        ? ListView.builder(
+      physics: const BouncingScrollPhysics(),
+      itemCount: allExpense.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => ExpenseDetails(
+                  expenseDetails: allExpense[index],
                 ),
-              );
+              ),
+            );
+          },
+          leading: const CircleAvatar(
+            radius: 20,
+            backgroundColor: ConstantColor.backgroundColor,
+            child: Icon(Icons.receipt_long),
+          ),
+          title: Text(
+            allExpense[index].productName,
+            style: TextStyle(
+                fontFamily: ConstantFonts.poppinsMedium,
+                color: ConstantColor.blackColor,
+                fontSize: 17),
+          ),
+        );
+      },
+    )
+        : Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Lottie.asset('assets/animations/no_data.json',
+              height: 200.0),
+          Text(
+            'No Expense made!!',
+            style: TextStyle(
+              fontFamily: ConstantFonts.poppinsMedium,
+              color: ConstantColor.blackColor,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   checkExpenseDetails() {

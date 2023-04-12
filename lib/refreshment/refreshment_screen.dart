@@ -246,7 +246,7 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
           if (value != null) {
             Map<Object?, Object?> foodList =
                 value['lunch_list'] as Map<Object?, Object?>;
-
+            log('food list is $value');
             //Checking whether already booked food or not
             if (foodList.isNotEmpty) {
               isFoodBooked = foodList.containsValue(widget.name);

@@ -29,6 +29,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   bool isEntered = false;
   bool isLoading = true;
 
+  TextEditingController reasonController = TextEditingController();
+
+  @override
+  void dispose() {
+    reasonController.dispose();
+    super.dispose();
+  }
+
   check() {
     final timeFormat = DateFormat('yyyy-MM-dd').format(DateTime.now());
     FirebaseDatabase.instance
@@ -57,13 +65,13 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         .child('virtualAttendance/${widget.uid}/$year/$month/$timeStamp/')
         .once()
         .then((value) {
-          log('data is${value.snapshot.value}');
+      log('data is${value.snapshot.value}');
       if (value.snapshot.value != null) {
         setState(() {
           isEntered = true;
           isLoading = false;
         });
-      }else{
+      } else {
         setState(() {
           isLoading = false;
         });
@@ -113,7 +121,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     final hasPermission = await _handleLocationPermission();
 
     if (!hasPermission) return;
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
       setState(() => _currentPosition = position);
       _getAddressFromLatLng(_currentPosition!);
@@ -152,13 +160,15 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   }
 
   Widget attendance() {
-    return SafeArea(
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
       child: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Image(
               image: AssetImage('assets/entry.png'),
+              height: 300,
+              width: 300,
             ),
             const SizedBox(height: 10),
             isLoading
@@ -171,7 +181,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                             style: TextStyle(
                               fontSize: 20,
                               fontFamily: ConstantFonts.poppinsMedium,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                           Text(
@@ -179,7 +189,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                             style: TextStyle(
                               fontSize: 20,
                               fontFamily: ConstantFonts.poppinsMedium,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ],
@@ -193,54 +203,117 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   }
 
   void addAttendanceToDatabase() async {
-    DateTime now = DateTime.now();
-    var timeStamp = DateFormat('yyyy-MM-dd').format(now);
-    var month = DateFormat('MM').format(now);
-    var year = DateFormat('yyyy').format(now);
-    final ref = FirebaseDatabase.instance.ref();
-    await ref.child('virtualAttendance/${widget.uid}/$year/$month/$timeStamp/').set(
-      {
-        'Name': widget.name,
-        'Latitude': _currentPosition?.latitude ?? "",
-        'Longitude': _currentPosition?.longitude ?? "",
-        'Address': _currentAddress ?? "",
-        'Time': DateFormat('kk:mm:ss').format(now),
-      },
-    );
+    if (reasonController.text.trim().isEmpty) {
+      final snackBar = SnackBar(
+        duration: const Duration(seconds: 3),
+        content: Text(
+          'Without Reason Entry won\'t be submitted!!',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 18,
+            fontFamily: ConstantFonts.poppinsMedium,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        backgroundColor: Colors.red,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      // print('no data');
+    } else {
+      DateTime now = DateTime.now();
+      var timeStamp = DateFormat('yyyy-MM-dd').format(now);
+      var month = DateFormat('MM').format(now);
+      var year = DateFormat('yyyy').format(now);
+      final ref = FirebaseDatabase.instance.ref();
+      await ref
+          .child('virtualAttendance/${widget.uid}/$year/$month/$timeStamp/')
+          .set(
+        {
+          'Name': widget.name,
+          'Latitude': _currentPosition?.latitude ?? "",
+          'Longitude': _currentPosition?.longitude ?? "",
+          'Address': _currentAddress ?? "",
+          'Time': DateFormat('kk:mm:ss').format(now),
+          'Reason': reasonController.text.trim(),
+        },
+      );
+      reasonController.clear();
+      final snackBar = SnackBar(
+        content: Text(
+          'Entry has been registered',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 16,
+            fontFamily: ConstantFonts.poppinsMedium,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        backgroundColor: Colors.green,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
   }
 
   Widget submitButton() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 25),
-      child: SwipeableButtonView(
-        buttonText: '      SLIDE TO MARK ATTENDANCE',
-        buttonWidget: Container(
-          child: const Icon(
-            Icons.arrow_forward_ios_rounded,
-            color: Colors.grey,
+    return Column(
+      children: [
+
+        Padding(
+          padding: const EdgeInsets.all(12),
+          child: TextField(
+            textInputAction: TextInputAction.done,
+            controller: reasonController,
+            scrollPhysics: const BouncingScrollPhysics(),
+            maxLines: 2,
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.all(15),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              hintText: 'Reason for Virtual Entry..',
+              hintStyle: TextStyle(color: Colors.grey.shade500),
+              
+            ),
           ),
         ),
-        activeColor: ConstantColor.backgroundColor,
-        isFinished: isFinished,
-        onWaitingProcess: () {
-          Future.delayed(const Duration(seconds: 1), () {
-            setState(() {
-              isFinished = true;
-            });
-          });
-        },
-        onFinish: () async {
-          _getCurrentPosition();
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => const ConfirmAttendanceScreen(),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 25),
+          child: SwipeableButtonView(
+            buttonText: '      SLIDE TO MARK ATTENDANCE',
+            buttonWidget: Container(
+              child: const Icon(
+                Icons.arrow_forward_ios_rounded,
+                color: Colors.grey,
+              ),
             ),
-          );
-          setState(() {
-            isFinished = false;
-          });
-        },
-      ),
+            activeColor: ConstantColor.backgroundColor,
+            isFinished: isFinished,
+            onWaitingProcess: () {
+              Future.delayed(
+                const Duration(seconds: 2),
+                () {
+                  setState(
+                    () {
+                      isFinished = true;
+                    },
+                  );
+                },
+              );
+            },
+            onFinish: () async {
+              _getCurrentPosition();
+              await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const ConfirmAttendanceScreen(),
+                ),
+              );
+              setState(() {
+                isFinished = false;
+              });
+            },
+          ),
+        ),
+      ],
     );
   }
 }

@@ -32,7 +32,7 @@ class ConfirmAttendanceScreen extends StatelessWidget {
           Lottie.asset('assets/animations/attendance.json',
               height: 400, fit: BoxFit.contain),
           Text(
-            'Wait until your entry is submitted!!',
+            'Wait Until your Entry is Registered!!',
             style: TextStyle(
               fontFamily: ConstantFonts.poppinsMedium,
               fontSize: 20,
