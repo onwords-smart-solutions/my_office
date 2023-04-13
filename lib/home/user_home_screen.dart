@@ -3,6 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:my_office/PR/invoice/Screens/Customer_Details_Screen.dart';
 import 'package:my_office/app_version/version.dart';
+import 'package:my_office/late_workdone/late_entry.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,8 +32,8 @@ import '../leave_approval/leave_request.dart';
 import '../onyx/announcement.dart';
 import '../suggestions/suggestions.dart';
 import '../suggestions/view_suggestions.dart';
-import '../work_done/work_complete.dart';
-import '../work_manager/work_entry.dart';
+import '../work_details/work_complete.dart';
+import '../work_entry/work_entry.dart';
 
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({Key? key}) : super(key: key);
@@ -136,10 +137,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
+                  childAspectRatio: 1/1.2,
+                  crossAxisCount: 2,
                     crossAxisSpacing: 10.0,
-                    mainAxisSpacing: 10.0,
-                    mainAxisExtent: 230),
+                    mainAxisSpacing: 10.0,),
                 children: [
                   buildButton(
                     name: 'Refreshment',
@@ -153,17 +154,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     ),
                   ),
                   buildButton(
-                    name: 'Food Count',
+                    name: 'Food count',
                     image: Image.asset(
                       'assets/food_count.png',
-                      scale: 3,
+                      scale: 3.4,
                     ),
                     page: const FoodCountScreen(),
                   ),
                   buildButton(
-                      name: 'Work done',
+                      name: 'Work details',
                       image: Image.asset(
-                        'assets/work_entry.png',
+                        'assets/work_details.png',
                         scale: 3.5,
                       ),
                       page: WorkCompleteViewScreen(
@@ -171,7 +172,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       ),
                   ),
                   buildButton(
-                      name: 'Absent Details',
+                      name: 'Absent details',
                       image: Image.asset(
                         'assets/lead search.png',
                         scale: 3.0,
@@ -179,20 +180,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       page: const AbsenteeScreen(),
                   ),
                   buildButton(
-                    name: 'Search Leads',
+                    name: 'Search leads',
                     image: Image.asset(
                       'assets/search_leads.png',
                       scale: 2.0,
                     ),
                     page: SearchLeadsScreen(staffInfo: staffInfo!),
-                  ),
-                  buildButton(
-                    name: 'Visit Check',
-                    image: Image.asset(
-                      'assets/visit_check.png',
-                      scale: 3.4,
-                    ),
-                    page: const VisitCheckScreen(),
                   ),
                   buildButton(
                     name: 'Visit',
@@ -203,7 +196,15 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     page: const VisitFromScreen(),
                   ),
                   buildButton(
-                    name: 'Invoice Generator',
+                    name: 'Visit check',
+                    image: Image.asset(
+                      'assets/visit_check.png',
+                      scale: 3.4,
+                    ),
+                    page: const VisitCheckScreen(),
+                  ),
+                  buildButton(
+                    name: 'Invoice generator',
                     image: Image.asset(
                       'assets/invoice.png',
                       scale: 2,
@@ -222,7 +223,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     name: 'Suggestions',
                     image: Image.asset(
                       'assets/suggestions.png',
-                      scale: 3,
+                      scale: 3.4,
                     ),
                     page: SuggestionScreen(
                       uid: staffInfo!.uid,
@@ -230,10 +231,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     ),
                   ),
                   buildButton(
-                    name: 'View Suggestions',
+                    name: 'View suggestions',
                     image: Image.asset(
                       'assets/view_suggestions.png',
-                      scale: 15,
+                      scale: 16.8,
                     ),
                     page: ViewSuggestions(
                       uid: staffInfo!.uid,
@@ -241,10 +242,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     ),
                   ),
                   buildButton(
-                    name: 'View Attendance',
+                    name: 'View attendance',
                     image: Image.asset(
                       'assets/view_attendance.png',
-                      scale: 3,
+                      scale: 3.36,
                     ),
                     page: const ViewAttendanceScreen(),
                   ),
@@ -266,7 +267,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     children: [
                       if (staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
                         buildButton(
-                          name: 'Visit Check',
+                          name: 'Visit check',
                           image: Image.asset(
                             'assets/visit_check.png',
                             scale: 3.4,
@@ -274,9 +275,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           page: const VisitCheckScreen(),
                         ),
                       buildButton(
-                        name: 'Work Manager',
+                        name: 'Work entry',
                         image: Image.asset(
-                          'assets/work_manager.png',
+                          'assets/work_entry.png',
                           scale: 1.5,
                         ),
                         page: WorkEntryScreen(
@@ -293,9 +294,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           page: RefreshmentScreen(
                             uid: staffInfo!.uid,
                             name: staffInfo!.name,
-                          )),
+                          ),
+                      ),
                       buildButton(
-                        name: 'Search Leads',
+                        name: 'Search leads',
                         image: Image.asset(
                           'assets/search_leads.png',
                           scale: 2.0,
@@ -311,7 +313,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         page: const VisitFromScreen(),
                       ),
                       buildButton(
-                        name: 'Invoice Generator',
+                        name: 'Invoice generator',
                         image: Image.asset(
                           'assets/invoice.png',
                           scale: 2,
@@ -322,7 +324,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         name: 'Suggestions',
                         image: Image.asset(
                           'assets/suggestions.png',
-                          scale: 3,
+                          scale: 3.4,
                         ),
                         page: SuggestionScreen(
                           uid: staffInfo!.uid,
@@ -330,10 +332,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         ),
                       ),
                       buildButton(
-                        name: 'Virtual Attendance',
+                        name: 'Virtual attendance',
                         image: Image.asset(
                           'assets/attendance.png',
-                          scale: 3,
+                          scale: 3.4,
                         ),
                         page: AttendanceScreen(
                           uid: staffInfo!.uid,
@@ -351,20 +353,30 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         shrinkWrap: true,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
+                              childAspectRatio: 1/1.2,
                                 crossAxisCount: 2,
                                 crossAxisSpacing: 10.0,
-                                mainAxisSpacing: 10.0,
-                                mainAxisExtent: 230),
+                                mainAxisSpacing: 10.0,),
                         children: [
                           buildButton(
-                            name: 'Work Manager',
+                            name: 'Work entry',
                             image: Image.asset(
-                              'assets/work_manager.png',
+                              'assets/work_entry.png',
                               scale: 1.5,
                             ),
                             page: WorkEntryScreen(
                               userId: staffInfo!.uid,
                               staffName: staffInfo!.name,
+                            ),
+                          ),
+                          buildButton(
+                            name: 'Work details',
+                            image: Image.asset(
+                              'assets/work_details.png',
+                              scale: 3.5,
+                            ),
+                            page: WorkCompleteViewScreen(
+                              userDetails: staffInfo!,
                             ),
                           ),
                           buildButton(
@@ -379,10 +391,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             ),
                           ),
                           buildButton(
-                            name: 'Food Count',
+                            name: 'Food count',
                             image: Image.asset(
                               'assets/food_count.png',
-                              scale: 3,
+                              scale: 3.4,
                             ),
                             page: const FoodCountScreen(),
                           ),
@@ -394,40 +406,33 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               name: 'Onyx',
                               image: Image.asset(
                                 'assets/onxy.png',
-                                scale: 2.8,
+                                scale: 3,
                               ),
-                              page: const AnnouncementScreen()),
+                              page: const AnnouncementScreen(),
+                          ),
                           buildButton(
-                              name: 'Work done',
-                              image: Image.asset(
-                                'assets/work_entry.png',
-                                scale: 3.5,
-                              ),
-                              page: WorkCompleteViewScreen(
-                                userDetails: staffInfo!,
-                              )),
-                          buildButton(
-                              name: 'Absent Details',
+                              name: 'Absent details',
                               image: Image.asset(
                                 'assets/lead search.png',
                                 scale: 3.0,
                               ),
-                              page: const AbsenteeScreen()),
-                          buildButton(
-                            name: 'Search Leads',
-                            image: Image.asset(
-                              'assets/search_leads.png',
-                              scale: 2.0,
-                            ),
-                            page: SearchLeadsScreen(staffInfo: staffInfo!),
+                              page: const AbsenteeScreen(),
                           ),
                           buildButton(
-                            name: 'Leave Request',
+                            name: 'Leave request',
                             image: Image.asset(
                               'assets/leave form.png',
                               scale: 4.0,
                             ),
                             page: const LeaveApprovalScreen(),
+                          ),
+                          buildButton(
+                            name: 'Search leads',
+                            image: Image.asset(
+                              'assets/search_leads.png',
+                              scale: 2.0,
+                            ),
+                            page: SearchLeadsScreen(staffInfo: staffInfo!),
                           ),
                           buildButton(
                             name: 'Visit',
@@ -438,20 +443,20 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             page: const VisitFromScreen(),
                           ),
                           buildButton(
-                            name: 'Invoice Generator',
-                            image: Image.asset(
-                              'assets/invoice.png',
-                              scale: 2,
-                            ),
-                            page: const CustomerDetails(),
-                          ),
-                          buildButton(
-                            name: 'Visit Check',
+                            name: 'Visit check',
                             image: Image.asset(
                               'assets/visit_check.png',
                               scale: 3.4,
                             ),
                             page: const VisitCheckScreen(),
+                          ),
+                          buildButton(
+                            name: 'Invoice generator',
+                            image: Image.asset(
+                              'assets/invoice.png',
+                              scale: 2,
+                            ),
+                            page: const CustomerDetails(),
                           ),
                           buildButton(
                             name: 'Finance',
@@ -465,7 +470,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             name: 'Suggestions',
                             image: Image.asset(
                               'assets/suggestions.png',
-                              scale: 3,
+                              scale: 3.4,
                             ),
                             page: SuggestionScreen(
                               uid: staffInfo!.uid,
@@ -473,10 +478,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             ),
                           ),
                           buildButton(
-                            name: 'Virtual Attendance',
+                            name: 'Virtual attendance',
                             image: Image.asset(
                               'assets/attendance.png',
-                              scale: 3,
+                              scale: 3.4,
                             ),
                             page: AttendanceScreen(
                               uid: staffInfo!.uid,
@@ -484,10 +489,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             ),
                           ),
                           buildButton(
-                            name: 'View Suggestions',
+                            name: 'View suggestions',
                             image: Image.asset(
                               'assets/view_suggestions.png',
-                              scale: 15,
+                              scale: 16.8,
                             ),
                             page: ViewSuggestions(
                               uid: staffInfo!.uid,
@@ -495,12 +500,20 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             ),
                           ),
                           buildButton(
-                            name: 'View Attendance',
+                            name: 'View attendance',
                             image: Image.asset(
                               'assets/view_attendance.png',
-                              scale: 3,
+                              scale: 3.36,
                             ),
                             page: const ViewAttendanceScreen(),
+                          ),
+                          buildButton(
+                            name: 'Late entry',
+                            image: Image.asset(
+                              'assets/late_entry.png',
+                              scale: 3.36,
+                            ),
+                            page: const LateEntry(),
                           ),
                         ],
                       )
@@ -518,9 +531,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                                 mainAxisExtent: 230),
                         children: [
                           buildButton(
-                            name: 'Work Manager',
+                            name: 'Work entry',
                             image: Image.asset(
-                              'assets/work_manager.png',
+                              'assets/work_entry.png',
                               scale: 1.5,
                             ),
                             page: WorkEntryScreen(
@@ -543,7 +556,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             name: 'Suggestions',
                             image: Image.asset(
                               'assets/suggestions.png',
-                              scale: 3,
+                              scale: 3.4,
                             ),
                             page: SuggestionScreen(
                               uid: staffInfo!.uid,
@@ -551,10 +564,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             ),
                           ),
                           buildButton(
-                            name: 'Virtual Attendance',
+                            name: 'Virtual attendance',
                             image: Image.asset(
                               'assets/attendance.png',
-                              scale: 3,
+                              scale: 3.4,
                             ),
                             page: AttendanceScreen(
                               uid: staffInfo!.uid,
@@ -580,14 +593,23 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20.0),
         decoration: BoxDecoration(
+          gradient: const LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            colors: [
+              Colors.black87,
+              ConstantColor.backgroundColor,
+            ],
+          ),
             color: const Color(0xffDAD6EE),
             borderRadius: BorderRadius.circular(20),
             boxShadow: const [
               BoxShadow(
                   color: Colors.black26,
-                  offset: Offset(3.0, 3.0),
-                  blurRadius: 3)
-            ]),
+                  offset: Offset(5.0, 5.0),
+                  blurRadius: 5)
+            ],
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -596,7 +618,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               name,
               style: TextStyle(
                 fontFamily: ConstantFonts.poppinsMedium,
-                color: ConstantColor.blackColor,
+                color: ConstantColor.background1Color,
               ),
               maxFontSize: 18,
               minFontSize: 12,

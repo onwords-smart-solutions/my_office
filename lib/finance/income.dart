@@ -63,7 +63,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
             child: Icon(Icons.receipt_long),
           ),
           title: Text(
-            allIncome[index].paidDate,
+            allIncome[index].customerName,
             style: TextStyle(
                 fontFamily: ConstantFonts.poppinsMedium,
                 color: ConstantColor.blackColor,

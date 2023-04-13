@@ -7,12 +7,12 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/models/staff_model.dart';
-import 'package:my_office/work_done/individual_work_complete.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../Account/account_screen.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 import '../util/main_template.dart';
+import 'individual_work_complete.dart';
 
 class WorkCompleteViewScreen extends StatefulWidget {
   final StaffModel userDetails;

@@ -69,7 +69,7 @@ class _MainTemplateState extends State<MainTemplate> {
     final width = MediaQuery.of(context).size.width;
     return RefreshIndicator(
       onRefresh: () async {
-        await Future.delayed(const Duration(seconds: 5));
+        await Future.delayed(const Duration(seconds: 4));
         setState(() {
           _pageLoadController();
         });
@@ -135,7 +135,7 @@ class _MainTemplateState extends State<MainTemplate> {
                               GestureDetector(
                                 onTap: () {
                                   // getImageUrl();
-                                  HapticFeedback.mediumImpact();
+                                  HapticFeedback.vibrate();
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (_) => AccountScreen(
                                           staffDetails: staffInfo!)));
