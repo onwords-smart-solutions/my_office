@@ -216,8 +216,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       // print('no data');
-    } else if (position.latitude.toString().contains("10.673") &&
-        position.longitude.toString().contains("76.976")) {
+    } else if (position.latitude.toString().contains("10.67") &&
+        position.longitude.toString().contains("76.97")) {
       final snackBar = SnackBar(
         duration: const Duration(seconds: 3),
         content: Text(
@@ -265,7 +265,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
-    Future.delayed(const Duration(seconds: 3)).then((value) {
+    Future.delayed(const Duration(seconds: 4)).then((value) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const UserHomeScreen(),
