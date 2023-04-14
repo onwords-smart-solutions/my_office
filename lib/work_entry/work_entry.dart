@@ -195,7 +195,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
     final width = MediaQuery.of(context).size.width;
     return MainTemplate(
       key: formKey,
-      subtitle: 'Update your works here !',
+      subtitle: 'Update your works here!!!',
       templateBody: bodyContent(height, width),
       bgColor: ConstantColor.background1Color,
     );
@@ -328,7 +328,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                               blurRadius: 5),
                         ]),
                     child: textFiledWidget(height, TextInputType.text,
-                        TextInputAction.done, 'Enter Work', _workController),
+                        TextInputAction.done, 'Enter your completed work today...', _workController),
                   ),
 
                   /// 3 Buttons
@@ -452,7 +452,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                                   ),
                                 ),
                                 Text(
-                                  'percent',
+                                  'Percent',
                                   style: TextStyle(
                                     fontFamily: ConstantFonts.poppinsMedium,
                                   ),

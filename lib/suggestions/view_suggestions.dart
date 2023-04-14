@@ -75,11 +75,11 @@ class _ViewSuggestionsState extends State<ViewSuggestions> {
                   child: Icon(Icons.date_range),
                 ),
                 title: Text(
-                  allSuggestion[index]['date'].toString(),
+                 '${ allSuggestion[index]['message'].toString().substring(0, 25)}....',
                   style: TextStyle(
                     color: ConstantColor.backgroundColor,
                     fontFamily: ConstantFonts.poppinsMedium,
-                    fontSize: 20,
+                    fontSize: 17,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

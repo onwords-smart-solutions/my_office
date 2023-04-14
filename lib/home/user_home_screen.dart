@@ -260,10 +260,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     shrinkWrap: true,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
+                            childAspectRatio: 1/1.2,
                             crossAxisCount: 2,
                             crossAxisSpacing: 10.0,
-                            mainAxisSpacing: 10.0,
-                            mainAxisExtent: 230),
+                            mainAxisSpacing: 10.0),
                     children: [
                       if (staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
                         buildButton(
@@ -507,14 +507,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             ),
                             page: const ViewAttendanceScreen(),
                           ),
-                          buildButton(
-                            name: 'Late entry',
-                            image: Image.asset(
-                              'assets/late_entry.png',
-                              scale: 3.36,
-                            ),
-                            page: const LateEntry(),
-                          ),
+                          // buildButton(
+                          //   name: 'Late entry',
+                          //   image: Image.asset(
+                          //     'assets/late_entry.png',
+                          //     scale: 3.36,
+                          //   ),
+                          //   page: LateEntryScreen(
+                          //     userId: staffInfo!.uid,
+                          //     staffName: staffInfo!.name,
+                          //   ),
+                          // ),
                         ],
                       )
                     : GridView(
@@ -525,10 +528,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         shrinkWrap: true,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
+                                childAspectRatio: 1/1.2,
                                 crossAxisCount: 2,
                                 crossAxisSpacing: 10.0,
-                                mainAxisSpacing: 10.0,
-                                mainAxisExtent: 230),
+                                mainAxisSpacing: 10.0),
                         children: [
                           buildButton(
                             name: 'Work entry',
@@ -593,14 +596,14 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20.0),
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            colors: [
-              Colors.black87,
-              ConstantColor.backgroundColor,
-            ],
-          ),
+          // gradient: const LinearGradient(
+          //   begin: Alignment.topCenter,
+          //   end: Alignment.bottomCenter,
+          //   colors: [
+          //     Color(0xffDAD6EE),
+          //     Color(0xff8355B7),
+          //   ],
+          // ),
             color: const Color(0xffDAD6EE),
             borderRadius: BorderRadius.circular(20),
             boxShadow: const [
@@ -618,7 +621,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               name,
               style: TextStyle(
                 fontFamily: ConstantFonts.poppinsMedium,
-                color: ConstantColor.background1Color,
               ),
               maxFontSize: 18,
               minFontSize: 12,

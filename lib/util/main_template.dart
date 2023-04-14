@@ -21,7 +21,8 @@ class MainTemplate extends StatefulWidget {
       required this.subtitle,
       required this.templateBody,
       required this.bgColor,
-      this.bottomImage})
+      this.bottomImage
+      })
       : super(key: key);
 
   @override
@@ -85,7 +86,7 @@ class _MainTemplateState extends State<MainTemplate> {
               Positioned(
                 top: 0,
                 child: Container(
-                  height: height * 0.95,
+                  height: height * 1,
                   width: width,
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).viewPadding.top * 1.5),
@@ -147,10 +148,6 @@ class _MainTemplateState extends State<MainTemplate> {
                                     borderRadius: BorderRadius.circular(100),
                                     child:  preferencesImageUrl == ''
                                         ? const Icon(Iconsax.user) : Image.network(preferencesImageUrl,fit: BoxFit.cover,)
-                                        // : Image.file(
-                                        //     File(preferencesImageUrl).absolute,
-                                        //     fit: BoxFit.cover,
-                                        //   ),
                                   ),
                                 ),
                               ),
