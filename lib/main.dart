@@ -65,7 +65,7 @@ class _MyAppState extends State<MyApp> {
           title: 'My Office',
           theme: ThemeData(
             primarySwatch: Colors.purple,
-            scaffoldBackgroundColor: ConstantColor.blackColor,
+            scaffoldBackgroundColor: ConstantColor.backgroundColor,
             fontFamily: 'PoppinsRegular',
           ),
           home: const InitialScreen(),

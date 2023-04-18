@@ -3,6 +3,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:my_office/PR/invoice/Screens/Customer_Details_Screen.dart';
 import 'package:my_office/app_version/version.dart';
+import 'package:my_office/tl_check_screen/check_entry.dart';
 import 'package:my_office/late_workdone/late_entry.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -20,9 +21,8 @@ import 'package:my_office/util/notification_services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Absentees/absentees.dart';
 import '../Constant/fonts/constant_font.dart';
-import '../attendance/attendance_screen.dart';
+import '../PR/pr_points_screen.dart';
 import '../PR/visit_check.dart';
-import '../attendance/view_attendance.dart';
 import '../database/hive_operations.dart';
 import '../finance/finance_analysis.dart';
 import '../food_count/food_count_screen.dart';
@@ -32,6 +32,8 @@ import '../leave_approval/leave_request.dart';
 import '../onyx/announcement.dart';
 import '../suggestions/suggestions.dart';
 import '../suggestions/view_suggestions.dart';
+import '../virtual_attendance/attendance_screen.dart';
+import '../virtual_attendance/view_attendance.dart';
 import '../work_details/work_complete.dart';
 import '../work_entry/work_entry.dart';
 
@@ -249,6 +251,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     ),
                     page: const ViewAttendanceScreen(),
                   ),
+                  buildButton(
+                    name: 'Check Entry',
+                    image: Image.asset(
+                      'assets/check_entry.png',
+                      scale: 3.36,
+                    ),
+                    page: CheckEntryScreen(
+                      userId: staffInfo!.uid,
+                      staffName: staffInfo!.name,
+                    ),
+                  ),
                 ],
               )
             : staffInfo!.department == 'PR'
@@ -334,12 +347,35 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       buildButton(
                         name: 'Virtual attendance',
                         image: Image.asset(
-                          'assets/attendance.png',
+                          'assets/virtual_attendance.png',
                           scale: 3.4,
                         ),
                         page: AttendanceScreen(
                           uid: staffInfo!.uid,
                           name: staffInfo!.name,
+                        ),
+                      ),
+                      buildButton(
+                        name: 'PR points',
+                        image: Image.asset(
+                          'assets/pr_points.png',
+                          scale: 3.36,
+                        ),
+                        page: PrPointsScreen(
+                          userId: staffInfo!.uid,
+                          staffName: staffInfo!.name,
+                        ),
+                      ),
+                      if (staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
+                      buildButton(
+                        name: 'Check Entry',
+                        image: Image.asset(
+                          'assets/check_entry.png',
+                          scale: 3.36,
+                        ),
+                        page: CheckEntryScreen(
+                          userId: staffInfo!.uid,
+                          staffName: staffInfo!.name,
                         ),
                       ),
                     ],
@@ -480,7 +516,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           buildButton(
                             name: 'Virtual attendance',
                             image: Image.asset(
-                              'assets/attendance.png',
+                              'assets/virtual_attendance.png',
                               scale: 3.4,
                             ),
                             page: AttendanceScreen(
@@ -507,17 +543,39 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             ),
                             page: const ViewAttendanceScreen(),
                           ),
-                          // buildButton(
-                          //   name: 'Late entry',
-                          //   image: Image.asset(
-                          //     'assets/late_entry.png',
-                          //     scale: 3.36,
-                          //   ),
-                          //   page: LateEntryScreen(
-                          //     userId: staffInfo!.uid,
-                          //     staffName: staffInfo!.name,
-                          //   ),
-                          // ),
+                          buildButton(
+                            name: 'Late entry',
+                            image: Image.asset(
+                              'assets/late_entry.png',
+                              scale: 3.36,
+                            ),
+                            page: LateEntryScreen(
+                              userId: staffInfo!.uid,
+                              staffName: staffInfo!.name,
+                            ),
+                          ),
+                          buildButton(
+                            name: 'PR points',
+                            image: Image.asset(
+                              'assets/pr_points.png',
+                              scale: 3.36,
+                            ),
+                            page: PrPointsScreen(
+                              userId: staffInfo!.uid,
+                              staffName: staffInfo!.name,
+                            ),
+                          ),
+                          buildButton(
+                            name: 'Check Entry',
+                            image: Image.asset(
+                              'assets/check_entry.png',
+                              scale: 3.36,
+                            ),
+                            page: CheckEntryScreen(
+                              userId: staffInfo!.uid,
+                              staffName: staffInfo!.name,
+                            ),
+                          ),
                         ],
                       )
                     : GridView(
@@ -569,12 +627,24 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           buildButton(
                             name: 'Virtual attendance',
                             image: Image.asset(
-                              'assets/attendance.png',
+                              'assets/virtual_attendance.png',
                               scale: 3.4,
                             ),
                             page: AttendanceScreen(
                               uid: staffInfo!.uid,
                               name: staffInfo!.name,
+                            ),
+                          ),
+                          if (staffInfo!.uid == 'QPgtT8vDV8Y9pdy8fhtOmBON1Q03'|| staffInfo!.uid == 'hCxvT3mh1sgORNUMjsSNc9rgxgk2')
+                          buildButton(
+                            name: 'Check Entry',
+                            image: Image.asset(
+                              'assets/check_entry.png',
+                              scale: 3.36,
+                            ),
+                            page: CheckEntryScreen(
+                              userId: staffInfo!.uid,
+                              staffName: staffInfo!.name,
                             ),
                           ),
                         ],
@@ -596,15 +666,15 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20.0),
         decoration: BoxDecoration(
-          // gradient: const LinearGradient(
-          //   begin: Alignment.topCenter,
-          //   end: Alignment.bottomCenter,
-          //   colors: [
-          //     Color(0xffDAD6EE),
-          //     Color(0xff8355B7),
-          //   ],
-          // ),
-            color: const Color(0xffDAD6EE),
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xffBFACE2),
+              Color(0xff8355B7),
+            ],
+          ),
+            // color: const Color(0xffDAD6EE),
             borderRadius: BorderRadius.circular(20),
             boxShadow: const [
               BoxShadow(
@@ -621,6 +691,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               name,
               style: TextStyle(
                 fontFamily: ConstantFonts.poppinsMedium,
+                color: ConstantColor.background1Color,
               ),
               maxFontSize: 18,
               minFontSize: 12,
@@ -667,7 +738,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       builder: (BuildContext context) => WillPopScope(
         child: CupertinoAlertDialog(
           title: Text(
-            "New Update Available!",
+            "New Update Available!!!",
             style: TextStyle(
               fontFamily: ConstantFonts.poppinsBold,
             ),

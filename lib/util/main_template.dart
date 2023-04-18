@@ -21,8 +21,7 @@ class MainTemplate extends StatefulWidget {
       required this.subtitle,
       required this.templateBody,
       required this.bgColor,
-      this.bottomImage
-      })
+      this.bottomImage})
       : super(key: key);
 
   @override
@@ -43,6 +42,7 @@ class _MainTemplateState extends State<MainTemplate> {
   SharedPreferences? preferences;
 
   String preferencesImageUrl = '';
+
   // String preferencesImageUrl2 = '';
 
   Future getImageUrl() async {
@@ -70,11 +70,12 @@ class _MainTemplateState extends State<MainTemplate> {
     final width = MediaQuery.of(context).size.width;
     return RefreshIndicator(
       onRefresh: () async {
-        await Future.delayed(const Duration(seconds: 4));
+        await Future.delayed(
+          const Duration(seconds: 4),
+        );
         setState(() {
           _pageLoadController();
         });
-
       },
       child: Scaffold(
         body: SizedBox(
@@ -86,7 +87,7 @@ class _MainTemplateState extends State<MainTemplate> {
               Positioned(
                 top: 0,
                 child: Container(
-                  height: height * 1,
+                  height: height * 0.95,
                   width: width,
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).viewPadding.top * 1.5),
@@ -132,6 +133,9 @@ class _MainTemplateState extends State<MainTemplate> {
                                 ],
                               ),
 
+                              //App icon change widget
+                              // const IconChangeWidget(),
+
                               //Profile icon
                               GestureDetector(
                                 onTap: () {
@@ -146,8 +150,12 @@ class _MainTemplateState extends State<MainTemplate> {
                                   width: height * 0.08,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(100),
-                                    child:  preferencesImageUrl == ''
-                                        ? const Icon(Iconsax.user) : Image.network(preferencesImageUrl,fit: BoxFit.cover,)
+                                    child: preferencesImageUrl == ''
+                                        ? const Icon(Iconsax.user)
+                                        : Image.network(
+                                            preferencesImageUrl,
+                                            fit: BoxFit.cover,
+                                          ),
                                   ),
                                 ),
                               ),
@@ -175,5 +183,47 @@ class _MainTemplateState extends State<MainTemplate> {
     setState(() {
       getImageUrl();
     });
+  }
+}
+
+class IconChangeWidget extends StatelessWidget {
+  const IconChangeWidget({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+          shape: const CircleBorder(),
+          elevation: 5,
+          backgroundColor: ConstantColor.backgroundColor),
+      child: const Icon(Icons.home),
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Change App Icon'),
+            elevation: 5,
+            content: ListTile(
+              title: Text('Change App Icon'),
+              trailing: Icon(Icons.add),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {},
+                child: Text('Update'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('Cancel'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

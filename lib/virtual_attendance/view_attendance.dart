@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
-import 'package:my_office/attendance/view_full_attendance.dart';
+import 'package:my_office/virtual_attendance/view_full_attendance.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../util/main_template.dart';
 
