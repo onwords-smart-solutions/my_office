@@ -354,12 +354,12 @@ class _PrPointsScreenState extends State<PrPointsScreen> {
     var yearFormat = DateFormat('yyyy').format(dateTime);
       prDatabase.child('${widget.userId}/$yearFormat/$monthFormat/$dateFormat').update(
         {
-          'calls': callsController.text.isEmpty ? '0' : callsController.text.trim(),
-          'invoice': invoiceController.text.isEmpty ? '0' : invoiceController.text.trim(),
-          'message': messageController.text.isEmpty ? '0' : messageController.text.trim(),
-          'points': pointsController.text.isEmpty ? '0' : pointsController.text.trim(),
-          'quote': quoteController.text.isEmpty ? '0' : quoteController.text.trim(),
-          'visit': visitController.text.isEmpty ? '0' : visitController.text.trim(),
+          'calls': callsController.text.isEmpty ? 0 : int.parse( callsController.text.trim()),
+          'invoice': invoiceController.text.isEmpty ? 0 : int.parse( invoiceController.text.trim()),
+          'message': messageController.text.isEmpty ? 0 : int.parse( messageController.text.trim()),
+          'points': pointsController.text.isEmpty ? 0 : int.parse( pointsController.text.trim()),
+          'quote': quoteController.text.isEmpty ? 0 : int.parse( quoteController.text.trim()),
+          'visit': visitController.text.isEmpty ? 0 : int.parse( visitController.text.trim()),
         },
       );
       final snackBar = SnackBar(

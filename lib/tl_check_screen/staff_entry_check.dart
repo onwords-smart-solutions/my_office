@@ -21,30 +21,57 @@ class StaffEntryCheckScreen extends StatefulWidget {
 class _StaffEntryCheckScreenState extends State<StaffEntryCheckScreen> {
   List<String> attendanceTime = [];
   bool isLoading = true;
-  final ref = FirebaseDatabase.instance.ref();
+  final fingerPrint = FirebaseDatabase.instance.ref();
+  final virtualAttendance = FirebaseDatabase.instance.ref();
   DateTime dateTime = DateTime.now();
 
   void entryCheck() async {
     setState(() {
       isLoading = true;
     });
+    List<String> entryTime = [];
     var dateFormat = DateFormat('yyyy-MM-dd').format(dateTime);
-    await ref
+    await fingerPrint
         .child('fingerPrint/${widget.staffDetail.uid}/$dateFormat')
         .once()
-        .then((entry) {
-      List<String> entryTime = [];
+        .then((entry) async {
+
       if (entry.snapshot.value != null) {
         for (var time in entry.snapshot.children) {
           entryTime.add(time.key.toString());
         }
+      } else {
+       entryTime =  await
+        checkVirtualAttendance();
       }
-      if (!mounted) return;
-      setState(() {
-        attendanceTime = entryTime;
-        isLoading = false;
-      });
+
     });
+
+    if (!mounted) return;
+    setState(() {
+      attendanceTime = entryTime;
+      isLoading = false;
+    });
+  }
+
+  Future<List<String>> checkVirtualAttendance() async {
+    var yearFormat = DateFormat('yyyy').format(dateTime);
+    var monthFormat = DateFormat('MM').format(dateTime);
+    var dateFormat = DateFormat('yyyy-MM-dd').format(dateTime);
+    List<String> attendTime = [];
+    await virtualAttendance
+        .child(
+            'virtualAttendance/${widget.staffDetail.uid}/$yearFormat/$monthFormat/$dateFormat')
+        .once()
+        .then((virtual) {
+          try{
+            final data = virtual.snapshot.value as Map<Object?, Object?>;
+            attendTime.add(data['Time'].toString());
+          }catch(e){
+            log('error is $e');
+          }
+      });
+    return attendTime;
   }
 
   datePicker() async {
@@ -69,7 +96,6 @@ class _StaffEntryCheckScreenState extends State<StaffEntryCheckScreen> {
 
   @override
   Widget build(BuildContext context) {
-    log('data is $attendanceTime');
     return ScreenTemplate(
       bodyTemplate: buildCheckEntry(),
       title: widget.staffDetail.name,
@@ -112,7 +138,7 @@ class _StaffEntryCheckScreenState extends State<StaffEntryCheckScreen> {
               )
             : attendanceTime.isNotEmpty
                 ? ListView.builder(
-          shrinkWrap: true,
+                    shrinkWrap: true,
                     physics: const BouncingScrollPhysics(),
                     itemCount: attendanceTime.length,
                     itemBuilder: (context, index) {
@@ -132,23 +158,23 @@ class _StaffEntryCheckScreenState extends State<StaffEntryCheckScreen> {
                       );
                     })
                 : Center(
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 50),
-                      Lottie.asset('assets/animations/no_data.json',
-                          height: 200.0),
-                      Text(
-                        'No Attendance registered!!',
-                        style: TextStyle(
-                          fontFamily: ConstantFonts.poppinsMedium,
-                          color: ConstantColor.blackColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 50),
+                        Lottie.asset('assets/animations/no_data.json',
+                            height: 200.0),
+                        Text(
+                          'No Attendance registered!!',
+                          style: TextStyle(
+                            fontFamily: ConstantFonts.poppinsMedium,
+                            color: ConstantColor.blackColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
       ],
     );
   }

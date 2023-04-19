@@ -437,7 +437,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           buildButton(
                               name: 'Leave form',
                               image: Image.asset('assets/leave_apply.png'),
-                              page: const LeaveApplyScreen()),
+                              page:  LeaveApplyScreen(
+                                name: staffInfo!.name,
+                                uid: staffInfo!.uid,
+
+                              )),
                           buildButton(
                               name: 'Onyx',
                               image: Image.asset(
@@ -457,8 +461,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           buildButton(
                             name: 'Leave request',
                             image: Image.asset(
-                              'assets/leave form.png',
-                              scale: 4.0,
+                              'assets/leave_request.png',
+                              scale: 1,
                             ),
                             page: const LeaveApprovalScreen(),
                           ),
