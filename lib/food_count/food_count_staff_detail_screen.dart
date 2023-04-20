@@ -42,11 +42,8 @@ class _FoodCountStaffDetailScreenState
     'December': '12',
   };
 
-  //METHOD TO FIND LUNCH DETAILS
   void checkFoodCount() async {
-    setState(() {
-      isLoading = true;
-    });
+
     List<dynamic> staffLunchData = [];
     final currentMonthFormat = '${DateTime.now().year}-${month[currentMonth]}';
     await ref.child('refreshments').once().then((value) {

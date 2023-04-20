@@ -271,8 +271,13 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
           height: height * 0.05,
           width: width * 0.3,
           decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          child: const Center(child: Text('Work Done')),
+            borderRadius: BorderRadius.all(
+              Radius.circular(10),
+            ),
+          ),
+          child: const Center(
+            child: Text('Work Done'),
+          ),
         ),
         Container(
           height: height * 0.05,
@@ -327,8 +332,12 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                               offset: Offset(-0.0, 6.0),
                               blurRadius: 5),
                         ]),
-                    child: textFiledWidget(height, TextInputType.text,
-                        TextInputAction.done, 'Enter your completed work today...', _workController),
+                    child: textFiledWidget(
+                        height,
+                        TextInputType.text,
+                        TextInputAction.done,
+                        'Enter your completed work today...',
+                        _workController),
                   ),
 
                   /// 3 Buttons
@@ -473,11 +482,11 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                             timeOfEnd!.isNotEmpty &&
                             _percentController.text.isNotEmpty &&
                             _workController.text.isNotEmpty) {
-
-                          String? startString =
-                          timeOfStart.toString().replaceAll(RegExp(':'), '');
+                          String? startString = timeOfStart
+                              .toString()
+                              .replaceAll(RegExp(':'), '');
                           String? endString =
-                          timeOfEnd.toString().replaceAll(RegExp(':'), '');
+                              timeOfEnd.toString().replaceAll(RegExp(':'), '');
 
                           int startInt = int.parse(startString);
                           int endInt = int.parse(endString);
@@ -526,28 +535,29 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                                 });
                               }
 
-                                if (above6 >= 5) {
-                                  // print(above6);
-                                  timeOfEnd = '';
-                                  timeOfEndView = '';
-                                  showSnackBar(
-                                      message:
-                                      "Work time exceeds 5 hours enter correctly",
-                                      color: Colors.red.shade500);
-                                } else {
-                                  // print(above6);
-                                  setState(() {
-                                    isLoading = true;
-                                    createNewWork();
-                                    // print('created');
-                                  });
-                                }
-                            }else{
+                              if (above6 >= 5) {
+                                // print(above6);
+                                timeOfEnd = '';
+                                timeOfEndView = '';
+                                showSnackBar(
+                                    message:
+                                        "Work time exceeds 5 hours enter correctly",
+                                    color: Colors.red.shade500);
+                              } else {
+                                // print(above6);
+                                setState(() {
+                                  isLoading = true;
+                                  createNewWork();
+                                  // print('created');
+                                });
+                              }
+                            } else {
                               _percentController.clear();
-                              showSnackBar(message: 'enter correct percentage', color: Colors.red.shade500);
+                              showSnackBar(
+                                  message: 'enter correct percentage',
+                                  color: Colors.red.shade500);
                             }
-                          }
-                          else {
+                          } else {
                             timeOfStart = '';
                             timeOfEnd = '';
                             timeOfStartView = '';
@@ -556,12 +566,11 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                                 message: 'Set the work time correctly',
                                 color: Colors.red.shade500);
                           }
-                        }else{
+                        } else {
                           showSnackBar(
                               message: 'Please Fill All Fields',
                               color: Colors.red.shade500);
                         }
-
                       });
                     },
                     child: Container(
@@ -665,13 +674,14 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
 
                     /// Percentage......
                     Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: percentIndicator(
-                            height,
-                            percent = double.parse(workPercentageList[index]
-                                    .replaceAll(RegExp(r'.$'), "")) /
-                                100,
-                            "${workPercentageList[index]}"),),
+                      padding: const EdgeInsets.all(8),
+                      child: percentIndicator(
+                          height,
+                          percent = double.parse(workPercentageList[index]
+                                  .replaceAll(RegExp(r'.$'), "")) /
+                              100,
+                          "${workPercentageList[index]}"),
+                    ),
                   ],
                 ),
               );

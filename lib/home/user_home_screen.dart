@@ -28,7 +28,7 @@ import '../finance/finance_analysis.dart';
 import '../food_count/food_count_screen.dart';
 import '../leads/search_leads.dart';
 import '../leave_apply/leave_apply_screen.dart';
-import '../leave_approval/leave_request.dart';
+import '../leave_approval/leave_approval_screen.dart';
 import '../onyx/announcement.dart';
 import '../suggestions/suggestions.dart';
 import '../suggestions/view_suggestions.dart';
@@ -440,8 +440,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               page:  LeaveApplyScreen(
                                 name: staffInfo!.name,
                                 uid: staffInfo!.uid,
-
-                              )),
+                              ),
+                          ),
                           buildButton(
                               name: 'Onyx',
                               image: Image.asset(
@@ -459,12 +459,15 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               page: const AbsenteeScreen(),
                           ),
                           buildButton(
-                            name: 'Leave request',
+                            name: 'Leave approval',
                             image: Image.asset(
                               'assets/leave_request.png',
-                              scale: 1,
+                              scale: 3.3,
                             ),
-                            page: const LeaveApprovalScreen(),
+                            page: LeaveApprovalScreen(
+                              name: staffInfo!.name,
+                              uid: staffInfo!.uid,
+                            ),
                           ),
                           buildButton(
                             name: 'Search leads',
