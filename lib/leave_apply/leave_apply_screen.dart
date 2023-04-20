@@ -40,9 +40,9 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
       dateTime = newDate;
     });
   }
-
-  List<String> departments = ['APP', 'MEDIA', 'WEB', 'PR', 'RND', 'OTHER'];
-  String? dropDownValue;
+    //DROP DOWN BUTTON VALUES//
+  // List<String> departments = ['APP', 'MEDIA', 'WEB', 'PR', 'RND', 'OTHER'];
+  // String? dropDownValue;
 
   @override
   void initState() {
@@ -130,7 +130,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
             right: width * 0.05,
             // bottom: height * 0.5,
             child: Container(
-              height: height * 0.47,
+              height: height * 0.43,
               width: width * 0.5,
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -391,51 +391,52 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
               ),
             ),
           ),
-          const SizedBox(height: 5),
-          buildDepartment(),
+          const SizedBox(height: 10),
+          // buildDepartment(),
           radioButtons(),
         ],
       ),
     );
   }
 
-  Widget buildDepartment() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Text(
-          'Department  -  ',
-          style: TextStyle(
-            color: ConstantColor.headingTextColor,
-            fontFamily: ConstantFonts.poppinsMedium,
-            fontSize: 17,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        DropdownButton(
-          value: dropDownValue,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            fontFamily: ConstantFonts.poppinsRegular,
-            color: ConstantColor.backgroundColor,
-          ),
-          items: departments.map((String departments) {
-            return DropdownMenuItem(
-              value: departments,
-              child: Text(departments),
-            );
-          }).toList(),
-          icon: const Icon(Icons.keyboard_arrow_down),
-          onChanged: (String? newValue) {
-            setState(() {
-              dropDownValue = newValue!;
-            });
-          },
-        ),
-      ],
-    );
-  }
+      //DEPARTMENT CHOOSE FUNCTION//
+  // Widget buildDepartment() {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.start,
+  //     children: [
+  //       Text(
+  //         'Department  -  ',
+  //         style: TextStyle(
+  //           color: ConstantColor.headingTextColor,
+  //           fontFamily: ConstantFonts.poppinsMedium,
+  //           fontSize: 17,
+  //           fontWeight: FontWeight.w700,
+  //         ),
+  //       ),
+  //       DropdownButton(
+  //         value: dropDownValue,
+  //         style: TextStyle(
+  //           fontSize: 16,
+  //           fontWeight: FontWeight.w700,
+  //           fontFamily: ConstantFonts.poppinsRegular,
+  //           color: ConstantColor.backgroundColor,
+  //         ),
+  //         items: departments.map((String departments) {
+  //           return DropdownMenuItem(
+  //             value: departments,
+  //             child: Text(departments),
+  //           );
+  //         }).toList(),
+  //         icon: const Icon(Icons.keyboard_arrow_down),
+  //         onChanged: (String? newValue) {
+  //           setState(() {
+  //             dropDownValue = newValue!;
+  //           });
+  //         },
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget radioButtons() {
     final width = MediaQuery.of(context).size.width;
@@ -552,20 +553,6 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }else if (dropDownValue == null) {
-      final snackBar = SnackBar(
-        content: Text(
-          'Choose your department',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 16,
-            fontFamily: ConstantFonts.poppinsMedium,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        backgroundColor: Colors.red,
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }else if (_reason == null) {
       final snackBar = SnackBar(
         content: Text(
@@ -594,7 +581,6 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
         'reason': leaveReason.text.trim(),
         'type': _reason,
         'name': widget.name,
-        'dep': dropDownValue.toString(),
       });
       final snackBar = SnackBar(
         content: Text(
@@ -613,7 +599,6 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
       setState(() {
         _reason = null;
         dateTime = null;
-        dropDownValue = null;
       });
     }
   }
