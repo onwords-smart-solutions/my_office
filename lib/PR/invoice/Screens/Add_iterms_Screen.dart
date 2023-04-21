@@ -1,7 +1,9 @@
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:intl/intl.dart';
+import 'package:my_office/PR/invoice/model/customer.dart';
 import 'package:my_office/models/staff_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -57,7 +59,7 @@ class _AddItermState extends State<AddIterm> {
   final formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  List<DropDownValueModel> productList =  [];
+  List<DropDownValueModel> productList = [];
 
   bool isTextFiled = false;
 
@@ -66,13 +68,14 @@ class _AddItermState extends State<AddIterm> {
   Future<void> getProducts() async {
     int count = 1;
     ref.child('inventory_management').once().then((value) {
-
       for (var a in value.snapshot.children) {
         // print(a.key);
         setState(() {
           setProdoct = a.value;
-          productList.add(DropDownValueModel(name: setProdoct['name'], value: count));
+          productList
+              .add(DropDownValueModel(name: setProdoct['name'], value: count));
         });
+        // print(productList);
         setState(() {
           count++;
         });
@@ -97,6 +100,8 @@ class _AddItermState extends State<AddIterm> {
       }
     });
   }
+
+  bool isPressed = false;
 
   @override
   void initState() {
@@ -146,9 +151,10 @@ class _AddItermState extends State<AddIterm> {
       // final netTotal = val.map((item) => item.amount * item.quantity).reduce((item1, item2) => item1 + item2);
 
       return Scaffold(
+
         key: _scaffoldKey,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Color(0xffDDE6E8),
           elevation: 0,
           title: Text(
             "Add Items",
@@ -191,7 +197,7 @@ class _AddItermState extends State<AddIterm> {
           //
           // ],
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xffDDE6E8),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -225,16 +231,15 @@ class _AddItermState extends State<AddIterm> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: height * 0.01,
-                ),
-                Container(
+
+                // Add Button
+                buildNeumorphic(width, height, Container(
                   padding: EdgeInsets.symmetric(horizontal: width * 0.05),
                   width: width * 0.9,
                   height: height * 0.05,
-                  decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(20)),
+                  // decoration: BoxDecoration(
+                  //     color: Colors.black.withOpacity(0.1),
+                  //     borderRadius: BorderRadius.circular(20)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -254,16 +259,14 @@ class _AddItermState extends State<AddIterm> {
                       //     ))
                     ],
                   ),
-                ),
-                SizedBox(
-                  height: height * 0.01,
-                ),
-                Container(
+                ),),
+                buildNeumorphic(width, height, Container(
                   width: width * 0.9,
                   height: height * 0.08,
-                  decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(20)),
+                  // decoration: BoxDecoration(
+                  //   color: Colors.black.withOpacity(0.1),
+                  //   borderRadius: BorderRadius.circular(20),
+                  // ),
                   child: SizedBox(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -290,26 +293,24 @@ class _AddItermState extends State<AddIterm> {
                       ],
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: height * 0.02,
-                ),
-
-                Container(
+                ),),
+                ///Table Headings
+                buildNeumorphic(width, height, Container(
                   padding: EdgeInsets.symmetric(horizontal: width * 0.05),
                   width: width * 0.9,
                   height: height * 0.08,
-                  decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.1),
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(20.0),
-                          topRight: Radius.circular(20.0))),
+                  // decoration: BoxDecoration(
+                  //     color: Colors.black.withOpacity(0.1),
+                  //     borderRadius: const BorderRadius.only(
+                  //         topLeft: Radius.circular(20.0),
+                  //         topRight: Radius.circular(20.0))),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
                         width: width * 0.15,
-                        child: Text('Name',
+                        child: Text(
+                          'Name',
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: height * 0.012,
@@ -325,13 +326,13 @@ class _AddItermState extends State<AddIterm> {
                       ),
                       SizedBox(
                         width: width * 0.16,
-                        child: Text('Quantity',
+                        child: Text(
+                          'Quantity',
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: height * 0.012,
                             fontFamily: 'Avenir',
                           ),
-
                         ),
                       ),
                       VerticalDivider(
@@ -342,27 +343,27 @@ class _AddItermState extends State<AddIterm> {
                       ),
                       SizedBox(
                           width: width * 0.12,
-                          child: Text('Rate',
+                          child: Text(
+                            'Rate',
                             style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: height * 0.012,
                               fontFamily: 'Avenir',
                             ),
-                          )
-
-                      ),
+                          )),
                     ],
                   ),
-                ),
-                Container(
+                ),),
+                /// Product Details
+                buildNeumorphic(width, height,  Container(
                   height: height * 0.18,
                   width: width * 0.9,
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.1),
-                    borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(20.0),
-                        bottomRight: Radius.circular(20.0)),
-                  ),
+                  // decoration: BoxDecoration(
+                  //   color: Colors.black.withOpacity(0.1),
+                  //   borderRadius: const BorderRadius.only(
+                  //       bottomLeft: Radius.circular(20.0),
+                  //       bottomRight: Radius.circular(20.0)),
+                  // ),
                   child: ListView.builder(
                     // shrinkWrap: true,
                     scrollDirection: Axis.vertical,
@@ -389,18 +390,15 @@ class _AddItermState extends State<AddIterm> {
                       );
                     },
                   ),
-                ),
-                SizedBox(
-                  height: height * 0.01,
-                ),
-                Container(
+                ),),
+                buildNeumorphic(width, height, Container(
                   padding: EdgeInsets.symmetric(horizontal: width * 0.05),
-                  height: height * 0.27,
+                  height: height * 0.23,
                   width: width * 0.9,
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
+                  // decoration: BoxDecoration(
+                  //   color: Colors.black.withOpacity(0.1),
+                  //   borderRadius: BorderRadius.circular(20),
+                  // ),
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -619,76 +617,83 @@ class _AddItermState extends State<AddIterm> {
                       ],
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: height * 0.01,
-                ),
-                SizedBox(
-                  width: width * 0.9,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            if (productName.isEmpty) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                backgroundColor: Colors.red,
-                                content: Text('Please select product'),
-                                duration: Duration(seconds: 1),
-                              ));
-                            } else {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => PreviewScreen(
-                                        doctype: dropdownValue,
-                                        category: category,
-                                        advanceAmt: advanceAmt,
-                                        // labAndInstall: labCharge,
-                                        gstValue: gstNeed,
-                                        discountAmount: discountAmount,
-                                        discountNeed: discountNeed,
-                                        // labValue: labNeed,
-                                      ))).then((value) {
-                                setState(() {
-                                  // labAndInstall.clear();
-                                  advancePaid.clear();
-                                  advanceAmt = 0;
-                                  // labCharge = 0;
-                                });
-                              });
-                            }
+                ),),
+                Listener(
+                  onPointerUp: (_) => setState(() {
+                    isPressed = false;
+                  }),
+                  onPointerDown: (_) => setState(() {
+                    isPressed = true;
+                  }),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (productName.isEmpty) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text('Please select product'),
+                            duration: Duration(seconds: 1),
+                          ));
+                        } else {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PreviewScreen(
+                                    doctype: dropdownValue,
+                                    category: category,
+                                    advanceAmt: advanceAmt,
+                                    // labAndInstall: labCharge,
+                                    gstValue: gstNeed,
+                                    discountAmount: discountAmount,
+                                    discountNeed: discountNeed,
+                                    // labValue: labNeed,
+                                  ))).then((value) {
+                            setState(() {
+                              // labAndInstall.clear();
+                              advancePaid.clear();
+                              advanceAmt = 0;
+                              // labCharge = 0;
+                            });
                           });
-                        },
-                        child: Container(
-                          width: width * 0.28,
-                          height: height * 0.05,
-                          decoration: BoxDecoration(
-                            color: const Color(0xff00bcd4),
-                            borderRadius: BorderRadius.circular(15),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black.withOpacity(0.3),
-                                  offset: const Offset(8, 8),
-                                  blurRadius: 10,
-                                  spreadRadius: 0)
-                            ],
-                          ),
-                          child: Center(
-                            child: Text(
-                              "Next",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: height * 0.013,
-                                  fontFamily: 'Nexa',
-                                  color: Colors.white),
-                            ),
+                        }
+                      });
+                    },
+                    child:     Neumorphic(
+                      duration: const Duration(milliseconds: 200),
+                      margin: const EdgeInsets.only(top: 20),
+                      style: NeumorphicStyle(
+                        depth: isPressed ? 0 : 3,
+                        boxShape: NeumorphicBoxShape.roundRect(
+                          BorderRadius.circular(20),
+                        ),
+                      ),
+                      child: SizedBox(
+                        width: width * 0.58,
+                        height: height * 0.07,
+                        // decoration: BoxDecoration(
+                        //   color: const Color(0xff00bcd4),
+                        //   borderRadius: BorderRadius.circular(15),
+                        //   boxShadow: [
+                        //     BoxShadow(
+                        //         color: Colors.black.withOpacity(0.3),
+                        //         offset: const Offset(8, 8),
+                        //         blurRadius: 10,
+                        //         spreadRadius: 0)
+                        //   ],
+                        // ),
+                        child: Center(
+                          child: Text(
+                            "Next",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: height * 0.025,
+                                fontFamily: 'Nexa',
+                                color: Colors.black),
                           ),
                         ),
-                      )
-                    ],
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -697,6 +702,19 @@ class _AddItermState extends State<AddIterm> {
         ),
       );
     });
+  }
+
+  Widget buildNeumorphic(double width, double height, Widget widget) {
+    return Neumorphic(
+      margin: EdgeInsets.symmetric(vertical: 5),
+      style: NeumorphicStyle(
+        depth: 1,
+        boxShape: NeumorphicBoxShape.roundRect(
+          BorderRadius.circular(20),
+        ),
+      ),
+      child: widget,
+    );
   }
 
   TableRow buildRow(List<String> cells, {bool isHeader = false}) => TableRow(
@@ -767,13 +785,17 @@ class _AddItermState extends State<AddIterm> {
         if (formKey.currentState!.validate()) {
           if (!mounted) return;
           setState(() {
-            isTextFiled ? productName.add(itermNameController2.text): productName.add(itermNameController.dropDownValue?.name);
+            isTextFiled
+                ? productName.add(itermNameController2.text)
+                : productName.add(itermNameController.dropDownValue?.name);
             productPrice.add(priceController.text);
             productQuantity.add(quantityController.text);
             productVat.add(vatController.text);
           });
           Provider.of<TaskData>(context, listen: false).addInvoiceListData(
-              isTextFiled ?  itermNameController2.text.toString() : itermNameController.dropDownValue!.name.toString(),
+              isTextFiled
+                  ? itermNameController2.text.toString()
+                  : itermNameController.dropDownValue!.name.toString(),
               int.parse(quantityController.text),
               double.parse(priceController.text));
           Provider.of<TaskData>(context, listen: false).addSubTotal(
@@ -792,6 +814,10 @@ class _AddItermState extends State<AddIterm> {
       child: const Text(" Cancel "),
       onPressed: () {
         Navigator.pop(context, false);
+        itermNameController.dropDownValue?.name.isEmpty;
+        priceController.clear();
+        quantityController.clear();
+        itermNameController2.clear();
       },
     );
     // Create AlertDialog
@@ -802,113 +828,116 @@ class _AddItermState extends State<AddIterm> {
         "  Data entry ",
         style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
       ),
-      content: StatefulBuilder(builder:
-          (BuildContext context, StateSetter setState) {
-        return Form(
-          key: formKey,
-          child: SizedBox(
-            height: height * 0.40,
-            width: width * 1.0,
-            child: SingleChildScrollView(
-              child: Column(
+      content: StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          return Form(
+            key: formKey,
+            child: SizedBox(
+              height: height * 0.40,
+              width: width * 1.0,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    // IconButton(
+                    //     onPressed: () {
+                    //       setState(() {
+                    //         isTextFiled = !isTextFiled;
+                    //         // print(isTextFiled);
+                    //       });
+                    //     }, icon: Icon(isTextFiled ? Icons.arrow_drop_down_sharp : Icons.text_fields)),
+                    SizedBox(
+                      width: width * 0.6,
+                      child: isTextFiled != true
+                          ? DropDownTextField(
+                        // initialValue: "name4",
+                        controller: itermNameController,
+                        clearOption: true,
+                        enableSearch: true,
+                        // dropDownIconProperty: IconProperty(icon: Icons.arrow_drop_down,color: Colors.black),
+                        clearIconProperty: IconProperty(
+                            color: Colors.black, icon: Icons.clear),
+                        // dropdownColor: Colors.orange,
 
-                children: [
-                  // IconButton(
-                  //     onPressed: () {
-                  //       setState(() {
-                  //         isTextFiled = !isTextFiled;
-                  //         // print(isTextFiled);
-                  //       });
-                  //     }, icon: Icon(isTextFiled ? Icons.arrow_drop_down_sharp : Icons.text_fields)),
-                  SizedBox(
-                    width: width * 0.6,
-                    child: isTextFiled != true ?  DropDownTextField(
-                      // initialValue: "name4",
-                      controller: itermNameController,
-                      clearOption: true,
-                      enableSearch: true,
-                      // dropDownIconProperty: IconProperty(icon: Icons.arrow_drop_down,color: Colors.black),
-                      clearIconProperty: IconProperty(
-                          color: Colors.black, icon: Icons.clear),
-                      // dropdownColor: Colors.orange,
+                        searchDecoration: const InputDecoration(
+                            hintText: "Select Product"),
+                        validator: (value) {
+                          if (value == null) {
+                            return "Required Product Name";
+                          } else {
+                            return null;
+                          }
+                        },
+                        dropDownItemCount: 6,
+                        dropDownList: productList,
 
-                      searchDecoration: const InputDecoration(
-                          hintText: "Select Product"),
-                      validator: (value) {
-                        if (value == null) {
-                          return "Required Product Name";
-                        } else {
+                        onChanged: (val) {
+                          // print(itermNameController.dropDownValue?.name);
+                          selectedVal =
+                              itermNameController.dropDownValue?.name;
+                          getProductsDetails();
+                        },
+                      )
+                          : Container(
+                        padding: const EdgeInsets.only(top: 20.0),
+                        child: TextFormField(
+                          textInputAction: TextInputAction.next,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter product name';
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.name,
+                          decoration: const InputDecoration(
+                              hintText: 'Product Name'),
+                          controller: itermNameController2,
+                        ),
+                      ),
+                    ),
 
-                          return null;
-                        }
-                      },
-                      dropDownItemCount: 6,
-                      dropDownList: productList,
-                      onChanged: (val) {
-                        // print(itermNameController.dropDownValue?.name);
-                        selectedVal = itermNameController.dropDownValue?.name;
-                        getProductsDetails();
-
-                      },
-                    )
-                        : Container(
+                    /// PRICE
+                    Container(
                       padding: const EdgeInsets.only(top: 20.0),
                       child: TextFormField(
-                        textInputAction: TextInputAction.next,
+                        enabled: false,
+                        textInputAction: TextInputAction.done,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter product name';
+                            return 'Please enter amount';
                           }
                           return null;
                         },
-                        keyboardType: TextInputType.name,
-                        decoration: const InputDecoration(hintText: 'Product Name'),
-                        controller: itermNameController2,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                            hintText: 'Amount Of Product'),
+                        controller: priceController,
                       ),
                     ),
-                  ),
 
-                  /// PRICE
-                  Container(
-                    padding: const EdgeInsets.only(top: 20.0),
-                    child: TextFormField(
-                      enabled: false,
-                      textInputAction: TextInputAction.done,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter amount';
-                        }
-                        return null;
-                      },
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(hintText: 'Amount Of Product'),
-                      controller: priceController,
+                    ///QUANTITY
+                    Container(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: TextFormField(
+                        textInputAction: TextInputAction.done,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter quantity';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                            hintText: 'Quantity of Product'),
+                        controller: quantityController,
+                      ),
                     ),
-                  ),
-                  ///QUANTITY
-                  Container(
-                    padding: const EdgeInsets.only(top: 20.0),
-                    child: TextFormField(
-                      textInputAction: TextInputAction.done,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter quantity';
-                        }
-                        return null;
-                      },
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(hintText: 'Quantity of Product'),
-                      controller: quantityController,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
       ),
-
       actions: [
         cancelButton,
         okButton,
@@ -919,19 +948,15 @@ class _AddItermState extends State<AddIterm> {
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        return StatefulBuilder(
-            builder: (context, setState) {
-              return WillPopScope(onWillPop: () async {
-                return false;
-              },
-                child: alert,
-              );
-            }
-        );
+        return StatefulBuilder(builder: (context, setState) {
+          return WillPopScope(
+            onWillPop: () async {
+              return false;
+            },
+            child: alert,
+          );
+        });
       },
     );
   }
-
-
 }
-

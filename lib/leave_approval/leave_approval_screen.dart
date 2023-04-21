@@ -76,6 +76,21 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
               }
             }
 
+            final index = staffLeaves.indexWhere(
+                (element) => element.status.toLowerCase().contains('pending'));
+            if (index < 0) {
+              return Center(
+                child: Text(
+                  'No leave forms available!!',
+                  style: TextStyle(
+                    fontFamily: ConstantFonts.poppinsRegular,
+                    fontWeight: FontWeight.w600,
+                    color: ConstantColor.backgroundColor,
+                    fontSize: 20,
+                  ),
+                ),
+              );
+            }
             //DISPLAYING ALL LEAVE REQUEST
             return ListView.builder(
                 itemCount: staffLeaves.length,
@@ -133,33 +148,39 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                                 Row(
                                   children: [
                                     SizedBox(
-                                        width: width * .4,
-                                        child: textWidget('Date', 15)),
+                                      width: width * .4,
+                                      child: textWidget('Date', 15),
+                                    ),
                                     Expanded(
-                                        child: textWidget(
-                                            ':  ${staffLeaves[index].date}', 15))
+                                      child: textWidget(
+                                          ':  ${staffLeaves[index].date}', 15),
+                                    ),
                                   ],
                                 ),
                                 const SizedBox(height: 10.0),
                                 Row(
                                   children: [
                                     SizedBox(
-                                        width: width * .4,
-                                        child: textWidget('Reason', 15)),
+                                      width: width * .4,
+                                      child: textWidget('Reason', 15),
+                                    ),
                                     Expanded(
-                                        child: reasonContainer(
-                                            staffLeaves[index].reason)),
+                                      child: reasonContainer(
+                                          staffLeaves[index].reason),
+                                    ),
                                   ],
                                 ),
                                 const SizedBox(height: 10.0),
                                 Row(
                                   children: [
                                     SizedBox(
-                                        width: width * .4,
-                                        child: textWidget('Leave Type', 15)),
+                                      width: width * .4,
+                                      child: textWidget('Leave Type', 15),
+                                    ),
                                     Expanded(
-                                        child: textWidget(
-                                            ':  ${staffLeaves[index].type}', 15))
+                                      child: textWidget(
+                                          ':  ${staffLeaves[index].type}', 15),
+                                    ),
                                   ],
                                 ),
                                 const SizedBox(height: 10.0),
@@ -243,7 +264,6 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                   }
                 });
           }
-
           //Loading section
           return const Center(
             child: CircularProgressIndicator(),
@@ -261,9 +281,18 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
       'status': status,
     });
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content:
-            Text('Leave request for ${leaveRequest.name} has been $status')));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Leave request for ${leaveRequest.name} has been $status',
+          style: TextStyle(
+            color: ConstantColor.backgroundColor,
+            fontSize: 16,
+            fontFamily: ConstantFonts.poppinsMedium,
+          ),
+        ),
+      ),
+    );
   }
 
   Widget buttonWidget(
@@ -308,8 +337,9 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
     return AutoSizeText(
       name,
       style: TextStyle(
-          fontSize: size,
+          fontSize: 16,
           fontFamily: ConstantFonts.poppinsRegular,
+          fontWeight: FontWeight.w600,
           color: ConstantColor.blackColor),
     );
   }
@@ -374,6 +404,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
         style: TextStyle(
             fontSize: 16,
             fontFamily: ConstantFonts.poppinsRegular,
+            fontWeight: FontWeight.w600,
             color: ConstantColor.blackColor),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,

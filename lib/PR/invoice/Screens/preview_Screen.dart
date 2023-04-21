@@ -25,7 +25,6 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 class PreviewScreen extends StatefulWidget {
-
   final String doctype;
   final String category;
   final int advanceAmt;
@@ -55,8 +54,6 @@ class PreviewScreen extends StatefulWidget {
 }
 
 class _PreviewScreenState extends State<PreviewScreen> {
-
-
   final HiveOperations _hiveOperations = HiveOperations();
   StaffModel? staffInfo;
 
@@ -66,7 +63,6 @@ class _PreviewScreenState extends State<PreviewScreen> {
       staffInfo = data;
     });
   }
-
 
   bool isVisible = false;
   final GlobalKey _globalKey = GlobalKey();
@@ -117,6 +113,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
   String supplierEmail = " ";
   String supplierWebsite = " ";
   String supplierGst = " ";
+
   // User? user;
   late DateTime currentPhoneDate;
   var dataJson;
@@ -185,14 +182,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery
-        .of(context)
-        .size
-        .height;
-    final width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Consumer<TaskData>(builder: (context, taskData, child) {
       final task =
       taskData.tasks.length == 2 ? taskData.tasks[1] : taskData.tasks[0];
@@ -223,22 +214,25 @@ class _PreviewScreenState extends State<PreviewScreen> {
           upiID: "onwordspay@ybl",
           payeeName: "Onwords Smart Solutions",
           amount: grandTotal < 80000 ? grandTotal : null,
-          transactionNote:
-          widget.category == 'GA' ? "Gate Automation"
-              : widget.category == 'SH' ? "Smart Home"
-              : widget.category == 'IT' ? "APP or Web Development"
-              : widget.category == 'DL' ? "Door Lock"
-              : widget.category == 'SS' ? "Security System"
-              : widget.category == 'WTA' ? "Water Tank Automation"
-              : widget.category == 'AG' ? "Agriculture Automation"
-              : 'Onwords Smart Solutions'
-
-      );
-
+          transactionNote: widget.category == 'GA'
+              ? "Gate Automation"
+              : widget.category == 'SH'
+              ? "Smart Home"
+              : widget.category == 'IT'
+              ? "APP or Web Development"
+              : widget.category == 'DL'
+              ? "Door Lock"
+              : widget.category == 'SS'
+              ? "Security System"
+              : widget.category == 'WTA'
+              ? "Water Tank Automation"
+              : widget.category == 'AG'
+              ? "Agriculture Automation"
+              : 'Onwords Smart Solutions');
 
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Color(0xffDDE6E8),
           elevation: 0,
           title: Text(
             "Invoice Preview",
@@ -262,28 +256,29 @@ class _PreviewScreenState extends State<PreviewScreen> {
             },
           ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Color(0xffDDE6E8),
         body: Form(
           key: formKey,
           child: Stack(
             children: [
               Positioned(
-                  top: 5,
-                  left: 0,
-                  right: 0,
-                  child: RepaintBoundary(
-                    key: _globalKey,
-                    child: UPIPaymentQRCode(
-                      upiDetails: upiDetails,
-                      size: 300,
-                    ),
-                  )),
+                top: 5,
+                left: 0,
+                right: 0,
+                child: RepaintBoundary(
+                  key: _globalKey,
+                  child: UPIPaymentQRCode(
+                    upiDetails: upiDetails,
+                    size: 300,
+                  ),
+                ),
+              ),
               Positioned(
                 top: 5,
                 left: 0,
                 right: 0,
                 child: Container(
-                  color: Colors.white,
+                  color: Color(0xffDDE6E8),
                   height: height * 1.0,
                   width: width * 1.0,
                   padding: EdgeInsets.symmetric(horizontal: width * 0.05),
@@ -297,15 +292,14 @@ class _PreviewScreenState extends State<PreviewScreen> {
                             Container(
                               padding: const EdgeInsets.all(05),
                               decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black26,
+                                  border: Border.all(
+                                      color: Colors.black26,
                                       width: width * 0.002),
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
+                                  borderRadius: BorderRadius.circular(10)),
                               child: Column(
                                 children: [
                                   Text(
-                                    'Date : ${DateFormat("dd.MM.yyyy").format(
-                                        date)}',
+                                    'Date : ${DateFormat("dd.MM.yyyy").format(date)}',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: height * 0.012,
@@ -343,14 +337,15 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                 ],
                               ),
                             ),
-
-                            widget.doctype == "INVOICE" ? Container(
+                            widget.doctype == "INVOICE"
+                                ? Container(
                               padding: const EdgeInsets.all(05),
                               decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black26,
+                                  border: Border.all(
+                                      color: Colors.black26,
                                       width: width * 0.002),
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
+                                  borderRadius:
+                                  BorderRadius.circular(10)),
                               child: Column(
                                 children: [
                                   Text(
@@ -365,11 +360,14 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                       height: height * 0.050,
                                       width: width * 0.25,
                                       child: TextFormField(
-                                        textInputAction: TextInputAction.done,
+                                        textInputAction:
+                                        TextInputAction.done,
                                         controller: estimateDate,
-                                        keyboardType: TextInputType.datetime,
+                                        keyboardType:
+                                        TextInputType.datetime,
                                         validator: (value) {
-                                          if (value == null || value.isEmpty) {
+                                          if (value == null ||
+                                              value.isEmpty) {
                                             return 'Date required';
                                           }
                                           return null;
@@ -389,21 +387,23 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                             fontSize: height * 0.012,
                                             fontFamily: 'Nexa',
                                           ),
-
                                         ),
                                         onTap: () async {
-                                          DateTime? pickedDate = await showDatePicker(
+                                          DateTime? pickedDate =
+                                          await showDatePicker(
                                               context: context,
-                                              initialDate: DateTime.now(),
-                                              firstDate: DateTime(2000),
+                                              initialDate:
+                                              DateTime.now(),
+                                              firstDate:
+                                              DateTime(2000),
                                               //DateTime.now() - not to allow to choose before today.
-                                              lastDate: DateTime(2101)
-                                          );
+                                              lastDate:
+                                              DateTime(2101));
 
                                           if (pickedDate != null) {
-                                            String formattedDate = DateFormat(
-                                                'yyyy-MM-dd').format(
-                                                pickedDate);
+                                            String formattedDate =
+                                            DateFormat('yyyy-MM-dd')
+                                                .format(pickedDate);
                                             setState(() {
                                               estimateDate.text =
                                                   formattedDate; //set output date to TextField value.
@@ -413,7 +413,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                       )),
                                 ],
                               ),
-                            ) : Container(),
+                            )
+                                : Container(),
                             Column(
                               children: [
                                 widget.doctype == 'INVOICE'
@@ -499,7 +500,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                           decoration: BoxDecoration(
                               border: Border.all(
                                   color: const Color(0xff00bcd4), width: 1.0),
-                              color: Colors.white,
+                              color: Color(0xffDDE6E8),
                               borderRadius: BorderRadius.circular(20)),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
@@ -517,8 +518,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                       (invoice[index].description),
                                       '${invoice[index].quantity}',
                                       '${invoice[index].unitPrice}',
-                                      '${invoice[index].quantity *
-                                          invoice[index].unitPrice}'
+                                      '${invoice[index].quantity * invoice[index].unitPrice}'
                                     ]),
                                   ],
                                 );
@@ -527,22 +527,24 @@ class _PreviewScreenState extends State<PreviewScreen> {
                           ),
                         ),
                         Container(
-                          margin: const EdgeInsets.symmetric(vertical: 10.0),
+                          margin: const EdgeInsets.only(top: 30,),
                           width: width * 0.9,
+                          // color: Colors.cyanAccent,
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               GestureDetector(
                                 onTap: () async {
-                                  final isValid = formKey.currentState
-                                      ?.validate();
+                                  final isValid =
+                                  formKey.currentState?.validate();
                                   if (isValid!) {
                                     showDialog(
                                         context: context,
                                         barrierDismissible: false,
                                         builder: (context) {
                                           return const Center(
-                                            child: CircularProgressIndicator(),);
+                                            child: CircularProgressIndicator(),
+                                          );
                                         });
                                     await _convertImage();
 
@@ -600,13 +602,13 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                     final firebaseStorage =
                                         FirebaseStorage.instance;
 
-                                    final pdfFile = await PdfInvoiceApi
-                                        .generate(
+                                    final pdfFile =
+                                    await PdfInvoiceApi.generate(
                                         invoice,
                                         // user!,
                                         convertedImage!);
-                                    PdfApi.openFile(pdfFile).then((
-                                        value) async {
+                                    PdfApi.openFile(pdfFile)
+                                        .then((value) async {
                                       // print(task.name);
                                       logData.setString(
                                           'accountNameSaved', accountName.text);
@@ -617,30 +619,33 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                       logData.setString(
                                           'bankNameSaved', bank.text);
 
-
                                       ///................FIREBASE..........
                                       if (widget.doctype == "INVOICE") {
                                         var snapshot = await firebaseStorage
                                             .ref()
                                             .child(
-                                                'INVOICE/INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
+                                            'INVOICE/INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
                                             .putFile(pdfFile);
                                         var downloadUrl =
-                                            await snapshot.ref.getDownloadURL();
+                                        await snapshot.ref.getDownloadURL();
 
-                                      /// INSTALLATION-INVOICE......
-                                      final installationPdfFile = await InstallationInvoicePdf.generate(
+                                        /// INSTALLATION-INVOICE......
+                                        final installationPdfFile =
+                                        await InstallationInvoicePdf
+                                            .generate(
                                           invoice,
-                                        // user,
-                                      );
+                                          // user,
+                                        );
 
-                                        var snapshotInstallation = await firebaseStorage
+                                        var snapshotInstallation =
+                                        await firebaseStorage
                                             .ref()
                                             .child(
                                             'INSTALLATION-INVOICE/INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
                                             .putFile(installationPdfFile);
                                         var downloadUrlInstallation =
-                                        await snapshotInstallation.ref.getDownloadURL();
+                                        await snapshotInstallation.ref
+                                            .getDownloadURL();
 
                                         var da = {
                                           'Customer_name': task.name,
@@ -649,7 +654,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                           'CreatedBy': staffInfo?.email,
                                           'mobile_number': task.phone,
                                           'document_link': downloadUrl,
-                                          'installation_document_link': downloadUrlInstallation,
+                                          'installation_document_link':
+                                          downloadUrlInstallation,
                                         };
                                         databaseReference
                                             .child('QuotationAndInvoice')
@@ -657,17 +663,16 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                             .child('${Utils.formatYear(date)}')
                                             .child('${Utils.formatMonth(date)}')
                                             .child(
-                                                'INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
+                                            'INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
                                             .set(da);
-                                      }
-                                      else {
+                                      } else {
                                         var snapshot = await firebaseStorage
                                             .ref()
                                             .child(
-                                                'QUOTATION/EST${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
+                                            'QUOTATION/EST${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
                                             .putFile(pdfFile);
                                         var downloadUrl =
-                                            await snapshot.ref.getDownloadURL();
+                                        await snapshot.ref.getDownloadURL();
                                         var da = {
                                           'Customer_name': task.name,
                                           'Status': 'Processing',
@@ -682,7 +687,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                             .child('${Utils.formatYear(date)}')
                                             .child('${Utils.formatMonth(date)}')
                                             .child(
-                                                'EST${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
+                                            'EST${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
                                             .set(da);
                                       }
 
@@ -690,37 +695,41 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                       quotNo.clear();
                                       estimateDate.clear();
                                     }).then((value) => {
-
-                                    setState(() {
-                                      // if(!mounted) return;
-                                      Navigator.of(context).pushAndRemoveUntil(
-                                        MaterialPageRoute(
-                                            builder: (_) => const UserHomeScreen()),
-                                            (route) => false);
-                                    Provider.of<TaskData>(context, listen: false)
-                                        .invoiceListData
-                                        .clear();
-                                    Provider.of<TaskData>(context, listen: false)
-                                        .value
-                                        .clear();
-                                    Provider.of<TaskData>(context, listen: false)
-                                        .deleteCustomerDetails(1);
-                                    }),
+                                      setState(() {
+                                        // if(!mounted) return;
+                                        Navigator.of(context)
+                                            .pushAndRemoveUntil(
+                                            MaterialPageRoute(
+                                                builder: (_) =>
+                                                const UserHomeScreen()),
+                                                (route) => false);
+                                        Provider.of<TaskData>(context,
+                                            listen: false)
+                                            .invoiceListData
+                                            .clear();
+                                        Provider.of<TaskData>(context,
+                                            listen: false)
+                                            .value
+                                            .clear();
+                                        Provider.of<TaskData>(context,
+                                            listen: false)
+                                            .deleteCustomerDetails(1);
+                                      }),
                                     });
-                                  }
-                                  else {
+                                  } else {
                                     showSnackBar(
                                         message: 'Please Fill All Filed',
                                         color: Colors.red);
                                   }
                                 },
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
                                   width: 130,
                                   height: 70,
                                   decoration: BoxDecoration(
                                     // color: const Color(0xffFF7E44),
-                                    color:  const Color(0xff00bcd4),
+                                    color: const Color(0xff00bcd4),
                                     borderRadius: BorderRadius.circular(15),
                                     boxShadow: [
                                       BoxShadow(
@@ -731,25 +740,26 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                     ],
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       const Text(
-                                        'Save as',
+                                        'Save As',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 13,
                                             fontFamily: 'Nexa',
                                             color: Colors.white),
                                       ),
-                                      Image.asset('assets/pdf.png',scale: 3.0,),
-
+                                      Image.asset(
+                                        'assets/pdf.png',
+                                        scale: 3.0,
+                                      ),
                                     ],
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                width: width * 0.05,
-                              ),
+
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
@@ -776,15 +786,13 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                     style: const TextStyle(fontSize: 10),
                                   ),
                                   Text(
-                                    "Discount :        ${widget
-                                        .discountAmount}",
+                                    "Discount :        ${widget.discountAmount}",
                                     style: const TextStyle(fontSize: 10),
                                   ),
                                   Text(
                                     "Advance :       ${widget.advanceAmt}",
                                     style: const TextStyle(fontSize: 10),
                                   ),
-
                                   Text(
                                     "Grand Total  : $grandTotal",
                                     style: const TextStyle(
@@ -793,7 +801,6 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                   ),
                                 ],
                               ),
-
                             ],
                           ),
                         ),
@@ -812,207 +819,41 @@ class _PreviewScreenState extends State<PreviewScreen> {
 
   void showSnackBar({required String message, required Color color}) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         padding: const EdgeInsets.all(0.0),
         content: Container(
-            height: 50.0,
-            color: color,
-            child: Center(
-                child: Text(
-                  message,
-                  style: const TextStyle(fontFamily: 'Nexa'),
-                )))));
+          height: 50.0,
+          color: color,
+          child: Center(
+            child: Text(
+              message,
+              style: const TextStyle(fontFamily: 'Nexa'),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
-  TableRow buildRow(List<String> cells, {bool isHeader = false}) =>
-      TableRow(
-        children: cells.map(
-              (cell) {
-            const style = TextStyle(
-              color: Colors.black,
-            );
-            return Padding(
-              padding: const EdgeInsets.all(1),
-              child: Center(
-                child: Text(
-                  cell,
-                  style: style,
-                ),
-              ),
-            );
-          },
-        ).toList(),
-      );
-// showFileNameDialog(BuildContext context,task,height,width,taskData) {
-//   // Create button
-//   Widget okButton =  ButtonWidget(
-//     text: 'GENERATE PDF',
-//     onClicked: () async {
-//       final date = DateTime.now();
-//       // final dueDate = date.add(Duration(days: 7));
-//       final invoice = Invoice(
-//         quotNo: int.parse(quotNo.text),
-//         fileName: fileName.text,
-//         supplier: Supplier(
-//           name: supplierName,
-//           street: supplierStreet,
-//           address: supplierAddress,
-//           phone: supplierPhone,
-//           email: supplierEmail,
-//           website: supplierWebsite,
-//         ),
-//         customer: Customer(
-//           name: task.name,
-//           street: task.street,
-//           address: task.address,
-//           phone: task.phone,
-//         ),
-//         info: InvoiceInfo(
-//           date: date,
-//           // dueDate: dueDate,
-//           // description: 'Description...',
-//           // number: '${DateTime.now().year}-9999',
-//         ),
-//         items: taskData.invoiceListData,
-//         docType: dropdownValue, cat: category, advancePaid: advanceAmt, labAndInstall: labCharge,
-//       );
-//
-//       final pdfFile = await PdfInvoiceApi.generate(invoice);
-//
-//       PdfApi.openFile(pdfFile).then((value){
-//         fileName.clear();
-//         quotNo.clear();
-//         // labAndInstall.clear();
-//         // advancePaid.clear();
-//       });
-//     },
-//   );
-//   Widget cancelButton = TextButton(
-//     child: const Text(" Cancel "),
-//     onPressed: () {
-//       Navigator.pop(context, false);
-//     },
-//   );
-//   // Create AlertDialog
-//   final alert = StatefulBuilder(
-//       builder: (context, setState) => AlertDialog(
-//         backgroundColor: Colors.white,
-//         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-//         content: Container(
-//           height: height*0.30,
-//           width: width*1.0,
-//           child: SingleChildScrollView(
-//             child: Column(
-//               mainAxisAlignment: MainAxisAlignment.start,
-//               children: [
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                   children: [
-//                     DropdownButton<String>(
-//                       value: dropdownValue,
-//                       icon: const Icon(Icons.arrow_downward),
-//                       elevation: 16,
-//                       style: const TextStyle(color: Colors.black),
-//                       underline: Container(
-//                         height: 2,
-//                         color: Colors.black,
-//                       ),
-//                       onChanged: (String? newValue) {
-//                         setState(() {
-//                           dropdownValue = newValue!;
-//                         });
-//                       },
-//                       items: <String>['QUOTATION','INVOICE']
-//                           .map<DropdownMenuItem<String>>((String value) {
-//                         return DropdownMenuItem<String>(
-//                           value: value,
-//                           child: Text(value),
-//                         );
-//                       }).toList(),
-//                     ),
-//                     DropdownButton<String>(
-//                       value: category,
-//                       icon: const Icon(Icons.arrow_downward),
-//                       elevation: 16,
-//                       style: const TextStyle(color: Colors.black),
-//                       underline: Container(
-//                         height: 2,
-//                         color: Colors.black,
-//                       ),
-//                       onChanged: (String? newValue) {
-//                         setState(() {
-//                           category = newValue!;
-//                         });
-//                       },
-//                       items: <String>['GA','SH','IT','DL','SS','WTA']
-//                           .map<DropdownMenuItem<String>>((String value) {
-//                         return DropdownMenuItem<String>(
-//                           value: value,
-//                           child: Text(value),
-//                         );
-//                       }).toList(),
-//                     ),
-//                   ],
-//                 ),
-//                 Container(
-//                   padding: const EdgeInsets.all(20.0),
-//                   child: TextFormField(
-//                     decoration: const InputDecoration(hintText: 'file name'),
-//                     controller: fileName,
-//                   ),
-//                 ),
-//                 Container(
-//                   padding: const EdgeInsets.all(20.0),
-//                   child: TextFormField(
-//                     keyboardType: TextInputType.number,
-//                     decoration: const InputDecoration(hintText: 'Quotation no'),
-//                     controller: quotNo,
-//                   ),
-//                 ),
-//                 dropdownValue=="INVOICE"? Container(
-//                   padding: const EdgeInsets.all(20.0),
-//                   child: TextFormField(
-//                     onChanged: (val){
-//                       setState((){
-//                         labCharge = int.parse(val);
-//                         print(labCharge);
-//                       });
-//                     },
-//                     keyboardType: TextInputType.number,
-//                     decoration: const InputDecoration(hintText: 'Labour and Installation Amount'),
-//                     controller: labAndInstall,
-//                   ),
-//                 ):Container(),
-//                 dropdownValue=="INVOICE"? Container(
-//                   padding: const EdgeInsets.all(20.0),
-//                   child: TextFormField(
-//                     onChanged: (val){
-//                       setState(() {
-//                         advanceAmt = int.parse(val);
-//                         print(advanceAmt);
-//                       });
-//                     },
-//                     keyboardType: TextInputType.number,
-//                     decoration: const InputDecoration(hintText: 'Advance Paid'),
-//                     controller: advancePaid,
-//                   ),
-//                 ):Container(),
-//               ],
-//             ),
-//           ),
-//         ),
-//         actions: [
-//           okButton,
-//           cancelButton,
-//         ],
-//       ));
-//   showDialog(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return alert;
-//     },
-//   );
-// }
+  TableRow buildRow(List<String> cells, {bool isHeader = false}) => TableRow(
+    children: cells.map(
+          (cell) {
+        const style = TextStyle(
+          color: Colors.black,
+        );
+        return Padding(
+          padding: const EdgeInsets.all(1),
+          child: Center(
+            child: Text(
+              cell,
+              style: style,
+            ),
+          ),
+        );
+      },
+    ).toList(),
+  );
 }

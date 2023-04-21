@@ -22,6 +22,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Absentees/absentees.dart';
 import '../Constant/fonts/constant_font.dart';
 import '../PR/pr_points_screen.dart';
+import '../PR/products/new_product.dart';
+import '../PR/products/point_calculations.dart';
 import '../PR/visit_check.dart';
 import '../database/hive_operations.dart';
 import '../finance/finance_analysis.dart';
@@ -139,10 +141,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 1/1.2,
+                  childAspectRatio: 1 / 1.2,
                   crossAxisCount: 2,
-                    crossAxisSpacing: 10.0,
-                    mainAxisSpacing: 10.0,),
+                  crossAxisSpacing: 10.0,
+                  mainAxisSpacing: 10.0,
+                ),
                 children: [
                   buildButton(
                     name: 'Refreshment',
@@ -164,22 +167,22 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     page: const FoodCountScreen(),
                   ),
                   buildButton(
-                      name: 'Work details',
-                      image: Image.asset(
-                        'assets/work_details.png',
-                        scale: 3.5,
-                      ),
-                      page: WorkCompleteViewScreen(
-                        userDetails: staffInfo!,
-                      ),
+                    name: 'Work details',
+                    image: Image.asset(
+                      'assets/work_details.png',
+                      scale: 3.5,
+                    ),
+                    page: WorkCompleteViewScreen(
+                      userDetails: staffInfo!,
+                    ),
                   ),
                   buildButton(
-                      name: 'Absent details',
-                      image: Image.asset(
-                        'assets/lead search.png',
-                        scale: 3.0,
-                      ),
-                      page: const AbsenteeScreen(),
+                    name: 'Absent details',
+                    image: Image.asset(
+                      'assets/lead search.png',
+                      scale: 3.0,
+                    ),
+                    page: const AbsenteeScreen(),
                   ),
                   buildButton(
                     name: 'Search leads',
@@ -273,7 +276,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     shrinkWrap: true,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 1/1.2,
+                            childAspectRatio: 1 / 1.2,
                             crossAxisCount: 2,
                             crossAxisSpacing: 10.0,
                             mainAxisSpacing: 10.0),
@@ -299,15 +302,15 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         ),
                       ),
                       buildButton(
-                          name: 'Refreshment',
-                          image: Image.asset(
-                            'assets/refreshment.png',
-                            scale: 3.8,
-                          ),
-                          page: RefreshmentScreen(
-                            uid: staffInfo!.uid,
-                            name: staffInfo!.name,
-                          ),
+                        name: 'Refreshment',
+                        image: Image.asset(
+                          'assets/refreshment.png',
+                          scale: 3.8,
+                        ),
+                        page: RefreshmentScreen(
+                          uid: staffInfo!.uid,
+                          name: staffInfo!.name,
+                        ),
                       ),
                       buildButton(
                         name: 'Search leads',
@@ -367,17 +370,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         ),
                       ),
                       if (staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
-                      buildButton(
-                        name: 'Check Entry',
-                        image: Image.asset(
-                          'assets/check_entry.png',
-                          scale: 3.36,
+                        buildButton(
+                          name: 'Check Entry',
+                          image: Image.asset(
+                            'assets/check_entry.png',
+                            scale: 3.36,
+                          ),
+                          page: CheckEntryScreen(
+                            userId: staffInfo!.uid,
+                            staffName: staffInfo!.name,
+                          ),
                         ),
-                        page: CheckEntryScreen(
-                          userId: staffInfo!.uid,
-                          staffName: staffInfo!.name,
-                        ),
-                      ),
                     ],
                   )
                 : staffInfo!.department == 'APP'
@@ -389,10 +392,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         shrinkWrap: true,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                              childAspectRatio: 1/1.2,
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 10.0,
-                                mainAxisSpacing: 10.0,),
+                          childAspectRatio: 1 / 1.2,
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 10.0,
+                          mainAxisSpacing: 10.0,
+                        ),
                         children: [
                           buildButton(
                             name: 'Work entry',
@@ -435,34 +439,34 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             page: const FoodCountScreen(),
                           ),
                           buildButton(
-                              name: 'Leave form',
-                              image: Image.asset('assets/leave_apply.png'),
-                              page:  LeaveApplyScreen(
-                                name: staffInfo!.name,
-                                uid: staffInfo!.uid,
-                              ),
+                            name: 'Leave form',
+                            image: Image.asset('assets/leave_apply.png'),
+                            page: LeaveApplyScreen(
+                              name: staffInfo!.name,
+                              uid: staffInfo!.uid,
+                            ),
                           ),
                           buildButton(
-                              name: 'Onyx',
-                              image: Image.asset(
-                                'assets/onxy.png',
-                                scale: 3,
-                              ),
-                              page: const AnnouncementScreen(),
+                            name: 'Onyx',
+                            image: Image.asset(
+                              'assets/onxy.png',
+                              scale: 3,
+                            ),
+                            page: const AnnouncementScreen(),
                           ),
                           buildButton(
-                              name: 'Absent details',
-                              image: Image.asset(
-                                'assets/lead search.png',
-                                scale: 3.0,
-                              ),
-                              page: const AbsenteeScreen(),
+                            name: 'Absent details',
+                            image: Image.asset(
+                              'assets/lead search.png',
+                              scale: 3.0,
+                            ),
+                            page: const AbsenteeScreen(),
                           ),
                           buildButton(
                             name: 'Leave approval',
                             image: Image.asset(
-                              'assets/leave_request.png',
-                              scale: 3.3,
+                              'assets/leave_approval.png',
+                              scale: 2,
                             ),
                             page: LeaveApprovalScreen(
                               name: staffInfo!.name,
@@ -583,6 +587,22 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               staffName: staffInfo!.name,
                             ),
                           ),
+                          buildButton(
+                            name: 'Create New Products',
+                            image: Image.asset(
+                              'assets/view_attendance.png',
+                              scale: 4.5,
+                            ),
+                            page: const CreateNewProduct(),
+                          ),
+                          buildButton(
+                            name: 'Points Calculations',
+                            image: Image.asset(
+                              'assets/points_calculation.png',
+                              scale: 1.55,
+                            ),
+                            page: const PointCalculationsScreen(),
+                          )
                         ],
                       )
                     : GridView(
@@ -593,7 +613,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         shrinkWrap: true,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                                childAspectRatio: 1/1.2,
+                                childAspectRatio: 1 / 1.2,
                                 crossAxisCount: 2,
                                 crossAxisSpacing: 10.0,
                                 mainAxisSpacing: 10.0),
@@ -642,18 +662,20 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               name: staffInfo!.name,
                             ),
                           ),
-                          if (staffInfo!.uid == 'QPgtT8vDV8Y9pdy8fhtOmBON1Q03'|| staffInfo!.uid == 'hCxvT3mh1sgORNUMjsSNc9rgxgk2')
-                          buildButton(
-                            name: 'Check Entry',
-                            image: Image.asset(
-                              'assets/check_entry.png',
-                              scale: 3.36,
+                          if (staffInfo!.uid ==
+                                  'QPgtT8vDV8Y9pdy8fhtOmBON1Q03' ||
+                              staffInfo!.uid == 'hCxvT3mh1sgORNUMjsSNc9rgxgk2')
+                            buildButton(
+                              name: 'Check Entry',
+                              image: Image.asset(
+                                'assets/check_entry.png',
+                                scale: 3.36,
+                              ),
+                              page: CheckEntryScreen(
+                                userId: staffInfo!.uid,
+                                staffName: staffInfo!.name,
+                              ),
                             ),
-                            page: CheckEntryScreen(
-                              userId: staffInfo!.uid,
-                              staffName: staffInfo!.name,
-                            ),
-                          ),
                         ],
                       )
         : Center(
@@ -681,14 +703,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               Color(0xff8355B7),
             ],
           ),
-            // color: const Color(0xffDAD6EE),
-            borderRadius: BorderRadius.circular(20),
-            boxShadow: const [
-              BoxShadow(
-                  color: Colors.black26,
-                  offset: Offset(5.0, 5.0),
-                  blurRadius: 5)
-            ],
+          // color: const Color(0xffDAD6EE),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: const [
+            BoxShadow(
+                color: Colors.black26, offset: Offset(5.0, 5.0), blurRadius: 5)
+          ],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
