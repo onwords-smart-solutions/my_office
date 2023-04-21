@@ -207,7 +207,7 @@ class _CustomerItemState extends State<CustomerItem> {
             .difference(DateTime(now.year, now.month, now.day))
             .inDays;
       }
-      if (calculateDifference(lastNoteUpdate) < -7) {
+      if (calculateDifference(lastNoteUpdate) <= -7) {
         isTimeToUpdate = true;
       }
     }

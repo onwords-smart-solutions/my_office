@@ -37,12 +37,14 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
         var entry = data.value as Map<Object?, Object?>;
         final staffEntry = StaffAttendanceModel(
           uid: data.key.toString(),
-          department:entry['department'].toString(),
+          department: entry['department'].toString(),
           name: entry['name'].toString(),
         );
         fullEntry.add(staffEntry);
 
-        if (staffEntry.department == "MEDIA" || staffEntry.department == "WEB" || staffEntry.department == "APP") {
+        if (staffEntry.department == "MEDIA" ||
+            staffEntry.department == "WEB" ||
+            staffEntry.department == "APP") {
           itStaffNames.add(staffEntry);
         }
         if (staffEntry.department == "RND") {
@@ -274,16 +276,66 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
                               );
                             },
                           )
-                        : Center(
-                            child: Text(
-                              'No Entry Registered!!!',
-                              style: TextStyle(
-                                color: ConstantColor.backgroundColor,
-                                fontSize: 22,
-                                fontFamily: ConstantFonts.poppinsMedium,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          );
+                        : widget.staffName == 'Nikhil Deepak'
+                            ? ListView.builder(
+                                physics: const BouncingScrollPhysics(),
+                                itemCount: adminStaffNames.length,
+                                itemBuilder: (ctx, i) {
+                                  return Container(
+                                    margin: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color: ConstantColor.background1Color,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.2),
+                                          offset: const Offset(-0.0, 5.0),
+                                          blurRadius: 8,
+                                        )
+                                      ],
+                                      borderRadius: BorderRadius.circular(11),
+                                    ),
+                                    child: Center(
+                                      child: ListTile(
+                                        onTap: () => Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (_) =>
+                                                StaffEntryCheckScreen(
+                                              staffDetail: adminStaffNames[i],
+                                            ),
+                                          ),
+                                        ),
+                                        leading: const CircleAvatar(
+                                          radius: 20,
+                                          backgroundColor:
+                                              ConstantColor.backgroundColor,
+                                          child: Icon(Icons.person),
+                                        ),
+                                        title: Text(
+                                          adminStaffNames[i].name,
+                                          style: TextStyle(
+                                              fontFamily:
+                                                  ConstantFonts.poppinsMedium,
+                                              color: ConstantColor.blackColor,
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.020),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              )
+                            : Center(
+                                child: Text(
+                                  'No Entry Registered!!!',
+                                  style: TextStyle(
+                                    color: ConstantColor.backgroundColor,
+                                    fontSize: 22,
+                                    fontFamily: ConstantFonts.poppinsMedium,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              );
   }
 }

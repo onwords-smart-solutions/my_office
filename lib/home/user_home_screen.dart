@@ -193,21 +193,42 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     page: SearchLeadsScreen(staffInfo: staffInfo!),
                   ),
                   buildButton(
-                    name: 'Visit',
-                    image: Image.asset(
-                      'assets/visit.png',
-                      scale: 1.8,
+                    name: 'Leave form',
+                    image: Image.asset('assets/leave_apply.png',
+                      scale: 13.8,
                     ),
-                    page: const VisitFromScreen(),
+                    page: LeaveApplyScreen(
+                      name: staffInfo!.name,
+                      uid: staffInfo!.uid,
+                    ),
                   ),
                   buildButton(
-                    name: 'Visit check',
+                    name: 'Leave approval',
                     image: Image.asset(
-                      'assets/visit_check.png',
-                      scale: 3.4,
+                      'assets/leave_approval.png',
+                      scale: 2,
                     ),
-                    page: const VisitCheckScreen(),
+                    page: LeaveApprovalScreen(
+                      name: staffInfo!.name,
+                      uid: staffInfo!.uid,
+                    ),
                   ),
+                  // buildButton(
+                  //   name: 'Visit',
+                  //   image: Image.asset(
+                  //     'assets/visit.png',
+                  //     scale: 1.8,
+                  //   ),
+                  //   page: const VisitFromScreen(),
+                  // ),
+                  // buildButton(
+                  //   name: 'Visit check',
+                  //   image: Image.asset(
+                  //     'assets/visit_check.png',
+                  //     scale: 3.4,
+                  //   ),
+                  //   page: const VisitCheckScreen(),
+                  // ),
                   buildButton(
                     name: 'Invoice generator',
                     image: Image.asset(
@@ -265,6 +286,33 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       staffName: staffInfo!.name,
                     ),
                   ),
+                  buildButton(
+                    name: 'PR points',
+                    image: Image.asset(
+                      'assets/pr_points.png',
+                      scale: 3.36,
+                    ),
+                    page: PrPointsScreen(
+                      userId: staffInfo!.uid,
+                      staffName: staffInfo!.name,
+                    ),
+                  ),
+                  buildButton(
+                    name: 'Create products',
+                    image: Image.asset(
+                      'assets/new_products.png',
+                      scale: 3.36,
+                    ),
+                    page: const CreateNewProduct(),
+                  ),
+                  buildButton(
+                    name: 'Sales points',
+                    image: Image.asset(
+                      'assets/points_calculation.png',
+                      scale: 1.55,
+                    ),
+                    page: const PointCalculationsScreen(),
+                  ),
                 ],
               )
             : staffInfo!.department == 'PR'
@@ -281,15 +329,15 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             crossAxisSpacing: 10.0,
                             mainAxisSpacing: 10.0),
                     children: [
-                      if (staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
-                        buildButton(
-                          name: 'Visit check',
-                          image: Image.asset(
-                            'assets/visit_check.png',
-                            scale: 3.4,
-                          ),
-                          page: const VisitCheckScreen(),
-                        ),
+                      // if (staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
+                      //   buildButton(
+                      //     name: 'Visit check',
+                      //     image: Image.asset(
+                      //       'assets/visit_check.png',
+                      //       scale: 3.4,
+                      //     ),
+                      //     page: const VisitCheckScreen(),
+                      //   ),
                       buildButton(
                         name: 'Work entry',
                         image: Image.asset(
@@ -320,14 +368,14 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         ),
                         page: SearchLeadsScreen(staffInfo: staffInfo!),
                       ),
-                      buildButton(
-                        name: 'Visit',
-                        image: Image.asset(
-                          'assets/visit.png',
-                          scale: 1.8,
-                        ),
-                        page: const VisitFromScreen(),
-                      ),
+                      // buildButton(
+                      //   name: 'Visit',
+                      //   image: Image.asset(
+                      //     'assets/visit.png',
+                      //     scale: 1.8,
+                      //   ),
+                      //   page: const VisitFromScreen(),
+                      // ),
                       buildButton(
                         name: 'Invoice generator',
                         image: Image.asset(
@@ -369,6 +417,28 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           staffName: staffInfo!.name,
                         ),
                       ),
+                      buildButton(
+                        name: 'Leave form',
+                        image: Image.asset('assets/leave_apply.png',
+                          scale: 13.8,
+                        ),
+                        page: LeaveApplyScreen(
+                          name: staffInfo!.name,
+                          uid: staffInfo!.uid,
+                        ),
+                      ),
+                      if (staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
+                      buildButton(
+                        name: 'Leave approval',
+                        image: Image.asset(
+                          'assets/leave_approval.png',
+                          scale: 2,
+                        ),
+                        page: LeaveApprovalScreen(
+                          name: staffInfo!.name,
+                          uid: staffInfo!.uid,
+                        ),
+                      ),
                       if (staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
                         buildButton(
                           name: 'Check Entry',
@@ -381,6 +451,23 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             staffName: staffInfo!.name,
                           ),
                         ),
+                      if (staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
+                      buildButton(
+                        name: 'Create products',
+                        image: Image.asset(
+                          'assets/new_products.png',
+                          scale: 3.36,
+                        ),
+                        page: const CreateNewProduct(),
+                      ),
+                      buildButton(
+                        name: 'Sales points',
+                        image: Image.asset(
+                          'assets/points_calculation.png',
+                          scale: 1.55,
+                        ),
+                        page: const PointCalculationsScreen(),
+                      ),
                     ],
                   )
                 : staffInfo!.department == 'APP'
@@ -440,7 +527,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           ),
                           buildButton(
                             name: 'Leave form',
-                            image: Image.asset('assets/leave_apply.png'),
+                            image: Image.asset('assets/leave_apply.png',
+                            scale: 13.8,
+                            ),
                             page: LeaveApplyScreen(
                               name: staffInfo!.name,
                               uid: staffInfo!.uid,
@@ -588,21 +677,21 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             ),
                           ),
                           buildButton(
-                            name: 'Create New Products',
+                            name: 'Create products',
                             image: Image.asset(
-                              'assets/view_attendance.png',
-                              scale: 4.5,
+                              'assets/new_products.png',
+                              scale: 3.36,
                             ),
                             page: const CreateNewProduct(),
                           ),
                           buildButton(
-                            name: 'Points Calculations',
+                            name: 'Sales points',
                             image: Image.asset(
                               'assets/points_calculation.png',
                               scale: 1.55,
                             ),
                             page: const PointCalculationsScreen(),
-                          )
+                          ),
                         ],
                       )
                     : GridView(
@@ -674,6 +763,30 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               page: CheckEntryScreen(
                                 userId: staffInfo!.uid,
                                 staffName: staffInfo!.name,
+                              ),
+                            ),
+                          buildButton(
+                            name: 'Leave form',
+                            image: Image.asset('assets/leave_apply.png',
+                              scale: 13.8,
+                            ),
+                            page: LeaveApplyScreen(
+                              name: staffInfo!.name,
+                              uid: staffInfo!.uid,
+                            ),
+                          ),
+                          if (staffInfo!.uid ==
+                              'QPgtT8vDV8Y9pdy8fhtOmBON1Q03' ||
+                              staffInfo!.uid == 'hCxvT3mh1sgORNUMjsSNc9rgxgk2')
+                            buildButton(
+                              name: 'Leave approval',
+                              image: Image.asset(
+                                'assets/leave_approval.png',
+                                scale: 2,
+                              ),
+                              page: LeaveApprovalScreen(
+                                name: staffInfo!.name,
+                                uid: staffInfo!.uid,
                               ),
                             ),
                         ],
