@@ -83,37 +83,37 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     _notificationService.showDailyNotification(setTime: isNotificationSet);
   }
 
-  //Checking app version
-  Future<void> checkAppVersion() async {
-    final ref = FirebaseDatabase.instance.ref();
-
-    ref.child('myOffice').once().then((value) {
-      if (value.snapshot.exists) {
-        final data = value.snapshot.value as Map<Object?, Object?>;
-        final updatedVersion = data['versionNumber'];
-        final updatedAdminVersion = data['adminVersion'];
-        final updatedPrVersion = data['prVersion'];
-
-        if (staffInfo?.department == 'ADMIN') {
-          if (AppConstants.adminDepVersion != updatedAdminVersion) {
-            showUpdateAppDialog();
-          }
-        } else if (staffInfo?.department == 'PR') {
-          if (AppConstants.prDepVersion != updatedPrVersion) {
-            showUpdateAppDialog();
-          }
-        } else {
-          if (AppConstants.pubVersion != updatedVersion) {
-            showUpdateAppDialog();
-          }
-        }
-      }
-    });
-  }
+          //CHECKING APP VERSION..//
+  // Future<void> checkAppVersion() async {
+  //   final ref = FirebaseDatabase.instance.ref();
+  //
+  //   ref.child('myOffice').once().then((value) {
+  //     if (value.snapshot.exists) {
+  //       final data = value.snapshot.value as Map<Object?, Object?>;
+  //       final updatedVersion = data['versionNumber'];
+  //       final updatedAdminVersion = data['adminVersion'];
+  //       final updatedPrVersion = data['prVersion'];
+  //
+  //       if (staffInfo?.department == 'ADMIN') {
+  //         if (AppConstants.adminDepVersion != updatedAdminVersion) {
+  //           showUpdateAppDialog();
+  //         }
+  //       } else if (staffInfo?.department == 'PR') {
+  //         if (AppConstants.prDepVersion != updatedPrVersion) {
+  //           showUpdateAppDialog();
+  //         }
+  //       } else {
+  //         if (AppConstants.pubVersion != updatedVersion) {
+  //           showUpdateAppDialog();
+  //         }
+  //       }
+  //     }
+  //   });
+  // }
 
   @override
   void initState() {
-    checkAppVersion();
+    // checkAppVersion();
     getConnectivity();
     getStaffDetail();
     setNotification();
@@ -192,27 +192,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     ),
                     page: SearchLeadsScreen(staffInfo: staffInfo!),
                   ),
-                  buildButton(
-                    name: 'Leave form',
-                    image: Image.asset('assets/leave_apply.png',
-                      scale: 13.8,
-                    ),
-                    page: LeaveApplyScreen(
-                      name: staffInfo!.name,
-                      uid: staffInfo!.uid,
-                    ),
-                  ),
-                  buildButton(
-                    name: 'Leave approval',
-                    image: Image.asset(
-                      'assets/leave_approval.png',
-                      scale: 2,
-                    ),
-                    page: LeaveApprovalScreen(
-                      name: staffInfo!.name,
-                      uid: staffInfo!.uid,
-                    ),
-                  ),
                   // buildButton(
                   //   name: 'Visit',
                   //   image: Image.asset(
@@ -274,6 +253,27 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       scale: 3.36,
                     ),
                     page: const ViewAttendanceScreen(),
+                  ),
+                  buildButton(
+                    name: 'Leave form',
+                    image: Image.asset('assets/leave_apply.png',
+                      scale: 13.8,
+                    ),
+                    page: LeaveApplyScreen(
+                      name: staffInfo!.name,
+                      uid: staffInfo!.uid,
+                    ),
+                  ),
+                  buildButton(
+                    name: 'Leave approval',
+                    image: Image.asset(
+                      'assets/leave_approval.png',
+                      scale: 2,
+                    ),
+                    page: LeaveApprovalScreen(
+                      name: staffInfo!.name,
+                      uid: staffInfo!.uid,
+                    ),
                   ),
                   buildButton(
                     name: 'Check Entry',

@@ -285,12 +285,14 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
       SnackBar(
         content: Text(
           'Leave request for ${leaveRequest.name} has been $status',
+          textAlign: TextAlign.center,
           style: TextStyle(
-            color: ConstantColor.backgroundColor,
-            fontSize: 16,
-            fontFamily: ConstantFonts.poppinsMedium,
+            fontFamily: ConstantFonts.poppinsRegular,
+            fontWeight: FontWeight.w600,
+            fontSize: 17,
           ),
         ),
+        backgroundColor: ConstantColor.backgroundColor,
       ),
     );
   }

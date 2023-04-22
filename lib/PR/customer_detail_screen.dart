@@ -9,7 +9,8 @@ import 'note_item.dart';
 const List<String> list = [
   'Following Up',
   'Delayed',
-  'Onwords',
+  'Rejected from MGMT',
+  'Rejected from Customer',
   'Advanced',
   'Product',
   'B2B',
@@ -44,9 +45,14 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
   @override
   void initState() {
 
-    if (widget.customerStatus.toLowerCase().contains('rejected')){
-      dropDownValue = 'Onwords';
-    }else{
+    if (widget.customerStatus.toLowerCase().contains('onwords') ||widget.customerStatus.toLowerCase().contains('rejected from management side')){
+      dropDownValue = 'Rejected from MGMT';
+    }
+    else if(widget.customerStatus.toLowerCase().contains('onwords') || widget.customerStatus.toLowerCase().contains('rejected from customer end')){
+      dropDownValue = 'Rejected from Customer';
+    }
+
+    else{
       dropDownValue = widget.customerStatus;
       super.initState();
     }

@@ -40,7 +40,8 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
       dateTime = newDate;
     });
   }
-    //DROP DOWN BUTTON VALUES//
+
+  //DROP DOWN BUTTON VALUES//
   // List<String> departments = ['APP', 'MEDIA', 'WEB', 'PR', 'RND', 'OTHER'];
   // String? dropDownValue;
 
@@ -198,6 +199,14 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
                             itemCount: dbLeaveStatus.length,
                             physics: const BouncingScrollPhysics(),
                             itemBuilder: (ctx, i) {
+                              Color changeColors = ConstantColor.backgroundColor;
+
+                       switch(dbLeaveStatus[i]['status'].toString().toLowerCase()){
+                         case 'pending':changeColors = Colors.grey.shade500;break;
+                         case 'declined':changeColors = Colors.red;break;
+                         case 'approved':changeColors = Colors.green;break;
+                       }
+
                               return ListTile(
                                 title: Text(
                                   '${dbLeaveStatus[i]['date'].toString()}   ',
@@ -221,7 +230,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
                                   '(${dbLeaveStatus[i]['status'].toString().toUpperCase()})',
                                   style: TextStyle(
                                     fontFamily: ConstantFonts.poppinsMedium,
-                                    color: Colors.black54,
+                                    color: changeColors,
                                     fontWeight: FontWeight.w700,
                                     fontSize: 16,
                                   ),
@@ -399,7 +408,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
     );
   }
 
-      //DEPARTMENT CHOOSE FUNCTION//
+  //DEPARTMENT CHOOSE FUNCTION//
   // Widget buildDepartment() {
   //   return Row(
   //     mainAxisAlignment: MainAxisAlignment.start,
@@ -553,7 +562,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }else if (_reason == null) {
+    } else if (_reason == null) {
       final snackBar = SnackBar(
         content: Text(
           'Fill the type for your leave..Sick/General',
@@ -567,7 +576,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }else {
+    } else {
       final leaveRef = FirebaseDatabase.instance.ref('leaveDetails');
       var dateFormat = DateFormat('yyyy-MM-dd').format(dateTime!);
       var monthFormat = DateFormat('MM').format(dateTime!);

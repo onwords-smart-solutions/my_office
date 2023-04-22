@@ -113,7 +113,15 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                 .contains('rejected')  || data['customer_state']
                 .toString()
                 .toLowerCase()
-                .contains('onwords')) {
+                .contains('onwords') ||
+                data['customer_state']
+                    .toString()
+                    .toLowerCase()
+                    .contains('rejected from mgmt') ||
+                data['customer_state']
+                    .toString()
+                    .toLowerCase()
+                    .contains('rejected from customer') ) {
               currentCustomerList.add(data);
             }
           } else if (data['customer_state']
