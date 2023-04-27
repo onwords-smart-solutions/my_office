@@ -52,7 +52,7 @@ class _FoodCountScreenState extends State<FoodCountScreen> {
     return isLoading
         ? Center(
             child: Lottie.asset(
-              "assets/animations/loading.json",
+              "assets/animations/new_loading.json",
             ),
           )
         : ListView.builder(

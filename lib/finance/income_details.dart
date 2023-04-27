@@ -27,22 +27,13 @@ class _IncomeDetailsState extends State<IncomeDetails> {
     return Center(
       child: Column(
         children: [
-          buildAmount(),
-          buildCustomerName(),
-          buildEnteredBy(),
-          buildEnteredDate(),
-          buildEnteredTime(),
-          buildInvoiceNumber(),
-          buildPaidDate(),
-          buildPaidTime(),
-          buildPaymentMethod(),
-          buildProductName(),
+          buildIncomeTable(),
         ],
       ),
     );
   }
 
-  Widget buildAmount() {
+  Widget buildIncomeTable() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Table(
@@ -68,7 +59,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     "Amount",
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
                   ),
@@ -79,30 +70,12 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     widget.incomeDetails.amount.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
                 ),
-              ])
-        ],
-      ),
-    );
-  }
-
-  Widget buildCustomerName() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
+              ],
+          ),
           TableRow(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -115,7 +88,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     "Customer Name",
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
                   ),
@@ -126,30 +99,12 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     widget.incomeDetails.customerName.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
                 ),
-              ])
-        ],
-      ),
-    );
-  }
-
-  Widget buildEnteredBy() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
+              ],
+          ),
           TableRow(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -162,7 +117,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     "Entered By",
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
                   ),
@@ -173,30 +128,12 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     widget.incomeDetails.enteredBy.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
                 ),
-              ])
-        ],
-      ),
-    );
-  }
-
-  Widget buildEnteredDate() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
+              ],
+          ),
           TableRow(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -209,7 +146,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     "Entered Date",
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
                   ),
@@ -220,30 +157,12 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     widget.incomeDetails.enteredDate.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
                 ),
-              ])
-        ],
-      ),
-    );
-  }
-
-  Widget buildEnteredTime() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
+              ],
+          ),
           TableRow(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -256,7 +175,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     "Entered Time",
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
                   ),
@@ -267,30 +186,12 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     widget.incomeDetails.enteredTime.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
                 ),
-              ])
-        ],
-      ),
-    );
-  }
-
-  Widget buildInvoiceNumber() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
+              ],
+          ),
           TableRow(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -303,7 +204,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     "Invoice Number",
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
                   ),
@@ -314,30 +215,12 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     widget.incomeDetails.invoiceNumber.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
                 ),
-              ])
-        ],
-      ),
-    );
-  }
-
-  Widget buildPaidDate() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
+              ],
+          ),
           TableRow(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -350,7 +233,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     "Paid Date",
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
                   ),
@@ -361,30 +244,12 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     widget.incomeDetails.paidDate.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
                 ),
-              ])
-        ],
-      ),
-    );
-  }
-
-  Widget buildPaidTime() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
+              ],
+          ),
           TableRow(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -397,7 +262,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     "Paid Time",
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
                   ),
@@ -408,30 +273,12 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     widget.incomeDetails.paidTime.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
                 ),
-              ])
-        ],
-      ),
-    );
-  }
-
-  Widget buildPaymentMethod() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
+              ],
+          ),
           TableRow(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -444,7 +291,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     "Payment Method",
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
                   ),
@@ -455,30 +302,12 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     widget.incomeDetails.paymentMethod.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
                 ),
-              ])
-        ],
-      ),
-    );
-  }
-
-  Widget buildProductName() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
+              ],
+          ),
           TableRow(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -491,7 +320,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     "Product Name",
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
                   ),
@@ -502,11 +331,12 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     widget.incomeDetails.productName.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
                 ),
-              ])
+              ],
+          ),
         ],
       ),
     );

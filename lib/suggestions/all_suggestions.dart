@@ -27,9 +27,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
       physics: const BouncingScrollPhysics(),
       child: Column(
         children: [
-          buildDate(),
-          buildIsRead(),
-          buildTime(),
+          buildSuggestionTable(),
           const SizedBox(height: 30),
           buildMessage(),
         ],
@@ -37,7 +35,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
     );
   }
 
-  Widget buildDate() {
+  Widget buildSuggestionTable() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Table(
@@ -63,7 +61,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                   "Date",
                   style: TextStyle(
                     color: ConstantColor.backgroundColor,
-                    fontSize: 17,
+                    fontSize: 16,
                     fontFamily: ConstantFonts.poppinsMedium,
                   ),
                 ),
@@ -74,31 +72,12 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                   widget.fullSuggestions['date'].toString(),
                   style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium),
                 ),
               ),
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildIsRead() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
@@ -111,7 +90,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                   "Is Read",
                   style: TextStyle(
                     color: ConstantColor.backgroundColor,
-                    fontSize: 17,
+                    fontSize: 16,
                     fontFamily: ConstantFonts.poppinsMedium,
                   ),
                 ),
@@ -122,31 +101,12 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                   widget.fullSuggestions['isread'].toString(),
                   style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium),
                 ),
               ),
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildTime() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
@@ -159,7 +119,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                   "Time",
                   style: TextStyle(
                     color: ConstantColor.backgroundColor,
-                    fontSize: 17,
+                    fontSize: 16,
                     fontFamily: ConstantFonts.poppinsMedium,
                   ),
                 ),
@@ -170,7 +130,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                   widget.fullSuggestions['time'].toString(),
                   style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium),
                 ),
               ),
@@ -207,7 +167,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                     "Message:",
                     style: TextStyle(
                       color: ConstantColor.backgroundColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
                   ),
@@ -226,7 +186,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                     widget.fullSuggestions['message'].toString(),
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
                   ),

@@ -69,17 +69,12 @@ class _ViewSuggestionsState extends State<ViewSuggestions> {
                     ),
                   );
                 },
-                leading: const CircleAvatar(
-                  radius: 20,
-                  backgroundColor: ConstantColor.backgroundColor,
-                  child: Icon(Icons.date_range),
-                ),
                 title: Text(
-                 '${ allSuggestion[index]['message'].toString().substring(0, 25)}....',
+                 '${ allSuggestion[index]['message'].toString().substring(0, 35)}..',
                   style: TextStyle(
                     color: ConstantColor.backgroundColor,
                     fontFamily: ConstantFonts.poppinsMedium,
-                    fontSize: 17,
+                    fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

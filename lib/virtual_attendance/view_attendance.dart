@@ -142,16 +142,16 @@ class _ViewAttendanceScreenState extends State<ViewAttendanceScreen> {
                         );
                       },
                       leading: const CircleAvatar(
-                        radius: 20,
+                        radius: 17,
                         backgroundColor: ConstantColor.backgroundColor,
-                        child: Icon(Icons.person),
+                        child: Icon(Icons.person,size: 20,),
                       ),
                       title: Text(
                         fullAttendance[index]['Name'].toString(),
                         style: TextStyle(
                             fontFamily: ConstantFonts.poppinsMedium,
                             color: ConstantColor.blackColor,
-                            fontSize: 18),
+                            fontSize: 16),
                       ),
                     );
                   },

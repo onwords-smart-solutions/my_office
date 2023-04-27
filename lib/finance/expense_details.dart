@@ -27,21 +27,13 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
     return Center(
       child: Column(
         children: [
-          buildAmount(),
-          buildEnteredBy(),
-          buildEnteredDate(),
-          buildEnteredTime(),
-          buildProductName(),
-          buildPurchasedDate(),
-          buildPurchasedFor(),
-          buildPurchasedTime(),
-          buildService(),
+          buildExpenseTable(),
         ],
       ),
     );
   }
 
-  Widget buildAmount() {
+  Widget buildExpenseTable() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Table(
@@ -67,7 +59,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     "Amount",
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
                   ),
@@ -78,30 +70,12 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     widget.expenseDetails.amount.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
                 ),
-              ])
-        ],
-      ),
-    );
-  }
-
-  Widget buildEnteredBy() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
+              ],
+          ),
           TableRow(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -114,7 +88,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     "Entered By",
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
                   ),
@@ -125,30 +99,12 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     widget.expenseDetails.enteredBy.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
                 ),
-              ])
-        ],
-      ),
-    );
-  }
-
-  Widget buildEnteredDate() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
+              ],
+          ),
           TableRow(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -161,7 +117,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     "Entered Date",
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
                   ),
@@ -172,30 +128,12 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     widget.expenseDetails.enteredDate.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
                 ),
-              ])
-        ],
-      ),
-    );
-  }
-
-  Widget buildEnteredTime() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
+              ],
+          ),
           TableRow(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -208,7 +146,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     "Entered Time",
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
                   ),
@@ -219,30 +157,12 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     widget.expenseDetails.enteredTime.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
                 ),
-              ])
-        ],
-      ),
-    );
-  }
-
-  Widget buildProductName() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
+              ],
+          ),
           TableRow(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -255,7 +175,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     "Product Name",
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
                   ),
@@ -266,30 +186,12 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     widget.expenseDetails.productName.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
                 ),
-              ])
-        ],
-      ),
-    );
-  }
-
-  Widget buildPurchasedDate() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
+              ],
+          ),
           TableRow(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -302,7 +204,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     "Purchased Date",
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
                   ),
@@ -313,30 +215,12 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     widget.expenseDetails.purchasedDate.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
                 ),
-              ])
-        ],
-      ),
-    );
-  }
-
-  Widget buildPurchasedFor() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
+              ],
+          ),
           TableRow(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -349,7 +233,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     "Purchased For",
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
                   ),
@@ -360,30 +244,12 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     widget.expenseDetails.purchasedFor.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
                 ),
-              ])
-        ],
-      ),
-    );
-  }
-
-  Widget buildPurchasedTime() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
+              ],
+          ),
           TableRow(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -396,7 +262,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     "Purchased Time",
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
                   ),
@@ -407,30 +273,12 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     widget.expenseDetails.purchasedTime.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
                 ),
-              ])
-        ],
-      ),
-    );
-  }
-
-  Widget buildService() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
+              ],
+          ),
           TableRow(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -443,7 +291,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     "Service",
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
                   ),
@@ -454,11 +302,12 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     widget.expenseDetails.service.toString(),
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
                 ),
-              ])
+              ],
+          ),
         ],
       ),
     );

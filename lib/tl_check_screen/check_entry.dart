@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -6,7 +5,7 @@ import 'package:my_office/models/staff_entry_model.dart';
 import 'package:my_office/tl_check_screen/staff_entry_check.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
-import '../util/main_template.dart';
+import '../util/screen_template.dart';
 
 class CheckEntryScreen extends StatefulWidget {
   final String userId;
@@ -21,7 +20,6 @@ class CheckEntryScreen extends StatefulWidget {
 }
 
 class _CheckEntryScreenState extends State<CheckEntryScreen> {
-  List<StaffAttendanceModel> allAttendance = [];
   List<StaffAttendanceModel> itStaffNames = [];
   List<StaffAttendanceModel> prStaffNames = [];
   List<StaffAttendanceModel> rndStaffNames = [];
@@ -30,7 +28,10 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
   final ref = FirebaseDatabase.instance.ref();
 
   void staffDetails() {
-    allAttendance.clear();
+    itStaffNames.clear();
+    prStaffNames.clear();
+    rndStaffNames.clear();
+    adminStaffNames.clear();
     List<StaffAttendanceModel> fullEntry = [];
     ref.child('staff_details').once().then((staffEntry) {
       for (var data in staffEntry.snapshot.children) {
@@ -76,10 +77,9 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MainTemplate(
-      subtitle: 'Attendance entry!!!',
-      templateBody: checkEntry(),
-      bgColor: ConstantColor.background1Color,
+    return ScreenTemplate(
+      bodyTemplate: checkEntry(),
+      title: 'Id tag Entry',
     );
   }
 
@@ -87,7 +87,7 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
     return isLoading
         ? Center(
             child: Lottie.asset(
-              "assets/animations/loading.json",
+              "assets/animations/new_loading.json",
             ),
           )
         : widget.staffName == 'Koushik Romel'

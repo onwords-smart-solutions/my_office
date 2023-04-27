@@ -26,17 +26,12 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
   Widget viewFullAttendancePage() {
     return Column(
       children: [
-        buildName(),
-        buildAddress(),
-        buildLatitude(),
-        buildLongitude(),
-        buildTime(),
-        buildReason(),
+        buildAttendanceTable(),
       ],
     );
   }
 
-  Widget buildName() {
+  Widget buildAttendanceTable() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Table(
@@ -61,7 +56,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                     "Name",
                     style: TextStyle(
                       color: ConstantColor.backgroundColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium,
                     ),
                   ),
@@ -72,76 +67,40 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                     widget.fullViewAttendance['Name'].toString(),
                     style: TextStyle(
                         color: ConstantColor.headingTextColor,
-                        fontSize: 17,
+                        fontSize: 16,
                         fontFamily: ConstantFonts.poppinsMedium),
                   ),
                 ),
-              ])
-        ],
-      ),
-    );
-  }
-
-  Widget buildAddress() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
+              ],
+          ),
           TableRow(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Text(
+                  "Address",
+                  style: TextStyle(
+                    color: ConstantColor.backgroundColor,
+                    fontSize: 16,
+                    fontFamily: ConstantFonts.poppinsMedium,
+                  ),
+                ),
               ),
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Text(
-                    "Address",
-                    style: TextStyle(
-                      color: ConstantColor.backgroundColor,
-                      fontSize: 17,
-                      fontFamily: ConstantFonts.poppinsMedium,
-                    ),
-                  ),
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: SelectableText(
+                  widget.fullViewAttendance['Address'].toString(),
+                  style: TextStyle(
+                      color: ConstantColor.headingTextColor,
+                      fontSize: 16,
+                      fontFamily: ConstantFonts.poppinsMedium),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: SelectableText(
-                    widget.fullViewAttendance['Address'].toString(),
-                    style: TextStyle(
-                        color: ConstantColor.headingTextColor,
-                        fontSize: 17,
-                        fontFamily: ConstantFonts.poppinsMedium),
-                  ),
-                ),
-              ])
-        ],
-      ),
-    );
-  }
-
-  Widget buildLatitude() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
+              ),
+            ],
+          ),
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
@@ -153,7 +112,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   "Latitude",
                   style: TextStyle(
                     color: ConstantColor.backgroundColor,
-                    fontSize: 17,
+                    fontSize: 16,
                     fontFamily: ConstantFonts.poppinsMedium,
                   ),
                 ),
@@ -164,31 +123,12 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   widget.fullViewAttendance['Latitude'].toString(),
                   style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium),
                 ),
               ),
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildLongitude() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
@@ -200,7 +140,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   "Longitude",
                   style: TextStyle(
                     color: ConstantColor.backgroundColor,
-                    fontSize: 17,
+                    fontSize: 16,
                     fontFamily: ConstantFonts.poppinsMedium,
                   ),
                 ),
@@ -211,31 +151,12 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   widget.fullViewAttendance['Longitude'].toString(),
                   style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium),
                 ),
               ),
             ],
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildTime() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
@@ -247,7 +168,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   "Time",
                   style: TextStyle(
                     color: ConstantColor.backgroundColor,
-                    fontSize: 17,
+                    fontSize: 16,
                     fontFamily: ConstantFonts.poppinsMedium,
                   ),
                 ),
@@ -258,31 +179,12 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   widget.fullViewAttendance['Time'].toString(),
                   style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium),
                 ),
               ),
             ],
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget buildReason() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Table(
-        columnWidths: const {
-          0: FlexColumnWidth(3),
-          1: FlexColumnWidth(3),
-        },
-        border: TableBorder.all(
-          borderRadius: BorderRadius.circular(10),
-          color: ConstantColor.backgroundColor,
-          width: 1.5,
-        ),
-        children: [
+          ),
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
@@ -294,7 +196,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   "Reason",
                   style: TextStyle(
                     color: ConstantColor.backgroundColor,
-                    fontSize: 17,
+                    fontSize: 16,
                     fontFamily: ConstantFonts.poppinsMedium,
                   ),
                 ),
@@ -305,12 +207,12 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   widget.fullViewAttendance['Reason'].toString(),
                   style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 17,
+                      fontSize: 16,
                       fontFamily: ConstantFonts.poppinsMedium),
                 ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

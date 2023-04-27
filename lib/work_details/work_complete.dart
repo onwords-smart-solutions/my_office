@@ -205,7 +205,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
     return isLoading
         ? Center(
             child: Lottie.asset(
-              "assets/animations/loading.json",
+              "assets/animations/new_loading.json",
             ),
           )
         : Column(
