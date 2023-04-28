@@ -89,8 +89,8 @@ class _AddItermState extends State<AddIterm> {
   Future<void> getProductsDetails() async {
     ref.child('inventory_management').once().then((value) {
       for (var a in value.snapshot.children) {
-        // print(a.value);
-        if (a.value.toString().contains(selectedVal.toString())) {
+        final x = a.value as Map<Object?,Object?>;
+        if (x['name'].toString().toUpperCase() == selectedVal.toString().toUpperCase()) {
           // print(a.value);
           setval = a.value;
           setState(() {

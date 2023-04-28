@@ -11,12 +11,12 @@ import '../model/invoice.dart';
 import '../model/supplier.dart';
 import '../utils.dart';
 
-// final upiDetails = UPIDetails(
-//     upiID: "UPI ID Here eg. 73641234@paytm",
-//     payeeName: "Payee Name Here",
-//     amount: total,
-//     transactionNote: "Hello World",
-// );
+final upiDetails = UPIDetails(
+    upiID: "UPI ID Here eg. 73641234@paytm",
+    payeeName: "Payee Name Here",
+    amount: total,
+    transactionNote: "Hello World",
+);
 double total = 0;
 
 
@@ -30,8 +30,8 @@ class InstallationInvoicePdf {
 
     // final image = pw.MemoryImage(pic);
 
-    // var qrImage = pw.MemoryImage(
-    //     (await rootBundle.load('assets/qr_pic.jpg')).buffer.asUint8List());
+    var qrImage = pw.MemoryImage(
+        (await rootBundle.load('assets/qr_pic.jpg')).buffer.asUint8List());
 
     // var assetImage = pw.MemoryImage(File(user.imagePath).readAsBytesSync());
 
@@ -46,13 +46,11 @@ class InstallationInvoicePdf {
           // buildTitle(invoice),
           buildInvoice(invoice),
           Divider(),
-          // buildTotal(invoice),
-          // Text('Scan me to Pay',style: TextStyle(fontWeight: FontWeight.bold)),
-          // SizedBox(height: 0.2 * PdfPageFormat.cm),
+          buildTotal(invoice),
+          Text('Scan me to Pay',style: TextStyle(fontWeight: FontWeight.bold)),
+          SizedBox(height: 0.2 * PdfPageFormat.cm),
           // builderQR(image),
           buildBankDetails(invoice),
-
-
         ],
         footer: (context) => buildFooter(invoice),
       ),
