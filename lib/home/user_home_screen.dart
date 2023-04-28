@@ -504,12 +504,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     ? GridView(
                         physics: const BouncingScrollPhysics(),
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0, vertical: 20.0),
+                            horizontal: 10.0, vertical: 15.0),
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                          childAspectRatio: 1 / 1.2,
+                          childAspectRatio: 1 / 1.3,
                           crossAxisCount: 2,
                           crossAxisSpacing: 10.0,
                           mainAxisSpacing: 10.0,

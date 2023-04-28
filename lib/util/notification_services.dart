@@ -27,7 +27,7 @@ class NotificationService {
   Future<NotificationDetails> _notificationDetails() async {
     AndroidNotificationDetails androidNotificationDetails =
         const AndroidNotificationDetails('My Office', 'Refreshment',
-            groupKey: 'com.onwords.my_office',
+            groupKey: 'com.onwords.my_office1',
             channelDescription: 'Notifications for refreshment reminder',
             importance: Importance.max,
             priority: Priority.high,

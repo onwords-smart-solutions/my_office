@@ -306,11 +306,10 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                       int.parse(minTotal.toString());
 
                                   // print('$maxTotal , $discount $obcTotal');
-                                  percentage = int.parse(maxTotal.toString()) /
-                                      int.parse(discount.toString());
+                                  percentage = (int.parse(discount.toString()) / int.parse(maxTotal.toString())) * 100;
+                                  print(percentage);
 
-                                  maximumDiscount =
-                                      double.parse(percentage.toString())
+                                  maximumDiscount = double.parse(percentage.toString())
                                           .toInt();
                                   itermNameController.clearDropDown();
                                   quantityController.clear();
@@ -667,16 +666,11 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                           if (_form.currentState!.validate()) {
                             setState(() {
                               discountedAmount =
-                                  int.parse(maxTotal.toString()) *
-                                      int.parse(percentageController.text) /
-                                      100;
+                                  int.parse(maxTotal.toString()) * int.parse(percentageController.text) / 100;
                               // print(discountedAmount);
-                              finalAmount = double.parse(maxTotal.toString()) -
-                                  double.parse(discountedAmount.toString());
+                              finalAmount = double.parse(maxTotal.toString()) - double.parse(discountedAmount.toString());
 
-                              prPoint = (double.parse(finalAmount.toString()) -
-                                  double.parse(obcTotal.toString())) /
-                                  1000;
+                              prPoint = (double.parse(finalAmount.toString()) - double.parse(obcTotal.toString())) / 1000;
 
                               print(prPoint);
                               // prPoint = double.parse(prPoint!.toStringAsFixed(3));
