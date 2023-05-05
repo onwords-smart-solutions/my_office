@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
 import 'package:timelines/timelines.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'note_item.dart';
 
 const List<String> list = [
@@ -32,7 +35,7 @@ class CustomerDetailScreen extends StatefulWidget {
       required this.containerColor,
       required this.currentStaffName,
       required this.nobColor,
-        required this.customerStatus})
+      required this.customerStatus})
       : super(key: key);
 
   @override
@@ -42,27 +45,58 @@ class CustomerDetailScreen extends StatefulWidget {
 class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
   TextEditingController notesController = TextEditingController();
   late String dropDownValue;
+
+  void openWhatsapp(
+      {required BuildContext context,
+      required String text,
+      required String number}) async {
+    var whatsapp = number; //+92xx enter like this
+    var whatsappURlAndroid =
+        "whatsapp://send?phone=" + whatsapp + "&text=$text";
+    var whatsappURLIos = "https://wa.me/$whatsapp?text=${Uri.tryParse(text)}";
+    if (Platform.isIOS) {
+      // for iOS phone only
+      if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
+        await launchUrl(Uri.parse(
+          whatsappURLIos,
+        ));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Whatsapp not installed")));
+      }
+    } else {
+      // android , web
+      if (await canLaunchUrl(Uri.parse(whatsappURlAndroid))) {
+        await launchUrl(Uri.parse(whatsappURlAndroid));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Whatsapp not installed")));
+      }
+    }
+  }
+
   @override
   void initState() {
-
-    if (widget.customerStatus.toLowerCase().contains('onwords') ||widget.customerStatus.toLowerCase().contains('rejected from management side')){
+    if (widget.customerStatus.toLowerCase().contains('onwords') ||
+        widget.customerStatus
+            .toLowerCase()
+            .contains('rejected from management side')) {
       dropDownValue = 'Rejected from MGMT';
-    }
-    else if(widget.customerStatus.toLowerCase().contains('onwords') || widget.customerStatus.toLowerCase().contains('rejected from customer end')){
+    } else if (widget.customerStatus.toLowerCase().contains('onwords') ||
+        widget.customerStatus
+            .toLowerCase()
+            .contains('rejected from customer end')) {
       dropDownValue = 'Rejected from Customer';
-    }
-
-    else{
+    } else {
       dropDownValue = widget.customerStatus;
       super.initState();
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    print(widget.currentStaffName);
+    // print(widget.currentStaffName);
     return Scaffold(
       backgroundColor: const Color(0xffF1F2F8),
       appBar: AppBar(
@@ -78,6 +112,34 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
             style: TextStyle(
                 fontFamily: ConstantFonts.poppinsBold, fontSize: 18.0)),
         titleSpacing: 0.0,
+        actions: [
+          IconButton(
+              onPressed: () {
+                launch(
+                    "tel://${widget.customerInfo['phone_number'].toString()}");
+                // print(widget.customerInfo['phone_number'].toString());
+              },
+              icon: const Icon(
+                Icons.call,
+                color: Colors.blue,
+                size: 30,
+              )),
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  openWhatsapp(
+                      context: context,
+                      text: '',
+                      number: widget.customerInfo['phone_number'].toString());
+                });
+                // print(widget.customerInfo['phone_number'].toString());
+              },
+              icon: const Icon(
+                Icons.whatsapp_rounded,
+                color: Colors.greenAccent,
+                size: 30,
+              )),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -158,7 +220,6 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
   Widget buildNotes() {
     final stream = FirebaseDatabase.instance.ref().child(
         'customer/${widget.customerInfo['phone_number'].toString()}/notes');
-
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

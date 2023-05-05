@@ -1,11 +1,10 @@
 import 'dart:async';
-import 'dart:math';
 
 import 'package:confetti/confetti.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:my_office/home/user_home_screen.dart';
 
 import '../../Constant/fonts/constant_font.dart';
 
@@ -21,7 +20,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
   final ref = FirebaseDatabase.instance.ref();
 
   final SingleValueDropDownController itermNameController =
-  SingleValueDropDownController();
+      SingleValueDropDownController();
   TextEditingController quantityController = TextEditingController();
   TextEditingController percentageController = TextEditingController();
 
@@ -32,7 +31,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
 
   List<TableList> listOfProductDetails = [];
   var setProductName;
-  var setval;
+  var setVal;
 
   String? selectedVal;
   String? maxPrice;
@@ -75,16 +74,17 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
     ref.child('inventory_management').once().then((value) {
       for (var a in value.snapshot.children) {
         // print(a.value);
-        final x = a.value as Map<Object?,Object?>;
-        if (x['name'].toString().toUpperCase() == selectedVal.toString().toUpperCase()) {
+        final x = a.value as Map<Object?, Object?>;
+        if (x['name'].toString().toUpperCase() ==
+            selectedVal.toString().toUpperCase()) {
           // if (a.value.toString().contains(selectedVal.toString())) {
           //   print(a.value);
-          setval = a.value;
+          setVal = a.value;
 
           setState(() {
-            maxPrice = setval['max_price'];
-            minPrice = setval['min_price'];
-            obcPrice = setval['obc'];
+            maxPrice = setVal['max_price'];
+            minPrice = setVal['min_price'];
+            obcPrice = setVal['obc'];
           });
         }
       }
@@ -182,11 +182,12 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                   },
                                   dropDownItemCount: 7,
                                   dropDownList: productList,
+
                                   onChanged: (val) {
                                     selectedVal =
                                         itermNameController.dropDownValue?.name;
                                     getProductsDetails();
-                                    print(selectedVal);
+                                    // print(selectedVal);
                                   },
                                 ),
                               ),
@@ -210,7 +211,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                               height: height * 0.08,
                               child: Padding(
                                 padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Center(
                                   child: TextFormField(
                                     textAlign: TextAlign.center,
@@ -254,50 +255,50 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                           int.parse(obcPrice.toString()));
 
                                   final index = listOfProductDetails.indexWhere(
-                                          (element) =>
-                                      element.productName ==
+                                      (element) =>
+                                          element.productName ==
                                           itermNameController
                                               .dropDownValue?.name);
                                   if (index > -1) {
                                     listOfProductDetails[index]
-                                        .productQuantity +=
+                                            .productQuantity +=
                                         int.parse(quantityController.text);
                                     listOfProductDetails[index].subTotalList +=
                                         int.parse(listOfProductDetails[index]
-                                            .productPrice) *
+                                                .productPrice) *
                                             int.parse(quantityController.text);
                                   } else {
                                     final product = TableList(
                                         productName: itermNameController
                                             .dropDownValue!.name,
                                         productQuantity:
-                                        int.parse(quantityController.text),
+                                            int.parse(quantityController.text),
                                         productPrice: maxPrice.toString(),
                                         subTotalList:
-                                        int.parse(quantityController.text) *
-                                            int.parse(maxPrice.toString()));
+                                            int.parse(quantityController.text) *
+                                                int.parse(maxPrice.toString()));
                                     listOfProductDetails.add(product);
                                   }
                                   var sum = 0.0;
                                   for (var i = 0;
-                                  i < listOfProductDetails.length;
-                                  i++) {
+                                      i < listOfProductDetails.length;
+                                      i++) {
                                     sum += listOfProductDetails[i].subTotalList;
                                     maxTotal = sum.toInt();
                                   }
 
                                   var sum1 = 0.0;
                                   for (var i = 0;
-                                  i < minPriceList.length;
-                                  i++) {
+                                      i < minPriceList.length;
+                                      i++) {
                                     sum1 += minPriceList[i];
                                     minTotal = sum1.toInt();
                                   }
 
                                   var sum2 = 0.0;
                                   for (var i = 0;
-                                  i < obcPriceList.length;
-                                  i++) {
+                                      i < obcPriceList.length;
+                                      i++) {
                                     sum2 += obcPriceList[i];
                                     obcTotal = sum2.toInt();
                                   }
@@ -306,10 +307,13 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                       int.parse(minTotal.toString());
 
                                   // print('$maxTotal , $discount $obcTotal');
-                                  percentage = (int.parse(discount.toString()) / int.parse(maxTotal.toString())) * 100;
-                                  print(percentage);
+                                  percentage = (int.parse(discount.toString()) /
+                                          int.parse(maxTotal.toString())) *
+                                      100;
+                                  // print(percentage);
 
-                                  maximumDiscount = double.parse(percentage.toString())
+                                  maximumDiscount =
+                                      double.parse(percentage.toString())
                                           .toInt();
                                   itermNameController.clearDropDown();
                                   quantityController.clear();
@@ -357,7 +361,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                   height: height * 0.08,
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       SizedBox(
                                         width: width * 0.15,
@@ -366,7 +370,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                           style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: height * 0.012,
-                                            fontFamily: 'Avenir',
+
                                           ),
                                         ),
                                       ),
@@ -383,7 +387,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                           style: TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: height * 0.012,
-                                            fontFamily: 'Avenir',
+
                                           ),
                                         ),
                                       ),
@@ -400,7 +404,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                             style: TextStyle(
                                               fontWeight: FontWeight.w600,
                                               fontSize: height * 0.012,
-                                              fontFamily: 'Avenir',
+
                                             ),
                                           )),
                                       VerticalDivider(
@@ -416,7 +420,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                             style: TextStyle(
                                               fontWeight: FontWeight.w600,
                                               fontSize: height * 0.012,
-                                              fontFamily: 'Avenir',
+
                                             ),
                                           )),
                                     ],
@@ -555,11 +559,11 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                       height: height * 0.08,
                                       child: Center(
                                           child: Text(
-                                            'Get Price Details',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w900,
-                                                fontSize: height * 0.025),
-                                          ))),
+                                        'Get Price Details',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w900,
+                                            fontSize: height * 0.025),
+                                      ))),
                                 ),
                               ),
                             ],
@@ -596,17 +600,17 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                             ),
                           )),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             buildNeumorphic(
                               width,
                               height,
                               Container(
-                                padding: EdgeInsets.all(8),
+                                padding: const EdgeInsets.all(8),
                                 height: height * 0.09,
-                                width: width * 0.5,
+                                width: width * .9,
                                 child: Center(
                                   child: TextFormField(
                                     textInputAction: TextInputAction.done,
@@ -629,35 +633,35 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                     decoration: InputDecoration(
                                         border: InputBorder.none,
                                         hintText:
-                                        'Enter below ${maximumDiscount.toString()} %'),
+                                            'Enter below ${maximumDiscount.toString()} %'),
                                     controller: percentageController,
                                   ),
                                 ),
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  itermNameController.clearDropDown();
-                                  quantityController.clear();
-                                  getPointsStatus = false;
-                                });
-                              },
-                              child: buildNeumorphic(
-                                width,
-                                height,
-                                SizedBox(
-                                  height: height * 0.09,
-                                  width: width * 0.3,
-                                  child: const Center(
-                                      child: Text(
-                                        'Add Products',
-                                        style:
-                                        TextStyle(fontWeight: FontWeight.w900),
-                                      )),
-                                ),
-                              ),
-                            ),
+                            // GestureDetector(
+                            //   onTap: () {
+                            //     setState(() {
+                            //       itermNameController.clearDropDown();
+                            //       quantityController.clear();
+                            //       getPointsStatus = false;
+                            //     });
+                            //   },
+                            //   child: buildNeumorphic(
+                            //     width,
+                            //     height,
+                            //     SizedBox(
+                            //       height: height * 0.09,
+                            //       width: width * 0.3,
+                            //       child: const Center(
+                            //           child: Text(
+                            //             'Add Products',
+                            //             style:
+                            //             TextStyle(fontWeight: FontWeight.w900),
+                            //           )),
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
@@ -666,32 +670,36 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                           if (_form.currentState!.validate()) {
                             setState(() {
                               discountedAmount =
-                                  int.parse(maxTotal.toString()) * int.parse(percentageController.text) / 100;
+                                  int.parse(maxTotal.toString()) *
+                                      int.parse(percentageController.text) /
+                                      100;
                               // print(discountedAmount);
-                              finalAmount = double.parse(maxTotal.toString()) - double.parse(discountedAmount.toString());
+                              finalAmount = double.parse(maxTotal.toString()) -
+                                  double.parse(discountedAmount.toString());
 
-                              prPoint = (double.parse(finalAmount.toString()) - double.parse(obcTotal.toString())) / 1000;
+                              prPoint = (double.parse(finalAmount.toString()) -
+                                      double.parse(obcTotal.toString())) /
+                                  1000;
 
-                              print(prPoint);
+                              // print(prPoint);
                               // prPoint = double.parse(prPoint!.toStringAsFixed(3));
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => PointView(
-                                        points: prPoint.toString(),
-                                      ))).then((value) {
-                                percentageController.clear();
-                                itermNameController.clearDropDown();
-                                quantityController.clear();
-                                listOfProductDetails.clear();
-                                maxTotal = 0;
-                                minTotal = 0;
-                                discount = 0;
-                                percentage = 0;
-                                minPriceList.clear();
-                                showTable = false;
-                                getPointsStatus = false;
-                              });
+                                            points: prPoint.toString(),
+                                          )));
+                              percentageController.clear();
+                              itermNameController.clearDropDown();
+                              quantityController.clear();
+                              listOfProductDetails.clear();
+                              maxTotal = 0;
+                              minTotal = 0;
+                              discount = 0;
+                              percentage = 0;
+                              minPriceList.clear();
+                              showTable = false;
+                              getPointsStatus = false;
                             });
                           }
                         },
@@ -758,23 +766,23 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
   }
 
   TableRow buildRow(List<String> cells, {bool isHeader = false}) => TableRow(
-    children: cells.map(
+        children: cells.map(
           (cell) {
-        final style = TextStyle(
-          fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
-        );
-        return Padding(
-          padding: const EdgeInsets.all(10),
-          child: Center(
-            child: Text(
-              cell,
-              style: style,
-            ),
-          ),
-        );
-      },
-    ).toList(),
-  );
+            final style = TextStyle(
+              fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
+            );
+            return Padding(
+              padding: const EdgeInsets.all(10),
+              child: Center(
+                child: Text(
+                  cell,
+                  style: style,
+                ),
+              ),
+            );
+          },
+        ).toList(),
+      );
 
   void showSnackBar({required String message, required Color color}) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -806,9 +814,9 @@ class TableList {
 
   TableList(
       {required this.productName,
-        required this.productQuantity,
-        required this.productPrice,
-        required this.subTotalList});
+      required this.productQuantity,
+      required this.productPrice,
+      required this.subTotalList});
 }
 
 class PointView extends StatefulWidget {
@@ -840,88 +848,103 @@ class _PointViewState extends State<PointView> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(height: height * 0.2),
-          ConfettiWidget(
-            confettiController: controller,
-            shouldLoop: true,
-            blastDirection: -pi / 2,
-            blastDirectionality: BlastDirectionality.explosive,
-            emissionFrequency: 0.00,
-            numberOfParticles: 100,
-            maxBlastForce: 100,
-            minBlastForce: 10,
-            gravity: 0.3,
-          ),
-          Text(
-            'You Have',
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w900,
-                fontSize: height * 0.05),
-          ),
-          Text(
-            widget.points.toString(),
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w900,
-                fontSize: height * 0.05),
-          ),
-          Text(
-            'points',
-            style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w900,
-                fontSize: height * 0.05),
-          ),
-          SizedBox(height: height * 0.4),
-          Center(
-              child: Listener(
-                onPointerUp: (_) => setState(() {
-                  isPressed = false;
-                }),
-                onPointerDown: (_) => setState(() {
-                  isPressed = true;
-                }),
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      Navigator.pop(context);
-                    });
-                  },
-                  child: Neumorphic(
-                    duration: Duration(milliseconds: 100),
-                    style: NeumorphicStyle(
-                      depth: isPressed ? 0 : -3,
-                      color: Color(0xff282C35),
-                      shadowDarkColor: Colors.white,
-                      shadowDarkColorEmboss: Colors.white,
-                      shadowLightColor: Colors.black,
-                      shadowLightColorEmboss: Colors.black,
-                      boxShape: NeumorphicBoxShape.roundRect(
-                        BorderRadius.circular(30),
-                      ),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (_) => const UserHomeScreen()),
+                (route) => false);
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: const Color(0xff282C35),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: height * 0.2),
+            // ConfettiWidget(
+            //   confettiController: controller,
+            //   shouldLoop: true,
+            //   blastDirection: -pi / 2,
+            //   blastDirectionality: BlastDirectionality.explosive,
+            //   emissionFrequency: 0.00,
+            //   numberOfParticles: 100,
+            //   maxBlastForce: 100,
+            //   minBlastForce: 10,
+            //   gravity: 0.3,
+            // ),
+            Text(
+              'You Have',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w900,
+                  fontSize: height * 0.05),
+            ),
+            Text(
+              widget.points.toString(),
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w900,
+                  fontSize: height * 0.05),
+            ),
+            Text(
+              'points',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w900,
+                  fontSize: height * 0.05),
+            ),
+            SizedBox(height: height * 0.3),
+            Center(
+                child: Listener(
+              onPointerUp: (_) => setState(() {
+                isPressed = false;
+              }),
+              onPointerDown: (_) => setState(() {
+                isPressed = true;
+              }),
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const UserHomeScreen(),),
+                        (route) => false);
+                  });
+                },
+                child: Neumorphic(
+                  duration: const Duration(milliseconds: 100),
+                  style: NeumorphicStyle(
+                    depth: isPressed ? 0 : -3,
+                    color: const Color(0xff282C35),
+                    shadowDarkColor: Colors.white,
+                    shadowDarkColorEmboss: Colors.white,
+                    shadowLightColor: Colors.black,
+                    shadowLightColorEmboss: Colors.black,
+                    boxShape: NeumorphicBoxShape.roundRect(
+                      BorderRadius.circular(30),
                     ),
-                    child: SizedBox(
-                      height: height * 0.08,
-                      width: width * 0.5,
-                      child: Center(
-                        child: Text(
-                          'Go Back',
-                          style: TextStyle(
-                              fontSize: height * 0.03,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0xffDDE6E8)),
-                        ),
+                  ),
+                  child: SizedBox(
+                    height: height * 0.08,
+                    width: width * 0.5,
+                    child: Center(
+                      child: Text(
+                        'Go Back',
+                        style: TextStyle(
+                            fontSize: height * 0.03,
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xffDDE6E8)),
                       ),
                     ),
                   ),
                 ),
-              )),
-        ],
+              ),
+            )),
+          ],
+        ),
       ),
     );
   }

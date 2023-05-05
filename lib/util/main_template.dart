@@ -78,6 +78,7 @@ class _MainTemplateState extends State<MainTemplate> {
         });
       },
       child: Scaffold(
+        backgroundColor: Colors.black,
         body: SizedBox(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -87,7 +88,7 @@ class _MainTemplateState extends State<MainTemplate> {
               Positioned(
                 top: 0,
                 child: Container(
-                  height: height * 0.95,
+                  height: height * 1,
                   width: width,
                   padding: EdgeInsets.only(
                       top: MediaQuery.of(context).viewPadding.top * 1.5),
