@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:my_office/PR/invoice/Screens/Customer_Details_Screen.dart';
-import 'package:my_office/app_version/version.dart';
 import 'package:my_office/tl_check_screen/check_entry.dart';
 import 'package:my_office/late_workdone/late_entry.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,6 +24,7 @@ import '../PR/pr_workdone/pr_work_entry.dart';
 import '../PR/products/new_product.dart';
 import '../PR/products/point_calculations.dart';
 import '../PR/visit_check.dart';
+import '../app_version/version.dart';
 import '../database/hive_operations.dart';
 import '../finance/finance_analysis.dart';
 import '../food_count/food_count_screen.dart';
@@ -50,6 +49,24 @@ class UserHomeScreen extends StatefulWidget {
 class _UserHomeScreenState extends State<UserHomeScreen> {
   final HiveOperations _hiveOperations = HiveOperations();
   final NotificationService _notificationService = NotificationService();
+
+  List<String> managementStaffNames = [];
+
+  Future<void> getManagementNames() async {
+    List<String> names = [];
+    final ref = FirebaseDatabase.instance.ref().child('special_access');
+    await ref.child('management').once().then((value) {
+      if (value.snapshot.exists) {
+        for (var mgmt in value.snapshot.children) {
+          names.add(mgmt.value.toString());
+        }
+        setState(() {
+          managementStaffNames = names;
+          print(managementStaffNames);
+        });
+      }
+    });
+  }
 
   StaffModel? staffInfo;
   late StreamSubscription subscription;
@@ -91,20 +108,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       if (value.snapshot.exists) {
         final data = value.snapshot.value as Map<Object?, Object?>;
         final updatedVersion = data['versionNumber'];
-        final updatedAdminVersion = data['adminVersion'];
-        final updatedPrVersion = data['prVersion'];
-
-        if (staffInfo?.department == 'ADMIN') {
-          if (AppConstants.adminDepVersion != updatedAdminVersion) {
-            showUpdateAppDialog();
-          }
-        } else if (staffInfo?.department == 'PR') {
-          if (AppConstants.prDepVersion != updatedPrVersion) {
-            showUpdateAppDialog();
-          }
-          if (AppConstants.pubVersion != updatedVersion) {
-            showUpdateAppDialog();
-          }
+        if (AppConstants.pubVersion != updatedVersion) {
+          showUpdateAppDialog();
         }
       }
     });
@@ -112,7 +117,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
   @override
   void initState() {
-    // checkAppVersion();
+    checkAppVersion();
+    getManagementNames();
     getConnectivity();
     getStaffDetail();
     setNotification();
@@ -132,7 +138,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
   Widget buildMenuGrid(double height, double width) {
     return staffInfo != null
-        ? staffInfo!.department == 'ADMIN'
+        ? managementStaffNames.any((element) => element == staffInfo?.name)
             ? GridView(
                 physics: const BouncingScrollPhysics(),
                 padding: const EdgeInsets.symmetric(
@@ -235,17 +241,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     ),
                   ),
                   buildButton(
-                    name: 'View suggestions',
-                    image: Image.asset(
-                      'assets/view_suggestions.png',
-                      scale: 16.8,
-                    ),
-                    page: ViewSuggestions(
-                      uid: staffInfo!.uid,
-                      name: staffInfo!.name,
-                    ),
-                  ),
-                  buildButton(
                     name: 'View attendance',
                     image: Image.asset(
                       'assets/view_attendance.png',
@@ -303,8 +298,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       'assets/pr_work_details.png',
                       scale: 1.55,
                     ),
-                    page: const PrWorkDetails(
-                    ),
+                    page: const PrWorkDetails(),
                   ),
                   buildButton(
                     name: 'Create products',
@@ -324,7 +318,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   ),
                 ],
               )
-            : staffInfo!.department == 'PR'
+            : staffInfo!.department == 'ADMIN'
                 ? GridView(
                     physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.symmetric(
@@ -333,22 +327,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     shrinkWrap: true,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 1 / 1.2,
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 10.0,
-                            mainAxisSpacing: 10.0),
+                      childAspectRatio: 1 / 1.2,
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10.0,
+                      mainAxisSpacing: 10.0,
+                    ),
                     children: [
-                      buildButton(
-                        name: 'Work entry',
-                        image: Image.asset(
-                          'assets/work_entry.png',
-                          scale: 1.5,
-                        ),
-                        page: WorkEntryScreen(
-                          userId: staffInfo!.uid,
-                          staffName: staffInfo!.name,
-                        ),
-                      ),
                       buildButton(
                         name: 'Refreshment',
                         image: Image.asset(
@@ -359,6 +343,32 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           uid: staffInfo!.uid,
                           name: staffInfo!.name,
                         ),
+                      ),
+                      buildButton(
+                        name: 'Food count',
+                        image: Image.asset(
+                          'assets/food_count.png',
+                          scale: 3.4,
+                        ),
+                        page: const FoodCountScreen(),
+                      ),
+                      buildButton(
+                        name: 'Work details',
+                        image: Image.asset(
+                          'assets/work_details.png',
+                          scale: 3.5,
+                        ),
+                        page: WorkCompleteViewScreen(
+                          userDetails: staffInfo!,
+                        ),
+                      ),
+                      buildButton(
+                        name: 'Absent details',
+                        image: Image.asset(
+                          'assets/lead search.png',
+                          scale: 3.0,
+                        ),
+                        page: const AbsenteeScreen(),
                       ),
                       buildButton(
                         name: 'Search leads',
@@ -377,12 +387,28 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         page: const VisitFromScreen(),
                       ),
                       buildButton(
+                        name: 'Visit check',
+                        image: Image.asset(
+                          'assets/visit_check.png',
+                          scale: 3.4,
+                        ),
+                        page: const VisitCheckScreen(),
+                      ),
+                      buildButton(
                         name: 'Invoice generator',
                         image: Image.asset(
                           'assets/invoice.png',
                           scale: 2,
                         ),
                         page: const CustomerDetails(),
+                      ),
+                      buildButton(
+                        name: 'Finance',
+                        image: Image.asset(
+                          'assets/finance.png',
+                          scale: 1,
+                        ),
+                        page: const FinanceScreen(),
                       ),
                       buildButton(
                         name: 'Suggestions',
@@ -396,26 +422,23 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         ),
                       ),
                       buildButton(
-                        name: 'Virtual attendance',
+                        name: 'View suggestions',
                         image: Image.asset(
-                          'assets/virtual_attendance.png',
-                          scale: 3.4,
+                          'assets/view_suggestions.png',
+                          scale: 16.8,
                         ),
-                        page: AttendanceScreen(
+                        page: ViewSuggestions(
                           uid: staffInfo!.uid,
                           name: staffInfo!.name,
                         ),
                       ),
                       buildButton(
-                        name: 'PR Work done',
+                        name: 'View attendance',
                         image: Image.asset(
-                          'assets/pr_points.png',
+                          'assets/view_attendance.png',
                           scale: 3.36,
                         ),
-                        page: PrWorkDone(
-                          userId: staffInfo!.uid,
-                          staffName: staffInfo!.name,
-                        ),
+                        page: const ViewAttendanceScreen(),
                       ),
                       buildButton(
                         name: 'Leave form',
@@ -429,6 +452,55 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         ),
                       ),
                       buildButton(
+                        name: 'Leave approval',
+                        image: Image.asset(
+                          'assets/leave_approval.png',
+                          scale: 2,
+                        ),
+                        page: LeaveApprovalScreen(
+                          name: staffInfo!.name,
+                          uid: staffInfo!.uid,
+                        ),
+                      ),
+                      buildButton(
+                        name: 'Check Id Entry',
+                        image: Image.asset(
+                          'assets/check_entry.png',
+                          scale: 3.36,
+                        ),
+                        page: CheckEntryScreen(
+                          userId: staffInfo!.uid,
+                          staffName: staffInfo!.name,
+                        ),
+                      ),
+                      buildButton(
+                        name: 'PR Work Done',
+                        image: Image.asset(
+                          'assets/pr_points.png',
+                          scale: 3.36,
+                        ),
+                        page: PrWorkDone(
+                          userId: staffInfo!.uid,
+                          staffName: staffInfo!.name,
+                        ),
+                      ),
+                      buildButton(
+                        name: 'PR Work details',
+                        image: Image.asset(
+                          'assets/pr_work_details.png',
+                          scale: 1.55,
+                        ),
+                        page: const PrWorkDetails(),
+                      ),
+                      buildButton(
+                        name: 'Create products',
+                        image: Image.asset(
+                          'assets/new_products.png',
+                          scale: 3.36,
+                        ),
+                        page: const CreateNewProduct(),
+                      ),
+                      buildButton(
                         name: 'Sales points',
                         image: Image.asset(
                           'assets/points_calculation.png',
@@ -436,303 +508,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         ),
                         page: const PointCalculationsScreen(),
                       ),
-                      if (staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
-                        buildButton(
-                          name: 'Visit check',
-                          image: Image.asset(
-                            'assets/visit_check.png',
-                            scale: 3.4,
-                          ),
-                          page: const VisitCheckScreen(),
-                        ),
-                      if (staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
-                        buildButton(
-                          name: 'Leave approval',
-                          image: Image.asset(
-                            'assets/leave_approval.png',
-                            scale: 2,
-                          ),
-                          page: LeaveApprovalScreen(
-                            name: staffInfo!.name,
-                            uid: staffInfo!.uid,
-                          ),
-                        ),
-                      if (staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
-                        buildButton(
-                          name: 'Check Id Entry',
-                          image: Image.asset(
-                            'assets/check_entry.png',
-                            scale: 3.36,
-                          ),
-                          page: CheckEntryScreen(
-                            userId: staffInfo!.uid,
-                            staffName: staffInfo!.name,
-                          ),
-                        ),
-                      if (staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
-                        buildButton(
-                          name: 'Create products',
-                          image: Image.asset(
-                            'assets/new_products.png',
-                            scale: 3.36,
-                          ),
-                          page: const CreateNewProduct(),
-                        ),
-                      if (staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
-                      buildButton(
-                        name: 'Work details',
-                        image: Image.asset(
-                          'assets/work_details.png',
-                          scale: 3.5,
-                        ),
-                        page: WorkCompleteViewScreen(
-                          userDetails: staffInfo!,
-                        ),
-                      ),
-                      if (staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
-                        buildButton(
-                          name: 'PR Work details',
-                          image: Image.asset(
-                            'assets/pr_work_details.png',
-                            scale: 1.55,
-                          ),
-                          page: const PrWorkDetails(),
-                        ),
                     ],
                   )
-                : staffInfo!.department == 'APP'
+                : staffInfo!.department == 'PR'
                     ? GridView(
-                        physics: const BouncingScrollPhysics(),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0, vertical: 15.0),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          childAspectRatio: 1 / 1.3,
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 10.0,
-                          mainAxisSpacing: 10.0,
-                        ),
-                        children: [
-                          buildButton(
-                            name: 'Work entry',
-                            image: Image.asset(
-                              'assets/work_entry.png',
-                              scale: 1.5,
-                            ),
-                            page: WorkEntryScreen(
-                              userId: staffInfo!.uid,
-                              staffName: staffInfo!.name,
-                            ),
-                          ),
-                          buildButton(
-                            name: 'Work details',
-                            image: Image.asset(
-                              'assets/work_details.png',
-                              scale: 3.5,
-                            ),
-                            page: WorkCompleteViewScreen(
-                              userDetails: staffInfo!,
-                            ),
-                          ),
-                          buildButton(
-                            name: 'Refreshment',
-                            image: Image.asset(
-                              'assets/refreshment.png',
-                              scale: 3.8,
-                            ),
-                            page: RefreshmentScreen(
-                              uid: staffInfo!.uid,
-                              name: staffInfo!.name,
-                            ),
-                          ),
-                          buildButton(
-                            name: 'Food count',
-                            image: Image.asset(
-                              'assets/food_count.png',
-                              scale: 3.4,
-                            ),
-                            page: const FoodCountScreen(),
-                          ),
-                          buildButton(
-                            name: 'Leave form',
-                            image: Image.asset(
-                              'assets/leave_apply.png',
-                              scale: 13.8,
-                            ),
-                            page: LeaveApplyScreen(
-                              name: staffInfo!.name,
-                              uid: staffInfo!.uid,
-                            ),
-                          ),
-                          buildButton(
-                            name: 'Onyx',
-                            image: Image.asset(
-                              'assets/onxy.png',
-                              scale: 3,
-                            ),
-                            page: const AnnouncementScreen(),
-                          ),
-                          buildButton(
-                            name: 'Absent details',
-                            image: Image.asset(
-                              'assets/lead search.png',
-                              scale: 3.0,
-                            ),
-                            page: const AbsenteeScreen(),
-                          ),
-                          buildButton(
-                            name: 'Leave approval',
-                            image: Image.asset(
-                              'assets/leave_approval.png',
-                              scale: 2,
-                            ),
-                            page: LeaveApprovalScreen(
-                              name: staffInfo!.name,
-                              uid: staffInfo!.uid,
-                            ),
-                          ),
-                          buildButton(
-                            name: 'Search leads',
-                            image: Image.asset(
-                              'assets/search_leads.png',
-                              scale: 2.0,
-                            ),
-                            page: SearchLeadsScreen(staffInfo: staffInfo!),
-                          ),
-                          buildButton(
-                            name: 'Visit',
-                            image: Image.asset(
-                              'assets/visit.png',
-                              scale: 1.8,
-                            ),
-                            page: const VisitFromScreen(),
-                          ),
-                          buildButton(
-                            name: 'Visit check',
-                            image: Image.asset(
-                              'assets/visit_check.png',
-                              scale: 3.4,
-                            ),
-                            page: const VisitCheckScreen(),
-                          ),
-                          buildButton(
-                            name: 'Invoice generator',
-                            image: Image.asset(
-                              'assets/invoice.png',
-                              scale: 2,
-                            ),
-                            page: const CustomerDetails(),
-                          ),
-                          buildButton(
-                            name: 'Finance',
-                            image: Image.asset(
-                              'assets/finance.png',
-                              scale: 1,
-                            ),
-                            page: const FinanceScreen(),
-                          ),
-                          buildButton(
-                            name: 'Suggestions',
-                            image: Image.asset(
-                              'assets/suggestions.png',
-                              scale: 3.4,
-                            ),
-                            page: SuggestionScreen(
-                              uid: staffInfo!.uid,
-                              name: staffInfo!.name,
-                            ),
-                          ),
-                          buildButton(
-                            name: 'Virtual attendance',
-                            image: Image.asset(
-                              'assets/virtual_attendance.png',
-                              scale: 3.4,
-                            ),
-                            page: AttendanceScreen(
-                              uid: staffInfo!.uid,
-                              name: staffInfo!.name,
-                            ),
-                          ),
-                          buildButton(
-                            name: 'View suggestions',
-                            image: Image.asset(
-                              'assets/view_suggestions.png',
-                              scale: 16.8,
-                            ),
-                            page: ViewSuggestions(
-                              uid: staffInfo!.uid,
-                              name: staffInfo!.name,
-                            ),
-                          ),
-                          buildButton(
-                            name: 'View attendance',
-                            image: Image.asset(
-                              'assets/view_attendance.png',
-                              scale: 3.36,
-                            ),
-                            page: const ViewAttendanceScreen(),
-                          ),
-                          buildButton(
-                            name: 'Late entry',
-                            image: Image.asset(
-                              'assets/late_entry.png',
-                              scale: 3.36,
-                            ),
-                            page: LateEntryScreen(
-                              userId: staffInfo!.uid,
-                              staffName: staffInfo!.name,
-                            ),
-                          ),
-                          buildButton(
-                            name: 'PR Work done',
-                            image: Image.asset(
-                              'assets/pr_points.png',
-                              scale: 3.36,
-                            ),
-                            page: PrWorkDone(
-                              userId: staffInfo!.uid,
-                              staffName: staffInfo!.name,
-                            ),
-                          ),
-                          buildButton(
-                            name: 'Check Id Entry',
-                            image: Image.asset(
-                              'assets/check_entry.png',
-                              scale: 3.36,
-                            ),
-                            page: CheckEntryScreen(
-                              userId: staffInfo!.uid,
-                              staffName: staffInfo!.name,
-                            ),
-                          ),
-                          buildButton(
-                            name: 'Create products',
-                            image: Image.asset(
-                              'assets/new_products.png',
-                              scale: 3.36,
-                            ),
-                            page: const CreateNewProduct(),
-                          ),
-                          buildButton(
-                            name: 'Sales points',
-                            image: Image.asset(
-                              'assets/points_calculation.png',
-                              scale: 1.55,
-                            ),
-                            page: const PointCalculationsScreen(),
-                          ),
-                          buildButton(
-                            name: 'PR Work details',
-                            image: Image.asset(
-                              'assets/pr_work_details.png',
-                            ),
-                            page: const PrWorkDetails(),
-                          ),
-                        ],
-                      )
-                    : GridView(
                         physics: const BouncingScrollPhysics(),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10.0, vertical: 20.0),
@@ -768,6 +547,30 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                             ),
                           ),
                           buildButton(
+                            name: 'Search leads',
+                            image: Image.asset(
+                              'assets/search_leads.png',
+                              scale: 2.0,
+                            ),
+                            page: SearchLeadsScreen(staffInfo: staffInfo!),
+                          ),
+                          buildButton(
+                            name: 'Visit',
+                            image: Image.asset(
+                              'assets/visit.png',
+                              scale: 1.8,
+                            ),
+                            page: const VisitFromScreen(),
+                          ),
+                          buildButton(
+                            name: 'Invoice generator',
+                            image: Image.asset(
+                              'assets/invoice.png',
+                              scale: 2,
+                            ),
+                            page: const CustomerDetails(),
+                          ),
+                          buildButton(
                             name: 'Suggestions',
                             image: Image.asset(
                               'assets/suggestions.png',
@@ -789,20 +592,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               name: staffInfo!.name,
                             ),
                           ),
-                          if (staffInfo!.uid ==
-                                  'QPgtT8vDV8Y9pdy8fhtOmBON1Q03' ||
-                              staffInfo!.uid == 'hCxvT3mh1sgORNUMjsSNc9rgxgk2')
-                            buildButton(
-                              name: 'Check Entry',
-                              image: Image.asset(
-                                'assets/check_entry.png',
-                                scale: 3.36,
-                              ),
-                              page: CheckEntryScreen(
-                                userId: staffInfo!.uid,
-                                staffName: staffInfo!.name,
-                              ),
+                          buildButton(
+                            name: 'PR Work done',
+                            image: Image.asset(
+                              'assets/pr_points.png',
+                              scale: 3.36,
                             ),
+                            page: PrWorkDone(
+                              userId: staffInfo!.uid,
+                              staffName: staffInfo!.name,
+                            ),
+                          ),
                           buildButton(
                             name: 'Leave form',
                             image: Image.asset(
@@ -814,9 +614,24 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               uid: staffInfo!.uid,
                             ),
                           ),
-                          if (staffInfo!.uid ==
-                                  'QPgtT8vDV8Y9pdy8fhtOmBON1Q03' ||
-                              staffInfo!.uid == 'hCxvT3mh1sgORNUMjsSNc9rgxgk2')
+                          buildButton(
+                            name: 'Sales points',
+                            image: Image.asset(
+                              'assets/points_calculation.png',
+                              scale: 1.55,
+                            ),
+                            page: const PointCalculationsScreen(),
+                          ),
+                          if (staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
+                            buildButton(
+                              name: 'Visit check',
+                              image: Image.asset(
+                                'assets/visit_check.png',
+                                scale: 3.4,
+                              ),
+                              page: const VisitCheckScreen(),
+                            ),
+                          if (staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
                             buildButton(
                               name: 'Leave approval',
                               image: Image.asset(
@@ -828,8 +643,381 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                                 uid: staffInfo!.uid,
                               ),
                             ),
+                          if (staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
+                            buildButton(
+                              name: 'Check Id Entry',
+                              image: Image.asset(
+                                'assets/check_entry.png',
+                                scale: 3.36,
+                              ),
+                              page: CheckEntryScreen(
+                                userId: staffInfo!.uid,
+                                staffName: staffInfo!.name,
+                              ),
+                            ),
+                          if (staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
+                            buildButton(
+                              name: 'Create products',
+                              image: Image.asset(
+                                'assets/new_products.png',
+                                scale: 3.36,
+                              ),
+                              page: const CreateNewProduct(),
+                            ),
+                          if (staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
+                            buildButton(
+                              name: 'Work details',
+                              image: Image.asset(
+                                'assets/work_details.png',
+                                scale: 3.5,
+                              ),
+                              page: WorkCompleteViewScreen(
+                                userDetails: staffInfo!,
+                              ),
+                            ),
+                          if (staffInfo!.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2')
+                            buildButton(
+                              name: 'PR Work details',
+                              image: Image.asset(
+                                'assets/pr_work_details.png',
+                                scale: 1.55,
+                              ),
+                              page: const PrWorkDetails(),
+                            ),
                         ],
                       )
+                    : staffInfo!.department == 'APP'
+                        ? GridView(
+                            physics: const BouncingScrollPhysics(),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10.0, vertical: 15.0),
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              childAspectRatio: 1 / 1.3,
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10.0,
+                              mainAxisSpacing: 10.0,
+                            ),
+                            children: [
+                              buildButton(
+                                name: 'Work entry',
+                                image: Image.asset(
+                                  'assets/work_entry.png',
+                                  scale: 1.5,
+                                ),
+                                page: WorkEntryScreen(
+                                  userId: staffInfo!.uid,
+                                  staffName: staffInfo!.name,
+                                ),
+                              ),
+                              buildButton(
+                                name: 'Work details',
+                                image: Image.asset(
+                                  'assets/work_details.png',
+                                  scale: 3.5,
+                                ),
+                                page: WorkCompleteViewScreen(
+                                  userDetails: staffInfo!,
+                                ),
+                              ),
+                              buildButton(
+                                name: 'Refreshment',
+                                image: Image.asset(
+                                  'assets/refreshment.png',
+                                  scale: 3.8,
+                                ),
+                                page: RefreshmentScreen(
+                                  uid: staffInfo!.uid,
+                                  name: staffInfo!.name,
+                                ),
+                              ),
+                              buildButton(
+                                name: 'Food count',
+                                image: Image.asset(
+                                  'assets/food_count.png',
+                                  scale: 3.4,
+                                ),
+                                page: const FoodCountScreen(),
+                              ),
+                              buildButton(
+                                name: 'Leave form',
+                                image: Image.asset(
+                                  'assets/leave_apply.png',
+                                  scale: 13.8,
+                                ),
+                                page: LeaveApplyScreen(
+                                  name: staffInfo!.name,
+                                  uid: staffInfo!.uid,
+                                ),
+                              ),
+                              buildButton(
+                                name: 'Onyx',
+                                image: Image.asset(
+                                  'assets/onxy.png',
+                                  scale: 3,
+                                ),
+                                page: const AnnouncementScreen(),
+                              ),
+                              buildButton(
+                                name: 'Absent details',
+                                image: Image.asset(
+                                  'assets/lead search.png',
+                                  scale: 3.0,
+                                ),
+                                page: const AbsenteeScreen(),
+                              ),
+                              buildButton(
+                                name: 'Leave approval',
+                                image: Image.asset(
+                                  'assets/leave_approval.png',
+                                  scale: 2,
+                                ),
+                                page: LeaveApprovalScreen(
+                                  name: staffInfo!.name,
+                                  uid: staffInfo!.uid,
+                                ),
+                              ),
+                              buildButton(
+                                name: 'Search leads',
+                                image: Image.asset(
+                                  'assets/search_leads.png',
+                                  scale: 2.0,
+                                ),
+                                page: SearchLeadsScreen(staffInfo: staffInfo!),
+                              ),
+                              buildButton(
+                                name: 'Visit',
+                                image: Image.asset(
+                                  'assets/visit.png',
+                                  scale: 1.8,
+                                ),
+                                page: const VisitFromScreen(),
+                              ),
+                              buildButton(
+                                name: 'Visit check',
+                                image: Image.asset(
+                                  'assets/visit_check.png',
+                                  scale: 3.4,
+                                ),
+                                page: const VisitCheckScreen(),
+                              ),
+                              buildButton(
+                                name: 'Invoice generator',
+                                image: Image.asset(
+                                  'assets/invoice.png',
+                                  scale: 2,
+                                ),
+                                page: const CustomerDetails(),
+                              ),
+                              buildButton(
+                                name: 'Finance',
+                                image: Image.asset(
+                                  'assets/finance.png',
+                                  scale: 1,
+                                ),
+                                page: const FinanceScreen(),
+                              ),
+                              buildButton(
+                                name: 'Suggestions',
+                                image: Image.asset(
+                                  'assets/suggestions.png',
+                                  scale: 3.4,
+                                ),
+                                page: SuggestionScreen(
+                                  uid: staffInfo!.uid,
+                                  name: staffInfo!.name,
+                                ),
+                              ),
+                              buildButton(
+                                name: 'Virtual attendance',
+                                image: Image.asset(
+                                  'assets/virtual_attendance.png',
+                                  scale: 3.4,
+                                ),
+                                page: AttendanceScreen(
+                                  uid: staffInfo!.uid,
+                                  name: staffInfo!.name,
+                                ),
+                              ),
+                              buildButton(
+                                name: 'View suggestions',
+                                image: Image.asset(
+                                  'assets/view_suggestions.png',
+                                  scale: 16.8,
+                                ),
+                                page: ViewSuggestions(
+                                  uid: staffInfo!.uid,
+                                  name: staffInfo!.name,
+                                ),
+                              ),
+                              buildButton(
+                                name: 'View attendance',
+                                image: Image.asset(
+                                  'assets/view_attendance.png',
+                                  scale: 3.36,
+                                ),
+                                page: const ViewAttendanceScreen(),
+                              ),
+                              buildButton(
+                                name: 'Late entry',
+                                image: Image.asset(
+                                  'assets/late_entry.png',
+                                  scale: 3.36,
+                                ),
+                                page: LateEntryScreen(
+                                  userId: staffInfo!.uid,
+                                  staffName: staffInfo!.name,
+                                ),
+                              ),
+                              buildButton(
+                                name: 'PR Work done',
+                                image: Image.asset(
+                                  'assets/pr_points.png',
+                                  scale: 3.36,
+                                ),
+                                page: PrWorkDone(
+                                  userId: staffInfo!.uid,
+                                  staffName: staffInfo!.name,
+                                ),
+                              ),
+                              buildButton(
+                                name: 'Check Id Entry',
+                                image: Image.asset(
+                                  'assets/check_entry.png',
+                                  scale: 3.36,
+                                ),
+                                page: CheckEntryScreen(
+                                  userId: staffInfo!.uid,
+                                  staffName: staffInfo!.name,
+                                ),
+                              ),
+                              buildButton(
+                                name: 'Create products',
+                                image: Image.asset(
+                                  'assets/new_products.png',
+                                  scale: 3.36,
+                                ),
+                                page: const CreateNewProduct(),
+                              ),
+                              buildButton(
+                                name: 'Sales points',
+                                image: Image.asset(
+                                  'assets/points_calculation.png',
+                                  scale: 1.55,
+                                ),
+                                page: const PointCalculationsScreen(),
+                              ),
+                              buildButton(
+                                name: 'PR Work details',
+                                image: Image.asset(
+                                  'assets/pr_work_details.png',
+                                ),
+                                page: const PrWorkDetails(),
+                              ),
+                            ],
+                          )
+                        : GridView(
+                            physics: const BouncingScrollPhysics(),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10.0, vertical: 20.0),
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    childAspectRatio: 1 / 1.2,
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 10.0,
+                                    mainAxisSpacing: 10.0),
+                            children: [
+                              buildButton(
+                                name: 'Work entry',
+                                image: Image.asset(
+                                  'assets/work_entry.png',
+                                  scale: 1.5,
+                                ),
+                                page: WorkEntryScreen(
+                                  userId: staffInfo!.uid,
+                                  staffName: staffInfo!.name,
+                                ),
+                              ),
+                              buildButton(
+                                name: 'Refreshment',
+                                image: Image.asset(
+                                  'assets/refreshment.png',
+                                  scale: 3.8,
+                                ),
+                                page: RefreshmentScreen(
+                                  uid: staffInfo!.uid,
+                                  name: staffInfo!.name,
+                                ),
+                              ),
+                              buildButton(
+                                name: 'Suggestions',
+                                image: Image.asset(
+                                  'assets/suggestions.png',
+                                  scale: 3.4,
+                                ),
+                                page: SuggestionScreen(
+                                  uid: staffInfo!.uid,
+                                  name: staffInfo!.name,
+                                ),
+                              ),
+                              buildButton(
+                                name: 'Virtual attendance',
+                                image: Image.asset(
+                                  'assets/virtual_attendance.png',
+                                  scale: 3.4,
+                                ),
+                                page: AttendanceScreen(
+                                  uid: staffInfo!.uid,
+                                  name: staffInfo!.name,
+                                ),
+                              ),
+                              if (staffInfo!.uid ==
+                                      'QPgtT8vDV8Y9pdy8fhtOmBON1Q03' ||
+                                  staffInfo!.uid ==
+                                      'hCxvT3mh1sgORNUMjsSNc9rgxgk2')
+                                buildButton(
+                                  name: 'Check Entry',
+                                  image: Image.asset(
+                                    'assets/check_entry.png',
+                                    scale: 3.36,
+                                  ),
+                                  page: CheckEntryScreen(
+                                    userId: staffInfo!.uid,
+                                    staffName: staffInfo!.name,
+                                  ),
+                                ),
+                              buildButton(
+                                name: 'Leave form',
+                                image: Image.asset(
+                                  'assets/leave_apply.png',
+                                  scale: 13.8,
+                                ),
+                                page: LeaveApplyScreen(
+                                  name: staffInfo!.name,
+                                  uid: staffInfo!.uid,
+                                ),
+                              ),
+                              if (staffInfo!.uid ==
+                                      'QPgtT8vDV8Y9pdy8fhtOmBON1Q03' ||
+                                  staffInfo!.uid ==
+                                      'hCxvT3mh1sgORNUMjsSNc9rgxgk2')
+                                buildButton(
+                                  name: 'Leave approval',
+                                  image: Image.asset(
+                                    'assets/leave_approval.png',
+                                    scale: 2,
+                                  ),
+                                  page: LeaveApprovalScreen(
+                                    name: staffInfo!.name,
+                                    uid: staffInfo!.uid,
+                                  ),
+                                ),
+                            ],
+                          )
         : Center(
             child: Lottie.asset(
               "assets/animations/loading.json",
@@ -923,28 +1111,28 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             ),
           ),
           content: Text(
-            "You are currently using an outdated version. Please update to a newer version to continue!!",
+            "You are currently using an outdated version. Contact admin for New version of the app..",
             style: TextStyle(
               fontFamily: ConstantFonts.poppinsMedium,
             ),
           ),
-          actions: [
-            CupertinoDialogAction(
-              isDefaultAction: true,
-              textStyle: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium,
-              ),
-              onPressed: () async {
-                final url = Uri.parse(
-                    'https://appdistribution.firebase.google.com/u/1/testerapps/1:566962550940:android:a6990ea93cd84de59e5559/releases/6rmk3jnsf41l0?fromSwitchAcct=true&pli=1');
-                if (await canLaunchUrl(url)) {
-                  await launchUrl(url);
-                } else {
-                  throw 'Could not launch $url';
-                }
-              },
-              child: const Text("Update Now"),
-            ),
+          actions: const [
+            // CupertinoDialogAction(
+            //   isDefaultAction: true,
+            //   textStyle: TextStyle(
+            //     fontFamily: ConstantFonts.poppinsMedium,
+            //   ),
+            //   onPressed: () async {
+            //     final url = Uri.parse(
+            //         'https://appdistribution.firebase.google.com/u/1/testerapps/1:566962550940:android:a6990ea93cd84de59e5559/releases/6rmk3jnsf41l0?fromSwitchAcct=true&pli=1');
+            //     if (await canLaunchUrl(url)) {
+            //       await launchUrl(url);
+            //     } else {
+            //       throw 'Could not launch $url';
+            //     }
+            //   },
+            //   child: const Text("Update Now"),
+            // ),
           ],
         ),
         onWillPop: () async {
