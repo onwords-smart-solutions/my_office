@@ -48,12 +48,11 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
 
   void openWhatsapp(
       {required BuildContext context,
-      required String text,
       required String number}) async {
     var whatsapp = number; //+92xx enter like this
     var whatsappURlAndroid =
-        "whatsapp://send?phone=" + whatsapp + "&text=$text";
-    var whatsappURLIos = "https://wa.me/$whatsapp?text=${Uri.tryParse(text)}";
+        "whatsapp://send?phone=$whatsapp";
+    var whatsappURLIos = "https://wa.me/$whatsapp";
     if (Platform.isIOS) {
       // for iOS phone only
       if (await canLaunchUrl(Uri.parse(whatsappURLIos))) {
@@ -70,7 +69,10 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         await launchUrl(Uri.parse(whatsappURlAndroid));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Whatsapp not installed")));
+          const SnackBar(
+            content: Text("Whatsapp not installed"),
+          ),
+        );
       }
     }
   }
@@ -100,19 +102,47 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     return Scaffold(
       backgroundColor: const Color(0xffF1F2F8),
       appBar: AppBar(
-        backgroundColor: const Color(0xffF1F2F8),
+        // backgroundColor: const Color(0xffF1F2F8),
+        // backgroundColor: const Color(0xff00BCD1).withOpacity(0.8),
+        flexibleSpace: Container(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),bottomRight: Radius.circular(20)),
+            gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: <Color>[Color(0xff3366FF), Color(0xff00CCFF)]),
+          ),
+        ),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(20),
+          ),
+        ),
         elevation: 0.0,
-        foregroundColor: const Color(0xff8355B7),
+        // foregroundColor: const Color(0xff8355B7),
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
-          icon: const Icon(Icons.arrow_back_ios_rounded),
+          icon:  const Icon(Icons.arrow_back_ios_rounded,color: Colors.white,),
           splashRadius: 20.0,
         ),
         title: Text(widget.customerInfo['name'].toString(),
             style: TextStyle(
+                color: Colors.white,
                 fontFamily: ConstantFonts.poppinsBold, fontSize: 18.0)),
         titleSpacing: 0.0,
         actions: [
+          IconButton(
+              onPressed: () {
+                setState(() {
+                addNotes();
+                });
+                // print(widget.customerInfo['phone_number'].toString());
+              },
+              icon: const Icon(
+                Icons.note_add_outlined,
+                color: Colors.white,
+                size: 30,
+              )),
           IconButton(
               onPressed: () {
                 launch(
@@ -121,7 +151,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
               },
               icon: const Icon(
                 Icons.call,
-                color: Colors.blue,
+                color: Color(0xff3366FF),
                 size: 30,
               )),
           IconButton(
@@ -129,16 +159,16 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                 setState(() {
                   openWhatsapp(
                       context: context,
-                      text: '',
                       number: widget.customerInfo['phone_number'].toString());
                 });
                 // print(widget.customerInfo['phone_number'].toString());
               },
               icon: const Icon(
-                Icons.whatsapp_rounded,
+                Icons.whatsapp,
                 color: Colors.greenAccent,
                 size: 30,
               )),
+
         ],
       ),
       body: Padding(
@@ -227,23 +257,23 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         const SizedBox(height: 10.0),
         //title
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Text(
-              'Notes',
-              style: TextStyle(
-                  fontFamily: ConstantFonts.poppinsMedium, fontSize: 20.0),
-            ),
-
-            // note add button
-            IconButton(
-              onPressed: () {
-                addNotes();
-              },
-              icon: const Icon(Icons.add_circle_rounded),
-              color: const Color(0xff8355B7),
-              splashRadius: 20.0,
-            ),
+            // Text(
+            //   'Notes',
+            //   style: TextStyle(
+            //       fontFamily: ConstantFonts.poppinsMedium, fontSize: 20.0),
+            // ),
+            //
+            // // note add button
+            // IconButton(
+            //   onPressed: () {
+            //     addNotes();
+            //   },
+            //   icon: const Icon(Icons.add_circle_rounded),
+            //   color: const Color(0xff8355B7),
+            //   splashRadius: 20.0,
+            // ),
 
             //Dropdown to change "State" of customers
             DropdownButton(
