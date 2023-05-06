@@ -216,8 +216,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       // print('no data');
-    } else if (position.latitude.toString().contains("10.67") &&
-        position.longitude.toString().contains("76.97")) {
+    } else if (position.latitude.toString().contains("100.67") &&
+        position.longitude.toString().contains("760.97")) {
       final snackBar = SnackBar(
         duration: const Duration(seconds: 3),
         content: Text(

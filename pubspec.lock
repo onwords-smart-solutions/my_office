@@ -730,6 +730,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.6.3"
+  install_plugin_v2:
+    dependency: "direct main"
+    description:
+      name: install_plugin_v2
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   internet_connection_checker:
     dependency: "direct main"
     description:
