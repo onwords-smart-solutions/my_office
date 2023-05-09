@@ -702,7 +702,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                             .pushAndRemoveUntil(
                                             MaterialPageRoute(
                                                 builder: (_) =>
-                                                const UserHomeScreen()),
+                                                const UserHomeScreen(),
+                                            ),
                                                 (route) => false);
                                         Provider.of<TaskData>(context,
                                             listen: false)
