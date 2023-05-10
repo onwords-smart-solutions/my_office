@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -16,7 +15,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upi_payment_qrcode_generator/upi_payment_qrcode_generator.dart';
 import '../../../database/hive_operations.dart';
 import '../../../models/staff_model.dart';
-import '../api/pdf_api.dart';
 import '../api/pdf_invoice_api.dart';
 import '../model/customer.dart';
 import '../model/invoice.dart';
@@ -416,12 +414,98 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                 ],
                               ),
                             )
+                            :widget.doctype == "PROFORMA INVOICE"
+                            ? Container(
+                              padding: const EdgeInsets.all(05),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.black26,
+                                      width: width * 0.002),
+                                  borderRadius:
+                                  BorderRadius.circular(10)),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'Estimate Date For Installation',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: height * 0.012,
+                                        fontFamily: 'Nexa',
+                                        color: Colors.black),
+                                  ),
+                                  SizedBox(
+                                      height: height * 0.050,
+                                      width: width * 0.25,
+                                      child: TextFormField(
+                                        textInputAction:
+                                        TextInputAction.done,
+                                        controller: estimateDate,
+                                        keyboardType:
+                                        TextInputType.datetime,
+                                        validator: (value) {
+                                          if (value == null ||
+                                              value.isEmpty) {
+                                            return 'Date required';
+                                          }
+                                          return null;
+                                        },
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: height * 0.012,
+                                          fontFamily: 'Avenir',
+                                        ),
+                                        readOnly: true,
+                                        textAlign: TextAlign.center,
+                                        decoration: InputDecoration(
+                                          // border: InputBorder.none,
+                                          hintText: 'Estimate Date',
+                                          hintStyle: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: height * 0.012,
+                                            fontFamily: 'Nexa',
+                                          ),
+                                        ),
+                                        onTap: () async {
+                                          DateTime? pickedDate =
+                                          await showDatePicker(
+                                              context: context,
+                                              initialDate:
+                                              DateTime.now(),
+                                              firstDate:
+                                              DateTime(2000),
+                                              //DateTime.now() - not to allow to choose before today.
+                                              lastDate:
+                                              DateTime(2101));
+
+                                          if (pickedDate != null) {
+                                            String formattedDate =
+                                            DateFormat('yyyy-MM-dd')
+                                                .format(pickedDate);
+                                            setState(() {
+                                              estimateDate.text =
+                                                  formattedDate; //set output date to TextField value.
+                                            });
+                                          }
+                                        },
+                                      )),
+                                ],
+                              ),
+                            )
                                 : Container(),
                             Column(
                               children: [
                                 widget.doctype == 'INVOICE'
                                     ? Text(
                                   '#INVOICE ',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: height * 0.014,
+                                      fontFamily: 'Avenir',
+                                      color: Colors.black),
+                                )
+                                : widget.doctype == "PROFORMA INVOICE"
+                                ? Text(
+                                  '#PROFORMA \n INVOICE',
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontSize: height * 0.014,

@@ -3,8 +3,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:intl/intl.dart';
-import 'package:my_office/PR/invoice/model/customer.dart';
-import 'package:my_office/models/staff_model.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../provider_page.dart';
@@ -430,6 +428,7 @@ class _AddItermState extends State<AddIterm> {
                               },
                               items: <String>[
                                 'QUOTATION',
+                                'PROFORMA INVOICE',
                                 'INVOICE'
                               ].map<DropdownMenuItem<String>>((String value) {
                                 return DropdownMenuItem<String>(
@@ -580,6 +579,51 @@ class _AddItermState extends State<AddIterm> {
                             )
                                 : const Text(""),
                             dropdownValue == "INVOICE"
+                                ? SizedBox(
+                              width: width * 0.40,
+                              child: TextFormField(
+                                onChanged: (val) {
+                                  if (val.isNotEmpty) {
+                                    setState(() {
+                                      advanceAmt = int.parse(val);
+                                    });
+                                  }
+                                },
+                                style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: height * 0.012,
+                                  fontFamily: 'Avenir',
+                                ),
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  hintText: ' Advance Paid',
+                                  border: InputBorder.none,
+                                  hintStyle: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
+                                    fontFamily: 'Nexa',
+                                  ),
+                                ),
+                                controller: advancePaid,
+                              ),
+                            )
+                                : const Text(""),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            dropdownValue == "PROFORMA INVOICE"
+                                ? Text(
+                              "Advance Amount",
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: height * 0.012,
+                                  fontFamily: 'Nexa',
+                                  color: Colors.black),
+                            )
+                                : const Text(""),
+                            dropdownValue == "PROFORMA INVOICE"
                                 ? SizedBox(
                               width: width * 0.40,
                               child: TextFormField(
