@@ -64,7 +64,7 @@ class _MyAppState extends State<MyApp> {
       child:  MaterialApp(
           title: 'My Office',
           theme: ThemeData(
-            primarySwatch: Colors.purple,
+            primarySwatch: Colors.blue,
             scaffoldBackgroundColor: ConstantColor.backgroundColor,
             fontFamily: 'PoppinsRegular',
           ),

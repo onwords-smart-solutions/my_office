@@ -16,12 +16,13 @@ class ScreenTemplate extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
+      backgroundColor: Colors.black,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             Container(
-              height: height * 0.95,
+              height: height * 1,
               width: width,
               padding: EdgeInsets.only(
                   top: MediaQuery.of(context).viewPadding.top * 1.5),

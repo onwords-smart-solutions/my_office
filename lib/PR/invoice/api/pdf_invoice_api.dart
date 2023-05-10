@@ -28,7 +28,7 @@ class PdfInvoiceApi {
     // var asset qrImage = pw.MemoryImage(
     //     (await rootBundle.load('assets/qr_pic.jpg')).buffer.asUint8List());
 
-    // var assetImages = pw.MemoryImage(File(user.imagePath).readAsBytesSync());
+    // var assetImages = pw.MemoryImage(Fil e(user.imagePath).readAsBytesSync());
 
 
     pdf.addPage(
@@ -45,8 +45,6 @@ class PdfInvoiceApi {
           Text('Scan to Pay',style: TextStyle(fontWeight: FontWeight.bold)),
           SizedBox(height: 0.2 * PdfPageFormat.cm),
           builderQR(image),
-
-
         ],
         footer: (context) => buildFooter(invoice),
       ),

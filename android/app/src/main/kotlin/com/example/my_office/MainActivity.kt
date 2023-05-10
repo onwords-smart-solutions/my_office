@@ -1,4 +1,4 @@
-package com.onwords.my_office
+package com.onwords.office
 
 import io.flutter.embedding.android.FlutterActivity
 

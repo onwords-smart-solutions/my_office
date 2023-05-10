@@ -14,7 +14,7 @@ class ExpenseScreen extends StatefulWidget {
 }
 
 class _ExpenseScreenState extends State<ExpenseScreen> {
-
+  bool ascending = false;
   @override
   Widget build(BuildContext context) {
     return ScreenTemplate(
@@ -24,36 +24,75 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
   }
 
   Widget buildExpenseScreen() {
-    return ListView.builder(
-      physics: const BouncingScrollPhysics(),
-      itemCount: widget.allExpense.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => ExpenseDetails(
-                  expenseDetails: widget.allExpense[index],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Container(
+          margin: EdgeInsets.symmetric(horizontal: 10),
+          width: 150,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: Colors.blue.withOpacity(0.3),
+          ),
+
+          child: TextButton(
+              onPressed: () {
+                setState(() {
+                  if (ascending) {
+                    widget.allExpense.sort((a, b) => a.amount.compareTo(b.amount));
+                  } else {
+                    widget.allExpense.sort((a, b) => b.amount.compareTo(a.amount));
+                  }
+                  ascending = !ascending;
+                });
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    ascending ? 'Ascending' : 'descending',
+                    style: TextStyle(color: Colors.black,fontSize: 15, fontWeight: FontWeight.bold),
+                  ),
+                  Icon(Icons.arrow_downward,color: Colors.black,size: 20,),
+                  Icon(Icons.arrow_upward,color: Colors.black,size: 20,),
+
+                ],
+              )),
+        ),
+        Expanded(
+          child: ListView.builder(
+            physics: const BouncingScrollPhysics(),
+            itemCount: widget.allExpense.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ExpenseDetails(
+                        expenseDetails: widget.allExpense[index],
+                      ),
+                    ),
+                  );
+                },
+                title: Text(
+                  widget.allExpense[index].productName,
+                  style: TextStyle(
+                      fontFamily: ConstantFonts.poppinsMedium,
+                      color: ConstantColor.blackColor,
+                      fontSize: 16),
                 ),
-              ),
-            );
-          },
-          title: Text(
-            widget.allExpense[index].productName,
-            style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium,
-                color: ConstantColor.blackColor,
-                fontSize: 16),
+                trailing: Text(
+                  '-   ${widget.allExpense[index].amount.toString()}',
+                  style: TextStyle(
+                      fontFamily: ConstantFonts.poppinsBold,
+                      color: ConstantColor.backgroundColor,
+                      fontSize: 16),
+                ),
+              );
+            },
           ),
-          trailing: Text(
-            '-   ${widget.allExpense[index].amount.toString()}',
-            style: TextStyle(
-                fontFamily: ConstantFonts.poppinsBold,
-                color: ConstantColor.backgroundColor,
-                fontSize: 16),
-          ),
-        );
-      },
+        ),
+      ],
     );
 
   }
