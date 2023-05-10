@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -6,6 +9,8 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/PR/invoice/api/installation_pdf.dart';
 import 'package:my_office/home/user_home_screen.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upi_payment_qrcode_generator/upi_payment_qrcode_generator.dart';
@@ -66,18 +71,18 @@ class _PreviewScreenState extends State<PreviewScreen> {
   Uint8List? convertedImage;
 
   Future<void> _convertImage() async {
-    // print('called function');
+    print('called function _convertImage()');
     RenderRepaintBoundary boundary =
     _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
     ui.Image image = await boundary.toImage(pixelRatio: 10.0);
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     Uint8List pngBytes = byteData!.buffer.asUint8List();
-    // print('DAta is $convertedImage');
+    // print('inside  Data is $convertedImage');
     setState(() {
       convertedImage = pngBytes;
     });
 
-    // print('DAta after is $convertedImage');
+    // print('out side Data after is $convertedImage');
   }
 
   // double amount = 0.0;
@@ -604,18 +609,14 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                         invoice,
                                         // user!,
                                         convertedImage!);
-                                    PdfApi.openFile(pdfFile)
-                                        .then((value) async {
-                                      // print(task.name);
-                                      logData.setString(
-                                          'accountNameSaved', accountName.text);
-                                      logData.setString(
-                                          'accountNoSaved', accountNo.text);
-                                      logData.setString(
-                                          'ifscCodeSaved', ifsc.text);
-                                      logData.setString(
-                                          'bankNameSaved', bank.text);
+                                    log('path is ${pdfFile.path}');
 
+                                    final dir = await getExternalStorageDirectory();
+                                    final file = File('${dir!.path}/${fileName.text}.pdf');
+                                    file.writeAsBytesSync(pdfFile.readAsBytesSync(),flush: true);
+                                    log('new path is ${file.path} and absolute is ${file.absolute.path}');
+                                    await OpenFile.open(file.path)
+                                        .then((value) async {
                                       ///................FIREBASE..........
                                       if (widget.doctype == "INVOICE") {
                                         var snapshot = await firebaseStorage
@@ -698,7 +699,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                             .pushAndRemoveUntil(
                                             MaterialPageRoute(
                                                 builder: (_) =>
-                                                const UserHomeScreen()),
+                                                const UserHomeScreen(),
+                                            ),
                                                 (route) => false);
                                         Provider.of<TaskData>(context,
                                             listen: false)

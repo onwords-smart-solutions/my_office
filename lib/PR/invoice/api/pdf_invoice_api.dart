@@ -28,7 +28,7 @@ class PdfInvoiceApi {
     // var asset qrImage = pw.MemoryImage(
     //     (await rootBundle.load('assets/qr_pic.jpg')).buffer.asUint8List());
 
-    // var assetImage = pw.MemoryImage(File(user.imagePath).readAsBytesSync());
+    // var assetImages = pw.MemoryImage(File(user.imagePath).readAsBytesSync());
 
 
     pdf.addPage(

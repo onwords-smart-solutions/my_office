@@ -46,11 +46,11 @@ class InstallationInvoicePdf {
           // buildTitle(invoice),
           buildInvoice(invoice),
           Divider(),
-          buildTotal(invoice),
-          Text('Scan me to Pay',style: TextStyle(fontWeight: FontWeight.bold)),
-          SizedBox(height: 0.2 * PdfPageFormat.cm),
+          // buildTotal(invoice),
+          // Text('Scan me to Pay',style: TextStyle(fontWeight: FontWeight.bold)),
+          // SizedBox(height: 0.2 * PdfPageFormat.cm),
           // builderQR(image),
-          buildBankDetails(invoice),
+          buildEstimateDetails  (invoice),
         ],
         footer: (context) => buildFooter(invoice),
       ),
@@ -100,16 +100,16 @@ class InstallationInvoicePdf {
         ],
       );
 
-  static builderQR(pw.MemoryImage img) {
-    // final qr = UPIPaymentQRCode(upiDetails: upiDetails,size: 100,);
-    return  Container(
-      margin: const EdgeInsets.only(left: -7),
-      height: 100, //150,
-      width: 100, //150,
-      child: pw.Image(img),
-    );
-
-  }
+  // static builderQR(pw.MemoryImage img) {
+  //   // final qr = UPIPaymentQRCode(upiDetails: upiDetails,size: 100,);
+  //   return  Container(
+  //     margin: const EdgeInsets.only(left: -7),
+  //     height: 100, //150,
+  //     width: 100, //150,
+  //     child: pw.Image(img),
+  //   );
+  //
+  // }
 
   static Widget buildHeader(Invoice invoice) => Row(
     // crossAxisAlignment: CrossAxisAlignment.start,
@@ -298,7 +298,7 @@ class InstallationInvoicePdf {
     );
   }
 
-  static Widget buildBankDetails(Invoice invoice) => Column(
+  static Widget buildEstimateDetails(Invoice invoice) => Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -329,136 +329,136 @@ class InstallationInvoicePdf {
         // Text("Bank : ${invoice.bankName}", style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15.0)),
       ]);
 
-  static Widget buildTotal(Invoice invoice) {
-    final netTotal = invoice.items
-        .map((item) => item.unitPrice * item.quantity)
-        .reduce((item1, item2) => item1 + item2);
-    // final vatPercent = invoice.items.first.vat;
-    const vatPercent = 0.09;
-    final vat = netTotal * vatPercent;
-    final iVat = netTotal * vatPercent;
-    final discount = invoice.discountAmount;
-    // final labAndIns = invoice.labAndInstall;
-    // final total = netTotal + vat + iVat + labAndIns;
-
-    // final total = invoice.gstNeed ? netTotal + vat + iVat : netTotal;
-
-    // final total = invoice.gstNeed?netTotal + vat + iVat + labAndIns: netTotal+ labAndIns;
-    total = invoice.gstNeed
-        ? netTotal + vat + iVat - discount
-        : netTotal - discount;
-    // val = invoice.gstNeed
-    //     ? netTotal + vat + iVat - discount
-    //     : netTotal - discount;
-    final advanceAmt = invoice.advancePaid;
-    final balanceAmt = total - advanceAmt;
-    final discounts = invoice.discountAmount;
-
-    return Container(
-      alignment: Alignment.centerRight,
-      child: Row(
-        children: [
-          buildBankDetails(invoice),
-          Spacer(flex: 3),
-          Expanded(
-            flex: 4,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                buildText(
-                  title: 'Sub total',
-                  value: Utils.formatPrice(netTotal),
-                  unite: true,
-                ),
-                invoice.gstNeed
-                    ? buildText(
-                  title: 'CGST ${vatPercent * 100} %',
-                  value: Utils.formatPrice(vat),
-                  unite: true,
-                )
-                    : Text(""),
-                invoice.gstNeed
-                    ? buildText(
-                  title: 'IGST ${vatPercent * 100} %',
-                  value: Utils.formatPrice(vat),
-                  unite: true,
-                )
-                    : Text(""),
-                SizedBox(height: 2 * PdfPageFormat.mm),
-                // (invoice.docType == "INVOICE")||(invoice.labNeed)?buildText(
-                //   title: 'LABOUR & INSTALLATION ',
-                //   titleStyle: TextStyle(
-                //     fontSize: 12,
-                //     fontWeight: FontWeight.normal,
-                //   ),
-                //   value: Utils.formatPrice(labAndIns.toDouble()),
-                //   unite: true,
-                // )
-                //     :Text(""),
-                SizedBox(height: 2 * PdfPageFormat.mm),
-                // buildText(
-                //   title: 'Grand total',
-                //   value: Utils.formatPrice(netTotal),
-                //   unite: true,
-                // ),
-                // Divider(),
-                discounts != 0
-                    ? buildText(
-                  title: 'Discount Amount ',
-                  titleStyle: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.normal,
-                  ),
-                  value: Utils.formatPrice(discount.toDouble()),
-                  unite: true,
-                )
-                    : Text(""),
-                buildText(
-                  title: 'Grand total ',
-                  titleStyle: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  value: Utils.formatPrice(total),
-                  unite: true,
-                ),
-                SizedBox(height: 2 * PdfPageFormat.mm),
-
-                advanceAmt != 0
-                    ? buildText(
-                  title: 'Advance Paid ',
-                  titleStyle: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.normal,
-                  ),
-                  value: Utils.formatPrice(advanceAmt.toDouble()),
-                  unite: true,
-                )
-                    : Text(""),
-                SizedBox(height: 2 * PdfPageFormat.mm),
-                advanceAmt != 0
-                    ? buildText(
-                  title: 'Balance Amount',
-                  titleStyle: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  value: Utils.formatPrice(balanceAmt.toDouble()),
-                  unite: true,
-                )
-                    : Text(""),
-
-                SizedBox(height: 2 * PdfPageFormat.mm),
-                Container(height: 1, color: PdfColors.grey400),
-                SizedBox(height: 0.5 * PdfPageFormat.mm),
-                Container(height: 1, color: PdfColors.grey400),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // static Widget buildTotal(Invoice invoice) {
+  //   final netTotal = invoice.items
+  //       .map((item) => item.unitPrice * item.quantity)
+  //       .reduce((item1, item2) => item1 + item2);
+  //   // final vatPercent = invoice.items.first.vat;
+  //   const vatPercent = 0.09;
+  //   final vat = netTotal * vatPercent;
+  //   final iVat = netTotal * vatPercent;
+  //   final discount = invoice.discountAmount;
+  //   // final labAndIns = invoice.labAndInstall;
+  //   // final total = netTotal + vat + iVat + labAndIns;
+  //
+  //   // final total = invoice.gstNeed ? netTotal + vat + iVat : netTotal;
+  //
+  //   // final total = invoice.gstNeed?netTotal + vat + iVat + labAndIns: netTotal+ labAndIns;
+  //   total = invoice.gstNeed
+  //       ? netTotal + vat + iVat - discount
+  //       : netTotal - discount;
+  //   // val = invoice.gstNeed
+  //   //     ? netTotal + vat + iVat - discount
+  //   //     : netTotal - discount;
+  //   final advanceAmt = invoice.advancePaid;
+  //   final balanceAmt = total - advanceAmt;
+  //   final discounts = invoice.discountAmount;
+  //
+  //   return Container(
+  //     alignment: Alignment.centerRight,
+  //     child: Row(
+  //       children: [
+  //         buildBankDetails(invoice),
+  //         Spacer(flex: 3),
+  //         Expanded(
+  //           flex: 4,
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.end,
+  //             children: [
+  //               buildText(
+  //                 title: 'Sub total',
+  //                 value: Utils.formatPrice(netTotal),
+  //                 unite: true,
+  //               ),
+  //               invoice.gstNeed
+  //                   ? buildText(
+  //                 title: 'CGST ${vatPercent * 100} %',
+  //                 value: Utils.formatPrice(vat),
+  //                 unite: true,
+  //               )
+  //                   : Text(""),
+  //               invoice.gstNeed
+  //                   ? buildText(
+  //                 title: 'IGST ${vatPercent * 100} %',
+  //                 value: Utils.formatPrice(vat),
+  //                 unite: true,
+  //               )
+  //                   : Text(""),
+  //               SizedBox(height: 2 * PdfPageFormat.mm),
+  //               // (invoice.docType == "INVOICE")||(invoice.labNeed)?buildText(
+  //               //   title: 'LABOUR & INSTALLATION ',
+  //               //   titleStyle: TextStyle(
+  //               //     fontSize: 12,
+  //               //     fontWeight: FontWeight.normal,
+  //               //   ),
+  //               //   value: Utils.formatPrice(labAndIns.toDouble()),
+  //               //   unite: true,
+  //               // )
+  //               //     :Text(""),
+  //               SizedBox(height: 2 * PdfPageFormat.mm),
+  //               // buildText(
+  //               //   title: 'Grand total',
+  //               //   value: Utils.formatPrice(netTotal),
+  //               //   unite: true,
+  //               // ),
+  //               // Divider(),
+  //               discounts != 0
+  //                   ? buildText(
+  //                 title: 'Discount Amount ',
+  //                 titleStyle: TextStyle(
+  //                   fontSize: 10,
+  //                   fontWeight: FontWeight.normal,
+  //                 ),
+  //                 value: Utils.formatPrice(discount.toDouble()),
+  //                 unite: true,
+  //               )
+  //                   : Text(""),
+  //               buildText(
+  //                 title: 'Grand total ',
+  //                 titleStyle: TextStyle(
+  //                   fontSize: 12,
+  //                   fontWeight: FontWeight.bold,
+  //                 ),
+  //                 value: Utils.formatPrice(total),
+  //                 unite: true,
+  //               ),
+  //               SizedBox(height: 2 * PdfPageFormat.mm),
+  //
+  //               advanceAmt != 0
+  //                   ? buildText(
+  //                 title: 'Advance Paid ',
+  //                 titleStyle: TextStyle(
+  //                   fontSize: 10,
+  //                   fontWeight: FontWeight.normal,
+  //                 ),
+  //                 value: Utils.formatPrice(advanceAmt.toDouble()),
+  //                 unite: true,
+  //               )
+  //                   : Text(""),
+  //               SizedBox(height: 2 * PdfPageFormat.mm),
+  //               advanceAmt != 0
+  //                   ? buildText(
+  //                 title: 'Balance Amount',
+  //                 titleStyle: TextStyle(
+  //                   fontSize: 10,
+  //                   fontWeight: FontWeight.bold,
+  //                 ),
+  //                 value: Utils.formatPrice(balanceAmt.toDouble()),
+  //                 unite: true,
+  //               )
+  //                   : Text(""),
+  //
+  //               SizedBox(height: 2 * PdfPageFormat.mm),
+  //               Container(height: 1, color: PdfColors.grey400),
+  //               SizedBox(height: 0.5 * PdfPageFormat.mm),
+  //               Container(height: 1, color: PdfColors.grey400),
+  //             ],
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
 
   static Widget buildFooter(Invoice invoice) => Column(
