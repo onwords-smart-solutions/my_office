@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/database/hive_operations.dart';
+import 'package:my_office/login/qr_code_scan.dart';
 import 'package:my_office/login/singIn_screen.dart';
 import 'package:my_office/models/staff_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -77,7 +78,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       fontSize: height * 0.020,
                     ),
                   ),
-                ]),
+                ],
+                ),
               ),
             ),
 
@@ -219,11 +221,20 @@ class _LoginScreenState extends State<LoginScreen> {
 
             /// Button...
             Positioned(
-              top: height * 0.8,
+              top: height * 0.75,
               left: width * 0.05,
               right: width * 0.05,
               child: buildGestureDetector(height),
             ),
+
+
+            //SCAN QR CODE...
+            // Positioned(
+            //   top: height * 0.85,
+            //   left: width * 0.35,
+            //   right: width * 0.35,
+            //   child: scanQrCode(),
+            // ),
 
             /// Create Account...
             Positioned(
@@ -233,6 +244,31 @@ class _LoginScreenState extends State<LoginScreen> {
               child: createAccountWidget(height, const SingInScreen()),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget scanQrCode(){
+    return Container(
+      height: 35,
+      width: 20,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: ConstantColor.backgroundColor
+      ),
+      child: GestureDetector(
+        onTap: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=> const QrCodeScan()));
+        },
+        child: const Center(
+          child: Text('Scan Qr',
+          style: TextStyle(
+            fontSize: 16,
+            color: ConstantColor.background1Color,
+            fontWeight: FontWeight.w600,
+          ),
+          ),
         ),
       ),
     );
@@ -269,7 +305,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       fontSize: height * 0.030,
                     ),
                   ),
-          )),
+          ),
+      ),
 
     );
   }
