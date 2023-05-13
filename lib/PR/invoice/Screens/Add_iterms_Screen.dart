@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../provider_page.dart';
-import 'dart:math' as math;
-
 
 import 'preview_Screen.dart';
 
@@ -357,7 +353,7 @@ class _AddItermState extends State<AddIterm> {
                   ),
                 ),),
                 /// Product Details
-                buildNeumorphic(width, height,  SizedBox(
+                buildNeumorphic(width, height,  Container(
                   height: height * 0.18,
                   width: width * 0.9,
                   // decoration: BoxDecoration(
@@ -432,8 +428,8 @@ class _AddItermState extends State<AddIterm> {
                               },
                               items: <String>[
                                 'QUOTATION',
-                                'PROFORMA_INVOICE',
-                                'INVOICE',
+                                'PROFORMA INVOICE',
+                                'INVOICE'
                               ].map<DropdownMenuItem<String>>((String value) {
                                 return DropdownMenuItem<String>(
                                   value: value,

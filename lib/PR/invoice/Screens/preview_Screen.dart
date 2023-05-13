@@ -1,7 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -9,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/PR/invoice/api/installation_pdf.dart';
-import 'package:my_office/PR/invoice/image_saving/user.dart';
 import 'package:my_office/home/user_home_screen.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
@@ -18,15 +15,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upi_payment_qrcode_generator/upi_payment_qrcode_generator.dart';
 import '../../../database/hive_operations.dart';
 import '../../../models/staff_model.dart';
-import '../api/pdf_api.dart';
 import '../api/pdf_invoice_api.dart';
-import '../image_saving/user_preference.dart';
 import '../model/customer.dart';
 import '../model/invoice.dart';
 import '../model/supplier.dart';
 import '../provider_page.dart';
 import '../utils.dart';
-import 'Customer_Details_Screen.dart';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
@@ -284,7 +278,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                 left: 0,
                 right: 0,
                 child: Container(
-                  color: const Color(0xffDDE6E8),
+                  color: Color(0xffDDE6E8),
                   height: height * 1.0,
                   width: width * 1.0,
                   padding: EdgeInsets.symmetric(horizontal: width * 0.05),
@@ -292,17 +286,6 @@ class _PreviewScreenState extends State<PreviewScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          '#${widget.doctype} ',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: height * 0.018,
-                              fontFamily: 'Avenir',
-                              color: Colors.black),
-                        ),
-                        SizedBox(
-                          height: height * 0.02,
-                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -354,7 +337,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                 ],
                               ),
                             ),
-                            widget.doctype == "PROFORMA_INVOICE"
+                            widget.doctype == "INVOICE"
                                 ? Container(
                               padding: const EdgeInsets.all(05),
                               decoration: BoxDecoration(
@@ -431,36 +414,114 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                 ],
                               ),
                             )
+                            :widget.doctype == "PROFORMA INVOICE"
+                            ? Container(
+                              padding: const EdgeInsets.all(05),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.black26,
+                                      width: width * 0.002),
+                                  borderRadius:
+                                  BorderRadius.circular(10)),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'Estimate Date For Installation',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: height * 0.012,
+                                        fontFamily: 'Nexa',
+                                        color: Colors.black),
+                                  ),
+                                  SizedBox(
+                                      height: height * 0.050,
+                                      width: width * 0.25,
+                                      child: TextFormField(
+                                        textInputAction:
+                                        TextInputAction.done,
+                                        controller: estimateDate,
+                                        keyboardType:
+                                        TextInputType.datetime,
+                                        validator: (value) {
+                                          if (value == null ||
+                                              value.isEmpty) {
+                                            return 'Date required';
+                                          }
+                                          return null;
+                                        },
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: height * 0.012,
+                                          fontFamily: 'Avenir',
+                                        ),
+                                        readOnly: true,
+                                        textAlign: TextAlign.center,
+                                        decoration: InputDecoration(
+                                          // border: InputBorder.none,
+                                          hintText: 'Estimate Date',
+                                          hintStyle: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: height * 0.012,
+                                            fontFamily: 'Nexa',
+                                          ),
+                                        ),
+                                        onTap: () async {
+                                          DateTime? pickedDate =
+                                          await showDatePicker(
+                                              context: context,
+                                              initialDate:
+                                              DateTime.now(),
+                                              firstDate:
+                                              DateTime(2000),
+                                              //DateTime.now() - not to allow to choose before today.
+                                              lastDate:
+                                              DateTime(2101));
+
+                                          if (pickedDate != null) {
+                                            String formattedDate =
+                                            DateFormat('yyyy-MM-dd')
+                                                .format(pickedDate);
+                                            setState(() {
+                                              estimateDate.text =
+                                                  formattedDate; //set output date to TextField value.
+                                            });
+                                          }
+                                        },
+                                      )),
+                                ],
+                              ),
+                            )
                                 : Container(),
-                            // Column(
-                            //   children: [
-                            //     // widget.doctype == 'INVOICE'
-                            //     //     ?
-                            //     Text(
-                            //       '#${widget.doctype} ',
-                            //       style: TextStyle(
-                            //           fontWeight: FontWeight.w600,
-                            //           fontSize: height * 0.014,
-                            //           fontFamily: 'Avenir',
-                            //           color: Colors.black),
-                            //     )
-                            //     //     : widget.doctype == 'QUOTATION' ? Text(
-                            //     //   '#QUOTATION ',
-                            //     //   style: TextStyle(
-                            //     //       fontWeight: FontWeight.w600,
-                            //     //       fontSize: height * 0.014,
-                            //     //       fontFamily: 'Avenir',
-                            //     //       color: Colors.black),
-                            //     // ) :  Text(
-                            //     //   '#QUOTATION ',
-                            //     //   style: TextStyle(
-                            //     //       fontWeight: FontWeight.w600,
-                            //     //       fontSize: height * 0.014,
-                            //     //       fontFamily: 'Avenir',
-                            //     //       color: Colors.black),
-                            //     // ),
-                            //   ],
-                            // ),
+                            Column(
+                              children: [
+                                widget.doctype == 'INVOICE'
+                                    ? Text(
+                                  '#INVOICE ',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: height * 0.014,
+                                      fontFamily: 'Avenir',
+                                      color: Colors.black),
+                                )
+                                : widget.doctype == "PROFORMA INVOICE"
+                                ? Text(
+                                  '#PROFORMA \n INVOICE',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: height * 0.014,
+                                      fontFamily: 'Avenir',
+                                      color: Colors.black),
+                                )
+                                    : Text(
+                                  '#QUOTATION ',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: height * 0.014,
+                                      fontFamily: 'Avenir',
+                                      color: Colors.black),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
                         SizedBox(
@@ -632,68 +693,20 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                         invoice,
                                         // user!,
                                         convertedImage!);
-                                    // log('path is ${pdfFile.path}');
+                                    log('path is ${pdfFile.path}');
 
                                     final dir = await getExternalStorageDirectory();
                                     final file = File('${dir!.path}/${fileName.text}.pdf');
                                     file.writeAsBytesSync(pdfFile.readAsBytesSync(),flush: true);
-                                    // log('new path is ${file.path} and absolute is ${file.absolute.path}');
+                                    log('new path is ${file.path} and absolute is ${file.absolute.path}');
                                     await OpenFile.open(file.path)
                                         .then((value) async {
-                                      ///...............FIREBASE..........////
-                                      /// INVOICE
+                                      ///................FIREBASE..........
                                       if (widget.doctype == "INVOICE") {
-                                        /// FINAL INVOICE
                                         var snapshot = await firebaseStorage
                                             .ref()
                                             .child(
                                             'INVOICE/INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
-                                            .putFile(pdfFile);
-                                        var downloadUrl =
-                                        await snapshot.ref.getDownloadURL();
-
-                                        /// INSTALLATION-INVOICE......
-                                        // final installationPdfFile =
-                                        // await InstallationInvoicePdf
-                                        //     .generate(
-                                        //   invoice,
-                                        //   // user,
-                                        // );
-
-                                        // var snapshotInstallation =
-                                        // await firebaseStorage
-                                        //     .ref()
-                                        //     .child(
-                                        //     'INSTALLATION-INVOICE/INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
-                                        //     .putFile(installationPdfFile);
-                                        // var downloadUrlInstallation =
-                                        // await snapshotInstallation.ref
-                                        //     .getDownloadURL();
-
-                                        var da = {
-                                          'Customer_name': task.name,
-                                          'Status': 'Processing',
-                                          'TimeStamp': myTimeStamp.seconds,
-                                          'CreatedBy': staffInfo?.email,
-                                          'mobile_number': task.phone,
-                                          'document_link': downloadUrl,
-                                          // 'installation_document_link': downloadUrlInstallation,
-                                        };
-                                        databaseReference
-                                            .child('QuotationAndInvoice')
-                                            .child('INVOICE')
-                                            .child('${Utils.formatYear(date)}')
-                                            .child('${Utils.formatMonth(date)}')
-                                            .child(
-                                            'INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
-                                            .set(da);
-                                      }
-                                      /// PROFORMA_INVOICE
-                                      else if(widget.doctype == "PROFORMA_INVOICE"){
-                                        var snapshot = await firebaseStorage
-                                            .ref()
-                                            .child(
-                                            'PROFORMA_INVOICE/PROFORMA_INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
                                             .putFile(pdfFile);
                                         var downloadUrl =
                                         await snapshot.ref.getDownloadURL();
@@ -705,10 +718,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                           invoice,
                                           // user,
                                         );
-                                        final random = Random();
-                                        const availableChars =
-                                            'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-                                        final randomString = List.generate(8, (index) => availableChars[random.nextInt(availableChars.length)]).join();
+
                                         var snapshotInstallation =
                                         await firebaseStorage
                                             .ref()
@@ -725,22 +735,19 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                           'TimeStamp': myTimeStamp.seconds,
                                           'CreatedBy': staffInfo?.email,
                                           'mobile_number': task.phone,
-                                          'id': randomString.toString(),
                                           'document_link': downloadUrl,
                                           'installation_document_link':
                                           downloadUrlInstallation,
                                         };
                                         databaseReference
                                             .child('QuotationAndInvoice')
-                                            .child('PROFORMA_INVOICE')
+                                            .child('INVOICE')
                                             .child('${Utils.formatYear(date)}')
                                             .child('${Utils.formatMonth(date)}')
                                             .child(
-                                            'PROFORMA_INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
+                                            'INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
                                             .set(da);
-                                      }
-                                      /// QUOTATION
-                                      else {
+                                      } else {
                                         var snapshot = await firebaseStorage
                                             .ref()
                                             .child(
@@ -775,8 +782,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                         Navigator.of(context)
                                             .pushAndRemoveUntil(
                                             MaterialPageRoute(
-                                              builder: (_) =>
-                                              const UserHomeScreen(),
+                                                builder: (_) =>
+                                                const UserHomeScreen(),
                                             ),
                                                 (route) => false);
                                         Provider.of<TaskData>(context,

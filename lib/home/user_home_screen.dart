@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
-import 'dart:ui';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:install_plugin_v2/install_plugin_v2.dart';
 import 'package:my_office/PR/invoice/Screens/Customer_Details_Screen.dart';
 import 'package:my_office/tl_check_screen/check_entry.dart';
@@ -76,12 +74,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         }
         setState(() {
           managementStaffNames = names;
-
           log('$managementStaffNames');
         });
       }
     });
-    getStaffDetail();
   }
 
   StaffModel? staffInfo;
@@ -106,7 +102,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   void getStaffDetail() async {
     final data = await _hiveOperations.getStaffDetail();
     setState(() {
-      if (managementStaffNames.any((element) => element == data.name)) {
+      if (managementStaffNames.any((element) => element == staffInfo?.name)) {
         userAccessGridButtonsName.addAll(AppDefaults.gridButtonsNames);
         userAccessGridButtonsName.remove('View suggestions');
         userAccessGridButtonsName.remove('Onyx');
@@ -182,7 +178,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     checkAppVersion();
     getManagementNames();
     getConnectivity();
-    // getStaffDetail();
+    getStaffDetail();
     setNotification();
     super.initState();
   }
@@ -215,18 +211,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             shrinkWrap: true,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 childAspectRatio: 1 / 1.2,
-                crossAxisCount: 2,
+                crossAxisCount: 3,
                 crossAxisSpacing: 10.0,
                 mainAxisSpacing: 10.0),
             itemBuilder: (BuildContext context, int index) {
-              final page = AppDefaults()
-                  .getPage(userAccessGridButtonsName[index], staffInfo!);
+              final page=AppDefaults().getPage(userAccessGridButtonsName[index], staffInfo!);
               return buildButton(
                   name: userAccessGridButtonsName[index],
                   image: Image.asset(
                     userAccessGridButtonsImages[index],
-                    // width: 150,
-                    height: 130,
+                    width: 65,
+                    height: 65,
                     fit: BoxFit.cover,
                   ),
                   page: page);
@@ -246,60 +241,38 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         HapticFeedback.vibrate();
         Navigator.push(context, MaterialPageRoute(builder: (context) => page));
       },
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: Neumorphic(
-            style: NeumorphicStyle(
-              depth: -3,
-              shadowLightColorEmboss: Colors.white12.withOpacity(0.8),
-              shadowLightColor: Colors.white.withOpacity(0.8),
-              shadowDarkColorEmboss: Colors.black12.withOpacity(0.5),
-              shadowDarkColor: Colors.black.withOpacity(0.5),
-              boxShape: NeumorphicBoxShape.roundRect(
-                BorderRadius.circular(20),
-              ),
-            ),
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              decoration: BoxDecoration(
-                // color: Colors.white.withOpacity(.6),
-                border: Border.all(color: Colors.black.withOpacity(0.1), width: 2),
-                // gradient: LinearGradient(
-                //   begin: Alignment.topCenter,
-                //   end: Alignment.bottomCenter,
-                //   colors: [
-                //     // Color(0xffBFACE2),
-                //     // Color(0xff8355B7),
-                //     Color(0xffDDE6E8),
-                //     Color(0xffDDE6E8),
-                //   ],
-                // ),
-                // color: const Color(0xffDAD6EE),
-                borderRadius: BorderRadius.circular(20),
-                // boxShadow: const [
-                //   BoxShadow(
-                //       color: Colors.black26, offset: Offset(5.0, 5.0), blurRadius: 5)
-                // ],
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Center(child: image),
-                  AutoSizeText(
-                    name,
-                    style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsMedium,
-                      color: ConstantColor.blackColor,
-                    ),
-                    maxFontSize: 15,
-                    minFontSize: 8,
-                  )
-                ],
-              ),
-            ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xffBFACE2),
+              Color(0xff8355B7),
+            ],
           ),
+          // color: const Color(0xffDAD6EE),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: const [
+            BoxShadow(
+                color: Colors.black26, offset: Offset(5.0, 5.0), blurRadius: 5)
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Center(child: image),
+            AutoSizeText(
+              name,
+              style: TextStyle(
+                fontFamily: ConstantFonts.poppinsMedium,
+                color: ConstantColor.background1Color,
+              ),
+              maxFontSize: 11,
+              minFontSize: 8,
+            )
+          ],
         ),
       ),
     );
@@ -388,7 +361,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     try {
       await resultPath.writeToFile(tempFile);
       await tempFile.create();
-      await InstallPlugin.installApk(tempFile.path, 'com.onwords.office')
+      await InstallPlugin.installApk(tempFile.path, 'com.onwords.my_office')
           .then((result) {
         print('install apk $result');
       }).catchError((error) {
