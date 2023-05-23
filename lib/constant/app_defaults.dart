@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_office/Account/account_screen.dart';
 import 'package:my_office/models/staff_model.dart';
-
 import '../Absentees/absentees.dart';
 import '../PR/invoice/Screens/Customer_Details_Screen.dart';
 import '../PR/pr_workdone/pr_work_details.dart';
@@ -32,7 +31,7 @@ class AppDefaults {
     'Work details',
     'Refreshment',
     'Food count',
-    'Leave form',
+    'Leave apply form',
     'Onyx',
     'Absent details',
     'Leave approval',
@@ -102,7 +101,7 @@ class AppDefaults {
       case 'Food count':
         page = const FoodCountScreen();
         break;
-      case 'Leave form':
+      case 'Leave apply form':
         page = LeaveApplyScreen(
           name: staffInfo.name,
           uid: staffInfo.uid,

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:delayed_display/delayed_display.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -27,6 +28,8 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   final String currentAppVersion = '1.1.1';
 
+
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final staff = FirebaseDatabase.instance.ref().child("staff");
   final firebaseStorage = FirebaseStorage.instance;
 
@@ -349,8 +352,6 @@ class _AccountScreenState extends State<AccountScreen> {
           ),
         )
     );
-
-
   }
 
   Widget buildText(double height, double width, String title, String value) =>

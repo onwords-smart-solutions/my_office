@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
@@ -32,9 +31,9 @@ class NotificationService {
             importance: Importance.max,
             priority: Priority.high,
             enableLights: true,
-            // sound: RawResourceAndroidNotificationSound('alarm'),
+            sound: RawResourceAndroidNotificationSound('notification'),
             autoCancel: false,
-            audioAttributesUsage: AudioAttributesUsage.notificationRingtone,
+            // audioAttributesUsage: AudioAttributesUsage.notification,
             playSound: true,
             fullScreenIntent: true,
             onlyAlertOnce: false,
@@ -45,7 +44,7 @@ class NotificationService {
   }
 
   //showing notification function
-  Future<void> showDailyNotification({required String setTime}) async {
+  Future<void> showDailyNotificationWithPayload({required String setTime}) async {
     //Notification setting main function
     setNotification() async {
       final pref = await SharedPreferences.getInstance();
@@ -57,7 +56,7 @@ class NotificationService {
 
       final detail = await _notificationDetails();
 
-      const title = 'Refreshment reminder';
+      const title = 'Refreshment time';
       const body = 'Don\'t forget to update your refreshment preferences.';
       // 10 AM
 
@@ -76,11 +75,13 @@ class NotificationService {
               title,
               body,
               tz.TZDateTime.from(notificationTimeMorning, tz.local),
+
               detail,
               uiLocalNotificationDateInterpretation:
                   UILocalNotificationDateInterpretation.absoluteTime,
               androidAllowWhileIdle: true,
             );
+
           }
         }
 

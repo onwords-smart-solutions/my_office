@@ -201,7 +201,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       key: formKey,
       subtitle: 'Update your works here !',
       templateBody: bodyContent(height, width),
-      bgColor: Color(0xffDDE6E8),
+      bgColor: ConstantColor.background1Color,
     );
   }
 
@@ -228,15 +228,15 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                     child: Container(
                       padding: const EdgeInsets.all(0),
                       height: height * 0.08,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         // color: ConstantColor.background1Color,
                         gradient: LinearGradient(
                             colors: [
-                              Colors.white.withOpacity(0.5),
-                              Colors.white.withOpacity(0.1)
+                              Color(0xffD136D4),
+                              Color(0xff7652B2),
                             ],
                             begin: Alignment.topLeft,
-                            end: Alignment.bottomRight),
+                            end: Alignment.bottomLeft),
                       ),
                       child: tabBarContainer(height, width),
                     ),
@@ -265,12 +265,13 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       physics: const BouncingScrollPhysics(),
       indicator: BoxDecoration(
         // color: Color(0xffDDE6E8),
-          gradient: LinearGradient(colors: [
-            Colors.blue.withOpacity(0.5),
-            Colors.cyanAccent.withOpacity(0.1)
+          gradient: const LinearGradient(
+              colors: [
+                Color(0xffD136D4),
+                Color(0xff7652B2),
           ], begin: Alignment.topLeft, end: Alignment.bottomRight),
           borderRadius: BorderRadius.circular(10.0)),
-      labelColor: Colors.black,
+      labelColor: Colors.white,
       unselectedLabelColor: Colors.black.withOpacity(0.5),
       automaticIndicatorColorAdjustment: true,
       labelStyle: TextStyle(

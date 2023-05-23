@@ -19,10 +19,9 @@ import 'models/visit_model.dart';
 
 /// version: 1.1.3+16 Updated On (14/03/2023)
 
-void main() async {
+  Future <void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
   //Hive database Setup
   await Hive.initFlutter();
   if (!Hive.isAdapterRegistered(StaffModelAdapter().typeId)) {
@@ -41,6 +40,7 @@ void main() async {
   );
 }
 
+
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -50,6 +50,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final NotificationService _notificationService = NotificationService();
+  bool isAllowed = false;
 
   @override
   void initState() {

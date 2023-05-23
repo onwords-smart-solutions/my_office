@@ -103,7 +103,8 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
                   child: tabViewContainer(height, width),
                 ),
               ],
-            )),
+            ),
+        ),
       ],
     );
   }

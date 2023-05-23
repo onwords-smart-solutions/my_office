@@ -1,7 +1,12 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
+import 'dart:convert';
 
+import 'package:http/http.dart' as http;
+import 'dart:developer';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/animate.dart';
@@ -180,6 +185,9 @@ class _LateEntryScreenState extends State<LateEntryScreen>
 
   bool a = true;
   bool b = true;
+  bool isAllowed = false;
+
+  String? mtoken = '';
 
   @override
   void initState() {
@@ -196,25 +204,38 @@ class _LateEntryScreenState extends State<LateEntryScreen>
     return MainTemplate(
       key: formKey,
       subtitle: 'Update your works here !!!',
-      templateBody: bodyContent(height, width),
+      templateBody: bodyContent(),
       bgColor: ConstantColor.background1Color,
     );
   }
 
-  Widget bodyContent(double height, double width) {
-    return Stack(
-      children: [
-        /// TabBarView...
-        Positioned(
-          top: height * 0.03,
-          left: width * 0.0,
-          right: width * 0.0,
-          bottom: height * 0.0,
-          child: tabViewContainer(height, width),
+  Widget bodyContent() {
+    return Center(
+      child: SizedBox(
+        height: 50,
+        width: 150,
+        child: ElevatedButton(
+          onPressed: () {},
+          child: Text('Notify'),
         ),
-      ],
+      ),
     );
   }
+
+  // Widget bodyContent(double height, double width) {
+  //   return Stack(
+  //     children: [
+  //       /// TabBarView...
+  //       Positioned(
+  //         top: height * 0.03,
+  //         left: width * 0.0,
+  //         right: width * 0.0,
+  //         bottom: height * 0.0,
+  //         child: tabViewContainer(height, width),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget tabViewContainer(double height, double width) {
     return Container(

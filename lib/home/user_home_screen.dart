@@ -2,49 +2,29 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:install_plugin_v2/install_plugin_v2.dart';
-import 'package:my_office/PR/invoice/Screens/Customer_Details_Screen.dart';
-import 'package:my_office/tl_check_screen/check_entry.dart';
-import 'package:my_office/late_workdone/late_entry.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
-import 'package:my_office/PR/visit/visit_form_screen.dart';
 import 'package:my_office/models/staff_model.dart';
-import 'package:my_office/refreshment/refreshment_screen.dart';
 import 'package:my_office/util/main_template.dart';
 import 'package:my_office/util/notification_services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../Absentees/absentees.dart';
-import '../Account/account_screen.dart';
 import '../Constant/fonts/constant_font.dart';
-import '../PR/pr_workdone/pr_work_details.dart';
-import '../PR/pr_workdone/pr_work_entry.dart';
-import '../PR/products/new_product.dart';
-import '../PR/products/point_calculations.dart';
-import '../PR/visit_check.dart';
 import '../app_version/version.dart';
 import '../constant/app_defaults.dart';
 import '../database/hive_operations.dart';
-import '../finance/finance_analysis.dart';
-import '../food_count/food_count_screen.dart';
-import '../leads/search_leads.dart';
-import '../leave_apply/leave_apply_screen.dart';
-import '../leave_approval/leave_approval_screen.dart';
-import '../onyx/announcement.dart';
-import '../suggestions/suggestions.dart';
-import '../suggestions/view_suggestions.dart';
-import '../virtual_attendance/attendance_screen.dart';
-import '../virtual_attendance/view_attendance.dart';
-import '../work_details/work_complete.dart';
-import '../work_entry/work_entry.dart';
+import '../refreshment/refreshment_screen.dart';
 
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({Key? key}) : super(key: key);
@@ -59,6 +39,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   bool isLoading = false;
   bool isAlwaysShown = true;
   final ScrollController _scrollController = ScrollController();
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   List<String> managementStaffNames = [];
   List<String> userAccessGridButtonsName = [];
@@ -74,7 +56,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         }
         setState(() {
           managementStaffNames = names;
-          log('$managementStaffNames');
         });
       }
     });
@@ -102,7 +83,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   void getStaffDetail() async {
     final data = await _hiveOperations.getStaffDetail();
     setState(() {
-      if (managementStaffNames.any((element) => element == staffInfo?.name)) {
+      if (managementStaffNames.any((element) => element == data.name)) {
         userAccessGridButtonsName.addAll(AppDefaults.gridButtonsNames);
         userAccessGridButtonsName.remove('View suggestions');
         userAccessGridButtonsName.remove('Onyx');
@@ -114,8 +95,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       } else if (data.department == 'ADMIN') {
         userAccessGridButtonsName.addAll(AppDefaults.gridButtonsNames);
         userAccessGridButtonsName.remove('Onyx');
+        userAccessGridButtonsName.remove('Late entry');
         userAccessGridButtonsImages.addAll(AppDefaults.gridButtonsImages);
         userAccessGridButtonsImages.remove('assets/onxy.png');
+        userAccessGridButtonsImages.remove('assets/late_entry.png');
       } else if (data.department == 'APP') {
         userAccessGridButtonsName.addAll(AppDefaults.gridButtonsNames);
         userAccessGridButtonsImages.addAll(AppDefaults.gridButtonsImages);
@@ -123,7 +106,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         for (int i = 0; i < AppDefaults.gridButtonsNames.length; i++) {
           if (AppDefaults.gridButtonsNames[i] == 'Work entry' ||
               AppDefaults.gridButtonsNames[i] == 'Refreshment' ||
-              AppDefaults.gridButtonsNames[i] == 'Leave form' ||
+              AppDefaults.gridButtonsNames[i] == 'Leave apply form' ||
               AppDefaults.gridButtonsNames[i] == 'Search leads' ||
               AppDefaults.gridButtonsNames[i] == 'Visit' ||
               AppDefaults.gridButtonsNames[i] == 'Invoice generator' ||
@@ -139,8 +122,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         for (int i = 0; i < AppDefaults.gridButtonsNames.length; i++) {
           if (AppDefaults.gridButtonsNames[i] == 'Work entry' ||
               AppDefaults.gridButtonsNames[i] == 'Refreshment' ||
-              AppDefaults.gridButtonsNames[i] == 'Leave form' ||
-              AppDefaults.gridButtonsNames[i] == 'Leave form' ||
+              AppDefaults.gridButtonsNames[i] == 'Leave apply form' ||
               AppDefaults.gridButtonsNames[i] == 'Suggestions' ||
               AppDefaults.gridButtonsNames[i] == 'Virtual attendance') {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
@@ -156,8 +138,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   setNotification() async {
     final pref = await SharedPreferences.getInstance();
     final isNotificationSet = pref.getString('NotificationSetTime') ?? '';
-    _notificationService.showDailyNotification(setTime: isNotificationSet);
+    _notificationService.showDailyNotificationWithPayload(setTime: isNotificationSet);
   }
+
 
   //CHECKING APP VERSION..//
   Future<void> checkAppVersion() async {
@@ -176,9 +159,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   @override
   void initState() {
     checkAppVersion();
+    getStaffDetail();
     getManagementNames();
     getConnectivity();
-    getStaffDetail();
     setNotification();
     super.initState();
   }
@@ -201,6 +184,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   }
 
   Widget buildMenuGrid(double height, double width) {
+    height = MediaQuery.of(context).size.height;
+    width = MediaQuery.of(context).size.width;
     return staffInfo != null
         ? GridView.builder(
             physics: const BouncingScrollPhysics(),
@@ -212,17 +197,18 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 childAspectRatio: 1 / 1.2,
                 crossAxisCount: 3,
-                crossAxisSpacing: 10.0,
-                mainAxisSpacing: 10.0),
+                crossAxisSpacing: 12.0,
+                mainAxisSpacing: 12.0),
             itemBuilder: (BuildContext context, int index) {
-              final page=AppDefaults().getPage(userAccessGridButtonsName[index], staffInfo!);
+              final page = AppDefaults()
+                  .getPage(userAccessGridButtonsName[index], staffInfo!);
               return buildButton(
                   name: userAccessGridButtonsName[index],
                   image: Image.asset(
                     userAccessGridButtonsImages[index],
-                    width: 65,
-                    height: 65,
-                    fit: BoxFit.cover,
+                    width: width * 1,
+                    height: height * 0.1,
+                    fit: BoxFit.contain,
                   ),
                   page: page);
             },
@@ -363,9 +349,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       await tempFile.create();
       await InstallPlugin.installApk(tempFile.path, 'com.onwords.my_office')
           .then((result) {
-        print('install apk $result');
+        log('install apk $result');
       }).catchError((error) {
-        print('install apk error: $error');
+        log('install apk error: $error');
       });
     } on FirebaseException {
       ScaffoldMessenger.of(context).showSnackBar(
