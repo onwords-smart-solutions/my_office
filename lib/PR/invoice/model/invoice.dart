@@ -20,11 +20,11 @@ class Invoice {
   final String bankName;
   final bool gstNeed;
   // final bool labNeed;
-  final bool discountNeed;
+  // final bool discountNeed;
   final String estimateDate;
 
 
-   Invoice({
+  Invoice({
     required this.info,
     required this.supplier,
     required this.customer,
@@ -35,17 +35,17 @@ class Invoice {
     required this.quotNo,
     // required this.labAndInstall,
 
-     required this.discountAmount,
-     required this.discountNeed,
+    required this.discountAmount,
+    // required this.discountNeed,
 
-     required this.advancePaid,
-     required this.accountName,
-     required this.accountNumber,
-     required this.ifscCode,
-     required this.bankName,
-     required this.gstNeed,
-     // required this.labNeed,
-     required this.estimateDate,
+    required this.advancePaid,
+    required this.accountName,
+    required this.accountNumber,
+    required this.ifscCode,
+    required this.bankName,
+    required this.gstNeed,
+    // required this.labNeed,
+    required this.estimateDate,
   });
 }
 
@@ -84,5 +84,5 @@ class SubTotal{
   SubTotal({
     required this.quantity,
     required this.amount,
-    });
+  });
 }

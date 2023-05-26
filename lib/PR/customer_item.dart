@@ -49,6 +49,7 @@ class _CustomerItemState extends State<CustomerItem> {
         .size;
     List<String> fields = [
       'Name',
+      'Customer id',
       'Phone no',
       'Location',
       'Enquiry For',
@@ -60,6 +61,7 @@ class _CustomerItemState extends State<CustomerItem> {
     ];
     List<String> values = [
       widget.customerInfo['name'].toString(),
+      widget.customerInfo['customer_id'].toString(),
       widget.customerInfo['phone_number'].toString(),
       widget.customerInfo['city'].toString(),
       widget.customerInfo['inquired_for'].toString(),
@@ -115,6 +117,24 @@ class _CustomerItemState extends State<CustomerItem> {
         .toLowerCase()
         .contains('installation completed')) {
       tileColor = const Color(0xff16f0b6);
+      nobColor = Colors.white70;
+    }else if (widget.customerInfo['customer_state']
+        .toString()
+        .toLowerCase()
+        .contains('product')) {
+      tileColor = const Color(0xfff3c8a3);
+      nobColor = Colors.white70;
+    }else if (widget.customerInfo['customer_state']
+        .toString()
+        .toLowerCase()
+        .contains('others')) {
+      tileColor = const Color(0xffd1ed8e);
+      nobColor = Colors.white70;
+    }else if (widget.customerInfo['customer_state']
+        .toString()
+        .toLowerCase()
+        .contains('hot lead')) {
+      tileColor = const Color(0xff009eed);
       nobColor = Colors.white70;
     }
 

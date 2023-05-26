@@ -2,11 +2,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'dart:developer';
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/animate.dart';
@@ -215,13 +212,21 @@ class _LateEntryScreenState extends State<LateEntryScreen>
         height: 50,
         width: 150,
         child: ElevatedButton(
-          onPressed: () {},
-          child: Text('Notify'),
+          onPressed: (){
+            // updateDb();
+          },
+          child: const Text('Notify'),
         ),
       ),
     );
   }
 
+  Future <void> updateDb()async {
+    final ref = FirebaseDatabase.instance.ref();
+    await ref.child('dropdown').set({
+      'Hello': 'Welcome'
+    });
+  }
   // Widget bodyContent(double height, double width) {
   //   return Stack(
   //     children: [

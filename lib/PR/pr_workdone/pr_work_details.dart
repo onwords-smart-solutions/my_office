@@ -181,14 +181,14 @@ class _PrWorkDetailsState extends State<PrWorkDetails> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Lottie.asset('assets/animations/no_data.json',
-                              height: 250.0),
+                              height: 300.0),
                         Text(
-                          'No WorkDone Registered!!!',
+                          'No WorkDone Registered!!',
                           style: TextStyle(
-                            color: ConstantColor.backgroundColor,
-                            fontSize: 22,
-                            fontFamily: ConstantFonts.poppinsMedium,
-                            fontWeight: FontWeight.w500,
+                            color: ConstantColor.blackColor,
+                            fontSize: 20,
+                            fontFamily: ConstantFonts.poppinsRegular,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ],

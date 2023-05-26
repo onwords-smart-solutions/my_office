@@ -50,7 +50,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
               child: RichText(
                 text: TextSpan(children: [
                   TextSpan(
-                    text: 'Forgot\nPassword ?\n',
+                    text: 'Forgot\nPassword?\n',
                     style: TextStyle(
                       fontFamily: ConstantFonts.poppinsMedium,
                       color: ConstantColor.blackColor,
@@ -58,7 +58,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     ),
                   ),
                   TextSpan(
-                    text: 'Please enter your  email id below',
+                    text: 'Please enter your Mail id below',
                     style: TextStyle(
                       fontFamily: ConstantFonts.poppinsMedium,
                       color: ConstantColor.blackColor,
@@ -179,7 +179,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
         style: TextStyle(
             fontSize: height * 0.02,
             color: Colors.black,
-            fontFamily: ConstantFonts.poppinsRegular),
+            fontFamily: ConstantFonts.poppinsMedium),
         decoration: InputDecoration(
           prefixIcon: icon,
           border: InputBorder.none,
@@ -211,7 +211,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     );
     try{
       await FirebaseAuth.instance.sendPasswordResetEmail(email: emailEditingController.text.trim());
-      showErrorSnackBar(message: 'Password reset email sent',color: Colors.green);
+      showErrorSnackBar(message: 'Password reset Mail has been sent',color: Colors.green);
       Navigator.of(context).popUntil((route) => route.isFirst);
     }
     on FirebaseAuthException catch(e)

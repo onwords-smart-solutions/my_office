@@ -84,131 +84,132 @@ class _MainTemplateState extends State<MainTemplate> {
           child: Stack(
             alignment: AlignmentDirectional.bottomCenter,
             children: [
-              Positioned(
-                top: height *  0.01,
-                left: width*  0.01,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    //left container
-                    ClayContainer(
-                      parentColor: const Color(0xffDDE6E8),
-                      color: const Color(0xffDDE6E8),
-                      width: 170,
-                      height: 170,
-                      borderRadius: 200,
-                      depth: 70,
-                      spread: 0,
+              // Positioned(
+              //   top: height *  0.01,
+              //   left: width*  0.01,
+              //   child: Stack(
+              //     alignment: Alignment.center,
+              //     children: [
+              //       //left container
+              //       ClayContainer(
+              //         parentColor: const Color(0xffDDE6E8),
+              //         color: const Color(0xffDDE6E8),
+              //         width: 170,
+              //         height: 170,
+              //         borderRadius: 200,
+              //         depth: 70,
+              //         spread: 0,
+              //
+              //         curveType: CurveType.convex,
+              //       ),
+              //
+              //       //left inside container1
+              //       ClayContainer(
+              //         parentColor: const Color(0xffDDE6E8),
+              //         color: const Color(0xffDDE6E8),
+              //         width: 140,
+              //         height: 140,
+              //         borderRadius: 200,
+              //         depth: -50,
+              //         curveType: CurveType.convex,
+              //       ),
+              //
+              //       //left inside container2
+              //       ClayContainer(
+              //         surfaceColor: Colors.orange,
+              //         color: const Color(0xffDDE6E8),
+              //         width: 70,
+              //         height: 70,
+              //         borderRadius: 200,
+              //         depth: 70,
+              //         curveType: CurveType.convex,
+              //         spread: 23,
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // Positioned(
+              //   top: height *  0.3,
+              //   right: width* - 0.33,
+              //   // right: 0,
+              //   child: Stack(
+              //     alignment: Alignment.center,
+              //     children: [
+              //       //Top right Container
+              //       ClayContainer(
+              //         color: const Color(0xffDDE6E8),
+              //         width: 220,
+              //         height: 220,
+              //         borderRadius: 200,
+              //         depth: -50,
+              //         curveType: CurveType.convex,
+              //       ),
+              //
+              //       //top right inside1 container
+              //       ClayContainer(
+              //         parentColor: const Color(0xffDDE6E8),
+              //         color: const Color(0xffDDE6E8),
+              //         width: 180,
+              //         height: 180,
+              //         borderRadius: 200,
+              //         depth: 70,
+              //         spread: 5,
+              //
+              //       ),
+              //
+              //       ClayContainer(
+              //         color: const Color(0xffDDE6E8),
+              //         width: 140,
+              //         height: 140,
+              //         borderRadius: 200,
+              //         depth: -50,
+              //
+              //         curveType: CurveType.convex,
+              //       ),
+              //
+              //       ClayContainer(
+              //         surfaceColor: Colors.orange.shade500,
+              //         color: const Color(0xffDDE6E8),
+              //         width: 100,
+              //         height: 100,
+              //         borderRadius: 200,
+              //         depth: 70,
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // Positioned(
+                // left: width * - 0.04,
+                // bottom:height * - 0.05,
+                // top: 0,
+                // child: Stack(
+                  // alignment: Alignment.topRight,
+                  // children: [
+                    // ClayContainer(
+                    //   // child: Lottie.asset('assets/14982-smart-home.json'),
+                    //   color: Colors.orange,
+                    //   width: 180,
+                    //   height: 180,
+                    //   borderRadius: 200,
+                    //   depth: 80,
+                    //   spread: 5,
+                    //   curveType: CurveType.convex,
+                    //
+                    // ),
+                    // ClayContainer(
+                    //   color: const Color(0xffDDE6E8),
+                    //   width: 60,
+                    //   height: 60,
+                    //   borderRadius: 200,
+                    //   depth: -50,
+                    //   spread: 0,
+                    //
+                    //   curveType: CurveType.convex,
+                    // ),
 
-                      curveType: CurveType.convex,
-                    ),
-
-                    //left inside container1
-                    ClayContainer(
-                      parentColor: const Color(0xffDDE6E8),
-                      color: const Color(0xffDDE6E8),
-                      width: 140,
-                      height: 140,
-                      borderRadius: 200,
-                      depth: -50,
-                      curveType: CurveType.convex,
-                    ),
-
-                    //left inside container2
-                    ClayContainer(
-                      surfaceColor: Colors.orange,
-                      color: const Color(0xffDDE6E8),
-                      width: 70,
-                      height: 70,
-                      borderRadius: 200,
-                      depth: 70,
-                      curveType: CurveType.convex,
-                      spread: 23,
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                top: height *  0.3,
-                right: width* - 0.33,
-                // right: 0,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    //Top right Container
-                    ClayContainer(
-                      color: const Color(0xffDDE6E8),
-                      width: 220,
-                      height: 220,
-                      borderRadius: 200,
-                      depth: -50,
-                      curveType: CurveType.convex,
-                    ),
-
-                    //top right inside1 container
-                    ClayContainer(
-                      parentColor: const Color(0xffDDE6E8),
-                      color: const Color(0xffDDE6E8),
-                      width: 180,
-                      height: 180,
-                      borderRadius: 200,
-                      depth: 70,
-                      spread: 5,
-
-                    ),
-
-                    ClayContainer(
-                      color: const Color(0xffDDE6E8),
-                      width: 140,
-                      height: 140,
-                      borderRadius: 200,
-                      depth: -50,
-
-                      curveType: CurveType.convex,
-                    ),
-
-                    ClayContainer(
-                      surfaceColor: Colors.orange.shade500,
-                      color: const Color(0xffDDE6E8),
-                      width: 100,
-                      height: 100,
-                      borderRadius: 200,
-                      depth: 70,
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                left: width * - 0.04,
-                bottom:height * - 0.05,
-                child: Stack(
-                  alignment: Alignment.topRight,
-                  children: [
-                    ClayContainer(
-                      // child: Lottie.asset('assets/14982-smart-home.json'),
-                      color: Colors.orange,
-                      width: 180,
-                      height: 180,
-                      borderRadius: 200,
-                      depth: 80,
-                      spread: 5,
-                      curveType: CurveType.convex,
-
-                    ),
-                    ClayContainer(
-                      color: const Color(0xffDDE6E8),
-                      width: 60,
-                      height: 60,
-                      borderRadius: 200,
-                      depth: -50,
-                      spread: 0,
-
-                      curveType: CurveType.convex,
-                    ),
-
-                  ],
-                ),
-              ),
+                  // ],
+                // ),
+              // ),
               Positioned(
                 top: 0,
                 child: Container(
@@ -256,8 +257,9 @@ class _MainTemplateState extends State<MainTemplate> {
                                                 ? 'Hi'
                                                 : 'Hi ${staffInfo!.name}',
                                             style: TextStyle(
-                                                fontFamily: ConstantFonts.poppinsBold,
+                                                fontFamily: ConstantFonts.poppinsRegular,
                                                 fontSize: 24.0,
+                                                fontWeight: FontWeight.w600,
                                                 color: Colors.black.withOpacity(0.8)                                          ),
                                           ),
                                           Text(

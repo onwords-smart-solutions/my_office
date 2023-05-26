@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../util/main_template.dart';
@@ -21,6 +22,7 @@ class ViewSuggestions extends StatefulWidget {
 class _ViewSuggestionsState extends State<ViewSuggestions> {
   List<Map<Object?, Object?>> allSuggestion = [];
   final viewSuggest = FirebaseDatabase.instance.ref('suggestion');
+  bool isLoading = true;
 
   finalViewSuggestion() {
     List<Map<Object?, Object?>> suggestions = [];
@@ -53,8 +55,8 @@ class _ViewSuggestionsState extends State<ViewSuggestions> {
 
   Widget viewSuggestionsPage() {
     return allSuggestion.isEmpty
-        ? const Center(
-            child: CircularProgressIndicator(),
+        ? Center(
+            child: Lottie.asset('assets/animations/new_loading.json'),
           )
         : ListView.builder(
             itemCount: allSuggestion.length,

@@ -6,10 +6,13 @@ import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
 import 'package:my_office/virtual_attendance/view_full_attendance.dart';
 import '../Constant/colors/constant_colors.dart';
+import '../models/staff_entry_model.dart';
 import '../util/main_template.dart';
 
 class ViewAttendanceScreen extends StatefulWidget {
-  const ViewAttendanceScreen({Key? key}) : super(key: key);
+  final String userId;
+  final String staffName;
+  const ViewAttendanceScreen({Key? key,required this.userId, required this.staffName}) : super(key: key);
 
   @override
   State<ViewAttendanceScreen> createState() => _ViewAttendanceScreenState();
@@ -22,6 +25,7 @@ class _ViewAttendanceScreenState extends State<ViewAttendanceScreen> {
 
   DateTime now = DateTime.now();
   final today = DateTime.now();
+  bool isLoading = true;
 
   var formatterDate = DateFormat('yyyy-MM-dd');
   var formatterMonth = DateFormat('MM');
@@ -49,6 +53,9 @@ class _ViewAttendanceScreenState extends State<ViewAttendanceScreen> {
   }
 
   finalViewAttendance() {
+    setState(() {
+      isLoading = true;
+    });
     List<Map<Object?, Object?>> attendance = [];
     viewAttendance.once().then(
       (attendList) {
@@ -73,6 +80,7 @@ class _ViewAttendanceScreenState extends State<ViewAttendanceScreen> {
         setState(
           () {
             fullAttendance = attendance;
+            isLoading = false;
           },
         );
       },
@@ -125,32 +133,53 @@ class _ViewAttendanceScreenState extends State<ViewAttendanceScreen> {
             ],
           ),
         ),
-        const SizedBox(height: 10),
+        isLoading ? Lottie.asset('assets/animations/new_loading.json') :
         fullAttendance.isNotEmpty
             ? Expanded(
                 child: ListView.builder(
                   itemCount: fullAttendance.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => ViewAllAttendance(
-                                fullViewAttendance: fullAttendance[index]),
-                          ),
-                        );
-                      },
-                      leading: const CircleAvatar(
-                        radius: 17,
-                        backgroundColor: ConstantColor.backgroundColor,
-                        child: Icon(Icons.person,size: 20,),
+                    return Container(
+                      margin: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: ConstantColor.background1Color,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            offset: const Offset(-0.0, 5.0),
+                            blurRadius: 8,
+                          )
+                        ],
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      title: Text(
-                        fullAttendance[index]['Name'].toString(),
-                        style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsMedium,
-                            color: ConstantColor.blackColor,
-                            fontSize: 16),
+                      child: ListTile(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ViewAllAttendance(
+                                  fullViewAttendance: fullAttendance[index]),
+                            ),
+                          );
+                        },
+                        leading: const CircleAvatar(
+                          radius: 17,
+                          backgroundColor: ConstantColor.backgroundColor,
+                          child: Icon(Icons.person,size: 20,),
+                        ),
+                        title: Text(
+                          fullAttendance[index]['Name'].toString(),
+                          style: TextStyle(
+                              fontFamily: ConstantFonts.poppinsMedium,
+                              color: ConstantColor.blackColor,
+                              fontSize: 16),
+                        ),
+                        trailing: Text(
+                          fullAttendance[index]['Time'].toString(),
+                          style: TextStyle(
+                              fontFamily: ConstantFonts.poppinsMedium,
+                              color: ConstantColor.blackColor,
+                              fontSize: 16),
+                        ),
                       ),
                     );
                   },
@@ -162,14 +191,14 @@ class _ViewAttendanceScreenState extends State<ViewAttendanceScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Lottie.asset('assets/animations/no_data.json',
-                          height: 200.0),
+                          height: 300.0),
                       Text(
-                        'No Entry Registered',
+                        'No Entry Registered!',
                         style: TextStyle(
                           fontFamily: ConstantFonts.poppinsMedium,
                           color: ConstantColor.blackColor,
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                          fontSize: 20,
                         ),
                       ),
                     ],

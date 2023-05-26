@@ -12,7 +12,7 @@ class IntroductionScreen extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: ConstantColor.background1Color,
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           imageWidget(height),
@@ -32,9 +32,9 @@ class IntroductionScreen extends StatelessWidget {
     return Container(
       height: height * 0.45,
       width: double.infinity,
-      color: Colors.transparent,
+      color: ConstantColor.background1Color,
       child: Image.asset(
-        'assets/intro pic.png',
+        'assets/intro_pic.jpg',
       ),
     );
   }
@@ -42,8 +42,8 @@ class IntroductionScreen extends StatelessWidget {
   Widget textWidget(double height, double width) {
     return Container(
       margin: EdgeInsets.symmetric(
-          vertical: height * 0.03, horizontal: width * 0.05),
-      height: height * 0.23,
+          vertical: height * 0.05, horizontal: width * 0.05),
+      height: height * 0.25,
       width: double.infinity,
       color: Colors.transparent,
       child: Column(
@@ -51,11 +51,11 @@ class IntroductionScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GradientText(
-            'Manage Your daily',
+            'Manage your daily',
             style: TextStyle(
               fontFamily: ConstantFonts.poppinsMedium,
               color: ConstantColor.blackColor,
-              fontSize: height * 0.045,
+              fontSize: height * 0.040,
             ),
             gradient: const LinearGradient(
               colors: [
@@ -65,25 +65,40 @@ class IntroductionScreen extends StatelessWidget {
             ),
           ),
           GradientText(
-            'Work manager',
+            'works with our',
             style: TextStyle(
               fontFamily: ConstantFonts.poppinsMedium,
               color: ConstantColor.blackColor,
-              fontSize: height * 0.045,
+              fontSize: height * 0.040,
             ),
             gradient: const LinearGradient(
               colors: [
-                Color(0xffB33DC9),
-                Color(0xffA043C1),
+                Colors.black,
+                Colors.black
               ],
             ),
           ),
           GradientText(
-            'Here !',
+            'Work Manager',
+            style: TextStyle(
+              fontFamily: ConstantFonts.poppinsRegular,
+              color: ConstantColor.blackColor,
+              fontSize: height * 0.040,
+              fontWeight: FontWeight.w600
+            ),
+            gradient: const LinearGradient(
+              colors: [
+                Color(0xffD136D4),
+                Color(0xff7652B2),
+              ],
+            ),
+          ),
+          GradientText(
+            'from here!!',
             style: TextStyle(
               fontFamily: ConstantFonts.poppinsMedium,
               color: ConstantColor.blackColor,
-              fontSize: height * 0.045,
+              fontSize: height * 0.040,
             ),
             gradient: const LinearGradient(
               colors: [

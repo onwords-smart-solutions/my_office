@@ -191,7 +191,7 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
     return isLoading
         ? Center(
             child: Lottie.asset(
-              "assets/animations/loading.json",
+              "assets/animations/new_loading.json",
             ),
           )
         : Column(

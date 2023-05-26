@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: RichText(
                 text: TextSpan(children: [
                   TextSpan(
-                    text: 'Hello !\n',
+                    text: 'Hi There!!\n',
                     style: TextStyle(
                       fontFamily: ConstantFonts.poppinsMedium,
                       color: ConstantColor.blackColor,
@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   TextSpan(
-                    text: 'Welcome To Team onwords',
+                    text: 'Welcome To Team Onwords',
                     style: TextStyle(
                       fontFamily: ConstantFonts.poppinsMedium,
                       color: ConstantColor.blackColor,
@@ -117,18 +117,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(
                             fontSize: height * 0.02,
                             color: Colors.black,
-                            fontFamily: ConstantFonts.poppinsRegular),
+                            fontFamily: ConstantFonts.poppinsMedium),
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Iconsax.user),
                           border: InputBorder.none,
                           hintText: 'Email',
                           filled: true,
                           fillColor: ConstantColor.background1Color,
-                          // contentPadding: const EdgeInsets.only(
-                          //     left: 14.0, bottom: 6.0, top: 8.0),
-                          focusedBorder: OutlineInputBorder(
+                          focusedBorder: UnderlineInputBorder(
                             borderSide: const BorderSide(
-                                color: ConstantColor.background1Color),
+                                color: ConstantColor.blackColor),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           enabledBorder: UnderlineInputBorder(
@@ -142,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         validator: (value) {
                           if (value!.trim().isEmpty) {
-                            return 'Email required';
+                            return 'Enter your mail id';
                           } else if (!value.trim().contains('@')) {
                             return 'Enter a valid email!';
                           }
@@ -165,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(
                             fontSize: height * 0.02,
                             color: Colors.black,
-                            fontFamily: ConstantFonts.poppinsRegular),
+                            fontFamily: ConstantFonts.poppinsMedium),
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Iconsax.lock),
                           border: InputBorder.none,
@@ -174,9 +172,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           fillColor: ConstantColor.background1Color,
                           contentPadding: const EdgeInsets.only(
                               left: 14.0, bottom: 6.0, top: 8.0),
-                          focusedBorder: OutlineInputBorder(
+                          focusedBorder: UnderlineInputBorder(
                             borderSide: const BorderSide(
-                                color: ConstantColor.background1Color),
+                                color: ConstantColor.blackColor),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           enabledBorder: UnderlineInputBorder(
@@ -204,7 +202,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         validator: (value) {
                           if (value!.trim().isEmpty) {
-                            return ('Password Required');
+                            return ('Enter the password');
                           }
                           return null;
                         },
@@ -237,12 +235,12 @@ class _LoginScreenState extends State<LoginScreen> {
             // ),
 
             /// Create Account...
-            Positioned(
-              top: height * 0.9,
-              left: width * 0.05,
-              right: width * 0.05,
-              child: createAccountWidget(height, const SingInScreen()),
-            ),
+            // Positioned(
+            //   top: height * 0.9,
+            //   left: width * 0.05,
+            //   right: width * 0.05,
+            //   child: createAccountWidget(height, const SingInScreen()),
+            // ),
           ],
         ),
       ),
@@ -298,7 +296,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     "assets/animations/loading.json",
                   )
                 : Text(
-                    'Login',
+                    'Log in',
                     style: TextStyle(
                       fontFamily: ConstantFonts.poppinsMedium,
                       color: ConstantColor.background1Color,
@@ -331,7 +329,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           TextSpan(
-            text: 'Create a account ?',
+            text: 'Create an account ?',
             style: TextStyle(
               fontFamily: ConstantFonts.poppinsMedium,
               color: ConstantColor.pinkColor,
@@ -345,7 +343,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget forgetPasswordWidget(double height, Widget screen) {
     return Padding(
-      padding: EdgeInsets.only(top: height * 0.01),
+      padding: EdgeInsets.only(top: height * 0.025, right: height * 0.01),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -355,11 +353,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   context, MaterialPageRoute(builder: (context) => screen));
             },
             child: Text(
-              'Forgot password ?',
+              'Forgot password?',
               style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium,
+                fontFamily: ConstantFonts.poppinsRegular,
+                fontWeight: FontWeight.w700,
                 color: ConstantColor.pinkColor,
-                fontSize: height * 0.015,
+                fontSize: height * 0.02,
               ),
             ),
           ),
@@ -396,7 +395,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         _isLoading = false;
       });
-      if (e.code.contains('invalid-email')) {
+      if (e.code.contains('Invalid-email')) {
         showErrorSnackbar(message: 'Provide a valid email');
       } else if (e.code.contains('user-not-found')) {
         showErrorSnackbar(message: 'No user associates with this email');
@@ -424,7 +423,7 @@ class _LoginScreenState extends State<LoginScreen> {
         );
 
         await HiveOperations().addStaffDetail(staff: staffInfo);
-        //Moving to home-screen
+        // Moving to home-screen
         navigator.pushAndRemoveUntil(
             MaterialPageRoute(builder: (_) => const UserHomeScreen()),
             (route) => false);

@@ -5,17 +5,16 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
 import 'package:upi_payment_qrcode_generator/upi_payment_qrcode_generator.dart';
-import '../image_saving/user.dart';
 import '../model/customer.dart';
 import '../model/invoice.dart';
 import '../model/supplier.dart';
 import '../utils.dart';
 
 final upiDetails = UPIDetails(
-    upiID: "UPI ID Here eg. 73641234@paytm",
-    payeeName: "Payee Name Here",
-    amount: total,
-    transactionNote: "Hello World",
+  upiID: "UPI ID Here eg. 73641234@paytm",
+  payeeName: "Payee Name Here",
+  amount: total,
+  transactionNote: "Hello World",
 );
 double total = 0;
 
@@ -40,16 +39,10 @@ class InstallationInvoicePdf {
       MultiPage(
         header: (context) => builderLogo(assetImage, invoice.info, invoice),
         build: (context) => [
-          // builderLogo(assetImage,invoice.info,invoice),
           buildHeader(invoice),
           SizedBox(height: 2.0 * PdfPageFormat.cm),
-          // buildTitle(invoice),
           buildInvoice(invoice),
           Divider(),
-          // buildTotal(invoice),
-          // Text('Scan me to Pay',style: TextStyle(fontWeight: FontWeight.bold)),
-          // SizedBox(height: 0.2 * PdfPageFormat.cm),
-          // builderQR(image),
           buildEstimateDetails  (invoice),
         ],
         footer: (context) => buildFooter(invoice),
@@ -100,16 +93,6 @@ class InstallationInvoicePdf {
         ],
       );
 
-  // static builderQR(pw.MemoryImage img) {
-  //   // final qr = UPIPaymentQRCode(upiDetails: upiDetails,size: 100,);
-  //   return  Container(
-  //     margin: const EdgeInsets.only(left: -7),
-  //     height: 100, //150,
-  //     width: 100, //150,
-  //     child: pw.Image(img),
-  //   );
-  //
-  // }
 
   static Widget buildHeader(Invoice invoice) => Row(
     // crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,33 +152,7 @@ class InstallationInvoicePdf {
     ],
   );
 
-  ///invoiceInfo
-  // static Widget buildInvoiceInfo(InvoiceInfo info) {
-  //
-  //   final paymentTerms = '${info.dueDate.difference(info.date).inDays} days';
-  //   final titles = <String>[
-  //     'Invoice Number:',
-  //     'Invoice Date:',
-  //     'Payment Terms:',
-  //     'Due Date:',
-  //   ];
-  //   final data = <String>[
-  //     info.number,
-  //     Utils.formatDate(info.date),
-  //     paymentTerms,
-  //     Utils.formatDate(info.dueDate),
-  //   ];
-  //
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: List.generate(titles.length, (index) {
-  //       final title = titles[index];
-  //       final value = data[index];
-  //
-  //       return buildText(title: title, value: value, width: 200);
-  //     }),
-  //   );
-  // }
+
 
   static Widget buildSupplierAddress(Supplier supplier) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,46 +170,16 @@ class InstallationInvoicePdf {
       SizedBox(height: 0.5 * PdfPageFormat.cm),
       Text("GSTIN: 33BTUPN5784J1ZT",
         style: TextStyle(fontWeight: FontWeight.normal, fontSize: 10.0),),
-
-      ///
-      // Text(supplier.street),
-      // Text(supplier.address),
-      // Text("Phone: ${supplier.phone}"),
-      // Text("Email: ${supplier.email}"),
-      // Text("Website: ${supplier.website}"),
-      // SizedBox(height: 0.5 * PdfPageFormat.cm),
-      // Text("GSTIN: ${supplier.gst}", style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15.0)),
     ],
   );
-
-  ///doctype
-  // static Widget buildTitle(Invoice invoice) => Column(
-  //   crossAxisAlignment: CrossAxisAlignment.start,
-  //   children: [
-  //     Text(
-  //       invoice.docType,
-  //       style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-  //     ),
-  //     SizedBox(height: 0.4 * PdfPageFormat.cm),
-  //     // Text(invoice.info.description),
-  //     // SizedBox(height: 0.8 * PdfPageFormat.cm),
-  //   ],
-  // );
 
   static Widget buildInvoice(Invoice invoice) {
     final headers = ['Item & Description', 'Quantity'];
 
     final data = invoice.items.map((item) {
-      // final total = item.unitPrice * item.quantity * ( 1 + item.vat);
-      final total = item.unitPrice * item.quantity * (1 + 0);
       return [
         item.description,
-        // Utils.formatDate(item.date),
         '${item.quantity}',
-        // '${item.unitPrice}',
-        // // '${0} %',
-        // // '${item.vat} %',
-        // (total.toStringAsFixed(2)),
       ];
     }).toList();
 
@@ -261,25 +188,11 @@ class InstallationInvoicePdf {
         data: data,
         cellStyle: const TextStyle(fontSize: 9),
         border: const TableBorder(
-          // left: BorderSide(),
-          // right: BorderSide(),
-          // top: BorderSide(),
-          // bottom: BorderSide(),
-          // horizontalInside: BorderSide(),
-          // verticalInside: BorderSide(),
         ),
         headerStyle: TextStyle(
             fontWeight: FontWeight.bold, fontSize: 10, color: PdfColors.white),
         headerDecoration: const BoxDecoration(color: PdfColors.red700),
         cellHeight: 25,
-        // headerAlignments: {
-        //   0: Alignment.center,
-        //   1: Alignment.center,
-        //   2: Alignment.center,
-        //   3: Alignment.center,
-        //   4: Alignment.center,
-        //   5: Alignment.center,
-        // },
         columnWidths: {
           0: const FixedColumnWidth(230.0), // fixed to 100 width
           1: const FlexColumnWidth(50.0),
@@ -302,164 +215,8 @@ class InstallationInvoicePdf {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        // Text(
-        //   "Acc.Name: Onwords",
-        //   style: TextStyle(fontWeight: FontWeight.normal, fontSize: 10.0),
-        // ),
-        // Text(
-        //   "Bank : HDFC",
-        //   style: TextStyle(fontWeight: FontWeight.normal, fontSize: 10.0),
-        // ),
-        // Text(
-        //   "Acc.No: 5020-0065-403656",
-        //   style: TextStyle(fontWeight: FontWeight.normal, fontSize: 10.0),
-        // ),
-        // Text(
-        //   "IFSC Code: HDFC0000787",
-        //   style: TextStyle(fontWeight: FontWeight.normal, fontSize: 10.0),
-        // ),
-        // Text(
-        //   "UPI : onwordspay@ybl",
-        //   style: TextStyle(fontWeight: FontWeight.normal, fontSize: 10.0),
-        // ),
-
         Text("Estimate Date For Installation:  ${invoice.estimateDate.toString()}", style: TextStyle(color: PdfColors.black,fontWeight: FontWeight.normal,fontSize: 10.0)),
-        // Text("Acc.No: ${invoice.accountNumber}", style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15.0)),
-        // Text("IFSC Code: ${invoice.ifscCode}", style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15.0)),
-        // Text("Bank : ${invoice.bankName}", style: TextStyle(fontWeight: FontWeight.normal,fontSize: 15.0)),
       ]);
-
-  // static Widget buildTotal(Invoice invoice) {
-  //   final netTotal = invoice.items
-  //       .map((item) => item.unitPrice * item.quantity)
-  //       .reduce((item1, item2) => item1 + item2);
-  //   // final vatPercent = invoice.items.first.vat;
-  //   const vatPercent = 0.09;
-  //   final vat = netTotal * vatPercent;
-  //   final iVat = netTotal * vatPercent;
-  //   final discount = invoice.discountAmount;
-  //   // final labAndIns = invoice.labAndInstall;
-  //   // final total = netTotal + vat + iVat + labAndIns;
-  //
-  //   // final total = invoice.gstNeed ? netTotal + vat + iVat : netTotal;
-  //
-  //   // final total = invoice.gstNeed?netTotal + vat + iVat + labAndIns: netTotal+ labAndIns;
-  //   total = invoice.gstNeed
-  //       ? netTotal + vat + iVat - discount
-  //       : netTotal - discount;
-  //   // val = invoice.gstNeed
-  //   //     ? netTotal + vat + iVat - discount
-  //   //     : netTotal - discount;
-  //   final advanceAmt = invoice.advancePaid;
-  //   final balanceAmt = total - advanceAmt;
-  //   final discounts = invoice.discountAmount;
-  //
-  //   return Container(
-  //     alignment: Alignment.centerRight,
-  //     child: Row(
-  //       children: [
-  //         buildBankDetails(invoice),
-  //         Spacer(flex: 3),
-  //         Expanded(
-  //           flex: 4,
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.end,
-  //             children: [
-  //               buildText(
-  //                 title: 'Sub total',
-  //                 value: Utils.formatPrice(netTotal),
-  //                 unite: true,
-  //               ),
-  //               invoice.gstNeed
-  //                   ? buildText(
-  //                 title: 'CGST ${vatPercent * 100} %',
-  //                 value: Utils.formatPrice(vat),
-  //                 unite: true,
-  //               )
-  //                   : Text(""),
-  //               invoice.gstNeed
-  //                   ? buildText(
-  //                 title: 'IGST ${vatPercent * 100} %',
-  //                 value: Utils.formatPrice(vat),
-  //                 unite: true,
-  //               )
-  //                   : Text(""),
-  //               SizedBox(height: 2 * PdfPageFormat.mm),
-  //               // (invoice.docType == "INVOICE")||(invoice.labNeed)?buildText(
-  //               //   title: 'LABOUR & INSTALLATION ',
-  //               //   titleStyle: TextStyle(
-  //               //     fontSize: 12,
-  //               //     fontWeight: FontWeight.normal,
-  //               //   ),
-  //               //   value: Utils.formatPrice(labAndIns.toDouble()),
-  //               //   unite: true,
-  //               // )
-  //               //     :Text(""),
-  //               SizedBox(height: 2 * PdfPageFormat.mm),
-  //               // buildText(
-  //               //   title: 'Grand total',
-  //               //   value: Utils.formatPrice(netTotal),
-  //               //   unite: true,
-  //               // ),
-  //               // Divider(),
-  //               discounts != 0
-  //                   ? buildText(
-  //                 title: 'Discount Amount ',
-  //                 titleStyle: TextStyle(
-  //                   fontSize: 10,
-  //                   fontWeight: FontWeight.normal,
-  //                 ),
-  //                 value: Utils.formatPrice(discount.toDouble()),
-  //                 unite: true,
-  //               )
-  //                   : Text(""),
-  //               buildText(
-  //                 title: 'Grand total ',
-  //                 titleStyle: TextStyle(
-  //                   fontSize: 12,
-  //                   fontWeight: FontWeight.bold,
-  //                 ),
-  //                 value: Utils.formatPrice(total),
-  //                 unite: true,
-  //               ),
-  //               SizedBox(height: 2 * PdfPageFormat.mm),
-  //
-  //               advanceAmt != 0
-  //                   ? buildText(
-  //                 title: 'Advance Paid ',
-  //                 titleStyle: TextStyle(
-  //                   fontSize: 10,
-  //                   fontWeight: FontWeight.normal,
-  //                 ),
-  //                 value: Utils.formatPrice(advanceAmt.toDouble()),
-  //                 unite: true,
-  //               )
-  //                   : Text(""),
-  //               SizedBox(height: 2 * PdfPageFormat.mm),
-  //               advanceAmt != 0
-  //                   ? buildText(
-  //                 title: 'Balance Amount',
-  //                 titleStyle: TextStyle(
-  //                   fontSize: 10,
-  //                   fontWeight: FontWeight.bold,
-  //                 ),
-  //                 value: Utils.formatPrice(balanceAmt.toDouble()),
-  //                 unite: true,
-  //               )
-  //                   : Text(""),
-  //
-  //               SizedBox(height: 2 * PdfPageFormat.mm),
-  //               Container(height: 1, color: PdfColors.grey400),
-  //               SizedBox(height: 0.5 * PdfPageFormat.mm),
-  //               Container(height: 1, color: PdfColors.grey400),
-  //             ],
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
 
   static Widget buildFooter(Invoice invoice) => Column(
     crossAxisAlignment: CrossAxisAlignment.center,
@@ -473,21 +230,13 @@ class InstallationInvoicePdf {
           : Text('')
           : Text(''),
 
-      // ((invoice.gstNeed==true)&&(invoice.labNeed == false))?Text("*All Amount mentioned are exclusive of Labour & Installation ",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0)):
-      // ((invoice.gstNeed==false)&&(invoice.labNeed == true))?Text ("*All Amount mentioned are exclusive of GST ",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0)):
-      // ((invoice.gstNeed==false)&&(invoice.labNeed == false))?Text("*All Amount mentioned are exclusive of GST & Labour & Installation "):Text(""):Text(""),
-
-      // invoice.docType == "QUOTATION"? invoice.gstNeed ?Text("*All Amount mentioned are exclusive of Labour & Installation ",
-      //     style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0)):Text ("*All Amount mentioned are exclusive of GST, Labour & Installation ",
-      //     style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12.0)):Text(""),
       Divider(),
       SizedBox(height: 2 * PdfPageFormat.mm),
       buildSimpleText(title: '', value: "In Sync, with Smart World"),
-      // buildSimpleText(title: 'Address', value: "${invoice.supplier.street},${invoice.supplier.address}"),
       SizedBox(height: 1 * PdfPageFormat.mm),
-      // buildSimpleText(title: 'Paypal', value: invoice.supplier.paymentInfo),
     ],
   );
+
 
   static buildSimpleText({
     required String title,

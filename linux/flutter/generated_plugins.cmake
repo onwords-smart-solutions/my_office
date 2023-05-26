@@ -3,7 +3,6 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  awesome_notifications
   upi_payment_qrcode_generator
   url_launcher_linux
 )

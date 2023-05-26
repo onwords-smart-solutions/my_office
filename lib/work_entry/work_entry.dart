@@ -10,6 +10,7 @@ import 'package:flutter_animate/animate.dart';
 import 'package:flutter_animate/effects/fade_effect.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:my_office/util/main_template.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../Constant/colors/constant_colors.dart';
@@ -199,7 +200,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
     final width = MediaQuery.of(context).size.width;
     return MainTemplate(
       key: formKey,
-      subtitle: 'Update your works here !',
+      subtitle: 'Update your works here!!',
       templateBody: bodyContent(height, width),
       bgColor: ConstantColor.background1Color,
     );
@@ -221,28 +222,22 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                 left: width * 0.05,
                 right: width * 0.05,
                 // bottom: height * 0.0,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                    child: Container(
-                      padding: const EdgeInsets.all(0),
-                      height: height * 0.08,
-                      decoration: const BoxDecoration(
-                        // color: ConstantColor.background1Color,
-                        gradient: LinearGradient(
-                            colors: [
-                              Color(0xffD136D4),
-                              Color(0xff7652B2),
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomLeft),
-                      ),
+                child: Container(
+                  padding: const EdgeInsets.all(5),
+                  height: height * 0.08,
+                  decoration: BoxDecoration(
+                    color: ConstantColor.background1Color,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                          color: Colors.black12,
+                          offset: Offset(-6.0, 6.0),
+                          blurRadius: 5),
+                    ],
+                  ),
                       child: tabBarContainer(height, width),
                     ),
                   ),
-                ),
-              ),
 
               /// TabBarView...
               Positioned(
@@ -269,10 +264,11 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
               colors: [
                 Color(0xffD136D4),
                 Color(0xff7652B2),
-          ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+          ],
+          ),
           borderRadius: BorderRadius.circular(10.0)),
       labelColor: Colors.white,
-      unselectedLabelColor: Colors.black.withOpacity(0.5),
+      unselectedLabelColor: ConstantColor.blackColor,
       automaticIndicatorColorAdjustment: true,
       labelStyle: TextStyle(
           fontWeight: FontWeight.w800, fontFamily: ConstantFonts.poppinsMedium),
@@ -314,26 +310,28 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   }
 
   Widget tabBarViewFirstScreen(double height, double width) {
-    return isLoading
-        ? const Center(child: CircularProgressIndicator())
+    return
+      isLoading
+        ?
+      Center(child: Lottie.asset('assets/animations/new_loading.json',))
         : Padding(
       padding: const EdgeInsets.all(08),
       child: SingleChildScrollView(
         child: Column(
           children: [
             /// Text Field
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: buildNeumorphic(
-                width,height,10, Container(
-                child: textFiledWidget(
-                    height,
-                    TextInputType.text,
-                    TextInputAction.done,
-                    'Enter work details',
-                    _workController),
-              ),
-              ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: width * 0.025),
+              decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                      color: _workController.text.isEmpty
+                          ? Colors.black26
+                          : Colors.green,width: 2),
+                ),
+              child: textFiledWidget(height, TextInputType.text,
+                  TextInputAction.done, 'Enter your work here..', _workController),
             ),
 
             /// 3 Buttons
@@ -342,32 +340,24 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  buildNeumorphic(
-                    width,height,10, ButtonWidget(
+                  ButtonWidget(
                       title: 'Start Time',
                       onClicked: () {
                         startTime();
                       },
-                      colorValue: timeOfStart.toString().isEmpty
-                          ? a = false
-                          : a = true,
-                      icon: const Icon(Icons.alarm,color: Colors.black,),
-                      val:
-                      "${timeOfStartView!.isEmpty ? '--' : timeOfStartView}"),
-                  ),
-                  buildNeumorphic(
-                    width,height,10, ButtonWidget(
+                      colorValue:
+                      timeOfStart.toString().isEmpty ? a = false : a = true,
+                      icon: const Icon(Icons.alarm),
+                      val: "${timeOfStart!.isEmpty ? '--' : timeOfStart}"),
+                  ButtonWidget(
                       title: 'End Time',
                       onClicked: () {
                         endTime();
                       },
-                      colorValue: timeOfEnd.toString().isEmpty
-                          ? b = false
-                          : b = true,
-                      icon: const Icon(Icons.alarm,color: Colors.black,),
-                      val:
-                      "${timeOfEndView!.isEmpty ? '--' : timeOfEndView}"),
-                  ),
+                      colorValue:
+                      timeOfEnd.toString().isEmpty ? b = false : b = true,
+                      icon: const Icon(Icons.alarm),
+                      val: "${timeOfEnd!.isEmpty ? '--' : timeOfEnd}"),
 
                   GestureDetector(
                     onTap: () {
@@ -438,39 +428,36 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                         ).show();
                       });
                     },
-                    child: buildNeumorphic(width,height,10,
-                      Container(
-                        height: height * 0.15,
-                        width: width * 0.25,
-                        decoration: BoxDecoration(
+                    child: Container(
+                      margin: EdgeInsets.only(top: height * 0.03),
+                      height: height * 0.15,
+                      width: width * 0.25,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.5),
                           border: Border.all(
                               color: _percentController.text.isEmpty
-                                  ? Colors.transparent
-                                  : Colors.blue,width: 2),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            const Icon(Icons.percent,color: Colors.black,),
-                            Text(
-                              _percentController.text.isEmpty
-                                  ? '--'
-                                  : _percentController.text,
-                              style: TextStyle(
-                                  fontFamily: ConstantFonts.poppinsMedium,
-                                  color: Colors.black
-                              ),
+                                  ? Colors.black26
+                                  : Colors.green,width: 2),
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          const Icon(Icons.percent),
+                          Text(
+                            _percentController.text.isEmpty
+                                ? '--'
+                                : _percentController.text,
+                            style: TextStyle(
+                              fontFamily: ConstantFonts.poppinsMedium,
                             ),
-                            Text(
-                              'percent',
-                              style: TextStyle(
-                                  fontFamily: ConstantFonts.poppinsMedium,
-                                  color: Colors.black
-                              ),
-                            )
-                          ],
-                        ),
+                          ),
+                          Text(
+                            'Percentage',
+                            style: TextStyle(
+                              fontFamily: ConstantFonts.poppinsMedium,
+                            ),
+                          )
+                        ],
                       ),
                     ),
                   ),
@@ -479,9 +466,6 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
             ),
 
             /// Submit Button
-            SizedBox(
-              height: height*0.13,
-            ),
             GestureDetector(
               onTap: () {
                 setState(() {
@@ -561,7 +545,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                       } else {
                         _percentController.clear();
                         showSnackBar(
-                            message: 'enter correct percentage',
+                            message: 'Enter correct percentage',
                             color: Colors.red.shade500);
                       }
                     } else {
@@ -575,26 +559,31 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                     }
                   } else {
                     showSnackBar(
-                        message: 'Please Fill All Fields',
+                        message: 'Please fill all the fields!!',
                         color: Colors.red.shade500);
                   }
                 });
               },
-              child: buildNeumorphic( width, height,20,
-                Container(
-                  height: height * 0.08,
-                  width: width * 0.9,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
+              child: Container(
+                margin: EdgeInsets.only(top: height * 0.15),
+                height: height * 0.07,
+                width: width * 0.9,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  gradient: const LinearGradient(
+                    colors: [
+                      Color(0xffD136D4),
+                      Color(0xff7652B2),
+                    ],
                   ),
-                  child: Center(
-                    child: Text(
-                      'Submit',
-                      style: TextStyle(
-                          fontFamily: ConstantFonts.poppinsBold,
-                          fontSize: height * 0.025,
-                          color: Colors.black),
-                    ),
+                ),
+                child: Center(
+                  child: Text(
+                    'Submit',
+                    style: TextStyle(
+                        fontFamily: ConstantFonts.poppinsMedium,
+                        fontSize: height * 0.025,
+                        color: Colors.white),
                   ),
                 ),
               ),
@@ -617,62 +606,73 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
         ),
         itemCount: workDoneList.length,
         itemBuilder: (BuildContext ctx, index) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: buildNeumorphic(
-              width,height,20, Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                children: [
-                  /// Work Details Container...
-                  Container(
-                    margin: EdgeInsets.symmetric(vertical: height * 0.02),
-                    padding: const EdgeInsets.all(8),
-                    height: height * 0.10,
-                    width: width * 0.88,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
+          return Container(
+            // padding: EdgeInsets.only(right: width * 0.05, left: width * 0.05),
+            margin: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: ConstantColor.background1Color,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  offset: const Offset(-0.0, 5.0),
+                  blurRadius: 8,
+                )
+              ],
+              borderRadius: BorderRadius.circular(11),
+            ),
+            child: Column(
+              children: [
+                /// Work Details Container...
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: height * 0.02),
+                  padding: const EdgeInsets.all(8),
+                  height: height * 0.10,
+                  width: width * 0.88,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    // color: ConstantColor.backgroundColor.withOpacity(0.09),
+                    gradient: LinearGradient(
+                      colors: [
+                        const Color(0xffD136D4).withOpacity(0.09),
+                        const Color(0xff7652B2).withOpacity(0.3),
+                      ],
                     ),
-                    child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      child: textWidget(
+                  ),
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: textWidget(
+                      height,
+                      workDoneList[index],
+                      height * 0.02,
+                    ),
+                  ),
+                ),
+
+                /// Time....
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    textWidget(height, 'Start : ${startTimeList[index]}',
+                        height * 0.019),
+                    textWidget(height, 'End : ${endTimeList[index]}',
+                        height * 0.019),
+                    textWidget(
                         height,
-                        workDoneList[index],
-                        height * 0.02,
-                      ),
-                    ),
-                  ),
+                        'Duration : ${workingHoursList[index]}',
+                        height * 0.019),
+                  ],
+                ),
 
-                  /// Time....
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      textWidget(height, 'Start : ${startTimeList[index]}',
-                          height * 0.020),
-                      textWidget(height, 'End : ${endTimeList[index]}',
-                          height * 0.020),
-                      textWidget(
-                          height,
-                          'Duration : ${workingHoursList[index]}',
-                          height * 0.020),
-                    ],
-                  ),
-
-                  /// Percentage......
-                  Padding(
+                /// Percentage......
+                Padding(
                     padding: const EdgeInsets.all(8),
                     child: percentIndicator(
                         height,
                         percent = double.parse(workPercentageList[index]
                             .replaceAll(RegExp(r'.$'), "")) /
                             100,
-                        "${workPercentageList[index]}"),
-                  ),
-                ],
-              ),
-            ),
+                        "${workPercentageList[index]}")),
+              ],
             ),
           );
         })
@@ -726,53 +726,41 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       TextInputAction textInputAction,
       String hintName,
       TextEditingController textEditingController) {
-    return TextFormField(
-      textAlign: TextAlign.center,
-      controller: textEditingController,
-      textInputAction: textInputAction,
-      maxLines: 5,
-      autofocus: false,
-      keyboardType: textInputType,
-      onTap: () {
-        setState(() {});
-      },
-      style: TextStyle(
-          fontSize: height * 0.02,
-          color: Colors.black,
-          fontFamily: ConstantFonts.poppinsRegular),
-      decoration: InputDecoration(
-        fillColor: Color(0xffDDE6E8),
-        border: InputBorder.none,
-        hintText: hintName,
-        hintStyle: TextStyle(color: Colors.black.withOpacity(0.9)),
-        filled: true,
-        // fillColor: Colors.transparent,
-        contentPadding:
-        const EdgeInsets.only(left: 14.0, bottom: 6.0, top: 8.0),
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.transparent),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        enabledBorder: UnderlineInputBorder(
-          borderSide: const BorderSide(color: Colors.transparent),
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-      ),
-    );
-  }
-
-  Widget buildNeumorphic(double width, double height,double radius, Widget widget,) {
-    return Neumorphic(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      style: NeumorphicStyle(
-        depth: 3,
-        shadowLightColorEmboss: Colors.white12.withOpacity(0.8),
-        shadowLightColor: Colors.white.withOpacity(0.8),
-        boxShape: NeumorphicBoxShape.roundRect(
-          BorderRadius.circular(radius),
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: TextFormField(
+        controller: textEditingController,
+        textInputAction: textInputAction,
+        textCapitalization: TextCapitalization.sentences,
+        maxLines: 5,
+        autofocus: false,
+        keyboardType: textInputType,
+        onTap: () {
+          setState(() {});
+        },
+        style: TextStyle(
+            fontSize: height * 0.02,
+            color: Colors.black,
+            fontFamily: ConstantFonts.poppinsMedium),
+        decoration: InputDecoration(
+          fillColor: Colors.white.withOpacity(0.5),
+          border: InputBorder.none,
+          hintText: hintName,
+          hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
+          filled: true,
+          // fillColor: Colors.transparent,
+          contentPadding:
+          const EdgeInsets.only(left: 14.0, bottom: 6.0, top: 8.0),
+          focusedBorder: OutlineInputBorder(
+            borderSide: const BorderSide(color: Colors.transparent),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: const BorderSide(color: Colors.transparent),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
         ),
       ),
-      child: widget,
     );
   }
 
@@ -822,13 +810,14 @@ class ButtonWidget extends StatelessWidget {
     return GestureDetector(
       onTap: onClicked,
       child: Container(
-        margin: EdgeInsets.only(top: height * 0.0),
+        margin: EdgeInsets.only(top: height * 0.03),
         height: height * 0.15,
         width: width * 0.25,
         decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.5),
           borderRadius: BorderRadius.circular(10),
           border:
-          Border.all(color: colorValue ? Colors.blue : Colors.transparent,width: 2),
+          Border.all(color: colorValue ? Colors.green : Colors.black26,width: 2),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,

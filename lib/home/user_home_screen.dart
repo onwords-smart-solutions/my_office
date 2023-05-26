@@ -5,7 +5,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:install_plugin_v2/install_plugin_v2.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,6 +18,7 @@ import 'package:my_office/models/staff_model.dart';
 import 'package:my_office/util/main_template.dart';
 import 'package:my_office/util/notification_services.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Constant/fonts/constant_font.dart';
 import '../app_version/version.dart';
@@ -39,7 +39,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   bool isLoading = false;
   bool isAlwaysShown = true;
   final ScrollController _scrollController = ScrollController();
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   List<String> managementStaffNames = [];
@@ -54,11 +53,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         for (var mgmt in value.snapshot.children) {
           names.add(mgmt.value.toString());
         }
-        setState(() {
-          managementStaffNames = names;
-        });
+
+        managementStaffNames = names;
       }
     });
+    getStaffDetail();
   }
 
   StaffModel? staffInfo;
@@ -83,6 +82,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   void getStaffDetail() async {
     final data = await _hiveOperations.getStaffDetail();
     setState(() {
+      log('names are $managementStaffNames');
+      log('data are ${data.name}');
       if (managementStaffNames.any((element) => element == data.name)) {
         userAccessGridButtonsName.addAll(AppDefaults.gridButtonsNames);
         userAccessGridButtonsName.remove('View suggestions');
@@ -138,9 +139,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   setNotification() async {
     final pref = await SharedPreferences.getInstance();
     final isNotificationSet = pref.getString('NotificationSetTime') ?? '';
-    _notificationService.showDailyNotificationWithPayload(setTime: isNotificationSet);
+    _notificationService.showDailyNotificationWithPayload(
+        setTime: isNotificationSet);
   }
-
 
   //CHECKING APP VERSION..//
   Future<void> checkAppVersion() async {
@@ -159,7 +160,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   @override
   void initState() {
     checkAppVersion();
-    getStaffDetail();
     getManagementNames();
     getConnectivity();
     setNotification();
@@ -191,14 +191,14 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             physics: const BouncingScrollPhysics(),
             itemCount: userAccessGridButtonsName.length,
             padding:
-                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                childAspectRatio: 1 / 1.2,
+                childAspectRatio: 1 / 1.3,
                 crossAxisCount: 3,
-                crossAxisSpacing: 12.0,
-                mainAxisSpacing: 12.0),
+                crossAxisSpacing: 10.0,
+                mainAxisSpacing: 10.0),
             itemBuilder: (BuildContext context, int index) {
               final page = AppDefaults()
                   .getPage(userAccessGridButtonsName[index], staffInfo!);
@@ -207,7 +207,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   image: Image.asset(
                     userAccessGridButtonsImages[index],
                     width: width * 1,
-                    height: height * 0.1,
+                    height: height * 0.12,
                     fit: BoxFit.contain,
                   ),
                   page: page);
@@ -215,7 +215,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           )
         : Center(
             child: Lottie.asset(
-              "assets/animations/loading.json",
+              "assets/animations/new_loading.json",
             ),
           );
   }
@@ -273,7 +273,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         actions: [
           TextButton(
             onPressed: () async {
-              Navigator.pop(context, 'Cancel');
+              Navigator.pop(context, 'CANCEL');
               setState(() {
                 isAlertSet = false;
               });
@@ -294,47 +294,74 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   }
 
   showUpdateAppDialog() {
-    setState(() {
-      isLoading = true;
-    });
     showCupertinoDialog(
       barrierDismissible: false,
       context: context,
-      builder: (BuildContext context) => WillPopScope(
-        child: StatefulBuilder(
-          builder: (BuildContext context, setState) => CupertinoAlertDialog(
-            title: Text(
-              "New Update Available!!",
-              style: TextStyle(
-                fontFamily: ConstantFonts.poppinsBold,
-              ),
-            ),
-            content: Text(
-              "You are currently using an outdated version. Contact admin for New version of the app..",
-              style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium,
-              ),
-            ),
-            actions: [
-              CupertinoDialogAction(
-                isDefaultAction: true,
-                textStyle: TextStyle(
-                  fontFamily: ConstantFonts.poppinsMedium,
+      builder: (BuildContext context) {
+        bool isUpdating = false;
+        return WillPopScope(
+          child: StatefulBuilder(
+            builder: (BuildContext context, setState) => CupertinoAlertDialog(
+              title: isUpdating
+                  ? Text(
+                      'App is updating..',
+                      style: TextStyle(
+                        fontFamily: ConstantFonts.poppinsBold,
+                      ),
+                    )
+                  : Text(
+                      "New Update Available!!",
+                      style: TextStyle(
+                        fontFamily: ConstantFonts.poppinsBold,
+                      ),
+                    ),
+              content: isUpdating
+                  ? Column(
+                    children: [
+                      const Text('While prompted to update \nPress Update'),
+                      Lottie.asset('assets/animations/app_update.json'),
+                    ],
+                  )
+                  : Text(
+                      "You are currently using an outdated version. Update the app to use the latest features..",
+                      style: TextStyle(
+                        fontFamily: ConstantFonts.poppinsMedium,
+                      ),
+                    ),
+
+              actions: [
+                 isUpdating ? SizedBox.shrink() :CupertinoDialogAction(
+                  isDefaultAction: true,
+                  textStyle: TextStyle(
+                    fontFamily: ConstantFonts.poppinsMedium,
+                  ),
+                  onPressed: () async {
+                    final permission = await Permission.requestInstallPackages.isGranted;
+                  if (permission){
+                    setState(() {
+                      isUpdating = true;
+                    });
+                    onClickInstallApk();
+                  }else{
+                   await Permission.requestInstallPackages.request();
+                  }
+                  },
+                  child: Text(
+                    "Update Now",
+                    style: TextStyle(
+                        color: ConstantColor.backgroundColor,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: ConstantFonts.poppinsRegular),
+                  ),
                 ),
-                onPressed: () async {
-                  isLoading
-                      ? const CircularProgressIndicator()
-                      : onClickInstallApk();
-                },
-                child: const Text("Update Now"),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        onWillPop: () async {
-          return false;
-        },
-      ),
+          onWillPop: () async {
+            return false;
+          },
+        );
+      },
     );
   }
 
@@ -347,11 +374,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     try {
       await resultPath.writeToFile(tempFile);
       await tempFile.create();
-      await InstallPlugin.installApk(tempFile.path, 'com.onwords.my_office')
+      await InstallPlugin.installApk(tempFile.path, 'com.onwords.office')
           .then((result) {
-        log('install apk $result');
+        print('install apk $result');
       }).catchError((error) {
-        log('install apk error: $error');
+        print('install apk error: $error');
       });
     } on FirebaseException {
       ScaffoldMessenger.of(context).showSnackBar(

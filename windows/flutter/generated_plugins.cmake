@@ -3,10 +3,10 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-  awesome_notifications
   connectivity_plus_windows
   firebase_core
   geolocator_windows
+  permission_handler_windows
   upi_payment_qrcode_generator
   url_launcher_windows
 )

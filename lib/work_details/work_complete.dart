@@ -246,24 +246,23 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                         child: Column(children: workDoneNames),
                       ),
                     )
-                  : Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Lottie.asset('assets/animations/no_data.json',
-                              height: 250.0),
-                          Text(
-                            'No work done yet',
-                            style: TextStyle(
-                              fontFamily: ConstantFonts.poppinsMedium,
-                              color: ConstantColor.blackColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
+                  : Center(
+                    child: Column(
+                      children: [
+                        Lottie.asset('assets/animations/no_data.json',
+                            height: 300.0),
+                        Text(
+                          'No work done yet!!',
+                          style: TextStyle(
+                            fontFamily: ConstantFonts.poppinsRegular,
+                            color: ConstantColor.blackColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
+                  ),
             ],
           );
   }

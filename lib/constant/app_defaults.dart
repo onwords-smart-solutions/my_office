@@ -43,10 +43,10 @@ class AppDefaults {
     'Suggestions',
     'Virtual attendance',
     'View suggestions',
-    'View attendance',
+    'Check Virtual entry',
     'Late entry',
     'PR Work done',
-    'Check Id Entry',
+    'Entry time',
     'Create products',
     'Sales points',
     'PR Work details',
@@ -153,8 +153,11 @@ class AppDefaults {
           name: staffInfo.name,
         );
         break;
-      case 'View attendance':
-        page = const ViewAttendanceScreen();
+      case 'Check Virtual entry':
+        page = ViewAttendanceScreen(
+          userId: staffInfo.uid,
+          staffName: staffInfo.name,
+        );
         break;
       case 'Late entry':
         page = LateEntryScreen(
@@ -168,7 +171,7 @@ class AppDefaults {
           staffName: staffInfo.name,
         );
         break;
-      case 'Check Id Entry':
+      case 'Entry time':
         page = CheckEntryScreen(
           userId: staffInfo.uid,
           staffName: staffInfo.name,

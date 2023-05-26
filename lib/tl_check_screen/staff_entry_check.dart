@@ -133,7 +133,7 @@ class _StaffEntryCheckScreenState extends State<StaffEntryCheckScreen> {
         isLoading
             ? Center(
                 child: Lottie.asset(
-                  "assets/animations/loading.json",
+                  "assets/animations/new_loading.json",
                 ),
               )
             : attendanceTime.isNotEmpty
@@ -161,15 +161,17 @@ class _StaffEntryCheckScreenState extends State<StaffEntryCheckScreen> {
                     child: Column(
                       children: [
                         const SizedBox(height: 50),
-                        Lottie.asset('assets/animations/no_data.json',
-                            height: 200.0),
+                        Center(
+                          child: Lottie.asset('assets/animations/no_data.json',
+                              height: 250.0),
+                        ),
                         Text(
                           'No Attendance registered!!',
                           style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsMedium,
+                            fontFamily: ConstantFonts.poppinsRegular,
                             color: ConstantColor.blackColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20,
                           ),
                         ),
                       ],

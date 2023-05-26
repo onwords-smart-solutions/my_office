@@ -52,7 +52,6 @@ class _AllSuggestionsState extends State<AllSuggestions> {
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
             ),
             children: [
               Padding(
@@ -81,7 +80,6 @@ class _AllSuggestionsState extends State<AllSuggestions> {
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
             ),
             children: [
               Padding(
@@ -110,7 +108,6 @@ class _AllSuggestionsState extends State<AllSuggestions> {
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
             ),
             children: [
               Padding(
@@ -158,7 +155,6 @@ class _AllSuggestionsState extends State<AllSuggestions> {
             TableRow(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Colors.grey.shade300,
               ),
               children: [
                 Padding(
@@ -177,7 +173,6 @@ class _AllSuggestionsState extends State<AllSuggestions> {
             TableRow(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: Colors.grey.shade300,
               ),
               children: [
                 Padding(

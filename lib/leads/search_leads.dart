@@ -36,6 +36,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
     'Under Construction',
     'Installation Completed',
     'Others',
+    'Hot lead'
   ];
 
   String selectedStaff = '';
@@ -103,14 +104,15 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
           data['LeadIncharge']
               .toString()
               .toLowerCase()
-              .contains(splitName[0].toLowerCase())) {
+              .contains(createdBy.toLowerCase())) {
         if (sortOption.isNotEmpty) {
           //sorting list
           if (sortOption == 'Onwords') {
             if (data['customer_state']
                 .toString()
                 .toLowerCase()
-                .contains('rejected')  || data['customer_state']
+                .contains('rejected')  ||
+                data['customer_state']
                 .toString()
                 .toLowerCase()
                 .contains('onwords') ||
@@ -215,10 +217,12 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
         final nameLower = customer['name'].toString().toLowerCase();
         final phone = customer['phone_number'].toString();
         final location = customer['city'].toString().toLowerCase();
+        final id = customer['customer_id'].toString().toLowerCase();
         final searchQuery = query.toLowerCase();
         return nameLower.contains(searchQuery) ||
             phone.contains(searchQuery) ||
-            location.contains(searchQuery);
+            location.contains(searchQuery) ||
+        id == searchQuery;
       }).toList();
       setState(() {
         this.query = query;
@@ -452,7 +456,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
   Widget buildCustomerList() {
     return query == ''
         ? isLoading
-            ? Center(child: Lottie.asset("assets/animations/loading.json"))
+            ? Center(child: Lottie.asset("assets/animations/new_loading.json"))
             : currentCustomerList.isNotEmpty
                 ? Column(
                     children: [

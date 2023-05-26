@@ -1,20 +1,23 @@
 import 'dart:developer';
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:my_office/PR/invoice/Screens/Add_iterms_Screen.dart';
 import 'package:my_office/PR/invoice/api/installation_pdf.dart';
-import 'package:my_office/home/user_home_screen.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upi_payment_qrcode_generator/upi_payment_qrcode_generator.dart';
 import '../../../database/hive_operations.dart';
+import '../../../home/user_home_screen.dart';
 import '../../../models/staff_model.dart';
+import '../../products/point_calculations.dart';
 import '../api/pdf_invoice_api.dart';
 import '../model/customer.dart';
 import '../model/invoice.dart';
@@ -24,27 +27,33 @@ import '../utils.dart';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+
 class PreviewScreen extends StatefulWidget {
-  final String doctype;
+  final String docType;
   final String category;
   final int advanceAmt;
+
+  final List<TableList> productDetails;
+  final int finalAmount;
+  final int listAmount;
 
   // final int labAndInstall;
   final int discountAmount;
   final bool gstValue;
 
   // final bool labValue;
-  final bool discountNeed;
+  // final bool discountNeed;
 
   const PreviewScreen({
     Key? key,
-    required this.doctype,
+    required this.docType,
     required this.category,
     required this.advanceAmt,
     // required this.labAndInstall,
     required this.gstValue,
     required this.discountAmount,
-    required this.discountNeed,
+    // required this.discountNeed,
+    required this.productDetails, required this.finalAmount, required this.listAmount,
 
     // required this.labValue,
   }) : super(key: key);
@@ -69,7 +78,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
   Uint8List? convertedImage;
 
   Future<void> _convertImage() async {
-    print('called function _convertImage()');
+    // print('called function _convertImage()');
     RenderRepaintBoundary boundary =
     _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
     ui.Image image = await boundary.toImage(pixelRatio: 10.0);
@@ -116,7 +125,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
 
   // User? user;
   late DateTime currentPhoneDate;
-  var dataJson;
+  // var dataJson;
   final formKey = GlobalKey<FormState>();
   List quotLength = [];
   int quotLen = 0;
@@ -151,7 +160,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
       try {
         for (var element in snap.snapshot.children) {
           // print("dataJson ${element.key} ");
-          if (widget.doctype == element.key) {
+          if (widget.docType == element.key) {
             // print("dataJson ${widget.doctype} ");
             for (var elem in element.children) {
               for (var ele in elem.children) {
@@ -189,13 +198,17 @@ class _PreviewScreenState extends State<PreviewScreen> {
       taskData.tasks.length == 2 ? taskData.tasks[1] : taskData.tasks[0];
       final invoice = taskData.invoiceListData;
       final val = taskData.subTotalValue;
-      if (val.isEmpty) {
-        // print("aasswipe");
+
+      // if (val.isEmpty) {
+      if (widget.finalAmount.toDouble().toString().isEmpty) {
+        print("aasswipe");
       } else {
-        amount = val
-            .map((e) => e.quantity * e.amount)
-            .reduce((value, element) => value + element);
-        // print(amount);
+        // amount = val
+        //     .map((e) => e.quantity * e.amount)
+        //     .reduce((value, element) => value + element);
+        amount = widget.finalAmount.toDouble();
+        print('final amount  $amount');
+        print('list amount  ${widget.listAmount}');
         const vatPercent = 0.09;
         if (widget.gstValue) {
           gst = vatPercent * amount;
@@ -203,7 +216,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
         // grandTotal = amount + (gst * 2) - advance;
         // grandTotal = amount + labour + (gst*2) - advance;
         grandTotal =
-            amount - widget.discountAmount + (gst * 2) - widget.advanceAmt;
+        // amount - widget.discountAmount + (gst * 2) - widget.advanceAmt;
+        amount + (gst * 2) - widget.advanceAmt;
       }
 
       // final double a = grandTotal = amount - discount + (gst * 2) - advance;
@@ -232,12 +246,12 @@ class _PreviewScreenState extends State<PreviewScreen> {
 
       return Scaffold(
         appBar: AppBar(
-          backgroundColor: Color(0xffDDE6E8),
+          backgroundColor: const Color(0xffDDE6E8),
           elevation: 0,
           title: Text(
             "Invoice Preview",
             style: TextStyle(
-                fontFamily: 'Nexa',
+                fontFamily: '',
                 fontWeight: FontWeight.w700,
                 color: Colors.black,
                 fontSize: height * 0.018),
@@ -256,7 +270,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
             },
           ),
         ),
-        backgroundColor: Color(0xffDDE6E8),
+        backgroundColor: const Color(0xffDDE6E8),
         body: Form(
           key: formKey,
           child: Stack(
@@ -278,7 +292,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                 left: 0,
                 right: 0,
                 child: Container(
-                  color: Color(0xffDDE6E8),
+                  color: const Color(0xffDDE6E8),
                   height: height * 1.0,
                   width: width * 1.0,
                   padding: EdgeInsets.symmetric(horizontal: width * 0.05),
@@ -286,16 +300,27 @@ class _PreviewScreenState extends State<PreviewScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Text(
+                          '#${widget.docType} ',
+                          style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: height * 0.018,
+                              fontFamily: '',
+                              color: Colors.black),
+                        ),
+                        SizedBox(
+                          height: height * 0.02,
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
                               padding: const EdgeInsets.all(05),
                               decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.black26,
-                                      width: width * 0.002),
-                                  borderRadius: BorderRadius.circular(10)),
+                                border: Border.all(
+                                    color: Colors.black26,
+                                    width: width * 0.002),
+                                borderRadius: BorderRadius.circular(10),),
                               child: Column(
                                 children: [
                                   Text(
@@ -303,49 +328,52 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: height * 0.012,
-                                        fontFamily: 'Nexa',
+                                        fontFamily: '',
                                         color: Colors.black),
                                   ),
                                   SizedBox(
-                                      height: height * 0.050,
-                                      width: width * 0.25,
-                                      child: TextFormField(
-                                        textInputAction: TextInputAction.done,
-                                        controller: fileName,
-                                        validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return 'File Name required';
-                                          }
-                                          return null;
-                                        },
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.normal,
+                                    height: height * 0.050,
+                                    width: width * 0.25,
+                                    child: TextFormField(
+                                      textInputAction: TextInputAction.done,
+                                      controller: fileName,
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          return 'File Name required';
+                                        }
+                                        return null;
+                                      },
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: height * 0.012,
+                                        fontFamily: '',
+                                      ),
+                                      textAlign: TextAlign.center,
+                                      decoration: InputDecoration(
+                                        // border: InputBorder.none,
+                                        hintText: 'File Name',
+                                        hintStyle: TextStyle(
+                                          fontWeight: FontWeight.bold,
                                           fontSize: height * 0.012,
-                                          fontFamily: 'Avenir',
+                                          fontFamily: '',
                                         ),
-                                        textAlign: TextAlign.center,
-                                        decoration: InputDecoration(
-                                          // border: InputBorder.none,
-                                          hintText: 'File Name',
-                                          hintStyle: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: height * 0.012,
-                                            fontFamily: 'Nexa',
-                                          ),
-                                        ),
-                                      )),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
-                            widget.doctype == "INVOICE"
-                                ? Container(
+                            widget.docType == "QUOTATION"
+                                ? Container()
+                                : Container(
                               padding: const EdgeInsets.all(05),
                               decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.black26,
-                                      width: width * 0.002),
-                                  borderRadius:
-                                  BorderRadius.circular(10)),
+                                border: Border.all(
+                                    color: Colors.black26,
+                                    width: width * 0.002),
+                                borderRadius:
+                                BorderRadius.circular(10),
+                              ),
                               child: Column(
                                 children: [
                                   Text(
@@ -353,174 +381,68 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: height * 0.012,
-                                        fontFamily: 'Nexa',
+                                        fontFamily: '',
                                         color: Colors.black),
                                   ),
                                   SizedBox(
-                                      height: height * 0.050,
-                                      width: width * 0.25,
-                                      child: TextFormField(
-                                        textInputAction:
-                                        TextInputAction.done,
-                                        controller: estimateDate,
-                                        keyboardType:
-                                        TextInputType.datetime,
-                                        validator: (value) {
-                                          if (value == null ||
-                                              value.isEmpty) {
-                                            return 'Date required';
-                                          }
-                                          return null;
-                                        },
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: height * 0.012,
-                                          fontFamily: 'Avenir',
-                                        ),
-                                        readOnly: true,
-                                        textAlign: TextAlign.center,
-                                        decoration: InputDecoration(
-                                          // border: InputBorder.none,
-                                          hintText: 'Estimate Date',
-                                          hintStyle: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: height * 0.012,
-                                            fontFamily: 'Nexa',
-                                          ),
-                                        ),
-                                        onTap: () async {
-                                          DateTime? pickedDate =
-                                          await showDatePicker(
-                                              context: context,
-                                              initialDate:
-                                              DateTime.now(),
-                                              firstDate:
-                                              DateTime(2000),
-                                              //DateTime.now() - not to allow to choose before today.
-                                              lastDate:
-                                              DateTime(2101));
-
-                                          if (pickedDate != null) {
-                                            String formattedDate =
-                                            DateFormat('yyyy-MM-dd')
-                                                .format(pickedDate);
-                                            setState(() {
-                                              estimateDate.text =
-                                                  formattedDate; //set output date to TextField value.
-                                            });
-                                          }
-                                        },
-                                      )),
-                                ],
-                              ),
-                            )
-                            :widget.doctype == "PROFORMA INVOICE"
-                            ? Container(
-                              padding: const EdgeInsets.all(05),
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Colors.black26,
-                                      width: width * 0.002),
-                                  borderRadius:
-                                  BorderRadius.circular(10)),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'Estimate Date For Installation',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
+                                    height: height * 0.050,
+                                    width: width * 0.25,
+                                    child: TextFormField(
+                                      textInputAction:
+                                      TextInputAction.done,
+                                      controller: estimateDate,
+                                      keyboardType:
+                                      TextInputType.datetime,
+                                      validator: (value) {
+                                        if (value == null ||
+                                            value.isEmpty) {
+                                          return 'Date required';
+                                        }
+                                        return null;
+                                      },
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.normal,
                                         fontSize: height * 0.012,
-                                        fontFamily: 'Nexa',
-                                        color: Colors.black),
-                                  ),
-                                  SizedBox(
-                                      height: height * 0.050,
-                                      width: width * 0.25,
-                                      child: TextFormField(
-                                        textInputAction:
-                                        TextInputAction.done,
-                                        controller: estimateDate,
-                                        keyboardType:
-                                        TextInputType.datetime,
-                                        validator: (value) {
-                                          if (value == null ||
-                                              value.isEmpty) {
-                                            return 'Date required';
-                                          }
-                                          return null;
-                                        },
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.normal,
+                                        fontFamily: '',
+                                      ),
+                                      readOnly: true,
+                                      textAlign: TextAlign.center,
+                                      decoration: InputDecoration(
+                                        // border: InputBorder.none,
+                                        hintText: 'Estimate Date',
+                                        hintStyle: TextStyle(
+                                          fontWeight: FontWeight.bold,
                                           fontSize: height * 0.012,
-                                          fontFamily: 'Avenir',
+                                          fontFamily: '',
                                         ),
-                                        readOnly: true,
-                                        textAlign: TextAlign.center,
-                                        decoration: InputDecoration(
-                                          // border: InputBorder.none,
-                                          hintText: 'Estimate Date',
-                                          hintStyle: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: height * 0.012,
-                                            fontFamily: 'Nexa',
-                                          ),
-                                        ),
-                                        onTap: () async {
-                                          DateTime? pickedDate =
-                                          await showDatePicker(
-                                              context: context,
-                                              initialDate:
-                                              DateTime.now(),
-                                              firstDate:
-                                              DateTime(2000),
-                                              //DateTime.now() - not to allow to choose before today.
-                                              lastDate:
-                                              DateTime(2101));
+                                      ),
+                                      onTap: () async {
+                                        DateTime? pickedDate =
+                                        await showDatePicker(
+                                          context: context,
+                                          initialDate:
+                                          DateTime.now(),
+                                          firstDate:
+                                          DateTime(2000),
+                                          //DateTime.now() - not to allow to choose before today.
+                                          lastDate:
+                                          DateTime(2101),
+                                        );
 
-                                          if (pickedDate != null) {
-                                            String formattedDate =
-                                            DateFormat('yyyy-MM-dd')
-                                                .format(pickedDate);
-                                            setState(() {
-                                              estimateDate.text =
-                                                  formattedDate; //set output date to TextField value.
-                                            });
-                                          }
-                                        },
-                                      )),
+                                        if (pickedDate != null) {
+                                          String formattedDate =
+                                          DateFormat('yyyy-MM-dd')
+                                              .format(pickedDate);
+                                          setState(() {
+                                            estimateDate.text =
+                                                formattedDate; //set output date to TextField value.
+                                          });
+                                        }
+                                      },
+                                    ),
+                                  ),
                                 ],
                               ),
-                            )
-                                : Container(),
-                            Column(
-                              children: [
-                                widget.doctype == 'INVOICE'
-                                    ? Text(
-                                  '#INVOICE ',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: height * 0.014,
-                                      fontFamily: 'Avenir',
-                                      color: Colors.black),
-                                )
-                                : widget.doctype == "PROFORMA INVOICE"
-                                ? Text(
-                                  '#PROFORMA \n INVOICE',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: height * 0.014,
-                                      fontFamily: 'Avenir',
-                                      color: Colors.black),
-                                )
-                                    : Text(
-                                  '#QUOTATION ',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: height * 0.014,
-                                      fontFamily: 'Avenir',
-                                      color: Colors.black),
-                                ),
-                              ],
                             ),
                           ],
                         ),
@@ -532,7 +454,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                           style: TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: height * 0.013,
-                              fontFamily: 'Avenir',
+                              fontFamily: '',
                               color: Colors.black),
                         ),
                         Text(
@@ -540,7 +462,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                           style: const TextStyle(
                               fontWeight: FontWeight.w600,
                               // fontSize: height * 0.018,
-                              fontFamily: 'Avenir',
+                              fontFamily: '',
                               color: Colors.black),
                         ),
                         Text(
@@ -548,7 +470,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                           style: const TextStyle(
                             // fontWeight: FontWeight.w600,
                             // fontSize: height * 0.011,
-                              fontFamily: 'Avenir',
+                              fontFamily: '',
                               color: Colors.black),
                         ),
                         Text(
@@ -556,7 +478,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                           style: const TextStyle(
                             // fontWeight: FontWeight.w600,
                             // fontSize: height * 0.011,
-                              fontFamily: 'Avenir',
+                              fontFamily: '',
                               color: Colors.black),
                         ),
                         SizedBox(
@@ -586,7 +508,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                           decoration: BoxDecoration(
                               border: Border.all(
                                   color: const Color(0xff00bcd4), width: 1.0),
-                              color: Color(0xffDDE6E8),
+                              color: const Color(0xffDDE6E8),
                               borderRadius: BorderRadius.circular(20)),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
@@ -594,17 +516,23 @@ class _PreviewScreenState extends State<PreviewScreen> {
                             child: ListView.builder(
                               shrinkWrap: true,
                               physics: const BouncingScrollPhysics(),
-                              itemCount: invoice.length,
+                              itemCount: widget.productDetails.length,
                               itemBuilder: (BuildContext context, int index) {
+                                final amount = widget.productDetails[index].productQuantity * int.parse(widget.productDetails[index].productPrice);
+                                print(amount);
                                 return Table(
                                   // border: TableBorder.symmetric(inside: BorderSide.none,outside: BorderSide(width: 1.0)),
                                   children: [
                                     buildRow([
                                       '${index + 1}.',
-                                      (invoice[index].description),
-                                      '${invoice[index].quantity}',
-                                      '${invoice[index].unitPrice}',
-                                      '${invoice[index].quantity * invoice[index].unitPrice}'
+                                      widget.productDetails[index].productName,
+                                      widget.productDetails[index].productQuantity.toString(),
+                                      widget.productDetails[index].productPrice,
+                                      amount.toString(),
+                                      // (invoice[index].description),
+                                      // '${invoice[index].quantity}',
+                                      // '${invoice[index].unitPrice}',
+                                      // '${invoice[index].quantity * invoice[index].unitPrice}'
                                     ]),
                                   ],
                                 );
@@ -621,6 +549,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                             children: [
                               GestureDetector(
                                 onTap: () async {
+                                  List<InvoiceItem> invoiceData = [];
                                   final isValid =
                                   formKey.currentState?.validate();
                                   if (isValid!) {
@@ -638,10 +567,14 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                     setState(() {
                                       quotLen = quotLength.length + 1;
                                     });
+                                    for(var item in widget.productDetails){
+                                      final data = InvoiceItem(description: item.productName, quantity: item.productQuantity, unitPrice: item.subTotalList.toDouble());
+                                      invoiceData.add(data);
+                                    }
 
                                     final invoice = Invoice(
                                       // labNeed: widget.labValue,
-                                      discountNeed: widget.discountNeed,
+                                      // discountNeed: widget.discountNeed,
                                       gstNeed: widget.gstValue,
                                       quotNo: formatter.format(quotLen),
                                       fileName: fileName.text,
@@ -667,8 +600,9 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                         // description: 'Description...',
                                         // number: '${DateTime.now().year}-9999',
                                       ),
-                                      items: taskData.invoiceListData,
-                                      docType: widget.doctype,
+                                      // items: taskData.invoiceListData,
+                                      items: invoiceData,
+                                      docType: widget.docType,
                                       cat: widget.category,
                                       advancePaid: widget.advanceAmt,
                                       // labAndInstall: widget.labAndInstall,
@@ -701,12 +635,60 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                     log('new path is ${file.path} and absolute is ${file.absolute.path}');
                                     await OpenFile.open(file.path)
                                         .then((value) async {
-                                      ///................FIREBASE..........
-                                      if (widget.doctype == "INVOICE") {
+                                      ///...............FIREBASE..........////
+                                      /// INVOICE
+                                      if (widget.docType == "INVOICE") {
+                                        /// FINAL INVOICE
                                         var snapshot = await firebaseStorage
                                             .ref()
                                             .child(
                                             'INVOICE/INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
+                                            .putFile(pdfFile);
+                                        var downloadUrl =
+                                        await snapshot.ref.getDownloadURL();
+
+                                        /// INSTALLATION-INVOICE......
+                                        final installationPdfFile =
+                                        await InstallationInvoicePdf
+                                            .generate(
+                                          invoice,
+                                          // user,
+                                        );
+
+                                        var snapshotInstallation =
+                                        await firebaseStorage
+                                            .ref()
+                                            .child(
+                                            'INSTALLATION-INVOICE/INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
+                                            .putFile(installationPdfFile);
+                                        var downloadUrlInstallation =
+                                        await snapshotInstallation.ref
+                                            .getDownloadURL();
+
+                                        var da = {
+                                          'Customer_name': task.name,
+                                          'Status': 'Processing',
+                                          'TimeStamp': myTimeStamp.seconds,
+                                          'CreatedBy': staffInfo?.email,
+                                          'mobile_number': task.phone,
+                                          'document_link': downloadUrl,
+                                          'installation_document_link': downloadUrlInstallation,
+                                        };
+                                        databaseReference
+                                            .child('QuotationAndInvoice')
+                                            .child('INVOICE')
+                                            .child('${Utils.formatYear(date)}')
+                                            .child('${Utils.formatMonth(date)}')
+                                            .child(
+                                            'INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
+                                            .set(da);
+                                      }
+                                      /// PROFORMA_INVOICE
+                                      else if(widget.docType == "PROFORMA INVOICE"){
+                                        var snapshot = await firebaseStorage
+                                            .ref()
+                                            .child(
+                                            'PROFORMA_INVOICE/PROFORMA_INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
                                             .putFile(pdfFile);
                                         var downloadUrl =
                                         await snapshot.ref.getDownloadURL();
@@ -741,13 +723,15 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                         };
                                         databaseReference
                                             .child('QuotationAndInvoice')
-                                            .child('INVOICE')
+                                            .child('PROFORMA_INVOICE')
                                             .child('${Utils.formatYear(date)}')
                                             .child('${Utils.formatMonth(date)}')
                                             .child(
-                                            'INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
+                                            'PROFORMA_INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
                                             .set(da);
-                                      } else {
+                                      }
+                                      /// QUOTATION
+                                      else {
                                         var snapshot = await firebaseStorage
                                             .ref()
                                             .child(
@@ -778,12 +762,12 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                       estimateDate.clear();
                                     }).then((value) => {
                                       setState(() {
-                                        // if(!mounted) return;
+                                        /// if(!mounted) return;
                                         Navigator.of(context)
                                             .pushAndRemoveUntil(
                                             MaterialPageRoute(
-                                                builder: (_) =>
-                                                const UserHomeScreen(),
+                                              builder: (_) =>
+                                              const UserHomeScreen(),
                                             ),
                                                 (route) => false);
                                         Provider.of<TaskData>(context,
@@ -796,7 +780,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                             .clear();
                                         Provider.of<TaskData>(context,
                                             listen: false)
-                                            .deleteCustomerDetails(1);
+                                            .deleteCustomerDetails(0);
                                       }),
                                     });
                                   } else {
@@ -831,7 +815,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 13,
-                                            fontFamily: 'Nexa',
+                                            fontFamily: '',
                                             color: Colors.white),
                                       ),
                                       Image.asset(
@@ -847,7 +831,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    "Sub Total :  $amount",
+                                    "Sub Total :  ${widget.listAmount}",
                                     style: const TextStyle(fontSize: 10),
                                   ),
                                   widget.gstValue
@@ -913,7 +897,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
           child: Center(
             child: Text(
               message,
-              style: const TextStyle(fontFamily: 'Nexa'),
+              style: const TextStyle(fontFamily: ''),
             ),
           ),
         ),

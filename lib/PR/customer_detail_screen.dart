@@ -19,7 +19,8 @@ const List<String> list = [
   'B2B',
   'Under Construction',
   'Installation Completed',
-  'Others'
+  'Others',
+  'Hot lead'
 ];
 
 class CustomerDetailScreen extends StatefulWidget {
@@ -203,6 +204,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         .child('customer/${widget.customerInfo['phone_number'].toString()}');
     List<String> fieldName = [
       'City',
+      'Customer id',
       'Lead in Charge',
       'Created By',
       'Created Date',
@@ -222,6 +224,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
             final data = snapshot.data!.snapshot.value as Map<Object?, Object?>;
             List<String> customerValue = [
               data['city'].toString(),
+              data['customer_id'].toString(),
               data['LeadIncharge'].toString(),
               data['created_by'].toString(),
               data['created_date'].toString(),
