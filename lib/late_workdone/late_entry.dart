@@ -1,7 +1,8 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
-import 'dart:convert';
+import 'dart:developer';
 
-import 'package:http/http.dart' as http;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -30,17 +31,13 @@ class _LateEntryScreenState extends State<LateEntryScreen>
   TabController? _tabController;
 
   final staff = FirebaseDatabase.instance.ref().child("staff");
-
   final fingerPrint = FirebaseDatabase.instance.ref().child("fingerPrint");
-
   final TextEditingController _workController = TextEditingController();
   final TextEditingController _percentController = TextEditingController();
   final TextEditingController _lateEntryController = TextEditingController();
-
   final formKey = GlobalKey<FormState>();
 
   int above6 = 0;
-
   double percent = 0;
   bool isLoading = false;
 
@@ -184,13 +181,10 @@ class _LateEntryScreenState extends State<LateEntryScreen>
   bool b = true;
   bool isAllowed = false;
 
-  String? mtoken = '';
-
   @override
   void initState() {
-    _tabController = TabController(length: 1, vsync: this);
-    todayDate();
-    getWorkDone();
+    // _tabController = TabController(length: 1, vsync: this);
+    // todayDate();
     super.initState();
   }
 
@@ -213,7 +207,6 @@ class _LateEntryScreenState extends State<LateEntryScreen>
         width: 150,
         child: ElevatedButton(
           onPressed: (){
-            // updateDb();
           },
           child: const Text('Notify'),
         ),
@@ -221,12 +214,7 @@ class _LateEntryScreenState extends State<LateEntryScreen>
     );
   }
 
-  Future <void> updateDb()async {
-    final ref = FirebaseDatabase.instance.ref();
-    await ref.child('dropdown').set({
-      'Hello': 'Welcome'
-    });
-  }
+
   // Widget bodyContent(double height, double width) {
   //   return Stack(
   //     children: [

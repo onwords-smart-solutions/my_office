@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:install_plugin_v2/install_plugin_v2.dart';
 import 'package:flutter/cupertino.dart';
@@ -57,7 +58,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         managementStaffNames = names;
       }
     });
-    getStaffDetail();
+    // getStaffDetail();
   }
 
   StaffModel? staffInfo;
@@ -132,6 +133,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         }
       }
       staffInfo = data;
+      getToken();
     });
   }
 
@@ -157,12 +159,62 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     });
   }
 
+  //Getting device specific token from each device..
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  Future <void> getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token') ?? '';
+    if (token.isEmpty){
+      String? fcmToken =  await FirebaseMessaging.instance.getToken();
+      log('Token of the device is $fcmToken');
+      await saveTokenToDb(fcmToken!);
+      FirebaseMessaging.instance.onTokenRefresh.listen(saveTokenToDb);
+      prefs.setString('token', fcmToken);
+    }
+  }
+
+   //Saving device token in Firestore database..
+  Future <void> saveTokenToDb(String fcmToken) async {
+    await FirebaseFirestore.instance
+        .collection('Devices')
+        .doc(staffInfo!.uid)
+        .set({
+      'Name': staffInfo!.name,
+      'Date': DateFormat('dd-MM-yyyy').format(DateTime.now()),
+      'Time': DateFormat.jms().format(DateTime.now()),
+      'Token': fcmToken,
+    });
+  }
+
+  //Requesting permission for sending separate notifications to specific devices..
+  void requestPermission() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+    if (settings.authorizationStatus == AuthorizationStatus.authorized){
+      print('user granted access');
+    }else if(settings.authorizationStatus == AuthorizationStatus.provisional){
+      print('user granted limited access');
+    }else {
+      print('user denied permission');
+    }
+  }
+
   @override
   void initState() {
     checkAppVersion();
     getManagementNames();
+    getStaffDetail();
     getConnectivity();
     setNotification();
+    requestPermission();
     super.initState();
   }
 
@@ -304,7 +356,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             builder: (BuildContext context, setState) => CupertinoAlertDialog(
               title: isUpdating
                   ? Text(
-                      'App is updating..',
+                      'Checking for update..',
                       style: TextStyle(
                         fontFamily: ConstantFonts.poppinsBold,
                       ),
@@ -318,7 +370,14 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               content: isUpdating
                   ? Column(
                     children: [
-                      const Text('While prompted to update \nPress Update'),
+                      const SizedBox(height: 20),
+                      Text('While prompted to update \nPress Update',
+                        style: TextStyle(
+                            color: ConstantColor.backgroundColor,
+                            fontSize: 16,
+                            fontFamily: ConstantFonts.poppinsRegular,
+                            fontWeight: FontWeight.w600
+                        ),),
                       Lottie.asset('assets/animations/app_update.json'),
                     ],
                   )

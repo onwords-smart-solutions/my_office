@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 import 'package:clay_containers/constants.dart';
 import 'package:clay_containers/widgets/clay_container.dart';
@@ -8,6 +9,7 @@ import 'package:my_office/database/hive_operations.dart';
 import 'package:my_office/models/staff_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Account/account_screen.dart';
+import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 
 class MainTemplate extends StatefulWidget {
@@ -70,11 +72,8 @@ class _MainTemplateState extends State<MainTemplate> {
     final width = MediaQuery.of(context).size.width;
     return RefreshIndicator(
       onRefresh: () async {
-        await Future.delayed(const Duration(seconds: 5));
-        if (!mounted) return;
-        setState(() {
-          _pageLoadController();
-        });
+       await Future.delayed(const Duration(seconds: 4));
+          await getImageUrl();
       },
       child: Scaffold(
         backgroundColor: const Color(0xffDDE6E8),
@@ -84,132 +83,6 @@ class _MainTemplateState extends State<MainTemplate> {
           child: Stack(
             alignment: AlignmentDirectional.bottomCenter,
             children: [
-              // Positioned(
-              //   top: height *  0.01,
-              //   left: width*  0.01,
-              //   child: Stack(
-              //     alignment: Alignment.center,
-              //     children: [
-              //       //left container
-              //       ClayContainer(
-              //         parentColor: const Color(0xffDDE6E8),
-              //         color: const Color(0xffDDE6E8),
-              //         width: 170,
-              //         height: 170,
-              //         borderRadius: 200,
-              //         depth: 70,
-              //         spread: 0,
-              //
-              //         curveType: CurveType.convex,
-              //       ),
-              //
-              //       //left inside container1
-              //       ClayContainer(
-              //         parentColor: const Color(0xffDDE6E8),
-              //         color: const Color(0xffDDE6E8),
-              //         width: 140,
-              //         height: 140,
-              //         borderRadius: 200,
-              //         depth: -50,
-              //         curveType: CurveType.convex,
-              //       ),
-              //
-              //       //left inside container2
-              //       ClayContainer(
-              //         surfaceColor: Colors.orange,
-              //         color: const Color(0xffDDE6E8),
-              //         width: 70,
-              //         height: 70,
-              //         borderRadius: 200,
-              //         depth: 70,
-              //         curveType: CurveType.convex,
-              //         spread: 23,
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              // Positioned(
-              //   top: height *  0.3,
-              //   right: width* - 0.33,
-              //   // right: 0,
-              //   child: Stack(
-              //     alignment: Alignment.center,
-              //     children: [
-              //       //Top right Container
-              //       ClayContainer(
-              //         color: const Color(0xffDDE6E8),
-              //         width: 220,
-              //         height: 220,
-              //         borderRadius: 200,
-              //         depth: -50,
-              //         curveType: CurveType.convex,
-              //       ),
-              //
-              //       //top right inside1 container
-              //       ClayContainer(
-              //         parentColor: const Color(0xffDDE6E8),
-              //         color: const Color(0xffDDE6E8),
-              //         width: 180,
-              //         height: 180,
-              //         borderRadius: 200,
-              //         depth: 70,
-              //         spread: 5,
-              //
-              //       ),
-              //
-              //       ClayContainer(
-              //         color: const Color(0xffDDE6E8),
-              //         width: 140,
-              //         height: 140,
-              //         borderRadius: 200,
-              //         depth: -50,
-              //
-              //         curveType: CurveType.convex,
-              //       ),
-              //
-              //       ClayContainer(
-              //         surfaceColor: Colors.orange.shade500,
-              //         color: const Color(0xffDDE6E8),
-              //         width: 100,
-              //         height: 100,
-              //         borderRadius: 200,
-              //         depth: 70,
-              //       ),
-              //     ],
-              //   ),
-              // ),
-              // Positioned(
-                // left: width * - 0.04,
-                // bottom:height * - 0.05,
-                // top: 0,
-                // child: Stack(
-                  // alignment: Alignment.topRight,
-                  // children: [
-                    // ClayContainer(
-                    //   // child: Lottie.asset('assets/14982-smart-home.json'),
-                    //   color: Colors.orange,
-                    //   width: 180,
-                    //   height: 180,
-                    //   borderRadius: 200,
-                    //   depth: 80,
-                    //   spread: 5,
-                    //   curveType: CurveType.convex,
-                    //
-                    // ),
-                    // ClayContainer(
-                    //   color: const Color(0xffDDE6E8),
-                    //   width: 60,
-                    //   height: 60,
-                    //   borderRadius: 200,
-                    //   depth: -50,
-                    //   spread: 0,
-                    //
-                    //   curveType: CurveType.convex,
-                    // ),
-
-                  // ],
-                // ),
-              // ),
               Positioned(
                 top: 0,
                 child: Container(
@@ -283,13 +156,13 @@ class _MainTemplateState extends State<MainTemplate> {
                                                   staffDetails: staffInfo!)));
                                         },
                                         child: SizedBox(
-                                          height: height * 0.08,
-                                          width: height * 0.08,
+                                          height: height * 0.065,
+                                          width: height * 0.065,
                                           child: ClipRRect(
-                                              borderRadius: BorderRadius.circular(100),
+                                              borderRadius: BorderRadius.circular(12),
                                               child: preferencesImageUrl == ''
-                                                  ? const Icon(Iconsax.user)
-                                                  : Image.network(
+                                                  ? const Icon(Icons.person_pin)
+                                                  :Image.network(
                                                 preferencesImageUrl,
                                                 fit: BoxFit.cover,
                                               )
@@ -307,7 +180,7 @@ class _MainTemplateState extends State<MainTemplate> {
                             ),
                           ),
                         ),
-                        SizedBox(height: height * 0.01),
+                        SizedBox(height: height * 0.001),
                         //Custom widget section
                         Expanded(child: widget.templateBody),
                       ],
@@ -322,11 +195,5 @@ class _MainTemplateState extends State<MainTemplate> {
         ),
       ),
     );
-  }
-
-  Future _pageLoadController() async {
-    setState(() {
-      getImageUrl();
-    });
   }
 }

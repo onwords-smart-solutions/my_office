@@ -12,7 +12,25 @@ import '../utils.dart';
 double total = 0;
 
 class PdfInvoiceApi {
-  static Future<File> generate(
+
+   late int subTotal;
+   late int cgst;
+   late int sgst;
+   late int discount;
+   late int advance;
+   late int granTotal;
+
+   PdfInvoiceApi({
+     required this.subTotal,
+     required this.cgst,
+     required this.sgst,
+     required this.discount,
+     required this.advance,
+     required this.granTotal,
+   });
+
+
+   Future<File> generate(
       Invoice invoice,
       // User user,
       Uint8List pic) async {
@@ -35,7 +53,7 @@ class PdfInvoiceApi {
           SizedBox(height: 2.0 * PdfPageFormat.cm),
           buildInvoice(invoice),
           Divider(),
-          buildTotal(invoice),
+          buildTotal(invoice,subTotal,cgst,sgst,discount,advance,granTotal),
           SizedBox(height: 0.2 * PdfPageFormat.cm),
           Text('Scan to Pay', style: TextStyle(fontSize: 11,fontWeight: FontWeight.bold)),
           SizedBox(height: 0.2 * PdfPageFormat.cm),
@@ -218,7 +236,7 @@ class PdfInvoiceApi {
 
     final data = invoice.items.map((item) {
       // final total = item.unitPrice * item.quantity * ( 1 + item.vat);
-      final total = item.unitPrice * item.quantity * (1 + 0);
+      final total = item.unitPrice * item.quantity;
       return [
         item.description,
         // Utils.formatDate(item.date),
@@ -360,7 +378,14 @@ class PdfInvoiceApi {
                 "4. Delivery to the client and mobile application integration if needed."),
       ]);
 
-  static Widget buildTotal(Invoice invoice) {
+  static Widget buildTotal(Invoice invoice,  int subTotal,
+    int igst,
+    int cgst,
+    int discount,
+    int advance,
+    int grandTotal,) {
+
+
     final netTotal = invoice.items
         .map((item) => item.unitPrice * item.quantity)
         .reduce((item1, item2) => item1 + item2);
@@ -398,20 +423,22 @@ class PdfInvoiceApi {
               children: [
                 buildText(
                   title: 'Sub total',
-                  value: Utils.formatPrice(netTotal),
+                  // value: Utils.formatPrice(netTotal),
+                  value: Utils.formatPrice(subTotal.toDouble()),
+                  // value: subTotal.toString(),
                   unite: true,
                 ),
                 invoice.gstNeed
                     ? buildText(
                   title: 'CGST ${vatPercent * 100} %',
-                  value: Utils.formatPrice(vat),
+                  value: Utils.formatPrice(cgst.toDouble()),
                   unite: true,
                 )
                     : Text(""),
                 invoice.gstNeed
                     ? buildText(
                   title: 'IGST ${vatPercent * 100} %',
-                  value: Utils.formatPrice(vat),
+                  value: Utils.formatPrice(igst.toDouble()),
                   unite: true,
                 )
                     : Text(""),
@@ -427,34 +454,17 @@ class PdfInvoiceApi {
                 // )
                 //     :Text(""),
                 SizedBox(height: 2 * PdfPageFormat.mm),
-                // buildText(
-                //   title: 'Grand total',
-                //   value: Utils.formatPrice(netTotal),
-                //   unite: true,
-                // ),
-                // Divider(),
                 discounts != 0
                     ? buildText(
                   title: 'Discount Amount ',
                   titleStyle: TextStyle(
                     fontSize: 10,
-                    fontWeight: FontWeight.normal,
+                    fontWeight: FontWeight.bold,
                   ),
                   value: Utils.formatPrice(discount.toDouble()),
                   unite: true,
                 )
                     : Text(""),
-                buildText(
-                  title: 'Grand total ',
-                  titleStyle: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  value: Utils.formatPrice(total),
-                  unite: true,
-                ),
-                SizedBox(height: 2 * PdfPageFormat.mm),
-
                 advanceAmt != 0
                     ? buildText(
                   title: 'Advance Paid ',
@@ -462,19 +472,7 @@ class PdfInvoiceApi {
                     fontSize: 10,
                     fontWeight: FontWeight.normal,
                   ),
-                  value: Utils.formatPrice(advanceAmt.toDouble()),
-                  unite: true,
-                )
-                    : Text(""),
-                SizedBox(height: 2 * PdfPageFormat.mm),
-                advanceAmt != 0
-                    ? buildText(
-                  title: 'Balance Amount',
-                  titleStyle: TextStyle(
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  value: Utils.formatPrice(balanceAmt.toDouble()),
+                  value: advance.toString(),
                   unite: true,
                 )
                     : Text(""),
@@ -483,6 +481,35 @@ class PdfInvoiceApi {
                 Container(height: 1, color: PdfColors.grey400),
                 SizedBox(height: 0.5 * PdfPageFormat.mm),
                 Container(height: 1, color: PdfColors.grey400),
+                buildText(
+                  title: 'Grand total ',
+                  titleStyle: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  value: Utils.formatPrice(grandTotal.toDouble()),
+                  unite: true,
+                ),
+                SizedBox(height: 2 * PdfPageFormat.mm),
+                Container(height: 1, color: PdfColors.grey400),
+                SizedBox(height: 0.5 * PdfPageFormat.mm),
+                Container(height: 1, color: PdfColors.grey400),
+                SizedBox(height: 2 * PdfPageFormat.mm),
+                //
+                // SizedBox(height: 2 * PdfPageFormat.mm),
+                // advanceAmt != 0
+                //     ? buildText(
+                //   title: 'Balance Amount',
+                //   titleStyle: TextStyle(
+                //     fontSize: 10,
+                //     fontWeight: FontWeight.bold,
+                //   ),
+                //   value: Utils.formatPrice(balanceAmt.toDouble()),
+                //   unite: true,
+                // )
+                //     : Text(""),
+                //
+
               ],
             ),
           ),
@@ -513,13 +540,12 @@ class PdfInvoiceApi {
       Divider(),
       SizedBox(height: 2 * PdfPageFormat.mm),
       buildSimpleText(title: '', value: "In Sync, with Smart World"),
-      // buildSimpleText(title: 'Address', value: "${invoice.supplier.street},${invoice.supplier.address}"),
       SizedBox(height: 1 * PdfPageFormat.mm),
       // buildSimpleText(title: 'Paypal', value: invoice.supplier.paymentInfo),
     ],
   );
 
-  static pw.Padding buildSubText(String text) =>Padding(padding: EdgeInsets.symmetric(vertical: 5),child: Text(text,
+  static pw.Padding buildSubText(String text) =>Padding(padding: const EdgeInsets.symmetric(vertical: 5),child: Text(text,
       style: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.normal,

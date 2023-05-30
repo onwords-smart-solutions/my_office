@@ -28,7 +28,7 @@ class _AddItermState extends State<AddIterm> {
   final date = DateTime.now();
 
   final SingleValueDropDownController itermNameController =
-  SingleValueDropDownController();
+      SingleValueDropDownController();
   TextEditingController itermNameController2 = TextEditingController();
 
   TextEditingController priceController = TextEditingController();
@@ -104,6 +104,7 @@ class _AddItermState extends State<AddIterm> {
   }
 
   var setVal;
+
   String? selectedVal;
 
   Future<void> getProductsDetails() async {
@@ -175,7 +176,7 @@ class _AddItermState extends State<AddIterm> {
     return Consumer<TaskData>(builder: (context, taskData, child) {
       // print("taskData.tasks ${taskData.tasks.length}");
       final task =
-      taskData.tasks.length == 2 ? taskData.tasks[1] : taskData.tasks[0];
+          taskData.tasks.length == 2 ? taskData.tasks[1] : taskData.tasks[0];
       // final val = taskData.subTotalValue;
       // if(val.isEmpty){
       //   // print("aas-swipe");
@@ -185,11 +186,11 @@ class _AddItermState extends State<AddIterm> {
       // final netTotal = val.map((item) => item.amount * item.quantity).reduce((item1, item2) => item1 + item2);
 
       return WillPopScope(
-        onWillPop: ()async{
+        onWillPop: () async {
           setState(() {
-            if(isDone){
+            if (isDone) {
               isDone = false;
-            }else{
+            } else {
               Navigator.pop(context);
             }
           });
@@ -217,9 +218,9 @@ class _AddItermState extends State<AddIterm> {
               ),
               onTap: () {
                 setState(() {
-                  if(isDone == true){
+                  if (isDone == true) {
                     isDone = false;
-                  }else{
+                  } else {
                     Navigator.pop(context);
                   }
                 });
@@ -238,7 +239,7 @@ class _AddItermState extends State<AddIterm> {
 
                     ///CUSTOMER DETAILS
                     buildCustomerDetails(width, height, task),
-
+                    /// Add Button, Table Headings,Product Details, Next Button
                     SizedBox(
                       height: isDone == false ? height * 0.8 : height * 0,
                       child: SingleChildScrollView(
@@ -312,14 +313,13 @@ class _AddItermState extends State<AddIterm> {
                                     vertical: 5, horizontal: 10),
                                 child: Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
+                                      MainAxisAlignment.spaceAround,
                                   children: [
                                     Text(
                                       "Give Discount : ",
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: height * 0.012,
-                                          fontFamily: 'Nexa',
                                           color: Colors.black),
                                     ),
                                     SizedBox(
@@ -328,9 +328,11 @@ class _AddItermState extends State<AddIterm> {
                                         textInputAction: TextInputAction.done,
                                         onChanged: (val) {
                                           if (val.isNotEmpty) {
-                                            setState(() {
-                                              discountAmount = int.parse(val);
-                                            });
+                                            if (mounted) {
+                                              setState(() {
+                                                discountAmount = int.parse(val);
+                                              });
+                                            }
                                           }
                                         },
                                         validator: (value) {
@@ -340,7 +342,7 @@ class _AddItermState extends State<AddIterm> {
                                               .toString()
                                               .contains('.')) {
                                             return 'Enter Single Value';
-                                          } else if (int.parse(value) >=
+                                          } else if (int.parse(value) >
                                               int.parse(
                                                   maximumDiscount.toString())) {
                                             return 'Enter less then $maximumDiscount % ';
@@ -352,7 +354,7 @@ class _AddItermState extends State<AddIterm> {
                                         decoration: InputDecoration(
                                             border: InputBorder.none,
                                             hintText:
-                                            'Enter below ${maximumDiscount.toString()} %'),
+                                                'Enter below ${maximumDiscount.toString()} %'),
                                         controller: discountController,
                                       ),
                                     ),
@@ -385,7 +387,6 @@ class _AddItermState extends State<AddIterm> {
       }),
       child: GestureDetector(
         onTap: () {
-
           if (_form.currentState!.validate()) {
             discountedAmount = int.parse(maxTotal.toString()) *
                 int.parse(discountController.text) /
@@ -419,21 +420,23 @@ class _AddItermState extends State<AddIterm> {
             // getPointsStatus = false;
 
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PreviewScreen(
-                      docType: dropdownValue,
-                      category: category,
-                      advanceAmt: advanceAmt,
-                      // labAndInstall: labCharge,
-                      gstValue: gstNeed,
-                      discountAmount: discountedAmount!.toInt(),
-                      // discountNeed: discountNeed,
-                      productDetails: listOfProductDetails,
-                      finalAmount: finalAmount!.toInt(),
-                      listAmount: maxTotal!.toInt(),
-                      // labValue: labNeed,
-                    ))).then((value) {
+              context,
+              MaterialPageRoute(
+                builder: (context) => PreviewScreen(
+                  docType: dropdownValue,
+                  category: category,
+                  advanceAmt: advanceAmt,
+                  // labAndInstall: labCharge,
+                  gstValue: gstNeed,
+                  discountAmount: discountedAmount!.toInt(),
+                  // discountNeed: discountNeed,
+                  productDetails: listOfProductDetails,
+                  finalAmount: finalAmount!.toInt(),
+                  listAmount: maxTotal!.toInt(),
+                  // labValue: labNeed,
+                ),
+              ),
+            ).then((value) {
               setState(() {
                 // labAndInstall.clear();
                 advancePaid.clear();
@@ -442,9 +445,6 @@ class _AddItermState extends State<AddIterm> {
               });
             });
           }
-
-
-
         },
         child: Neumorphic(
           duration: const Duration(milliseconds: 200),
@@ -476,7 +476,8 @@ class _AddItermState extends State<AddIterm> {
                     fontWeight: FontWeight.bold,
                     fontSize: height * 0.025,
                     fontFamily: 'Nexa',
-                    color: Colors.black),
+                    color: Colors.black,
+                ),
               ),
             ),
           ),
@@ -526,7 +527,7 @@ class _AddItermState extends State<AddIterm> {
                         dropdownValue = newValue!;
                       });
                     },
-                    items: <String>['QUOTATION', 'PROFORMA INVOICE', 'INVOICE']
+                    items: <String>['QUOTATION', 'PROFORMA_INVOICE', 'INVOICE']
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -598,64 +599,49 @@ class _AddItermState extends State<AddIterm> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  dropdownValue == "INVOICE"
+                  dropdownValue == "INVOICE"|| dropdownValue == "PROFORMA_INVOICE"
                       ? Text(
-                    "Advance Amount",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: height * 0.012,
-                        fontFamily: 'Nexa',
-                        color: Colors.black),
-                  )
+                          "Advance Amount",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: height * 0.012,
+                              fontFamily: 'Nexa',
+                              color: Colors.black),
+                        )
                       : const Text(""),
-                  dropdownValue == "INVOICE"
+                  dropdownValue == "INVOICE" || dropdownValue == "PROFORMA_INVOICE"
                       ? SizedBox(
-                    width: width * 0.40,
-                    child: TextFormField(
-                      onChanged: (val) {
-                        if (val.isNotEmpty) {
-                          setState(() {
-                            advanceAmt = int.parse(val);
-                          });
-                        }
-                      },
-                      style: TextStyle(
-                        fontWeight: FontWeight.normal,
-                        fontSize: height * 0.012,
-                        fontFamily: 'Avenir',
-                      ),
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        hintText: ' Advance Paid',
-                        border: InputBorder.none,
-                        hintStyle: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
-                          fontFamily: 'Nexa',
-                        ),
-                      ),
-                      controller: advancePaid,
-                    ),
-                  )
+                          width: width * 0.40,
+                          child: TextFormField(
+                            onChanged: (val) {
+                              if (val.isNotEmpty) {
+                                setState(() {
+                                  advanceAmt = int.parse(val);
+                                });
+                              }
+                            },
+                            style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontSize: height * 0.012,
+                              fontFamily: 'Avenir',
+                            ),
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              hintText: ' Advance Paid',
+                              border: InputBorder.none,
+                              hintStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                                fontFamily: 'Nexa',
+                              ),
+                            ),
+                            controller: advancePaid,
+                          ),
+                        )
                       : const Text(""),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  dropdownValue == "PROFORMA INVOICE" ||
-                      dropdownValue == "PROFORMA INVOICE"
-                      ? Text(
-                    "Advance Amount",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: height * 0.012,
-                        fontFamily: 'Nexa',
-                        color: Colors.black),
-                  )
-                      : const Text(""),
-                ],
-              ),
+
               SizedBox(
                 height: height * 0.03,
               ),
@@ -677,8 +663,10 @@ class _AddItermState extends State<AddIterm> {
             children: [
               buildListTile(height, 'Max Total Amount', maxTotal.toString()),
               buildListTile(height, 'Min Total Amount', minTotal.toString()),
-              buildListTile(height, 'Discount Amount', discount.toString()),
               buildListTile(height, 'Percentage', maximumDiscount.toString()),
+              buildListTile(height, 'Discount Amount', '${  int.parse(maxTotal.toString()) *
+                  int.parse(maximumDiscount.toString()) / 100}'),
+
             ],
           ),
         ));
@@ -980,7 +968,7 @@ class _AddItermState extends State<AddIterm> {
 
   Widget buildNeumorphic(double width, double height, Widget widget) {
     return Neumorphic(
-      margin: EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       style: NeumorphicStyle(
         depth: 3,
         boxShape: NeumorphicBoxShape.roundRect(
@@ -992,23 +980,23 @@ class _AddItermState extends State<AddIterm> {
   }
 
   TableRow buildRow(List<String> cells, {bool isHeader = false}) => TableRow(
-    children: cells.map(
+        children: cells.map(
           (cell) {
-        final style = TextStyle(
-          fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
-        );
-        return Padding(
-          padding: const EdgeInsets.all(10),
-          child: Center(
-            child: Text(
-              cell,
-              style: style,
-            ),
-          ),
-        );
-      },
-    ).toList(),
-  );
+            final style = TextStyle(
+              fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
+            );
+            return Padding(
+              padding: const EdgeInsets.all(10),
+              child: Center(
+                child: Text(
+                  cell,
+                  style: style,
+                ),
+              ),
+            );
+          },
+        ).toList(),
+      );
 
   showDeleteDialog(BuildContext context, int index) {
     Widget okButton = TextButton(
@@ -1086,7 +1074,7 @@ class _AddItermState extends State<AddIterm> {
             // print(minPriceList);
             // print(obcPriceList);
             final index = listOfProductDetails.indexWhere((element) =>
-            element.productName == itermNameController.dropDownValue?.name);
+                element.productName == itermNameController.dropDownValue?.name);
             if (index > -1) {
               listOfProductDetails[index].productQuantity +=
                   int.parse(quantityController.text);
@@ -1168,9 +1156,9 @@ class _AddItermState extends State<AddIterm> {
                     SizedBox(
                         width: width * 0.6,
                         child:
-                        // isTextFiled != true
-                        //     ?
-                        DropDownTextField(
+                            // isTextFiled != true
+                            //     ?
+                            DropDownTextField(
                           // initialValue: "name4",
                           controller: itermNameController,
                           clearOption: true,
@@ -1182,7 +1170,7 @@ class _AddItermState extends State<AddIterm> {
                           // dropdownColor: Colors.orange,
 
                           searchDecoration:
-                          const InputDecoration(hintText: "Select Product"),
+                              const InputDecoration(hintText: "Select Product"),
                           validator: (value) {
                             if (value == null) {
                               return "Required Product Name";
@@ -1200,23 +1188,23 @@ class _AddItermState extends State<AddIterm> {
                             getProductsDetails();
                           },
                         )
-                      //     : Container(
-                      //   padding: const EdgeInsets.only(top: 20.0),
-                      //    child: TextFormField(
-                      //     textInputAction: TextInputAction.next,
-                      //     validator: (value) {
-                      //       if (value == null || value.isEmpty) {
-                      //         return 'Please enter product name';
-                      //       }
-                      //       return null;
-                      //     },
-                      //     keyboardType: TextInputType.name,
-                      //     decoration: const InputDecoration(
-                      //         hintText: 'Product Name'),
-                      //     controller: itermNameController2,
-                      //   ),
-                      // ),
-                    ),
+                        //     : Container(
+                        //   padding: const EdgeInsets.only(top: 20.0),
+                        //    child: TextFormField(
+                        //     textInputAction: TextInputAction.next,
+                        //     validator: (value) {
+                        //       if (value == null || value.isEmpty) {
+                        //         return 'Please enter product name';
+                        //       }
+                        //       return null;
+                        //     },
+                        //     keyboardType: TextInputType.name,
+                        //     decoration: const InputDecoration(
+                        //         hintText: 'Product Name'),
+                        //     controller: itermNameController2,
+                        //   ),
+                        // ),
+                        ),
 
                     /// PRICE
                     Container(
@@ -1293,7 +1281,7 @@ class _AddItermState extends State<AddIterm> {
               return false;
             },
             child: CupertinoAlertDialog(
-              title: Text("Be sure to add all items. "),
+              title: const Text("Be sure to add all items. "),
               // content: const Text(
               //     ""
               //         // "If you click ok, you cannot change that list."
@@ -1326,7 +1314,7 @@ class _AddItermState extends State<AddIterm> {
 
                       // print('$maxTotal , $discount $obcTotal');
                       percentage = (int.parse(discount.toString()) /
-                          int.parse(maxTotal.toString())) *
+                              int.parse(maxTotal.toString())) *
                           100;
                       // print(percentage);
 

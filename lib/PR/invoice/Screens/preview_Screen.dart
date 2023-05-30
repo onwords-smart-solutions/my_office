@@ -1,6 +1,6 @@
-import 'dart:developer';
 import 'dart:io';
-
+import 'dart:math';
+import 'dart:developer' as dev;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -27,7 +27,6 @@ import '../utils.dart';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
-
 class PreviewScreen extends StatefulWidget {
   final String docType;
   final String category;
@@ -53,7 +52,9 @@ class PreviewScreen extends StatefulWidget {
     required this.gstValue,
     required this.discountAmount,
     // required this.discountNeed,
-    required this.productDetails, required this.finalAmount, required this.listAmount,
+    required this.productDetails,
+    required this.finalAmount,
+    required this.listAmount,
 
     // required this.labValue,
   }) : super(key: key);
@@ -65,6 +66,7 @@ class PreviewScreen extends StatefulWidget {
 class _PreviewScreenState extends State<PreviewScreen> {
   final HiveOperations _hiveOperations = HiveOperations();
   StaffModel? staffInfo;
+  final databaseReference = FirebaseDatabase.instance.ref();
 
   void getStaffDetail() async {
     final data = await _hiveOperations.getStaffDetail();
@@ -80,7 +82,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
   Future<void> _convertImage() async {
     // print('called function _convertImage()');
     RenderRepaintBoundary boundary =
-    _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+        _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
     ui.Image image = await boundary.toImage(pixelRatio: 10.0);
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     Uint8List pngBytes = byteData!.buffer.asUint8List();
@@ -125,6 +127,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
 
   // User? user;
   late DateTime currentPhoneDate;
+
   // var dataJson;
   final formKey = GlobalKey<FormState>();
   List quotLength = [];
@@ -155,13 +158,13 @@ class _PreviewScreenState extends State<PreviewScreen> {
   Future<void> fireData() async {
     quotLen = 0;
     quotLength.clear();
-    final databaseReference = FirebaseDatabase.instance.ref();
+
     databaseReference.child('QuotationAndInvoice').once().then((snap) async {
       try {
         for (var element in snap.snapshot.children) {
           // print("dataJson ${element.key} ");
           if (widget.docType == element.key) {
-            // print("dataJson ${widget.doctype} ");
+            // print("dataJson ${widget.docType} ");
             for (var elem in element.children) {
               for (var ele in elem.children) {
                 // print(ele.key);
@@ -181,34 +184,77 @@ class _PreviewScreenState extends State<PreviewScreen> {
     });
   }
 
+  List alreadyGeneratedId = [];
+
+  Future<void> getId() async {
+    databaseReference
+        .child('QuotationAndInvoice/PROFORMA_INVOICE')
+        .once()
+        .then((snap) async {
+      List generatedId = [];
+      for (var val1 in snap.snapshot.children) {
+        for (var val2 in val1.children) {
+          for (var val3 in val2.children) {
+            final data = val3.value as Map<Object?, Object?>;
+            final id = data['id'].toString();
+            generatedId.add(id);
+          }
+        }
+      }
+      setState(() {
+        alreadyGeneratedId = generatedId;
+        dev.log('ID IS $alreadyGeneratedId');
+      });
+    });
+  }
+
+  String generateRandomString(int len) {
+    var r = Random();
+    const characters =
+        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz';
+    return List.generate(
+        len, (index) => characters[r.nextInt(characters.length)]).join();
+  }
+
   @override
   void initState() {
     getStaffDetail();
+    getId();
     fireData();
     readData();
     super.initState();
   }
+  @override
+  void dispose() {
+    estimateDate.dispose();
+    quotNo.dispose();
+    fileName.dispose();
+    bank.dispose();
+    ifsc.dispose();
+    accountNo.dispose();
+    accountName.dispose();
 
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Consumer<TaskData>(builder: (context, taskData, child) {
       final task =
-      taskData.tasks.length == 2 ? taskData.tasks[1] : taskData.tasks[0];
+          taskData.tasks.length == 2 ? taskData.tasks[1] : taskData.tasks[0];
       final invoice = taskData.invoiceListData;
       final val = taskData.subTotalValue;
-
       // if (val.isEmpty) {
       if (widget.finalAmount.toDouble().toString().isEmpty) {
-        print("aasswipe");
+        // dev.log(" ");
       } else {
         // amount = val
         //     .map((e) => e.quantity * e.amount)
         //     .reduce((value, element) => value + element);
         amount = widget.finalAmount.toDouble();
-        print('final amount  $amount');
-        print('list amount  ${widget.listAmount}');
+        // dev.log('final amount  $amount');
+        // dev.log('list amount  ${widget.listAmount}');
         const vatPercent = 0.09;
         if (widget.gstValue) {
           gst = vatPercent * amount;
@@ -216,8 +262,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
         // grandTotal = amount + (gst * 2) - advance;
         // grandTotal = amount + labour + (gst*2) - advance;
         grandTotal =
-        // amount - widget.discountAmount + (gst * 2) - widget.advanceAmt;
-        amount + (gst * 2) - widget.advanceAmt;
+            // amount - widget.discountAmount + (gst * 2) - widget.advanceAmt;
+            amount + (gst * 2) - widget.advanceAmt;
       }
 
       // final double a = grandTotal = amount - discount + (gst * 2) - advance;
@@ -231,18 +277,18 @@ class _PreviewScreenState extends State<PreviewScreen> {
           transactionNote: widget.category == 'GA'
               ? "Gate Automation"
               : widget.category == 'SH'
-              ? "Smart Home"
-              : widget.category == 'IT'
-              ? "APP or Web Development"
-              : widget.category == 'DL'
-              ? "Door Lock"
-              : widget.category == 'SS'
-              ? "Security System"
-              : widget.category == 'WTA'
-              ? "Water Tank Automation"
-              : widget.category == 'AG'
-              ? "Agriculture Automation"
-              : 'Onwords Smart Solutions');
+                  ? "Smart Home"
+                  : widget.category == 'IT'
+                      ? "APP or Web Development"
+                      : widget.category == 'DL'
+                          ? "Door Lock"
+                          : widget.category == 'SS'
+                              ? "Security System"
+                              : widget.category == 'WTA'
+                                  ? "Water Tank Automation"
+                                  : widget.category == 'AG'
+                                      ? "Agriculture Automation"
+                                      : 'Onwords Smart Solutions');
 
       return Scaffold(
         appBar: AppBar(
@@ -269,6 +315,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
               });
             },
           ),
+
         ),
         backgroundColor: const Color(0xffDDE6E8),
         body: Form(
@@ -320,7 +367,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                 border: Border.all(
                                     color: Colors.black26,
                                     width: width * 0.002),
-                                borderRadius: BorderRadius.circular(10),),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                               child: Column(
                                 children: [
                                   Text(
@@ -366,84 +414,81 @@ class _PreviewScreenState extends State<PreviewScreen> {
                             widget.docType == "QUOTATION"
                                 ? Container()
                                 : Container(
-                              padding: const EdgeInsets.all(05),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.black26,
-                                    width: width * 0.002),
-                                borderRadius:
-                                BorderRadius.circular(10),
-                              ),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'Estimate Date For Installation',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: height * 0.012,
-                                        fontFamily: '',
-                                        color: Colors.black),
-                                  ),
-                                  SizedBox(
-                                    height: height * 0.050,
-                                    width: width * 0.25,
-                                    child: TextFormField(
-                                      textInputAction:
-                                      TextInputAction.done,
-                                      controller: estimateDate,
-                                      keyboardType:
-                                      TextInputType.datetime,
-                                      validator: (value) {
-                                        if (value == null ||
-                                            value.isEmpty) {
-                                          return 'Date required';
-                                        }
-                                        return null;
-                                      },
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.normal,
-                                        fontSize: height * 0.012,
-                                        fontFamily: '',
-                                      ),
-                                      readOnly: true,
-                                      textAlign: TextAlign.center,
-                                      decoration: InputDecoration(
-                                        // border: InputBorder.none,
-                                        hintText: 'Estimate Date',
-                                        hintStyle: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: height * 0.012,
-                                          fontFamily: '',
+                                    padding: const EdgeInsets.all(05),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.black26,
+                                          width: width * 0.002),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          'Estimate Date For Installation',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: height * 0.012,
+                                              fontFamily: '',
+                                              color: Colors.black),
                                         ),
-                                      ),
-                                      onTap: () async {
-                                        DateTime? pickedDate =
-                                        await showDatePicker(
-                                          context: context,
-                                          initialDate:
-                                          DateTime.now(),
-                                          firstDate:
-                                          DateTime(2000),
-                                          //DateTime.now() - not to allow to choose before today.
-                                          lastDate:
-                                          DateTime(2101),
-                                        );
+                                        SizedBox(
+                                          height: height * 0.050,
+                                          width: width * 0.25,
+                                          child: TextFormField(
 
-                                        if (pickedDate != null) {
-                                          String formattedDate =
-                                          DateFormat('yyyy-MM-dd')
-                                              .format(pickedDate);
-                                          setState(() {
-                                            estimateDate.text =
-                                                formattedDate; //set output date to TextField value.
-                                          });
-                                        }
-                                      },
+                                            textInputAction:
+                                                TextInputAction.done,
+                                            controller: estimateDate,
+                                            keyboardType:
+                                                TextInputType.datetime,
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'Date required';
+                                              }
+                                              return null;
+                                            },
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.normal,
+                                              fontSize: height * 0.012,
+                                              fontFamily: '',
+                                            ),
+                                            readOnly: true,
+                                            textAlign: TextAlign.center,
+                                            decoration: InputDecoration(
+                                              // border: InputBorder.none,
+                                              hintText: 'Estimate Date',
+                                              hintStyle: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: height * 0.012,
+                                                fontFamily: '',
+                                              ),
+                                            ),
+                                            onTap: () async {
+                                              DateTime? pickedDate =
+                                                  await showDatePicker(
+                                                context: context,
+                                                initialDate: DateTime.now(),
+                                                firstDate: DateTime(2000),
+                                                //DateTime.now() - not to allow to choose before today.
+                                                lastDate: DateTime(2101),
+                                              );
+
+                                              if (pickedDate != null) {
+                                                String formattedDate =
+                                                    DateFormat('yyyy-MM-dd')
+                                                        .format(pickedDate);
+                                                setState(() {
+                                                  estimateDate.text =
+                                                      formattedDate; //set output date to TextField value.
+                                                });
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
                           ],
                         ),
                         SizedBox(
@@ -455,7 +500,8 @@ class _PreviewScreenState extends State<PreviewScreen> {
                               fontWeight: FontWeight.w600,
                               fontSize: height * 0.013,
                               fontFamily: '',
-                              color: Colors.black),
+                              color: Colors.black,
+                          ),
                         ),
                         Text(
                           task.name,
@@ -468,16 +514,16 @@ class _PreviewScreenState extends State<PreviewScreen> {
                         Text(
                           "${task.street},${task.address}",
                           style: const TextStyle(
-                            // fontWeight: FontWeight.w600,
-                            // fontSize: height * 0.011,
+                              // fontWeight: FontWeight.w600,
+                              // fontSize: height * 0.011,
                               fontFamily: '',
                               color: Colors.black),
                         ),
                         Text(
                           task.gst,
                           style: const TextStyle(
-                            // fontWeight: FontWeight.w600,
-                            // fontSize: height * 0.011,
+                              // fontWeight: FontWeight.w600,
+                              // fontSize: height * 0.011,
                               fontFamily: '',
                               color: Colors.black),
                         ),
@@ -518,15 +564,20 @@ class _PreviewScreenState extends State<PreviewScreen> {
                               physics: const BouncingScrollPhysics(),
                               itemCount: widget.productDetails.length,
                               itemBuilder: (BuildContext context, int index) {
-                                final amount = widget.productDetails[index].productQuantity * int.parse(widget.productDetails[index].productPrice);
-                                print(amount);
+                                final amount = widget
+                                        .productDetails[index].productQuantity *
+                                    int.parse(widget
+                                        .productDetails[index].productPrice);
+                                // dev.log(amount);
                                 return Table(
                                   // border: TableBorder.symmetric(inside: BorderSide.none,outside: BorderSide(width: 1.0)),
                                   children: [
                                     buildRow([
                                       '${index + 1}.',
                                       widget.productDetails[index].productName,
-                                      widget.productDetails[index].productQuantity.toString(),
+                                      widget
+                                          .productDetails[index].productQuantity
+                                          .toString(),
                                       widget.productDetails[index].productPrice,
                                       amount.toString(),
                                       // (invoice[index].description),
@@ -541,7 +592,9 @@ class _PreviewScreenState extends State<PreviewScreen> {
                           ),
                         ),
                         Container(
-                          margin: const EdgeInsets.only(top: 30,),
+                          margin: const EdgeInsets.only(
+                            top: 30,
+                          ),
                           width: width * 0.9,
                           // color: Colors.cyanAccent,
                           child: Row(
@@ -551,7 +604,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                 onTap: () async {
                                   List<InvoiceItem> invoiceData = [];
                                   final isValid =
-                                  formKey.currentState?.validate();
+                                      formKey.currentState?.validate();
                                   if (isValid!) {
                                     showDialog(
                                         context: context,
@@ -567,8 +620,12 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                     setState(() {
                                       quotLen = quotLength.length + 1;
                                     });
-                                    for(var item in widget.productDetails){
-                                      final data = InvoiceItem(description: item.productName, quantity: item.productQuantity, unitPrice: item.subTotalList.toDouble());
+                                    for (var item in widget.productDetails) {
+                                      final data = InvoiceItem(
+                                          description: item.productName,
+                                          quantity: item.productQuantity,
+                                          unitPrice:
+                                              double.parse(item.productPrice.toString()));
                                       invoiceData.add(data);
                                     }
 
@@ -616,23 +673,42 @@ class _PreviewScreenState extends State<PreviewScreen> {
 
                                     currentPhoneDate = DateTime.now();
                                     Timestamp myTimeStamp =
-                                    Timestamp.fromDate(currentPhoneDate);
+                                        Timestamp.fromDate(currentPhoneDate);
                                     final databaseReference =
-                                    FirebaseDatabase.instance.ref();
+                                        FirebaseDatabase.instance.ref();
                                     final firebaseStorage =
                                         FirebaseStorage.instance;
 
-                                    final pdfFile =
-                                    await PdfInvoiceApi.generate(
-                                        invoice,
-                                        // user!,
-                                        convertedImage!);
-                                    log('path is ${pdfFile.path}');
+                                    log(widget.finalAmount);
+                                    log(widget.discountAmount);
+                                    log(widget.advanceAmt);
+                                    log(grandTotal);
+                                    dev.log(Utils.formatPrice(gst),);
 
-                                    final dir = await getExternalStorageDirectory();
-                                    final file = File('${dir!.path}/${fileName.text}.pdf');
-                                    file.writeAsBytesSync(pdfFile.readAsBytesSync(),flush: true);
-                                    log('new path is ${file.path} and absolute is ${file.absolute.path}');
+                                    PdfInvoiceApi x = PdfInvoiceApi(
+                                        subTotal: widget.finalAmount,
+                                        cgst: gst.toInt(),
+                                        sgst: gst.toInt(),
+                                        discount: widget.discountAmount,
+                                        advance: widget.advanceAmt,
+                                        granTotal: grandTotal.toInt(),
+                                    );
+
+                                    final pdfFile =
+                                        await x.generate(
+                                            invoice,
+                                            // user!,
+                                            convertedImage!);
+                                    // log('path is ${pdfFile.path}');
+
+                                    final dir =
+                                        await getExternalStorageDirectory();
+                                    final file = File(
+                                        '${dir!.path}/${fileName.text}.pdf');
+                                    file.writeAsBytesSync(
+                                        pdfFile.readAsBytesSync(),
+                                        flush: true);
+                                    // log('new path is ${file.path} and absolute is ${file.absolute.path}');
                                     await OpenFile.open(file.path)
                                         .then((value) async {
                                       ///...............FIREBASE..........////
@@ -642,74 +718,28 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                         var snapshot = await firebaseStorage
                                             .ref()
                                             .child(
-                                            'INVOICE/INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
+                                                'INVOICE/INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
                                             .putFile(pdfFile);
                                         var downloadUrl =
-                                        await snapshot.ref.getDownloadURL();
+                                            await snapshot.ref.getDownloadURL();
 
                                         /// INSTALLATION-INVOICE......
                                         final installationPdfFile =
-                                        await InstallationInvoicePdf
-                                            .generate(
+                                            await InstallationInvoicePdf
+                                                .generate(
                                           invoice,
                                           // user,
                                         );
 
                                         var snapshotInstallation =
-                                        await firebaseStorage
-                                            .ref()
-                                            .child(
-                                            'INSTALLATION-INVOICE/INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
-                                            .putFile(installationPdfFile);
+                                            await firebaseStorage
+                                                .ref()
+                                                .child(
+                                                    'INSTALLATION-INVOICE/INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
+                                                .putFile(installationPdfFile);
                                         var downloadUrlInstallation =
-                                        await snapshotInstallation.ref
-                                            .getDownloadURL();
-
-                                        var da = {
-                                          'Customer_name': task.name,
-                                          'Status': 'Processing',
-                                          'TimeStamp': myTimeStamp.seconds,
-                                          'CreatedBy': staffInfo?.email,
-                                          'mobile_number': task.phone,
-                                          'document_link': downloadUrl,
-                                          'installation_document_link': downloadUrlInstallation,
-                                        };
-                                        databaseReference
-                                            .child('QuotationAndInvoice')
-                                            .child('INVOICE')
-                                            .child('${Utils.formatYear(date)}')
-                                            .child('${Utils.formatMonth(date)}')
-                                            .child(
-                                            'INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
-                                            .set(da);
-                                      }
-                                      /// PROFORMA_INVOICE
-                                      else if(widget.docType == "PROFORMA INVOICE"){
-                                        var snapshot = await firebaseStorage
-                                            .ref()
-                                            .child(
-                                            'PROFORMA_INVOICE/PROFORMA_INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
-                                            .putFile(pdfFile);
-                                        var downloadUrl =
-                                        await snapshot.ref.getDownloadURL();
-
-                                        /// INSTALLATION-INVOICE......
-                                        final installationPdfFile =
-                                        await InstallationInvoicePdf
-                                            .generate(
-                                          invoice,
-                                          // user,
-                                        );
-
-                                        var snapshotInstallation =
-                                        await firebaseStorage
-                                            .ref()
-                                            .child(
-                                            'INSTALLATION-INVOICE/INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
-                                            .putFile(installationPdfFile);
-                                        var downloadUrlInstallation =
-                                        await snapshotInstallation.ref
-                                            .getDownloadURL();
+                                            await snapshotInstallation.ref
+                                                .getDownloadURL();
 
                                         var da = {
                                           'Customer_name': task.name,
@@ -719,26 +749,92 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                           'mobile_number': task.phone,
                                           'document_link': downloadUrl,
                                           'installation_document_link':
-                                          downloadUrlInstallation,
+                                              downloadUrlInstallation,
                                         };
                                         databaseReference
                                             .child('QuotationAndInvoice')
-                                            .child('PROFORMA_INVOICE')
+                                            .child('INVOICE')
                                             .child('${Utils.formatYear(date)}')
                                             .child('${Utils.formatMonth(date)}')
                                             .child(
-                                            'PROFORMA_INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
+                                                'INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
                                             .set(da);
                                       }
+
+                                      /// PROFORMA_INVOICE
+                                      else if (widget.docType ==
+                                          "PROFORMA_INVOICE") {
+                                        String id = generateRandomString(5)
+                                            .toUpperCase()
+                                            .toString();
+                                        if (alreadyGeneratedId
+                                            .any((element) => element == id)) {
+                                          dev.log(
+                                              'Already Id Created. Create New one');
+                                          id = generateRandomString(5)
+                                              .toUpperCase()
+                                              .toString();
+                                        } else {
+                                          dev.log('Create New Id');
+                                          var snapshot = await firebaseStorage
+                                              .ref()
+                                              .child(
+                                                  'PROFORMA_INVOICE/PROFORMA_INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
+                                              .putFile(pdfFile);
+                                          var downloadUrl = await snapshot.ref
+                                              .getDownloadURL();
+
+                                          /// INSTALLATION-INVOICE......
+                                          final installationPdfFile =
+                                              await InstallationInvoicePdf
+                                                  .generate(
+                                            invoice,
+                                            // user,
+                                          );
+
+                                          var snapshotInstallation =
+                                              await firebaseStorage
+                                                  .ref()
+                                                  .child(
+                                                      'INSTALLATION-INVOICE/INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
+                                                  .putFile(installationPdfFile);
+                                          var downloadUrlInstallation =
+                                              await snapshotInstallation.ref
+                                                  .getDownloadURL();
+
+                                          var da = {
+                                            'Customer_name': task.name,
+                                            'id': "#$id",
+                                            'Status': 'Processing',
+                                            'TimeStamp': myTimeStamp.seconds,
+                                            'CreatedBy': staffInfo?.email,
+                                            'mobile_number': task.phone,
+                                            'document_link': downloadUrl,
+                                            'installation_document_link':
+                                                downloadUrlInstallation,
+                                          };
+                                          databaseReference
+                                              .child('QuotationAndInvoice')
+                                              .child('PROFORMA_INVOICE')
+                                              .child(
+                                                  '${Utils.formatYear(date)}')
+                                              .child(
+                                                  '${Utils.formatMonth(date)}')
+                                              .child(
+                                                  'PROFORMA_INV${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
+                                              .set(da);
+                                        }
+                                      }
+
                                       /// QUOTATION
                                       else {
                                         var snapshot = await firebaseStorage
                                             .ref()
                                             .child(
-                                            'QUOTATION/EST${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
+                                                'QUOTATION/EST${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
                                             .putFile(pdfFile);
                                         var downloadUrl =
-                                        await snapshot.ref.getDownloadURL();
+                                            await snapshot.ref.getDownloadURL();
                                         var da = {
                                           'Customer_name': task.name,
                                           'Status': 'Processing',
@@ -753,7 +849,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                             .child('${Utils.formatYear(date)}')
                                             .child('${Utils.formatMonth(date)}')
                                             .child(
-                                            'EST${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
+                                                'EST${widget.category}-${Utils.formatDummyDate(date)}${formatter.format(quotLen)}')
                                             .set(da);
                                       }
 
@@ -761,28 +857,28 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                       quotNo.clear();
                                       estimateDate.clear();
                                     }).then((value) => {
-                                      setState(() {
-                                        /// if(!mounted) return;
-                                        Navigator.of(context)
-                                            .pushAndRemoveUntil(
-                                            MaterialPageRoute(
-                                              builder: (_) =>
-                                              const UserHomeScreen(),
-                                            ),
-                                                (route) => false);
-                                        Provider.of<TaskData>(context,
-                                            listen: false)
-                                            .invoiceListData
-                                            .clear();
-                                        Provider.of<TaskData>(context,
-                                            listen: false)
-                                            .value
-                                            .clear();
-                                        Provider.of<TaskData>(context,
-                                            listen: false)
-                                            .deleteCustomerDetails(0);
-                                      }),
-                                    });
+                                              setState(() {
+                                                /// if(!mounted) return;
+                                                Navigator.of(context)
+                                                    .pushAndRemoveUntil(
+                                                        MaterialPageRoute(
+                                                          builder: (_) =>
+                                                              const UserHomeScreen(),
+                                                        ),
+                                                        (route) => false);
+                                                Provider.of<TaskData>(context,
+                                                        listen: false)
+                                                    .invoiceListData
+                                                    .clear();
+                                                Provider.of<TaskData>(context,
+                                                        listen: false)
+                                                    .value
+                                                    .clear();
+                                                Provider.of<TaskData>(context,
+                                                        listen: false)
+                                                    .deleteCustomerDetails(0);
+                                              }),
+                                            });
                                   } else {
                                     showSnackBar(
                                         message: 'Please Fill All Filed',
@@ -808,7 +904,7 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                   ),
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       const Text(
                                         'Save As',
@@ -826,32 +922,31 @@ class _PreviewScreenState extends State<PreviewScreen> {
                                   ),
                                 ),
                               ),
-
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Text(
-                                    "Sub Total :  ${widget.listAmount}",
+                                    "Sub Total :  ${widget.finalAmount}",
                                     style: const TextStyle(fontSize: 10),
                                   ),
                                   widget.gstValue
                                       ? Text(
-                                    "IGST 9% : ${Utils.formatPrice(gst)}",
-                                    style: const TextStyle(fontSize: 10),
-                                  )
+                                          "IGST 9% : ${Utils.formatPrice(gst)}",
+                                          style: const TextStyle(fontSize: 10),
+                                        )
                                       : Text(
-                                    "IGST 9% : ${Utils.formatPrice(0.0)}",
-                                    style: const TextStyle(fontSize: 10),
-                                  ),
+                                          "IGST 9% : ${Utils.formatPrice(0.0)}",
+                                          style: const TextStyle(fontSize: 10),
+                                        ),
                                   widget.gstValue
                                       ? Text(
-                                    "CGST  9% : ${Utils.formatPrice(gst)}",
-                                    style: const TextStyle(fontSize: 10),
-                                  )
+                                          "CGST  9% : ${Utils.formatPrice(gst)}",
+                                          style: const TextStyle(fontSize: 10),
+                                        )
                                       : Text(
-                                    "IGST 9% : ${Utils.formatPrice(0.0)}",
-                                    style: const TextStyle(fontSize: 10),
-                                  ),
+                                          "IGST 9% : ${Utils.formatPrice(0.0)}",
+                                          style: const TextStyle(fontSize: 10),
+                                        ),
                                   Text(
                                     "Discount :        ${widget.discountAmount}",
                                     style: const TextStyle(fontSize: 10),
@@ -906,21 +1001,21 @@ class _PreviewScreenState extends State<PreviewScreen> {
   }
 
   TableRow buildRow(List<String> cells, {bool isHeader = false}) => TableRow(
-    children: cells.map(
+        children: cells.map(
           (cell) {
-        const style = TextStyle(
-          color: Colors.black,
-        );
-        return Padding(
-          padding: const EdgeInsets.all(1),
-          child: Center(
-            child: Text(
-              cell,
-              style: style,
-            ),
-          ),
-        );
-      },
-    ).toList(),
-  );
+            const style = TextStyle(
+              color: Colors.black,
+            );
+            return Padding(
+              padding: const EdgeInsets.all(1),
+              child: Center(
+                child: Text(
+                  cell,
+                  style: style,
+                ),
+              ),
+            );
+          },
+        ).toList(),
+      );
 }

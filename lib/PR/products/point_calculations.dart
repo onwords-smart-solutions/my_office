@@ -592,8 +592,8 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                     maxTotal.toString()),
                                 buildListTile(height, 'Min Total Amount',
                                     minTotal.toString()),
-                                buildListTile(height, 'Discount Amount',
-                                    discount.toString()),
+                                buildListTile(height, 'Discount Amount', '${  int.parse(maxTotal.toString()) *
+                                    int.parse(maximumDiscount.toString()) / 100}'),
                                 buildListTile(height, 'Percentage',
                                     maximumDiscount.toString()),
                               ],

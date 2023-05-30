@@ -156,7 +156,7 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
     for (int i = 0; i < notEntry.length; i++) {
       final widget = Container(
         // height: height * 0.1,
-        margin: const EdgeInsets.all(10),
+        margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: ConstantColor.background1Color,
           boxShadow: [

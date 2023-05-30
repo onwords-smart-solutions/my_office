@@ -7,7 +7,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
 import 'package:my_office/app_version/version.dart';
 import 'package:my_office/models/staff_model.dart';
@@ -26,8 +28,6 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  final String currentAppVersion = '1.1.1';
-
 
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final staff = FirebaseDatabase.instance.ref().child("staff");
@@ -63,7 +63,6 @@ class _AccountScreenState extends State<AccountScreen> {
   final picker = ImagePicker();
 
   File? _image;
-
   // File? get image => _image;
 
   Future pickerGalleryImage(BuildContext context) async {
@@ -120,8 +119,15 @@ class _AccountScreenState extends State<AccountScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            content: SizedBox(
-              height: 120,
+            backgroundColor: ConstantColor.background1Color,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            content: Container(
+              height: MediaQuery.of(context).size.height * 0.135,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12)
+              ),
               child: Column(
                 children: [
                   ListTile(
@@ -129,16 +135,28 @@ class _AccountScreenState extends State<AccountScreen> {
                       pickerCameraImage(context);
                       Navigator.pop(context);
                     },
-                    leading: const Icon(Icons.camera),
-                    title: const Text('Camera'),
+                    leading: const Icon(Icons.camera_alt_rounded,color: ConstantColor.backgroundColor),
+                    title: Text('Camera',
+                        style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: ConstantFonts.poppinsRegular
+                    ),
+                    ),
                   ),
                   ListTile(
                     onTap: () {
                       pickerGalleryImage(context);
                       Navigator.pop(context);
                     },
-                    leading: const Icon(Icons.browse_gallery),
-                    title: const Text('Gallery'),
+                    leading: const Icon(Icons.photo_size_select_actual_rounded,color: ConstantColor.backgroundColor),
+                    title: Text('Gallery',
+                      style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: ConstantFonts.poppinsRegular
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -186,23 +204,10 @@ class _AccountScreenState extends State<AccountScreen> {
                               outerColor: Colors.black,
                               child: GestureDetector(
                                 onTap: () {
-                                  pickImage(context);
+
                                 },
                                 child: Container(
                                   decoration: const BoxDecoration(
-                                    // boxShadow: [
-                                    //   BoxShadow(
-                                    //     color: Colors.black.withOpacity(0.1),
-                                    //     offset: const Offset(2, 2),
-                                    //     spreadRadius: 2,
-                                    //     blurRadius: 0,
-                                    //   ),
-                                    //   const BoxShadow(
-                                    //       color: Color(0xffEEF0FE),
-                                    //       offset: Offset(2, 2),
-                                    //       spreadRadius: 2,
-                                    //       blurRadius: 5),
-                                    // ],
                                     shape: BoxShape.circle,
                                   ),
                                   child: ClipRRect(
@@ -226,24 +231,31 @@ class _AccountScreenState extends State<AccountScreen> {
                             delay: 1.seconds,
                             child: GestureDetector(
                               onTap: () {
-
                                 pickImage(context);
                               },
                               child: Container(
-                                width: width*0.3,
-                                margin: const EdgeInsets.only(top: 20),
+                                height: height * 0.05,
+                                width: width * 0.45,
+                                margin: const EdgeInsets.only(top: 25),
                                 decoration:  BoxDecoration(
-                                    color: Colors.black.withOpacity(0.05),
-                                    borderRadius: BorderRadius.circular(20)
-
+                                    color: Colors.black.withOpacity(0.08),
+                                    borderRadius: BorderRadius.circular(12)
                                 ),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
-                                    Text('Edit ',style: TextStyle(fontSize: 15),),
-                                    Icon(
-                                      Icons.edit,
-                                      size: 15,
+                                  children: [
+                                    Text('Change image',
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: ConstantFonts.poppinsRegular
+                                      ),
+                                    ),
+                                    const SizedBox(width: 5),
+                                    const Icon(
+                                      color: ConstantColor.backgroundColor,
+                                      Icons.image,
+                                      size: 20,
                                     )
                                   ],
                                 ),
@@ -302,14 +314,6 @@ class _AccountScreenState extends State<AccountScreen> {
                               final pref = await SharedPreferences.getInstance();
                               await pref.clear();
 
-                              // Provider.of<TaskData>(context, listen: false)
-                              //     .invoiceListData
-                              //     .clear();
-                              // Provider.of<TaskData>(context, listen: false)
-                              //     .value
-                              //     .clear();
-                              // Provider.of<TaskData>(context, listen: false)
-                              //     .deleteCustomerDetails(1);
                               navigator.pushAndRemoveUntil(
                                   MaterialPageRoute(
                                       builder: (_) => const LoginScreen()),

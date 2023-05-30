@@ -208,6 +208,11 @@ class _CustomerItemState extends State<CustomerItem> {
                 value: values[8],
                 nobColor: nobColor,
                 size: size),
+            buildField(
+                field: fields[9],
+                value: values[9],
+                nobColor: nobColor,
+                size: size),
           ],
         ),
       ),
@@ -243,11 +248,11 @@ class _CustomerItemState extends State<CustomerItem> {
         ),
       ),
       contents: Container(
-        padding: const EdgeInsets.only(left: 8.0, top: 5.0, right: 5.0),
+        padding: const EdgeInsets.only(left: 8.0, top: 5.0, right: 8.0, bottom: 3),
         width: size.width * .7,
         // height: 20.0,
-        child: isTimeToUpdate ?
-        Row(
+        child: isTimeToUpdate
+            ? Row(
           children: [
             Text(
               '$value     ',

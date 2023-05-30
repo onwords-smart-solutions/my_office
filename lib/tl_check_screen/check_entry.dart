@@ -38,25 +38,16 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
     await ref.child('staff_details').once().then((staffEntry) async {
       for (var data in staffEntry.snapshot.children) {
         var entry = data.value as Map<Object?, Object?>;
+
+        final time = await entryCheck(data.key.toString());
         final staffEntry = StaffAttendanceModel(
           uid: data.key.toString(),
           department: entry['department'].toString(),
           name: entry['name'].toString(),
+          entryTime: time,
         );
         fullEntry.add(staffEntry);
-        if (staffEntry.department == "MEDIA" ||
-            staffEntry.department == "WEB" ||
-            staffEntry.department == "APP" ||
-            staffEntry.department == "RND" ||
-            staffEntry.department == "PR") {
           adminStaffNames.add(staffEntry);
-        }
-      }
-      for (var admin in adminStaffNames) {
-        final time = await entryCheck(admin.uid);
-        adminStaffNames
-            .firstWhere((element) => element.uid == admin.uid)
-            .entryTime = time;
       }
       if (!mounted) return;
       setState(() {

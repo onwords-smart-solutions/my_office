@@ -1,6 +1,6 @@
 class AppConstants{
-  static String displayVersion = '1.1.11';
+  static String displayVersion = '1.1.13';
 
-  static String pubVersion = '1.1.11+28';
+  static String pubVersion = '1.1.12+29';
 
 }
