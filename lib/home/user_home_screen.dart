@@ -58,7 +58,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         managementStaffNames = names;
       }
     });
-    // getStaffDetail();
+    getStaffDetail();
   }
 
   StaffModel? staffInfo;
@@ -211,7 +211,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   void initState() {
     checkAppVersion();
     getManagementNames();
-    getStaffDetail();
     getConnectivity();
     setNotification();
     requestPermission();

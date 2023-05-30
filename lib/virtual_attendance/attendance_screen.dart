@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -151,48 +152,48 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   Widget build(BuildContext context) {
     return MainTemplate(
         subtitle: 'Register your Attendance!!',
-        templateBody: attendance(),
+        templateBody: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: attendance()),
         bgColor: ConstantColor.background1Color);
   }
 
   Widget attendance() {
-    return SingleChildScrollView(
-      physics: const BouncingScrollPhysics(),
-      child: Center(
-        child: Column(
-          children: [
-            const Image(
-              image: AssetImage('assets/entry.png'),
-              height: 300,
-              width: 300,
-            ),
-            const SizedBox(height: 10),
-            isLoading
-                ? const CircularProgressIndicator()
-                : isEntered
-                    ? Column(
-                        children: [
-                          Text(
-                            'Your Entry has already Registered!!!',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontFamily: ConstantFonts.poppinsMedium,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          Text(
-                            'Leave the Page...',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontFamily: ConstantFonts.poppinsMedium,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      )
-                    : submitButton(),
-          ],
-        ),
+    return Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: Column(
+        children: [
+          const Image(
+            image: AssetImage('assets/entry.png'),
+            height: 300,
+            width: 300,
+          ),
+          const SizedBox(height: 10),
+          isLoading
+              ? Lottie.asset('assets/animations/new_loading.json')
+              : isEntered
+              ? Column(
+            children: [
+              Text(
+                'Your Entry has already Registered!!!',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: ConstantFonts.poppinsMedium,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Text(
+                'Leave the Screen...',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: ConstantFonts.poppinsMedium,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          )
+              : submitButton(),
+        ],
       ),
     );
   }
@@ -216,22 +217,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       // print('no data');
-    } else if (position.latitude.toString().contains("100.67") &&
-        position.longitude.toString().contains("760.97")) {
-      final snackBar = SnackBar(
-        duration: const Duration(seconds: 3),
-        content: Text(
-          'You are not allowed to put Virtual Attendance inside Office premises!!',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 18,
-            fontFamily: ConstantFonts.poppinsMedium,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        backgroundColor: Colors.red,
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
       DateTime now = DateTime.now();
       var timeStamp = DateFormat('yyyy-MM-dd').format(now);
@@ -265,12 +250,12 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
-    Future.delayed(const Duration(seconds: 4)).then((value) {
+    Future.delayed(const Duration(seconds: 3)).then((value) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const UserHomeScreen(),
           ),
-          (route) => false);
+              (route) => false);
     });
   }
 
@@ -281,23 +266,35 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           padding: const EdgeInsets.all(12),
           child: TextField(
             textInputAction: TextInputAction.done,
+            textCapitalization: TextCapitalization.sentences,
             controller: reasonController,
             scrollPhysics: const BouncingScrollPhysics(),
-            maxLines: 2,
+            maxLines: 3,
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontFamily: ConstantFonts.poppinsRegular,
+            ),
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(15),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              hintText: 'Reason for Virtual Entry..',
-              hintStyle: TextStyle(color: Colors.grey.shade500),
+              hintText: 'Reason is compulsory..',
+              hintStyle: TextStyle(color: Colors.grey.shade600,
+              fontWeight: FontWeight.w600,
+              ),
             ),
+            onChanged: (value){
+              setState(() {
+              });
+            },
           ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 25),
           child: SwipeableButtonView(
-            buttonText: '      SLIDE TO MARK ATTENDANCE',
+            isActive : reasonController.text.trim().isNotEmpty,
+            buttonText: '       SLIDE TO MARK ATTENDANCE',
             buttonWidget: const Icon(
               Icons.arrow_forward_ios_rounded,
               color: Colors.grey,
@@ -306,10 +303,10 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             isFinished: isFinished,
             onWaitingProcess: () {
               Future.delayed(
-                const Duration(seconds: 2),
-                () {
-                  setState(
+                const Duration(seconds: 1),
                     () {
+                  setState(
+                        () {
                       isFinished = true;
                     },
                   );

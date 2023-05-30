@@ -16,7 +16,6 @@ import 'PR/invoice/provider_page.dart';
 import 'introduction/intro_screen.dart';
 import 'models/visit_model.dart';
 
-
 /// version: 1.1.3+16 Updated On (14/03/2023)
 
   Future <void> main() async {

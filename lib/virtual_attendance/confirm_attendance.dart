@@ -10,13 +10,6 @@ class ConfirmAttendanceScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Future.delayed(const Duration(seconds: 10)).then((value) {
-    //   Navigator.of(context).pushAndRemoveUntil(
-    //       MaterialPageRoute(
-    //         builder: (context) => const UserHomeScreen(),
-    //       ),
-    //       (route) => false);
-    // });
     return MainTemplate(
         subtitle: 'Attendance Reference Screen',
         templateBody: attendance(),
