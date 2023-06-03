@@ -35,19 +35,24 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
   Future<void> staffDetails() async {
     adminStaffNames.clear();
     List<StaffAttendanceModel> fullEntry = [];
-    await ref.child('staff_details').once().then((staffEntry) async {
+    await ref.child('staff').once().then((staffEntry) async {
       for (var data in staffEntry.snapshot.children) {
         var entry = data.value as Map<Object?, Object?>;
-
-        final time = await entryCheck(data.key.toString());
+        log('data is $entry');
         final staffEntry = StaffAttendanceModel(
           uid: data.key.toString(),
           department: entry['department'].toString(),
           name: entry['name'].toString(),
-          entryTime: time,
         );
-        fullEntry.add(staffEntry);
+        if(staffEntry.name != 'Nikhil Deepak') {
           adminStaffNames.add(staffEntry);
+        }
+      }
+      for (var admin in adminStaffNames) {
+        final time = await entryCheck(admin.uid);
+        adminStaffNames
+            .firstWhere((element) => element.uid == admin.uid)
+            .entryTime = time;
       }
       if (!mounted) return;
       setState(() {
@@ -65,7 +70,7 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
         .then((entry) async {
       if (entry.snapshot.value != null) {
         final data = entry.snapshot.value as Map<Object?, Object?>;
-          entryTime = data.keys.last.toString();
+        entryTime = data.keys.last.toString();
       } else {
         entryTime = await checkVirtualAttendance(uid);
       }
@@ -79,8 +84,7 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
     var dateFormat = DateFormat('yyyy-MM-dd').format(dateTime);
     String attendTime = '';
     await virtualAttendance
-        .child(
-            'virtualAttendance/$uid/$yearFormat/$monthFormat/$dateFormat')
+        .child('virtualAttendance/$uid/$yearFormat/$monthFormat/$dateFormat')
         .once()
         .then((virtual) {
       try {
@@ -108,115 +112,141 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
   }
 
   Widget checkEntry() {
+    int present = 0;
+    int absent = 0;
+
+    for (var staff in adminStaffNames){
+      if(staff.entryTime!.isEmpty){
+        absent +=1;
+      }else{
+        present +=1;
+      }
+    }
     return isLoading
         ? Column(
-          children: [
-            Center(
+            children: [
+              Center(
                 child: Lottie.asset(
                   "assets/animations/id_entry.json",
                 ),
               ),
-            Text('Please wait.. Fetching data⌛',
-            style: TextStyle(
-              fontFamily: ConstantFonts.poppinsRegular,
-              fontWeight: FontWeight.w600,
-              color: ConstantColor.blackColor,
-              fontSize: 17
-            ),)
-          ],
-        )
+              Text(
+                'Please wait.. Fetching data⌛',
+                style: TextStyle(
+                    fontFamily: ConstantFonts.poppinsRegular,
+                    fontWeight: FontWeight.w600,
+                    color: ConstantColor.blackColor,
+                    fontSize: 17),
+              ),
+            ],
+          )
         : widget.staffName == 'Nikhil Deepak' ||
-        widget.staffName == 'Devendiran' ||
-        widget.staffName == 'Anitha' ||
-        widget.staffName == 'Prem Kumar' ||
-        widget.staffName == 'Koushik Romel'
-                            ? ListView.builder(
-                                physics: const BouncingScrollPhysics(),
-                                itemCount: adminStaffNames.length,
-                                itemBuilder: (ctx, i) {
-                                  return Container(
-                                    margin: const EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      color: ConstantColor.background1Color,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.2),
-                                          offset: const Offset(-0.0, 5.0),
-                                          blurRadius: 8,
-                                        )
-                                      ],
-                                      borderRadius: BorderRadius.circular(11),
-                                    ),
-                                    child: Center(
-                                      child: ListTile(
-                                        onTap: () => Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (_) =>
-                                                StaffEntryCheckScreen(
-                                              staffDetail: adminStaffNames[i],
-                                            ),
-                                          ),
-                                        ),
-                                        leading: const CircleAvatar(
-                                          radius: 20,
-                                          backgroundColor:
-                                              ConstantColor.backgroundColor,
-                                          child: Icon(Icons.person),
-                                        ),
-                                        title: Text(
-                                          adminStaffNames[i].name,
-                                          style: TextStyle(
-                                              fontFamily:
-                                                  ConstantFonts.poppinsMedium,
-                                              color: ConstantColor.blackColor,
-                                              fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.020),
-                                        ),
-                                        trailing: Text(
-                                          adminStaffNames[i]
-                                                  .entryTime
-                                                  .toString()
-                                                  .isEmpty
-                                              ? 'Absent'
-                                              : adminStaffNames[i]
-                                                  .entryTime
-                                                  .toString(),
-                                          style: TextStyle(
-                                              fontFamily:
-                                                  ConstantFonts.poppinsMedium,
-                                              color: adminStaffNames[i]
-                                                      .entryTime
-                                                      .toString()
-                                                      .isEmpty
-                                                  ? Colors.red
-                                                  : ConstantColor.blackColor,
-                                              fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.020),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              )
-                            : Column(
-                              children: [
-                                Lottie.asset('assets/animations/new_loading', height: 300),
-                                Center(
-                                    child: Text(
-                                      'No Entry Registered!!!',
-                                      style: TextStyle(
-                                        color: ConstantColor.backgroundColor,
-                                        fontSize: 20,
-                                        fontFamily: ConstantFonts.poppinsRegular,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            );
+                widget.staffName == 'Devendiran' ||
+                widget.staffName == 'Jibin K John' ||
+                widget.staffName == 'Anitha' ||
+                widget.staffName == 'Prem Kumar' ||
+                widget.staffName == 'Koushik Romel'
+            ? Column(
+              children: [
+                Text(
+                  'Present : $present',
+                style: TextStyle(
+                  fontFamily: ConstantFonts.poppinsRegular,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 17,
+                  color: ConstantColor.headingTextColor
+                ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  'Absent : $absent',
+                  style: TextStyle(
+                    fontFamily: ConstantFonts.poppinsRegular,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 17,
+                    color: Colors.red
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: adminStaffNames.length,
+                    itemBuilder: (ctx, i) {
+                      return Container(
+                        margin: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: ConstantColor.background1Color,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              offset: const Offset(-0.0, 5.0),
+                              blurRadius: 8,
+                            )
+                          ],
+                          borderRadius: BorderRadius.circular(11),
+                        ),
+                        child: Center(
+                          child: ListTile(
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => StaffEntryCheckScreen(
+                                  staffDetail: adminStaffNames[i],
+                                ),
+                              ),
+                            ),
+                            leading: const CircleAvatar(
+                              radius: 20,
+                              backgroundColor: ConstantColor.backgroundColor,
+                              child: Icon(Icons.person),
+                            ),
+                            title: Text(
+                              adminStaffNames[i].name,
+                              style: TextStyle(
+                                  fontFamily: ConstantFonts.poppinsMedium,
+                                  color: ConstantColor.blackColor,
+                                  fontSize:
+                                      MediaQuery.of(context).size.height *
+                                          0.020),
+                            ),
+                            trailing: Text(
+                              adminStaffNames[i].entryTime.toString().isEmpty
+                                  ? 'Absent'
+                                  : adminStaffNames[i].entryTime.toString(),
+                              style: TextStyle(
+                                  fontFamily: ConstantFonts.poppinsMedium,
+                                  color: adminStaffNames[i]
+                                          .entryTime
+                                          .toString()
+                                          .isEmpty
+                                      ? Colors.red
+                                      : ConstantColor.blackColor,
+                                  fontSize:
+                                      MediaQuery.of(context).size.height *
+                                          0.020),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            )
+            : Column(
+                children: [
+                  Lottie.asset('assets/animations/new_loading', height: 300),
+                  Center(
+                    child: Text(
+                      'No Entry Registered!!!',
+                      style: TextStyle(
+                        color: ConstantColor.backgroundColor,
+                        fontSize: 20,
+                        fontFamily: ConstantFonts.poppinsRegular,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ],
+              );
   }
 }

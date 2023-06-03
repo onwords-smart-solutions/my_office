@@ -145,7 +145,7 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
   @override
   Widget build(BuildContext context) {
     return MainTemplate(
-        subtitle: 'Absentees',
+        subtitle: 'Absentees list!!',
         templateBody: bodyContent(),
         bgColor: ConstantColor.background1Color);
   }
@@ -188,13 +188,7 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
       absentNames.add(widget);
     }
 
-    return isLoading
-        ? Center(
-            child: Lottie.asset(
-              "assets/animations/new_loading.json",
-            ),
-          )
-        : Column(
+    return Column(
             children: [
               //calender button
               Padding(
@@ -218,6 +212,21 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
                   ],
                 ),
               ),
+              Text('Total absentees : ${notEntry.length}',
+              style: TextStyle(
+                fontFamily: ConstantFonts.poppinsRegular,
+                fontWeight: FontWeight.w600,
+                fontSize: 17,
+                height: 2,
+              ),
+              ),
+              isLoading
+                  ? Center(
+                child: Lottie.asset(
+                  "assets/animations/new_loading.json",
+                ),
+              )
+                  :
               notEntry.isNotEmpty
                   ? Expanded(
                       child: SingleChildScrollView(

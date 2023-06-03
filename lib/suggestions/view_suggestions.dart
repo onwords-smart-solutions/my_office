@@ -9,11 +9,7 @@ import '../util/main_template.dart';
 import 'all_suggestions.dart';
 
 class ViewSuggestions extends StatefulWidget {
-  final String uid;
-  final String name;
-
-  const ViewSuggestions({Key? key, required this.uid, required this.name})
-      : super(key: key);
+  const ViewSuggestions({Key? key}) : super(key: key);
 
   @override
   State<ViewSuggestions> createState() => _ViewSuggestionsState();
@@ -62,22 +58,41 @@ class _ViewSuggestionsState extends State<ViewSuggestions> {
             itemCount: allSuggestion.length,
             physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) {
-              return ListTile(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          AllSuggestions(fullSuggestions: allSuggestion[index]),
+              return Container(
+                margin: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: ConstantColor.background1Color,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      offset: const Offset(-0.0, 5.0),
+                      blurRadius: 8,
+                    )
+                  ],
+                  borderRadius: BorderRadius.circular(11),
+                ),
+                child: ListTile(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            AllSuggestions(fullSuggestions: allSuggestion[index]),
+                      ),
+                    );
+                  },
+                  leading: const CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.deepPurple,
+                    child: Icon(Icons.bookmark),
+                  ),
+                  title: Text(
+                      allSuggestion[index]['message'].toString().length >= 30? '${allSuggestion[index]['message'].toString().substring(0, 30)} ...': allSuggestion[index]['message'].toString(),
+                    style: TextStyle(
+                      color: ConstantColor.headingTextColor,
+                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
                     ),
-                  );
-                },
-                title: Text(
-                 '${ allSuggestion[index]['message'].toString().substring(0, 35)}..',
-                  style: TextStyle(
-                    color: ConstantColor.backgroundColor,
-                    fontFamily: ConstantFonts.poppinsMedium,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
                   ),
                 ),
               );

@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -5,6 +8,7 @@ import 'package:lottie/lottie.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 import '../util/main_template.dart';
+import 'package:http/http.dart' as http;
 
 class LeaveApplyScreen extends StatefulWidget {
   final String name;
@@ -42,6 +46,65 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
   //DROP DOWN BUTTON VALUES//
   // List<String> departments = ['APP', 'MEDIA', 'WEB', 'PR', 'RND', 'OTHER'];
   // String? dropDownValue;
+  List<String> mgmtTokens = [
+    'hCxvT3mh1sgORNUMjsSNc9rgxgk2',
+    '58JIRnAbechEMJl8edlLvRzHcW52',
+    'Ae6DcpP2XmbtEf88OA8oSHQVpFB2',
+    'QPgtT8vDV8Y9pdy8fhtOmBON1Q03',
+    'Vhbt8jIAfiaV1HxuWERLqJh7dbj2',
+    'ZIuUpLfSIRgRN5EqP7feKA9SbbS2',
+    'pztngdZPCPQrEvmI37b3gf3w33d2',
+  ];
+
+  Future<void> sendNotification(
+      String userId, String title, String body) async {
+    FirebaseFirestore.instance
+        .collection('Devices')
+        .doc(userId)
+        .get()
+        .then((value) async {
+      if (value.exists) {
+        final data = value.data();
+        final mgmtDeviceToken = data!['Token'];
+        if (mgmtDeviceToken != null) {
+          const url = 'https://fcm.googleapis.com/fcm/send';
+          const serverKey =
+              'AAAAhAGZ-Jw:APA91bFk_GTSGX1LAj-ZxOW7DQn8Q69sYLStSB8lukQDlxBMmugrkQCsgIvuFm0fU5vBbVB5SATjaoO0mrCdsJm03ZEEZtaRdH-lQ9ZmX5RpYuyLytWyHVH7oDu-6LaShqrVE5vYHCqK'; // Your FCM server key
+          final headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'key=$serverKey',
+          };
+
+          final payload = {
+            'notification': {
+              'title': title,
+              'body': body,
+            },
+            'priority': 'high',
+            'data': {
+              'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+              'screen' : 'LeaveApprovalScreen',
+              'status': 'done',
+            },
+            'to': mgmtDeviceToken,
+          };
+
+          final response = await http.post(
+            Uri.parse(url),
+            headers: headers,
+            body: jsonEncode(payload),
+          );
+
+          if (response.statusCode == 200) {
+            print('Notification sent successfully!');
+          } else {
+            print(
+                'Error sending notification. Status code: ${response.statusCode}');
+          }
+        }
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -321,6 +384,10 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
     return GestureDetector(
       onTap: () {
         addLeaveToDb();
+     for(var mgmt in mgmtTokens){
+       sendNotification( mgmt, 'My Office',
+       'New leave form has been submitted by ${widget.name}..');
+     }
       },
       child: Container(
         height: height * 0.07,
@@ -374,18 +441,22 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
           SizedBox(
             child: TextFormField(
               controller: textEditingController,
+              textCapitalization: TextCapitalization.sentences,
               textInputAction: action,
               keyboardType: inputType,
               maxLines: 4,
               style: TextStyle(
                 color: ConstantColor.blackColor,
-                fontFamily: ConstantFonts.poppinsMedium,
+                fontFamily: ConstantFonts.poppinsRegular,
+                fontWeight: FontWeight.w600
               ),
               decoration: InputDecoration(
                 hintText: name,
                 hintStyle: TextStyle(
-                    color: Colors.black.withOpacity(0.2),
-                    fontFamily: ConstantFonts.poppinsMedium),
+                    color: Colors.black.withOpacity(0.3),
+                    fontFamily: ConstantFonts.poppinsRegular,
+                fontWeight: FontWeight.bold,
+                fontSize: 17),
                 filled: true,
                 fillColor: ConstantColor.background1Color,
                 enabledBorder: const OutlineInputBorder(

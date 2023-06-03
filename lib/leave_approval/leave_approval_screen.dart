@@ -2,16 +2,16 @@ import 'dart:developer';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:my_office/models/staff_leave_model.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 import '../util/main_template.dart';
 
 class LeaveApprovalScreen extends StatefulWidget {
-  final String name;
   final String uid;
-
-  const LeaveApprovalScreen({super.key, required this.name, required this.uid});
+  final String name;
+  const LeaveApprovalScreen({super.key, required this.uid, required this.name});
 
   @override
   State<LeaveApprovalScreen> createState() => _LeaveApprovalScreenState();
@@ -77,6 +77,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
 
             final index = staffLeaves.indexWhere(
                 (element) => element.status.toLowerCase().contains('pending'));
+
             if (index < 0) {
               return Center(
                 child: Text(
@@ -90,6 +91,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                 ),
               );
             }
+            staffLeaves.sort((a, b) => b.date.compareTo(a.date));
             //DISPLAYING ALL LEAVE REQUEST
             return ListView.builder(
                 itemCount: staffLeaves.length,
@@ -190,16 +192,88 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               GestureDetector(
-                                onTap: () async {
-                                  await changeRequest(
-                                      staffLeaves[index], 'Approved');
-                                  setState(() {
-                                    approve = true;
-                                  });
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context){
+                                      return   AlertDialog(
+                                        title: Text('Confirmation status',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w700,
+                                              fontFamily: ConstantFonts.poppinsRegular,
+                                              color: Colors.deepPurple
+                                          ),),
+                                        content: SingleChildScrollView(
+                                          child: ListBody(
+                                            children: [
+                                              Text('This is to confirm your approval status for leave request of the employee.',
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: ConstantFonts.poppinsRegular,
+                                                    color: ConstantColor.headingTextColor
+                                                ),),
+                                            ],
+                                          ),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            child: Text('Approve',
+                                              style: TextStyle(
+                                                  fontSize: 17,
+                                                  fontFamily: ConstantFonts.poppinsMedium,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: ConstantColor.pinkColor
+                                              ),),
+                                            onPressed: () async {
+                                              await changeRequest(
+                                                  staffLeaves[index], 'Approved');
+                                              setState(() {
+                                                approve = true;
+                                              });
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          TextButton(
+                                            child: Text('Decline',
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: ConstantFonts.poppinsMedium,
+                                              color: Colors.red
+                                            ),
+                                            ),
+                                            onPressed: () async {
+                                              await changeRequest(
+                                              staffLeaves[index], 'Declined');
+                                              setState(() {
+                                                decline = true;
+                                              });
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                          TextButton(
+                                            child: Text('Cancel',
+                                              style: TextStyle(
+                                                  fontSize: 17,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: ConstantFonts.poppinsMedium,
+                                                  color: ConstantColor.headingTextColor
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                  }
+                                  );
                                 },
                                 child: Container(
                                   height: height * 0.05,
-                                  width: width * 0.3,
+                                  width: width * 0.6,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
                                     gradient: const LinearGradient(
@@ -211,39 +285,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      'Approve',
-                                      style: TextStyle(
-                                        fontFamily: ConstantFonts.poppinsMedium,
-                                        color: ConstantColor.background1Color,
-                                        fontSize: height * 0.020,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () async {
-                                  await changeRequest(
-                                      staffLeaves[index], 'Declined');
-                                  setState(() {
-                                    decline = true;
-                                  });
-                                },
-                                child: Container(
-                                  height: height * 0.05,
-                                  width: width * 0.3,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    gradient: const LinearGradient(
-                                      colors: [
-                                        Color(0xffD136D4),
-                                        Color(0xff7652B2),
-                                      ],
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Decline',
+                                      'Tap to Approve/Cancel',
                                       style: TextStyle(
                                         fontFamily: ConstantFonts.poppinsMedium,
                                         color: ConstantColor.background1Color,
@@ -264,8 +306,8 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                 });
           }
           //Loading section
-          return const Center(
-            child: CircularProgressIndicator(),
+          return Center(
+            child: Lottie.asset( "assets/animations/new_loading.json",),
           );
         });
   }
@@ -277,6 +319,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
         .child(
             'leaveDetails/${leaveRequest.uid}/leaveApplied/${leaveRequest.year}/${leaveRequest.month}/${leaveRequest.date}')
         .update({
+      'updated_by' : widget.name,
       'status': status,
     });
     if (!mounted) return;
@@ -288,10 +331,10 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
           style: TextStyle(
             fontFamily: ConstantFonts.poppinsRegular,
             fontWeight: FontWeight.w600,
-            fontSize: 17,
+            fontSize: 16,
           ),
         ),
-        backgroundColor: ConstantColor.backgroundColor,
+        backgroundColor: Colors.green,
       ),
     );
   }
@@ -357,7 +400,8 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
               'Reason :',
               style: TextStyle(
                   fontSize: 20,
-                  fontFamily: ConstantFonts.poppinsMedium,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: ConstantFonts.poppinsRegular,
                   color: ConstantColor.blackColor),
             ),
             elevation: 10,
@@ -366,7 +410,8 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                 reason,
                 style: TextStyle(
                     fontSize: 17,
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: ConstantFonts.poppinsRegular,
                     color: ConstantColor.backgroundColor),
               ),
             ),
@@ -384,6 +429,9 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                   ),
                 ),
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: ConstantColor.backgroundColor
+                  ),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },

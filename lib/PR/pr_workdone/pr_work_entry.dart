@@ -352,6 +352,10 @@ class _PrWorkDoneState extends State<PrWorkDone> {
     var dateFormat = DateFormat('yyyy-MM-dd').format(dateTime);
     var monthFormat = DateFormat('MM').format(dateTime);
     var yearFormat = DateFormat('yyyy').format(dateTime);
+
+    await prDatabase.child(widget.userId).update({
+      'name': widget.staffName
+    });
       prDatabase.child('${widget.userId}/$yearFormat/$monthFormat/$dateFormat').update(
         {
           'calls': callsController.text.isEmpty ? 0 : int.parse( callsController.text.trim()),

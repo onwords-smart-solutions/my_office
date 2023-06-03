@@ -35,9 +35,10 @@ class _PrWorkDetailsState extends State<PrWorkDetails> {
       if (staffEntry.snapshot.exists) {
         for (var uid in staffEntry.snapshot.children) {
           try {
-            log('calling ${now.year}/$month/$date');
+
             final workDone = uid.child('${now.year}/$month/$date').value
                 as Map<Object?, Object?>;
+            log('message ${uid.value}');
             final staffData = uid.value as Map<Object?, Object?>;
             final data = PRWorkDoneModel(
                 calls: int.parse(workDone['calls'].toString()),

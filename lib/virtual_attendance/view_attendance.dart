@@ -133,6 +133,14 @@ class _ViewAttendanceScreenState extends State<ViewAttendanceScreen> {
             ],
           ),
         ),
+        const SizedBox(height: 10),
+        Text('Total entries : ${fullAttendance.length}',
+        style: TextStyle(
+          fontSize: 17,
+          fontFamily: ConstantFonts.poppinsRegular,
+          fontWeight: FontWeight.w600,
+        ),
+        ),
         isLoading ? Lottie.asset('assets/animations/new_loading.json') :
         fullAttendance.isNotEmpty
             ? Expanded(

@@ -115,8 +115,8 @@ class AppDefaults {
         break;
       case 'Leave approval':
         page = LeaveApprovalScreen(
-          name: staffInfo.name,
           uid: staffInfo.uid,
+          name: staffInfo.name,
         );
         break;
       case 'Search leads':
@@ -148,10 +148,7 @@ class AppDefaults {
         );
         break;
       case 'View suggestions':
-        page = ViewSuggestions(
-          uid: staffInfo.uid,
-          name: staffInfo.name,
-        );
+        page = const ViewSuggestions();
         break;
       case 'Check Virtual entry':
         page = ViewAttendanceScreen(

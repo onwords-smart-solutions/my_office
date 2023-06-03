@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:after_layout/after_layout.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/PR/visit/visit_form_screen.dart';
@@ -18,15 +22,15 @@ import 'models/visit_model.dart';
 
 /// version: 1.1.3+16 Updated On (14/03/2023)
 
-  Future <void> main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-  );
+  await Firebase.initializeApp();
   //Hive database Setup
   await Hive.initFlutter();
   if (!Hive.isAdapterRegistered(StaffModelAdapter().typeId)) {
     Hive.registerAdapter(StaffModelAdapter());
-  }if (!Hive.isAdapterRegistered(VisitModelAdapter().typeId)) {
+  }
+  if (!Hive.isAdapterRegistered(VisitModelAdapter().typeId)) {
     Hive.registerAdapter(VisitModelAdapter());
   }
 
@@ -39,7 +43,6 @@ import 'models/visit_model.dart';
     ),
   );
 }
-
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -62,20 +65,20 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => TaskData(),
-      child:  MaterialApp(
-          title: 'My Office',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-            scaffoldBackgroundColor: ConstantColor.backgroundColor,
-            fontFamily: 'PoppinsRegular',
-          ),
-          home: const InitialScreen(),
-          routes: {
-            '/visitResume': (_) => const VisitFromScreen(),
-            // '/invoiceGenerator': (_) => const Invoice(),
-          },
+      child: MaterialApp(
+        title: 'My Office',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          scaffoldBackgroundColor: ConstantColor.backgroundColor,
+          fontFamily: 'PoppinsRegular',
         ),
-      );
+        home: const InitialScreen(),
+        routes: {
+          '/visitResume': (_) => const VisitFromScreen(),
+          // '/invoiceGenerator': (_) => const Invoice(),
+        },
+      ),
+    );
   }
 }
 

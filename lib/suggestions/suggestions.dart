@@ -1,10 +1,17 @@
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
+import 'package:my_office/suggestions/view_suggestions.dart';
 import 'package:my_office/util/main_template.dart';
-
 import '../Constant/colors/constant_colors.dart';
+import 'package:http/http.dart' as http;
 
 class SuggestionScreen extends StatefulWidget {
   final String uid;
@@ -21,6 +28,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
   TextEditingController suggestionsController = TextEditingController();
   int characterCount = 0;
 
+
   @override
   void initState() {
     suggestionsController.addListener(() {
@@ -35,6 +43,56 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
   void dispose() {
     suggestionsController.dispose();
     super.dispose();
+  }
+
+  Future<void> sendNotification(
+      String userId, String title, String body) async {
+    FirebaseFirestore.instance
+        .collection('Devices')
+        .doc(userId)
+        .get()
+        .then((value) async {
+      if (value.exists) {
+        final data = value.data();
+        final annaDeviceToken = data!['Token'];
+        if (annaDeviceToken != null) {
+          const url = 'https://fcm.googleapis.com/fcm/send';
+          const serverKey =
+              'AAAAhAGZ-Jw:APA91bFk_GTSGX1LAj-ZxOW7DQn8Q69sYLStSB8lukQDlxBMmugrkQCsgIvuFm0fU5vBbVB5SATjaoO0mrCdsJm03ZEEZtaRdH-lQ9ZmX5RpYuyLytWyHVH7oDu-6LaShqrVE5vYHCqK'; // Your FCM server key
+          final headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'key=$serverKey',
+          };
+
+          final payload = {
+            'notification': {
+              'title': title,
+              'body': body,
+            },
+            'priority': 'high',
+            'data': {
+              'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+              'screen' : 'ViewSuggestionsScreen',
+              'status': 'done',
+            },
+            'to': annaDeviceToken,
+          };
+
+          final response = await http.post(
+            Uri.parse(url),
+            headers: headers,
+            body: jsonEncode(payload),
+          );
+
+          if (response.statusCode == 200) {
+            print('Notification sent successfully!');
+          } else {
+            print(
+                'Error sending notification. Status code: ${response.statusCode}');
+          }
+        }
+      }
+    });
   }
 
   @override
@@ -79,6 +137,8 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
           child: ElevatedButton(
             onPressed: () {
               addSuggestionToDatabase();
+              sendNotification('Vhbt8jIAfiaV1HxuWERLqJh7dbj2', 'My Office',
+                            'New suggestion has arrived..');
             },
             style: ElevatedButton.styleFrom(
               elevation: 10,
