@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
+import 'package:my_office/PR/invoice_generator/screens/client_detials.dart';
 // import 'package:my_office/PR/invoice/customer_detail_screen.dart';
 import 'package:my_office/PR/visit/visit_summary.dart';
 import 'package:my_office/models/visit_model.dart';
@@ -15,7 +16,6 @@ import '../../Constant/colors/constant_colors.dart';
 import '../../Constant/fonts/constant_font.dart';
 import '../../database/hive_operations.dart';
 import '../../util/screen_template.dart';
-import '../invoice/Screens/Customer_Details_Screen.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final VisitModel visitData;
@@ -379,7 +379,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 // await LaunchApp.openApp(
                 //   androidPackageName: 'com.onwords.invoice_app',
                 // );
-                Navigator.push(context, MaterialPageRoute(builder: (context) => CustomerDetails()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const ClientDetails()));
               }),
           if (step2Error.isNotEmpty) showError(message: step2Error)
         ],

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_office/Account/account_screen.dart';
+import 'package:my_office/PR/invoice_generator/screens/client_detials.dart';
 import 'package:my_office/models/staff_model.dart';
 import '../Absentees/absentees.dart';
-import '../PR/invoice/Screens/Customer_Details_Screen.dart';
 import '../PR/pr_workdone/pr_work_details.dart';
 import '../PR/pr_workdone/pr_work_entry.dart';
 import '../PR/products/new_product.dart';
@@ -130,7 +130,7 @@ class AppDefaults {
         page = const VisitCheckScreen();
         break;
       case 'Invoice generator':
-        page = const CustomerDetails();
+        page = const ClientDetails();
         break;
       case 'Finance':
         page = const FinanceScreen();

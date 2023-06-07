@@ -16,7 +16,8 @@ import 'package:my_office/models/staff_model.dart';
 import 'package:my_office/util/notification_services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'PR/invoice/provider_page.dart';
+import 'PR/invoice_generator/models/providers.dart';
+import 'PR/invoice_generator/screens/client_detials.dart';
 import 'introduction/intro_screen.dart';
 import 'models/visit_model.dart';
 
@@ -63,22 +64,28 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => TaskData(),
-      child: MaterialApp(
-        title: 'My Office',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          scaffoldBackgroundColor: ConstantColor.backgroundColor,
-          fontFamily: 'PoppinsRegular',
+    return
+      MultiProvider(providers: [
+        // ChangeNotifierProvider(
+        //   create: (context) => TaskData(),),
+        ChangeNotifierProvider(
+          create: (context) => InvoiceProvider(),),
+
+      ],
+        child: MaterialApp(
+          title: 'My Office',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+            scaffoldBackgroundColor: ConstantColor.background1Color,
+            fontFamily: 'PoppinsRegular',
+          ),
+          home: const InitialScreen(),
+          routes: {
+            '/visitResume': (_) => const VisitFromScreen(),
+            '/invoiceGenerator': (_) => const ClientDetails(),
+          },
         ),
-        home: const InitialScreen(),
-        routes: {
-          '/visitResume': (_) => const VisitFromScreen(),
-          // '/invoiceGenerator': (_) => const Invoice(),
-        },
-      ),
-    );
+      );
   }
 }
 

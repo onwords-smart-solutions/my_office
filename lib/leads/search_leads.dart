@@ -36,7 +36,8 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
     'Under Construction',
     'Installation Completed',
     'Others',
-    'Hot lead'
+    'Hot lead',
+    'Black dots'
   ];
 
   String selectedStaff = '';
@@ -66,6 +67,12 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
         isLoading = false;
       });
     });
+  }
+  int calculateDifference(DateTime date) {
+    DateTime now = DateTime.now();
+    return DateTime(date.year, date.month, date.day)
+        .difference(DateTime(now.year, now.month, now.day))
+        .inDays;
   }
 
   void getCustomerDetail(
@@ -126,17 +133,41 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                     .contains('rejected from customer') ) {
               currentCustomerList.add(data);
             }
-          } else if (data['customer_state']
+          }else if(sortOption == 'Black dots'){
+          try{
+            //Getting all notes from customer data
+            final Map<Object?, Object?> allNotes =
+            data['notes'] as Map<Object?, Object?>;
+            final noteKeys = allNotes.keys.toList();
+
+            //Checking if key is empty or not
+            if (noteKeys.isNotEmpty) {
+              noteKeys.sort((a, b) => b.toString().compareTo(a.toString()));
+              final Map<Object?, Object?> firstNote =
+              allNotes[noteKeys[0]] as Map<Object?, Object?>;
+              final lastNoteDate = firstNote['date'].toString();
+              final lastNoteUpdatedOn = DateTime.parse(lastNoteDate);
+              print('date is $lastNoteUpdatedOn');
+              if (calculateDifference(lastNoteUpdatedOn) <= -7) {
+                currentCustomerList.add(data);
+              }
+            }
+          }catch(e){
+            print('error is $e');
+          }
+          }
+          else if (data['customer_state']
               .toString()
               .toLowerCase()
               .contains(sortChoice.toLowerCase())) {
             currentCustomerList.add(data);
           }
-        } else {
+        }else {
           currentCustomerList.add(data);
         }
       }
     }
+
 
     //Sorting list based on created date
     if (ascending) {

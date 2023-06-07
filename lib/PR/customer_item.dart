@@ -218,6 +218,12 @@ class _CustomerItemState extends State<CustomerItem> {
       ),
     );
   }
+  int calculateDifference(DateTime date) {
+    DateTime now = DateTime.now();
+    return DateTime(date.year, date.month, date.day)
+        .difference(DateTime(now.year, now.month, now.day))
+        .inDays;
+  }
 
   Widget buildField({required String field,
     required String value,
@@ -226,12 +232,7 @@ class _CustomerItemState extends State<CustomerItem> {
     bool isTimeToUpdate = false;
     if (field == "Note updated" && value.isNotEmpty) {
       final lastNoteUpdate = DateTime.parse(value);
-      int calculateDifference(DateTime date) {
-        DateTime now = DateTime.now();
-        return DateTime(date.year, date.month, date.day)
-            .difference(DateTime(now.year, now.month, now.day))
-            .inDays;
-      }
+
       if (calculateDifference(lastNoteUpdate) <= -7) {
         isTimeToUpdate = true;
       }

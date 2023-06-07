@@ -2,10 +2,12 @@ import 'dart:developer';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/models/staff_entry_model.dart';
 import 'package:my_office/tl_check_screen/staff_entry_check.dart';
+import 'package:shimmer/shimmer.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 import '../util/main_template.dart';
@@ -123,23 +125,15 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
       }
     }
     return isLoading
-        ? Column(
-            children: [
-              Center(
-                child: Lottie.asset(
-                  "assets/animations/id_entry.json",
-                ),
-              ),
-              Text(
-                'Please wait.. Fetching data⌛',
-                style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsRegular,
-                    fontWeight: FontWeight.w600,
-                    color: ConstantColor.blackColor,
-                    fontSize: 17),
-              ),
-            ],
-          )
+        ? ListView.builder(
+          physics: const BouncingScrollPhysics(),
+          itemCount: 10,
+          itemBuilder: (context, i){
+            return const Skeleton(
+                height: 60,
+              );
+          },
+        )
         : widget.staffName == 'Nikhil Deepak' ||
                 widget.staffName == 'Devendiran' ||
                 widget.staffName == 'Jibin K John' ||
@@ -183,7 +177,7 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
                               blurRadius: 8,
                             )
                           ],
-                          borderRadius: BorderRadius.circular(11),
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: Center(
                           child: ListTile(
@@ -205,8 +199,8 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
                                   fontFamily: ConstantFonts.poppinsMedium,
                                   color: ConstantColor.blackColor,
                                   fontSize:
-                                      MediaQuery.of(context).size.height *
-                                          0.020),
+                                  MediaQuery.of(context).size.height *
+                                      0.020),
                             ),
                             trailing: Text(
                               adminStaffNames[i].entryTime.toString().isEmpty
@@ -215,14 +209,14 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
                               style: TextStyle(
                                   fontFamily: ConstantFonts.poppinsMedium,
                                   color: adminStaffNames[i]
-                                          .entryTime
-                                          .toString()
-                                          .isEmpty
+                                      .entryTime
+                                      .toString()
+                                      .isEmpty
                                       ? Colors.red
                                       : ConstantColor.blackColor,
                                   fontSize:
-                                      MediaQuery.of(context).size.height *
-                                          0.020),
+                                  MediaQuery.of(context).size.height *
+                                      0.020),
                             ),
                           ),
                         ),
@@ -230,13 +224,16 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
                     },
                   ),
                 ),
+
               ],
             )
+    
             : Column(
                 children: [
                   Lottie.asset('assets/animations/new_loading', height: 300),
                   Center(
-                    child: Text(
+                    child:
+                    Text(
                       'No Entry Registered!!!',
                       style: TextStyle(
                         color: ConstantColor.backgroundColor,
@@ -248,5 +245,56 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
                   ),
                 ],
               );
+  }
+}
+
+class Skeleton extends StatelessWidget {
+  const Skeleton({
+    Key? key, this.height, this.width,
+  }) : super(key: key);
+  final double? height, width;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: height,
+      width: width,
+      margin: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: ConstantColor.background1Color
+      ),
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey.shade400,
+        highlightColor: Colors.grey.shade100,
+        child: Row(
+          children: [
+            const CircleAvatar(
+              radius: 20,
+              backgroundColor: Colors.white,
+              child: Icon(Icons.person,color: Colors.white,),
+            ),
+            const SizedBox(width: 20,),
+            Container(
+              height: 55,
+              width: 160,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(width: 40),
+            Container(
+              height: 55,
+              width: 80,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: Colors.white,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
