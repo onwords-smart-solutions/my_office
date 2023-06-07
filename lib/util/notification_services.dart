@@ -31,7 +31,7 @@ class NotificationService {
             importance: Importance.max,
             priority: Priority.high,
             enableLights: true,
-            sound: RawResourceAndroidNotificationSound('notification'),
+            sound: RawResourceAndroidNotificationSound('office'),
             autoCancel: false,
             // audioAttributesUsage: AudioAttributesUsage.notification,
             playSound: true,

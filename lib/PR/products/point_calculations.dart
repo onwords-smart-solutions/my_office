@@ -689,17 +689,17 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                       builder: (context) => PointView(
                                             points: prPoint.toString(),
                                           )));
-                              percentageController.clear();
-                              itermNameController.clearDropDown();
-                              quantityController.clear();
-                              listOfProductDetails.clear();
-                              maxTotal = 0;
-                              minTotal = 0;
-                              discount = 0;
-                              percentage = 0;
-                              minPriceList.clear();
-                              showTable = false;
-                              getPointsStatus = false;
+                              // percentageController.clear();
+                              // itermNameController.clearDropDown();
+                              // quantityController.clear();
+                              // listOfProductDetails.clear();
+                              // maxTotal = 0;
+                              // minTotal = 0;
+                              // discount = 0;
+                              // percentage = 0;
+                              // minPriceList.clear();
+                              // showTable = false;
+                              // getPointsStatus = false;
                             });
                           }
                         },
@@ -850,11 +850,7 @@ class _PointViewState extends State<PointView> {
     final width = MediaQuery.of(context).size.width;
     return WillPopScope(
       onWillPop: () async {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (_) => const UserHomeScreen()),
-                (route) => false);
+        Navigator.of(context).pop();
         return true;
       },
       child: Scaffold(
@@ -907,11 +903,7 @@ class _PointViewState extends State<PointView> {
               child: GestureDetector(
                 onTap: () {
                   setState(() {
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => const UserHomeScreen(),),
-                        (route) => false);
+                    Navigator.of(context).pop();
                   });
                 },
                 child: Neumorphic(
