@@ -57,10 +57,9 @@ class _FoodCountStaffDetailScreenState
               final lunchData = data['Lunch'] as Map<Object?, Object?>;
               final lunchList =
                   lunchData['lunch_list'] as Map<Object?, Object?>;
-              final isContain = lunchList.containsValue(widget.staffName);
 
               for(var staff in lunchList.values) {
-                if (staff.toString().contains(widget.staffName)) {
+                if (staff.toString() == widget.staffName) {
                   staffLunchData.add(detail.key);
                 }
               }
