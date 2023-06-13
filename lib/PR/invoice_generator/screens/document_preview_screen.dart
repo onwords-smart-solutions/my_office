@@ -16,7 +16,9 @@ import 'package:my_office/home/user_home_screen.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:upi_payment_qrcode_generator/upi_payment_qrcode_generator.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+
+// import 'package:upi_payment_qrcode_generator/upi_payment_qrcode_generator.dart';
 import '../../../database/hive_operations.dart';
 import '../../../models/staff_model.dart';
 import '../models/client_model.dart';
@@ -34,6 +36,7 @@ class InvoicePreviewScreen extends StatefulWidget {
 
   final double advanceAmount;
   final double discountAmount;
+  final double prPoint;
   final int percentage;
   final bool gstNeed;
 
@@ -43,7 +46,8 @@ class InvoicePreviewScreen extends StatefulWidget {
       required this.advanceAmount,
       required this.gstNeed,
       required this.percentage,
-      required this.discountAmount})
+      required this.discountAmount,
+      required this.prPoint})
       : super(key: key);
 
   @override
@@ -53,7 +57,6 @@ class InvoicePreviewScreen extends StatefulWidget {
 class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
   final HiveOperations _hiveOperations = HiveOperations();
   StaffModel? staffInfo;
-
 
   final formKey = GlobalKey<FormState>();
   final databaseReference = FirebaseDatabase.instance.ref();
@@ -188,25 +191,42 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
       total += invoice.subTotalList;
     }
     lisTotal = total;
-    final upiDetails = UPIDetails(
-        upiID: "onwordspay@ybl",
-        payeeName: "Onwords Smart Solutions",
-        amount: grandTotal < 80000 ? grandTotal : null,
-        transactionNote: customerDetails.docCategory == 'GA'
-            ? "Gate Automation"
-            : customerDetails.docCategory == 'SH'
-                ? "Smart Home"
-                : customerDetails.docCategory == 'IT'
-                    ? "APP or Web Development"
-                    : customerDetails.docCategory == 'DL'
-                        ? "Door Lock"
-                        : customerDetails.docCategory == 'SS'
-                            ? "Security System"
-                            : customerDetails.docCategory == 'WTA'
-                                ? "Water Tank Automation"
-                                : customerDetails.docCategory == 'AG'
-                                    ? "Agriculture Automation"
-                                    : 'Onwords Smart Solutions');
+
+    String transactionNote = customerDetails.docCategory == 'GA'
+        ? "Gate Automation"
+        : customerDetails.docCategory == 'SH'
+            ? "Smart Home"
+            : customerDetails.docCategory == 'IT'
+                ? "APP or Web Development"
+                : customerDetails.docCategory == 'DL'
+                    ? "Door Lock"
+                    : customerDetails.docCategory == 'SS'
+                        ? "Security System"
+                        : customerDetails.docCategory == 'WTA'
+                            ? "Water Tank Automation"
+                            : customerDetails.docCategory == 'AG'
+                                ? "Agriculture Automation"
+                                : 'Onwords Smart Solutions';
+
+    // final upiDetails = UPIDetails(
+    //     upiID: "onwordspay@ybl",
+    //     payeeName: "Onwords Smart Solutions",
+    //     amount: grandTotal < 80000 ? grandTotal : null,
+    //     transactionNote: customerDetails.docCategory == 'GA'
+    //         ? "Gate Automation"
+    //         : customerDetails.docCategory == 'SH'
+    //             ? "Smart Home"
+    //             : customerDetails.docCategory == 'IT'
+    //                 ? "APP or Web Development"
+    //                 : customerDetails.docCategory == 'DL'
+    //                     ? "Door Lock"
+    //                     : customerDetails.docCategory == 'SS'
+    //                         ? "Security System"
+    //                         : customerDetails.docCategory == 'WTA'
+    //                             ? "Water Tank Automation"
+    //                             : customerDetails.docCategory == 'AG'
+    //                                 ? "Agriculture Automation"
+    //                                 : 'Onwords Smart Solutions');
 
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
@@ -230,12 +250,13 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
             left: 0,
             right: 0,
             child: RepaintBoundary(
-              key: _globalKey,
-              child: UPIPaymentQRCode(
-                upiDetails: upiDetails,
-                size: 300,
-              ),
-            ),
+                key: _globalKey,
+                child: QrImageView(
+                  data:
+                      'upi://pay?pa=onwordspay@ybl&pn=Onwords Smart Solutions&tr=&am=${grandTotal < 80000 ? grandTotal : ''}&cu=INR&mode=01&purpose=10&orgid=-&sign=-&tn=$transactionNote&note=${widget.prPoint}',
+                  version: QrVersions.auto,
+                  size: 200.0,
+                )),
           ),
           Positioned(
             top: 0,
@@ -636,14 +657,12 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
             SizedBox(
               // color: Colors.transparent,
               width: 150,
-              child: Text
-                (value,
+              child: Text(value,
                   textAlign: TextAlign.end,
                   style: const TextStyle(
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
                     fontSize: 10,
-
                   )),
             ),
           ],
@@ -663,7 +682,13 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
             child: Form(
               key: formKey,
               child: CupertinoAlertDialog(
-                title: Text("Document Details\n",style: TextStyle(color: ConstantColor.backgroundColor, fontFamily: ConstantFonts.poppinsRegular, fontWeight: FontWeight.w600),),
+                title: Text(
+                  "Document Details\n",
+                  style: TextStyle(
+                      color: ConstantColor.backgroundColor,
+                      fontFamily: ConstantFonts.poppinsRegular,
+                      fontWeight: FontWeight.w600),
+                ),
                 content: Material(
                   color: Colors.transparent,
                   child: Column(
@@ -686,13 +711,15 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                       const SizedBox(
                         height: 5,
                       ),
-                      clientModel.docType != 'QUOTATION' ? const Text(
-                        '  Date For Installation',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                            color: Colors.black),
-                      ): const SizedBox(),
+                      clientModel.docType != 'QUOTATION'
+                          ? const Text(
+                              '  Date For Installation',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 13,
+                                  color: Colors.black),
+                            )
+                          : const SizedBox(),
                       const SizedBox(
                         height: 10,
                       ),
@@ -713,7 +740,6 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                                   fontWeight: FontWeight.w600,
                                   fontFamily: ConstantFonts.poppinsRegular,
                                 ),
-
                                 labelStyle: TextStyle(
                                   fontWeight: FontWeight.w600,
                                   fontFamily: ConstantFonts.poppinsRegular,
@@ -759,7 +785,9 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                     child: Text(
                       "Cancel",
                       style: TextStyle(
-                          fontWeight: FontWeight.w600, color: Colors.black, fontFamily: ConstantFonts.poppinsRegular),
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                          fontFamily: ConstantFonts.poppinsRegular),
                     ),
                     onPressed: () async {
                       Navigator.of(context).pop();
@@ -769,7 +797,9 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                     child: Text(
                       "Save",
                       style: TextStyle(
-                          fontWeight: FontWeight.w600, color: Colors.black,fontFamily: ConstantFonts.poppinsRegular),
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                          fontFamily: ConstantFonts.poppinsRegular),
                     ),
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {
@@ -820,120 +850,119 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                         OpenFile.open(file.path).then((value) async {
                           ///...............FIREBASE..........////
                           /// INVOICE OR PROFORMA_INVOICE
-                          if (clientModel.docType == "INVOICE" ||
-                              clientModel.docType == "PROFORMA_INVOICE") {
-                            String id = generateRandomString(5)
-                                .toUpperCase()
-                                .toString();
-                            if (alreadyGeneratedId
-                                .any((element) => element == id)) {
-                              dev.log('Already Id Created. Create New one');
-                              id = generateRandomString(5)
-                                  .toUpperCase()
-                                  .toString();
-                            } else {
-                              var snapshot = await firebaseStorage
-                                  .ref()
-                                  .child(
-                                      '${clientModel.docType}/INV${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
-                                  .putFile(pdfFile);
-                              var downloadUrl =
-                                  await snapshot.ref.getDownloadURL();
-
-                              /// INSTALLATION-INVOICE......
-                              final installationPdfFile = await InstallationPdf(
-                                documentLen: docLen,
-                                estimateDate:
-                                    DateTime.parse(estimateDateController.text),
-                              ).generate(clientModel, productDetailsModel);
-
-                              var snapshotInstallation = await firebaseStorage
-                                  .ref()
-                                  .child(
-                                      'INSTALLATION-INVOICE/INV${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
-                                  .putFile(installationPdfFile);
-                              var downloadUrlInstallation =
-                                  await snapshotInstallation.ref
-                                      .getDownloadURL();
-
-                              var invoice = {
-                                'Customer_name': clientModel.name,
-                                'Status': 'Processing',
-                                'TimeStamp': myTimeStamp.seconds,
-                                'CreatedBy': staffInfo?.email,
-                                'mobile_number': clientModel.phone,
-                                'document_link': downloadUrl,
-                                'installation_document_link':
-                                    downloadUrlInstallation,
-                              };
-                              var proformaInvoice = {
-                                'Customer_name': clientModel.name,
-                                'id': "#$id",
-                                'Status': 'Processing',
-                                'TimeStamp': myTimeStamp.seconds,
-                                'CreatedBy': staffInfo?.email,
-                                'mobile_number': clientModel.phone,
-                                'document_link': downloadUrl,
-                                'installation_document_link':
-                                    downloadUrlInstallation,
-                              };
-
-                              databaseReference
-                                  .child('QuotationAndInvoice')
-                                  .child(clientModel.docType == 'INVOICE'
-                                      ? 'INVOICE'
-                                      : 'PROFORMA_INVOICE')
-                                  .child('${Utils.formatYear(date)}')
-                                  .child('${Utils.formatMonth(date)}')
-                                  .child(
-                                      '${clientModel.docType == 'INVOICE' ? 'INV_' : 'PRO_INV_'}${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
-                                  .set(clientModel.docType == 'INVOICE'
-                                      ? invoice
-                                      : proformaInvoice);
-                            }
-                          }
-
-                          /// QUOTATION
-                          else {
-                            var snapshot = await firebaseStorage
-                                .ref()
-                                .child(
-                                    'QUOTATION/EST${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
-                                .putFile(pdfFile);
-                            var downloadUrl =
-                                await snapshot.ref.getDownloadURL();
-                            var quotation = {
-                              'Customer_name': clientModel.name,
-                              'Status': 'Processing',
-                              'TimeStamp': myTimeStamp.seconds,
-                              'CreatedBy': staffInfo?.email,
-                              'mobile_number': clientModel.phone,
-                              'document_link': downloadUrl,
-                            };
-                            databaseReference
-                                .child('QuotationAndInvoice')
-                                .child('QUOTATION')
-                                .child('${Utils.formatYear(date)}')
-                                .child('${Utils.formatMonth(date)}')
-                                .child(
-                                    'EST${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
-                                .set(quotation);
-                          }
-
+                          // if (clientModel.docType == "INVOICE" ||
+                          //     clientModel.docType == "PROFORMA_INVOICE") {
+                          //   String id = generateRandomString(5)
+                          //       .toUpperCase()
+                          //       .toString();
+                          //   if (alreadyGeneratedId
+                          //       .any((element) => element == id)) {
+                          //     dev.log('Already Id Created. Create New one');
+                          //     id = generateRandomString(5)
+                          //         .toUpperCase()
+                          //         .toString();
+                          //   } else {
+                          //     var snapshot = await firebaseStorage
+                          //         .ref()
+                          //         .child(
+                          //             '${clientModel.docType}/INV${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
+                          //         .putFile(pdfFile);
+                          //     var downloadUrl =
+                          //         await snapshot.ref.getDownloadURL();
+                          //
+                          //     /// INSTALLATION-INVOICE......
+                          //     final installationPdfFile = await InstallationPdf(
+                          //       documentLen: docLen,
+                          //       estimateDate:
+                          //           DateTime.parse(estimateDateController.text),
+                          //     ).generate(clientModel, productDetailsModel);
+                          //
+                          //     var snapshotInstallation = await firebaseStorage
+                          //         .ref()
+                          //         .child(
+                          //             'INSTALLATION-INVOICE/INV${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
+                          //         .putFile(installationPdfFile);
+                          //     var downloadUrlInstallation =
+                          //         await snapshotInstallation.ref
+                          //             .getDownloadURL();
+                          //
+                          //     var invoice = {
+                          //       'Customer_name': clientModel.name,
+                          //       'Status': 'Processing',
+                          //       'TimeStamp': myTimeStamp.seconds,
+                          //       'CreatedBy': staffInfo?.email,
+                          //       'mobile_number': clientModel.phone,
+                          //       'document_link': downloadUrl,
+                          //       'installation_document_link':
+                          //           downloadUrlInstallation,
+                          //     };
+                          //     var proformaInvoice = {
+                          //       'Customer_name': clientModel.name,
+                          //       'id': "#$id",
+                          //       'Status': 'Processing',
+                          //       'TimeStamp': myTimeStamp.seconds,
+                          //       'CreatedBy': staffInfo?.email,
+                          //       'mobile_number': clientModel.phone,
+                          //       'document_link': downloadUrl,
+                          //       'installation_document_link':
+                          //           downloadUrlInstallation,
+                          //     };
+                          //
+                          //     databaseReference
+                          //         .child('QuotationAndInvoice')
+                          //         .child(clientModel.docType == 'INVOICE'
+                          //             ? 'INVOICE'
+                          //             : 'PROFORMA_INVOICE')
+                          //         .child('${Utils.formatYear(date)}')
+                          //         .child('${Utils.formatMonth(date)}')
+                          //         .child(
+                          //             '${clientModel.docType == 'INVOICE' ? 'INV_' : 'PRO_INV_'}${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
+                          //         .set(clientModel.docType == 'INVOICE'
+                          //             ? invoice
+                          //             : proformaInvoice);
+                          //   }
+                          // }
+                          //
+                          // /// QUOTATION
+                          // else {
+                          //   var snapshot = await firebaseStorage
+                          //       .ref()
+                          //       .child(
+                          //           'QUOTATION/EST${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
+                          //       .putFile(pdfFile);
+                          //   var downloadUrl =
+                          //       await snapshot.ref.getDownloadURL();
+                          //   var quotation = {
+                          //     'Customer_name': clientModel.name,
+                          //     'Status': 'Processing',
+                          //     'TimeStamp': myTimeStamp.seconds,
+                          //     'CreatedBy': staffInfo?.email,
+                          //     'mobile_number': clientModel.phone,
+                          //     'document_link': downloadUrl,
+                          //   };
+                          //   databaseReference
+                          //       .child('QuotationAndInvoice')
+                          //       .child('QUOTATION')
+                          //       .child('${Utils.formatYear(date)}')
+                          //       .child('${Utils.formatMonth(date)}')
+                          //       .child(
+                          //           'EST${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
+                          //       .set(quotation);
+                          // }
                         }).then((value) {
-                          fileNameController.clear();
-                          listOfDocLength.clear();
-                          estimateDateController.clear();
-                          grandTotal = 0;
-                          gst = 0;
-                          Provider.of<InvoiceProvider>(context, listen: false)
-                              .clearAllData();
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => const UserHomeScreen()),
-                              (route) => false);
-                          // Navigator.pushNamedAndRemoveUntil(context, '/invoiceGenerator', (route) => false);
+                          // fileNameController.clear();
+                          // listOfDocLength.clear();
+                          // estimateDateController.clear();
+                          // grandTotal = 0;
+                          // gst = 0;
+                          // Provider.of<InvoiceProvider>(context, listen: false)
+                          //     .clearAllData();
+                          // Navigator.pushAndRemoveUntil(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (_) => const UserHomeScreen()),
+                          //     (route) => false);
+                          // // Navigator.pushNamedAndRemoveUntil(context, '/invoiceGenerator', (route) => false);
                         });
                       }
                     },
@@ -947,36 +976,34 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
     );
   }
 
-
   OutlineInputBorder myInputBorder() {
     return OutlineInputBorder(
         borderRadius: const BorderRadius.all(Radius.circular(20)),
         borderSide: BorderSide(
           color: Colors.black.withOpacity(0.3),
           width: 2,
-        )
-    );
+        ));
   }
 
   OutlineInputBorder myFocusBorder() {
     return OutlineInputBorder(
-        borderRadius: const BorderRadius.all(Radius.circular(20),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(20),
         ),
         borderSide: BorderSide(
           color: Colors.black.withOpacity(0.3),
           width: 2,
-        )
-    );
+        ));
   }
 
   OutlineInputBorder myDisabledBorder() {
     return OutlineInputBorder(
-        borderRadius: const BorderRadius.all(Radius.circular(20),
+        borderRadius: const BorderRadius.all(
+          Radius.circular(20),
         ),
         borderSide: BorderSide(
           color: Colors.black.withOpacity(0.3),
           width: 2,
-        )
-    );
+        ));
   }
 }

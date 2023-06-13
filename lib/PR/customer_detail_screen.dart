@@ -1,11 +1,14 @@
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
+import 'package:my_office/PR/add_notes.dart';
 import 'package:my_office/constant/colors/constant_colors.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:timelines/timelines.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'note_item.dart';
@@ -104,15 +107,16 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     return Scaffold(
       backgroundColor: const Color(0xffF1F2F8),
       appBar: AppBar(
-        // backgroundColor: const Color(0xffF1F2F8),
-        // backgroundColor: const Color(0xff00BCD1).withOpacity(0.8),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),bottomRight: Radius.circular(20)),
             gradient: LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
-                colors: <Color>[Color(0xff3366FF), Color(0xff00CCFF)]),
+                colors: <Color>[
+                  Color(0xffD136D4),
+                  Color(0xff7652B2),
+                ]),
           ),
         ),
         shape: const RoundedRectangleBorder(
@@ -130,7 +134,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         title: Text(widget.customerInfo['name'].toString(),
             style: TextStyle(
                 color: Colors.white,
-                fontFamily: ConstantFonts.poppinsBold, fontSize: 18.0)),
+                fontFamily: ConstantFonts.poppinsMedium,
+                fontWeight: FontWeight.w700,
+                fontSize: 18.0)),
         titleSpacing: 0.0,
         actions: [
           IconButton(
@@ -141,7 +147,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                 // print(widget.customerInfo['phone_number'].toString());
               },
               icon: const Icon(
-                Icons.note_add_outlined,
+                Icons.note_alt_outlined,
                 color: Colors.white,
                 size: 30,
               )),
@@ -153,7 +159,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
               },
               icon: const Icon(
                 Icons.call,
-                color: Color(0xff3366FF),
+                color: Colors.lightBlueAccent,
                 size: 30,
               )),
           IconButton(
@@ -166,7 +172,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                 // print(widget.customerInfo['phone_number'].toString());
               },
               icon: const Icon(
-                Icons.whatsapp,
+                Icons.message,
                 color: Colors.greenAccent,
                 size: 30,
               )),
@@ -263,21 +269,6 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            // Text(
-            //   'Notes',
-            //   style: TextStyle(
-            //       fontFamily: ConstantFonts.poppinsMedium, fontSize: 20.0),
-            // ),
-            //
-            // // note add button
-            // IconButton(
-            //   onPressed: () {
-            //     addNotes();
-            //   },
-            //   icon: const Icon(Icons.add_circle_rounded),
-            //   color: const Color(0xff8355B7),
-            //   splashRadius: 20.0,
-            // ),
 
             //Dropdown to change "State" of customers
             DropdownButton(
@@ -330,11 +321,13 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                       final date = singleNote['date'] ?? 'Not mentioned';
                       final time = singleNote['time'] ?? 'Not mentioned';
                       final note = singleNote['note'] ?? 'No notes added';
+                      final audio = singleNote['audio_file'];
 
                       return Container(
                         margin: const EdgeInsets.symmetric(vertical: 5.0),
                         child: NoteItem(
                           note: note.toString(),
+                          url: audio.toString(),
                           updatedDate: date.toString(),
                           updatedStaff: name.toString(),
                           updatedTime: time.toString(),
@@ -352,74 +345,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
 
   //adding notes
   void addNotes() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(
-                20.0,
-              ),
-            ),
-          ),
-          contentPadding: const EdgeInsets.only(
-            top: 10.0,
-          ),
-          content: SizedBox(
-            height: MediaQuery.of(context).size.height * 0.4,
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "Add notes",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      controller: notesController,
-                      maxLines: 4,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Enter your notes here',
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: 60,
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        addNoteToDatabase();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xff8355B7),
-                        // fixedSize: Size(250, 50),
-                      ),
-                      child: const Text(
-                        "Submit",
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> AddNotes(customerInfo: widget.customerInfo, currentStaffName: widget.currentStaffName,)));
   }
 
   Widget buildField(
@@ -460,36 +386,6 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         endConnector: SolidLineConnector(color: widget.nobColor),
       ),
     );
-  }
-
-  void addNoteToDatabase() async {
-    if (notesController.text.trim().isEmpty) {
-      const snackBar = SnackBar(
-        content: Text(
-          'Enter some notes',
-          textAlign: TextAlign.center,
-        ),
-        backgroundColor: Colors.red,
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      // print('no data');
-    } else {
-      DateTime now = DateTime.now();
-      var timeStamp = DateFormat('yyyy-MM-dd_kk:mm:ss').format(now);
-      final ref = FirebaseDatabase.instance.ref();
-      ref
-          .child(
-              'customer/${widget.customerInfo['phone_number'].toString()}/notes/$timeStamp')
-          .update(
-        {
-          'date': DateFormat('yyyy-MM-dd').format(now),
-          'entered_by': widget.currentStaffName,
-          'note': notesController.text.trim(),
-          'time': DateFormat('kk:mm').format(now)
-        },
-      );
-      notesController.clear();
-    }
   }
 
   void addStateToFirebase() async {

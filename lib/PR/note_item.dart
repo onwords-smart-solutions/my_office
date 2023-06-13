@@ -1,7 +1,11 @@
+import 'dart:io';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 
 class NoteItem extends StatefulWidget {
@@ -9,6 +13,7 @@ class NoteItem extends StatefulWidget {
   final String updatedTime;
   final String updatedDate;
   final String note;
+  final String url;
 
   const NoteItem({
     Key? key,
@@ -16,6 +21,7 @@ class NoteItem extends StatefulWidget {
     required this.updatedDate,
     required this.updatedStaff,
     required this.updatedTime,
+    required this.url,
   }) : super(key: key);
 
   @override
@@ -24,8 +30,63 @@ class NoteItem extends StatefulWidget {
 
 class _NoteItemState extends State<NoteItem> {
    var firebaseRef  = FirebaseDatabase.instance.ref().child('customer/');
+
+   final audioPlayer = AudioPlayer();
+   bool isPlaying = false;
+   bool isPaused = false;
+   Duration duration = Duration.zero;
+   Duration position = Duration.zero;
+
+
+   @override
+   void initState() {
+     //Listen to player state change
+     audioPlayer.onPlayerStateChanged.listen((state) {
+       if (state == PlayerState.completed) {
+         if (!mounted) return;
+         setState(() {
+           position = Duration.zero;
+         });
+       }
+       if (!mounted) return;
+       setState(() {
+         isPlaying = state == PlayerState.playing;
+       });
+     });
+
+     //Listen to audio duration change
+     audioPlayer.onDurationChanged.listen((newDuration) {
+       if (!mounted) return;
+       setState(() {
+         duration = newDuration;
+       });
+     });
+
+     //Listen to audio position change
+     audioPlayer.onPositionChanged.listen((newPosition) {
+       if (!mounted) return;
+       setState(() {
+         position = newPosition;
+       });
+     });
+     super.initState();
+   }
+
+   @override
+   void dispose() {
+     audioPlayer.dispose();
+     super.dispose();
+   }
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery
+        .of(context)
+        .size
+        .height;
+    final width = MediaQuery
+        .of(context)
+        .size
+        .width;
     return Container(
       padding: const EdgeInsets.all(8.0),
       margin: const EdgeInsets.symmetric(horizontal: 5.0),
@@ -77,12 +138,56 @@ class _NoteItemState extends State<NoteItem> {
 
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
-            child: Text(
-              widget.note,
-              style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium,
-                fontSize: 15.0,
-              ),
+            child: Column(
+              children: [
+                Text(
+                  widget.note,
+                  style: TextStyle(
+                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontSize: 15.0,
+                  ),
+                ),
+                  widget.url != 'null'
+                      ? Row(
+                    children: [
+                      IconButton(
+                        onPressed: () async {
+                          if (isPlaying) {
+                            await audioPlayer.pause();
+                          } else {
+                            await audioPlayer.play(
+                                UrlSource(widget.url));
+                          }
+                        },
+                        icon: Icon(
+                          isPlaying
+                              ? Icons.pause_circle
+                              : Icons.play_circle,
+                          size: 45,
+                          color: isPlaying ? Colors.red : Colors.green,),
+                      ),
+                      SizedBox(
+                        width: width * 0.7,
+                        child: SliderTheme(
+                          data: const SliderThemeData(
+                            trackHeight: 3,
+                          ),
+                          child: Slider(
+                              activeColor: ConstantColor.backgroundColor,
+                              inactiveColor: Colors.grey,
+                              min: 0,
+                              max: duration.inSeconds.toDouble(),
+                              value: position.inSeconds.toDouble(),
+                              onChanged: (value) async {
+                                final position = Duration(seconds: value.toInt());
+                                await audioPlayer.seek(position);
+                              }),
+                        ),
+                      ),
+                    ],
+                  )
+                      : const SizedBox.shrink(),
+              ],
             ),
           ),
         ],

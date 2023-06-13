@@ -24,6 +24,7 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
   bool gstNeed = false;
 
   double finalAmountWithoutGst = 0;
+  double prPoint = 0;
 
   @override
   void dispose() {
@@ -37,6 +38,7 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
     int maxTotalAmount = 0;
     int minTotalAmount = 0;
     double discountAmount = 0;
+    double obcTotal = 0;
     int discountPercentage = 0;
 
     final invoiceProvider = Provider.of<InvoiceProvider>(context);
@@ -49,9 +51,13 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
     for (var invoice in invoiceList) {
       minTotalAmount += invoice.minPrice * invoice.productQuantity;
     }
+    for(var invoice in invoiceList){
+      obcTotal += invoice.obcPrice * invoice.productQuantity;
+    }
 
     int getDiscount1;
     double getDiscount2;
+
     getDiscount1 = maxTotalAmount - minTotalAmount;
     getDiscount2 = (int.parse(getDiscount1.toString()) /
             int.parse(maxTotalAmount.toString())) *
@@ -62,6 +68,8 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
     discountAmount = int.parse(maxTotalAmount.toString()) *
         int.parse(discountPercentage.toString()) /
         100;
+
+
 
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
@@ -237,6 +245,12 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                             double.parse(discountAmount.toString());
                     log('$finalAmountWithoutGst');
                     log('$discountAmount');
+
+
+                    prPoint = (double.parse(finalAmountWithoutGst.toString()) -
+                        double.parse(obcTotal.toString())) /
+                        1000;
+                    log('PR POINT : ${prPoint.toString()}');
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -251,7 +265,7 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                                   gstNeed: gstNeed,
                                   discountAmount:
                                       double.parse(discountAmount.toString())
-                                          .toDouble(), percentage: int.parse(discountController.text),
+                                          .toDouble(), percentage: int.parse(discountController.text), prPoint: prPoint,
                                 ),),);
                   }
                 }).button(),

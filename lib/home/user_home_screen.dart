@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
@@ -8,7 +7,6 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:install_plugin_v2/install_plugin_v2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +27,6 @@ import '../Constant/fonts/constant_font.dart';
 import '../app_version/version.dart';
 import '../constant/app_defaults.dart';
 import '../database/hive_operations.dart';
-import 'package:http/http.dart' as http;
 
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({Key? key}) : super(key: key);
@@ -119,7 +116,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'Suggestions' ||
               AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
               AppDefaults.gridButtonsNames[i] == 'PR Work done' ||
-              AppDefaults.gridButtonsNames[i] == 'Sales points') {
+              AppDefaults.gridButtonsNames[i] == 'Sales points' ||
+          AppDefaults.gridButtonsNames[i] == 'Scan QR')  {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
             userAccessGridButtonsImages.add(AppDefaults.gridButtonsImages[i]);
           }

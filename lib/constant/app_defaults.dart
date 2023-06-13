@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_office/Account/account_screen.dart';
 import 'package:my_office/PR/invoice_generator/screens/client_detials.dart';
+import 'package:my_office/PR/products/scan_qr.dart';
 import 'package:my_office/models/staff_model.dart';
 import '../Absentees/absentees.dart';
 import '../PR/pr_workdone/pr_work_details.dart';
@@ -50,6 +51,7 @@ class AppDefaults {
     'Create products',
     'Sales points',
     'PR Work details',
+    'Scan QR',
   ];
 
   static List<String> gridButtonsImages = [
@@ -76,6 +78,7 @@ class AppDefaults {
     'assets/new_products.png',
     'assets/points_calculation.png',
     'assets/pr_work_details.png',
+    'assets/qr_scanner.png'
   ];
 
   Widget getPage(String buttonName, StaffModel staffInfo) {
@@ -182,6 +185,9 @@ class AppDefaults {
         break;
       case 'PR Work details':
         page = const PrWorkDetails();
+        break;
+      case 'Scan QR':
+        page = const ScanQRScreen();
         break;
     }
     return page;

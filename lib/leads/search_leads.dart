@@ -25,7 +25,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
   List<Map<Object?, Object?>> currentCustomerList = [];
   List<Map<Object?, Object?>> searchCustomerInfo = [];
 
-  List<String> staffs = ['All'];
+  List<String> staffs = ['All', 'Not Assigned'];
   List<String> sortList = [
     'Following Up',
     'Delayed',
