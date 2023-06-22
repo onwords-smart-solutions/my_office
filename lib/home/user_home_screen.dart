@@ -15,6 +15,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
+import 'package:my_office/leave_apply/leave_apply_screen.dart';
 import 'package:my_office/leave_approval/leave_approval_screen.dart';
 import 'package:my_office/models/staff_model.dart';
 import 'package:my_office/suggestions/view_suggestions.dart';
@@ -117,7 +118,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
               AppDefaults.gridButtonsNames[i] == 'PR Work done' ||
               AppDefaults.gridButtonsNames[i] == 'Sales points' ||
-          AppDefaults.gridButtonsNames[i] == 'Scan QR')  {
+              AppDefaults.gridButtonsNames[i] == 'Scan QR') {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
             userAccessGridButtonsImages.add(AppDefaults.gridButtonsImages[i]);
           }
@@ -222,12 +223,30 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
       final screen = event.data['screen'];
       if (screen == 'ViewSuggestionsScreen') {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) =>
-                const ViewSuggestions()));
-      }else if(screen == 'LeaveApprovalScreen'){
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => LeaveApprovalScreen(name: staffInfo!.name, uid: staffInfo!.uid,)));
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => const ViewSuggestions(),
+          ),
+        );
+      } else if (screen == 'LeaveApprovalScreen') {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => LeaveApprovalScreen(
+              name: staffInfo!.name,
+              uid: staffInfo!.uid,
+              department: staffInfo!.department,
+            ),
+          ),
+        );
+      } else if (screen == 'LeaveApplyForm') {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => LeaveApplyScreen(
+                name: staffInfo!.name,
+                uid: staffInfo!.uid,
+                department: staffInfo!.department),
+          ),
+        );
       }
     });
     super.initState();

@@ -18,6 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'PR/invoice_generator/models/providers.dart';
 import 'PR/invoice_generator/screens/client_detials.dart';
+import 'firebase_options.dart';
 import 'introduction/intro_screen.dart';
 import 'models/visit_model.dart';
 
@@ -25,7 +26,9 @@ import 'models/visit_model.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   //Hive database Setup
   await Hive.initFlutter();
   if (!Hive.isAdapterRegistered(StaffModelAdapter().typeId)) {

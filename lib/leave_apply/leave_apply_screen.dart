@@ -13,8 +13,9 @@ import 'package:http/http.dart' as http;
 class LeaveApplyScreen extends StatefulWidget {
   final String name;
   final String uid;
+  final String department;
 
-  const LeaveApplyScreen({Key? key, required this.name, required this.uid})
+  const LeaveApplyScreen({Key? key, required this.name, required this.uid, required this.department})
       : super(key: key);
 
   @override
@@ -42,10 +43,6 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
       dateTime = newDate;
     });
   }
-
-  //DROP DOWN BUTTON VALUES//
-  // List<String> departments = ['APP', 'MEDIA', 'WEB', 'PR', 'RND', 'OTHER'];
-  // String? dropDownValue;
   List<String> mgmtTokens = [
     'hCxvT3mh1sgORNUMjsSNc9rgxgk2',
     '58JIRnAbechEMJl8edlLvRzHcW52',
@@ -369,10 +366,9 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
         physics: const BouncingScrollPhysics(),
         controller: _tabController,
         children: [
-          /// First Screen
+          // First Screen
           tabBarViewFirstScreen(height, width),
-
-          /// Second Screen
+          // Second Screen
           tabBarViewSecondScreen(height, width),
         ],
       ),
@@ -383,11 +379,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
     final height = MediaQuery.of(context).size.height;
     return GestureDetector(
       onTap: () {
-        addLeaveToDb();
-     for(var mgmt in mgmtTokens){
-       sendNotification( mgmt, 'My Office',
-       'New leave form has been submitted by ${widget.name}..');
-     }
+         addLeaveToDb();
       },
       child: Container(
         height: height * 0.07,
@@ -478,45 +470,6 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
     );
   }
 
-  //DEPARTMENT CHOOSE FUNCTION//
-  // Widget buildDepartment() {
-  //   return Row(
-  //     mainAxisAlignment: MainAxisAlignment.start,
-  //     children: [
-  //       Text(
-  //         'Department  -  ',
-  //         style: TextStyle(
-  //           color: ConstantColor.headingTextColor,
-  //           fontFamily: ConstantFonts.poppinsMedium,
-  //           fontSize: 17,
-  //           fontWeight: FontWeight.w700,
-  //         ),
-  //       ),
-  //       DropdownButton(
-  //         value: dropDownValue,
-  //         style: TextStyle(
-  //           fontSize: 16,
-  //           fontWeight: FontWeight.w700,
-  //           fontFamily: ConstantFonts.poppinsRegular,
-  //           color: ConstantColor.backgroundColor,
-  //         ),
-  //         items: departments.map((String departments) {
-  //           return DropdownMenuItem(
-  //             value: departments,
-  //             child: Text(departments),
-  //           );
-  //         }).toList(),
-  //         icon: const Icon(Icons.keyboard_arrow_down),
-  //         onChanged: (String? newValue) {
-  //           setState(() {
-  //             dropDownValue = newValue!;
-  //           });
-  //         },
-  //       ),
-  //     ],
-  //   );
-  // }
-
   Widget radioButtons() {
     final width = MediaQuery.of(context).size.width;
     return Row(
@@ -603,7 +556,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
     );
   }
 
-  void addLeaveToDb() async {
+   void addLeaveToDb() async {
     if (dateTime == null) {
       final snackBar = SnackBar(
         content: Text(
@@ -660,6 +613,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
         'reason': leaveReason.text.trim(),
         'type': _reason,
         'name': widget.name,
+        'dep': widget.department,
       });
       final snackBar = SnackBar(
         content: Text(
@@ -673,7 +627,12 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
         ),
         backgroundColor: Colors.green,
       );
+      checkLeaveStatus();
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      for(var mgmt in mgmtTokens){
+        sendNotification( mgmt, 'My Office',
+        'New leave form has been submitted by ${widget.name}..');
+      }
       leaveReason.clear();
       setState(() {
         _reason = null;

@@ -1,17 +1,21 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/models/staff_leave_model.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
+import 'package:http/http.dart' as http;
 import '../util/main_template.dart';
 
 class LeaveApprovalScreen extends StatefulWidget {
   final String uid;
   final String name;
-  const LeaveApprovalScreen({super.key, required this.uid, required this.name});
+  final String department;
+  const LeaveApprovalScreen({super.key, required this.uid, required this.name, required this.department});
 
   @override
   State<LeaveApprovalScreen> createState() => _LeaveApprovalScreenState();
@@ -50,11 +54,13 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                   for (var leaveRequest in month.children) {
                     String name = 'GHOST';
                     String status = 'Pending';
+                    String department = 'Not provided';
                     final leaveData =
                         leaveRequest.value as Map<Object?, Object?>;
                     try {
                       name = leaveData['name'].toString();
                       status = leaveData['status'].toString();
+                      department = leaveData['dep'].toString() == 'null' ? 'Not provided' :leaveData['dep'].toString();
                     } catch (e) {
                       log('Error while fetching leave details $e');
                     }
@@ -67,7 +73,8 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                         month: month.key.toString(),
                         year: year.key.toString(),
                         reason: leaveData['reason'].toString(),
-                        type: leaveData['type'].toString());
+                        type: leaveData['type'].toString(),
+                        department: department);
 
                     staffLeaves.add(data);
                   }
@@ -185,6 +192,19 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                                   ],
                                 ),
                                 const SizedBox(height: 10.0),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: width * .4,
+                                      child: textWidget('Department', 15),
+                                    ),
+                                    Expanded(
+                                      child: textWidget(
+                                          ':  ${staffLeaves[index].department}', 15),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 10.0),
                               ],
                             ),
                           ),
@@ -232,6 +252,8 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                                               setState(() {
                                                 approve = true;
                                               });
+                                              sendNotification(staffLeaves[index].uid, 'My Office',
+                                                  'Your leave request has been Approved by ${widget.name}');
                                               Navigator.of(context).pop();
                                             },
                                           ),
@@ -250,6 +272,8 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                                               setState(() {
                                                 decline = true;
                                               });
+                                              sendNotification(staffLeaves[index].uid, 'My Office',
+                                                  'Your leave request has been Declined by ${widget.name}');
                                               Navigator.of(context).pop();
                                             },
                                           ),
@@ -405,14 +429,17 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                   color: ConstantColor.blackColor),
             ),
             elevation: 10,
-            content: ListTile(
-              title: Text(
-                reason,
-                style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: ConstantFonts.poppinsRegular,
-                    color: ConstantColor.backgroundColor),
+            content: SingleChildScrollView(
+              physics: const ClampingScrollPhysics(),
+              child: ListTile(
+                title: Text(
+                  reason,
+                  style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: ConstantFonts.poppinsRegular,
+                      color: ConstantColor.backgroundColor),
+                ),
               ),
             ),
             actions: [
@@ -459,5 +486,56 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
         overflow: TextOverflow.ellipsis,
       ),
     );
+  }
+
+  //Leave approve status for employees
+  Future<void> sendNotification(
+      String userId, String title, String body) async {
+    FirebaseFirestore.instance
+        .collection('Devices')
+        .doc(userId)
+        .get()
+        .then((value) async {
+      if (value.exists) {
+        final data = value.data();
+        final mgmtDeviceToken = data!['Token'];
+        if (mgmtDeviceToken != null) {
+          const url = 'https://fcm.googleapis.com/fcm/send';
+          const serverKey =
+              'AAAAhAGZ-Jw:APA91bFk_GTSGX1LAj-ZxOW7DQn8Q69sYLStSB8lukQDlxBMmugrkQCsgIvuFm0fU5vBbVB5SATjaoO0mrCdsJm03ZEEZtaRdH-lQ9ZmX5RpYuyLytWyHVH7oDu-6LaShqrVE5vYHCqK'; // Your FCM server key
+          final headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'key=$serverKey',
+          };
+
+          final payload = {
+            'notification': {
+              'title': title,
+              'body': body,
+            },
+            'priority': 'high',
+            'data': {
+              'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+              'screen' : 'LeaveApplyForm',
+              'status': 'done',
+            },
+            'to': mgmtDeviceToken,
+          };
+
+          final response = await http.post(
+            Uri.parse(url),
+            headers: headers,
+            body: jsonEncode(payload),
+          );
+
+          if (response.statusCode == 200) {
+            print('Notification sent successfully!');
+          } else {
+            print(
+                'Error sending notification. Status code: ${response.statusCode}');
+          }
+        }
+      }
+    });
   }
 }

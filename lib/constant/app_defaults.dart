@@ -78,7 +78,7 @@ class AppDefaults {
     'assets/new_products.png',
     'assets/points_calculation.png',
     'assets/pr_work_details.png',
-    'assets/qr_scanner.png'
+    'assets/qr_scanner_points.png'
   ];
 
   Widget getPage(String buttonName, StaffModel staffInfo) {
@@ -108,6 +108,7 @@ class AppDefaults {
         page = LeaveApplyScreen(
           name: staffInfo.name,
           uid: staffInfo.uid,
+          department: staffInfo.department,
         );
         break;
       case 'Onyx':
@@ -120,6 +121,7 @@ class AppDefaults {
         page = LeaveApprovalScreen(
           uid: staffInfo.uid,
           name: staffInfo.name,
+          department: staffInfo.department,
         );
         break;
       case 'Search leads':

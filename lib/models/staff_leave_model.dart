@@ -7,6 +7,7 @@ class StaffLeaveModel {
   final String reason;
   final String status;
   final String type;
+  final String department;
 
   StaffLeaveModel(
       {required this.name,
@@ -16,5 +17,6 @@ class StaffLeaveModel {
       required this.month,
       required this.year,
       required this.reason,
-      required this.type});
+      required this.type,
+      required this.department});
 }
