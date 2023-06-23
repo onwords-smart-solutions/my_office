@@ -850,119 +850,119 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                         OpenFile.open(file.path).then((value) async {
                           ///...............FIREBASE..........////
                           /// INVOICE OR PROFORMA_INVOICE
-                          // if (clientModel.docType == "INVOICE" ||
-                          //     clientModel.docType == "PROFORMA_INVOICE") {
-                          //   String id = generateRandomString(5)
-                          //       .toUpperCase()
-                          //       .toString();
-                          //   if (alreadyGeneratedId
-                          //       .any((element) => element == id)) {
-                          //     dev.log('Already Id Created. Create New one');
-                          //     id = generateRandomString(5)
-                          //         .toUpperCase()
-                          //         .toString();
-                          //   } else {
-                          //     var snapshot = await firebaseStorage
-                          //         .ref()
-                          //         .child(
-                          //             '${clientModel.docType}/INV${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
-                          //         .putFile(pdfFile);
-                          //     var downloadUrl =
-                          //         await snapshot.ref.getDownloadURL();
-                          //
-                          //     /// INSTALLATION-INVOICE......
-                          //     final installationPdfFile = await InstallationPdf(
-                          //       documentLen: docLen,
-                          //       estimateDate:
-                          //           DateTime.parse(estimateDateController.text),
-                          //     ).generate(clientModel, productDetailsModel);
-                          //
-                          //     var snapshotInstallation = await firebaseStorage
-                          //         .ref()
-                          //         .child(
-                          //             'INSTALLATION-INVOICE/INV${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
-                          //         .putFile(installationPdfFile);
-                          //     var downloadUrlInstallation =
-                          //         await snapshotInstallation.ref
-                          //             .getDownloadURL();
-                          //
-                          //     var invoice = {
-                          //       'Customer_name': clientModel.name,
-                          //       'Status': 'Processing',
-                          //       'TimeStamp': myTimeStamp.seconds,
-                          //       'CreatedBy': staffInfo?.email,
-                          //       'mobile_number': clientModel.phone,
-                          //       'document_link': downloadUrl,
-                          //       'installation_document_link':
-                          //           downloadUrlInstallation,
-                          //     };
-                          //     var proformaInvoice = {
-                          //       'Customer_name': clientModel.name,
-                          //       'id': "#$id",
-                          //       'Status': 'Processing',
-                          //       'TimeStamp': myTimeStamp.seconds,
-                          //       'CreatedBy': staffInfo?.email,
-                          //       'mobile_number': clientModel.phone,
-                          //       'document_link': downloadUrl,
-                          //       'installation_document_link':
-                          //           downloadUrlInstallation,
-                          //     };
-                          //
-                          //     databaseReference
-                          //         .child('QuotationAndInvoice')
-                          //         .child(clientModel.docType == 'INVOICE'
-                          //             ? 'INVOICE'
-                          //             : 'PROFORMA_INVOICE')
-                          //         .child('${Utils.formatYear(date)}')
-                          //         .child('${Utils.formatMonth(date)}')
-                          //         .child(
-                          //             '${clientModel.docType == 'INVOICE' ? 'INV_' : 'PRO_INV_'}${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
-                          //         .set(clientModel.docType == 'INVOICE'
-                          //             ? invoice
-                          //             : proformaInvoice);
-                          //   }
-                          // }
-                          //
+                          if (clientModel.docType == "INVOICE" ||
+                              clientModel.docType == "PROFORMA_INVOICE") {
+                            String id = generateRandomString(5)
+                                .toUpperCase()
+                                .toString();
+                            if (alreadyGeneratedId
+                                .any((element) => element == id)) {
+                              dev.log('Already Id Created. Create New one');
+                              id = generateRandomString(5)
+                                  .toUpperCase()
+                                  .toString();
+                            } else {
+                              var snapshot = await firebaseStorage
+                                  .ref()
+                                  .child(
+                                      '${clientModel.docType}/INV${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
+                                  .putFile(pdfFile);
+                              var downloadUrl =
+                                  await snapshot.ref.getDownloadURL();
+
+                              /// INSTALLATION-INVOICE......
+                              final installationPdfFile = await InstallationPdf(
+                                documentLen: docLen,
+                                estimateDate:
+                                    DateTime.parse(estimateDateController.text),
+                              ).generate(clientModel, productDetailsModel);
+
+                              var snapshotInstallation = await firebaseStorage
+                                  .ref()
+                                  .child(
+                                      'INSTALLATION-INVOICE/INV${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
+                                  .putFile(installationPdfFile);
+                              var downloadUrlInstallation =
+                                  await snapshotInstallation.ref
+                                      .getDownloadURL();
+
+                              var invoice = {
+                                'Customer_name': clientModel.name,
+                                'Status': 'Processing',
+                                'TimeStamp': myTimeStamp.seconds,
+                                'CreatedBy': staffInfo?.email,
+                                'mobile_number': clientModel.phone,
+                                'document_link': downloadUrl,
+                                'installation_document_link':
+                                    downloadUrlInstallation,
+                              };
+                              var proformaInvoice = {
+                                'Customer_name': clientModel.name,
+                                'id': "#$id",
+                                'Status': 'Processing',
+                                'TimeStamp': myTimeStamp.seconds,
+                                'CreatedBy': staffInfo?.email,
+                                'mobile_number': clientModel.phone,
+                                'document_link': downloadUrl,
+                                'installation_document_link':
+                                    downloadUrlInstallation,
+                              };
+
+                              databaseReference
+                                  .child('QuotationAndInvoice')
+                                  .child(clientModel.docType == 'INVOICE'
+                                      ? 'INVOICE'
+                                      : 'PROFORMA_INVOICE')
+                                  .child('${Utils.formatYear(date)}')
+                                  .child('${Utils.formatMonth(date)}')
+                                  .child(
+                                      '${clientModel.docType == 'INVOICE' ? 'INV_' : 'PRO_INV_'}${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
+                                  .set(clientModel.docType == 'INVOICE'
+                                      ? invoice
+                                      : proformaInvoice);
+                            }
+                          }
+
                           // /// QUOTATION
-                          // else {
-                          //   var snapshot = await firebaseStorage
-                          //       .ref()
-                          //       .child(
-                          //           'QUOTATION/EST${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
-                          //       .putFile(pdfFile);
-                          //   var downloadUrl =
-                          //       await snapshot.ref.getDownloadURL();
-                          //   var quotation = {
-                          //     'Customer_name': clientModel.name,
-                          //     'Status': 'Processing',
-                          //     'TimeStamp': myTimeStamp.seconds,
-                          //     'CreatedBy': staffInfo?.email,
-                          //     'mobile_number': clientModel.phone,
-                          //     'document_link': downloadUrl,
-                          //   };
-                          //   databaseReference
-                          //       .child('QuotationAndInvoice')
-                          //       .child('QUOTATION')
-                          //       .child('${Utils.formatYear(date)}')
-                          //       .child('${Utils.formatMonth(date)}')
-                          //       .child(
-                          //           'EST${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
-                          //       .set(quotation);
-                          // }
+                          else {
+                            var snapshot = await firebaseStorage
+                                .ref()
+                                .child(
+                                    'QUOTATION/EST${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
+                                .putFile(pdfFile);
+                            var downloadUrl =
+                                await snapshot.ref.getDownloadURL();
+                            var quotation = {
+                              'Customer_name': clientModel.name,
+                              'Status': 'Processing',
+                              'TimeStamp': myTimeStamp.seconds,
+                              'CreatedBy': staffInfo?.email,
+                              'mobile_number': clientModel.phone,
+                              'document_link': downloadUrl,
+                            };
+                            databaseReference
+                                .child('QuotationAndInvoice')
+                                .child('QUOTATION')
+                                .child('${Utils.formatYear(date)}')
+                                .child('${Utils.formatMonth(date)}')
+                                .child(
+                                    'EST${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
+                                .set(quotation);
+                          }
                         }).then((value) {
-                          // fileNameController.clear();
-                          // listOfDocLength.clear();
-                          // estimateDateController.clear();
-                          // grandTotal = 0;
-                          // gst = 0;
-                          // Provider.of<InvoiceProvider>(context, listen: false)
-                          //     .clearAllData();
-                          // Navigator.pushAndRemoveUntil(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (_) => const UserHomeScreen()),
-                          //     (route) => false);
-                          // // Navigator.pushNamedAndRemoveUntil(context, '/invoiceGenerator', (route) => false);
+                          fileNameController.clear();
+                          listOfDocLength.clear();
+                          estimateDateController.clear();
+                          grandTotal = 0;
+                          gst = 0;
+                          Provider.of<InvoiceProvider>(context, listen: false)
+                              .clearAllData();
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const UserHomeScreen()),
+                              (route) => false);
+                          // Navigator.pushNamedAndRemoveUntil(context, '/invoiceGenerator', (route) => false);
                         });
                       }
                     },

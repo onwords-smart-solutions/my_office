@@ -3,6 +3,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
@@ -24,6 +25,7 @@ class AddNotes extends StatefulWidget {
 class _AddNotesState extends State<AddNotes> {
   TextEditingController notesController = TextEditingController();
   File? audioFile;
+  TextEditingController dateController = TextEditingController();
 
   final audioPlayer = AudioPlayer();
   bool isPlaying = false;
@@ -84,14 +86,8 @@ class _AddNotesState extends State<AddNotes> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery
-        .of(context)
-        .size
-        .height;
-    final width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: const Color(0xffF1F2F8),
       appBar: AppBar(
@@ -132,7 +128,7 @@ class _AddNotesState extends State<AddNotes> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                "Add notes :",
+                "Add notes ",
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontFamily: ConstantFonts.poppinsRegular,
@@ -154,17 +150,91 @@ class _AddNotesState extends State<AddNotes> {
                 ),
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: CupertinoColors.systemPurple,
+                          width: 2)
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: CupertinoColors.systemGrey, width: 2)
                   ),
                   hintText: 'Enter your notes here..',
                   hintStyle: TextStyle(
-                    color: Colors.black.withOpacity(0.4),
+                    color: CupertinoColors.systemGrey,
                     fontWeight: FontWeight.w600,
+                    fontSize: 15,
                     fontFamily: ConstantFonts.poppinsRegular,
                   ),
                 ),
               ),
             ),
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: Text(
+            //     'Set Reminder',
+            //     style: TextStyle(
+            //       fontSize: 16,
+            //       fontWeight: FontWeight.w600,
+            //       fontFamily: ConstantFonts.poppinsRegular,
+            //     ),
+            //   ),
+            // ),
+            // Padding(
+            //   padding: const EdgeInsets.all(8),
+            //   child: TextField(
+            //     controller: dateController,
+            //     textInputAction: TextInputAction.done,
+            //     readOnly: true,
+            //     onTap: () async {
+            //       DateTime? pickedDate = await showDatePicker(
+            //         context: context,
+            //         initialDate: DateTime.now(),
+            //         firstDate: DateTime(2000),
+            //         //DateTime.now() - not to allow to choose before today.
+            //         lastDate: DateTime(2101),
+            //       );
+            //       if (pickedDate != null) {
+            //         String formattedDate =
+            //         DateFormat('yyyy-MM-dd')
+            //             .format(pickedDate);
+            //         setState(() {
+            //           dateController.text = formattedDate; //set output date to TextField value.
+            //         });
+            //       }
+            //     },
+            //     decoration: InputDecoration(
+            //       contentPadding: const EdgeInsets.all(10),
+            //       prefixIcon: const Icon(CupertinoIcons.calendar,color: CupertinoColors.systemPurple),
+            //       border: OutlineInputBorder(
+            //         borderRadius: BorderRadius.circular(12),
+            //       ),
+            //       focusedBorder: OutlineInputBorder(
+            //         borderRadius: BorderRadius.circular(12),
+            //         borderSide: const BorderSide(color: CupertinoColors.systemPurple,
+            //         width: 2)
+            //       ),
+            //       enabledBorder: OutlineInputBorder(
+            //         borderRadius: BorderRadius.circular(12),
+            //         borderSide: const BorderSide(color: CupertinoColors.systemGrey, width: 2)
+            //       ),
+            //       hintText: 'Tap to pick a date',
+            //       hintStyle: TextStyle(
+            //         fontFamily: ConstantFonts.poppinsRegular,
+            //         fontWeight: FontWeight.w600,
+            //         fontSize: 15,
+            //         color: CupertinoColors.systemGrey
+            //       ),
+            //     ),
+            //     style: TextStyle(
+            //       fontSize: 16,
+            //       fontWeight: FontWeight.w600,
+            //       fontFamily: ConstantFonts.poppinsRegular,
+            //     ),
+            //   ),
+            // ),
             Padding(
               padding: const EdgeInsets.all(8),
               child: ElevatedButton(
@@ -193,43 +263,45 @@ class _AddNotesState extends State<AddNotes> {
                 ),
                 child: audioFile != null
                     ? Row(
-                  children: [
-                    IconButton(
-                      onPressed: () async {
-                        if (isPlaying) {
-                          await audioPlayer.pause();
-                        } else {
-                          await audioPlayer.play(
-                              DeviceFileSource(audioFile!.path));
-                        }
-                      },
-                      icon: Icon(
-                        isPlaying
-                            ? Icons.pause_circle
-                            : Icons.play_circle,
-                        size: 45,
-                        color: isPlaying ? Colors.red : Colors.green,),
-                    ),
-                    SizedBox(
-                      width: width * 0.7,
-                      child: SliderTheme(
-                        data: const SliderThemeData(
-                          trackHeight: 3,
-                        ),
-                        child: Slider(
-                            activeColor: ConstantColor.backgroundColor,
-                            inactiveColor: Colors.grey,
-                            min: 0,
-                            max: duration.inSeconds.toDouble(),
-                            value: position.inSeconds.toDouble(),
-                            onChanged: (value) async {
-                              final position = Duration(seconds: value.toInt());
-                              await audioPlayer.seek(position);
-                            }),
-                      ),
-                    ),
-                  ],
-                )
+                        children: [
+                          IconButton(
+                            onPressed: () async {
+                              if (isPlaying) {
+                                await audioPlayer.pause();
+                              } else {
+                                await audioPlayer
+                                    .play(DeviceFileSource(audioFile!.path));
+                              }
+                            },
+                            icon: Icon(
+                              isPlaying
+                                  ? Icons.pause_circle
+                                  : Icons.play_circle,
+                              size: 45,
+                              color: isPlaying ? Colors.red : Colors.green,
+                            ),
+                          ),
+                          SizedBox(
+                            width: width * 0.7,
+                            child: SliderTheme(
+                              data: const SliderThemeData(
+                                trackHeight: 3,
+                              ),
+                              child: Slider(
+                                  activeColor: ConstantColor.backgroundColor,
+                                  inactiveColor: Colors.grey,
+                                  min: 0,
+                                  max: duration.inSeconds.toDouble(),
+                                  value: position.inSeconds.toDouble(),
+                                  onChanged: (value) async {
+                                    final position =
+                                        Duration(seconds: value.toInt());
+                                    await audioPlayer.seek(position);
+                                  }),
+                            ),
+                          ),
+                        ],
+                      )
                     : const SizedBox.shrink(),
               ),
             ),
@@ -268,9 +340,7 @@ class _AddNotesState extends State<AddNotes> {
   }
 
   void addNoteToDatabase() async {
-    if (notesController.text
-        .trim()
-        .isEmpty) {
+    if (notesController.text.trim().isEmpty) {
       final snackBar = SnackBar(
         content: Text(
           'Enter some notes..',
@@ -289,17 +359,14 @@ class _AddNotesState extends State<AddNotes> {
       DateTime now = DateTime.now();
       var timeStamp = DateFormat('yyyy-MM-dd_kk:mm:ss').format(now);
       final audio = FirebaseStorage.instance.ref().child(
-          'AUDIO_NOTES/${widget.customerInfo['phone_number']
-              .toString()}/${DateTime
-              .now()
-              .millisecondsSinceEpoch}/${widget.currentStaffName}');
+          'AUDIO_NOTES/${widget.customerInfo['phone_number'].toString()}/${DateTime.now().millisecondsSinceEpoch}/${widget.currentStaffName}');
       audio.putFile(File(audioFile!.absolute.path)).whenComplete(() async {
         final url = await audio.getDownloadURL();
 
         final ref = FirebaseDatabase.instance.ref();
-        ref.child(
-            'customer/${widget.customerInfo['phone_number']
-                .toString()}/notes/$timeStamp')
+        ref
+            .child(
+                'customer/${widget.customerInfo['phone_number'].toString()}/notes/$timeStamp')
             .update(
           {
             'date': DateFormat('yyyy-MM-dd').format(now),
@@ -328,9 +395,9 @@ class _AddNotesState extends State<AddNotes> {
       DateTime now = DateTime.now();
       var timeStamp = DateFormat('yyyy-MM-dd_kk:mm:ss').format(now);
       final ref = FirebaseDatabase.instance.ref();
-      ref.child(
-          'customer/${widget.customerInfo['phone_number']
-              .toString()}/notes/$timeStamp')
+      ref
+          .child(
+              'customer/${widget.customerInfo['phone_number'].toString()}/notes/$timeStamp')
           .update(
         {
           'date': DateFormat('yyyy-MM-dd').format(now),

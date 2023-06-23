@@ -7,6 +7,9 @@ import 'package:my_office/util/main_template.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 import '../PR/customer_item.dart';
+import 'package:printing/printing.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 
 class SearchLeadsScreen extends StatefulWidget {
   final StaffModel staffInfo;
@@ -432,13 +435,40 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                   ascending: isAscending);
             },
             icon: const Icon(Icons.cancel,size: 20.0,),
-
             color: Colors.red,
           ),
+          // const Spacer(),
+          // // Printer button for printing page
+          // CupertinoButton(
+          //   borderRadius: BorderRadius.circular(20),
+          //   onPressed: _createPdf,
+          //   child: const Icon(CupertinoIcons.printer_fill),
+          // ),
         ],
       ),
     );
   }
+
+  //Creating the Pdf for printing
+  Future <void> _createPdf() async {
+    final doc = pw.Document();
+    
+    doc.addPage(
+      pw.Page(
+      pageFormat: PdfPageFormat.a4,
+      build: (_) {
+        return pw.Center(
+            child: pw.Expanded(
+              child: pw.Text('Hello')
+            ));
+      })
+      );
+
+    //Printing the document
+    await Printing.layoutPdf(onLayout: (PdfPageFormat format) async {
+       return doc.save();
+    });
+   }
 
   Widget buildSortHint() {
     return ListView.builder(
