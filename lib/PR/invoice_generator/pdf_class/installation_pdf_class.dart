@@ -112,7 +112,7 @@ class InstallationPdf {
       createText('Location', customerDetails.street, false, 10,0),
       createText('Phone', customerDetails.phone.toString(), false, 10,0),
       SizedBox(height: 1 * PdfPageFormat.mm),
-      createText('GSTIN', customerDetails.gst.toString(), false, 10,0),
+      customerDetails.gst.toString().isNotEmpty ?createText('GSTIN', customerDetails.gst.toString(), false, 10,0) : SizedBox.shrink()
     ],
   );
 
@@ -189,7 +189,7 @@ class InstallationPdf {
       SizedBox(height: 0.5 * PdfPageFormat.cm),
       Divider(),
       SizedBox(height: 2 * PdfPageFormat.mm),
-      buildBodyText("In Sync, with Smart World", true),
+      buildBodyText("In Sync, with Smarter World", true),
       SizedBox(height: 1 * PdfPageFormat.mm),
       // buildSimpleText(title: 'Paypal', value: invoice.supplier.paymentInfo),
     ],

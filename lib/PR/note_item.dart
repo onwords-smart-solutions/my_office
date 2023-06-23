@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -14,6 +15,7 @@ class NoteItem extends StatefulWidget {
   final String updatedDate;
   final String note;
   final String url;
+  final String reminder;
 
   const NoteItem({
     Key? key,
@@ -22,6 +24,7 @@ class NoteItem extends StatefulWidget {
     required this.updatedStaff,
     required this.updatedTime,
     required this.url,
+    required this.reminder
   }) : super(key: key);
 
   @override
@@ -143,10 +146,12 @@ class _NoteItemState extends State<NoteItem> {
                 Text(
                   widget.note,
                   style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium,
-                    fontSize: 15.0,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: ConstantFonts.poppinsRegular,
+                    fontSize: 13.0,
                   ),
                 ),
+                  //Adding audio of calls
                   widget.url != 'null'
                       ? Row(
                     children: [
@@ -187,6 +192,19 @@ class _NoteItemState extends State<NoteItem> {
                     ],
                   )
                       : const SizedBox.shrink(),
+                //Adding reminder date
+                const SizedBox(height: 10),
+                widget.reminder != 'null'
+                ? Text(
+                    'Next Reminder - ${widget.reminder}',
+                  style: TextStyle(
+                    color: CupertinoColors.systemPurple,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: ConstantFonts.poppinsRegular,
+                    fontSize: 13.0,
+                  ),
+                ) :
+                    const SizedBox.shrink()
               ],
             ),
           ),

@@ -148,7 +148,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         setTime: isNotificationSet);
   }
 
-  //CHECKING APP VERSION..//
+  //CHECKING APP VERSION..
   Future<void> checkAppVersion() async {
     final ref = FirebaseDatabase.instance.ref();
     ref.child('myOffice').once().then((value) {

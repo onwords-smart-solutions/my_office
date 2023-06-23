@@ -391,7 +391,38 @@ class _AddNotesState extends State<AddNotes> {
         backgroundColor: Colors.green,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    } else {
+    }
+    // else if(dateController.text.trim().isNotEmpty){
+    //   DateTime now = DateTime.now();
+    //   var timeStamp = DateFormat('yyyy-MM-dd_kk:mm:ss').format(now);
+    //   final ref = FirebaseDatabase.instance.ref();
+    //   ref
+    //       .child(
+    //       'customer/${widget.customerInfo['phone_number'].toString()}/notes/$timeStamp').
+    // update({
+    //     'date': DateFormat('yyyy-MM-dd').format(now),
+    //     'entered_by': widget.currentStaffName,
+    //     'note': notesController.text.trim(),
+    //     'time': DateFormat('kk:mm').format(now),
+    //     'reminder_date': dateController.text.trim(),
+    //   });
+    //   notesController.clear();
+    //   dateController.clear();
+    //   final snackBar = SnackBar(
+    //     content: Text(
+    //       'Your data has been saved..',
+    //       style: TextStyle(
+    //         fontFamily: ConstantFonts.poppinsRegular,
+    //         fontWeight: FontWeight.w600,
+    //         fontSize: 17,
+    //       ),
+    //       textAlign: TextAlign.center,
+    //     ),
+    //     backgroundColor: Colors.green,
+    //   );
+    //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    // }
+    else {
       DateTime now = DateTime.now();
       var timeStamp = DateFormat('yyyy-MM-dd_kk:mm:ss').format(now);
       final ref = FirebaseDatabase.instance.ref();

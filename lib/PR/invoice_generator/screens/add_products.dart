@@ -26,9 +26,13 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   ///CONTROLLERS
   SingleValueDropDownController itemNameController =
-      SingleValueDropDownController();
+  SingleValueDropDownController();
   TextEditingController itemPriceController = TextEditingController();
   TextEditingController itemQtyController = TextEditingController();
+
+  final productName = TextEditingController();
+  final productPrice = TextEditingController();
+  final pageController = PageController();
 
   ///LISTS
   List<DropDownValueModel> productList = [];
@@ -86,6 +90,8 @@ class _ProductDetailsState extends State<ProductDetails> {
     });
   }
 
+  bool manualEntry = false;
+
   @override
   void initState() {
     getProducts();
@@ -97,6 +103,8 @@ class _ProductDetailsState extends State<ProductDetails> {
     itemNameController.dispose();
     itemQtyController.dispose();
     itemPriceController.dispose();
+    productName.dispose();
+    productPrice.dispose();
     super.dispose();
   }
 
@@ -125,11 +133,41 @@ class _ProductDetailsState extends State<ProductDetails> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              SizedBox(
+                // color: Colors.blue,
+                width: 300,
+                child: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        manualEntry = !manualEntry;
+                        log(manualEntry.toString());
+                      });
+                    },
+                    icon: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(manualEntry ? 'Change to DropDown' : 'Change to Manual Entry',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: ConstantFonts.poppinsRegular,
+                          color: CupertinoColors.systemPurple
+                        ),),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        manualEntry
+                            ? const Icon(CupertinoIcons.arrow_2_circlepath)
+                            : const Icon(CupertinoIcons.plus_rectangle_fill_on_rectangle_fill),
+                      ],
+                    )),
+              ),
+
               /// Product Details
-              productDetails(height),
+              productDetails(height,manualEntry),
 
               /// Next Button
-              addButton(height),
+              addButton(height,manualEntry),
             ],
           ),
         ),
@@ -137,7 +175,10 @@ class _ProductDetailsState extends State<ProductDetails> {
     );
   }
 
-  Widget addButton(double height) {
+  Widget addButton(
+      double height,
+      bool isManual
+      ) {
     return Container(
         margin: EdgeInsets.only(top: height * 0.25),
         child: Button('Add Product', () {
@@ -150,13 +191,12 @@ class _ProductDetailsState extends State<ProductDetails> {
 
             Provider.of<InvoiceProvider>(context, listen: false).addProduct(
               ListOfTable(
-                  productName: itemNameController.dropDownValue!.name,
+                  productName: isManual ? productName.text :itemNameController.dropDownValue!.name,
                   productQuantity: int.parse(itemQtyController.text),
                   productPrice: int.parse(itemPriceController.text),
-                  subTotalList: int.parse(itemQtyController.text) *
-                      int.parse(maxPriceStringVal.toString()),
-                  minPrice: int.parse(minPriceStringVal.toString()),
-                  obcPrice: int.parse(obcPriceStringVal.toString())),
+                  subTotalList: isManual ? int.parse(itemQtyController.text) * int.parse(itemPriceController.text.toString()) :  int.parse(itemQtyController.text) * int.parse(maxPriceStringVal.toString()),
+                  minPrice: isManual ? int.parse(itemPriceController.text) : int.parse(minPriceStringVal.toString()),
+                  obcPrice: isManual ? int.parse(itemPriceController.text) : int.parse(obcPriceStringVal.toString())),
             );
             Navigator.pop(context);
 
@@ -167,12 +207,12 @@ class _ProductDetailsState extends State<ProductDetails> {
         }).button());
   }
 
-  Widget productDetails(double height) {
+  Widget productDetails(double height, bool isManualEntry) {
     return Container(
       margin: const EdgeInsets.only(top: 20),
       height: height * 0.3,
       decoration: BoxDecoration(
-          // color: Colors.blueGrey,
+        // color: Colors.blueGrey,
           borderRadius: BorderRadius.circular(20)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -182,13 +222,38 @@ class _ProductDetailsState extends State<ProductDetails> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('  Select Product',style: TextStyle(fontSize: 17,fontWeight: FontWeight.w600, fontFamily: ConstantFonts.poppinsRegular),),
-              Container(
+              Text(
+                isManualEntry
+                    ? '  Enter Product Name\n'  : '  Select Product\n',
+                style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: ConstantFonts.poppinsRegular),
+              ),
+              isManualEntry
+                  ? TextFiledWidget(
+                isEnable: true,
+                controller: productName,
+                textInputType: TextInputType.name,
+                textInputAction: TextInputAction.next,
+                hintName: 'Product Name',
+                icon: const Icon(Icons.currency_rupee_rounded,
+                    color: Colors.black),
+                maxLength: 1000,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Fill Product Name';
+                  }
+                  return null;
+                },
+              ).textInputFiled()
+                  : Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 height: height * .08,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Colors.black.withOpacity(0.3), width: 2),
+                  border: Border.all(
+                      color: Colors.black.withOpacity(0.3), width: 2),
                 ),
                 alignment: Alignment.bottomCenter,
                 child: ClipRRect(
@@ -196,13 +261,15 @@ class _ProductDetailsState extends State<ProductDetails> {
                   child: DropDownTextField(
                     // initialValue: "name4",
                     controller: itemNameController,
-                    textStyle: TextStyle(fontWeight: FontWeight.w600, fontFamily: ConstantFonts.poppinsRegular),
+                    textStyle: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontFamily: ConstantFonts.poppinsRegular),
                     clearOption: true,
                     enableSearch: true,
                     dropDownIconProperty: IconProperty(
                         icon: Icons.arrow_drop_down, color: Colors.black),
-                    clearIconProperty:
-                        IconProperty(color: Colors.black, icon: Icons.clear),
+                    clearIconProperty: IconProperty(
+                        color: Colors.black, icon: Icons.clear),
                     // dropdownColor: Colors.orange,
                     searchDecoration: InputDecoration(
                       hintText: "Select Product",
@@ -212,7 +279,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                       ),
                     ),
 
-                    listTextStyle: TextStyle(fontWeight: FontWeight.w600, fontFamily: ConstantFonts.poppinsRegular, fontSize: 16),
+                    listTextStyle: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontFamily: ConstantFonts.poppinsRegular,
+                        fontSize: 16),
                     validator: (value) {
                       if (value == null) {
                         return "Required Product Name";
@@ -223,7 +293,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                     dropDownItemCount: 6,
                     dropDownList: productList,
                     onChanged: (val) {
-                      selectedItemName = itemNameController.dropDownValue?.name;
+                      selectedItemName =
+                          itemNameController.dropDownValue?.name;
                       getSelectedProductsDetails();
                     },
                   ),
@@ -239,12 +310,13 @@ class _ProductDetailsState extends State<ProductDetails> {
               SizedBox(
                 width: 160,
                 child: TextFiledWidget(
-                  isEnable: false,
+                  isEnable: isManualEntry ? true : false,
                   controller: itemPriceController,
                   textInputType: TextInputType.number,
                   textInputAction: TextInputAction.next,
                   hintName: 'Product Price',
-                  icon: const Icon(Icons.currency_rupee_rounded, color: Colors.black),
+                  icon: const Icon(Icons.currency_rupee_rounded,
+                      color: Colors.black),
                   maxLength: 20,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -254,6 +326,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   },
                 ).textInputFiled(),
               ),
+
               ///QUANTITY FILED
               SizedBox(
                 width: 160,
@@ -272,8 +345,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                   },
                 ).textInputFiled(),
               ),
-
-
             ],
           )
         ],

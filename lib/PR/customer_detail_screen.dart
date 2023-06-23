@@ -322,6 +322,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                       final time = singleNote['time'] ?? 'Not mentioned';
                       final note = singleNote['note'] ?? 'No notes added';
                       final audio = singleNote['audio_file'];
+                      final reminder = singleNote['reminder_date'];
 
                       return Container(
                         margin: const EdgeInsets.symmetric(vertical: 5.0),
@@ -331,6 +332,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                           updatedDate: date.toString(),
                           updatedStaff: name.toString(),
                           updatedTime: time.toString(),
+                          reminder: reminder.toString(),
                         ),
                       );
                     },

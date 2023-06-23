@@ -8,6 +8,7 @@ import '../PR/pr_workdone/pr_work_details.dart';
 import '../PR/pr_workdone/pr_work_entry.dart';
 import '../PR/products/new_product.dart';
 import '../PR/products/point_calculations.dart';
+import '../PR/reminder_screen.dart';
 import '../PR/visit/visit_form_screen.dart';
 import '../PR/visit_check.dart';
 import '../finance/finance_analysis.dart';
@@ -52,6 +53,7 @@ class AppDefaults {
     'Sales points',
     'PR Work details',
     'Scan QR',
+    // 'PR Reminder',
   ];
 
   static List<String> gridButtonsImages = [
@@ -78,7 +80,8 @@ class AppDefaults {
     'assets/new_products.png',
     'assets/points_calculation.png',
     'assets/pr_work_details.png',
-    'assets/qr_scanner_points.png'
+    'assets/qr_scanner_points.png',
+    // 'assets/reminder.png',
   ];
 
   Widget getPage(String buttonName, StaffModel staffInfo) {
@@ -191,6 +194,9 @@ class AppDefaults {
       case 'Scan QR':
         page = const ScanQRScreen();
         break;
+      // case 'PR Reminder':
+      //   page = const ReminderScreen();
+      //   break;
     }
     return page;
   }

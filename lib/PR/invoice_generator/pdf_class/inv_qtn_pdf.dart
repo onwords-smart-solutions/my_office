@@ -145,7 +145,7 @@ class InvAndQtnPdf {
       createText('Location', customerDetails.street, false, 10,0),
       createText('Phone', customerDetails.phone.toString(), false, 10,0),
       SizedBox(height: 1 * PdfPageFormat.mm),
-      createText('GSTIN', customerDetails.gst.toString(), false, 10,0),
+      customerDetails.gst.toString().isNotEmpty ? createText('GSTIN', customerDetails.gst.toString(), false, 10,0): SizedBox.shrink(),
     ],
   );
 
@@ -246,17 +246,17 @@ class InvAndQtnPdf {
               children: [
                 finalTotal('Total', Utils.formatPrice(total.toDouble()),
                   false, 10),
-                finalTotal('Discount $percentage%',
-                  Utils.formatPrice(discount.toDouble()), false, 10),
+                discount != 0 ? finalTotal('Discount $percentage%',
+                  Utils.formatPrice(discount.toDouble()), false, 10) : SizedBox.shrink(),
                 finalTotal('SubTotal',
                   Utils.formatPrice(subTotal.toDouble()), false, 10),
                 needGst
                     ? finalTotal('CGST %',
-                  Utils.formatPrice(cgst.toDouble()), false, 10)
+                  Utils.formatPrice(cgst.toDouble().roundToDouble()), false, 10)
                     : SizedBox(),
                 needGst
                     ? finalTotal('SGST %',
-                    Utils.formatPrice(sgst.toDouble()), false, 10)
+                    Utils.formatPrice(sgst.toDouble().roundToDouble()), false, 10)
                     : SizedBox(),
                 SizedBox(height: 2 * PdfPageFormat.mm),
                 Container(height: 1, width: 180, color: PdfColors.grey400),
@@ -274,11 +274,11 @@ class InvAndQtnPdf {
                     ? Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      finalTotal(
+                      advance != 0 ? finalTotal(
                           'Advanced',
                           Utils.formatPrice(advance.toDouble()),
                           false,
-                          10),
+                          10): SizedBox.shrink(),
                       SizedBox(height: 2 * PdfPageFormat.mm),
                       Container(
                           height: 1,
@@ -347,7 +347,7 @@ class InvAndQtnPdf {
           : Text(''),
       Divider(),
       SizedBox(height: 2 * PdfPageFormat.mm),
-      buildBodyText("In Sync, with Smart World", true),
+      buildBodyText("In Sync, with Smarter World", true),
       SizedBox(height: 1 * PdfPageFormat.mm),
       // buildSimpleText(title: 'Paypal', value: invoice.supplier.paymentInfo),
     ],
