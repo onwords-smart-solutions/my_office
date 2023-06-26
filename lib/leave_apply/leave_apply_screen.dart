@@ -44,13 +44,16 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
     });
   }
   List<String> mgmtTokens = [
-    'hCxvT3mh1sgORNUMjsSNc9rgxgk2',
     '58JIRnAbechEMJl8edlLvRzHcW52',
-    'Ae6DcpP2XmbtEf88OA8oSHQVpFB2',
+    'hCxvT3mh1sgORNUMjsSNc9rgxgk2',
     'QPgtT8vDV8Y9pdy8fhtOmBON1Q03',
     'Vhbt8jIAfiaV1HxuWERLqJh7dbj2',
     'ZIuUpLfSIRgRN5EqP7feKA9SbbS2',
     'pztngdZPCPQrEvmI37b3gf3w33d2',
+    'Ae6DcpP2XmbtEf88OA8oSHQVpFB2',
+    'eGMgZ4YlXjRRAhytqEDtGIBRdtW2',
+    '7lunH9jV0sV5EE2YzjjBrQWyVk72',
+    '6WHjHuUai5ZimnLz4URUDssaMWj1',
   ];
 
   Future<void> sendNotification(

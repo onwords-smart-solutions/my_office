@@ -53,7 +53,7 @@ class AppDefaults {
     'Sales points',
     'PR Work details',
     'Scan QR',
-    // 'PR Reminder',
+    'PR Reminder',
   ];
 
   static List<String> gridButtonsImages = [
@@ -81,7 +81,7 @@ class AppDefaults {
     'assets/points_calculation.png',
     'assets/pr_work_details.png',
     'assets/qr_scanner_points.png',
-    // 'assets/reminder.png',
+    'assets/reminder.png',
   ];
 
   Widget getPage(String buttonName, StaffModel staffInfo) {
@@ -194,9 +194,9 @@ class AppDefaults {
       case 'Scan QR':
         page = const ScanQRScreen();
         break;
-      // case 'PR Reminder':
-      //   page = const ReminderScreen();
-      //   break;
+      case 'PR Reminder':
+        page =  ReminderScreen();
+        break;
     }
     return page;
   }

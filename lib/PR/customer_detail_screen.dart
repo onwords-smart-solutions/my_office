@@ -1,14 +1,9 @@
 import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
 import 'package:my_office/PR/add_notes.dart';
-import 'package:my_office/constant/colors/constant_colors.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:timelines/timelines.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'note_item.dart';
@@ -322,7 +317,6 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                       final time = singleNote['time'] ?? 'Not mentioned';
                       final note = singleNote['note'] ?? 'No notes added';
                       final audio = singleNote['audio_file'];
-                      final reminder = singleNote['reminder_date'];
 
                       return Container(
                         margin: const EdgeInsets.symmetric(vertical: 5.0),
@@ -332,7 +326,6 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                           updatedDate: date.toString(),
                           updatedStaff: name.toString(),
                           updatedTime: time.toString(),
-                          reminder: reminder.toString(),
                         ),
                       );
                     },

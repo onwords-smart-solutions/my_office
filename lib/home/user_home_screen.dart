@@ -45,9 +45,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   List<String> managementStaffNames = [];
+  List<String> tlStaffNames = [];
   List<String> userAccessGridButtonsName = [];
   List<String> userAccessGridButtonsImages = [];
 
+  //Getting management staff names form database
   Future<void> getManagementNames() async {
     List<String> names = [];
     final ref = FirebaseDatabase.instance.ref().child('special_access');
@@ -56,11 +58,24 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         for (var mgmt in value.snapshot.children) {
           names.add(mgmt.value.toString());
         }
-
         managementStaffNames = names;
       }
     });
     getStaffDetail();
+  }
+
+  //Getting Tl names from database
+  Future <void> getTlNames() async {
+    List <String> tlNames = [];
+    final ref = FirebaseDatabase.instance.ref().child('special_access');
+    await ref.child('tl').once().then((value) {
+      if(value.snapshot.exists){
+        for (var tl in value.snapshot.children){
+          tlNames.add(tl.value.toString());
+        }
+        tlStaffNames = tlNames;
+      }
+    });
   }
 
   StaffModel? staffInfo;
@@ -68,6 +83,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   var isDeviceConnected = false;
   bool isAlertSet = false;
 
+  //Checking internet connectivity
   getConnectivity() {
     subscription = Connectivity()
         .onConnectivityChanged
@@ -82,11 +98,14 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     });
   }
 
+  //Getting staff details for accessing the home screen tabs
   void getStaffDetail() async {
     final data = await _hiveOperations.getStaffDetail();
+    final tl = await _hiveOperations.getStaffDetail();
     setState(() {
       log('management names are $managementStaffNames');
       log('current user is ${data.name}');
+      log('tl names are $tlStaffNames');
       if (managementStaffNames.any((element) => element == data.name)) {
         userAccessGridButtonsName.addAll(AppDefaults.gridButtonsNames);
         userAccessGridButtonsName.remove('View suggestions');
@@ -96,17 +115,37 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         userAccessGridButtonsImages.remove('assets/view_suggestions.png');
         userAccessGridButtonsImages.remove('assets/onxy.png');
         userAccessGridButtonsImages.remove('assets/late_entry.png');
-      } else if (data.department == 'ADMIN') {
+      }
+      else if (tlStaffNames.any((element) => element == tl.name)){
+        for (int i = 0; i < AppDefaults.gridButtonsNames.length; i++){
+          if (AppDefaults.gridButtonsNames[i] == 'Work entry' ||
+              AppDefaults.gridButtonsNames[i] == 'Work details' ||
+              AppDefaults.gridButtonsNames[i] == 'Refreshment' ||
+              AppDefaults.gridButtonsNames[i] == 'Leave apply form' ||
+              AppDefaults.gridButtonsNames[i] == 'Absent details' ||
+              AppDefaults.gridButtonsNames[i] == 'Leave approval' ||
+              AppDefaults.gridButtonsNames[i] == 'Suggestions' ||
+              AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
+              AppDefaults.gridButtonsNames[i] == 'Check Virtual entry' ||
+              AppDefaults.gridButtonsNames[i] == 'Entry time' ){
+            userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
+            userAccessGridButtonsImages.add(AppDefaults.gridButtonsImages[i]);
+          }
+        }
+      }
+      else if (data.department == 'ADMIN') {
         userAccessGridButtonsName.addAll(AppDefaults.gridButtonsNames);
         userAccessGridButtonsName.remove('Onyx');
         userAccessGridButtonsName.remove('Late entry');
         userAccessGridButtonsImages.addAll(AppDefaults.gridButtonsImages);
         userAccessGridButtonsImages.remove('assets/onxy.png');
         userAccessGridButtonsImages.remove('assets/late_entry.png');
-      } else if (data.department == 'APP') {
+      }
+      else if (data.department == 'APP') {
         userAccessGridButtonsName.addAll(AppDefaults.gridButtonsNames);
         userAccessGridButtonsImages.addAll(AppDefaults.gridButtonsImages);
-      } else if (data.department == 'PR') {
+      }
+      else if (data.department == 'PR') {
         for (int i = 0; i < AppDefaults.gridButtonsNames.length; i++) {
           if (AppDefaults.gridButtonsNames[i] == 'Work entry' ||
               AppDefaults.gridButtonsNames[i] == 'Refreshment' ||
@@ -118,12 +157,13 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
               AppDefaults.gridButtonsNames[i] == 'PR Work done' ||
               AppDefaults.gridButtonsNames[i] == 'Sales points' ||
-              AppDefaults.gridButtonsNames[i] == 'Scan QR') {
+              AppDefaults.gridButtonsNames[i] == 'Scan QR' ||
+              AppDefaults.gridButtonsNames[i] == 'PR Reminder') {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
             userAccessGridButtonsImages.add(AppDefaults.gridButtonsImages[i]);
           }
-        }
-      } else {
+        }}
+      else {
         for (int i = 0; i < AppDefaults.gridButtonsNames.length; i++) {
           if (AppDefaults.gridButtonsNames[i] == 'Work entry' ||
               AppDefaults.gridButtonsNames[i] == 'Refreshment' ||
@@ -216,6 +256,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   void initState() {
     checkAppVersion();
     getManagementNames();
+    getTlNames();
     getConnectivity();
     setNotification();
     requestPermission();
@@ -293,7 +334,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   image: Image.asset(
                     userAccessGridButtonsImages[index],
                     width: width * 1,
-                    height: height * 0.12,
+                    height: height * 0.11,
                     fit: BoxFit.contain,
                   ),
                   page: page);

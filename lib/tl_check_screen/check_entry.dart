@@ -136,10 +136,13 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
         )
         : widget.staffName == 'Nikhil Deepak' ||
                 widget.staffName == 'Devendiran' ||
-                widget.staffName == 'Jibin K John' ||
                 widget.staffName == 'Anitha' ||
                 widget.staffName == 'Prem Kumar' ||
-                widget.staffName == 'Koushik Romel'
+                widget.staffName == 'Koushik Romel' ||
+                widget.staffName == 'Jibin K John' ||
+                widget.staffName == 'Vinith' ||
+                widget.staffName == 'Raam Kumar' ||
+                widget.staffName == 'Ganesh'
             ? Column(
               children: [
                 Text(
@@ -224,13 +227,11 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
                     },
                   ),
                 ),
-
               ],
             )
-    
             : Column(
                 children: [
-                  Lottie.asset('assets/animations/new_loading', height: 300),
+                  Lottie.asset('assets/animations/no_data.json', height: 300),
                   Center(
                     child:
                     Text(

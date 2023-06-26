@@ -15,7 +15,6 @@ class NoteItem extends StatefulWidget {
   final String updatedDate;
   final String note;
   final String url;
-  final String reminder;
 
   const NoteItem({
     Key? key,
@@ -24,7 +23,6 @@ class NoteItem extends StatefulWidget {
     required this.updatedStaff,
     required this.updatedTime,
     required this.url,
-    required this.reminder
   }) : super(key: key);
 
   @override
@@ -192,19 +190,6 @@ class _NoteItemState extends State<NoteItem> {
                     ],
                   )
                       : const SizedBox.shrink(),
-                //Adding reminder date
-                const SizedBox(height: 10),
-                widget.reminder != 'null'
-                ? Text(
-                    'Next Reminder - ${widget.reminder}',
-                  style: TextStyle(
-                    color: CupertinoColors.systemPurple,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: ConstantFonts.poppinsRegular,
-                    fontSize: 13.0,
-                  ),
-                ) :
-                    const SizedBox.shrink()
               ],
             ),
           ),
