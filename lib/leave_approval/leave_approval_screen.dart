@@ -419,7 +419,8 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
       onTap: () {
         showDialog(
           context: context,
-          builder: (context) => AlertDialog(
+          builder: (context) =>
+              AlertDialog(
             title: Text(
               'Reason :',
               style: TextStyle(

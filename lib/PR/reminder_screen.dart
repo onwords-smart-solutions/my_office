@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/models/reminder_model.dart';
+import 'package:my_office/models/staff_model.dart';
 
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
@@ -13,7 +14,9 @@ import '../util/main_template.dart';
 import 'full_reminders_screen.dart';
 
 class ReminderScreen extends StatefulWidget {
-  const ReminderScreen({super.key});
+  final StaffModel staffInfo;
+
+  const ReminderScreen({super.key, required this.staffInfo});
 
   @override
   State<ReminderScreen> createState() => _ReminderScreenState();
@@ -26,7 +29,8 @@ class _ReminderScreenState extends State<ReminderScreen> {
   //Function for accessing the customer reminders db
   void getReminders() {
     allReminders.clear();
-    final ref = FirebaseDatabase.instance.ref('customer_reminders/$selectedDate/');
+    final ref =
+        FirebaseDatabase.instance.ref('customer_reminders/$selectedDate/');
     ref.once().then((data) {
       for (var customer in data.snapshot.children) {
         final allData = customer.value as Map<Object?, Object?>;
@@ -58,6 +62,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
   DateTime now = DateTime.now();
   var dateFormat = DateFormat('yyyy-MM-dd');
   String? selectedDate;
+
   //Date-picker for selecting reminders date
   datePicker() async {
     DateTime? newDate = await showDatePicker(
@@ -67,8 +72,9 @@ class _ReminderScreenState extends State<ReminderScreen> {
       lastDate: DateTime(2100),
     );
     if (newDate == null) return;
-    setState(() {
-      selectedDate = dateFormat.format(newDate);
+    setState(
+      () {
+        selectedDate = dateFormat.format(newDate);
       },
     );
     getReminders();
@@ -122,86 +128,163 @@ class _ReminderScreenState extends State<ReminderScreen> {
           ),
         ),
         const SizedBox(height: 10),
-        Text('Total reminders : ${allReminders.length}',
+        Text(
+          'Total reminders : ${allReminders.length}',
           style: TextStyle(
             fontSize: 17,
             fontFamily: ConstantFonts.poppinsRegular,
             fontWeight: FontWeight.w600,
           ),
         ),
-        isLoading ?
-        Expanded(
-          child: Center(
-            child: Lottie.asset(
-              "assets/animations/new_loading.json",
-            ),
-          ),
-        ) : allReminders.isNotEmpty ?
-        ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: allReminders.length,
-              itemBuilder: (ctx, i) {
-                  return Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: ConstantColor.background1Color,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          offset: const Offset(-0.0, 5.0),
-                          blurRadius: 8,
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: ListTile(
-                      leading: const Icon(
-                        CupertinoIcons.person_2_fill,
-                        color: CupertinoColors.systemPurple,
-                      ),
-                      title: Text(
-                        allReminders[i].customerName,
-                        style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: ConstantFonts.poppinsRegular,
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => FullRemindersScreen(
-                              fullReminders: allReminders[i],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  );
-              },
-            )
-            : Expanded(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Lottie.asset('assets/animations/no_data.json',
-                    height: 300.0),
-                Text(
-                  'No reminders saved!!',
-                  style: TextStyle(
-                    color: ConstantColor.blackColor,
-                    fontSize: 20,
-                    fontFamily: ConstantFonts.poppinsRegular,
-                    fontWeight: FontWeight.w600,
+        isLoading
+            ? Expanded(
+                child: Center(
+                  child: Lottie.asset(
+                    "assets/animations/new_loading.json",
                   ),
                 ),
-              ],
-            ),
-          ),
-        ),
+              )
+            : allReminders.isNotEmpty
+                ? Expanded(
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: allReminders.length,
+                        itemBuilder: (ctx, i) {
+                          return Container(
+                            margin: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                              color: ConstantColor.background1Color,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  offset: const Offset(-0.0, 5.0),
+                                  blurRadius: 8,
+                                )
+                              ],
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: ListTile(
+                              leading: const Icon(
+                                CupertinoIcons.person_2_fill,
+                                color: CupertinoColors.systemPurple,
+                              ),
+                              trailing: CupertinoButton(
+                                pressedOpacity: 0.5,
+                                child: const Icon(CupertinoIcons.delete_solid,
+                                    color: CupertinoColors.destructiveRed),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (ctx) {
+                                      return AlertDialog(
+                                        title: Text(
+                                          'Do you want to delete the reminder?',
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: ConstantFonts.poppinsRegular,
+                                              color: CupertinoColors.label
+                                          ),
+                                        ),
+                                        elevation: 10,
+                                        actions: [
+                                          Container(
+                                            height: height * 0.05,
+                                            width: width * 0.2,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(20),
+                                            ),
+                                            child: MaterialButton(
+                                              child: Text(
+                                                'Yes',
+                                                style: TextStyle(
+                                                    fontSize: 17,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: ConstantFonts.poppinsRegular,
+                                                    color: CupertinoColors.destructiveRed),
+                                              ),
+                                              onPressed: () async {
+                                                await FirebaseDatabase.instance.ref('customer_reminders/$selectedDate/${allReminders[i].phoneNumber}').remove();
+                                              getReminders();
+                                              Navigator.of(context).pop();
+                                                },
+                                            ),
+                                          ),
+                                          Container(
+                                            height: height * 0.05,
+                                            width: width * 0.2,
+                                             decoration: BoxDecoration(
+                                             borderRadius: BorderRadius.circular(20),
+                                             ),
+                                            child: MaterialButton(
+                                              child: Text(
+                                                'No',
+                                                style: TextStyle(
+                                                  color: CupertinoColors.black,
+                                                    fontFamily: ConstantFonts.poppinsRegular,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 17),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                              title: Text(
+                                allReminders[i].customerName,
+                                style: TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: ConstantFonts.poppinsRegular,
+                                ),
+                              ),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => FullRemindersScreen(
+                                      staffInfo: widget.staffInfo,
+                                      fullReminders: allReminders[i],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  )
+                : Expanded(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Lottie.asset('assets/animations/no_data.json',
+                              height: 300.0),
+                          Text(
+                            'No reminders saved!!',
+                            style: TextStyle(
+                              color: ConstantColor.blackColor,
+                              fontSize: 20,
+                              fontFamily: ConstantFonts.poppinsRegular,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
       ],
     );
   }

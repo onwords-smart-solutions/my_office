@@ -11,6 +11,7 @@ import '../PR/products/point_calculations.dart';
 import '../PR/reminder_screen.dart';
 import '../PR/visit/visit_form_screen.dart';
 import '../PR/visit_check.dart';
+import '../employee_leave_status/employee_names.dart';
 import '../finance/finance_analysis.dart';
 import '../food_count/food_count_screen.dart';
 import '../late_workdone/late_entry.dart';
@@ -54,6 +55,7 @@ class AppDefaults {
     'PR Work details',
     'Scan QR',
     'PR Reminder',
+    // 'Leave status',
   ];
 
   static List<String> gridButtonsImages = [
@@ -63,7 +65,7 @@ class AppDefaults {
     'assets/food_count.png',
     'assets/leave_apply.png',
     'assets/onxy.png',
-    'assets/lead search.png',
+    'assets/absent_details.png',
     'assets/leave_approval.png',
     'assets/search_leads.png',
     'assets/visit.png',
@@ -82,6 +84,7 @@ class AppDefaults {
     'assets/pr_work_details.png',
     'assets/qr_scanner_points.png',
     'assets/reminder.png',
+    // 'assets/leave_status.png',
   ];
 
   Widget getPage(String buttonName, StaffModel staffInfo) {
@@ -195,8 +198,14 @@ class AppDefaults {
         page = const ScanQRScreen();
         break;
       case 'PR Reminder':
-        page =  ReminderScreen();
+        page =  ReminderScreen(staffInfo: staffInfo,);
         break;
+      // case 'Leave status' :
+      //   page = LeaveStatusScreen(
+      //     uid: staffInfo.uid,
+      //     name: staffInfo.name,
+      //   );
+      //   break;
     }
     return page;
   }

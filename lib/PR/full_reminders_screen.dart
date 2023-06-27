@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_office/leads/search_leads.dart';
+import 'package:my_office/models/staff_model.dart';
 
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
@@ -7,7 +10,8 @@ import '../util/screen_template.dart';
 
 class FullRemindersScreen extends StatefulWidget {
   final ReminderModel fullReminders;
-  const FullRemindersScreen({super.key, required this.fullReminders});
+  final StaffModel staffInfo;
+  const FullRemindersScreen({super.key, required this.fullReminders, required this.staffInfo});
 
   @override
   State<FullRemindersScreen> createState() => _FullRemindersScreenState();
@@ -488,7 +492,21 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
               ),
             ],
           ),
-        )
+        ),
+        const SizedBox(height: 30),
+        CupertinoButton(
+          color: CupertinoColors.activeOrange,
+            pressedOpacity: 0.5,
+            borderRadius: BorderRadius.circular(20),
+            child: Text('Get leads',
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontFamily: ConstantFonts.poppinsRegular,
+            ),),
+            onPressed: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> SearchLeadsScreen(staffInfo: widget.staffInfo),),);
+            },
+        ),
       ],
     );
   }

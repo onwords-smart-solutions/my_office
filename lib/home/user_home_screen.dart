@@ -61,6 +61,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         managementStaffNames = names;
       }
     });
+    await getTlNames();
     getStaffDetail();
   }
 
@@ -101,7 +102,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   //Getting staff details for accessing the home screen tabs
   void getStaffDetail() async {
     final data = await _hiveOperations.getStaffDetail();
-    final tl = await _hiveOperations.getStaffDetail();
     setState(() {
       log('management names are $managementStaffNames');
       log('current user is ${data.name}');
@@ -116,7 +116,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         userAccessGridButtonsImages.remove('assets/onxy.png');
         userAccessGridButtonsImages.remove('assets/late_entry.png');
       }
-      else if (tlStaffNames.any((element) => element == tl.name)){
+      else if (tlStaffNames.any((element) => element == data.name)){
         for (int i = 0; i < AppDefaults.gridButtonsNames.length; i++){
           if (AppDefaults.gridButtonsNames[i] == 'Work entry' ||
               AppDefaults.gridButtonsNames[i] == 'Work details' ||
@@ -256,7 +256,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   void initState() {
     checkAppVersion();
     getManagementNames();
-    getTlNames();
     getConnectivity();
     setNotification();
     requestPermission();
@@ -334,7 +333,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   image: Image.asset(
                     userAccessGridButtonsImages[index],
                     width: width * 1,
-                    height: height * 0.11,
+                    height: height * 0.125,
                     fit: BoxFit.contain,
                   ),
                   page: page);

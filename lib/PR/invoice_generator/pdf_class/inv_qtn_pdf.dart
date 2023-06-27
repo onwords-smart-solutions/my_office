@@ -347,7 +347,7 @@ class InvAndQtnPdf {
           : Text(''),
       Divider(),
       SizedBox(height: 2 * PdfPageFormat.mm),
-      buildBodyText("In Sync, with Smarter World", true),
+      buildBodyText("In Sync with the Smarter World", true),
       SizedBox(height: 1 * PdfPageFormat.mm),
       // buildSimpleText(title: 'Paypal', value: invoice.supplier.paymentInfo),
     ],

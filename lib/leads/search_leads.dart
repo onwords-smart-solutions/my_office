@@ -221,7 +221,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
   @override
   Widget build(BuildContext context) {
     return MainTemplate(
-        subtitle: 'Search leads here!',
+        subtitle: 'Search leads here!!',
         templateBody: buildScreen(),
         bgColor: ConstantColor.background1Color);
   }
