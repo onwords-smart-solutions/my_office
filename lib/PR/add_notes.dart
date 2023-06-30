@@ -102,7 +102,7 @@ class _AddNotesState extends State<AddNotes> {
           style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              fontFamily: ConstantFonts.poppinsRegular),
+              fontFamily: ConstantFonts.sfProRegular),
         ),
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -137,7 +137,7 @@ class _AddNotesState extends State<AddNotes> {
                 "Add notes ",
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  fontFamily: ConstantFonts.poppinsRegular,
+                  fontFamily: ConstantFonts.sfProRegular,
                   fontSize: 16,
                 ),
               ),
@@ -151,7 +151,7 @@ class _AddNotesState extends State<AddNotes> {
                 textInputAction: TextInputAction.done,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  fontFamily: ConstantFonts.poppinsRegular,
+                  fontFamily: ConstantFonts.sfProRegular,
                   fontSize: 16,
                 ),
                 decoration: InputDecoration(
@@ -172,9 +172,8 @@ class _AddNotesState extends State<AddNotes> {
                   hintText: 'Enter your notes here..',
                   hintStyle: TextStyle(
                     color: CupertinoColors.systemGrey,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 15,
-                    fontFamily: ConstantFonts.poppinsRegular,
+                    fontSize: 16,
+                    fontFamily: ConstantFonts.sfProMedium,
                   ),
                 ),
               ),
@@ -184,9 +183,9 @@ class _AddNotesState extends State<AddNotes> {
               child: Text(
                 'Set Reminder',
                 style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: ConstantFonts.poppinsRegular,
+                  fontSize: 17,
+                  fontFamily: ConstantFonts.sfProRegular,
+                  fontWeight: FontWeight.w600
                 ),
               ),
             ),
@@ -234,22 +233,21 @@ class _AddNotesState extends State<AddNotes> {
                   ),
                   hintText: 'Tap to pick a date',
                   hintStyle: TextStyle(
-                      fontFamily: ConstantFonts.poppinsRegular,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 15,
+                      fontFamily: ConstantFonts.sfProMedium,
+                      fontSize: 16,
                       color: CupertinoColors.systemGrey
                   ),
                 ),
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  fontFamily: ConstantFonts.poppinsRegular,
+                  fontFamily: ConstantFonts.sfProRegular,
                 ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8),
-              child: ElevatedButton(
+              child: FilledButton.tonal(
                 onPressed: picksinglefile,
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
@@ -260,7 +258,7 @@ class _AddNotesState extends State<AddNotes> {
                   'Pick audio file',
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontFamily: ConstantFonts.poppinsRegular,
+                    fontFamily: ConstantFonts.sfProRegular,
                   ),
                 ),
               ),
@@ -323,23 +321,16 @@ class _AddNotesState extends State<AddNotes> {
                 width: width * 0.6,
                 height: height * 0.08,
                 padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(
+                child: FilledButton(
                   onPressed: () {
                     addNoteToDatabase();
                   },
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    backgroundColor: const Color(0xff8355B7),
-                    // fixedSize: Size(250, 50),
-                  ),
                   child: Text(
                     "Submit",
                     style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
-                      fontFamily: ConstantFonts.poppinsRegular,
+                      fontFamily: ConstantFonts.sfProRegular,
                     ),
                   ),
                 ),
@@ -358,7 +349,7 @@ class _AddNotesState extends State<AddNotes> {
         content: Text(
           'Enter some notes..',
           style: TextStyle(
-            fontFamily: ConstantFonts.poppinsRegular,
+            fontFamily: ConstantFonts.sfProRegular,
             fontWeight: FontWeight.w600,
             fontSize: 17,
           ),
@@ -418,7 +409,7 @@ class _AddNotesState extends State<AddNotes> {
             content: Text(
               'Your audio file,reminder and notes has been saved..',
               style: TextStyle(
-                fontFamily: ConstantFonts.poppinsRegular,
+                fontFamily: ConstantFonts.sfProRegular,
                 fontWeight: FontWeight.w600,
                 fontSize: 17,
               ),
@@ -461,7 +452,7 @@ class _AddNotesState extends State<AddNotes> {
             content: Text(
               'Your audio file and notes has been saved..',
               style: TextStyle(
-                fontFamily: ConstantFonts.poppinsRegular,
+                fontFamily: ConstantFonts.sfProRegular,
                 fontWeight: FontWeight.w600,
                 fontSize: 17,
               ),
@@ -518,7 +509,7 @@ class _AddNotesState extends State<AddNotes> {
             content: Text(
               'Your reminder and notes has been saved..',
               style: TextStyle(
-                fontFamily: ConstantFonts.poppinsRegular,
+                fontFamily: ConstantFonts.sfProRegular,
                 fontWeight: FontWeight.w600,
                 fontSize: 17,
               ),
@@ -551,7 +542,7 @@ class _AddNotesState extends State<AddNotes> {
           content: Text(
             'Your data has been saved..',
             style: TextStyle(
-              fontFamily: ConstantFonts.poppinsRegular,
+              fontFamily: ConstantFonts.sfProRegular,
               fontWeight: FontWeight.w600,
               fontSize: 17,
             ),

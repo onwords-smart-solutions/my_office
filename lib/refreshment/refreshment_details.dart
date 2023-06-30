@@ -143,14 +143,14 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                 style: TextStyle(
                     color: const Color(0xff8355B7),
                     fontSize: 16.0,
-                    fontFamily: ConstantFonts.poppinsMedium),
+                    fontFamily: ConstantFonts.sfProBold),
               ),
               Text(
                 _dayTime,
                 style: TextStyle(
                     color: const Color(0xff8355B7),
                     fontSize: 16.0,
-                    fontFamily: ConstantFonts.poppinsMedium),
+                    fontFamily: ConstantFonts.sfProMedium),
               ),
               const SizedBox(height: 20.0),
               SingleChildScrollView(
@@ -174,8 +174,8 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                             'Tea $_teaCount',
                             style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 14.0,
-                                fontFamily: ConstantFonts.poppinsMedium),
+                                fontSize: 15.0,
+                                fontFamily: ConstantFonts.sfProMedium),
                           ),
                         ],
                       ),
@@ -192,8 +192,8 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                           Text('Coffee $_coffeeCount',
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 14.0,
-                                  fontFamily: ConstantFonts.poppinsMedium)),
+                                  fontSize: 15.0,
+                                  fontFamily: ConstantFonts.sfProMedium)),
                         ],
                       ),
 
@@ -208,8 +208,8 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                           Text('Food $_foodCount',
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: 14.0,
-                                  fontFamily: ConstantFonts.poppinsMedium)),
+                                  fontSize: 15.0,
+                                  fontFamily: ConstantFonts.sfProMedium)),
                         ],
                       )
                     ],
@@ -250,7 +250,7 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
               style: TextStyle(
                   color: const Color(0xffDD9324),
                   fontSize: 26.0,
-                  fontFamily: ConstantFonts.poppinsMedium)),
+                  fontFamily: ConstantFonts.sfProMedium)),
           Container(
             margin: const EdgeInsets.only(left: 25.0, right: 5.0),
             child: Row(
@@ -263,7 +263,12 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                       padding: const EdgeInsets.symmetric(vertical: 5.0),
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (ctx, index) {
-                        return Text(listOfTea[index]);
+                        return Text(listOfTea[index],
+                        style: TextStyle(
+                          fontFamily: ConstantFonts.sfProMedium,
+                          fontSize: 15,
+                        ),
+                        );
                       }),
                 ),
                 Image.asset(
@@ -296,7 +301,7 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
               style: TextStyle(
                   color: const Color(0xff5B3618),
                   fontSize: 26.0,
-                  fontFamily: ConstantFonts.poppinsMedium)),
+                  fontFamily: ConstantFonts.sfProMedium)),
           Container(
             // height: MediaQuery.of(context).size.height * .18,
             margin: const EdgeInsets.only(left: 25.0, right: 5.0),
@@ -310,7 +315,12 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                       padding: const EdgeInsets.symmetric(vertical: 5.0),
                       physics: const BouncingScrollPhysics(),
                       itemBuilder: (ctx, index) {
-                        return Text(listOfCoffee[index]);
+                        return Text(listOfCoffee[index],
+                          style: TextStyle(
+                            fontFamily: ConstantFonts.sfProMedium,
+                            fontSize: 15,
+                          ),
+                        );
                       }),
                 ),
                 Image.asset(
@@ -343,7 +353,7 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
               style: TextStyle(
                   color: Colors.redAccent,
                   fontSize: 26.0,
-                  fontFamily: ConstantFonts.poppinsMedium)),
+                  fontFamily: ConstantFonts.sfProMedium)),
           Container(
             // height: MediaQuery.of(context).size.height * .18,
             margin: const EdgeInsets.only(left: 25.0, right: 5.0),
@@ -357,7 +367,12 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                     padding: const EdgeInsets.symmetric(vertical: 5.0),
                     physics: const BouncingScrollPhysics(),
                     itemBuilder: (ctx, index) {
-                      return Text(listOfFood[index]);
+                      return Text(listOfFood[index],
+                        style: TextStyle(
+                          fontFamily: ConstantFonts.sfProMedium,
+                          fontSize: 15,
+                        ),
+                      );
                     },
                   ),
                 ),

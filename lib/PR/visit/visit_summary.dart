@@ -69,7 +69,7 @@ class _VisitSummaryScreenState extends State<VisitSummaryScreen> {
                     child: Text(
                       'Back',
                       style: TextStyle(
-                          fontFamily: ConstantFonts.poppinsMedium,
+                          fontFamily: ConstantFonts.sfProRegular,
                           fontSize: 15.0,
                           color: Colors.grey),
                     )),
@@ -83,7 +83,7 @@ class _VisitSummaryScreenState extends State<VisitSummaryScreen> {
                           borderRadius: BorderRadius.circular(20.0))),
                   child: Text(buttonText,
                       style: TextStyle(
-                        fontFamily: ConstantFonts.poppinsMedium,
+                        fontFamily: ConstantFonts.sfProRegular,
                         fontSize: 15.0,
                       ))),
             ],
@@ -100,7 +100,7 @@ class _VisitSummaryScreenState extends State<VisitSummaryScreen> {
   Step visitSummaryNoteStep() {
     final textStyle = currentStep == 0
         ? ConstantFonts.poppinsBold
-        : ConstantFonts.poppinsMedium;
+        : ConstantFonts.sfProRegular;
     final textColor = currentStep == 0 ? Colors.purple : Colors.black;
 
     return Step(
@@ -117,7 +117,7 @@ class _VisitSummaryScreenState extends State<VisitSummaryScreen> {
   Step dateStep() {
     final textStyle = currentStep == 1
         ? ConstantFonts.poppinsBold
-        : ConstantFonts.poppinsMedium;
+        : ConstantFonts.sfProRegular;
     final textColor = currentStep == 1 ? Colors.purple : Colors.black;
 
     return Step(
@@ -134,7 +134,7 @@ class _VisitSummaryScreenState extends State<VisitSummaryScreen> {
   Step endKmStep() {
     final textStyle = currentStep == 2
         ? ConstantFonts.poppinsBold
-        : ConstantFonts.poppinsMedium;
+        : ConstantFonts.sfProRegular;
     final textColor = currentStep == 2 ? Colors.purple : Colors.black;
 
     return Step(
@@ -151,7 +151,7 @@ class _VisitSummaryScreenState extends State<VisitSummaryScreen> {
   Step summaryStep() {
     final textStyle = currentStep == 3
         ? ConstantFonts.poppinsBold
-        : ConstantFonts.poppinsMedium;
+        : ConstantFonts.sfProRegular;
     final textColor = currentStep == 3 ? Colors.purple : Colors.black;
 
     return Step(
@@ -232,7 +232,7 @@ class _VisitSummaryScreenState extends State<VisitSummaryScreen> {
           controller: _summaryNoteController,
           textCapitalization: TextCapitalization.sentences,
           style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               fontSize: 15.0,
               color: Colors.black),
           textInputAction: TextInputAction.done,
@@ -289,7 +289,7 @@ class _VisitSummaryScreenState extends State<VisitSummaryScreen> {
           readOnly: true,
           controller: _dateController,
           style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               fontSize: 15.0,
               color: Colors.black),
           textInputAction: TextInputAction.done,
@@ -329,7 +329,7 @@ class _VisitSummaryScreenState extends State<VisitSummaryScreen> {
         TextField(
           controller: _endKmController,
           style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               fontSize: 15.0,
               color: Colors.black),
           keyboardType: TextInputType.number,
@@ -399,7 +399,7 @@ class _VisitSummaryScreenState extends State<VisitSummaryScreen> {
                         foregroundColor: const Color(0xff8355B7)),
                     label: Text(
                       'Take Photo',
-                      style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+                      style: TextStyle(fontFamily: ConstantFonts.sfProRegular),
                     )),
           ),
         ),
@@ -430,7 +430,7 @@ class _VisitSummaryScreenState extends State<VisitSummaryScreen> {
           Text(
             '  ${_summaryNoteController.text.trim()}',
             style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               fontSize: 15.0,
             ),
           ),
@@ -446,7 +446,7 @@ class _VisitSummaryScreenState extends State<VisitSummaryScreen> {
           Text(
             '  ${_dateController.text.trim()}',
             style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               fontSize: 15.0,
             ),
           ),
@@ -462,7 +462,7 @@ class _VisitSummaryScreenState extends State<VisitSummaryScreen> {
           Text(
             '  ${_endKmController.text.trim()}',
             style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               fontSize: 15.0,
             ),
           ),
@@ -479,12 +479,12 @@ class _VisitSummaryScreenState extends State<VisitSummaryScreen> {
         const SizedBox(height: 10.0),
         Text(
           'Uploading data, please wait',
-          style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+          style: TextStyle(fontFamily: ConstantFonts.sfProRegular),
         ),
         Text(
           'Don\'t press back button or close this app',
           style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               fontSize: 12.0,
               color: Colors.grey),
         ),
@@ -502,7 +502,7 @@ class _VisitSummaryScreenState extends State<VisitSummaryScreen> {
           child: Text(
             message,
             style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium, color: Colors.red),
+                fontFamily: ConstantFonts.sfProRegular, color: Colors.red),
           ),
         ),
       ],
@@ -522,7 +522,7 @@ class _VisitSummaryScreenState extends State<VisitSummaryScreen> {
           child: Center(
             child: Text(
               message,
-              style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+              style: TextStyle(fontFamily: ConstantFonts.sfProRegular),
             ),
           ),
         ),

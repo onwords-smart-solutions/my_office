@@ -136,7 +136,7 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
 //             TextSpan(
 //               text: 'Hi Admin\n',
 //               style: TextStyle(
-//                 fontFamily: ConstantFonts.poppinsMedium,
+//                 fontFamily: ConstantFonts.sfPro,
 //                 color: ConstantColor.blackColor,
 //                 fontSize: height * 0.030,
 //               ),
@@ -144,7 +144,7 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
 //             TextSpan(
 //               text: 'Onyx Announcement',
 //               style: TextStyle(
-//                 fontFamily: ConstantFonts.poppinsMedium,
+//                 fontFamily: ConstantFonts.sfPro,
 //                 color: ConstantColor.blackColor,
 //                 fontSize: height * 0.020,
 //               ),
@@ -188,7 +188,7 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
 //           title,
 //           style: TextStyle(
 //             color: ConstantColor.blackColor,
-//             fontFamily: ConstantFonts.poppinsMedium,
+//             fontFamily: ConstantFonts.sfPro,
 //           ),
 //         ),
 //         SizedBox(
@@ -200,7 +200,7 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
 //             autocorrect: true,
 //             style: TextStyle(
 //               color: ConstantColor.blackColor,
-//               fontFamily: ConstantFonts.poppinsMedium,
+//               fontFamily: ConstantFonts.sfPro,
 //             ),
 //             decoration: InputDecoration(
 //               hintText: name,
@@ -216,7 +216,7 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
 //
 //               hintStyle: TextStyle(
 //                   color: Colors.black.withOpacity(0.2),
-//                   fontFamily: ConstantFonts.poppinsMedium),
+//                   fontFamily: ConstantFonts.sfPro),
 //               filled: true,
 //               fillColor: ConstantColor.background1Color,
 //               enabledBorder: const OutlineInputBorder(

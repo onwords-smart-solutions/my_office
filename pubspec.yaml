@@ -39,7 +39,7 @@ dependencies:
   auto_size_text:
   slide_to_confirm:
   percent_indicator:
-  flutter_neumorphic:
+#  flutter_neumorphic:
   dropdown_button2:
   timelines:
   firebase_core:
@@ -85,7 +85,7 @@ dependencies:
   shimmer: ^3.0.0
   file_picker: ^5.2.10
   audioplayers: ^4.1.0
-  printing: ^5.10.4
+  flutter_svg:
 
 dev_dependencies:
   flutter_test:
@@ -145,6 +145,18 @@ flutter:
     - family: PoppinsBold
       fonts:
         - asset: assets/fonts/poppins/Poppins-Bold.ttf
+
+    - family: SFProRegular
+      fonts:
+        - asset: assets/fonts/sf pro/SFPRODISPLAYREGULAR.OTF
+
+    - family: SFProMedium
+      fonts:
+        - asset: assets/fonts/sf pro/SFPRODISPLAYMEDIUM.OTF
+
+    - family: SFProBold
+      fonts:
+        - asset: assets/fonts/sf pro/SFPRODISPLAYBOLD.OTF
 
   # fonts:
   #   - family: Schyler

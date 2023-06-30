@@ -53,7 +53,7 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   style: TextStyle(
                     color: ConstantColor.headingTextColor,
                     fontSize: 16,
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                   ),
                 ),
               ),
@@ -81,7 +81,7 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   style: TextStyle(
                     color: ConstantColor.headingTextColor,
                     fontSize: 16,
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                   ),
                 ),
               ),
@@ -109,7 +109,7 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   style: TextStyle(
                     color: ConstantColor.headingTextColor,
                     fontSize: 16,
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                   ),
                 ),
               ),
@@ -137,7 +137,7 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   style: TextStyle(
                     color: ConstantColor.headingTextColor,
                     fontSize: 16,
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                   ),
                 ),
               ),
@@ -165,7 +165,7 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   style: TextStyle(
                     color: ConstantColor.headingTextColor,
                     fontSize: 16,
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                   ),
                 ),
               ),
@@ -193,7 +193,7 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   style: TextStyle(
                     color: ConstantColor.headingTextColor,
                     fontSize: 16,
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                   ),
                 ),
               ),

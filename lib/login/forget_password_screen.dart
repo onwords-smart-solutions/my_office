@@ -52,7 +52,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   TextSpan(
                     text: 'Forgot\nPassword?\n',
                     style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontFamily: ConstantFonts.sfProRegular,
                       color: ConstantColor.blackColor,
                       fontSize: height * 0.035,
                     ),
@@ -60,7 +60,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                   TextSpan(
                     text: 'Please enter your Mail id below',
                     style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontFamily: ConstantFonts.sfProRegular,
                       color: ConstantColor.blackColor,
                       fontSize: height * 0.020,
                     ),
@@ -150,7 +150,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
           child: Text(
             name,
             style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               color: ConstantColor.background1Color,
               fontSize: height * 0.030,
             ),
@@ -179,7 +179,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
         style: TextStyle(
             fontSize: height * 0.02,
             color: Colors.black,
-            fontFamily: ConstantFonts.poppinsMedium),
+            fontFamily: ConstantFonts.sfProRegular),
         decoration: InputDecoration(
           prefixIcon: icon,
           border: InputBorder.none,

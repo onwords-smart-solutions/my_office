@@ -4,6 +4,7 @@ import 'package:after_layout/after_layout.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -78,9 +79,10 @@ class _MyAppState extends State<MyApp> {
         child: MaterialApp(
           title: 'My Office',
           theme: ThemeData(
-            primarySwatch: Colors.blue,
-            scaffoldBackgroundColor: ConstantColor.background1Color,
-            fontFamily: 'PoppinsRegular',
+            useMaterial3: true,
+            primarySwatch: Colors.amber,
+            scaffoldBackgroundColor: const Color(0xffEEEEEE),
+            fontFamily: 'sfPro',
           ),
           home: const InitialScreen(),
           routes: {

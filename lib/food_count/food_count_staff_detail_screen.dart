@@ -109,10 +109,9 @@ class _FoodCountStaffDetailScreenState
                         Text(
                           'Food details not found',
                           style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsMedium,
+                            fontFamily: ConstantFonts.sfProMedium,
                             color: ConstantColor.blackColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                            fontSize: 18,
                           ),
                         ),
                       ],
@@ -122,9 +121,8 @@ class _FoodCountStaffDetailScreenState
                         Text(
                           'Total Count : ${staffLunchSummary.length}',
                           style: TextStyle(
-                              fontFamily: ConstantFonts.poppinsMedium,
+                              fontFamily: ConstantFonts.sfProBold,
                               color: ConstantColor.blackColor,
-                              fontWeight: FontWeight.bold,
                               fontSize: 20.0),
                         ),
                         Expanded(
@@ -141,7 +139,7 @@ class _FoodCountStaffDetailScreenState
                                 title: Text(
                                   staffLunchSummary[i].toString(),
                                   style: TextStyle(
-                                    fontFamily: ConstantFonts.poppinsMedium,
+                                    fontFamily: ConstantFonts.sfProRegular,
                                     color: ConstantColor.blackColor,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
@@ -175,7 +173,7 @@ class _FoodCountStaffDetailScreenState
                 return PopupMenuItem(
                   child: Text(
                     month.keys.toList()[index],
-                    style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+                    style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
                   ),
                   onTap: () {
                     setState(() {
@@ -194,7 +192,7 @@ class _FoodCountStaffDetailScreenState
           Text(
             currentMonth,
             style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium, fontSize: 16.0),
+                fontFamily: ConstantFonts.sfProBold, fontSize: 16.0),
           )
         ],
       ),

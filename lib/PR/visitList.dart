@@ -68,7 +68,7 @@ class _VisitListState extends State<VisitList> {
             Text(
               '   Customer Detail',
               style: TextStyle(
-                  fontFamily: ConstantFonts.poppinsMedium,
+                  fontFamily: ConstantFonts.sfProRegular,
                   fontSize: 15.0,
                   color: Colors.black54.withOpacity(.6)),
             ),
@@ -93,7 +93,7 @@ class _VisitListState extends State<VisitList> {
               Text(
                 'Name',
                 style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                     fontSize: 12.0,
                     color: Colors.grey),
               ),
@@ -108,7 +108,7 @@ class _VisitListState extends State<VisitList> {
               Text(
                 'Phone Number',
                 style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                     fontSize: 12.0,
                     color: Colors.grey),
               ),
@@ -133,7 +133,7 @@ class _VisitListState extends State<VisitList> {
         Text(
           '   PR Detail',
           style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               fontSize: 15.0,
               color: Colors.black54.withOpacity(.6)),
         ),
@@ -179,7 +179,7 @@ class _VisitListState extends State<VisitList> {
         Text(
           '   Product Detail',
           style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               fontSize: 15.0,
               color: Colors.black54.withOpacity(.6)),
         ),
@@ -194,7 +194,7 @@ class _VisitListState extends State<VisitList> {
               Text(
                 'Selected Products',
                 style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                     fontSize: 12.0,
                     color: Colors.grey),
               ),
@@ -210,7 +210,7 @@ class _VisitListState extends State<VisitList> {
               Text(
                 'Quotation (or) Invoice Number',
                 style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                     fontSize: 12.0,
                     color: Colors.grey),
               ),
@@ -225,7 +225,7 @@ class _VisitListState extends State<VisitList> {
               Text(
                 'Date of installation',
                 style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                     fontSize: 12.0,
                     color: Colors.grey),
               ),
@@ -240,7 +240,7 @@ class _VisitListState extends State<VisitList> {
               Text(
                 'Product Images',
                 style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                     fontSize: 12.0,
                     color: Colors.grey),
               ),
@@ -318,7 +318,7 @@ class _VisitListState extends State<VisitList> {
         Text(
           '   Travel Detail',
           style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               fontSize: 15.0,
               color: Colors.black54.withOpacity(.6)),
         ),
@@ -343,7 +343,7 @@ class _VisitListState extends State<VisitList> {
               Text(
                 'Total Travel KM',
                 style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                     fontSize: 12.0,
                     color: Colors.grey),
               ),
@@ -368,7 +368,7 @@ class _VisitListState extends State<VisitList> {
         Text(
           '   Summary Notes',
           style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               fontSize: 15.0,
               color: Colors.black54.withOpacity(.6)),
         ),
@@ -402,7 +402,7 @@ class _VisitListState extends State<VisitList> {
             Text(
               title,
               style: TextStyle(
-                  fontFamily: ConstantFonts.poppinsMedium,
+                  fontFamily: ConstantFonts.sfProRegular,
                   fontSize: 12.0,
                   color: Colors.grey),
             ),
@@ -468,7 +468,7 @@ class _VisitListState extends State<VisitList> {
           Text(
             'Unable to load image',
             style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               color: Colors.red,
               fontSize: 8.0,
             ),

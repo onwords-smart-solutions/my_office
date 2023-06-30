@@ -65,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextSpan(
                     text: 'Hi There!!\n',
                     style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontFamily: ConstantFonts.sfProRegular,
                       color: ConstantColor.blackColor,
                       fontSize: height * 0.035,
                     ),
@@ -73,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextSpan(
                     text: 'Welcome To Team Onwords',
                     style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontFamily: ConstantFonts.sfProRegular,
                       color: ConstantColor.blackColor,
                       fontSize: height * 0.020,
                     ),
@@ -117,7 +117,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(
                             fontSize: height * 0.02,
                             color: Colors.black,
-                            fontFamily: ConstantFonts.poppinsMedium),
+                            fontFamily: ConstantFonts.sfProRegular),
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Iconsax.user),
                           border: InputBorder.none,
@@ -163,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(
                             fontSize: height * 0.02,
                             color: Colors.black,
-                            fontFamily: ConstantFonts.poppinsMedium),
+                            fontFamily: ConstantFonts.sfProRegular),
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Iconsax.lock),
                           border: InputBorder.none,
@@ -298,7 +298,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 : Text(
                     'Log in',
                     style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontFamily: ConstantFonts.sfProRegular,
                       color: ConstantColor.background1Color,
                       fontSize: height * 0.030,
                     ),
@@ -323,7 +323,7 @@ class _LoginScreenState extends State<LoginScreen> {
           TextSpan(
             text: 'Not a member  ',
             style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               color: ConstantColor.blackColor,
               fontSize: height * 0.015,
             ),
@@ -331,7 +331,7 @@ class _LoginScreenState extends State<LoginScreen> {
           TextSpan(
             text: 'Create an account ?',
             style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               color: ConstantColor.pinkColor,
               fontSize: height * 0.015,
             ),
@@ -355,7 +355,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Text(
               'Forgot password?',
               style: TextStyle(
-                fontFamily: ConstantFonts.poppinsRegular,
+                fontFamily: ConstantFonts.sfProRegular,
                 fontWeight: FontWeight.w700,
                 color: ConstantColor.pinkColor,
                 fontSize: height * 0.02,

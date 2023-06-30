@@ -25,8 +25,11 @@ class _LeaveStatusScreenState extends State<LeaveStatusScreen> {
     return Column(
       children: [
         Center(
-          child: Text('hello'),
-        )
+          child: FloatingActionButton(
+            onPressed: (){},
+            child: Text('Test'),
+          )
+        ),
       ],
     );
   }

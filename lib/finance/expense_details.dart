@@ -59,8 +59,8 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     "Amount",
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontSize: 16,
-                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontSize: 16, 
+                      fontFamily: ConstantFonts.sfProBold,
                     ),
                   ),
                 ),
@@ -71,7 +71,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 16,
-                        fontFamily: ConstantFonts.poppinsMedium),
+                        fontFamily: ConstantFonts.sfProMedium),
                   ),
                 ),
               ],
@@ -89,7 +89,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
                       fontSize: 16,
-                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontFamily: ConstantFonts.sfProBold,
                     ),
                   ),
                 ),
@@ -100,7 +100,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 16,
-                        fontFamily: ConstantFonts.poppinsMedium),
+                        fontFamily: ConstantFonts.sfProMedium),
                   ),
                 ),
               ],
@@ -118,7 +118,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
                       fontSize: 16,
-                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontFamily: ConstantFonts.sfProBold,
                     ),
                   ),
                 ),
@@ -129,7 +129,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 16,
-                        fontFamily: ConstantFonts.poppinsMedium),
+                        fontFamily: ConstantFonts.sfProMedium),
                   ),
                 ),
               ],
@@ -147,7 +147,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
                       fontSize: 16,
-                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontFamily: ConstantFonts.sfProBold,
                     ),
                   ),
                 ),
@@ -158,7 +158,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 16,
-                        fontFamily: ConstantFonts.poppinsMedium),
+                        fontFamily: ConstantFonts.sfProMedium),
                   ),
                 ),
               ],
@@ -176,7 +176,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
                       fontSize: 16,
-                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontFamily: ConstantFonts.sfProBold,
                     ),
                   ),
                 ),
@@ -187,7 +187,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 16,
-                        fontFamily: ConstantFonts.poppinsMedium),
+                        fontFamily: ConstantFonts.sfProMedium),
                   ),
                 ),
               ],
@@ -205,7 +205,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
                       fontSize: 16,
-                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontFamily: ConstantFonts.sfProBold,
                     ),
                   ),
                 ),
@@ -216,7 +216,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 16,
-                        fontFamily: ConstantFonts.poppinsMedium),
+                        fontFamily: ConstantFonts.sfProMedium),
                   ),
                 ),
               ],
@@ -234,7 +234,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
                       fontSize: 16,
-                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontFamily: ConstantFonts.sfProBold,
                     ),
                   ),
                 ),
@@ -245,7 +245,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 16,
-                        fontFamily: ConstantFonts.poppinsMedium),
+                        fontFamily: ConstantFonts.sfProMedium),
                   ),
                 ),
               ],
@@ -263,7 +263,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
                       fontSize: 16,
-                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontFamily: ConstantFonts.sfProBold,
                     ),
                   ),
                 ),
@@ -274,7 +274,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 16,
-                        fontFamily: ConstantFonts.poppinsMedium),
+                        fontFamily: ConstantFonts.sfProMedium),
                   ),
                 ),
               ],
@@ -290,9 +290,8 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                   child: Text(
                     "Service",
                     style: TextStyle(
-                      color: ConstantColor.headingTextColor,
                       fontSize: 16,
-                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontFamily: ConstantFonts.sfProBold,
                     ),
                   ),
                 ),
@@ -303,7 +302,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 16,
-                        fontFamily: ConstantFonts.poppinsMedium),
+                        fontFamily: ConstantFonts.sfProMedium),
                   ),
                 ),
               ],

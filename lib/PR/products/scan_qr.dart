@@ -42,7 +42,7 @@ class _ScanQRScreenState extends State<ScanQRScreen> {
         title: Text('Scan to get PR points',
         style: TextStyle(
           fontWeight: FontWeight.w600,
-          fontFamily: ConstantFonts.poppinsRegular,
+          fontFamily: ConstantFonts.sfProRegular,
         ),),
         centerTitle: true,
         elevation: 0,

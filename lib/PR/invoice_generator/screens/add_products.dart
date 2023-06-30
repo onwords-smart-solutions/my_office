@@ -150,7 +150,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          fontFamily: ConstantFonts.poppinsRegular,
+                          fontFamily: ConstantFonts.sfProRegular,
                           color: CupertinoColors.systemPurple
                         ),),
                         const SizedBox(
@@ -228,7 +228,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                 style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w600,
-                    fontFamily: ConstantFonts.poppinsRegular),
+                    fontFamily: ConstantFonts.sfProRegular),
               ),
               isManualEntry
                   ? TextFiledWidget(
@@ -263,7 +263,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     controller: itemNameController,
                     textStyle: TextStyle(
                         fontWeight: FontWeight.w600,
-                        fontFamily: ConstantFonts.poppinsRegular),
+                        fontFamily: ConstantFonts.sfProRegular),
                     clearOption: true,
                     enableSearch: true,
                     dropDownIconProperty: IconProperty(
@@ -274,14 +274,14 @@ class _ProductDetailsState extends State<ProductDetails> {
                     searchDecoration: InputDecoration(
                       hintText: "Select Product",
                       hintStyle: TextStyle(
-                        fontFamily: ConstantFonts.poppinsRegular,
+                        fontFamily: ConstantFonts.sfProRegular,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
 
                     listTextStyle: TextStyle(
                         fontWeight: FontWeight.w600,
-                        fontFamily: ConstantFonts.poppinsRegular,
+                        fontFamily: ConstantFonts.sfProRegular,
                         fontSize: 16),
                     validator: (value) {
                       if (value == null) {

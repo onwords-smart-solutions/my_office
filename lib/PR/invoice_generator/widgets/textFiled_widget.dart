@@ -37,7 +37,7 @@ class TextFiledWidget {
       enabled: isEnable,
       style: TextStyle(color: Colors.black,
           fontWeight: FontWeight.w600,
-          fontFamily: ConstantFonts.poppinsRegular),
+          fontFamily: ConstantFonts.sfProRegular),
       decoration: InputDecoration(
         counterText: '',
         prefixIcon: icon,
@@ -45,11 +45,11 @@ class TextFiledWidget {
         labelText: hintName,
         labelStyle: TextStyle(color: Colors.black,
             fontWeight: FontWeight.w600,
-            fontFamily: ConstantFonts.poppinsRegular),
+            fontFamily: ConstantFonts.sfProRegular),
         hintStyle:
         TextStyle(color: Colors.black.withOpacity(0.6),
             fontWeight: FontWeight.w600,
-            fontFamily: ConstantFonts.poppinsRegular),
+            fontFamily: ConstantFonts.sfProRegular),
         border: myInputBorder(),
         enabledBorder: myInputBorder(),
         focusedBorder: myFocusBorder(),

@@ -89,7 +89,7 @@ class _FoodCountScreenState extends State<FoodCountScreen> {
                     title: Text(
                       staffNames[i],
                       style: TextStyle(
-                          fontFamily: ConstantFonts.poppinsMedium,
+                          fontFamily: ConstantFonts.sfProMedium,
                           color: ConstantColor.blackColor,
                           fontSize: MediaQuery.of(context).size.height * 0.020),
                     ),

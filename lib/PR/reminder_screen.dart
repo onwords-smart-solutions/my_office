@@ -119,7 +119,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
               Text(
                 '$selectedDate',
                 style: TextStyle(
-                  fontFamily: ConstantFonts.poppinsBold,
+                  fontFamily: ConstantFonts.sfProBold,
                   fontSize: 17,
                   color: CupertinoColors.systemPurple,
                 ),
@@ -131,9 +131,8 @@ class _ReminderScreenState extends State<ReminderScreen> {
         Text(
           'Total reminders : ${allReminders.length}',
           style: TextStyle(
-            fontSize: 17,
-            fontFamily: ConstantFonts.poppinsRegular,
-            fontWeight: FontWeight.w600,
+            fontSize: 18,
+            fontFamily: ConstantFonts.sfProBold,
           ),
         ),
         isLoading
@@ -154,14 +153,13 @@ class _ReminderScreenState extends State<ReminderScreen> {
                         itemCount: allReminders.length,
                         itemBuilder: (ctx, i) {
                           return Container(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
+                            margin: const EdgeInsets.all(5),
                             decoration: BoxDecoration(
                               color: ConstantColor.background1Color,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.2),
-                                  offset: const Offset(-0.0, 5.0),
+                                  offset: const Offset(0.0, 2.0),
                                   blurRadius: 8,
                                 )
                               ],
@@ -185,12 +183,10 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                           'Do you want to delete the reminder?',
                                           style: TextStyle(
                                               fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: ConstantFonts.poppinsRegular,
+                                              fontFamily: ConstantFonts.sfProMedium,
                                               color: CupertinoColors.label
                                           ),
                                         ),
-                                        elevation: 10,
                                         actions: [
                                           Container(
                                             height: height * 0.05,
@@ -203,8 +199,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                                 'Yes',
                                                 style: TextStyle(
                                                     fontSize: 17,
-                                                    fontWeight: FontWeight.w600,
-                                                    fontFamily: ConstantFonts.poppinsRegular,
+                                                    fontFamily: ConstantFonts.sfProBold,
                                                     color: CupertinoColors.destructiveRed),
                                               ),
                                               onPressed: () async {
@@ -225,8 +220,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                                 'No',
                                                 style: TextStyle(
                                                   color: CupertinoColors.black,
-                                                    fontFamily: ConstantFonts.poppinsRegular,
-                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: ConstantFonts.sfProBold,
                                                     fontSize: 17),
                                               ),
                                               onPressed: () {
@@ -243,9 +237,8 @@ class _ReminderScreenState extends State<ReminderScreen> {
                               title: Text(
                                 allReminders[i].customerName,
                                 style: TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: ConstantFonts.poppinsRegular,
+                                  fontSize: 18,
+                                  fontFamily: ConstantFonts.sfProMedium,
                                 ),
                               ),
                               onTap: () {
@@ -277,7 +270,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
                             style: TextStyle(
                               color: ConstantColor.blackColor,
                               fontSize: 20,
-                              fontFamily: ConstantFonts.poppinsRegular,
+                              fontFamily: ConstantFonts.sfProRegular,
                               fontWeight: FontWeight.w600,
                             ),
                           ),

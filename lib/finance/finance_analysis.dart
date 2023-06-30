@@ -4,7 +4,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
@@ -169,6 +168,8 @@ class _FinanceScreenState extends State<FinanceScreen> {
   }
 
   Widget buildFinanceScreen() {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     int profitWithSalary = 0;
     int profitWithOutSalary = 0;
     if (!isLoading) {
@@ -198,7 +199,10 @@ class _FinanceScreenState extends State<FinanceScreen> {
                         RichText(
                           text: TextSpan(
                             text: 'Profit with salary : ',
-                            style: TextStyle(fontSize: 15, color: Colors.black),
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: ConstantFonts.sfProMedium,
+                                color: Colors.black),
                             children: <TextSpan>[
                               TextSpan(
                                   text: profitWithSalary.toString(),
@@ -216,7 +220,10 @@ class _FinanceScreenState extends State<FinanceScreen> {
                         RichText(
                           text: TextSpan(
                             text: 'Profit without salary : ',
-                            style: TextStyle(fontSize: 15, color: Colors.black),
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: ConstantFonts.sfProMedium,
+                                color: Colors.black),
                             children: <TextSpan>[
                               TextSpan(
                                   text: profitWithOutSalary.toString(),
@@ -233,38 +240,23 @@ class _FinanceScreenState extends State<FinanceScreen> {
                         ),
                       ],
                     ),
-                    GestureDetector(
-                      onTap: () {
+                    FilledButton.tonal(
+                      onPressed: () {
                         datePicker();
                       },
-                      child: Neumorphic(
-                        style: NeumorphicStyle(
-                          depth: - 2,
-                          shadowLightColorEmboss: Colors.white.withOpacity(0.8),
-                          shadowDarkColorEmboss: Colors.black.withOpacity(0.7),
-                          shadowLightColor: Colors.white,
-                          shadowDarkColor: Colors.black,
-                          boxShape: NeumorphicBoxShape.roundRect(
-                            BorderRadius.circular(20),
-                          ),
-                        ),
-                        child: Container(
-                          height: 50,
-                          width: 100,
-                          // decoration: BoxDecoration(
-                              color: Colors.blue.shade300,
-                          //     borderRadius: BorderRadius.circular(20)),
+                        child: SizedBox(
+                          height: height * 0.05,
+                          width: width * 0.17,
                           child: Center(
                             child: Text(
                               '$selectedYear/$selectedMonth',
                               style: TextStyle(
                                   fontSize: 15,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600),
+                                  fontFamily: ConstantFonts.sfProBold,
+                              ),
                             ),
                           ),
                         ),
-                      ),
                     )
                   ],
                 ),
@@ -291,13 +283,16 @@ class _FinanceScreenState extends State<FinanceScreen> {
 
   Widget buildButton(
       {required String name, required Image image, required Widget page}) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
         HapticFeedback.vibrate();
         Navigator.push(context, MaterialPageRoute(builder: (context) => page));
       },
       child: Container(
-        height: 250,
+        height: height * 0.3,
+        width: width * 1,
         padding: const EdgeInsets.symmetric(vertical: 20.0),
         decoration: BoxDecoration(
             color: const Color(0xffDAD6EE),
@@ -315,7 +310,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
             AutoSizeText(
               name,
               style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium,
+                fontFamily: ConstantFonts.sfProMedium,
                 color: ConstantColor.blackColor,
               ),
               minFontSize: 20,
@@ -325,79 +320,6 @@ class _FinanceScreenState extends State<FinanceScreen> {
       ),
     );
   }
-
-// checkIncomeDetails() {
-//   allIncome.clear();
-//   int total = 0;
-//   List<IncomeModel> incomeCheck = [];
-//   incomeDetails.child('Income').once().then((income) {
-//     for (var check in income.snapshot.children) {
-//       for (var monthData in check.children) {
-//         for (var dateData in monthData.children) {
-//           final data = dateData.value as Map<Object?, Object?>;
-//           final incomeDetails = IncomeModel(
-//             amount: int.parse(data['Amount'].toString()),
-//             customerName: data['CustomerName'].toString(),
-//             enteredBy: data['EnteredBy'].toString(),
-//             enteredDate: data['EnteredDate'].toString(),
-//             enteredTime: data['EnteredTime'].toString(),
-//             invoiceNumber: data['InvoiceNumber'].toString(),
-//             paidDate: data['PaidDate'].toString(),
-//             paidTime: data['PaidTime'].toString(),
-//             paymentMethod: data['PaymentMethod'].toString(),
-//             productName: data['ProductName'].toString(),
-//           );
-//           incomeCheck.add(incomeDetails);
-//           total += int.parse(data['Amount'].toString());
-//         }
-//       }
-//     }
-//     incomeCheck.sort((a, b) => b.enteredDate.compareTo(a.enteredDate));
-//
-//     if (!mounted) return;
-//     setState(() {
-//       allIncome.addAll(incomeCheck);
-//       totalIncome = total;
-//       isLoading = false;
-//     });
-//   });
-// }
-//
-// checkExpenseDetails() {
-//   allExpense.clear();
-//   int minus = 0;
-//   List<ExpenseModel> expenseCheck = [];
-//   expenseDetails.child('Expense').once().then((expense) {
-//     for (var check in expense.snapshot.children) {
-//       for (var monthData in check.children) {
-//         for (var dateData in monthData.children) {
-//           final data = dateData.value as Map<Object?, Object?>;
-//           final expenseDetails = ExpenseModel(
-//             amount: int.parse(data['Amount'].toString()),
-//             enteredBy: data['EnteredBy'].toString(),
-//             enteredDate: data['EnteredDate'].toString(),
-//             enteredTime: data['EnteredTime'].toString(),
-//             productName: data['ProductName'].toString(),
-//             purchasedDate: data['PurchasedDate'].toString(),
-//             purchasedFor: data['PurchasedFor'].toString(),
-//             purchasedTime: data['PurchasedTime'].toString(),
-//             service: data['Service'].toString(),
-//           );
-//           expenseCheck.add(expenseDetails);
-//           minus += int.parse(data['Amount'].toString());
-//         }
-//       }
-//     }
-//     expenseCheck.sort((a, b) => b.enteredDate.compareTo(a.enteredDate));
-//     if (!mounted) return;
-//     setState(() {
-//       allExpense.addAll(expenseCheck);
-//       totalExpense = minus;
-//       isLoading = false;
-//     });
-//   });
-// }
-////////////////////////////
 
   int getTotalSalary() {
     // int totalSalary = 0;

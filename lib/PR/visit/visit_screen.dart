@@ -56,7 +56,7 @@ class _VisitScreenState extends State<VisitScreen> {
           children: [
             Text('Customer Phone No',
                 style: TextStyle(
-                  fontFamily: ConstantFonts.poppinsMedium,
+                  fontFamily: ConstantFonts.sfProRegular,
                 )),
             TextFormField(
               textInputAction: TextInputAction.done,
@@ -313,7 +313,7 @@ class _VisitScreenState extends State<VisitScreen> {
           child: Text(
             'Next',
             style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium,
+                fontFamily: ConstantFonts.sfProRegular,
                 fontSize: size.height * 0.025,
                 color: Colors.white),
           ),
@@ -366,7 +366,7 @@ class _VisitScreenState extends State<VisitScreen> {
             child: Center(
                 child: Text(
               message,
-              style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+              style: TextStyle(fontFamily: ConstantFonts.sfProRegular),
             )))));
   }
 }

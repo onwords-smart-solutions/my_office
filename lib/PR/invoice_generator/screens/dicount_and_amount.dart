@@ -140,7 +140,7 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                               children: [
                                 Text('Available Discount - $discountPercentage %',
                                 style: TextStyle(
-                                  fontFamily: ConstantFonts.poppinsRegular,
+                                  fontFamily: ConstantFonts.sfProRegular,
                                   fontWeight: FontWeight.w600,
                                   color: ConstantColor.backgroundColor,
                                   fontSize: 14
@@ -211,7 +211,7 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                                   borderRadius: BorderRadius.circular(20)),
                               child: Column(
                                 children: [
-                                  Text('Advanced Amount', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, fontFamily: ConstantFonts.poppinsRegular),),
+                                  Text('Advanced Amount', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, fontFamily: ConstantFonts.sfProRegular),),
                                   const SizedBox(height: 10),
                                   TextFiledWidget(
                                     controller: advancedAmountController,

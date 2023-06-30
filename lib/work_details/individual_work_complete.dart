@@ -137,7 +137,7 @@ class _IndividualWorkDoneState extends State<IndividualWorkDone> {
       center: Text(
         val,
         style: TextStyle(
-            fontFamily: ConstantFonts.poppinsMedium,
+            fontFamily: ConstantFonts.sfProRegular,
             color: color,
             fontSize: height * 0.010,
             fontWeight: FontWeight.bold),
@@ -150,7 +150,7 @@ class _IndividualWorkDoneState extends State<IndividualWorkDone> {
       name,
       style: TextStyle(
           fontSize: size * 2,
-          fontFamily: ConstantFonts.poppinsMedium,
+          fontFamily: ConstantFonts.sfProRegular,
           color: ConstantColor.blackColor),
     );
   }

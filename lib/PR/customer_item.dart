@@ -259,7 +259,7 @@ class _CustomerItemState extends State<CustomerItem> {
             Text(
               '$value     ',
               style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium, fontSize: 13.0,),
+                fontFamily: ConstantFonts.sfProRegular, fontSize: 13.0,),
             ),
             const CircleAvatar(
               radius: 8,
@@ -269,7 +269,7 @@ class _CustomerItemState extends State<CustomerItem> {
         ) : Text(
           value,
           style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium, fontSize: 13.0),
+              fontFamily: ConstantFonts.sfProRegular, fontSize: 13.0),
         ),
       ),
       node: TimelineNode(

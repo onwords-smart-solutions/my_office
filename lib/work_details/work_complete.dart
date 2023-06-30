@@ -191,7 +191,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
             title: Text(
               '${nameData[i]}',
               style: TextStyle(
-                  fontFamily: ConstantFonts.poppinsMedium,
+                  fontFamily: ConstantFonts.sfProRegular,
                   color: ConstantColor.blackColor,
                   fontSize: height * 0.020),
             ),
@@ -254,7 +254,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                         Text(
                           'No work done yet!!',
                           style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsRegular,
+                            fontFamily: ConstantFonts.sfProRegular,
                             color: ConstantColor.blackColor,
                             fontWeight: FontWeight.w600,
                             fontSize: 20,

@@ -182,7 +182,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
         Text(
           'Please wait form is submitting',
           style: TextStyle(
-            fontFamily: ConstantFonts.poppinsMedium,
+            fontFamily: ConstantFonts.sfProRegular,
             color: ConstantColor.backgroundColor,
             fontSize: 15.0,
           ),
@@ -201,7 +201,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
         Text(
           'Failed to submit form',
           style: TextStyle(
-            fontFamily: ConstantFonts.poppinsMedium,
+            fontFamily: ConstantFonts.sfProRegular,
             color: Colors.red,
             fontSize: 15.0,
           ),
@@ -217,14 +217,14 @@ class _LoadingScreenState extends State<LoadingScreen> {
             child: Text(
               'Try again',
               style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium,
+                fontFamily: ConstantFonts.sfProRegular,
               ),
             )),
         CupertinoButton(
             child: Text(
               'Cancel',
               style: TextStyle(
-                  fontFamily: ConstantFonts.poppinsMedium,
+                  fontFamily: ConstantFonts.sfProRegular,
                   fontSize: 14.0,
                   color: Colors.grey),
             ),
@@ -242,7 +242,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
         Text(
           'Visit form submitted successfully',
           style: TextStyle(
-            fontFamily: ConstantFonts.poppinsMedium,
+            fontFamily: ConstantFonts.sfProRegular,
             color: const Color(0xff2cda94),
             fontSize: 15.0,
           ),
@@ -257,7 +257,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
             child: Text(
               'Go Home',
               style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium,
+                fontFamily: ConstantFonts.sfProRegular,
               ),
             ),
             onPressed: () => Navigator.of(context).pushAndRemoveUntil(
@@ -267,7 +267,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
           child: Text(
             'Add another visit entry',
             style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium,
+                fontFamily: ConstantFonts.sfProRegular,
                 fontSize: 14.0,
                 color: Colors.grey),
           ),
@@ -291,7 +291,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
           child: Center(
             child: Text(
               message,
-              style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+              style: TextStyle(fontFamily: ConstantFonts.sfProRegular),
             ),
           ),
         ),

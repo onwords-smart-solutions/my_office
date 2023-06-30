@@ -7,6 +7,7 @@ import 'expense_model.dart';
 
 class ExpenseScreen extends StatefulWidget {
   final List<ExpenseModel> allExpense;
+
   const ExpenseScreen({Key? key, required this.allExpense}) : super(key: key);
 
   @override
@@ -15,6 +16,7 @@ class ExpenseScreen extends StatefulWidget {
 
 class _ExpenseScreenState extends State<ExpenseScreen> {
   bool ascending = false;
+
   @override
   Widget build(BuildContext context) {
     return ScreenTemplate(
@@ -34,14 +36,15 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
             borderRadius: BorderRadius.circular(15),
             color: Colors.blue.withOpacity(0.3),
           ),
-
           child: TextButton(
               onPressed: () {
                 setState(() {
                   if (ascending) {
-                    widget.allExpense.sort((a, b) => a.amount.compareTo(b.amount));
+                    widget.allExpense
+                        .sort((a, b) => a.amount.compareTo(b.amount));
                   } else {
-                    widget.allExpense.sort((a, b) => b.amount.compareTo(a.amount));
+                    widget.allExpense
+                        .sort((a, b) => b.amount.compareTo(a.amount));
                   }
                   ascending = !ascending;
                 });
@@ -50,12 +53,22 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    ascending ? 'Ascending' : 'descending',
-                    style: TextStyle(color: Colors.black,fontSize: 15, fontWeight: FontWeight.bold),
+                    ascending ? 'Ascending' : 'Descending',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontFamily: ConstantFonts.sfProMedium),
                   ),
-                  Icon(Icons.arrow_downward,color: Colors.black,size: 20,),
-                  Icon(Icons.arrow_upward,color: Colors.black,size: 20,),
-
+                  const Icon(
+                    Icons.arrow_downward,
+                    color: Colors.black,
+                    size: 20,
+                  ),
+                  const Icon(
+                    Icons.arrow_upward,
+                    color: Colors.black,
+                    size: 20,
+                  ),
                 ],
               )),
         ),
@@ -77,14 +90,14 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                 title: Text(
                   widget.allExpense[index].productName,
                   style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontFamily: ConstantFonts.sfProMedium,
                       color: ConstantColor.blackColor,
                       fontSize: 16),
                 ),
                 trailing: Text(
                   '-   ${widget.allExpense[index].amount.toString()}',
                   style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsBold,
+                      fontFamily: ConstantFonts.sfProBold,
                       color: ConstantColor.backgroundColor,
                       fontSize: 16),
                 ),
@@ -94,6 +107,5 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
         ),
       ],
     );
-
   }
 }

@@ -178,16 +178,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 'Your Entry has already Registered!!!',
                 style: TextStyle(
                   fontSize: 20,
-                  fontFamily: ConstantFonts.poppinsMedium,
-                  fontWeight: FontWeight.w600,
+                  fontFamily: ConstantFonts.sfProMedium,
                 ),
               ),
               Text(
                 'Leave the Screen...',
                 style: TextStyle(
                   fontSize: 20,
-                  fontFamily: ConstantFonts.poppinsMedium,
-                  fontWeight: FontWeight.w600,
+                  fontFamily: ConstantFonts.sfProMedium,
                 ),
               ),
             ],
@@ -209,7 +207,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 18,
-            fontFamily: ConstantFonts.poppinsMedium,
+            fontFamily: ConstantFonts.sfProRegular,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -242,7 +240,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16,
-            fontFamily: ConstantFonts.poppinsMedium,
+            fontFamily: ConstantFonts.sfProRegular,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -272,7 +270,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             maxLines: 3,
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              fontFamily: ConstantFonts.poppinsRegular,
+              fontFamily: ConstantFonts.sfProRegular,
             ),
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(15),
@@ -281,7 +279,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               ),
               hintText: 'Reason is compulsory..',
               hintStyle: TextStyle(color: Colors.grey.shade600,
-              fontWeight: FontWeight.w600,
+                fontFamily: ConstantFonts.sfProMedium
               ),
             ),
             onChanged: (value){

@@ -1,6 +1,7 @@
 import 'dart:core';
 import 'dart:developer';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../Constant/colors/constant_colors.dart';
@@ -109,20 +110,23 @@ class _PrWorkDoneState extends State<PrWorkDone> {
   }
 
   Widget currentDatePicker() {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return Column(
       children: [
         Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 190),
-              child: FloatingActionButton.small(
-                elevation: 10,
-                backgroundColor: ConstantColor.backgroundColor,
-                tooltip: 'Date Picker',
+              padding: EdgeInsets.only(left: width * 0.43),
+              child: FilledButton.tonal(
+                style: FilledButton.styleFrom(
+                  foregroundColor: CupertinoColors.systemPurple,
+                  elevation: 10,
+                ),
                 onPressed: () {
                   datePicker();
                 },
-                child: const Icon(Icons.date_range, size: 20),
+                child: Icon(Icons.date_range, size: height * 0.028),
               ),
             ),
             const SizedBox(width: 10),
@@ -164,7 +168,7 @@ class _PrWorkDoneState extends State<PrWorkDone> {
                         style: TextStyle(
                           color: ConstantColor.headingTextColor,
                           fontSize: 17,
-                          fontFamily: ConstantFonts.poppinsMedium,
+                          fontFamily: ConstantFonts.sfProRegular,
                         ),
                       ),
                     ),
@@ -191,7 +195,7 @@ class _PrWorkDoneState extends State<PrWorkDone> {
                         style: TextStyle(
                           color: ConstantColor.headingTextColor,
                           fontSize: 17,
-                          fontFamily: ConstantFonts.poppinsMedium,
+                          fontFamily: ConstantFonts.sfProRegular,
                         ),
                       ),
                     ),
@@ -218,7 +222,7 @@ class _PrWorkDoneState extends State<PrWorkDone> {
                         style: TextStyle(
                           color: ConstantColor.headingTextColor,
                           fontSize: 17,
-                          fontFamily: ConstantFonts.poppinsMedium,
+                          fontFamily: ConstantFonts.sfProRegular,
                         ),
                       ),
                     ),
@@ -245,7 +249,7 @@ class _PrWorkDoneState extends State<PrWorkDone> {
                         style: TextStyle(
                           color: ConstantColor.headingTextColor,
                           fontSize: 17,
-                          fontFamily: ConstantFonts.poppinsMedium,
+                          fontFamily: ConstantFonts.sfProRegular,
                         ),
                       ),
                     ),
@@ -272,7 +276,7 @@ class _PrWorkDoneState extends State<PrWorkDone> {
                         style: TextStyle(
                           color: ConstantColor.headingTextColor,
                           fontSize: 17,
-                          fontFamily: ConstantFonts.poppinsMedium,
+                          fontFamily: ConstantFonts.sfProRegular,
                         ),
                       ),
                     ),
@@ -299,7 +303,7 @@ class _PrWorkDoneState extends State<PrWorkDone> {
                         style: TextStyle(
                           color: ConstantColor.headingTextColor,
                           fontSize: 17,
-                          fontFamily: ConstantFonts.poppinsMedium,
+                          fontFamily: ConstantFonts.sfProRegular,
                         ),
                       ),
                     ),
@@ -325,23 +329,15 @@ class _PrWorkDoneState extends State<PrWorkDone> {
     return SizedBox(
       height: 40,
       width: 100,
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          elevation: 10,
-          backgroundColor: ConstantColor.backgroundColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
+      child: FilledButton(
         onPressed: () {
           addPrPoints();
         },
         child: Text(
           'Update',
           style: TextStyle(
-            color: ConstantColor.background1Color,
-            fontSize: 17,
-            fontFamily: ConstantFonts.poppinsMedium,
+            fontSize: 15,
+            fontFamily: ConstantFonts.sfProBold,
           ),
         ),
       ),
@@ -372,7 +368,7 @@ class _PrWorkDoneState extends State<PrWorkDone> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16,
-            fontFamily: ConstantFonts.poppinsMedium,
+            fontFamily: ConstantFonts.sfProRegular,
             fontWeight: FontWeight.w500,
           ),
         ),

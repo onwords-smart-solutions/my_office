@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
@@ -99,14 +100,13 @@ class _PrWorkDetailsState extends State<PrWorkDetails> {
           children: [
             Padding(
               padding: const EdgeInsets.only(left: 190),
-              child: FloatingActionButton.small(
+              child: FloatingActionButton(
                 elevation: 5,
-                backgroundColor: ConstantColor.backgroundColor,
                 tooltip: 'Date Picker',
                 onPressed: () {
                   datePicker();
                 },
-                child: const Icon(Icons.date_range, size: 20),
+                child: const Icon(Icons.date_range, size: 25),
               ),
             ),
             const SizedBox(width: 10),
@@ -115,7 +115,7 @@ class _PrWorkDetailsState extends State<PrWorkDetails> {
               style: TextStyle(
                 color: ConstantColor.headingTextColor,
                 fontSize: 18,
-                fontFamily: ConstantFonts.poppinsBold,
+                fontFamily: ConstantFonts.sfProBold
               ),
             ),
           ],
@@ -135,17 +135,17 @@ class _PrWorkDetailsState extends State<PrWorkDetails> {
                       itemCount: prStaffNames.length,
                       itemBuilder: (ctx, i) {
                         return Container(
-                          margin: const EdgeInsets.all(10),
+                          margin: const EdgeInsets.all(5),
                           decoration: BoxDecoration(
                             color: ConstantColor.background1Color,
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.black.withOpacity(0.2),
-                                offset: const Offset(-0.0, 5.0),
+                                offset: const Offset(0.0, 2.0),
                                 blurRadius: 8,
-                              )
+                              ),
                             ],
-                            borderRadius: BorderRadius.circular(11),
+                            borderRadius: BorderRadius.circular(15),
                           ),
                           child: Center(
                             child: ListTile(
@@ -158,17 +158,16 @@ class _PrWorkDetailsState extends State<PrWorkDetails> {
                               ),
                               leading: const CircleAvatar(
                                 radius: 20,
-                                backgroundColor: ConstantColor.backgroundColor,
-                                child: Icon(Icons.person),
+                                child: Icon(CupertinoIcons.person_2_fill),
                               ),
                               title: Text(
                                 prStaffNames[i].name,
                                 style: TextStyle(
-                                    fontFamily: ConstantFonts.poppinsMedium,
+                                    fontFamily: ConstantFonts.sfProMedium,
                                     color: ConstantColor.blackColor,
                                     fontSize:
                                         MediaQuery.of(context).size.height *
-                                            0.020),
+                                            0.021),
                               ),
                             ),
                           ),
@@ -188,7 +187,7 @@ class _PrWorkDetailsState extends State<PrWorkDetails> {
                           style: TextStyle(
                             color: ConstantColor.blackColor,
                             fontSize: 20,
-                            fontFamily: ConstantFonts.poppinsRegular,
+                            fontFamily: ConstantFonts.sfProRegular,
                             fontWeight: FontWeight.w600,
                           ),
                         ),

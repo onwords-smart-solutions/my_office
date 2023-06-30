@@ -337,7 +337,7 @@ class _LateEntryScreenState extends State<LateEntryScreen>
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontFamily:
-                                                ConstantFonts.poppinsMedium),
+                                                ConstantFonts.sfProRegular),
                                         controller: _percentController,
                                         keyboardType: TextInputType.number,
                                         textInputAction: TextInputAction.done,
@@ -345,7 +345,7 @@ class _LateEntryScreenState extends State<LateEntryScreen>
                                           // fillColor: const Color(0xffFBF8FF),
                                           hintStyle: TextStyle(
                                               fontFamily:
-                                                  ConstantFonts.poppinsMedium,
+                                                  ConstantFonts.sfProRegular,
                                               fontWeight: FontWeight.w900,
                                               fontSize: 16,
                                               color: Colors.black54
@@ -376,7 +376,7 @@ class _LateEntryScreenState extends State<LateEntryScreen>
                                           // color: ConstantColor.blackColor,
                                           fontWeight: FontWeight.w900,
                                           fontFamily:
-                                              ConstantFonts.poppinsMedium),
+                                              ConstantFonts.sfProRegular),
                                       btnOkOnPress: () {
                                         setState(() {
                                           // debugPrint(_percentController.text.toString());
@@ -411,14 +411,14 @@ class _LateEntryScreenState extends State<LateEntryScreen>
                                             : _percentController.text,
                                         style: TextStyle(
                                           fontFamily:
-                                              ConstantFonts.poppinsMedium,
+                                              ConstantFonts.sfProRegular,
                                         ),
                                       ),
                                       Text(
                                         'Percent',
                                         style: TextStyle(
                                           fontFamily:
-                                              ConstantFonts.poppinsMedium,
+                                              ConstantFonts.sfProRegular,
                                         ),
                                       ),
                                     ],
@@ -576,7 +576,7 @@ class _LateEntryScreenState extends State<LateEntryScreen>
                               child: Text(
                                 'Submit',
                                 style: TextStyle(
-                                    fontFamily: ConstantFonts.poppinsMedium,
+                                    fontFamily: ConstantFonts.sfProRegular,
                                     fontSize: height * 0.025,
                                     color: Colors.white),
                               ),
@@ -599,7 +599,7 @@ class _LateEntryScreenState extends State<LateEntryScreen>
         name,
         style: TextStyle(
             fontSize: size,
-            fontFamily: ConstantFonts.poppinsMedium,
+            fontFamily: ConstantFonts.sfProRegular,
             color: ConstantColor.blackColor),
       ),
     );
@@ -625,7 +625,7 @@ class _LateEntryScreenState extends State<LateEntryScreen>
         style: TextStyle(
             fontSize: height * 0.02,
             color: Colors.black,
-            fontFamily: ConstantFonts.poppinsRegular),
+            fontFamily: ConstantFonts.sfProRegular),
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: hintName,
@@ -660,7 +660,7 @@ class _LateEntryScreenState extends State<LateEntryScreen>
             child: Text(
               message,
               style: TextStyle(
-                  fontFamily: ConstantFonts.poppinsMedium, fontSize: 17),
+                  fontFamily: ConstantFonts.sfProRegular, fontSize: 17),
             ),
           ),
         ),
@@ -708,13 +708,13 @@ class ButtonWidget extends StatelessWidget {
             Text(
               val,
               style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium,
+                fontFamily: ConstantFonts.sfProRegular,
               ),
             ),
             Text(
               title,
               style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium,
+                fontFamily: ConstantFonts.sfProRegular,
               ),
             ),
           ],

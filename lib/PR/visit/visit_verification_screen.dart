@@ -105,7 +105,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                           child: Text(
                             'Back',
                             style: TextStyle(
-                                fontFamily: ConstantFonts.poppinsMedium,
+                                fontFamily: ConstantFonts.sfProRegular,
                                 fontSize: 15.0,
                                 color: Colors.grey),
                           )),
@@ -120,7 +120,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                                 borderRadius: BorderRadius.circular(20.0))),
                         child: Text(buttonText,
                             style: TextStyle(
-                              fontFamily: ConstantFonts.poppinsMedium,
+                              fontFamily: ConstantFonts.sfProRegular,
                               fontSize: 15.0,
                             ))),
                   ],
@@ -137,7 +137,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
   Step inChargeStep() {
     final textStyle = currentStep == 0
         ? ConstantFonts.poppinsBold
-        : ConstantFonts.poppinsMedium;
+        : ConstantFonts.sfProRegular;
     final textColor = currentStep == 0 ? Colors.purple : Colors.black;
 
     return Step(
@@ -170,7 +170,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                       value: inChargeName.isEmpty ? null : inChargeName,
                       borderRadius: BorderRadius.circular(15.0),
                       style: TextStyle(
-                          fontFamily: ConstantFonts.poppinsMedium,
+                          fontFamily: ConstantFonts.sfProRegular,
                           color: Colors.black),
                       iconSize: 30.0,
                       menuMaxHeight: size.height * .4,
@@ -184,7 +184,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                       // value: inChargeName,
                       hint: Text('Select inCharge name',
                           style: TextStyle(
-                              fontFamily: ConstantFonts.poppinsMedium,
+                              fontFamily: ConstantFonts.sfProRegular,
                               color: Colors.grey)),
                       items: staffs.map((String items) {
                         return DropdownMenuItem(
@@ -243,7 +243,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                             label: Text(
                               'Take Photo',
                               style: TextStyle(
-                                  fontFamily: ConstantFonts.poppinsMedium),
+                                  fontFamily: ConstantFonts.sfProRegular),
                             ),
                           ),
                   ),
@@ -265,7 +265,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
   Step addSupport() {
     final textStyle = currentStep == 1
         ? ConstantFonts.poppinsBold
-        : ConstantFonts.poppinsMedium;
+        : ConstantFonts.sfProRegular;
     final textColor = currentStep == 1 ? Colors.purple : Colors.black;
     return Step(
       title: Text(
@@ -318,7 +318,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
             icon: const Icon(Icons.add_circle_rounded),
             label: Text("Add support crew",
                 style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium, fontSize: 15.0))),
+                    fontFamily: ConstantFonts.sfProRegular, fontSize: 15.0))),
       ],
     );
   }
@@ -335,7 +335,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
           Text(
             'Remove',
             style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium, color: Colors.white),
+                fontFamily: ConstantFonts.sfProRegular, color: Colors.white),
           ),
           const Icon(Icons.delete_rounded, color: Colors.white),
         ],
@@ -347,7 +347,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
   Step kmStartDetail() {
     final textStyle = currentStep == 2
         ? ConstantFonts.poppinsBold
-        : ConstantFonts.poppinsMedium;
+        : ConstantFonts.sfProRegular;
     final textColor = currentStep == 2 ? Colors.purple : Colors.black;
     return Step(
       title: Text(
@@ -368,7 +368,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
         TextField(
           controller: _kmEditingController,
           style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               fontSize: 15.0,
               color: Colors.black),
           keyboardType: TextInputType.number,
@@ -438,7 +438,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                         foregroundColor: const Color(0xff8355B7)),
                     label: Text(
                       'Take Photo',
-                      style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+                      style: TextStyle(fontFamily: ConstantFonts.sfProRegular),
                     )),
           ),
         ),
@@ -453,7 +453,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
   Step summary() {
     final textStyle = currentStep == 3
         ? ConstantFonts.poppinsBold
-        : ConstantFonts.poppinsMedium;
+        : ConstantFonts.sfProRegular;
     final textColor = currentStep == 3 ? Colors.purple : Colors.black;
     return Step(
       title: Text(
@@ -486,7 +486,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
             children: [
               Text(
                 'Incharge Name',
-                style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+                style: TextStyle(fontFamily: ConstantFonts.sfProRegular),
               ),
               Text(
                 inChargeName,
@@ -507,7 +507,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                   children: [
                     Text(
                       'Support  ${i + 1}',
-                      style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+                      style: TextStyle(fontFamily: ConstantFonts.sfProRegular),
                     ),
                     Text(
                       supportCrewNames[i],
@@ -522,7 +522,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
             children: [
               Text(
                 'Start KM Reading',
-                style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+                style: TextStyle(fontFamily: ConstantFonts.sfProRegular),
               ),
               Text(
                 _kmEditingController.text,
@@ -602,7 +602,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
         Text(
           message,
           style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium, color: Colors.red),
+              fontFamily: ConstantFonts.sfProRegular, color: Colors.red),
         ),
       ],
     );
@@ -635,7 +635,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                       Text(
                         'Enter Support Crew Name',
                         style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsMedium,
+                            fontFamily: ConstantFonts.sfProRegular,
                             fontSize: 12.0,
                             color: Colors.grey),
                       ),
@@ -647,7 +647,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                               child: TextField(
                             controller: _textEditingController,
                             style: TextStyle(
-                                fontFamily: ConstantFonts.poppinsMedium,
+                                fontFamily: ConstantFonts.sfProRegular,
                                 fontSize: 15.0,
                                 color: Colors.black),
                             textCapitalization: TextCapitalization.words,
@@ -697,7 +697,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                                   child: Text(choice,
                                       style: TextStyle(
                                           fontFamily:
-                                              ConstantFonts.poppinsMedium,
+                                              ConstantFonts.sfProRegular,
                                           color: Colors.black)),
                                 );
                               }).toList();
@@ -709,7 +709,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                       Text(
                         'Upload Support Crew Image',
                         style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsMedium,
+                            fontFamily: ConstantFonts.sfProRegular,
                             fontSize: 12.0,
                             color: Colors.grey),
                       ),
@@ -758,7 +758,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                                       'Take Photo',
                                       style: TextStyle(
                                           fontFamily:
-                                              ConstantFonts.poppinsMedium),
+                                              ConstantFonts.sfProRegular),
                                     )),
                           ),
                         ),
@@ -801,7 +801,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
                               child: Text('Add',
                                   style: TextStyle(
                                       fontFamily:
-                                          ConstantFonts.poppinsMedium)))),
+                                          ConstantFonts.sfProRegular)))),
                     ],
                   ),
                 ),
@@ -916,12 +916,12 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
         const SizedBox(height: 10.0),
         Text(
           'Uploading data, please wait',
-          style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+          style: TextStyle(fontFamily: ConstantFonts.sfProRegular),
         ),
         Text(
           'Don\'t press back button or close this app',
           style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               fontSize: 12.0,
               color: Colors.grey),
         ),
@@ -968,7 +968,7 @@ class _VisitVerificationScreenState extends State<VisitVerificationScreen> {
           child: Center(
             child: Text(
               message,
-              style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+              style: TextStyle(fontFamily: ConstantFonts.sfProRegular),
             ),
           ),
         ),

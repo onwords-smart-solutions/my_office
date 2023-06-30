@@ -129,7 +129,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         title: Text(widget.customerInfo['name'].toString(),
             style: TextStyle(
                 color: Colors.white,
-                fontFamily: ConstantFonts.poppinsMedium,
+                fontFamily: ConstantFonts.sfProRegular,
                 fontWeight: FontWeight.w700,
                 fontSize: 18.0)),
         titleSpacing: 0.0,
@@ -272,7 +272,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 17,
-                  fontFamily: ConstantFonts.poppinsMedium),
+                  fontFamily: ConstantFonts.sfProRegular),
               icon: const Icon(
                 Icons.arrow_drop_down_circle_outlined,
                 color: Colors.black,
@@ -369,7 +369,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           cursorColor: Colors.purple,
           scrollPhysics: const ClampingScrollPhysics(),
           style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium, fontSize: 14.0),
+              fontFamily: ConstantFonts.sfProRegular, fontSize: 14.0),
         ),
       ),
       node: TimelineNode(

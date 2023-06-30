@@ -16,7 +16,7 @@ class ScreenTemplate extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.black,
+      // backgroundColor: Colors.black,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
@@ -52,8 +52,8 @@ class ScreenTemplate extends StatelessWidget {
                         Text(
                           title,
                           style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsMedium,
-                            fontSize: 24.0,
+                            fontFamily: ConstantFonts.sfProBold,
+                            fontSize: 25.0,
                           ),
                         ),
                       ],

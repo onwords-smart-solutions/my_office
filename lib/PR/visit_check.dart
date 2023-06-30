@@ -123,7 +123,7 @@ class _VisitCheckScreenState extends State<VisitCheckScreen> {
                       title: Text(
                         allVisits[index].inChargeDetail.keys.first,
                         style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsMedium,
+                            fontFamily: ConstantFonts.sfProRegular,
                             color: ConstantColor.blackColor,
                             fontSize: 17),
                       ),
@@ -141,7 +141,7 @@ class _VisitCheckScreenState extends State<VisitCheckScreen> {
                       Text(
                         'No Visits available',
                         style: TextStyle(
-                          fontFamily: ConstantFonts.poppinsMedium,
+                          fontFamily: ConstantFonts.sfProRegular,
                           color: ConstantColor.blackColor,
                           fontWeight: FontWeight.bold,
                           fontSize: 16,

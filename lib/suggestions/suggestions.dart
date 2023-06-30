@@ -134,26 +134,17 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
           height: 60,
           width: 150,
           padding: const EdgeInsets.all(8.0),
-          child: ElevatedButton(
+          child: FilledButton(
             onPressed: () {
               addSuggestionToDatabase();
               sendNotification('Vhbt8jIAfiaV1HxuWERLqJh7dbj2', 'My Office',
                             'New suggestion has arrived..');
             },
-            style: ElevatedButton.styleFrom(
-              elevation: 10,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              backgroundColor: const Color(0xff8355B7),
-              // fixedSize: Size(250, 50),
-            ),
             child: Text(
               "Submit",
               style: TextStyle(
                 fontSize: 17,
-                fontWeight: FontWeight.w500,
-                fontFamily: ConstantFonts.poppinsMedium,
+                fontFamily: ConstantFonts.sfProBold,
               ),
             ),
           ),
@@ -171,7 +162,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16,
-            fontFamily: ConstantFonts.poppinsMedium,
+            fontFamily: ConstantFonts.sfProRegular,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -186,7 +177,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16,
-            fontFamily: ConstantFonts.poppinsMedium,
+            fontFamily: ConstantFonts.sfProRegular,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -212,7 +203,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16,
-            fontFamily: ConstantFonts.poppinsMedium,
+            fontFamily: ConstantFonts.sfProRegular,
             fontWeight: FontWeight.w500,
           ),
         ),

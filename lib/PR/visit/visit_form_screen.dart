@@ -45,7 +45,7 @@ class _VisitFromScreenState extends State<VisitFromScreen> {
       label: Text(
         'Create new visit form',
         style:
-        TextStyle(fontFamily: ConstantFonts.poppinsMedium, fontSize: 16.0,color: Colors.black),
+        TextStyle(fontFamily: ConstantFonts.sfProRegular, fontSize: 16.0,color: Colors.black),
       ),
       icon: const Icon(
         Icons.add_circle_rounded,
@@ -71,7 +71,7 @@ class _VisitFromScreenState extends State<VisitFromScreen> {
                 child: Text(
                   'No pending visit entry',
                   style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontFamily: ConstantFonts.sfProRegular,
                       fontSize: 14.0,color: Colors.black
                   ),
                 ),
@@ -92,7 +92,7 @@ class _VisitFromScreenState extends State<VisitFromScreen> {
           child: Text(
             'Incomplete visit forms',
             style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium,
+                fontFamily: ConstantFonts.sfProRegular,
                 fontSize: 14.0,
                 color: Colors.white),
           ),

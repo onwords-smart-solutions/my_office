@@ -81,7 +81,7 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
   @override
   Widget build(BuildContext context) {
     return MainTemplate(
-      subtitle: 'Choose your Refreshment here !',
+      subtitle: 'Choose your Refreshment here!!',
       templateBody: buildRefreshmentSection(),
       bgColor: ConstantColor.background1Color,
       bottomImage: buildBottomImage(),
@@ -165,26 +165,26 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
                 Text(
                   'Wait until refreshment portal opens...',
                   style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsBold,
+                      fontFamily: ConstantFonts.sfProBold,
                       color: Colors.deepPurple,
-                      fontSize: 16.0),
+                      fontSize: 18.0),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 25.0),
                 Text(
                   'Morning refreshment and food time: 9:30 AM - 11:00 AM',
                   style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsMedium,
-                      color: Colors.deepPurple,
-                      fontSize: 12.0),
+                      fontFamily: ConstantFonts.sfProMedium,
+                      color: Colors.brown,
+                      fontSize: 13.0),
                   textAlign: TextAlign.center,
                 ),
                 Text(
                   'Evening refreshment time: 1:30 PM - 3:30 PM',
                   style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsMedium,
-                      color: Colors.deepPurple,
-                      fontSize: 12.0),
+                      fontFamily: ConstantFonts.sfProMedium,
+                      color: Colors.brown,
+                      fontSize: 13.0),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -219,7 +219,8 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
       backgroundShape: BorderRadius.circular(40),
       text: title,
       textStyle: TextStyle(
-          fontFamily: ConstantFonts.poppinsMedium,
+          fontFamily: ConstantFonts.sfProMedium,
+          fontSize: 16,
           color: const Color(0xff5E5E5E)),
       sliderButtonContent: image,
     );
@@ -301,21 +302,6 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
             // isCoffeeOrdered = coffeeList.containsValue(widget.name);
             coffeeCount = value['coffee_count'];
           }
-
-          // if (isTeaOrdered || isCoffeeOrdered) {
-          //   final item = isTeaOrdered ? 'Tea' : 'Coffee';
-          //   showSnackBar(
-          //       message: 'You have already submitted your $item',
-          //       color: Colors.red);
-          // } else {
-          //   orderTeaOrCoffee(
-          //       item: item,
-          //       coffeeCount: coffeeCount,
-          //       teaCount: teaCount,
-          //       date: format,
-          //       mode: mode);
-          // }
-
           orderTeaOrCoffee(
               item: item,
               coffeeCount: coffeeCount,
@@ -408,7 +394,7 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
           child: Center(
             child: Text(
               message,
-              style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+              style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
             ),
           ),
         ),

@@ -57,7 +57,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                     style: TextStyle(
                       color: ConstantColor.backgroundColor,
                       fontSize: 16,
-                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontFamily: ConstantFonts.sfProRegular,
                     ),
                   ),
                 ),
@@ -68,7 +68,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                     style: TextStyle(
                         color: ConstantColor.headingTextColor,
                         fontSize: 16,
-                        fontFamily: ConstantFonts.poppinsMedium),
+                        fontFamily: ConstantFonts.sfProRegular),
                   ),
                 ),
               ],
@@ -85,7 +85,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   style: TextStyle(
                     color: ConstantColor.backgroundColor,
                     fontSize: 16,
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                   ),
                 ),
               ),
@@ -96,7 +96,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   style: TextStyle(
                       color: ConstantColor.headingTextColor,
                       fontSize: 16,
-                      fontFamily: ConstantFonts.poppinsMedium),
+                      fontFamily: ConstantFonts.sfProRegular),
                 ),
               ),
             ],
@@ -113,7 +113,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   style: TextStyle(
                     color: ConstantColor.backgroundColor,
                     fontSize: 16,
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                   ),
                 ),
               ),
@@ -124,7 +124,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   style: TextStyle(
                       color: ConstantColor.headingTextColor,
                       fontSize: 16,
-                      fontFamily: ConstantFonts.poppinsMedium),
+                      fontFamily: ConstantFonts.sfProRegular),
                 ),
               ),
             ],
@@ -141,7 +141,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   style: TextStyle(
                     color: ConstantColor.backgroundColor,
                     fontSize: 16,
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                   ),
                 ),
               ),
@@ -152,7 +152,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   style: TextStyle(
                       color: ConstantColor.headingTextColor,
                       fontSize: 16,
-                      fontFamily: ConstantFonts.poppinsMedium),
+                      fontFamily: ConstantFonts.sfProRegular),
                 ),
               ),
             ],
@@ -169,7 +169,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   style: TextStyle(
                     color: ConstantColor.backgroundColor,
                     fontSize: 16,
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                   ),
                 ),
               ),
@@ -180,7 +180,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   style: TextStyle(
                       color: ConstantColor.headingTextColor,
                       fontSize: 16,
-                      fontFamily: ConstantFonts.poppinsMedium),
+                      fontFamily: ConstantFonts.sfProRegular),
                 ),
               ),
             ],
@@ -197,7 +197,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   style: TextStyle(
                     color: ConstantColor.backgroundColor,
                     fontSize: 16,
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                   ),
                 ),
               ),
@@ -208,7 +208,7 @@ class _ViewAllAttendanceState extends State<ViewAllAttendance> {
                   style: TextStyle(
                       color: ConstantColor.headingTextColor,
                       fontSize: 16,
-                      fontFamily: ConstantFonts.poppinsMedium),
+                      fontFamily: ConstantFonts.sfProRegular),
                 ),
               ),
             ],

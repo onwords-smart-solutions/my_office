@@ -52,11 +52,11 @@ class _IncomeScreenState extends State<IncomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    ascending ? 'Ascending' : 'descending',
-                    style: TextStyle(color: Colors.black,fontSize: 15, fontWeight: FontWeight.bold),
+                    ascending ? 'Ascending' : 'Descending',
+                    style: TextStyle(color: Colors.black,fontSize: 15,fontFamily: ConstantFonts.sfProMedium),
                   ),
-                  Icon(Icons.arrow_downward,color: Colors.black,size: 20,),
-                  Icon(Icons.arrow_upward,color: Colors.black,size: 20,),
+                  const Icon(Icons.arrow_downward,color: Colors.black,size: 20,),
+                  const Icon(Icons.arrow_upward,color: Colors.black,size: 20,),
 
                 ],
               )),
@@ -79,14 +79,14 @@ class _IncomeScreenState extends State<IncomeScreen> {
                 title: Text(
                   widget.allIncome[index].customerName,
                   style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontFamily: ConstantFonts.sfProMedium,
                       color: ConstantColor.blackColor,
                       fontSize: 16),
                 ),
                 trailing: Text(
                   '-   ${widget.allIncome[index].amount.toString()}',
                   style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsBold,
+                      fontFamily: ConstantFonts.sfProBold,
                       color: ConstantColor.backgroundColor,
                       fontSize: 16),
                 ),

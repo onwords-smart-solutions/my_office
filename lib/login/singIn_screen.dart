@@ -44,7 +44,7 @@ class _SingInScreenState extends State<SingInScreen> {
                 TextSpan(
                   text: 'Hello !\n',
                   style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                     color: ConstantColor.blackColor,
                     fontSize: height * 0.035,
                   ),
@@ -52,7 +52,7 @@ class _SingInScreenState extends State<SingInScreen> {
                 TextSpan(
                   text: 'Welcome To Team onwords',
                   style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                     color: ConstantColor.blackColor,
                     fontSize: height * 0.020,
                   ),
@@ -159,12 +159,12 @@ class _SingInScreenState extends State<SingInScreen> {
         text: TextSpan(
             children: [
               TextSpan(text: 'Already member  ', style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium,
+                fontFamily: ConstantFonts.sfProRegular,
                 color: ConstantColor.blackColor,
                 fontSize: height * 0.015,
               ),),
               TextSpan(text: 'Login ?', style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium,
+                fontFamily: ConstantFonts.sfProRegular,
                 color: ConstantColor.pinkColor,
                 fontSize: height * 0.015,
               ),
@@ -198,7 +198,7 @@ class _SingInScreenState extends State<SingInScreen> {
           child: Text(
             name,
             style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               color: ConstantColor.background1Color,
               fontSize: height * 0.030,
             ),
@@ -225,7 +225,7 @@ class _SingInScreenState extends State<SingInScreen> {
         style: TextStyle(
             fontSize: height * 0.02,
             color: Colors.black,
-            fontFamily: ConstantFonts.poppinsRegular),
+            fontFamily: ConstantFonts.sfProRegular),
         decoration: InputDecoration(
           prefixIcon: icon,
           border: InputBorder.none,

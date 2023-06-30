@@ -151,7 +151,7 @@ class _StaffEntryCheckScreenState extends State<StaffEntryCheckScreen> {
                         title: Text(
                           attendanceTime[index],
                           style: TextStyle(
-                              fontFamily: ConstantFonts.poppinsMedium,
+                              fontFamily: ConstantFonts.sfProRegular,
                               color: ConstantColor.blackColor,
                               fontSize: 18),
                         ),
@@ -168,7 +168,7 @@ class _StaffEntryCheckScreenState extends State<StaffEntryCheckScreen> {
                         Text(
                           'No Attendance registered!!',
                           style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsRegular,
+                            fontFamily: ConstantFonts.sfProRegular,
                             color: ConstantColor.blackColor,
                             fontWeight: FontWeight.w600,
                             fontSize: 20,

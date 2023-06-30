@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
@@ -125,7 +126,7 @@ class _ViewAttendanceScreenState extends State<ViewAttendanceScreen> {
               Text(
                 '$selectedDate',
                 style: TextStyle(
-                  fontFamily: ConstantFonts.poppinsBold,
+                  fontFamily: ConstantFonts.sfProBold,
                   fontSize: 17,
                   color: ConstantColor.backgroundColor,
                 ),
@@ -137,8 +138,7 @@ class _ViewAttendanceScreenState extends State<ViewAttendanceScreen> {
         Text('Total entries : ${fullAttendance.length}',
         style: TextStyle(
           fontSize: 17,
-          fontFamily: ConstantFonts.poppinsRegular,
-          fontWeight: FontWeight.w600,
+          fontFamily: ConstantFonts.sfProBold,
         ),
         ),
         isLoading ? Lottie.asset('assets/animations/new_loading.json') :
@@ -148,17 +148,17 @@ class _ViewAttendanceScreenState extends State<ViewAttendanceScreen> {
                   itemCount: fullAttendance.length,
                   itemBuilder: (context, index) {
                     return Container(
-                      margin: const EdgeInsets.all(8),
+                      margin: const EdgeInsets.all(5),
                       decoration: BoxDecoration(
                         color: ConstantColor.background1Color,
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.2),
-                            offset: const Offset(-0.0, 5.0),
+                            offset: const Offset(0.0, 2.0),
                             blurRadius: 8,
                           )
                         ],
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(15),
                       ),
                       child: ListTile(
                         onTap: () {
@@ -169,22 +169,21 @@ class _ViewAttendanceScreenState extends State<ViewAttendanceScreen> {
                             ),
                           );
                         },
-                        leading: const CircleAvatar(
+                        leading:  const CircleAvatar(
                           radius: 17,
-                          backgroundColor: ConstantColor.backgroundColor,
-                          child: Icon(Icons.person,size: 20,),
+                          child: Icon(CupertinoIcons.person_2_fill, size: 20),
                         ),
                         title: Text(
                           fullAttendance[index]['Name'].toString(),
                           style: TextStyle(
-                              fontFamily: ConstantFonts.poppinsMedium,
+                              fontFamily: ConstantFonts.sfProMedium,
                               color: ConstantColor.blackColor,
-                              fontSize: 16),
+                              fontSize: 17),
                         ),
                         trailing: Text(
                           fullAttendance[index]['Time'].toString(),
                           style: TextStyle(
-                              fontFamily: ConstantFonts.poppinsMedium,
+                              fontFamily: ConstantFonts.sfProRegular,
                               color: ConstantColor.blackColor,
                               fontSize: 16),
                         ),
@@ -203,7 +202,7 @@ class _ViewAttendanceScreenState extends State<ViewAttendanceScreen> {
                       Text(
                         'No Entry Registered!',
                         style: TextStyle(
-                          fontFamily: ConstantFonts.poppinsMedium,
+                          fontFamily: ConstantFonts.sfProRegular,
                           color: ConstantColor.blackColor,
                           fontWeight: FontWeight.bold,
                           fontSize: 20,

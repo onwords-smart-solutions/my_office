@@ -6,6 +6,7 @@ import 'package:delayed_display/delayed_display.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:iconsax/iconsax.dart';
@@ -98,9 +99,8 @@ class _AccountScreenState extends State<AccountScreen> {
                     title: Text(
                       'Camera',
                       style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: ConstantFonts.poppinsRegular),
+                          fontSize: 18,
+                          fontFamily: ConstantFonts.sfProMedium),
                     ),
                   ),
                   ListTile(
@@ -113,9 +113,8 @@ class _AccountScreenState extends State<AccountScreen> {
                     title: Text(
                       'Gallery',
                       style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: ConstantFonts.poppinsRegular),
+                          fontSize: 18,
+                          fontFamily: ConstantFonts.sfProMedium),
                     ),
                   ),
                 ],
@@ -229,13 +228,11 @@ class _AccountScreenState extends State<AccountScreen> {
                                 Text(
                                   'Change image',
                                   style: TextStyle(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: ConstantFonts.poppinsRegular),
+                                      fontSize: 17,
+                                      fontFamily: ConstantFonts.sfProMedium),
                                 ),
                                 const SizedBox(width: 5),
                                 const Icon(
-                                  color: ConstantColor.backgroundColor,
                                   Icons.image,
                                   size: 20,
                                 )
@@ -287,7 +284,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   child: DelayedDisplay(
                     delay: 1.6.seconds,
                     child: Center(
-                      child: TextButton.icon(
+                      child: FilledButton.icon(
                         onPressed: () async {
                           final navigator = Navigator.of(context);
                           await FirebaseAuth.instance.signOut();
@@ -300,13 +297,12 @@ class _AccountScreenState extends State<AccountScreen> {
                                   builder: (_) => const LoginScreen()),
                               (route) => false);
                         },
-                        style:
-                            TextButton.styleFrom(foregroundColor: Colors.black),
                         label: Text('Log out',
                             style: TextStyle(
-                                fontSize: height * 0.020,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black)),
+                                fontSize: height * 0.023,
+                                fontFamily: ConstantFonts.sfProMedium,
+                            ),
+                        ),
                         icon: const Icon(Icons.logout_rounded),
                       ),
                     ),
@@ -322,9 +318,9 @@ class _AccountScreenState extends State<AccountScreen> {
                       child: Text(
                         'Version ${AppConstants.displayVersion}',
                         style: TextStyle(
-                          color: Colors.grey,
-                          fontFamily: ConstantFonts.poppinsMedium,
-                          fontWeight: FontWeight.w500,
+                          color: CupertinoColors.systemGrey2,
+                          fontFamily: ConstantFonts.sfProMedium,
+                          fontSize: 17,
                         ),
                       ),
                     ),
@@ -353,20 +349,22 @@ class _AccountScreenState extends State<AccountScreen> {
             Text(
               title,
               style: TextStyle(
-                fontSize: height * 0.015,
-                fontWeight: FontWeight.bold,
+                fontSize: height * 0.020,
+                fontFamily: ConstantFonts.sfProMedium,
                 color: Colors.black26,
               ),
             ),
             Text(value,
                 style: TextStyle(
-                    fontSize: height * 0.018,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87)),
+                    fontSize: height * 0.020,
+                    fontFamily: ConstantFonts.sfProMedium,
+                    color: Colors.black87,
+                ),
+            ),
             const Divider(
               // height: height * 0.03,
               color: Colors.black54,
-              thickness: 1.0,
+              thickness: 1.2,
             ),
           ],
         ),

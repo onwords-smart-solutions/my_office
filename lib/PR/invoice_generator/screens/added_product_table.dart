@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter/material.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
 import 'package:provider/provider.dart';
@@ -52,20 +52,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
             child: Column(
               children: [
                 /// TABLE HEAD
-                Neumorphic(
-                  margin: const EdgeInsets.only(bottom: 5),
-                  style: NeumorphicStyle(
-                    depth: 1,
-                    boxShape: NeumorphicBoxShape.roundRect(
-                      const BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20)),
-                    ),
-                  ),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     height: height * .08,
                     width: width * 1,
+                    margin: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: CupertinoColors.systemGrey.withOpacity(0.4),
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -76,23 +71,16 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       ],
                     ),
                   ),
-                ),
 
                 /// TABLE CONTENT
-                Neumorphic(
-                  style: NeumorphicStyle(
-                    depth: 2,
-                    boxShape: NeumorphicBoxShape.roundRect(
-                      const BorderRadius.only(
-                          bottomRight: Radius.circular(20),
-                          bottomLeft: Radius.circular(20)),
-                    ),
-                  ),
-                  child: Container(
+                Container(
                       height: height * .55,
                       width: width * 1,
+                      margin: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20)),
+                          borderRadius: BorderRadius.circular(20),
+                        color: CupertinoColors.systemGrey.withOpacity(0.4),
+                      ),
                       child: ListView.builder(
                           scrollDirection: Axis.vertical,
                           physics: const BouncingScrollPhysics(),
@@ -119,7 +107,6 @@ class _AddProductScreenState extends State<AddProductScreen> {
                               ),
                             );
                           })),
-                ),
 
                 Container(
                   margin: EdgeInsets.only(top: 10, left: width * .4),
@@ -145,7 +132,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          fontFamily: ConstantFonts.poppinsRegular,
+                          fontFamily: ConstantFonts.sfProRegular,
                           color: Colors.black.withOpacity(0.4),
                         ),
                       ),
@@ -205,7 +192,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               title,
               style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  fontFamily: ConstantFonts.poppinsRegular,
+                  fontFamily: ConstantFonts.sfProRegular,
                   fontSize: 16),
             ),
           ),
@@ -258,7 +245,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 style: TextStyle(
                     color: Colors.red,
                     fontWeight: FontWeight.w600,
-                    fontFamily: ConstantFonts.poppinsRegular,
+                    fontFamily: ConstantFonts.sfProRegular,
                 fontSize: 18
                 ),
               ),
@@ -269,7 +256,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     'Do you want to delete this product?',
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
-                        fontFamily: ConstantFonts.poppinsRegular,
+                        fontFamily: ConstantFonts.sfProRegular,
                         fontSize: 16),
                   ),
                 ),
@@ -281,7 +268,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
                         color: Colors.red,
-                        fontFamily: ConstantFonts.poppinsRegular),
+                        fontFamily: ConstantFonts.sfProRegular),
                   ),
                   onPressed: () async {
                     Provider.of<InvoiceProvider>(context, listen: false)
@@ -295,7 +282,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
                         color: Colors.black,
-                        fontFamily: ConstantFonts.poppinsRegular),
+                        fontFamily: ConstantFonts.sfProRegular),
                   ),
                   onPressed: () async {
                     Navigator.of(context).pop();

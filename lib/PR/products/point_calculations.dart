@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:confetti/confetti.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:my_office/home/user_home_screen.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../../Constant/fonts/constant_font.dart';
 
@@ -114,17 +114,19 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: const Color(0xffDDE6E8),
       appBar: AppBar(
         centerTitle: true,
         iconTheme: const IconThemeData(
           color: Colors.black,
         ),
-        title: const Text(
+        title: Text(
           'Points Calculations',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.black,
+          fontFamily: ConstantFonts.sfProBold,
+            fontSize: 23,
+          ),
         ),
-        backgroundColor: const Color(0xffDDE6E8),
+        backgroundColor: const Color(0xffEEEEEE),
         elevation: 0,
       ),
       body: Form(
@@ -145,7 +147,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                       ),
 
                       ///Drop Down
-                      buildNeumorphic(
+                      buildContainer(
                         height,
                         width,
                         ClipRRect(
@@ -157,7 +159,14 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 18.0),
                                 child: DropDownTextField(
-                                  // initialValue: "name4",
+                                  textStyle: TextStyle(
+                                    fontFamily: ConstantFonts.sfProMedium,
+                                    fontSize: 17,
+                                  ),
+                                  listTextStyle: TextStyle(
+                                    fontFamily: ConstantFonts.sfProMedium,
+                                    fontSize: 17,
+                                  ),
                                   controller: itermNameController,
                                   clearOption: true,
                                   enableSearch: true,
@@ -169,9 +178,13 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                       color: Colors.black, icon: Icons.clear),
                                   dropdownColor: const Color(0xffDDE6E8),
                                   // searchDecoration:InputDecoration(hintText: "Select Product"),
-                                  textFieldDecoration: const InputDecoration(
+                                  textFieldDecoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText: '     Select Product',
+                                    hintStyle: TextStyle(
+                                      fontSize: 17,
+                                      fontFamily: ConstantFonts.sfProMedium,
+                                    ),
                                   ),
                                   validator: (value) {
                                     if (value == null) {
@@ -201,19 +214,22 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
 
                       ///Quantity
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          buildNeumorphic(
+                          buildContainer(
                             height,
                             width,
                             SizedBox(
-                              width: width * 0.5,
+                              width: width * 0.38,
                               height: height * 0.08,
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Center(
                                   child: TextFormField(
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontFamily: ConstantFonts.sfProMedium
+                                    ),
                                     textAlign: TextAlign.center,
                                     textInputAction: TextInputAction.done,
                                     // validator: (value) {
@@ -223,9 +239,14 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                     //   return null;
                                     // },
                                     keyboardType: TextInputType.number,
-                                    decoration: const InputDecoration(
+                                    decoration:  InputDecoration(
                                         border: InputBorder.none,
-                                        hintText: 'Quantity of Product'),
+                                        hintText: 'Quantity of Product',
+                                    hintStyle: TextStyle(
+                                      fontFamily: ConstantFonts.sfProMedium,
+                                      fontSize: 17,
+                                    ),
+                                    ),
                                     controller: quantityController,
                                   ),
                                 ),
@@ -321,7 +342,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                 });
                               }
                             },
-                            child: buildNeumorphic(
+                            child: buildContainer(
                               width,
                               height,
                               SizedBox(
@@ -331,8 +352,8 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                   child: Text(
                                     'Add',
                                     style: TextStyle(
-                                        fontWeight: FontWeight.w900,
-                                        fontSize: height * 0.020),
+                                      fontFamily: ConstantFonts.sfProBold,
+                                        fontSize: height * 0.021),
                                   ),
                                 ),
                               ),
@@ -351,7 +372,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                           child: Column(
                             children: [
                               /// Table Heading
-                              buildNeumorphic(
+                              buildContainer(
                                 width,
                                 height,
                                 Container(
@@ -368,9 +389,8 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                         child: Text(
                                           'Name',
                                           style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: height * 0.012,
-
+                                            fontFamily: ConstantFonts.sfProMedium,
+                                            fontSize: height * 0.017,
                                           ),
                                         ),
                                       ),
@@ -385,8 +405,8 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                         child: Text(
                                           'Quantity',
                                           style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: height * 0.012,
+                                            fontFamily: ConstantFonts.sfProMedium,
+                                            fontSize: height * 0.017,
 
                                           ),
                                         ),
@@ -402,8 +422,8 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                           child: Text(
                                             'Rate',
                                             style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: height * 0.012,
+                                              fontFamily: ConstantFonts.sfProMedium,
+                                              fontSize: height * 0.017,
 
                                             ),
                                           )),
@@ -418,18 +438,18 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                           child: Text(
                                             'Total',
                                             style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: height * 0.012,
-
+                                              fontFamily: ConstantFonts.sfProMedium,
+                                              fontSize: height * 0.017,
                                             ),
-                                          )),
+                                          ),
+                                      ),
                                     ],
                                   ),
                                 ),
                               ),
 
                               /// Table Value
-                              buildNeumorphic(
+                              buildContainer(
                                 width,
                                 height,
                                 SizedBox(
@@ -551,7 +571,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                     //     getPointsStatus = true;
                                   });
                                 },
-                                child: buildNeumorphic(
+                                child: buildContainer(
                                   width,
                                   height,
                                   SizedBox(
@@ -561,9 +581,11 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                           child: Text(
                                         'Get Price Details',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.w900,
+                                            fontFamily: ConstantFonts.sfProBold,
                                             fontSize: height * 0.025),
-                                      ))),
+                                      ),
+                                      ),
+                                  ),
                                 ),
                               ),
                             ],
@@ -580,7 +602,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      buildNeumorphic(
+                      buildContainer(
                           width,
                           height,
                           SizedBox(
@@ -602,17 +624,20 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            buildNeumorphic(
+                            buildContainer(
                               width,
                               height,
                               Container(
                                 padding: const EdgeInsets.all(8),
                                 height: height * 0.09,
-                                width: width * .9,
+                                width: width * .85,
                                 child: Center(
                                   child: TextFormField(
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontFamily: ConstantFonts.sfProMedium,
+                                    ),
                                     textInputAction: TextInputAction.done,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
@@ -633,7 +658,12 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                     decoration: InputDecoration(
                                         border: InputBorder.none,
                                         hintText:
-                                            'Enter below ${maximumDiscount.toString()} %'),
+                                            'Enter below ${maximumDiscount.toString()} %',
+                                    hintStyle: TextStyle(
+                                      fontFamily: ConstantFonts.sfProMedium,
+                                      fontSize: 17,
+                                    )
+                                    ),
                                     controller: percentageController,
                                   ),
                                 ),
@@ -703,7 +733,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                             });
                           }
                         },
-                        child: buildNeumorphic(
+                        child: buildContainer(
                           width,
                           height,
                           SizedBox(
@@ -713,16 +743,14 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                               child: Text(
                                 "Get Point",
                                 style: TextStyle(
-                                    fontSize: height * 0.025,
-                                    fontWeight: FontWeight.bold),
+                                    fontSize: height * 0.027,
+                                   fontFamily: ConstantFonts.sfProBold,
                               ),
                             ),
                           ),
                         ),
                       ),
-
-                      //   Text('final Amount   $finalAmount'),
-                      //   Text('PR Points  : $prPoint'),
+                      ),
                     ],
                   ),
                 ),
@@ -741,27 +769,32 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
         child: ListTile(
           title: Text(
             title,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 16,
+              fontFamily: ConstantFonts.sfProBold,
+            ),
           ),
           trailing: Text(
             value,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontFamily: ConstantFonts.sfProMedium,
+              fontSize: 14,
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget buildNeumorphic(double width, double height, Widget widget) {
-    return Neumorphic(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      style: NeumorphicStyle(
-        depth: 2,
-        boxShape: NeumorphicBoxShape.roundRect(
-          BorderRadius.circular(20),
+  Widget buildContainer(double width, double height, Widget widget) {
+    return Container(
+        padding: const EdgeInsets.all(5),
+        margin: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: CupertinoColors.systemGrey.withOpacity(0.4),
         ),
-      ),
-      child: widget,
+        child: widget
     );
   }
 
@@ -797,7 +830,9 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
           child: Center(
             child: Text(
               message,
-              style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+              style: TextStyle(
+                  fontSize: 17,
+                  fontFamily: ConstantFonts.sfProMedium),
             ),
           ),
         ),
@@ -859,36 +894,26 @@ class _PointViewState extends State<PointView> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(height: height * 0.2),
-            // ConfettiWidget(
-            //   confettiController: controller,
-            //   shouldLoop: true,
-            //   blastDirection: -pi / 2,
-            //   blastDirectionality: BlastDirectionality.explosive,
-            //   emissionFrequency: 0.00,
-            //   numberOfParticles: 100,
-            //   maxBlastForce: 100,
-            //   minBlastForce: 10,
-            //   gravity: 0.3,
-            // ),
             Text(
-              'You Have',
+              'You have got',
               style: TextStyle(
                   color: Colors.white,
-                  fontWeight: FontWeight.w900,
+                  fontFamily: ConstantFonts.sfProMedium,
                   fontSize: height * 0.05),
             ),
             Text(
               widget.points.toString(),
               style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w900,
-                  fontSize: height * 0.05),
+                  color: Colors.amber,
+                  fontFamily: ConstantFonts.sfProMedium,
+                  fontSize: height * 0.05,
+              ),
             ),
             Text(
-              'points',
+              'points👍',
               style: TextStyle(
                   color: Colors.white,
-                  fontWeight: FontWeight.w900,
+                  fontFamily: ConstantFonts.sfProMedium,
                   fontSize: height * 0.05),
             ),
             SizedBox(height: height * 0.3),
@@ -900,38 +925,26 @@ class _PointViewState extends State<PointView> {
               onPointerDown: (_) => setState(() {
                 isPressed = true;
               }),
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    Navigator.of(context).pop();
-                  });
-                },
-                child: Neumorphic(
-                  duration: const Duration(milliseconds: 100),
-                  style: NeumorphicStyle(
-                    depth: isPressed ? 0 : -3,
-                    color: const Color(0xff282C35),
-                    shadowDarkColor: Colors.white,
-                    shadowDarkColorEmboss: Colors.white,
-                    shadowLightColor: Colors.black,
-                    shadowLightColorEmboss: Colors.black,
-                    boxShape: NeumorphicBoxShape.roundRect(
-                      BorderRadius.circular(30),
+              child: Container(
+                height: height * 0.08,
+                width: width * 0.5,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: CupertinoColors.systemPurple,
+                ),
+                child: CupertinoButton(
+                  onPressed: () {
+                    setState(() {
+                      Navigator.of(context).pop();
+                    });
+                  },
+                    child: Text(
+                      'Go Back',
+                      style: TextStyle(
+                          fontSize: height * 0.035,
+                          fontFamily: ConstantFonts.sfProBold,
+                          color: const Color(0xffDDE6E8)),
                     ),
-                  ),
-                  child: SizedBox(
-                    height: height * 0.08,
-                    width: width * 0.5,
-                    child: Center(
-                      child: Text(
-                        'Go Back',
-                        style: TextStyle(
-                            fontSize: height * 0.03,
-                            fontWeight: FontWeight.bold,
-                            color: const Color(0xffDDE6E8)),
-                      ),
-                    ),
-                  ),
                 ),
               ),
             )),

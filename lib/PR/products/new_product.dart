@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../../Constant/colors/constant_colors.dart';
 import '../../Constant/fonts/constant_font.dart';
@@ -39,7 +40,7 @@ class _CreateNewProductState extends State<CreateNewProduct> {
             style: TextStyle(
               color: ConstantColor.backgroundColor,
               fontSize: 16,
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
             ),
           ),
         ),
@@ -84,9 +85,12 @@ class _CreateNewProductState extends State<CreateNewProduct> {
         iconTheme: const IconThemeData(
           color: Colors.black, //change your color here
         ),
-        title: const Text(
+        title: Text(
           'New Products',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Colors.black,
+              fontSize: 23,
+              fontFamily: ConstantFonts.sfProBold),
         ),
         backgroundColor: const Color(0xffDDE6E8),
         elevation: 0,
@@ -168,28 +172,24 @@ class _CreateNewProductState extends State<CreateNewProduct> {
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Neumorphic(
-                          duration: const Duration(
-                            milliseconds: 200,
-                          ),
-                          style: NeumorphicStyle(
-                            shadowLightColor: Colors.white.withOpacity(0.8),
-                            depth: isPressed ? 0 : 3,
-                            boxShape: NeumorphicBoxShape.roundRect(
-                              BorderRadius.circular(20),
+                          child: Container(
+                            padding: const EdgeInsets.all(5),
+                            margin: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: CupertinoColors.systemGrey.withOpacity(0.4),
                             ),
-                          ),
-                          child: const SizedBox(
-                            height: 60,
-                            child: Center(
-                              child: Text(
-                                'Create Product',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.bold),
+                            child: const SizedBox(
+                              height: 50,
+                              child: Center(
+                                child: Text(
+                                  'Create Product',
+                                  style: TextStyle(
+                                      fontSize: 16, fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
                           ),
-                        ),
                       ),
                     ),
                   ),
@@ -214,39 +214,37 @@ class _CreateNewProductState extends State<CreateNewProduct> {
       children: [
         Text(
           '    $name',
-          style: const TextStyle(
-              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15),
+          style: TextStyle(
+              color: Colors.black,fontFamily: ConstantFonts.sfProBold, fontSize: 17),
         ),
-        Neumorphic(
+        Container(
+         padding: const EdgeInsets.all(5),
           margin: const EdgeInsets.all(10),
-          padding: const EdgeInsets.all(5),
-          style:  NeumorphicStyle(
-            shadowLightColor: Colors.white.withOpacity(0.8),
-            depth: 2,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: CupertinoColors.systemGrey.withOpacity(0.4),
           ),
           child: TextFormField(
-            textInputAction: textInputAction,
-            keyboardType: textInputType,
-            controller: controller,
-            style: const TextStyle(color: Colors.black),
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: name,
-              hintStyle: const TextStyle(
-                  fontWeight: FontWeight.w300, color: Colors.black54),
-              // enabledBorder: const OutlineInputBorder(
-              //   borderSide: BorderSide(
-              //     color: Colors.transparent,
-              //   ),
-              // ),
+              textInputAction: textInputAction,
+              keyboardType: textInputType,
+              controller: controller,
+              style: const TextStyle(color: Colors.black),
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.all(8),
+                border: InputBorder.none,
+                hintText: name,
+                hintStyle: TextStyle(
+                    fontFamily: ConstantFonts.sfProMedium,
+                     fontSize: 16,
+                     color: Colors.black54),
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return "Enter $errorName of Product";
+                }
+                return null;
+              },
             ),
-            validator: (value) {
-              if (value!.isEmpty) {
-                return "Enter $errorName of Product";
-              }
-              return null;
-            },
-          ),
         ),
       ],
     );

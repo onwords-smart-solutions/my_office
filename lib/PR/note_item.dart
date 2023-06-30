@@ -119,14 +119,14 @@ class _NoteItemState extends State<NoteItem> {
                   Text(
                     widget.updatedDate,
                     style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontFamily: ConstantFonts.sfProRegular,
                       fontSize: 12.0,
                     ),
                   ),
                   Text(
                     widget.updatedTime,
                     style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsMedium,
+                      fontFamily: ConstantFonts.sfProRegular,
                       fontSize: 12.0,
                     ),
                   ),
@@ -145,7 +145,7 @@ class _NoteItemState extends State<NoteItem> {
                   widget.note,
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    fontFamily: ConstantFonts.poppinsRegular,
+                    fontFamily: ConstantFonts.sfProRegular,
                     fontSize: 13.0,
                   ),
                 ),

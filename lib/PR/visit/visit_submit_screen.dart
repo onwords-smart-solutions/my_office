@@ -76,7 +76,7 @@ class _VisitSubmitScreenState extends State<VisitSubmitScreen> {
                           borderRadius: BorderRadius.circular(50.0))),
                   child: Text(
                     'Submit',
-                    style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+                    style: TextStyle(fontFamily: ConstantFonts.sfProRegular),
                   )),
             ),
           ),
@@ -112,7 +112,7 @@ class _VisitSubmitScreenState extends State<VisitSubmitScreen> {
         Text(
           '   Customer Detail',
           style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               fontSize: 15.0,
               color: Colors.black54.withOpacity(.6)),
         ),
@@ -127,7 +127,7 @@ class _VisitSubmitScreenState extends State<VisitSubmitScreen> {
               Text(
                 'Name',
                 style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                     fontSize: 12.0,
                     color: Colors.grey),
               ),
@@ -142,7 +142,7 @@ class _VisitSubmitScreenState extends State<VisitSubmitScreen> {
               Text(
                 'Phone Number',
                 style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                     fontSize: 12.0,
                     color: Colors.grey),
               ),
@@ -167,7 +167,7 @@ class _VisitSubmitScreenState extends State<VisitSubmitScreen> {
         Text(
           '   PR Detail',
           style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               fontSize: 15.0,
               color: Colors.black54.withOpacity(.6)),
         ),
@@ -213,7 +213,7 @@ class _VisitSubmitScreenState extends State<VisitSubmitScreen> {
         Text(
           '   Product Detail',
           style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               fontSize: 15.0,
               color: Colors.black54.withOpacity(.6)),
         ),
@@ -228,7 +228,7 @@ class _VisitSubmitScreenState extends State<VisitSubmitScreen> {
               Text(
                 'Selected Products',
                 style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                     fontSize: 12.0,
                     color: Colors.grey),
               ),
@@ -244,7 +244,7 @@ class _VisitSubmitScreenState extends State<VisitSubmitScreen> {
               Text(
                 'Quotation or Invoice Number',
                 style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                     fontSize: 12.0,
                     color: Colors.grey),
               ),
@@ -259,7 +259,7 @@ class _VisitSubmitScreenState extends State<VisitSubmitScreen> {
               Text(
                 'Product Images',
                 style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                     fontSize: 12.0,
                     color: Colors.grey),
               ),
@@ -310,7 +310,7 @@ class _VisitSubmitScreenState extends State<VisitSubmitScreen> {
         Text(
           '   Travel Detail',
           style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               fontSize: 15.0,
               color: Colors.black54.withOpacity(.6)),
         ),
@@ -336,7 +336,7 @@ class _VisitSubmitScreenState extends State<VisitSubmitScreen> {
                       Text(
                         'End KM',
                         style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsMedium,
+                            fontFamily: ConstantFonts.sfProRegular,
                             fontSize: 12.0,
                             color: Colors.grey),
                       ),
@@ -363,7 +363,7 @@ class _VisitSubmitScreenState extends State<VisitSubmitScreen> {
               Text(
                 'Total Travel KM',
                 style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium,
+                    fontFamily: ConstantFonts.sfProRegular,
                     fontSize: 12.0,
                     color: Colors.grey),
               ),
@@ -388,7 +388,7 @@ class _VisitSubmitScreenState extends State<VisitSubmitScreen> {
         Text(
           '   Summary Notes',
           style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               fontSize: 15.0,
               color: Colors.black54.withOpacity(.6)),
         ),
@@ -422,7 +422,7 @@ class _VisitSubmitScreenState extends State<VisitSubmitScreen> {
             Text(
               title,
               style: TextStyle(
-                  fontFamily: ConstantFonts.poppinsMedium,
+                  fontFamily: ConstantFonts.sfProRegular,
                   fontSize: 12.0,
                   color: Colors.grey),
             ),
@@ -467,7 +467,7 @@ class _VisitSubmitScreenState extends State<VisitSubmitScreen> {
           Text(
             'Unable to load image',
             style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               color: Colors.red,
               fontSize: 8.0,
             ),

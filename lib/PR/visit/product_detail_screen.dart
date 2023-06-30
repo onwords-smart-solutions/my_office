@@ -84,7 +84,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     child: Text(
                       'Back',
                       style: TextStyle(
-                          fontFamily: ConstantFonts.poppinsMedium,
+                          fontFamily: ConstantFonts.sfProRegular,
                           fontSize: 15.0,
                           color: Colors.grey),
                     )),
@@ -98,7 +98,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           borderRadius: BorderRadius.circular(20.0))),
                   child: Text(buttonText,
                       style: TextStyle(
-                        fontFamily: ConstantFonts.poppinsMedium,
+                        fontFamily: ConstantFonts.sfProRegular,
                         fontSize: 15.0,
                       ))),
             ],
@@ -115,7 +115,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Step productListStep() {
     final textStyle = currentStep == 0
         ? ConstantFonts.poppinsBold
-        : ConstantFonts.poppinsMedium;
+        : ConstantFonts.sfProRegular;
     final textColor = currentStep == 0 ? Colors.purple : Colors.black;
 
     return Step(
@@ -132,7 +132,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Step quotationInvoiceStep() {
     final textStyle = currentStep == 1
         ? ConstantFonts.poppinsBold
-        : ConstantFonts.poppinsMedium;
+        : ConstantFonts.sfProRegular;
     final textColor = currentStep == 1 ? Colors.purple : Colors.black;
 
     return Step(
@@ -149,7 +149,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Step productImageStep() {
     final textStyle = currentStep == 2
         ? ConstantFonts.poppinsBold
-        : ConstantFonts.poppinsMedium;
+        : ConstantFonts.sfProRegular;
     final textColor = currentStep == 2 ? Colors.purple : Colors.black;
 
     return Step(
@@ -166,7 +166,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Step summaryStep() {
     final textStyle = currentStep == 3
         ? ConstantFonts.poppinsBold
-        : ConstantFonts.poppinsMedium;
+        : ConstantFonts.sfProRegular;
     final textColor = currentStep == 3 ? Colors.purple : Colors.black;
 
     return Step(
@@ -339,7 +339,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           TextField(
             controller: _invoiceQuotationNumberController,
             style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium,
+                fontFamily: ConstantFonts.sfProRegular,
                 fontSize: 15.0,
                 color: Colors.black),
             textCapitalization: TextCapitalization.words,
@@ -373,7 +373,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               child: Text(
                 'Generate',
                 style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium, fontSize: 16.0),
+                    fontFamily: ConstantFonts.sfProRegular, fontSize: 16.0),
               ),
               onPressed: () async {
                 // await LaunchApp.openApp(
@@ -418,7 +418,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             child: Text(
               'Add image',
               style: TextStyle(
-                  fontFamily: ConstantFonts.poppinsMedium,
+                  fontFamily: ConstantFonts.sfProRegular,
                   fontSize: 15.0,
                   color: const Color(0xff8355B7)),
             )),
@@ -497,7 +497,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         Text(
           'Upload product image',
           style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               fontSize: 12.0,
               color: Colors.grey),
         ),
@@ -521,16 +521,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               padding: const EdgeInsets.symmetric(vertical: 10.0),
               shrinkWrap: true,
               itemBuilder: (ctx,i){
-            return Text('  ${i+1}. ${selectedProducts[i]}',style: TextStyle(fontFamily: ConstantFonts.poppinsMedium,fontSize: 15.0,));
+            return Text('  ${i+1}. ${selectedProducts[i]}',style: TextStyle(fontFamily: ConstantFonts.sfProRegular,fontSize: 15.0,));
           }),
           Text('Quotation or Invoice number',style: TextStyle(fontFamily: ConstantFonts.poppinsBold,fontSize: 15.0,),),
           const SizedBox(height: 10.0),
-          Text('  ${_invoiceQuotationNumberController.text.trim()}',style: TextStyle(fontFamily: ConstantFonts.poppinsMedium,fontSize: 15.0,),),
+          Text('  ${_invoiceQuotationNumberController.text.trim()}',style: TextStyle(fontFamily: ConstantFonts.sfProRegular,fontSize: 15.0,),),
 
           const SizedBox(height: 10.0),
           Text('Uploaded Product image count',style: TextStyle(fontFamily: ConstantFonts.poppinsBold,fontSize: 15.0,),),
           const SizedBox(height: 10.0),
-          Text('  ${productImages.length}',style: TextStyle(fontFamily: ConstantFonts.poppinsMedium,fontSize: 15.0,),),
+          Text('  ${productImages.length}',style: TextStyle(fontFamily: ConstantFonts.sfProRegular,fontSize: 15.0,),),
 
         ],
       ),
@@ -588,7 +588,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         Text(
                           "Choose from library",
                           style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsMedium,
+                            fontFamily: ConstantFonts.sfProRegular,
                             fontSize: 16,
                           ),
                         ),
@@ -624,7 +624,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         Text(
                           "Take photo",
                           style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsMedium,
+                            fontFamily: ConstantFonts.sfProRegular,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
@@ -649,12 +649,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         const SizedBox(height: 10.0),
         Text(
           'Uploading data, please wait',
-          style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+          style: TextStyle(fontFamily: ConstantFonts.sfProRegular),
         ),
         Text(
           'Don\'t press back button or close this app',
           style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               fontSize: 12.0,
               color: Colors.grey),
         ),
@@ -671,7 +671,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         Text(
           message,
           style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium, color: Colors.red),
+              fontFamily: ConstantFonts.sfProRegular, color: Colors.red),
         ),
       ],
     );
@@ -766,7 +766,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           child: Center(
             child: Text(
               message,
-              style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+              style: TextStyle(fontFamily: ConstantFonts.sfProRegular),
             ),
           ),
         ),

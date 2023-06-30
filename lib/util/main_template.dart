@@ -1,9 +1,9 @@
-import 'dart:developer';
 import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:my_office/database/hive_operations.dart';
 import 'package:my_office/models/staff_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -69,7 +69,7 @@ class _MainTemplateState extends State<MainTemplate> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: const Color(0xffDDE6E8),
+      // backgroundColor: const Color(0xffDDE6E8),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -96,14 +96,6 @@ class _MainTemplateState extends State<MainTemplate> {
                           borderRadius: BorderRadius.circular(20),
                           child: BackdropFilter(
                             filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-                            child: Neumorphic(
-                              style: NeumorphicStyle(
-                                color: Colors.transparent,
-                                depth: 5,
-                                boxShape: NeumorphicBoxShape.roundRect(
-                                  BorderRadius.circular(20),
-                                ),
-                              ),
                               child: Container(
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
@@ -124,20 +116,18 @@ class _MainTemplateState extends State<MainTemplate> {
                                               : 'Hi ${staffInfo!.name}',
                                           style: TextStyle(
                                               fontFamily: ConstantFonts
-                                                  .poppinsRegular,
-                                              fontSize: 24.0,
+                                                  .sfProRegular,
+                                              fontSize: 25.0,
                                               fontWeight: FontWeight.w600,
-                                              color: Colors.black
-                                                  .withOpacity(0.8)),
+                                              color: Colors.black),
                                         ),
                                         Text(
                                           widget.subtitle,
                                           style: TextStyle(
                                               fontFamily:
-                                                  ConstantFonts.poppinsMedium,
-                                              fontSize: 14.0,
-                                              color: Colors.black
-                                                  .withOpacity(0.8)),
+                                                  ConstantFonts.sfProBold,
+                                              fontSize: 15.0,
+                                          color: Colors.deepPurpleAccent),
                                         ),
                                       ],
                                     ),
@@ -205,7 +195,6 @@ class _MainTemplateState extends State<MainTemplate> {
                                   ],
                                 ),
                               ),
-                            ),
                           ),
                         ),
                       ),

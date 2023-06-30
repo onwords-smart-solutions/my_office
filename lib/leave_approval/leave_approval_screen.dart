@@ -90,7 +90,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                 child: Text(
                   'No leave forms available!!',
                   style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsRegular,
+                    fontFamily: ConstantFonts.sfProRegular,
                     fontWeight: FontWeight.w600,
                     color: ConstantColor.backgroundColor,
                     fontSize: 20,
@@ -219,9 +219,8 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                                       return   AlertDialog(
                                         title: Text('Confirmation status',
                                           style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w700,
-                                              fontFamily: ConstantFonts.poppinsRegular,
+                                              fontSize: 20,
+                                              fontFamily: ConstantFonts.sfProBold,
                                               color: Colors.deepPurple
                                           ),),
                                         content: SingleChildScrollView(
@@ -229,9 +228,8 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                                             children: [
                                               Text('This is to confirm your approval status for leave request of the employee.',
                                                 style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w600,
-                                                    fontFamily: ConstantFonts.poppinsRegular,
+                                                    fontSize: 17,
+                                                    fontFamily: ConstantFonts.sfProMedium,
                                                     color: ConstantColor.headingTextColor
                                                 ),),
                                             ],
@@ -242,8 +240,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                                             child: Text('Approve',
                                               style: TextStyle(
                                                   fontSize: 17,
-                                                  fontFamily: ConstantFonts.poppinsMedium,
-                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: ConstantFonts.sfProBold,
                                                   color: ConstantColor.pinkColor
                                               ),),
                                             onPressed: () async {
@@ -261,8 +258,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                                             child: Text('Decline',
                                             style: TextStyle(
                                               fontSize: 17,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: ConstantFonts.poppinsMedium,
+                                              fontFamily: ConstantFonts.sfProBold,
                                               color: Colors.red
                                             ),
                                             ),
@@ -281,8 +277,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                                             child: Text('Cancel',
                                               style: TextStyle(
                                                   fontSize: 17,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily: ConstantFonts.poppinsMedium,
+                                                  fontFamily: ConstantFonts.sfProBold,
                                                   color: ConstantColor.headingTextColor
                                               ),
                                             ),
@@ -299,7 +294,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                                   height: height * 0.05,
                                   width: width * 0.6,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(12),
                                     gradient: const LinearGradient(
                                       colors: [
                                         Color(0xffD136D4),
@@ -311,9 +306,9 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                                     child: Text(
                                       'Tap to Approve/Cancel',
                                       style: TextStyle(
-                                        fontFamily: ConstantFonts.poppinsMedium,
+                                        fontFamily: ConstantFonts.sfProMedium,
                                         color: ConstantColor.background1Color,
-                                        fontSize: height * 0.020,
+                                        fontSize: height * 0.021,
                                       ),
                                     ),
                                   ),
@@ -353,9 +348,8 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
           'Leave request for ${leaveRequest.name} has been $status',
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontFamily: ConstantFonts.poppinsRegular,
-            fontWeight: FontWeight.w600,
-            fontSize: 16,
+            fontFamily: ConstantFonts.sfProMedium,
+            fontSize: 17,
           ),
         ),
         backgroundColor: Colors.green,
@@ -391,7 +385,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
           child: Text(
             name,
             style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               color: ConstantColor.background1Color,
               fontSize: height * 0.040,
             ),
@@ -406,8 +400,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
       name,
       style: TextStyle(
           fontSize: 16,
-          fontFamily: ConstantFonts.poppinsRegular,
-          fontWeight: FontWeight.w600,
+          fontFamily: ConstantFonts.sfProMedium,
           color: ConstantColor.blackColor),
     );
   }
@@ -425,8 +418,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
               'Reason :',
               style: TextStyle(
                   fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: ConstantFonts.poppinsRegular,
+                  fontFamily: ConstantFonts.sfProBold,
                   color: ConstantColor.blackColor),
             ),
             elevation: 10,
@@ -437,8 +429,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                   reason,
                   style: TextStyle(
                       fontSize: 17,
-                      fontWeight: FontWeight.w600,
-                      fontFamily: ConstantFonts.poppinsRegular,
+                      fontFamily: ConstantFonts.sfProMedium,
                       color: ConstantColor.backgroundColor),
                 ),
               ),
@@ -448,27 +439,18 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                 height: height * 0.05,
                 width: width * 0.2,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color(0xffD136D4),
-                      Color(0xff7652B2),
-                    ],
-                  ),
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: ConstantColor.backgroundColor
-                  ),
+                child: FilledButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
                   child: Text(
-                    'Ok',
+                    'OK',
                     style: TextStyle(
                         fontSize: 20,
-                        fontFamily: ConstantFonts.poppinsMedium,
-                        color: Colors.white),
+                        fontFamily: ConstantFonts.sfProMedium,
+                       ),
                   ),
                 ),
               ),
@@ -480,8 +462,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
         ':  $reason',
         style: TextStyle(
             fontSize: 16,
-            fontFamily: ConstantFonts.poppinsRegular,
-            fontWeight: FontWeight.w600,
+            fontFamily: ConstantFonts.sfProMedium,
             color: ConstantColor.blackColor),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,

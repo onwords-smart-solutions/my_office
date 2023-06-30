@@ -6,8 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
@@ -208,26 +208,6 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                                 ? "Agriculture Automation"
                                 : 'Onwords Smart Solutions';
 
-    // final upiDetails = UPIDetails(
-    //     upiID: "onwordspay@ybl",
-    //     payeeName: "Onwords Smart Solutions",
-    //     amount: grandTotal < 80000 ? grandTotal : null,
-    //     transactionNote: customerDetails.docCategory == 'GA'
-    //         ? "Gate Automation"
-    //         : customerDetails.docCategory == 'SH'
-    //             ? "Smart Home"
-    //             : customerDetails.docCategory == 'IT'
-    //                 ? "APP or Web Development"
-    //                 : customerDetails.docCategory == 'DL'
-    //                     ? "Door Lock"
-    //                     : customerDetails.docCategory == 'SS'
-    //                         ? "Security System"
-    //                         : customerDetails.docCategory == 'WTA'
-    //                             ? "Water Tank Automation"
-    //                             : customerDetails.docCategory == 'AG'
-    //                                 ? "Agriculture Automation"
-    //                                 : 'Onwords Smart Solutions');
-
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -388,21 +368,15 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                         child: Column(
                           children: [
                             /// TABLE HEAD
-                            Neumorphic(
-                              margin: const EdgeInsets.only(bottom: 3),
-                              style: NeumorphicStyle(
-                                depth: 1,
-                                boxShape: NeumorphicBoxShape.roundRect(
-                                  const BorderRadius.only(
-                                      topLeft: Radius.circular(15),
-                                      topRight: Radius.circular(15)),
-                                ),
-                              ),
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 15),
+                        Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                margin: const EdgeInsets.only(bottom: 3),
                                 height: height * .05,
                                 width: width * 1,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: CupertinoColors.systemGrey.withOpacity(0.4),
+                                ),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
@@ -418,23 +392,16 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                                   ],
                                 ),
                               ),
-                            ),
 
                             /// TABLE CONTENT
-                            Neumorphic(
-                              style: NeumorphicStyle(
-                                depth: 1,
-                                boxShape: NeumorphicBoxShape.roundRect(
-                                  const BorderRadius.only(
-                                      bottomRight: Radius.circular(20),
-                                      bottomLeft: Radius.circular(20)),
-                                ),
-                              ),
-                              child: Container(
+                              Container(
+                                margin: const EdgeInsets.only(top: 3),
                                   height: height * .4,
                                   width: width * 1,
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20)),
+                                      borderRadius: BorderRadius.circular(20),
+                                  color: CupertinoColors.systemGrey.withOpacity(0.4),
+                                  ),
                                   child: ListView.builder(
                                       scrollDirection: Axis.vertical,
                                       physics: const BouncingScrollPhysics(),
@@ -463,7 +430,6 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                                               ]),
                                         );
                                       })),
-                            ),
                             const Divider(
                               color: Colors.black,
                               indent: 5,
@@ -686,7 +652,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                   "Document Details\n",
                   style: TextStyle(
                       color: ConstantColor.backgroundColor,
-                      fontFamily: ConstantFonts.poppinsRegular,
+                      fontFamily: ConstantFonts.sfProRegular,
                       fontWeight: FontWeight.w600),
                 ),
                 content: Material(
@@ -731,18 +697,18 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                               readOnly: true,
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
-                                fontFamily: ConstantFonts.poppinsRegular,
+                                fontFamily: ConstantFonts.sfProRegular,
                               ),
                               decoration: InputDecoration(
                                 counterText: '',
                                 hintText: 'Estimated Date',
                                 hintStyle: TextStyle(
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: ConstantFonts.poppinsRegular,
+                                  fontFamily: ConstantFonts.sfProRegular,
                                 ),
                                 labelStyle: TextStyle(
                                   fontWeight: FontWeight.w600,
-                                  fontFamily: ConstantFonts.poppinsRegular,
+                                  fontFamily: ConstantFonts.sfProRegular,
                                 ),
                                 border: myInputBorder(),
                                 enabledBorder: myInputBorder(),
@@ -787,7 +753,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                       style: TextStyle(
                           fontWeight: FontWeight.w600,
                           color: Colors.black,
-                          fontFamily: ConstantFonts.poppinsRegular),
+                          fontFamily: ConstantFonts.sfProRegular),
                     ),
                     onPressed: () async {
                       Navigator.of(context).pop();
@@ -799,7 +765,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                       style: TextStyle(
                           fontWeight: FontWeight.w600,
                           color: Colors.black,
-                          fontFamily: ConstantFonts.poppinsRegular),
+                          fontFamily: ConstantFonts.sfProRegular),
                     ),
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {

@@ -17,7 +17,7 @@ class SupportCrewItem extends StatelessWidget {
       children: [
       Row(
         children: [
-          Text(name, style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),),
+          Text(name, style: TextStyle(fontFamily: ConstantFonts.sfProRegular),),
         ],
       ),
 

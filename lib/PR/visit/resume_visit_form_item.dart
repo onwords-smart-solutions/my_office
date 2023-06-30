@@ -103,10 +103,10 @@ class _ResumeVisitFormItemState extends State<ResumeVisitFormItem> {
             subtitle: Text(
                 DateFormat('y-MM-dd').format(widget.visitDetail.dateTime),
                 style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium, fontSize: 12.0)),
+                    fontFamily: ConstantFonts.sfProRegular, fontSize: 12.0)),
             trailing: Text(DateFormat.jm().format(widget.visitDetail.dateTime),
                 style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsMedium, fontSize: 12.0)),
+                    fontFamily: ConstantFonts.sfProRegular, fontSize: 12.0)),
           ),
         ),
       ),
@@ -125,7 +125,7 @@ class _ResumeVisitFormItemState extends State<ResumeVisitFormItem> {
           Text(
             'Delete',
             style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium, color: Colors.white),
+                fontFamily: ConstantFonts.sfProRegular, color: Colors.white),
           ),
           const Icon(Icons.delete_rounded, color: Colors.white),
         ],
@@ -146,7 +146,7 @@ class _ResumeVisitFormItemState extends State<ResumeVisitFormItem> {
           child: Center(
             child: Text(
               message,
-              style: TextStyle(fontFamily: ConstantFonts.poppinsMedium),
+              style: TextStyle(fontFamily: ConstantFonts.sfProRegular),
             ),
           ),
         ),
@@ -185,7 +185,7 @@ class _ResumeVisitFormItemState extends State<ResumeVisitFormItem> {
                   ),
                 ),
                 const SizedBox(width: 10.0),
-                Text('Deleting',style: TextStyle(fontFamily: ConstantFonts.poppinsMedium,color: Colors.red),),
+                Text('Deleting',style: TextStyle(fontFamily: ConstantFonts.sfProRegular,color: Colors.red),),
               ],
             ),
           ),

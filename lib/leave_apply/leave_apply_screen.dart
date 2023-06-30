@@ -128,45 +128,45 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
     return Stack(
       children: [
         Positioned(
-            top: height * 0.0,
-            left: width * 0.0,
-            right: width * 0.0,
-            bottom: height * 0.0,
-            child: Stack(
-              children: [
-                //Tab bar
-                Positioned(
-                  top: height * 0.02,
-                  left: width * 0.05,
-                  right: width * 0.05,
-                  // bottom: height * 0.0,
-                  child: Container(
-                    padding: const EdgeInsets.all(5),
-                    height: height * 0.08,
-                    decoration: BoxDecoration(
-                      color: ConstantColor.background1Color,
-                      borderRadius: BorderRadius.circular(10),
-                      boxShadow: const [
-                        BoxShadow(
-                            color: Colors.black12,
-                            offset: Offset(-6.0, 6.0),
-                            blurRadius: 5),
-                      ],
-                    ),
-                    child: tabBarContainer(height, width),
+          top: height * 0.0,
+          left: width * 0.0,
+          right: width * 0.0,
+          bottom: height * 0.0,
+          child: Stack(
+            children: [
+              //Tab bar
+              Positioned(
+                top: height * 0.02,
+                left: width * 0.05,
+                right: width * 0.05,
+                // bottom: height * 0.0,
+                child: Container(
+                  padding: const EdgeInsets.all(5),
+                  height: height * 0.08,
+                  decoration: BoxDecoration(
+                    color: ConstantColor.background1Color,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                          color: Colors.black12,
+                          offset: Offset(-6.0, 6.0),
+                          blurRadius: 5),
+                    ],
                   ),
+                  child: tabBarContainer(height, width),
                 ),
+              ),
 
-                //Tab bar view
-                Positioned(
-                  top: height * 0.13,
-                  left: width * 0.01,
-                  right: width * 0.01,
-                  bottom: height * 0.0,
-                  child: tabViewContainer(height, width),
-                ),
-              ],
-            ),
+              //Tab bar view
+              Positioned(
+                top: height * 0.13,
+                left: width * 0.01,
+                right: width * 0.01,
+                bottom: height * 0.0,
+                child: tabViewContainer(height, width),
+              ),
+            ],
+          ),
         ),
       ],
     );
@@ -176,15 +176,8 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Container(
-      height: height * 0.90,
+      height: height * 0.92,
       width: double.infinity,
-      decoration: const BoxDecoration(
-        color: ConstantColor.background1Color,
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
-        ),
-      ),
       child: Stack(
         children: [
           Positioned(
@@ -205,13 +198,8 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
                       blurRadius: 5)
                 ],
               ),
-              child: Column(
-                children: [
-                  const SizedBox(height: 10),
-                  textFieldWidget('Reason for leave...', 'Reason :',
-                      leaveReason, TextInputType.name, TextInputAction.done),
-                ],
-              ),
+              child: textFieldWidget('Reason for leave...', 'Reason :',
+                  leaveReason, TextInputType.name, TextInputAction.done),
             ),
           ),
 
@@ -233,76 +221,74 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
         Expanded(
           child: isLoading
               ? Center(
-                  child: Lottie.asset(
-                    "assets/animations/loading.json",
-                  ),
-                )
+            child: Lottie.asset(
+              "assets/animations/loading.json",
+            ),
+          )
               : dbLeaveStatus.isEmpty
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Lottie.asset('assets/animations/no_data.json',
-                            height: 250.0),
-                        Text(
-                          'No leave forms submitted!!',
-                          style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsMedium,
-                            color: ConstantColor.blackColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
+              ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Lottie.asset('assets/animations/no_data.json',
+                  height: 250.0),
+              Text(
+                'No leave forms submitted!!',
+                style: TextStyle(
+                  fontFamily: ConstantFonts.sfProMedium,
+                  color: ConstantColor.blackColor,
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          )
+              : Column(
+            children: [
+              Expanded(
+                child: ListView.builder(
+                  itemCount: dbLeaveStatus.length,
+                  physics: const BouncingScrollPhysics(),
+                  itemBuilder: (ctx, i) {
+                    Color changeColors = ConstantColor.backgroundColor;
+
+                    switch(dbLeaveStatus[i]['status'].toString().toLowerCase()){
+                      case 'pending':changeColors = Colors.grey.shade500;break;
+                      case 'declined':changeColors = Colors.red;break;
+                      case 'approved':changeColors = Colors.green;break;
+                    }
+
+                    return ListTile(
+                      title: Text(
+                        '${dbLeaveStatus[i]['date'].toString()}   ',
+                        style: TextStyle(
+                          fontFamily: ConstantFonts.sfProMedium,
+                          color: ConstantColor.blackColor,
+                          fontSize: 17,
                         ),
-                      ],
-                    )
-                  : Column(
-                      children: [
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: dbLeaveStatus.length,
-                            physics: const BouncingScrollPhysics(),
-                            itemBuilder: (ctx, i) {
-                              Color changeColors = ConstantColor.backgroundColor;
-
-                       switch(dbLeaveStatus[i]['status'].toString().toLowerCase()){
-                         case 'pending':changeColors = Colors.grey.shade500;break;
-                         case 'declined':changeColors = Colors.red;break;
-                         case 'approved':changeColors = Colors.green;break;
-                       }
-
-                              return ListTile(
-                                title: Text(
-                                  '${dbLeaveStatus[i]['date'].toString()}   ',
-                                  style: TextStyle(
-                                    fontFamily: ConstantFonts.poppinsMedium,
-                                    color: ConstantColor.blackColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 17,
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  dbLeaveStatus[i]['reason'].toString(),
-                                  style: TextStyle(
-                                    fontFamily: ConstantFonts.poppinsRegular,
-                                    fontWeight: FontWeight.w600,
-                                    color: ConstantColor.backgroundColor,
-                                    fontSize: 17,
-                                  ),
-                                ),
-                                trailing: Text(
-                                  '(${dbLeaveStatus[i]['status'].toString().toUpperCase()})',
-                                  style: TextStyle(
-                                    fontFamily: ConstantFonts.poppinsMedium,
-                                    color: changeColors,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        )
-                      ],
-                    ),
+                      ),
+                      subtitle: Text(
+                        dbLeaveStatus[i]['reason'].toString(),
+                        style: TextStyle(
+                          fontFamily: ConstantFonts.sfProRegular,
+                          fontWeight: FontWeight.w600,
+                          color: ConstantColor.backgroundColor,
+                          fontSize: 17,
+                        ),
+                      ),
+                      trailing: Text(
+                        '(${dbLeaveStatus[i]['status'].toString().toUpperCase()})',
+                        style: TextStyle(
+                          fontFamily: ConstantFonts.sfProRegular,
+                          color: changeColors,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              )
+            ],
+          ),
         )
       ],
     );
@@ -327,33 +313,41 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
       labelStyle: TextStyle(
           fontWeight: FontWeight.w700,
           fontSize: 17,
-          fontFamily: ConstantFonts.poppinsMedium),
+          fontFamily: ConstantFonts.sfProRegular),
       tabs: [
         Container(
           height: height * 0.05,
-          width: width * 0.3,
+          width: width * 0.5,
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(
               Radius.circular(10),
             ),
           ),
-          child: const Center(
+          child: Center(
             child: Text(
               'Leave form',
+              style: TextStyle(
+                fontSize: 18,
+                fontFamily: ConstantFonts.sfProRegular,
+              ),
             ),
           ),
         ),
         Container(
           height: height * 0.05,
-          width: width * 0.3,
+          width: width * 0.5,
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(
               Radius.circular(10),
             ),
           ),
-          child: const Center(
+          child: Center(
             child: Text(
               'Leave status',
+              style: TextStyle(
+                fontSize: 18,
+                fontFamily: ConstantFonts.sfProRegular,
+              ),
             ),
           ),
         ),
@@ -382,7 +376,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
     final height = MediaQuery.of(context).size.height;
     return GestureDetector(
       onTap: () {
-         addLeaveToDb();
+        addLeaveToDb();
       },
       child: Container(
         height: height * 0.07,
@@ -399,7 +393,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
           child: Text(
             'Submit',
             style: TextStyle(
-              fontFamily: ConstantFonts.poppinsMedium,
+              fontFamily: ConstantFonts.sfProRegular,
               color: ConstantColor.background1Color,
               fontWeight: FontWeight.w700,
               fontSize: height * 0.028,
@@ -427,8 +421,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
             title,
             style: TextStyle(
               color: ConstantColor.headingTextColor,
-              fontFamily: ConstantFonts.poppinsMedium,
-              fontWeight: FontWeight.w700,
+              fontFamily: ConstantFonts.sfProBold,
               fontSize: 18,
             ),
           ),
@@ -441,17 +434,15 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
               keyboardType: inputType,
               maxLines: 4,
               style: TextStyle(
-                color: ConstantColor.blackColor,
-                fontFamily: ConstantFonts.poppinsRegular,
-                fontWeight: FontWeight.w600
+                  color: ConstantColor.blackColor,
+                  fontFamily: ConstantFonts.sfProMedium,
               ),
               decoration: InputDecoration(
                 hintText: name,
                 hintStyle: TextStyle(
                     color: Colors.black.withOpacity(0.3),
-                    fontFamily: ConstantFonts.poppinsRegular,
-                fontWeight: FontWeight.bold,
-                fontSize: 17),
+                    fontFamily: ConstantFonts.sfProMedium,
+                    fontSize: 17),
                 filled: true,
                 fillColor: ConstantColor.background1Color,
                 enabledBorder: const OutlineInputBorder(
@@ -482,7 +473,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
           child: RadioListTile(
             contentPadding: const EdgeInsets.all(0.0),
             title: Text("Sick",
-                style: TextStyle(fontFamily: ConstantFonts.poppinsMedium)),
+                style: TextStyle(fontFamily: ConstantFonts.sfProMedium)),
             value: "Sick leave",
             groupValue: _reason,
             onChanged: (value) {
@@ -497,7 +488,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
           child: RadioListTile(
             contentPadding: const EdgeInsets.all(0.0),
             title: Text("General",
-                style: TextStyle(fontFamily: ConstantFonts.poppinsMedium)),
+                style: TextStyle(fontFamily: ConstantFonts.sfProMedium)),
             value: "General leave",
             groupValue: _reason,
             onChanged: (value) {
@@ -539,8 +530,8 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
               style: TextStyle(
                 color: ConstantColor.background1Color,
                 fontSize: 18,
-                fontFamily: ConstantFonts.poppinsMedium,
-                fontWeight: FontWeight.w700,
+                fontFamily: ConstantFonts.sfProMedium,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -551,7 +542,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
           style: TextStyle(
             color: ConstantColor.headingTextColor,
             fontSize: 18,
-            fontFamily: ConstantFonts.poppinsMedium,
+            fontFamily: ConstantFonts.sfProMedium,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -559,7 +550,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
     );
   }
 
-   void addLeaveToDb() async {
+  void addLeaveToDb() async {
     if (dateTime == null) {
       final snackBar = SnackBar(
         content: Text(
@@ -567,7 +558,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16,
-            fontFamily: ConstantFonts.poppinsMedium,
+            fontFamily: ConstantFonts.sfProRegular,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -581,8 +572,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16,
-            fontFamily: ConstantFonts.poppinsMedium,
-            fontWeight: FontWeight.w500,
+            fontFamily: ConstantFonts.sfProMedium,
           ),
         ),
         backgroundColor: Colors.red,
@@ -595,7 +585,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16,
-            fontFamily: ConstantFonts.poppinsMedium,
+            fontFamily: ConstantFonts.sfProRegular,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -609,7 +599,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
       var yearFormat = DateFormat('yyyy').format(dateTime!);
       leaveRef
           .child(
-              '${widget.uid}/leaveApplied/$yearFormat/$monthFormat/$dateFormat')
+          '${widget.uid}/leaveApplied/$yearFormat/$monthFormat/$dateFormat')
           .update({
         'date': DateFormat('yyyy-MM-dd').format(dateTime!),
         'status': 'Pending',
@@ -624,7 +614,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 16,
-            fontFamily: ConstantFonts.poppinsMedium,
+            fontFamily: ConstantFonts.sfProRegular,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -634,7 +624,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       for(var mgmt in mgmtTokens){
         sendNotification( mgmt, 'My Office',
-        'New leave form has been submitted by ${widget.name}..');
+            'New leave form has been submitted by ${widget.name}..');
       }
       leaveReason.clear();
       setState(() {
@@ -661,7 +651,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
           }
         }
         leaveStatus.sort(
-            (a, b) => b['date'].toString().compareTo(a['date'].toString()));
+                (a, b) => b['date'].toString().compareTo(a['date'].toString()));
       }
     });
     if (!mounted) return;

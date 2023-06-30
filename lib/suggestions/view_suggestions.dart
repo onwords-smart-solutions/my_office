@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
@@ -56,20 +57,19 @@ class _ViewSuggestionsState extends State<ViewSuggestions> {
           )
         : ListView.builder(
             itemCount: allSuggestion.length,
-            physics: const BouncingScrollPhysics(),
             itemBuilder: (context, index) {
               return Container(
-                margin: const EdgeInsets.all(8),
+                margin: const EdgeInsets.all(5),
                 decoration: BoxDecoration(
                   color: ConstantColor.background1Color,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.2),
-                      offset: const Offset(-0.0, 5.0),
+                      offset: const Offset(0.0, 2.0),
                       blurRadius: 8,
                     )
                   ],
-                  borderRadius: BorderRadius.circular(11),
+                  borderRadius: BorderRadius.circular(15),
                 ),
                 child: ListTile(
                   onTap: () {
@@ -82,16 +82,14 @@ class _ViewSuggestionsState extends State<ViewSuggestions> {
                   },
                   leading: const CircleAvatar(
                     radius: 20,
-                    backgroundColor: Colors.deepPurple,
-                    child: Icon(Icons.bookmark),
+                    child: Icon(CupertinoIcons.bookmark_solid),
                   ),
                   title: Text(
                       allSuggestion[index]['message'].toString().length >= 30? '${allSuggestion[index]['message'].toString().substring(0, 30)} ...': allSuggestion[index]['message'].toString(),
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontFamily: ConstantFonts.poppinsMedium,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                      fontFamily: ConstantFonts.sfProMedium,
+                      fontSize: 17,
                     ),
                   ),
                 ),

@@ -1,11 +1,14 @@
 import 'dart:developer';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/util/main_template.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 import 'package:intl/intl.dart';
+
+import '../models/staff_entry_model.dart';
 
 class AbsenteeScreen extends StatefulWidget {
   const AbsenteeScreen({
@@ -18,31 +21,22 @@ class AbsenteeScreen extends StatefulWidget {
 
 class _AbsenteeScreenState extends State<AbsenteeScreen> {
   bool isLoading = true;
-  bool isFuture = false;
-
-  var firebaseData;
-
-  List notEntry = [];
-  List allData = [];
-  List nameData = [];
-  List depData = [];
-
-  String? formattedTime;
-  var formattedDate;
-  var formattedMonth;
-  var formattedYear;
-
-  // final staff = FirebaseDatabase.instance.ref().child("staff");
-  final fingerPrint = FirebaseDatabase.instance.ref().child("fingerPrint");
-  final virtualAttendance =
-      FirebaseDatabase.instance.ref().child('virtualAttendance');
+  List<StaffAttendanceModel> staffNames = [];
+  List <StaffAttendanceModel> fullNames = [];
+  final ref = FirebaseDatabase.instance.ref();
+  final fingerPrint = FirebaseDatabase.instance.ref();
+  final virtualAttendance = FirebaseDatabase.instance.ref();
+  DateTime dateTime = DateTime.now();
 
   DateTime now = DateTime.now();
   var formatterDate = DateFormat('yyyy-MM-dd');
+  var formatterMonth = DateFormat('MM');
+  var formatterYear = DateFormat('yyyy');
   String? selectedDate;
+  String? selectedMonth;
+  String? selectedYear;
 
   datePicker() async {
-    selectedDate = formatterDate.format(now);
     DateTime? newDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -50,95 +44,85 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
       lastDate: DateTime(2100),
     );
     if (newDate == null) return;
-    if (!mounted) return;
-    setState(() {
-      selectedDate = formatterDate.format(newDate);
-      if (newDate.isAfter(DateTime.now())) {
-        notEntry.clear();
-        isFuture = true;
-      } else {
-        if (selectedDate != null) {
-          getAbsentsName();
+    setState(
+          () {
+        selectedYear = formatterYear.format(newDate);
+        selectedMonth = formatterMonth.format(newDate);
+        selectedDate = formatterDate.format(newDate);
+      },
+    );
+    staffDetails();
+  }
+
+  Future<void> staffDetails() async {
+    staffNames.clear();
+    await ref.child('staff').once().then((staffEntry) async {
+      for (var data in staffEntry.snapshot.children) {
+        var entry = data.value as Map<Object?, Object?>;
+        // log('data is $entry');
+        final staffEntry = StaffAttendanceModel(
+          uid: data.key.toString(),
+          department: entry['department'].toString(),
+          name: entry['name'].toString(),
+        );
+        if (staffEntry.name != 'Nikhil Deepak') {
+          staffNames.add(staffEntry);
         }
       }
+      for (var admin in staffNames) {
+        final time = await entryCheck(admin.uid);
+        staffNames.firstWhere((element) => element.uid == admin.uid).entryTime =
+            time;
+      }
+      if (!mounted) return;
+      setState(() {
+        fullNames = staffNames;
+        isLoading = false;
+      });
     });
   }
 
-  todayDate() {
-    var now = DateTime.now();
-    var formatterDate = DateFormat('yyyy-MM-dd');
-    var formatterYear = DateFormat('yyyy');
-    var formatterMonth = DateFormat('MM');
-    formattedTime = DateFormat('kk:mm:a').format(now);
-    formattedDate = formatterDate.format(now);
-    formattedYear = formatterYear.format(now);
-    formattedMonth = formatterMonth.format(now);
-  }
-
-  getAbsentsName() {
-    isLoading = true;
-    isFuture = false;
-    notEntry.clear();
-    fingerPrint.once().then(
-      (value) async {
-        for (var val in value.snapshot.children) {
-          firebaseData = val.value;
-
-          final staffName = firebaseData['name'];
-
-          try {
-            notEntry.add(staffName);
-          } catch (e) {
-            log(e.toString());
-          }
-
-          if (firebaseData[selectedDate] != null) {
-            notEntry.remove(staffName);
-          } else {
-            //CHECKING IN PR ATTENDANCE LOCATION IN FIREBASE
-            // WHETHER STAFF HAVE DATA OR NOT
-            checkInVirtualStorage(val.key!);
-          }
-        }
-
-        Future.delayed(
-          const Duration(seconds: 1),
-          () {
-            setState(
-              () {
-                isLoading = false;
-              },
-            );
-          },
-        );
-      },
-    );
-  }
-
-  checkInVirtualStorage(String uid) {
-    virtualAttendance
-        .child('$uid/$formattedYear/$formattedMonth/$selectedDate/')
+  Future<String> entryCheck(String uid) async {
+    String entryName = '';
+    var dateFormat = DateFormat('yyyy-MM-dd').format(dateTime);
+    await fingerPrint
+        .child('fingerPrint/$uid')
         .once()
-        .then(
-      (value) {
-        Map<Object?, Object?> data = {};
-        try {
-          data = value.snapshot.value as Map<Object?, Object?>;
-          setState(() {
-            notEntry.remove(data['Name']);
-          });
-        } catch (e) {
-          log('ERROR FROM VIRTUAL ATTENDANCE $e');
-        }
-      },
-    );
+        .then((entry) async {
+     for(var name in entry.snapshot.children){
+       final data = name.value as Map<Object?, Object?>;
+       var entryName = data['name'].toString();
+     }
+     entryName = await checkVirtualAttendance(uid);
+    });
+    return entryName;
+  }
+
+  Future<String> checkVirtualAttendance(String uid) async {
+    var yearFormat = DateFormat('yyyy').format(dateTime);
+    var monthFormat = DateFormat('MM').format(dateTime);
+    var dateFormat = DateFormat('yyyy-MM-dd').format(dateTime);
+    String attendTime = '';
+    await virtualAttendance
+        .child('virtualAttendance/$uid/$yearFormat/$monthFormat/$dateFormat')
+        .once()
+        .then((virtual) {
+      try {
+        final data = virtual.snapshot.value as Map<Object?, Object?>;
+        attendTime = data['Time'].toString();
+      } catch (e) {
+        log('error is $e');
+      }
+    });
+    return attendTime;
   }
 
   @override
   void initState() {
     selectedDate = formatterDate.format(now);
-    todayDate();
-    getAbsentsName();
+    selectedMonth = formatterMonth.format(now);
+    selectedYear = formatterYear.format(now);
+    staffDetails();
     super.initState();
   }
 
@@ -151,112 +135,123 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
   }
 
   Widget bodyContent() {
-    List<Widget> absentNames = [];
-
-    for (int i = 0; i < notEntry.length; i++) {
-      final widget = Container(
-        // height: height * 0.1,
-        margin: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: ConstantColor.background1Color,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              offset: const Offset(-0.0, 5.0),
-              blurRadius: 8,
-            )
-          ],
-          borderRadius: BorderRadius.circular(11),
-        ),
-        child: Center(
-          child: ListTile(
-            leading: const CircleAvatar(
-              radius: 20,
-              backgroundColor: ConstantColor.backgroundColor,
-              child: Icon(Icons.person),
-            ),
-            title: Text(
-              notEntry[i],
-              style: TextStyle(
-                  fontFamily: ConstantFonts.poppinsMedium,
-                  color: ConstantColor.blackColor,
-                  fontSize: 16),
+    int absent = 0;
+    for (var staff in staffNames) {
+      if (staff.entryTime!.isEmpty) {
+        absent += 1;
+      }
+    }
+      return Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    datePicker();
+                  },
+                  child: Image.asset(
+                    'assets/calender.png',
+                    scale: 3,
+                  ),
+                ),
+                const SizedBox(width: 15),
+                Text(
+                  '$selectedDate',
+                  style: TextStyle(
+                    fontFamily: ConstantFonts.sfProBold,
+                    fontSize: 17,
+                    color: ConstantColor.backgroundColor,
+                  ),
+                ),
+              ],
             ),
           ),
-        ),
-      );
-      absentNames.add(widget);
-    }
-
-    return Column(
-            children: [
-              //calender button
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    GestureDetector(
-                      onTap: datePicker,
-                      child: Image.asset(
-                        'assets/calender.png',
-                        scale: 3,
+          const SizedBox(height: 10),
+          Text('Total absentees : $absent',
+            style: TextStyle(
+              fontSize: 17,
+              fontFamily: ConstantFonts.sfProBold,
+            ),
+          ),
+          isLoading
+              ? Lottie.asset('assets/animations/new_loading.json')
+              : staffNames.isNotEmpty
+              ? Expanded(
+            child: ListView.builder(
+              itemCount: staffNames.length,
+              itemBuilder: (ctx, i) {
+                return Container(
+                  margin: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color: ConstantColor.background1Color,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        offset: const Offset(0.0, 2.0),
+                        blurRadius: 8,
+                      )
+                    ],
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Center(
+                    child: ListTile(
+                      leading: const CircleAvatar(
+                        radius: 20,
+                        child: Icon(CupertinoIcons.person_2_fill),
+                      ),
+                      title: Text(
+                        staffNames[i].name,
+                        style: TextStyle(
+                            fontFamily: ConstantFonts.sfProMedium,
+                            color: ConstantColor.blackColor,
+                            fontSize:
+                            MediaQuery
+                                .of(context)
+                                .size
+                                .height *
+                                0.021),
+                      ),
+                      trailing: Text(
+                        staffNames[i].department,
+                        style: TextStyle(
+                            fontFamily: ConstantFonts.sfProBold,
+                            color: CupertinoColors.destructiveRed,
+                            fontSize:
+                            MediaQuery
+                                .of(context)
+                                .size
+                                .height *
+                                0.021),
                       ),
                     ),
-                    const SizedBox(width: 15),
-                    Text('$selectedDate   ',
-                        style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsBold,
-                            fontSize: 17,
-                            color: ConstantColor.backgroundColor)),
-                  ],
-                ),
-              ),
-              Text('Total absentees : ${notEntry.length}',
-              style: TextStyle(
-                fontFamily: ConstantFonts.poppinsRegular,
-                fontWeight: FontWeight.w600,
-                fontSize: 17,
-                height: 2,
-              ),
-              ),
-              isLoading
-                  ? Center(
-                child: Lottie.asset(
-                  "assets/animations/new_loading.json",
-                ),
-              )
-                  :
-              notEntry.isNotEmpty
-                  ? Expanded(
-                      child: SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(),
-                        child: Column(
-                          children: absentNames,
-                        ),
-                      ),
-                    )
-                  : isFuture
-                      ? errorMessage('Not available right now')
-                      : errorMessage('Everyone present today'),
-            ],
-          );
-  }
-
-  Widget errorMessage(String message) => Expanded(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Lottie.asset('assets/animations/no_data.json', height: 250.0),
-            Text(
-              message,
-              style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium,
-                color: Colors.purple,
-                fontSize: 20,
+                  ),
+                );
+              },
+            ),
+          )
+              : Expanded(
+            child: Center(
+              child: Column(
+                children: [
+                  Lottie.asset('assets/animations/no_data.json',
+                      height: 300),
+                  Text(
+                    'Everyone is Present today🤔',
+                    style: TextStyle(
+                      color: ConstantColor.backgroundColor,
+                      fontSize: 20,
+                      fontFamily: ConstantFonts.sfProRegular,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       );
-}
+    }
+  }

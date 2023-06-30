@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/intl.dart';
@@ -148,8 +149,7 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
                 Text(
                   'Present : $present',
                 style: TextStyle(
-                  fontFamily: ConstantFonts.poppinsRegular,
-                  fontWeight: FontWeight.w600,
+                  fontFamily: ConstantFonts.sfProBold,
                   fontSize: 17,
                   color: ConstantColor.headingTextColor
                 ),
@@ -158,29 +158,27 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
                 Text(
                   'Absent : $absent',
                   style: TextStyle(
-                    fontFamily: ConstantFonts.poppinsRegular,
-                    fontWeight: FontWeight.w600,
+                    fontFamily: ConstantFonts.sfProBold,
                     fontSize: 17,
                     color: Colors.red
                   ),
                 ),
                 Expanded(
                   child: ListView.builder(
-                    physics: const BouncingScrollPhysics(),
                     itemCount: adminStaffNames.length,
                     itemBuilder: (ctx, i) {
                       return Container(
-                        margin: const EdgeInsets.all(10),
+                        margin: const EdgeInsets.all(5),
                         decoration: BoxDecoration(
                           color: ConstantColor.background1Color,
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.2),
-                              offset: const Offset(-0.0, 5.0),
+                              offset: const Offset(0.0, 2.0),
                               blurRadius: 8,
                             )
                           ],
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(15),
                         ),
                         child: Center(
                           child: ListTile(
@@ -193,24 +191,23 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
                             ),
                             leading: const CircleAvatar(
                               radius: 20,
-                              backgroundColor: ConstantColor.backgroundColor,
-                              child: Icon(Icons.person),
+                              child: Icon(CupertinoIcons.person_2_fill),
                             ),
                             title: Text(
                               adminStaffNames[i].name,
                               style: TextStyle(
-                                  fontFamily: ConstantFonts.poppinsMedium,
+                                  fontFamily: ConstantFonts.sfProMedium,
                                   color: ConstantColor.blackColor,
                                   fontSize:
                                   MediaQuery.of(context).size.height *
-                                      0.020),
+                                      0.021),
                             ),
                             trailing: Text(
                               adminStaffNames[i].entryTime.toString().isEmpty
                                   ? 'Absent'
                                   : adminStaffNames[i].entryTime.toString(),
                               style: TextStyle(
-                                  fontFamily: ConstantFonts.poppinsMedium,
+                                  fontFamily: ConstantFonts.sfProMedium,
                                   color: adminStaffNames[i]
                                       .entryTime
                                       .toString()
@@ -239,7 +236,7 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
                       style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 20,
-                        fontFamily: ConstantFonts.poppinsRegular,
+                        fontFamily: ConstantFonts.sfProRegular,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -259,10 +256,10 @@ class Skeleton extends StatelessWidget {
     return Container(
       height: height,
       width: width,
-      margin: const EdgeInsets.all(8),
+      margin: const EdgeInsets.all(5),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(15),
         color: ConstantColor.background1Color
       ),
       child: Shimmer.fromColors(
@@ -272,7 +269,6 @@ class Skeleton extends StatelessWidget {
           children: [
             const CircleAvatar(
               radius: 20,
-              backgroundColor: Colors.white,
               child: Icon(Icons.person,color: Colors.white,),
             ),
             const SizedBox(width: 20,),
@@ -280,7 +276,7 @@ class Skeleton extends StatelessWidget {
               height: 55,
               width: 160,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(12),
                 color: Colors.white,
               ),
             ),

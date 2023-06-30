@@ -32,7 +32,7 @@ class Button {
                   fontSize: 20,
                   color: Colors.white,
                   fontWeight: FontWeight.w700,
-                  fontFamily: ConstantFonts.poppinsMedium,
+                  fontFamily: ConstantFonts.sfProRegular,
                 ),
               ),
             ),

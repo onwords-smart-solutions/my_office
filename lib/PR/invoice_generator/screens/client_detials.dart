@@ -210,7 +210,7 @@ class _ClientDetailsState extends State<ClientDetails> {
                                       value: value,
                                       child: Text(
                                         value,
-                                        style: TextStyle(fontSize: 10, fontFamily: ConstantFonts.poppinsRegular, fontWeight: FontWeight.w600),
+                                        style: TextStyle(fontSize: 10, fontFamily: ConstantFonts.sfProRegular, fontWeight: FontWeight.w600),
                                       ),
                                     );
                                   }).toList(),

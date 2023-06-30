@@ -47,7 +47,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   List<String> managementStaffNames = [];
   List<String> tlStaffNames = [];
   List<String> userAccessGridButtonsName = [];
-  List<String> userAccessGridButtonsImages = [];
+  List<String> userAccessGridButtonsPics = [];
 
   //Getting management staff names form database
   Future<void> getManagementNames() async {
@@ -66,12 +66,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   }
 
   //Getting Tl names from database
-  Future <void> getTlNames() async {
-    List <String> tlNames = [];
+  Future<void> getTlNames() async {
+    List<String> tlNames = [];
     final ref = FirebaseDatabase.instance.ref().child('special_access');
     await ref.child('tl').once().then((value) {
-      if(value.snapshot.exists){
-        for (var tl in value.snapshot.children){
+      if (value.snapshot.exists) {
+        for (var tl in value.snapshot.children) {
           tlNames.add(tl.value.toString());
         }
         tlStaffNames = tlNames;
@@ -111,13 +111,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         userAccessGridButtonsName.remove('View suggestions');
         userAccessGridButtonsName.remove('Onyx');
         userAccessGridButtonsName.remove('Late entry');
-        userAccessGridButtonsImages.addAll(AppDefaults.gridButtonsImages);
-        userAccessGridButtonsImages.remove('assets/view_suggestions.png');
-        userAccessGridButtonsImages.remove('assets/onxy.png');
-        userAccessGridButtonsImages.remove('assets/late_entry.png');
-      }
-      else if (tlStaffNames.any((element) => element == data.name)){
-        for (int i = 0; i < AppDefaults.gridButtonsNames.length; i++){
+        userAccessGridButtonsPics.addAll(AppDefaults.gridButtonPics);
+        userAccessGridButtonsPics.remove('assets/view_suggestions.png');
+        userAccessGridButtonsPics.remove('assets/onxy.png');
+        userAccessGridButtonsPics.remove('assets/late_entry.png');
+      } else if (tlStaffNames.any((element) => element == data.name)) {
+        for (int i = 0; i < AppDefaults.gridButtonsNames.length; i++) {
           if (AppDefaults.gridButtonsNames[i] == 'Work entry' ||
               AppDefaults.gridButtonsNames[i] == 'Work details' ||
               AppDefaults.gridButtonsNames[i] == 'Refreshment' ||
@@ -127,25 +126,22 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'Suggestions' ||
               AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
               AppDefaults.gridButtonsNames[i] == 'Check Virtual entry' ||
-              AppDefaults.gridButtonsNames[i] == 'Entry time' ){
+              AppDefaults.gridButtonsNames[i] == 'Entry time') {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
-            userAccessGridButtonsImages.add(AppDefaults.gridButtonsImages[i]);
+            userAccessGridButtonsPics.add(AppDefaults.gridButtonPics[i]);
           }
         }
-      }
-      else if (data.department == 'ADMIN') {
+      } else if (data.department == 'ADMIN') {
         userAccessGridButtonsName.addAll(AppDefaults.gridButtonsNames);
         userAccessGridButtonsName.remove('Onyx');
         userAccessGridButtonsName.remove('Late entry');
-        userAccessGridButtonsImages.addAll(AppDefaults.gridButtonsImages);
-        userAccessGridButtonsImages.remove('assets/onxy.png');
-        userAccessGridButtonsImages.remove('assets/late_entry.png');
-      }
-      else if (data.department == 'APP') {
+        userAccessGridButtonsPics.addAll(AppDefaults.gridButtonPics);
+        userAccessGridButtonsPics.remove('assets/onxy.png');
+        userAccessGridButtonsPics.remove('assets/late_entry.png');
+      } else if (data.department == 'APP') {
         userAccessGridButtonsName.addAll(AppDefaults.gridButtonsNames);
-        userAccessGridButtonsImages.addAll(AppDefaults.gridButtonsImages);
-      }
-      else if (data.department == 'PR') {
+        userAccessGridButtonsPics.addAll(AppDefaults.gridButtonPics);
+      } else if (data.department == 'PR') {
         for (int i = 0; i < AppDefaults.gridButtonsNames.length; i++) {
           if (AppDefaults.gridButtonsNames[i] == 'Work entry' ||
               AppDefaults.gridButtonsNames[i] == 'Refreshment' ||
@@ -160,10 +156,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'Scan QR' ||
               AppDefaults.gridButtonsNames[i] == 'PR Reminder') {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
-            userAccessGridButtonsImages.add(AppDefaults.gridButtonsImages[i]);
+            userAccessGridButtonsPics.add(AppDefaults.gridButtonPics[i]);
           }
-        }}
-      else {
+        }
+      } else {
         for (int i = 0; i < AppDefaults.gridButtonsNames.length; i++) {
           if (AppDefaults.gridButtonsNames[i] == 'Work entry' ||
               AppDefaults.gridButtonsNames[i] == 'Refreshment' ||
@@ -171,7 +167,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'Suggestions' ||
               AppDefaults.gridButtonsNames[i] == 'Virtual attendance') {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
-            userAccessGridButtonsImages.add(AppDefaults.gridButtonsImages[i]);
+            userAccessGridButtonsPics.add(AppDefaults.gridButtonPics[i]);
           }
         }
       }
@@ -210,7 +206,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     final token = prefs.getString('token') ?? '';
     if (token.isEmpty) {
       String? fcmToken = await FirebaseMessaging.instance.getToken();
-      log('Token of the device is $fcmToken');
+      // log('Token of the device is $fcmToken');
       await saveTokenToDb(fcmToken!);
       FirebaseMessaging.instance.onTokenRefresh.listen(saveTokenToDb);
       prefs.setString('token', fcmToken);
@@ -303,7 +299,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return MainTemplate(
-      subtitle: 'Choose your destination here!',
+      subtitle: 'Welcome back👋',
       templateBody: buildMenuGrid(height, width),
       bgColor: ConstantColor.background1Color,
     );
@@ -314,26 +310,25 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     width = MediaQuery.of(context).size.width;
     return staffInfo != null
         ? GridView.builder(
-            physics: const BouncingScrollPhysics(),
             itemCount: userAccessGridButtonsName.length,
             padding:
-                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
             scrollDirection: Axis.vertical,
-            shrinkWrap: true,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                childAspectRatio: 1 / 1.3,
+                childAspectRatio: 1/1.2,
                 crossAxisCount: 3,
-                crossAxisSpacing: 10.0,
-                mainAxisSpacing: 10.0),
+                crossAxisSpacing: 7.0,
+                mainAxisSpacing: 4,
+            ),
             itemBuilder: (BuildContext context, int index) {
               final page = AppDefaults()
                   .getPage(userAccessGridButtonsName[index], staffInfo!);
               return buildButton(
                   name: userAccessGridButtonsName[index],
                   image: Image.asset(
-                    userAccessGridButtonsImages[index],
+                    userAccessGridButtonsPics[index],
                     width: width * 1,
-                    height: height * 0.125,
+                    height: height * 0.1,
                     fit: BoxFit.contain,
                   ),
                   page: page);
@@ -347,46 +342,49 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   }
 
   Widget buildButton(
-      {required String name, required Image image, required Widget page}) {
+      {required String name,
+        required Image image,
+      required Widget page}) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     return GestureDetector(
       onTap: () {
-        HapticFeedback.vibrate();
+        HapticFeedback.heavyImpact();
         Navigator.push(context, MaterialPageRoute(builder: (context) => page));
       },
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10.0),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xffBFACE2),
-              Color(0xff8355B7),
-            ],
+      child:
+      Center(
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
           ),
-          // color: const Color(0xffDAD6EE),
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: const [
-            BoxShadow(
-                color: Colors.black26, offset: Offset(5.0, 5.0), blurRadius: 5)
-          ],
+          elevation: 10,
+          child: Container(
+            height: height * 0.5,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: const Color(0xff9384D1),
+            ),
+            child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+            image,
+              AutoSizeText(
+                textAlign: TextAlign.center,
+                name,
+                style: TextStyle(
+                  fontFamily: ConstantFonts.sfProMedium,
+                  fontSize: 15,
+                  color: CupertinoColors.white,
+                ),
+                maxFontSize: 15,
+                minFontSize: 8,
+              )
+            ],
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Center(child: image),
-            AutoSizeText(
-              name,
-              style: TextStyle(
-                fontFamily: ConstantFonts.poppinsMedium,
-                color: ConstantColor.background1Color,
-              ),
-              maxFontSize: 11,
-              minFontSize: 8,
-            )
-          ],
+          ),
         ),
-      ),
+      )
     );
   }
 
@@ -394,8 +392,22 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     showCupertinoDialog(
       context: context,
       builder: (BuildContext context) => CupertinoAlertDialog(
-        title: const Text("No Internet Connection"),
-        content: const Text("Please check your internet connection"),
+        title: Text("No Internet Connection💀",
+          style: TextStyle(
+          color: ConstantColor.headingTextColor,
+          fontFamily: ConstantFonts.sfProBold,
+          // fontWeight: FontWeight.w600,
+          fontSize: 18,
+        ),
+        ),
+        content: Text("Please check your internet connection",
+          style: TextStyle(
+            color: ConstantColor.headingTextColor,
+            fontFamily: ConstantFonts.sfProMedium,
+            fontWeight: FontWeight.w600,
+            fontSize: 15,
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: () async {
@@ -412,7 +424,14 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 });
               }
             },
-            child: const Text("OK"),
+            child: Text("OK",
+              style: TextStyle(
+                color: ConstantColor.backgroundColor,
+                fontFamily: ConstantFonts.sfProRegular,
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
+            ),
           ),
         ],
       ),
@@ -450,7 +469,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           style: TextStyle(
                               color: ConstantColor.backgroundColor,
                               fontSize: 16,
-                              fontFamily: ConstantFonts.poppinsRegular,
+                              fontFamily: ConstantFonts.sfProRegular,
                               fontWeight: FontWeight.w600),
                         ),
                         Lottie.asset('assets/animations/app_update.json'),
@@ -459,7 +478,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   : Text(
                       "You are currently using an outdated version. Update the app to use the latest features..",
                       style: TextStyle(
-                        fontFamily: ConstantFonts.poppinsMedium,
+                        fontFamily: ConstantFonts.sfProRegular,
                       ),
                     ),
               actions: [
@@ -468,7 +487,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     : CupertinoDialogAction(
                         isDefaultAction: true,
                         textStyle: TextStyle(
-                          fontFamily: ConstantFonts.poppinsMedium,
+                          fontFamily: ConstantFonts.sfProRegular,
                         ),
                         onPressed: () async {
                           final permission =
@@ -487,7 +506,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           style: TextStyle(
                               color: ConstantColor.backgroundColor,
                               fontWeight: FontWeight.w600,
-                              fontFamily: ConstantFonts.poppinsRegular),
+                              fontFamily: ConstantFonts.sfProRegular),
                         ),
                       ),
               ],
@@ -521,7 +540,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         SnackBar(
           content: Text(
             'Error, file is not available to download',
-            style: Theme.of(context).textTheme.bodyText1,
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
         ),
       );
