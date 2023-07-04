@@ -237,7 +237,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
                               title: Text(
                                 allReminders[i].customerName,
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 17,
                                   fontFamily: ConstantFonts.sfProMedium,
                                 ),
                               ),

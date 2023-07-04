@@ -137,20 +137,20 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
               //Tab bar
               Positioned(
                 top: height * 0.02,
-                left: width * 0.05,
-                right: width * 0.05,
+                left: width * 0.03,
+                right: width * 0.03,
                 // bottom: height * 0.0,
                 child: Container(
                   padding: const EdgeInsets.all(5),
                   height: height * 0.08,
                   decoration: BoxDecoration(
                     color: ConstantColor.background1Color,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(12),
                     boxShadow: const [
                       BoxShadow(
                           color: Colors.black12,
-                          offset: Offset(-6.0, 6.0),
-                          blurRadius: 5),
+                          offset: Offset(-6.0, 8.0),
+                          blurRadius: 8),
                     ],
                   ),
                   child: tabBarContainer(height, width),
@@ -159,7 +159,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
 
               //Tab bar view
               Positioned(
-                top: height * 0.13,
+                top: height * 0.12,
                 left: width * 0.01,
                 right: width * 0.01,
                 bottom: height * 0.0,
@@ -182,12 +182,12 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
         children: [
           Positioned(
             top: height * 0.02,
-            left: width * 0.05,
-            right: width * 0.05,
+            left: width * 0.03,
+            right: width * 0.03,
             // bottom: height * 0.5,
             child: Container(
               height: height * 0.43,
-              width: width * 0.5,
+              width: width * 0.6,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(15),
@@ -195,7 +195,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
                   BoxShadow(
                       color: Colors.black12,
                       offset: Offset(-5.0, 5.0),
-                      blurRadius: 5)
+                      blurRadius: 8)
                 ],
               ),
               child: textFieldWidget('Reason for leave...', 'Reason :',
@@ -328,7 +328,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
               'Leave form',
               style: TextStyle(
                 fontSize: 18,
-                fontFamily: ConstantFonts.sfProRegular,
+                fontFamily: ConstantFonts.sfProMedium,
               ),
             ),
           ),
@@ -346,7 +346,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
               'Leave status',
               style: TextStyle(
                 fontSize: 18,
-                fontFamily: ConstantFonts.sfProRegular,
+                fontFamily: ConstantFonts.sfProMedium,
               ),
             ),
           ),
@@ -393,10 +393,9 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
           child: Text(
             'Submit',
             style: TextStyle(
-              fontFamily: ConstantFonts.sfProRegular,
+              fontFamily: ConstantFonts.sfProMedium,
               color: ConstantColor.background1Color,
-              fontWeight: FontWeight.w700,
-              fontSize: height * 0.028,
+              fontSize: height * 0.029,
             ),
           ),
         ),
@@ -436,11 +435,12 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
               style: TextStyle(
                   color: ConstantColor.blackColor,
                   fontFamily: ConstantFonts.sfProMedium,
+                fontSize: 17
               ),
               decoration: InputDecoration(
                 hintText: name,
                 hintStyle: TextStyle(
-                    color: Colors.black.withOpacity(0.3),
+                    color: Colors.black.withOpacity(0.4),
                     fontFamily: ConstantFonts.sfProMedium,
                     fontSize: 17),
                 filled: true,
@@ -473,7 +473,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
           child: RadioListTile(
             contentPadding: const EdgeInsets.all(0.0),
             title: Text("Sick",
-                style: TextStyle(fontFamily: ConstantFonts.sfProMedium)),
+                style: TextStyle(fontFamily: ConstantFonts.sfProMedium,fontSize: 17)),
             value: "Sick leave",
             groupValue: _reason,
             onChanged: (value) {
@@ -488,7 +488,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
           child: RadioListTile(
             contentPadding: const EdgeInsets.all(0.0),
             title: Text("General",
-                style: TextStyle(fontFamily: ConstantFonts.sfProMedium)),
+                style: TextStyle(fontFamily: ConstantFonts.sfProMedium,fontSize: 17)),
             value: "General leave",
             groupValue: _reason,
             onChanged: (value) {
@@ -530,8 +530,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
               style: TextStyle(
                 color: ConstantColor.background1Color,
                 fontSize: 18,
-                fontFamily: ConstantFonts.sfProMedium,
-                fontWeight: FontWeight.w600,
+                fontFamily: ConstantFonts.sfProBold,
               ),
             ),
           ),
@@ -542,8 +541,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
           style: TextStyle(
             color: ConstantColor.headingTextColor,
             fontSize: 18,
-            fontFamily: ConstantFonts.sfProMedium,
-            fontWeight: FontWeight.w700,
+            fontFamily: ConstantFonts.sfProBold,
           ),
         ),
       ],
@@ -557,9 +555,8 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
           'Select the date for leave!!',
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 16,
-            fontFamily: ConstantFonts.sfProRegular,
-            fontWeight: FontWeight.w500,
+            fontSize: 17,
+            fontFamily: ConstantFonts.sfProMedium,
           ),
         ),
         backgroundColor: Colors.red,
@@ -571,7 +568,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
           'Reason should be filled!!',
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 17,
             fontFamily: ConstantFonts.sfProMedium,
           ),
         ),
@@ -613,9 +610,8 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
           'Leave form has been submitted',
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 16,
-            fontFamily: ConstantFonts.sfProRegular,
-            fontWeight: FontWeight.w500,
+            fontSize: 17,
+            fontFamily: ConstantFonts.sfProMedium,
           ),
         ),
         backgroundColor: Colors.green,

@@ -56,7 +56,6 @@ class AppDefaults {
     'PR Work details',
     'Scan QR',
     'PR Reminder',
-    'Leave status',
   ];
 
   static List<String> gridButtonPics = [
@@ -85,43 +84,6 @@ class AppDefaults {
     'assets/pr_work_details.png',
     'assets/qr_scanner_points.png',
     'assets/reminder.png',
-    'assets/leave_status.png',
-  ];
-
-  // static List<Color> gridButtonsImages = [
-  //  const Color(0xff9681EB),
-  //  const Color(0xffF2EAD3),
-  //  const Color(0xffA7EDE7),
-  //  const Color(0xffD0F5BE),
-  //  const Color(0xff4FC0D0),
-  //  const Color(0xffEAB2A0),
-  //  const Color(0xffDAFFFB),
-  //  const Color(0xffFFD0D0),
-  //  const Color(0xffFFE4A7),
-  //  const Color(0xff64CCC5),
-  //  const Color(0xffFF9EAA),
-  //  const Color(0xff8EAC50),
-  //  const Color(0xff9575DE),
-  //  const Color(0xffC0DBEA),
-  //  const Color(0xff9AC5F4),
-  //  const Color(0xffF1D4E5),
-  //  const Color(0xffECF8F9),
-  //  const Color(0xff9DB2BF),
-  //  const Color(0xff2CD3E1),
-  //  const Color(0xffF0EDD4),
-  //  const Color(0xffECCDB4),
-  //  const Color(0xffB9E9FC),
-  //  const Color(0xffA0D8B3),
-  //  const Color(0xffF7DB6A),
-  //  const Color(0xffF79540),
-  //   const Color(0xff577D86),
-  // ];
-
-  static List<Icon> gridButtonIcons = [
-    Icon( Icons.assignment),
-    Icon( Icons.work),
-    Icon( Icons.fastfood_rounded),
-
   ];
 
   Widget getPage(String buttonName, StaffModel staffInfo) {
@@ -236,12 +198,6 @@ class AppDefaults {
         break;
       case 'PR Reminder':
         page =  ReminderScreen(staffInfo: staffInfo,);
-        break;
-      case 'Leave status' :
-        page = LeaveStatusScreen(
-          uid: staffInfo.uid,
-          name: staffInfo.name,
-        );
         break;
     }
     return page;

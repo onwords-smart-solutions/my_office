@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
@@ -108,11 +109,8 @@ class _StaffEntryCheckScreenState extends State<StaffEntryCheckScreen> {
         Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 190),
-              child: FloatingActionButton.small(
-                elevation: 10,
-                backgroundColor: ConstantColor.backgroundColor,
-                tooltip: 'Date Picker',
+              padding: const EdgeInsets.only(left: 160),
+              child: FilledButton.tonal(
                 onPressed: () {
                   datePicker();
                 },
@@ -125,7 +123,7 @@ class _StaffEntryCheckScreenState extends State<StaffEntryCheckScreen> {
               style: TextStyle(
                 color: ConstantColor.headingTextColor,
                 fontSize: 18,
-                fontFamily: ConstantFonts.poppinsBold,
+                fontFamily: ConstantFonts.sfProBold,
               ),
             ),
           ],
@@ -145,13 +143,12 @@ class _StaffEntryCheckScreenState extends State<StaffEntryCheckScreen> {
                       return ListTile(
                         leading: const CircleAvatar(
                           radius: 22,
-                          backgroundColor: ConstantColor.backgroundColor,
-                          child: Icon(Icons.access_time_rounded),
+                          child: Icon(CupertinoIcons.time_solid),
                         ),
                         title: Text(
                           attendanceTime[index],
                           style: TextStyle(
-                              fontFamily: ConstantFonts.sfProRegular,
+                              fontFamily: ConstantFonts.sfProMedium,
                               color: ConstantColor.blackColor,
                               fontSize: 18),
                         ),
@@ -168,9 +165,8 @@ class _StaffEntryCheckScreenState extends State<StaffEntryCheckScreen> {
                         Text(
                           'No Attendance registered!!',
                           style: TextStyle(
-                            fontFamily: ConstantFonts.sfProRegular,
+                            fontFamily: ConstantFonts.sfProMedium,
                             color: ConstantColor.blackColor,
-                            fontWeight: FontWeight.w600,
                             fontSize: 20,
                           ),
                         ),

@@ -207,8 +207,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 18,
-            fontFamily: ConstantFonts.sfProRegular,
-            fontWeight: FontWeight.w500,
+            fontFamily: ConstantFonts.sfProMedium,
           ),
         ),
         backgroundColor: Colors.red,
@@ -239,9 +238,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           'Entry has been registered',
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 16,
-            fontFamily: ConstantFonts.sfProRegular,
-            fontWeight: FontWeight.w500,
+            fontSize: 17,
+            fontFamily: ConstantFonts.sfProMedium,
           ),
         ),
         backgroundColor: Colors.green,
@@ -269,8 +267,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             scrollPhysics: const BouncingScrollPhysics(),
             maxLines: 3,
             style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontFamily: ConstantFonts.sfProRegular,
+              fontFamily: ConstantFonts.sfProMedium,
+              fontSize: 16,
             ),
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(15),
@@ -279,6 +277,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               ),
               hintText: 'Reason is compulsory..',
               hintStyle: TextStyle(color: Colors.grey.shade600,
+                fontSize: 16,
                 fontFamily: ConstantFonts.sfProMedium
               ),
             ),

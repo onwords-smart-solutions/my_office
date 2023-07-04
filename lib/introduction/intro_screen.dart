@@ -20,6 +20,7 @@ class IntroductionScreen extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        elevation: 10,
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context)=> const LoginScreen()));
         },
@@ -32,7 +33,6 @@ class IntroductionScreen extends StatelessWidget {
     return Container(
       height: height * 0.45,
       width: double.infinity,
-      color: ConstantColor.background1Color,
       child: Image.asset(
         'assets/intro_pic.jpg',
       ),
@@ -53,7 +53,7 @@ class IntroductionScreen extends StatelessWidget {
           GradientText(
             'Manage your daily',
             style: TextStyle(
-              fontFamily: ConstantFonts.sfProRegular,
+              fontFamily: ConstantFonts.sfProMedium,
               color: ConstantColor.blackColor,
               fontSize: height * 0.040,
             ),
@@ -67,7 +67,7 @@ class IntroductionScreen extends StatelessWidget {
           GradientText(
             'works with our',
             style: TextStyle(
-              fontFamily: ConstantFonts.sfProRegular,
+              fontFamily: ConstantFonts.sfProMedium,
               color: ConstantColor.blackColor,
               fontSize: height * 0.040,
             ),
@@ -81,10 +81,9 @@ class IntroductionScreen extends StatelessWidget {
           GradientText(
             'Work Manager',
             style: TextStyle(
-              fontFamily: ConstantFonts.sfProRegular,
+              fontFamily: ConstantFonts.sfProMedium,
               color: ConstantColor.blackColor,
               fontSize: height * 0.040,
-              fontWeight: FontWeight.w600
             ),
             gradient: const LinearGradient(
               colors: [
@@ -96,7 +95,7 @@ class IntroductionScreen extends StatelessWidget {
           GradientText(
             'from here!!',
             style: TextStyle(
-              fontFamily: ConstantFonts.sfProRegular,
+              fontFamily: ConstantFonts.sfProMedium,
               color: ConstantColor.blackColor,
               fontSize: height * 0.040,
             ),
@@ -124,16 +123,9 @@ class IntroductionScreen extends StatelessWidget {
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            offset: Offset(5, 5),
-            blurRadius: 10,
-          )
-        ],
       ),
       child: const Center(
-        child: Icon(Icons.arrow_forward_ios),
+        child: Icon(Icons.arrow_forward_ios, color: Colors.white),
       ),
     );
   }

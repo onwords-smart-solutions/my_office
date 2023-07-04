@@ -128,7 +128,6 @@ class _FoodCountStaffDetailScreenState
                         Expanded(
                           child: ListView.builder(
                             itemCount: staffLunchSummary.length,
-                            physics: const BouncingScrollPhysics(),
                             itemBuilder: (ctx, i) {
                               return ListTile(
                                 leading: const Icon(
@@ -173,7 +172,7 @@ class _FoodCountStaffDetailScreenState
                 return PopupMenuItem(
                   child: Text(
                     month.keys.toList()[index],
-                    style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
+                    style: TextStyle(fontFamily: ConstantFonts.sfProMedium,fontSize: 15),
                   ),
                   onTap: () {
                     setState(() {

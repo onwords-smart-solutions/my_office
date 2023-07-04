@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
@@ -27,7 +28,6 @@ class SuggestionScreen extends StatefulWidget {
 class _SuggestionScreenState extends State<SuggestionScreen> {
   TextEditingController suggestionsController = TextEditingController();
   int characterCount = 0;
-
 
   @override
   void initState() {
@@ -72,7 +72,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
             'priority': 'high',
             'data': {
               'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-              'screen' : 'ViewSuggestionsScreen',
+              'screen': 'ViewSuggestionsScreen',
               'status': 'done',
             },
             'to': annaDeviceToken,
@@ -111,21 +111,43 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
           child: Column(
             children: [
               TextField(
+                style: TextStyle(
+                  fontSize: 17,
+                  fontFamily: ConstantFonts.sfProMedium,
+                ),
+                textCapitalization: TextCapitalization.sentences,
                 textInputAction: TextInputAction.done,
                 controller: suggestionsController,
-                scrollPhysics: const BouncingScrollPhysics(),
                 maxLines: 5,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                   ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: const BorderSide(
+                        color: CupertinoColors.systemGrey, width: 2),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: const BorderSide(
+                        color: CupertinoColors.systemPurple, width: 2),
+                  ),
                   hintText: 'Fill up your suggestions!!',
+                  hintStyle: TextStyle(
+                    fontFamily: ConstantFonts.sfProMedium,
+                  ),
                 ),
               ),
               const SizedBox(height: 5),
               Align(
                 alignment: Alignment.bottomLeft,
-                child: Text('  Character count: $characterCount'),
+                child: Text(
+                  '  Character count: $characterCount',
+                  style: TextStyle(
+                    fontFamily: ConstantFonts.sfProMedium,
+                  ),
+                ),
               ),
             ],
           ),
@@ -138,7 +160,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
             onPressed: () {
               addSuggestionToDatabase();
               sendNotification('Vhbt8jIAfiaV1HxuWERLqJh7dbj2', 'My Office',
-                            'New suggestion has arrived..');
+                  'New suggestion has arrived..');
             },
             child: Text(
               "Submit",
@@ -161,9 +183,8 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
           'Suggestions should not be empty!!',
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 16,
-            fontFamily: ConstantFonts.sfProRegular,
-            fontWeight: FontWeight.w500,
+            fontSize: 17,
+            fontFamily: ConstantFonts.sfProMedium,
           ),
         ),
         backgroundColor: Colors.red,
@@ -176,9 +197,8 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
           'Too short for a Suggestion',
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 16,
-            fontFamily: ConstantFonts.sfProRegular,
-            fontWeight: FontWeight.w500,
+            fontSize: 17,
+            fontFamily: ConstantFonts.sfProMedium,
           ),
         ),
         backgroundColor: Colors.red,
@@ -202,9 +222,8 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
           'Suggestions has been submitted',
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 16,
-            fontFamily: ConstantFonts.sfProRegular,
-            fontWeight: FontWeight.w500,
+            fontSize: 17,
+            fontFamily: ConstantFonts.sfProMedium,
           ),
         ),
         backgroundColor: Colors.green,

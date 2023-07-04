@@ -31,8 +31,7 @@ class Button {
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: ConstantFonts.sfProRegular,
+                  fontFamily: ConstantFonts.sfProMedium,
                 ),
               ),
             ),

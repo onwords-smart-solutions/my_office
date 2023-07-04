@@ -99,14 +99,12 @@ class _PrWorkDetailsState extends State<PrWorkDetails> {
         Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 190),
-              child: FloatingActionButton(
-                elevation: 5,
-                tooltip: 'Date Picker',
+              padding: const EdgeInsets.only(left: 160),
+              child: FilledButton.tonal(
                 onPressed: () {
                   datePicker();
                 },
-                child: const Icon(Icons.date_range, size: 25),
+                child: const Icon(Icons.date_range, size: 22),
               ),
             ),
             const SizedBox(width: 10),
@@ -183,7 +181,7 @@ class _PrWorkDetailsState extends State<PrWorkDetails> {
                           Lottie.asset('assets/animations/no_data.json',
                               height: 300.0),
                         Text(
-                          'No WorkDone Registered!!',
+                          'No Work-done Registered!!',
                           style: TextStyle(
                             color: ConstantColor.blackColor,
                             fontSize: 20,

@@ -107,8 +107,8 @@ class _NoteItemState extends State<NoteItem> {
               Text(
                 widget.updatedStaff,
                 style: TextStyle(
-                  fontFamily: ConstantFonts.poppinsBold,
-                  fontSize: 13.0,
+                  fontFamily: ConstantFonts.sfProBold,
+                  fontSize: 14.0,
                 ),
               ),
 
@@ -119,14 +119,14 @@ class _NoteItemState extends State<NoteItem> {
                   Text(
                     widget.updatedDate,
                     style: TextStyle(
-                      fontFamily: ConstantFonts.sfProRegular,
+                      fontFamily: ConstantFonts.sfProMedium,
                       fontSize: 12.0,
                     ),
                   ),
                   Text(
                     widget.updatedTime,
                     style: TextStyle(
-                      fontFamily: ConstantFonts.sfProRegular,
+                      fontFamily: ConstantFonts.sfProMedium,
                       fontSize: 12.0,
                     ),
                   ),
@@ -144,9 +144,8 @@ class _NoteItemState extends State<NoteItem> {
                 Text(
                   widget.note,
                   style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontFamily: ConstantFonts.sfProRegular,
-                    fontSize: 13.0,
+                    fontFamily: ConstantFonts.sfProMedium,
+                    fontSize: 14.0,
                   ),
                 ),
                   //Adding audio of calls

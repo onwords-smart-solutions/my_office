@@ -2,6 +2,7 @@
 
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -153,17 +154,17 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
     for (int i = 0; i < nameData.length; i++) {
       final widget = Container(
         // height: height * 0.1,
-        margin: const EdgeInsets.all(10),
+        margin: const EdgeInsets.all(5),
         decoration: BoxDecoration(
           color: ConstantColor.background1Color,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.2),
-              offset: const Offset(-0.0, 5.0),
+              offset: const Offset(0.0, 2.0),
               blurRadius: 8,
             )
           ],
-          borderRadius: BorderRadius.circular(11),
+          borderRadius: BorderRadius.circular(15),
         ),
         child: Center(
           child: ListTile(
@@ -185,15 +186,14 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
             },
             leading: const CircleAvatar(
               radius: 20,
-              backgroundColor: ConstantColor.backgroundColor,
-              child: Icon(Icons.person),
+              child: Icon(CupertinoIcons.person_2_fill),
             ),
             title: Text(
               '${nameData[i]}',
               style: TextStyle(
-                  fontFamily: ConstantFonts.sfProRegular,
+                  fontFamily: ConstantFonts.sfProMedium,
                   color: ConstantColor.blackColor,
-                  fontSize: height * 0.020),
+                  fontSize: height * 0.021),
             ),
           ),
         ),
@@ -233,9 +233,10 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                     const SizedBox(width: 15),
                     Text('$selectedDate   ',
                         style: TextStyle(
-                            fontFamily: ConstantFonts.poppinsBold,
+                            fontFamily: ConstantFonts.sfProBold,
                             fontSize: 17,
-                            color: ConstantColor.backgroundColor)),
+                            color: ConstantColor.backgroundColor),
+                    ),
                   ],
                 ),
               ),
@@ -252,11 +253,10 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                         Lottie.asset('assets/animations/no_data.json',
                             height: 300.0),
                         Text(
-                          'No work done yet!!',
+                          'No work done submitted yet!!',
                           style: TextStyle(
-                            fontFamily: ConstantFonts.sfProRegular,
+                            fontFamily: ConstantFonts.sfProMedium,
                             color: ConstantColor.blackColor,
-                            fontWeight: FontWeight.w600,
                             fontSize: 20,
                           ),
                         ),

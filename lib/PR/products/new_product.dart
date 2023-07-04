@@ -179,13 +179,13 @@ class _CreateNewProductState extends State<CreateNewProduct> {
                               borderRadius: BorderRadius.circular(15),
                               color: CupertinoColors.systemGrey.withOpacity(0.4),
                             ),
-                            child: const SizedBox(
+                            child: SizedBox(
                               height: 50,
                               child: Center(
                                 child: Text(
                                   'Create Product',
                                   style: TextStyle(
-                                      fontSize: 16, fontWeight: FontWeight.bold),
+                                      fontSize: 16, fontFamily: ConstantFonts.sfProBold),
                                 ),
                               ),
                             ),

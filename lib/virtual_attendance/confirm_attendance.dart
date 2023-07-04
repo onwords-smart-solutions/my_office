@@ -26,9 +26,8 @@ class ConfirmAttendanceScreen extends StatelessWidget {
           Text(
             'Wait Until your Entry is Registered!!',
             style: TextStyle(
-              fontFamily: ConstantFonts.sfProRegular,
+              fontFamily: ConstantFonts.sfProMedium,
               fontSize: 20,
-              fontWeight: FontWeight.w500,
               color: ConstantColor.backgroundColor,
             ),
           ),

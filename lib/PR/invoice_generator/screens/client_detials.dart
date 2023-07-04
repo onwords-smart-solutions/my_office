@@ -61,12 +61,12 @@ class _ClientDetailsState extends State<ClientDetails> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Client Details'),
+          title: Text('Client Details',style: TextStyle(fontSize: 22, color: Colors.white,fontFamily: ConstantFonts.sfProMedium),),
           centerTitle: true,
           elevation: 0,
           backgroundColor: ConstantColor.backgroundColor,
           leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new),
+            icon: const Icon(Icons.arrow_back_ios_new,color: Colors.white,),
             onPressed: () {
               Provider.of<InvoiceProvider>(context, listen: false)
                   .clearAllData();
@@ -79,7 +79,6 @@ class _ClientDetailsState extends State<ClientDetails> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -87,7 +86,6 @@ class _ClientDetailsState extends State<ClientDetails> {
                     margin: const EdgeInsets.only(top: 30),
                     height: 560,
                     child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -100,7 +98,7 @@ class _ClientDetailsState extends State<ClientDetails> {
                             textInputAction: TextInputAction.next,
                             hintName: 'Client Name',
                             icon: const Icon(Icons.person),
-                            maxLength: 35,
+                            maxLength: 45,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Please enter Customer Name';
@@ -185,7 +183,11 @@ class _ClientDetailsState extends State<ClientDetails> {
                               SizedBox(
                                 width: 160,
                                 child: DropdownButtonFormField<String>(
-                                  hint: const Text("Doc-Type", style: TextStyle(fontWeight: FontWeight.w600),),
+                                  style: TextStyle(
+                                    fontFamily: ConstantFonts.sfProMedium,
+                                    color: Colors.black
+                                  ),
+                                  hint: Text("Doc-Type", style: TextStyle(fontFamily: ConstantFonts.sfProMedium),),
                                   decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.all(5.0),
                                     border: myInputBorder(),
@@ -210,7 +212,7 @@ class _ClientDetailsState extends State<ClientDetails> {
                                       value: value,
                                       child: Text(
                                         value,
-                                        style: TextStyle(fontSize: 10, fontFamily: ConstantFonts.sfProRegular, fontWeight: FontWeight.w600),
+                                        style: TextStyle(fontSize: 10, fontFamily: ConstantFonts.sfProMedium),
                                       ),
                                     );
                                   }).toList(),
@@ -219,7 +221,12 @@ class _ClientDetailsState extends State<ClientDetails> {
                               SizedBox(
                                 width: 160,
                                 child: DropdownButtonFormField<String>(
-                                  hint: const Text("Category", style: TextStyle(fontWeight: FontWeight.w600),),
+                                  style: TextStyle(
+                                    fontFamily: ConstantFonts.sfProMedium,
+                                    color: CupertinoColors.label,
+                                    fontSize: 16
+                                  ),
+                                  hint: Text("Category", style: TextStyle(fontFamily: ConstantFonts.sfProMedium),),
                                   decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.all(5.0),
                                     border: myInputBorder(),
@@ -359,7 +366,8 @@ class _ClientDetailsState extends State<ClientDetails> {
         borderSide: BorderSide(
           color: Colors.black.withOpacity(0.5),
           width: 1.5,
-        ));
+        ),
+    );
   }
 
   OutlineInputBorder myFocusBorder() {
@@ -368,6 +376,7 @@ class _ClientDetailsState extends State<ClientDetails> {
         borderSide: BorderSide(
           color: Colors.black.withOpacity(0.5),
           width: 1.5,
-        ));
+        ),
+    );
   }
 }

@@ -30,7 +30,6 @@ class _IndividualWorkDoneState extends State<IndividualWorkDone> {
 
   Widget workDetailsContainer(double height, double width) {
     // print(widget.workDetails.length.bitLength);
-
     return ListView.builder(
         scrollDirection: Axis.vertical,
         physics: const BouncingScrollPhysics(),
@@ -39,29 +38,28 @@ class _IndividualWorkDoneState extends State<IndividualWorkDone> {
         itemBuilder: (BuildContext context, int ind) {
           return Container(
             height: height * 0.25,
-            margin: const EdgeInsets.all(10),
+            margin: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               color: ConstantColor.background1Color,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.2),
-                  offset: const Offset(-0.0, 0.0),
-                  blurRadius: 3,
+                  offset: const Offset(0.0, 0.0),
+                  blurRadius: 8,
                 ),
               ],
-              borderRadius: BorderRadius.circular(11),
+              borderRadius: BorderRadius.circular(15),
             ),
             child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
                     margin: EdgeInsets.symmetric(
-                        vertical: height * 0.02, horizontal: width * 0.02),
+                        vertical: height * 0.02, horizontal: width * 0.01),
                     padding: const EdgeInsets.all(8),
                     height: height * 0.1,
-                    width: width * 0.88,
+                    width: width * 0.9,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       // color: ConstantColor.backgroundColor.withOpacity(0.09),
@@ -82,7 +80,7 @@ class _IndividualWorkDoneState extends State<IndividualWorkDone> {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: width * 0.03),
+                    margin: EdgeInsets.symmetric(horizontal: width * 0.04),
                     child: percentIndicator(
                       height * 2,
                       double.parse(widget.workDetails[ind]['workPercentage']
@@ -137,10 +135,9 @@ class _IndividualWorkDoneState extends State<IndividualWorkDone> {
       center: Text(
         val,
         style: TextStyle(
-            fontFamily: ConstantFonts.sfProRegular,
+            fontFamily: ConstantFonts.sfProMedium,
             color: color,
-            fontSize: height * 0.010,
-            fontWeight: FontWeight.bold),
+            fontSize: height * 0.010,),
       ),
     );
   }
@@ -150,7 +147,7 @@ class _IndividualWorkDoneState extends State<IndividualWorkDone> {
       name,
       style: TextStyle(
           fontSize: size * 2,
-          fontFamily: ConstantFonts.sfProRegular,
+          fontFamily: ConstantFonts.sfProMedium,
           color: ConstantColor.blackColor),
     );
   }

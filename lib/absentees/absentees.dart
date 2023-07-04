@@ -22,19 +22,12 @@ class AbsenteeScreen extends StatefulWidget {
 class _AbsenteeScreenState extends State<AbsenteeScreen> {
   bool isLoading = true;
   List<StaffAttendanceModel> staffNames = [];
-  List <StaffAttendanceModel> fullNames = [];
+  List<StaffAttendanceModel> absentees = [];
   final ref = FirebaseDatabase.instance.ref();
   final fingerPrint = FirebaseDatabase.instance.ref();
   final virtualAttendance = FirebaseDatabase.instance.ref();
   DateTime dateTime = DateTime.now();
-
-  DateTime now = DateTime.now();
-  var formatterDate = DateFormat('yyyy-MM-dd');
-  var formatterMonth = DateFormat('MM');
-  var formatterYear = DateFormat('yyyy');
-  String? selectedDate;
-  String? selectedMonth;
-  String? selectedYear;
+  var dateFormat = DateFormat('yyyy-MM-dd');
 
   datePicker() async {
     DateTime? newDate = await showDatePicker(
@@ -46,56 +39,63 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
     if (newDate == null) return;
     setState(
           () {
-        selectedYear = formatterYear.format(newDate);
-        selectedMonth = formatterMonth.format(newDate);
-        selectedDate = formatterDate.format(newDate);
+        dateTime = newDate;
       },
     );
     staffDetails();
   }
 
   Future<void> staffDetails() async {
-    staffNames.clear();
+    setState(() {
+      isLoading = true;
+      absentees.clear();
+      staffNames.clear();
+    });
     await ref.child('staff').once().then((staffEntry) async {
       for (var data in staffEntry.snapshot.children) {
         var entry = data.value as Map<Object?, Object?>;
-        // log('data is $entry');
         final staffEntry = StaffAttendanceModel(
           uid: data.key.toString(),
           department: entry['department'].toString(),
           name: entry['name'].toString(),
         );
-        if (staffEntry.name != 'Nikhil Deepak') {
+        if(staffEntry.name != 'Nikhil Deepak') {
           staffNames.add(staffEntry);
         }
       }
-      for (var admin in staffNames) {
-        final time = await entryCheck(admin.uid);
-        staffNames.firstWhere((element) => element.uid == admin.uid).entryTime =
-            time;
+
+    });
+    List<StaffAttendanceModel> absenteesList =[];
+    for (var staff in staffNames) {
+      final time = await entryCheck(staff.uid);
+      log("NAMES ARE ${staff.name} $time");
+      if(time.isEmpty){
+        absenteesList.add(staff);
       }
-      if (!mounted) return;
-      setState(() {
-        fullNames = staffNames;
-        isLoading = false;
-      });
+
+    }
+    if (!mounted) return;
+    setState(() {
+      absentees = absenteesList;
+      isLoading = false;
     });
   }
 
   Future<String> entryCheck(String uid) async {
-    String entryName = '';
+    String entryTime = '';
     var dateFormat = DateFormat('yyyy-MM-dd').format(dateTime);
     await fingerPrint
-        .child('fingerPrint/$uid')
+        .child('fingerPrint/$uid/$dateFormat')
         .once()
         .then((entry) async {
-     for(var name in entry.snapshot.children){
-       final data = name.value as Map<Object?, Object?>;
-       var entryName = data['name'].toString();
-     }
-     entryName = await checkVirtualAttendance(uid);
+      if (entry.snapshot.value != null) {
+        final data = entry.snapshot.value as Map<Object?, Object?>;
+        entryTime = data.keys.last.toString();
+      } else {
+        entryTime = await checkVirtualAttendance(uid);
+      }
     });
-    return entryName;
+    return entryTime;
   }
 
   Future<String> checkVirtualAttendance(String uid) async {
@@ -119,9 +119,6 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
 
   @override
   void initState() {
-    selectedDate = formatterDate.format(now);
-    selectedMonth = formatterMonth.format(now);
-    selectedYear = formatterYear.format(now);
     staffDetails();
     super.initState();
   }
@@ -135,12 +132,6 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
   }
 
   Widget bodyContent() {
-    int absent = 0;
-    for (var staff in staffNames) {
-      if (staff.entryTime!.isEmpty) {
-        absent += 1;
-      }
-    }
       return Column(
         children: [
           Padding(
@@ -159,7 +150,7 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
                 ),
                 const SizedBox(width: 15),
                 Text(
-                  '$selectedDate',
+                  DateFormat('yyyy-MM-dd').format(dateTime),
                   style: TextStyle(
                     fontFamily: ConstantFonts.sfProBold,
                     fontSize: 17,
@@ -170,7 +161,7 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
             ),
           ),
           const SizedBox(height: 10),
-          Text('Total absentees : $absent',
+          Text('Total absentees : ${absentees.length}',
             style: TextStyle(
               fontSize: 17,
               fontFamily: ConstantFonts.sfProBold,
@@ -178,10 +169,10 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
           ),
           isLoading
               ? Lottie.asset('assets/animations/new_loading.json')
-              : staffNames.isNotEmpty
+              : absentees.isNotEmpty
               ? Expanded(
             child: ListView.builder(
-              itemCount: staffNames.length,
+              itemCount: absentees.length,
               itemBuilder: (ctx, i) {
                 return Container(
                   margin: const EdgeInsets.all(5),
@@ -203,7 +194,7 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
                         child: Icon(CupertinoIcons.person_2_fill),
                       ),
                       title: Text(
-                        staffNames[i].name,
+                        absentees[i].name,
                         style: TextStyle(
                             fontFamily: ConstantFonts.sfProMedium,
                             color: ConstantColor.blackColor,
@@ -215,7 +206,7 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
                                 0.021),
                       ),
                       trailing: Text(
-                        staffNames[i].department,
+                        absentees[i].department,
                         style: TextStyle(
                             fontFamily: ConstantFonts.sfProBold,
                             color: CupertinoColors.destructiveRed,

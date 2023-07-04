@@ -52,8 +52,8 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   "Calls",
                   style: TextStyle(
                     color: ConstantColor.headingTextColor,
-                    fontSize: 16,
-                    fontFamily: ConstantFonts.sfProRegular,
+                    fontSize: 17,
+                    fontFamily: ConstantFonts.sfProMedium,
                   ),
                 ),
               ),
@@ -64,7 +64,7 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   style: TextStyle(
                       color: ConstantColor.backgroundColor,
                       fontSize: 16,
-                      fontFamily: ConstantFonts.poppinsBold),
+                      fontFamily: ConstantFonts.sfProBold),
                 ),
               ),
             ],
@@ -80,8 +80,8 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   "Invoice",
                   style: TextStyle(
                     color: ConstantColor.headingTextColor,
-                    fontSize: 16,
-                    fontFamily: ConstantFonts.sfProRegular,
+                    fontSize: 17,
+                    fontFamily: ConstantFonts.sfProMedium,
                   ),
                 ),
               ),
@@ -92,7 +92,7 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   style: TextStyle(
                       color: ConstantColor.backgroundColor,
                       fontSize: 16,
-                      fontFamily: ConstantFonts.poppinsBold),
+                      fontFamily: ConstantFonts.sfProBold),
                 ),
               ),
             ],
@@ -108,8 +108,8 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   "Message",
                   style: TextStyle(
                     color: ConstantColor.headingTextColor,
-                    fontSize: 16,
-                    fontFamily: ConstantFonts.sfProRegular,
+                    fontSize: 17,
+                    fontFamily: ConstantFonts.sfProMedium,
                   ),
                 ),
               ),
@@ -120,7 +120,7 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   style: TextStyle(
                       color: ConstantColor.backgroundColor,
                       fontSize: 16,
-                      fontFamily: ConstantFonts.poppinsBold),
+                      fontFamily: ConstantFonts.sfProBold),
                 ),
               ),
             ],
@@ -136,8 +136,8 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   "Points",
                   style: TextStyle(
                     color: ConstantColor.headingTextColor,
-                    fontSize: 16,
-                    fontFamily: ConstantFonts.sfProRegular,
+                    fontSize: 17,
+                    fontFamily: ConstantFonts.sfProMedium,
                   ),
                 ),
               ),
@@ -148,7 +148,7 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   style: TextStyle(
                       color: ConstantColor.backgroundColor,
                       fontSize: 16,
-                      fontFamily: ConstantFonts.poppinsBold),
+                      fontFamily: ConstantFonts.sfProBold),
                 ),
               ),
             ],
@@ -164,8 +164,8 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   "Quote",
                   style: TextStyle(
                     color: ConstantColor.headingTextColor,
-                    fontSize: 16,
-                    fontFamily: ConstantFonts.sfProRegular,
+                    fontSize: 17,
+                    fontFamily: ConstantFonts.sfProMedium,
                   ),
                 ),
               ),
@@ -176,7 +176,7 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   style: TextStyle(
                       color: ConstantColor.backgroundColor,
                       fontSize: 16,
-                      fontFamily: ConstantFonts.poppinsBold),
+                      fontFamily: ConstantFonts.sfProBold),
                 ),
               ),
             ],
@@ -192,8 +192,8 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   "Visit",
                   style: TextStyle(
                     color: ConstantColor.headingTextColor,
-                    fontSize: 16,
-                    fontFamily: ConstantFonts.sfProRegular,
+                    fontSize: 17,
+                    fontFamily: ConstantFonts.sfProMedium,
                   ),
                 ),
               ),
@@ -204,7 +204,7 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   style: TextStyle(
                       color: ConstantColor.backgroundColor,
                       fontSize: 16,
-                      fontFamily: ConstantFonts.poppinsBold),
+                      fontFamily: ConstantFonts.sfProBold),
                 ),
               ),
             ],

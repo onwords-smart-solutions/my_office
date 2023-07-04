@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:my_office/PR/invoice_generator/widgets/button_widget.dart';
@@ -41,8 +42,9 @@ class _ScanQRScreenState extends State<ScanQRScreen> {
       appBar: AppBar(
         title: Text('Scan to get PR points',
         style: TextStyle(
-          fontWeight: FontWeight.w600,
-          fontFamily: ConstantFonts.sfProRegular,
+          fontFamily: ConstantFonts.sfProBold,
+          fontSize: 22,
+          color: Colors.white
         ),),
         centerTitle: true,
         elevation: 0,
@@ -52,7 +54,7 @@ class _ScanQRScreenState extends State<ScanQRScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back_ios_new),
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
         ),
       ),
       backgroundColor: Colors.black,
@@ -87,15 +89,17 @@ class _ScanQRScreenState extends State<ScanQRScreen> {
                   child: (result != null)
                       ? Text(
                           'PR point is  : $note',
-                          style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white),
+                          style: TextStyle(
+                              fontSize: 22,
+                              fontFamily: ConstantFonts.sfProMedium,
+                              color: CupertinoColors.activeOrange,),
                         )
-                      : const Text('Scan a QR code', style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white),),
+                      : Text('Scan a QR code', style: TextStyle(
+                      fontSize: 20,
+                      fontFamily: ConstantFonts.sfProMedium,
+                      color: Colors.white,
+                  ),
+                  ),
                 ),
                 isResult ?  Button('Done', () {
                   setState(() {

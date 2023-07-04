@@ -114,12 +114,15 @@ class _ProductDetailsState extends State<ProductDetails> {
     // final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Product Details'),
+        title: Text('Product Details',style: TextStyle(fontFamily: ConstantFonts.sfProMedium,
+        fontSize: 22,
+          color: Colors.white
+        ),),
         centerTitle: true,
         elevation: 0,
         backgroundColor: ConstantColor.backgroundColor,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
+          icon: const Icon(Icons.arrow_back_ios_new,color: Colors.white,),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -148,9 +151,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                       children: [
                         Text(manualEntry ? 'Change to DropDown' : 'Change to Manual Entry',
                         style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: ConstantFonts.sfProRegular,
+                          fontSize: 17,
+                          fontFamily: ConstantFonts.sfProMedium,
                           color: CupertinoColors.systemPurple
                         ),),
                         const SizedBox(
@@ -227,8 +229,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     ? '  Enter Product Name\n'  : '  Select Product\n',
                 style: TextStyle(
                     fontSize: 17,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: ConstantFonts.sfProRegular),
+                    fontFamily: ConstantFonts.sfProMedium),
               ),
               isManualEntry
                   ? TextFiledWidget(
@@ -274,14 +275,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                     searchDecoration: InputDecoration(
                       hintText: "Select Product",
                       hintStyle: TextStyle(
-                        fontFamily: ConstantFonts.sfProRegular,
-                        fontWeight: FontWeight.w600,
+                        fontFamily: ConstantFonts.sfProMedium,
                       ),
                     ),
 
                     listTextStyle: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontFamily: ConstantFonts.sfProRegular,
+                        fontFamily: ConstantFonts.sfProMedium,
                         fontSize: 16),
                     validator: (value) {
                       if (value == null) {

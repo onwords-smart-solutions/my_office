@@ -129,8 +129,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         title: Text(widget.customerInfo['name'].toString(),
             style: TextStyle(
                 color: Colors.white,
-                fontFamily: ConstantFonts.sfProRegular,
-                fontWeight: FontWeight.w700,
+                fontFamily: ConstantFonts.sfProMedium,
                 fontSize: 18.0)),
         titleSpacing: 0.0,
         actions: [
@@ -142,7 +141,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                 // print(widget.customerInfo['phone_number'].toString());
               },
               icon: const Icon(
-                Icons.note_alt_outlined,
+                CupertinoIcons.bag_fill_badge_plus,
                 color: Colors.white,
                 size: 30,
               )),
@@ -153,7 +152,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                 // print(widget.customerInfo['phone_number'].toString());
               },
               icon: const Icon(
-                Icons.call,
+                CupertinoIcons.phone_solid,
                 color: Colors.lightBlueAccent,
                 size: 30,
               )),
@@ -167,11 +166,11 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                 // print(widget.customerInfo['phone_number'].toString());
               },
               icon: const Icon(
-                Icons.message,
+                CupertinoIcons.bubble_left_bubble_right_fill,
                 color: Colors.greenAccent,
                 size: 30,
-              )),
-
+              ),
+          ),
         ],
       ),
       body: Padding(
@@ -268,14 +267,14 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
             //Dropdown to change "State" of customers
             DropdownButton(
               value: dropDownValue,
-              elevation: 15,
+              elevation: 12,
+              borderRadius: BorderRadius.circular(15),
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 17,
-                  fontFamily: ConstantFonts.sfProRegular),
+                  fontFamily: ConstantFonts.sfProMedium),
               icon: const Icon(
                 Icons.arrow_drop_down_circle_outlined,
-                color: Colors.black,
               ),
               onChanged: (String? value) {
                 setState(() {
@@ -356,7 +355,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           cursorColor: Colors.purple,
           scrollPhysics: const ClampingScrollPhysics(),
           style:
-              TextStyle(fontFamily: ConstantFonts.poppinsBold, fontSize: 13.0),
+              TextStyle(fontFamily: ConstantFonts.sfProMedium, fontSize: 14.0),
         ),
       ),
       contents: Container(
@@ -369,7 +368,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           cursorColor: Colors.purple,
           scrollPhysics: const ClampingScrollPhysics(),
           style: TextStyle(
-              fontFamily: ConstantFonts.sfProRegular, fontSize: 14.0),
+              fontFamily: ConstantFonts.sfProMedium, fontSize: 14.0),
         ),
       ),
       node: TimelineNode(
@@ -385,9 +384,13 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
 
   void addStateToFirebase() async {
     if (dropDownValue.isEmpty) {
-      const snackBar = SnackBar(
+      var snackBar = SnackBar(
         content: Text(
           'Select one state to change',
+          style: TextStyle(
+            fontSize: 17,
+            fontFamily: ConstantFonts.sfProMedium
+          ),
           textAlign: TextAlign.center,
         ),
         backgroundColor: Colors.red,

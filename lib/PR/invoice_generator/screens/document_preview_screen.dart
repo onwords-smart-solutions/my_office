@@ -212,12 +212,12 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Preview of Document'),
+        title: Text('Preview of Document',style: TextStyle(fontSize: 22, color: Colors.white,fontFamily: ConstantFonts.sfProMedium),),
         centerTitle: true,
         elevation: 0,
         backgroundColor: ConstantColor.backgroundColor,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
+          icon: const Icon(Icons.arrow_back_ios_new,color: Colors.white),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -248,7 +248,6 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
               child: Container(
                 color: ConstantColor.background1Color,
                 child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
                   child: Column(
                     children: [
                       /// Document Details
@@ -274,9 +273,9 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                               ),
                               child: Column(
                                 children: [
-                                  const Text('Customer Details',
+                                  Text('Customer Details',
                                       style: TextStyle(
-                                          fontWeight: FontWeight.w600,
+                                        fontFamily: ConstantFonts.sfProMedium,
                                           color: Colors.black)),
                                   createCustomerDetails(
                                     width,
@@ -320,7 +319,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                             ),
                             const VerticalDivider(
                               color: Colors.black,
-                              width: 2,
+                              width: 1,
                             ),
                             Container(
                               height: height * 0.2,
@@ -334,20 +333,20 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text('      Document Details',
+                                   Text('      Document Details',
                                       style: TextStyle(
-                                          fontWeight: FontWeight.w600,
+                                        fontFamily: ConstantFonts.sfProMedium,
                                           color: Colors.black)),
                                   Text(
                                       ' Doc-Type : #${customerDetails.docType}',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w600,
+                                      style:  TextStyle(
+                                          fontFamily: ConstantFonts.sfProMedium,
                                           color: Colors.black,
                                           fontSize: 10)),
                                   Text(
                                       ' Category : ${customerDetails.docCategory}',
-                                      style: const TextStyle(
-                                          fontWeight: FontWeight.w600,
+                                      style:  TextStyle(
+                                          fontFamily: ConstantFonts.sfProMedium,
                                           color: Colors.black,
                                           fontSize: 10)),
                                 ],
@@ -522,18 +521,18 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
           child: Center(
             child: Text(
               title,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
+              style:  TextStyle(
+                fontFamily: ConstantFonts.sfProMedium
               ),
             ),
           ),
         ),
         isTrue
-            ? VerticalDivider(
-                color: Colors.black.withOpacity(0.4),
+            ? const VerticalDivider(
+                color: Colors.black,
                 endIndent: 23,
                 indent: 23,
-                thickness: 3,
+                thickness: 2,
               )
             : const SizedBox(),
       ],
@@ -546,6 +545,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
           (cell) {
             final style = TextStyle(
               fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
+              fontFamily: ConstantFonts.sfProMedium,
             );
             return Padding(
               padding: const EdgeInsets.all(8),
@@ -572,8 +572,8 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
               width: 60,
               child: Text(
                 key,
-                style: const TextStyle(
-                    fontWeight: FontWeight.w600,
+                style: TextStyle(
+                  fontFamily: ConstantFonts.sfProMedium,
                     color: Colors.black,
                     fontSize: 10),
               ),
@@ -585,8 +585,8 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                 physics: const BouncingScrollPhysics(),
                 child: Text(
                   value,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w500,
+                  style:  TextStyle(
+                    fontFamily: ConstantFonts.sfProMedium,
                     color: Colors.black,
                     fontSize: 10,
                   ),
@@ -613,8 +613,8 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
               width: 150,
               child: Text(
                 key,
-                style: const TextStyle(
-                    fontWeight: FontWeight.w600,
+                style:  TextStyle(
+                  fontFamily: ConstantFonts.sfProMedium,
                     color: Colors.black,
                     fontSize: 12),
               ),
@@ -625,14 +625,16 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
               width: 150,
               child: Text(value,
                   textAlign: TextAlign.end,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w500,
+                  style:  TextStyle(
+                    fontFamily: ConstantFonts.sfProMedium,
                     color: Colors.black,
                     fontSize: 10,
-                  )),
+                  ),
+              ),
             ),
           ],
-        ));
+        ),
+    );
   }
 
   _showDialog(BuildContext context, ClientModel clientModel,
@@ -652,8 +654,8 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                   "Document Details\n",
                   style: TextStyle(
                       color: ConstantColor.backgroundColor,
-                      fontFamily: ConstantFonts.sfProRegular,
-                      fontWeight: FontWeight.w600),
+                      fontFamily: ConstantFonts.sfProMedium,
+                  fontSize: 16),
                 ),
                 content: Material(
                   color: Colors.transparent,
@@ -678,10 +680,10 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                         height: 5,
                       ),
                       clientModel.docType != 'QUOTATION'
-                          ? const Text(
+                          ?  Text(
                               '  Date For Installation',
                               style: TextStyle(
-                                  fontWeight: FontWeight.w600,
+                                fontFamily: ConstantFonts.sfProMedium,
                                   fontSize: 13,
                                   color: Colors.black),
                             )
@@ -696,19 +698,16 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                               maxLength: 15,
                               readOnly: true,
                               style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontFamily: ConstantFonts.sfProRegular,
+                                fontFamily: ConstantFonts.sfProMedium,
                               ),
                               decoration: InputDecoration(
                                 counterText: '',
                                 hintText: 'Estimated Date',
                                 hintStyle: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: ConstantFonts.sfProRegular,
+                                  fontFamily: ConstantFonts.sfProMedium,
                                 ),
                                 labelStyle: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: ConstantFonts.sfProRegular,
+                                  fontFamily: ConstantFonts.sfProMedium,
                                 ),
                                 border: myInputBorder(),
                                 enabledBorder: myInputBorder(),
@@ -751,9 +750,8 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                     child: Text(
                       "Cancel",
                       style: TextStyle(
-                          fontWeight: FontWeight.w600,
                           color: Colors.black,
-                          fontFamily: ConstantFonts.sfProRegular),
+                          fontFamily: ConstantFonts.sfProMedium),
                     ),
                     onPressed: () async {
                       Navigator.of(context).pop();
@@ -763,9 +761,8 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                     child: Text(
                       "Save",
                       style: TextStyle(
-                          fontWeight: FontWeight.w600,
                           color: Colors.black,
-                          fontFamily: ConstantFonts.sfProRegular),
+                          fontFamily: ConstantFonts.sfProMedium),
                     ),
                     onPressed: () async {
                       if (formKey.currentState!.validate()) {

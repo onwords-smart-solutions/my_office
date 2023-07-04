@@ -73,7 +73,7 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
         .then((entry) async {
       if (entry.snapshot.value != null) {
         final data = entry.snapshot.value as Map<Object?, Object?>;
-        entryTime = data.keys.last.toString();
+        entryTime = data.keys.first.toString();
       } else {
         entryTime = await checkVirtualAttendance(uid);
       }

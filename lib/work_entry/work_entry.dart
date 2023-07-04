@@ -270,21 +270,31 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       unselectedLabelColor: ConstantColor.blackColor,
       automaticIndicatorColorAdjustment: true,
       labelStyle: TextStyle(
-          fontWeight: FontWeight.w800, fontFamily: ConstantFonts.sfProRegular),
+          fontSize: 17,fontFamily: ConstantFonts.sfProMedium),
       tabs: [
         Container(
           height: height * 0.05,
           width: width * 0.5,
           decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(10))),
-          child: const Center(child: Text('Work Entry')),
+          child: Center(child: Text('Work Entry',
+          style: TextStyle(
+            fontSize: 17,
+            fontFamily: ConstantFonts.sfProMedium,
+          ),
+          ),),
         ),
         Container(
           height: height * 0.05,
           width: width * 0.6,
           decoration: const BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(10))),
-          child: const Center(child: Text('Work History')),
+          child: Center(child: Text('Work History',
+            style: TextStyle(
+              fontSize: 17,
+              fontFamily: ConstantFonts.sfProMedium,
+            ),
+          ),),
         ),
       ],
     );
@@ -379,16 +389,16 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                               LengthLimitingTextInputFormatter(3),
                             ],
                             style: TextStyle(
+                              height: 1,
                                 color: Colors.black,
-                                fontFamily: ConstantFonts.sfProRegular),
+                                fontFamily: ConstantFonts.sfProMedium),
                             controller: _percentController,
                             keyboardType: TextInputType.number,
                             textInputAction: TextInputAction.done,
                             decoration: InputDecoration(
                               // fillColor: const Color(0xffFBF8FF),
                               hintStyle: TextStyle(
-                                  fontFamily: ConstantFonts.sfProRegular,
-                                  fontWeight: FontWeight.w900,
+                                  fontFamily: ConstantFonts.sfProMedium,
                                   fontSize: 16,
                                   color: Colors.black54
                                 // (0xffFBF8FF)
@@ -409,12 +419,10 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                               }
                             },
                           ),
-                          btnOkColor: Colors.black87,
                           btnOkText: 'Done',
                           buttonsTextStyle: TextStyle(
-                            // color: ConstantColor.blackColor,
-                              fontWeight: FontWeight.w900,
-                              fontFamily: ConstantFonts.sfProRegular),
+                            fontSize: 17,
+                              fontFamily: ConstantFonts.sfProMedium),
                           btnOkOnPress: () {
                             setState(() {
                               // debugPrint(_percentController.text.toString());
@@ -447,13 +455,13 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                                 ? '--'
                                 : _percentController.text,
                             style: TextStyle(
-                              fontFamily: ConstantFonts.sfProRegular,
+                              fontFamily: ConstantFonts.sfProMedium,
                             ),
                           ),
                           Text(
                             'Percentage',
                             style: TextStyle(
-                              fontFamily: ConstantFonts.sfProRegular,
+                              fontFamily: ConstantFonts.sfProMedium,
                             ),
                           )
                         ],
@@ -677,11 +685,11 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
         })
         : Center(
       child: Text(
-        'No Works Completed',
+        'No Works Completed!!',
         style: TextStyle(
-            fontFamily: ConstantFonts.sfProRegular,
+            fontFamily: ConstantFonts.sfProMedium,
             color: Colors.black,
-            fontWeight: FontWeight.bold),
+        fontSize: 17),
       ),
     );
   }
@@ -699,9 +707,8 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       center: Text(
         percentage,
         style: TextStyle(
-            fontFamily: ConstantFonts.sfProRegular,
-            color: Colors.white,
-            fontWeight: FontWeight.bold),
+            fontFamily: ConstantFonts.sfProMedium,
+            fontSize: 17),
       ),
     );
   }
@@ -713,7 +720,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
         name,
         style: TextStyle(
             fontSize: size,
-            fontFamily: ConstantFonts.sfProRegular,
+            fontFamily: ConstantFonts.sfProMedium,
             color: ConstantColor.blackColor),
       ),
     );
@@ -740,12 +747,13 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
         style: TextStyle(
             fontSize: height * 0.02,
             color: Colors.black,
-            fontFamily: ConstantFonts.sfProRegular),
+            fontFamily: ConstantFonts.sfProMedium),
         decoration: InputDecoration(
           fillColor: Colors.white.withOpacity(0.5),
           border: InputBorder.none,
           hintText: hintName,
-          hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
+          hintStyle: TextStyle(color: Colors.black.withOpacity(0.5),
+          fontFamily: ConstantFonts.sfProMedium),
           filled: true,
           // fillColor: Colors.transparent,
           contentPadding:
@@ -776,7 +784,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
           child: Center(
             child: Text(
               message,
-              style: TextStyle(fontFamily: ConstantFonts.sfProRegular),
+              style: TextStyle(fontFamily: ConstantFonts.sfProMedium,fontSize: 17),
             ),
           ),
         ),
@@ -825,7 +833,7 @@ class ButtonWidget extends StatelessWidget {
             Text(
               val,
               style: TextStyle(
-                  fontFamily: ConstantFonts.sfProRegular,
+                  fontFamily: ConstantFonts.sfProMedium,
                   color: Colors.black
               ),
             ),
@@ -833,7 +841,7 @@ class ButtonWidget extends StatelessWidget {
               title,
               style: TextStyle(
                 color: Colors.black,
-                fontFamily: ConstantFonts.sfProRegular,
+                fontFamily: ConstantFonts.sfProMedium,
               ),
             ),
           ],

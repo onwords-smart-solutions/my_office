@@ -102,7 +102,6 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
             //DISPLAYING ALL LEAVE REQUEST
             return ListView.builder(
                 itemCount: staffLeaves.length,
-                physics: const BouncingScrollPhysics(),
                 itemBuilder: (listCtx, index) {
                   if (staffLeaves[index]
                       .status
@@ -399,7 +398,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
     return AutoSizeText(
       name,
       style: TextStyle(
-          fontSize: 16,
+          fontSize: 17,
           fontFamily: ConstantFonts.sfProMedium,
           color: ConstantColor.blackColor),
     );
@@ -430,7 +429,8 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                   style: TextStyle(
                       fontSize: 17,
                       fontFamily: ConstantFonts.sfProMedium,
-                      color: ConstantColor.backgroundColor),
+                      color: ConstantColor.backgroundColor
+                  ),
                 ),
               ),
             ),
@@ -461,7 +461,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
       child: Text(
         ':  $reason',
         style: TextStyle(
-            fontSize: 16,
+            fontSize: 17,
             fontFamily: ConstantFonts.sfProMedium,
             color: ConstantColor.blackColor),
         maxLines: 1,

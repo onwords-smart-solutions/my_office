@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
@@ -65,15 +66,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextSpan(
                     text: 'Hi There!!\n',
                     style: TextStyle(
-                      fontFamily: ConstantFonts.sfProRegular,
+                      fontFamily: ConstantFonts.sfProMedium,
                       color: ConstantColor.blackColor,
                       fontSize: height * 0.035,
                     ),
                   ),
                   TextSpan(
-                    text: 'Welcome To Team Onwords',
+                    text: 'Welcome To Team Onwords😎',
                     style: TextStyle(
-                      fontFamily: ConstantFonts.sfProRegular,
+                      fontFamily: ConstantFonts.sfProMedium,
                       color: ConstantColor.blackColor,
                       fontSize: height * 0.020,
                     ),
@@ -117,11 +118,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(
                             fontSize: height * 0.02,
                             color: Colors.black,
-                            fontFamily: ConstantFonts.sfProRegular),
+                            fontFamily: ConstantFonts.sfProMedium),
                         decoration: InputDecoration(
-                          prefixIcon: const Icon(Iconsax.user),
+                          prefixIcon: const Icon(CupertinoIcons.mail_solid),
                           border: InputBorder.none,
                           hintText: 'Email',
+                          hintStyle: TextStyle(
+                              fontSize: height * 0.02,
+                              color: Colors.grey,
+                              fontFamily: ConstantFonts.sfProMedium
+                          ),
                           filled: true,
                           fillColor: ConstantColor.background1Color,
                           focusedBorder: UnderlineInputBorder(
@@ -163,12 +169,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(
                             fontSize: height * 0.02,
                             color: Colors.black,
-                            fontFamily: ConstantFonts.sfProRegular),
+                            fontFamily: ConstantFonts.sfProMedium),
                         decoration: InputDecoration(
-                          prefixIcon: const Icon(Iconsax.lock),
+                          prefixIcon: const Icon(CupertinoIcons.padlock_solid),
                           border: InputBorder.none,
                           hintText: 'Password',
                           filled: true,
+                          hintStyle: TextStyle(
+                              fontSize: height * 0.02,
+                              color: Colors.grey,
+                              fontFamily: ConstantFonts.sfProMedium
+                          ),
                           fillColor: ConstantColor.background1Color,
                           contentPadding: const EdgeInsets.only(
                               left: 14.0, bottom: 6.0, top: 8.0),
@@ -298,9 +309,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 : Text(
                     'Log in',
                     style: TextStyle(
-                      fontFamily: ConstantFonts.sfProRegular,
+                      fontFamily: ConstantFonts.sfProMedium,
                       color: ConstantColor.background1Color,
-                      fontSize: height * 0.030,
+                      fontSize: height * 0.033,
                     ),
                   ),
           ),
@@ -355,8 +366,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Text(
               'Forgot password?',
               style: TextStyle(
-                fontFamily: ConstantFonts.sfProRegular,
-                fontWeight: FontWeight.w700,
+                fontFamily: ConstantFonts.sfProMedium,
                 color: ConstantColor.pinkColor,
                 fontSize: height * 0.02,
               ),

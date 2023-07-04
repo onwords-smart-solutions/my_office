@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
 import 'package:provider/provider.dart';
@@ -75,12 +76,12 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Discount and Amount Info'),
+        title:  Text('Discount and Amount Info',style: TextStyle(fontSize: 22, fontFamily: ConstantFonts.sfProMedium, color: Colors.white),),
         centerTitle: true,
         elevation: 0,
         backgroundColor: ConstantColor.backgroundColor,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
+          icon: const Icon(Icons.arrow_back_ios_new,color: Colors.white),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -140,10 +141,9 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                               children: [
                                 Text('Available Discount - $discountPercentage %',
                                 style: TextStyle(
-                                  fontFamily: ConstantFonts.sfProRegular,
-                                  fontWeight: FontWeight.w600,
+                                  fontFamily: ConstantFonts.sfProMedium,
                                   color: ConstantColor.backgroundColor,
-                                  fontSize: 14
+                                  fontSize: 15
                                 ),),
                                 const SizedBox(height: 15),
                                 TextFiledWidget(
@@ -185,8 +185,8 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                                 Text(
                                   "GST Need : ",
                                   style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: height * 0.020,
+                                    fontFamily: ConstantFonts.sfProMedium,
+                                      fontSize: height * 0.019,
                                       color: Colors.black),
                                 ),
                                 Checkbox(
@@ -284,11 +284,11 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
         child: ListTile(
           title: Text(
             title,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(fontFamily: ConstantFonts.sfProBold),
           ),
           trailing: Text(
             value,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(fontFamily: ConstantFonts.sfProBold,fontSize: 15,color: CupertinoColors.systemPurple),
           ),
         ),
       ),

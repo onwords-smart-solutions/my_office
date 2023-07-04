@@ -35,7 +35,6 @@ class InvAndQtnPdf {
     required this.percentage,
   });
 
-
   Future<File> generate(ClientModel clientModel,
       List<ListOfTable> productDetailsModel, Uint8List pic) async {
     final pdf = Document();
@@ -64,10 +63,10 @@ class InvAndQtnPdf {
           productTable(productDetailsModel),
           Divider(),
           totalAmountDetails(total, subTotal, cgst, sgst, discount, advance,
-              grandTotal, amountToPay, needGst, percentage,qrImage),
-          SizedBox(height: 0.3 * PdfPageFormat.cm),
+              grandTotal, amountToPay, needGst, percentage, qrImage),
+          buildSizedBox(0.3),
           Divider(),
-          buildTermsAndConditions(),
+          buildTermsAndConditions(clientModel),
         ],
         footer: (context) => buildFooter(clientModel, needGst),
       ),
@@ -101,7 +100,8 @@ class InvAndQtnPdf {
                         color: PdfColors.red500,
                         fontSize: 20.0)),
                 Text("Date :  ${Utils.formatDate(DateTime.now())}",
-                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold)),
+                    style: TextStyle(
+                        fontSize: 10, fontWeight: FontWeight.bold)),
                 SizedBox(height: 3),
                 customerDetails.docType == "QUOTATION"
                     ? Text(
@@ -138,31 +138,34 @@ class InvAndQtnPdf {
     crossAxisAlignment: CrossAxisAlignment.start,
     mainAxisAlignment: MainAxisAlignment.start,
     children: [
-      createText('To', customerDetails.name, false, 10,0),
+      createText('To', customerDetails.name, false, 10, 0),
       SizedBox(height: 3),
-      createText('Address', customerDetails.address, false, 10,0),
+      createText('Address', customerDetails.address, false, 10, 0),
       SizedBox(height: 3),
-      createText('Location', customerDetails.street, false, 10,0),
-      createText('Phone', customerDetails.phone.toString(), false, 10,0),
+      createText('Location', customerDetails.street, false, 10, 0),
+      createText('Phone', customerDetails.phone.toString(), false, 10, 0),
       SizedBox(height: 1 * PdfPageFormat.mm),
-      customerDetails.gst.toString().isNotEmpty ? createText('GSTIN', customerDetails.gst.toString(), false, 10,0): SizedBox.shrink(),
+      customerDetails.gst.toString().isNotEmpty
+          ? createText(
+          'GSTIN', customerDetails.gst.toString(), false, 10, 0)
+          : SizedBox.shrink(),
     ],
   );
 
   Widget supplierDetails() => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      createText('From', 'Onwords Smart Solutions', false, 10 ,0),
+      createText('From', 'Onwords Smart Solutions', false, 10, 0),
       SizedBox(height: 3),
-      createText('Address', '1/1 RR Garden, Zamin Muthur,', false, 10,0),
+      createText('Address', '1/1 RR Garden, Zamin Muthur,', false, 10, 0),
       SizedBox(height: 3),
-      createText('Location',
-          'Pollachi, Coimbatore,\nTamilNadu - 642 005', false, 10,0),
+      createText('Location', 'Pollachi, Coimbatore,\nTamilNadu - 642 005',
+          false, 10, 0),
       SizedBox(height: 3),
-      createText('Phone', '+91 7708630275', false, 10,0),
-      createText('Email', 'cs@onwords.in', false, 10,0),
-      createText('Website', 'www.onwords.in', false, 10,0),
-      createText('GSTIN', '33BTUPN5784J1ZT', false, 10,0),
+      createText('Phone', '+91 7708630275', false, 10, 0),
+      createText('Email', 'cs@onwords.in', false, 10, 0),
+      createText('Website', 'www.onwords.in', false, 10, 0),
+      createText('GSTIN', '33BTUPN5784J1ZT', false, 10, 0),
     ],
   );
 
@@ -229,8 +232,7 @@ class InvAndQtnPdf {
       int amountToPay,
       bool needGst,
       int percentage,
-      pw.MemoryImage img
-      ) {
+      pw.MemoryImage img) {
     const vatPercent = 0.09;
     return Container(
       // alignment: Alignment.centerRight,
@@ -244,19 +246,27 @@ class InvAndQtnPdf {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                finalTotal('Total', Utils.formatPrice(total.toDouble()),
-                  false, 10),
-                discount != 0 ? finalTotal('Discount $percentage%',
-                  Utils.formatPrice(discount.toDouble()), false, 10) : SizedBox.shrink(),
-                finalTotal('SubTotal',
-                  Utils.formatPrice(subTotal.toDouble()), false, 10),
+                finalTotal(
+                    'Total', Utils.formatPrice(total.toDouble()), false, 10),
+                discount != 0
+                    ? finalTotal('Discount $percentage%',
+                    Utils.formatPrice(discount.toDouble()), false, 10)
+                    : SizedBox.shrink(),
+                finalTotal('SubTotal', Utils.formatPrice(subTotal.toDouble()),
+                    false, 10),
                 needGst
-                    ? finalTotal('CGST %',
-                  Utils.formatPrice(cgst.toDouble().roundToDouble()), false, 10)
+                    ? finalTotal(
+                    'CGST %',
+                    Utils.formatPrice(cgst.toDouble().roundToDouble()),
+                    false,
+                    10)
                     : SizedBox(),
                 needGst
-                    ? finalTotal('SGST %',
-                    Utils.formatPrice(sgst.toDouble().roundToDouble()), false, 10)
+                    ? finalTotal(
+                    'SGST %',
+                    Utils.formatPrice(sgst.toDouble().roundToDouble()),
+                    false,
+                    10)
                     : SizedBox(),
                 SizedBox(height: 2 * PdfPageFormat.mm),
                 Container(height: 1, width: 180, color: PdfColors.grey400),
@@ -274,11 +284,13 @@ class InvAndQtnPdf {
                     ? Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      advance != 0 ? finalTotal(
+                      advance != 0
+                          ? finalTotal(
                           'Advanced',
                           Utils.formatPrice(advance.toDouble()),
                           false,
-                          10): SizedBox.shrink(),
+                          10)
+                          : SizedBox.shrink(),
                       SizedBox(height: 2 * PdfPageFormat.mm),
                       Container(
                           height: 1,
@@ -319,18 +331,16 @@ class InvAndQtnPdf {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       createText('Acc.Name', 'Onwords', false, 10, 0),
-      createText('Bank', 'HDFC', false, 10,0),
-      createText('Acc.No', '50-2000-6540-3656', false, 10,0),
-      createText('IFSC Code', 'HDFC0000787', false, 10,0),
-      createText('UPI', 'onwordspay@ybl', false, 10,0),
+      createText('Bank', 'HDFC', false, 10, 0),
+      createText('Acc.No', '50-2000-6540-3656', false, 10, 0),
+      createText('IFSC Code', 'HDFC0000787', false, 10, 0),
+      createText('UPI', 'onwordspay@ybl', false, 10, 0),
       SizedBox(height: 3 * PdfPageFormat.mm),
-      Row(
-          children: [
-            createText('Scan To Pay', '', true, 10,0),
-            SizedBox(width: 1 * PdfPageFormat.mm),
-            qr,
-          ]
-      )
+      Row(children: [
+        createText('Scan To Pay', '', true, 10, 0),
+        SizedBox(width: 1 * PdfPageFormat.mm),
+        qr,
+      ])
     ],
   );
 
@@ -353,64 +363,156 @@ class InvAndQtnPdf {
     ],
   );
 
-  Widget buildTermsAndConditions() => Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        buildBodyText("Terms and Conditions", true),
-        buildBodyText(
-            "It is recommended by the Company to use INVERTER (UPS) of 1KVA for our control modules and theSame shall be in Client's  Scope.",
-            true),
-        buildBodyText(
-            "The following facilities and services are to be provided by the client.",
-            true),
-        buildBodyText(
-            "1. Site Preparation including fabricator,carpentry, welder, civil and Masonry work.\n"
-                "2. Provision for suitable Wiring, Electricity Supply with suitable plugs, socket etc.\n"
-                "3. Cable identification and Termination of the cables laid by Client's Contractor on the Distribution Board etc. Dedicated Earth Connection required.\n"
-                "4. Wire cost and material cost, other than motor and control box which comes within the package.",
-            false),
-        Center(
-          child: buildBodyText(
-              "*** Any additional work on behalf of client  will be quoted extra separately ***",
-              true),
-        ),
-        buildBodyText("Warranty:", true),
-        buildBodyText(
-            'Service and replacement warranty will be provided for the products up to 1 year from the date of installation.',
-            false),
-        buildBodyText(
-            'The warranty will  cover the failures for the following reasons:',
-            true),
-        buildBodyText(
-            "1. Damage or defect caused by transportation, accident, misuse, lack of maintenance, improper usage or negligence on the part of Client; \n"
-                "2. Wilful damage or negligence, normal wear and tear;\n"
-                "Abuse or misuse of equipment/product;\n"
-                "3. Damage or defect caused by  earthquake  or other similar natural disasters;\n"
-                "4. Damage or defect caused by alteration, modification, conversion not authorised by Company in writing;\n"
-                "5. Repairs carried out by personnel other than Company's authorised service personnel's;\n"
-                "6. Defects or damages due to any other external means or causes are not covered under warranty.",
-            false),
-        buildBodyText("Payment:", true),
-        buildBodyText(
-            "50% of order amount should be paid as advance, balance 50% should be paid at the date of installation, There should not be any negotiation in final payment before handing over the Remote and other accessories.",
-            false),
-        buildBodyText("Delivery Period:", true),
-        buildBodyText(
-            "1-2 weeks after receipt of commercially & technically clear order with advance of 50%.",
-            false),
-        buildBodyText("Cancellation of Order: ", true),
-        buildBodyText(
-            "If the Order placed is cancelled by Client then the cancellation charges of 30% of the Order value shall be charged as  a Termination fee.",
-            false),
-        buildBodyText("Scope of Work: ", true),
-        buildBodyText(
-            "1. Instruction and Supervision of conduit work at the initial level and there after completion of conduit work and wiring  work  final inspection will be done.\n"
-                "2. Once the contractor finishes the Electrical work and civil work, we will start Installation of GateAutomation Modules.\n"
-                "3. Programming of all the above mentioned components.\n"
-                "4. Delivery to the client and mobile application integration if needed.",
-            false),
-      ]);
+  Widget buildTermsAndConditions(
+      ClientModel customerDetails,
+      ) =>
+      customerDetails.docCategory == 'GA'
+          ? Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            buildBodyText("Terms and Conditions", true),
+            buildSizedBox(0.1),
+            buildBodyText(
+                "It is recommended by the Company to use INVERTER (UPS) of 1KVA for our control modules and theSame shall be in Client's  Scope.",
+                true),
+            buildSizedBox(0.2),
+            buildBodyText(
+                "The following facilities and services are to be provided by the client.",
+                true),
+            buildSizedBox(0.1),
+            buildBodyText(
+                "1. Site Preparation including fabricator,carpentry, welder, civil and Masonry work.\n"
+                    "2. Provision for suitable Wiring, Electricity Supply with suitable plugs, socket etc.\n"
+                    "3. Cable identification and Termination of the cables laid by Client's Contractor on the Distribution Board etc. Dedicated Earth Connection required.\n"
+                    "4. Wire cost and material cost, other than motor and control box which comes within the package.",
+                false),
+            buildSizedBox(0.1),
+            buildBodyText(
+                "*** Any additional work on behalf of client  will be quoted extra separately ***",
+                true),
+            buildSizedBox(0.2),
+            buildBodyText("Warranty:", true),
+            buildSizedBox(0.1),
+            buildBodyText(
+                'Service and replacement warranty will be provided for the products up to 1 year from the date of installation.',
+                false),
+            buildSizedBox(0.2),
+            buildBodyText(
+                'The warranty will cover the failures for the following reasons:',
+                true),
+            buildSizedBox(0.1),
+            buildBodyText(
+                "1. Defects caused at the time of installation \n"
+                    "2. Defects caused by manufacturer;\n"
+                    "3. Defects caused by Application / Programming error;\n",
+                false),
+            buildSizedBox(0.2),
+            buildBodyText(
+                'The warranty will not cover the failures for the following reasons:',
+                true),
+            buildSizedBox(0.1),
+            buildBodyText(
+                "1. Damage or defect caused by transportation, accident, misuse, lack of maintenance, improper usage or negligence on the part of Client; \n"
+                    "2. Wilful damage or negligence, normal wear and tear;\n"
+                    "Abuse or misuse of equipment/product;\n"
+                    "3. Damage or defect caused by  earthquake  or other similar natural disasters;\n"
+                    "4. Damage or defect caused by alteration, modification, conversion not authorised by Company in writing;\n"
+                    "5. Repairs carried out by personnel other than Company's authorised service personnel's;\n"
+                    "6. Defects or damages due to any other external means or causes are not covered under warranty.",
+                false),
+            buildSizedBox(0.2),
+            buildBodyText("Payment:", true),
+            buildSizedBox(0.1),
+            buildBodyText(
+                "50% of order amount should be paid as advance, balance 50% should be paid at the date of installation, There should not be any negotiation in final payment before handing over the Remote and other accessories.",
+                false),
+            buildSizedBox(0.2),
+            buildBodyText("Delivery Period:", true),
+            buildSizedBox(0.1),
+            buildBodyText(
+                "1-2 weeks after receipt of commercially & technically clear order with advance of 50%.",
+                false),
+            buildSizedBox(0.2),
+            buildBodyText("Cancellation of Order: ", true),
+            buildSizedBox(0.1),
+            buildBodyText(
+                "If the Order placed is cancelled by Client then the cancellation charges of 30% of the Order value shall be charged as  a Termination fee.",
+                false),
+            buildSizedBox(0.2),
+            buildBodyText("Scope of Work: ", true),
+            buildSizedBox(0.1),
+            buildBodyText(
+                "1. Instruction and Supervision of conduit work at the initial level and there after completion of conduit work and wiring  work  final inspection will be done.\n"
+                    "2. Once the contractor finishes the Electrical work and civil work, we will start Installation of GateAutomation Modules.\n"
+                    "3. Programming of all the above mentioned components.\n"
+                    "4. Delivery to the client and mobile application integration if needed.",
+                false),
+          ])
+          : customerDetails.docCategory == 'SS'
+          ? Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            buildBodyText("Terms and Conditions", true),
+            buildSizedBox(0.1),
+            buildBodyText(
+                "Provision for suitable Wiring, Electricity Supply with suitable plugs, socket etc.",
+                false),
+            buildBodyText(
+                "**Any additional work on behalf of client will be quoted extra separately**",
+                false),
+            buildSizedBox(0.2),
+            buildBodyText("Warranty:", true),
+            buildSizedBox(0.1),
+            buildBodyText(
+                'Service and replacement warranty will be provided for the products up to 2 years from the date of installation.',
+                false),
+            buildSizedBox(0.2),
+            buildBodyText(
+                'The warranty will  cover the failures for the following reasons:',
+                true),
+            buildSizedBox(0.1),
+            buildBodyText(
+                "1. Damage or defect caused by transportation, accident, misuse, lack of maintenance, improper usage or negligence on the part of Client; \n"
+                    "2. Willful damage or negligence, normal wear and tear; \n"
+                    "Abuse or misuse of equipment/product;\n"
+                    "3. Damage or defect caused by  earthquake  or other similar natural disasters;\n"
+                    "4. Damage or defect caused by alteration, modification, conversion not authorised by Company in writing;\n"
+                    "5. Repairs carried out by personnel other than Company's authorised service personnel's;\n"
+                    "6. Defects or damages due to any other external means or causes are not covered under warranty.",
+                false),
+            buildSizedBox(0.2),
+            buildBodyText("Payment:", true),
+            buildSizedBox(0.1),
+            buildBodyText(
+                "50% of order amount should be paid as advance, balance 50% should be paid at the date of installation, There should not be any negotiation in final payment before handing over the Remote and other accessories.",
+                false),
+            buildSizedBox(0.2),
+            buildBodyText("Delivery Period:", true),
+            buildSizedBox(0.1),
+            buildBodyText(
+                "1-2 weeks after receipt of commercially & technically clear order with advance of 50% except Dual curtain(4Weeks)",
+                false),
+            buildSizedBox(0.2),
+            buildBodyText("Cancellation of Order: ", true),
+            buildSizedBox(0.1),
+            buildBodyText(
+                "If the order placed is cancelled by Client then the cancellation charges of 30% of the Order value shall be charged as a Termination fee.",
+                false),
+            buildSizedBox(0.2),
+            buildBodyText("Scope of Work: ", true),
+            buildSizedBox(0.1),
+            buildBodyText(
+                "1. Installation and calibrationDelivery to the client and mobile application of sensors at right places. \n"
+                    "2. Programming of all the above mentioned components. \n"
+                    "3. Delivery to the client and mobile application integration if needed.",
+                false),
+          ])
+          : SizedBox.shrink();
+
+  pw.SizedBox buildSizedBox(double height) =>
+      SizedBox(height: height * PdfPageFormat.cm);
 
   pw.Text buildBodyText(String text, bool isHead) => Text(text,
       style: TextStyle(
@@ -418,8 +520,8 @@ class InvAndQtnPdf {
         fontWeight: isHead ? FontWeight.bold : FontWeight.normal,
       ));
 
-
-  Widget createText(String title, String subTitle, bool isHead, double size,double val) =>
+  Widget createText(String title, String subTitle, bool isHead, double size,
+      double val) =>
       Row(children: [
         Container(
           // color: PdfColors.blue,
@@ -437,32 +539,33 @@ class InvAndQtnPdf {
             textAlign: pw.TextAlign.left,
             style: TextStyle(
               fontSize: size,
-              fontWeight: isHead ? FontWeight.bold : FontWeight.normal,),
+              fontWeight: isHead ? FontWeight.bold : FontWeight.normal,
+            ),
           ),
         ),
       ]);
 }
 
-  Widget finalTotal(String title, String subTitle, bool isHead, double size) =>
-      Row(children: [
-        Container(
-            // color: PdfColors.green,
-            width: 30 * PdfPageFormat.mm,
-            child: Text(
-              title,
-              style: TextStyle(fontSize: size, fontWeight: FontWeight.bold),
-            )),
-        Text(':  '),
-        Container(
-          // color: PdfColors.purple,
-          width: 25 * PdfPageFormat.mm,
+Widget finalTotal(String title, String subTitle, bool isHead, double size) =>
+    Row(children: [
+      Container(
+        // color: PdfColors.green,
+          width: 30 * PdfPageFormat.mm,
           child: Text(
-            subTitle,
-            textAlign:  pw.TextAlign.right,
-            style: TextStyle(
-              fontSize: size,
-              fontWeight: isHead ? FontWeight.bold : FontWeight.normal,),
+            title,
+            style: TextStyle(fontSize: size, fontWeight: FontWeight.bold),
+          )),
+      Text(':  '),
+      Container(
+        // color: PdfColors.purple,
+        width: 25 * PdfPageFormat.mm,
+        child: Text(
+          subTitle,
+          textAlign: pw.TextAlign.right,
+          style: TextStyle(
+            fontSize: size,
+            fontWeight: isHead ? FontWeight.bold : FontWeight.normal,
           ),
         ),
-      ]);
-
+      ),
+    ]);

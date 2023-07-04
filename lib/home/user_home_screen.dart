@@ -451,13 +451,15 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   ? Text(
                       'Checking for update..',
                       style: TextStyle(
-                        fontFamily: ConstantFonts.poppinsBold,
+                        fontFamily: ConstantFonts.sfProBold,
+                        fontSize: 18,
                       ),
                     )
                   : Text(
                       "New Update Available!!",
                       style: TextStyle(
-                        fontFamily: ConstantFonts.poppinsBold,
+                        fontFamily: ConstantFonts.sfProBold,
+                        fontSize: 18,
                       ),
                     ),
               content: isUpdating
@@ -468,9 +470,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           'While prompted to update \nPress Update',
                           style: TextStyle(
                               color: ConstantColor.backgroundColor,
-                              fontSize: 16,
-                              fontFamily: ConstantFonts.sfProRegular,
-                              fontWeight: FontWeight.w600),
+                              fontSize: 17,
+                              fontFamily: ConstantFonts.sfProMedium,),
                         ),
                         Lottie.asset('assets/animations/app_update.json'),
                       ],
@@ -478,7 +479,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   : Text(
                       "You are currently using an outdated version. Update the app to use the latest features..",
                       style: TextStyle(
-                        fontFamily: ConstantFonts.sfProRegular,
+                        fontFamily: ConstantFonts.sfProMedium,
+                        fontSize: 16,
                       ),
                     ),
               actions: [
@@ -505,8 +507,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           "Update Now",
                           style: TextStyle(
                               color: ConstantColor.backgroundColor,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: ConstantFonts.sfProRegular),
+                              fontFamily: ConstantFonts.sfProBold),
                         ),
                       ),
               ],

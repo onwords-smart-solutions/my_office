@@ -33,12 +33,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Product Table'),
+        title: Text('Product Table',style: TextStyle(fontSize: 22,color: Colors.white, fontFamily: ConstantFonts.sfProMedium),),
         centerTitle: true,
         elevation: 0,
         backgroundColor: ConstantColor.backgroundColor,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
+          icon: const Icon(Icons.arrow_back_ios_new,color: Colors.white),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -114,8 +114,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     'Sub Total : $total',
                     maxFontSize: 25,
                     minFontSize: 15,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
+                    style: TextStyle(
+                      fontFamily: ConstantFonts.sfProMedium,
+                      fontSize: 16,
                     ),
                   ),
                 ),
@@ -130,9 +131,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       Text(
                         'Tap on the product to delete..',
                         style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: ConstantFonts.sfProRegular,
+                          fontSize: 15,
+                          fontFamily: ConstantFonts.sfProMedium,
                           color: Colors.black.withOpacity(0.4),
                         ),
                       ),
@@ -165,7 +165,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               FloatingActionButton(
                 backgroundColor: ConstantColor.backgroundColor,
                 child: const Center(
-                  child: Icon(Icons.add),
+                  child: Icon(Icons.add,color: Colors.white),
                 ),
                 onPressed: () {
                   Navigator.push(context,
@@ -191,9 +191,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
             child: Text(
               title,
               style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontFamily: ConstantFonts.sfProRegular,
-                  fontSize: 16),
+                  fontFamily: ConstantFonts.sfProMedium,
+                  fontSize: 17),
             ),
           ),
         ),
@@ -202,7 +201,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 color: Colors.black.withOpacity(0.4),
                 endIndent: 23,
                 indent: 23,
-                thickness: 3,
+                thickness: 2,
               )
             : const SizedBox(),
       ],
@@ -215,6 +214,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
           (cell) {
             final style = TextStyle(
               fontWeight: isHeader ? FontWeight.bold : FontWeight.w600,
+              fontFamily: ConstantFonts.sfProMedium,
+              fontSize: 15
             );
             return Padding(
               padding: const EdgeInsets.all(8),
@@ -240,24 +241,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
               return false;
             },
             child: CupertinoAlertDialog(
-              title: Text(
-                "Delete",
-                style: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: ConstantFonts.sfProRegular,
-                fontSize: 18
-                ),
-              ),
               content: Material(
                 color: Colors.transparent,
                 child: Center(
                   child: Text(
                     'Do you want to delete this product?',
                     style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontFamily: ConstantFonts.sfProRegular,
-                        fontSize: 16),
+                        fontFamily: ConstantFonts.sfProMedium,
+                        fontSize: 17),
                   ),
                 ),
               ),
@@ -266,9 +257,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   child: Text(
                     "Delete",
                     style: TextStyle(
-                        fontWeight: FontWeight.w600,
                         color: Colors.red,
-                        fontFamily: ConstantFonts.sfProRegular),
+                        fontFamily: ConstantFonts.sfProBold),
                   ),
                   onPressed: () async {
                     Provider.of<InvoiceProvider>(context, listen: false)
@@ -280,9 +270,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   child: Text(
                     "Cancel",
                     style: TextStyle(
-                        fontWeight: FontWeight.w600,
                         color: Colors.black,
-                        fontFamily: ConstantFonts.sfProRegular),
+                        fontFamily: ConstantFonts.sfProBold),
                   ),
                   onPressed: () async {
                     Navigator.of(context).pop();

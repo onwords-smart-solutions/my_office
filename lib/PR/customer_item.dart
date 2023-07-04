@@ -151,7 +151,7 @@ class _CustomerItemState extends State<CustomerItem> {
                     customerStatus: widget.customerInfo['customer_state']
                         .toString(),))),
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+        margin: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.0),
         decoration: BoxDecoration(
           color: tileColor,
           boxShadow: [
@@ -160,7 +160,7 @@ class _CustomerItemState extends State<CustomerItem> {
               blurRadius: 8,
             )
           ],
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(15),
         ),
         child: Column(
           children: [
@@ -246,7 +246,7 @@ class _CustomerItemState extends State<CustomerItem> {
         child: Text(
           field,
           style:
-          TextStyle(fontFamily: ConstantFonts.poppinsBold, fontSize: 13.0),
+          TextStyle(fontFamily: ConstantFonts.sfProMedium, fontSize: 14.0),
         ),
       ),
       contents: Container(
@@ -259,7 +259,7 @@ class _CustomerItemState extends State<CustomerItem> {
             Text(
               '$value     ',
               style: TextStyle(
-                fontFamily: ConstantFonts.sfProRegular, fontSize: 13.0,),
+                fontFamily: ConstantFonts.sfProMedium, fontSize: 14.0,),
             ),
             const CircleAvatar(
               radius: 8,
@@ -269,7 +269,7 @@ class _CustomerItemState extends State<CustomerItem> {
         ) : Text(
           value,
           style: TextStyle(
-              fontFamily: ConstantFonts.sfProRegular, fontSize: 13.0),
+              fontFamily: ConstantFonts.sfProMedium, fontSize: 14.0),
         ),
       ),
       node: TimelineNode(

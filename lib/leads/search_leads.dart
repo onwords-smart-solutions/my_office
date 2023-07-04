@@ -295,7 +295,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                   searchUser(value.toString());
                 },
                 style: TextStyle(
-                    fontFamily: ConstantFonts.sfProRegular,
+                    fontFamily: ConstantFonts.sfProMedium,
                     fontSize: 15,
                     color: Colors.black),
               ),
@@ -319,8 +319,8 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
               },
               icon: Icon(
                 isAscending
-                    ? Icons.arrow_upward_rounded
-                    : Icons.arrow_downward_rounded,
+                    ? CupertinoIcons.up_arrow
+                    : CupertinoIcons.down_arrow,
                 size: 20.0,
               ),
               color: const Color(0xffB13FC8),
@@ -345,7 +345,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                   return PopupMenuItem(
                     child: Text(
                       staffs[index],
-                      style: TextStyle(fontFamily: ConstantFonts.sfProRegular),
+                      style: TextStyle(fontFamily: ConstantFonts.sfProMedium, fontSize: 15),
                     ),
                     onTap: () {
                       getCustomerDetail(
@@ -358,7 +358,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                 return PopupMenuItem(
                   child: Text(
                     staffs[index],
-                    style: TextStyle(fontFamily: ConstantFonts.sfProRegular),
+                    style: TextStyle(fontFamily: ConstantFonts.sfProMedium, fontSize: 15),
                   ),
                   onTap: () {
                     getCustomerDetail(
@@ -387,7 +387,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                 return PopupMenuItem(
                   child: Text(
                     sortList[index],
-                    style: TextStyle(fontFamily: ConstantFonts.sfProRegular),
+                    style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
                   ),
                   onTap: () {
                     getCustomerDetail(
@@ -404,7 +404,8 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
           Icons.filter_list_rounded,
           color: Color(0xffB93DCB),
           size: 25.0,
-        ));
+        ),
+    );
   }
 
   Widget buildFilterHint() {
@@ -423,7 +424,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
             child: Text(
               'Leads of $selectedStaff',
               style: TextStyle(
-                  fontFamily: ConstantFonts.sfProRegular, fontSize: 14.0,color: Color(0xffF1F2F8)),
+                  fontFamily: ConstantFonts.sfProMedium, fontSize: 14.0,color: Color(0xffF1F2F8)),
             ),
           ),
           IconButton(
@@ -433,7 +434,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                   sortChoice: sortOption,
                   ascending: isAscending);
             },
-            icon: const Icon(Icons.cancel,size: 20.0,),
+            icon: const Icon(CupertinoIcons.xmark_octagon_fill,size: 20.0,),
             color: Colors.red,
           ),
         ],
@@ -475,8 +476,8 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                 child: Text(
                   sortList[i],
                   style: TextStyle(
-                      fontFamily: ConstantFonts.poppinsBold,
-                      fontSize: 10.0,
+                      fontFamily: ConstantFonts.sfProMedium,
+                      fontSize: 13.0,
                       color: textColor),
                 ),
               ),
@@ -494,11 +495,10 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                     children: [
                       Text(
                         'Total Count :${currentCustomerList.length}',
-                        style: TextStyle(fontFamily: ConstantFonts.poppinsBold),
+                        style: TextStyle(fontFamily: ConstantFonts.sfProBold, fontSize: 15),
                       ),
                       Expanded(
                         child: ListView.builder(
-                            physics: const BouncingScrollPhysics(),
                             itemCount: currentCustomerList.length,
                             itemBuilder: (c, index) {
                               return CustomerItem(
@@ -509,10 +509,10 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                   )
                 : Center(
                     child: Text(
-                      'No leads found!',
+                      'No leads found!!',
                       style: TextStyle(
-                          fontFamily: ConstantFonts.sfProRegular,
-                          fontSize: 16.0),
+                          fontFamily: ConstantFonts.sfProMedium,
+                          fontSize: 17.0),
                     ),
                   )
         : searchCustomerInfo.isNotEmpty? ListView.builder(
@@ -523,7 +523,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                   customerInfo: searchCustomerInfo[index], currentStaffName: widget.staffInfo.name,);
             }):Padding(
               padding: const EdgeInsets.only(top: 10.0),
-              child: Text('No result for $query',style: TextStyle(fontFamily: ConstantFonts.sfProRegular),),
+              child: Text('No result for $query',style: TextStyle(fontFamily: ConstantFonts.sfProMedium),),
             );
   }
 }
