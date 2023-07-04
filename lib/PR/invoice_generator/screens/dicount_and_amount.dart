@@ -203,7 +203,7 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                       ),
 
                       /// ADVANCE AMOUNT
-                      invoiceProvider.getCustomerDetails.docType != 'QUOTATION'
+                      invoiceProvider.getCustomerDetails.docType == 'PROFORMA_INVOICE'
                           ? Container(
                               height: height * .15,
                               decoration: BoxDecoration(
