@@ -502,9 +502,9 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                             itemCount: currentCustomerList.length,
                             itemBuilder: (c, index) {
                               return CustomerItem(
-                                  customerInfo: currentCustomerList[index], currentStaffName: widget.staffInfo.name,);
+                                  customerInfo: currentCustomerList[index], currentStaffName: widget.staffInfo.name, prNames: staffs,);
                             }),
-                      )
+                      ),
                     ],
                   )
                 : Center(
@@ -520,7 +520,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
             itemCount: searchCustomerInfo.length,
             itemBuilder: (c, index) {
               return CustomerItem(
-                  customerInfo: searchCustomerInfo[index], currentStaffName: widget.staffInfo.name,);
+                  customerInfo: searchCustomerInfo[index], currentStaffName: widget.staffInfo.name, prNames: staffs,);
             }):Padding(
               padding: const EdgeInsets.only(top: 10.0),
               child: Text('No result for $query',style: TextStyle(fontFamily: ConstantFonts.sfProMedium),),

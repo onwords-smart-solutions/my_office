@@ -28,6 +28,8 @@ class CustomerDetailScreen extends StatefulWidget {
   final String customerStatus;
   final Color containerColor;
   final Color nobColor;
+  final List<String> prStaffNames;
+  final String leadName;
 
   const CustomerDetailScreen(
       {Key? key,
@@ -35,7 +37,9 @@ class CustomerDetailScreen extends StatefulWidget {
       required this.containerColor,
       required this.currentStaffName,
       required this.nobColor,
-      required this.customerStatus})
+      required this.customerStatus,
+      required this.leadName,
+      required this.prStaffNames})
       : super(key: key);
 
   @override
@@ -45,13 +49,13 @@ class CustomerDetailScreen extends StatefulWidget {
 class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
   TextEditingController notesController = TextEditingController();
   late String dropDownValue;
+  final _formKey = GlobalKey<FormState>();
+  late String leadName;
 
   void openWhatsapp(
-      {required BuildContext context,
-      required String number}) async {
+      {required BuildContext context, required String number}) async {
     var whatsapp = number; //+92xx enter like this
-    var whatsappURlAndroid =
-        "whatsapp://send?phone=$whatsapp";
+    var whatsappURlAndroid = "whatsapp://send?phone=$whatsapp";
     var whatsappURLIos = "https://wa.me/$whatsapp";
     if (Platform.isIOS) {
       // for iOS phone only
@@ -93,6 +97,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
       dropDownValue = widget.customerStatus;
       super.initState();
     }
+    leadName = widget.leadName;
   }
 
   @override
@@ -104,14 +109,17 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20),bottomRight: Radius.circular(20)),
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20)),
             gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: <Color>[
-                  Color(0xffD136D4),
-                  Color(0xff7652B2),
-                ]),
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: <Color>[
+                Color(0xffD136D4),
+                Color(0xff7652B2),
+              ],
+            ),
           ),
         ),
         shape: const RoundedRectangleBorder(
@@ -123,7 +131,10 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         // foregroundColor: const Color(0xff8355B7),
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
-          icon:  const Icon(Icons.arrow_back_ios_rounded,color: Colors.white,),
+          icon: const Icon(
+            Icons.arrow_back_ios_rounded,
+            color: Colors.white,
+          ),
           splashRadius: 20.0,
         ),
         title: Text(widget.customerInfo['name'].toString(),
@@ -136,7 +147,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           IconButton(
               onPressed: () {
                 setState(() {
-                addNotes();
+                  addNotes();
                 });
                 // print(widget.customerInfo['phone_number'].toString());
               },
@@ -157,19 +168,19 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                 size: 30,
               )),
           IconButton(
-              onPressed: () {
-                setState(() {
-                  openWhatsapp(
-                      context: context,
-                      number: widget.customerInfo['phone_number'].toString());
-                });
-                // print(widget.customerInfo['phone_number'].toString());
-              },
-              icon: const Icon(
-                CupertinoIcons.bubble_left_bubble_right_fill,
-                color: Colors.greenAccent,
-                size: 30,
-              ),
+            onPressed: () {
+              setState(() {
+                openWhatsapp(
+                    context: context,
+                    number: widget.customerInfo['phone_number'].toString());
+              });
+              // print(widget.customerInfo['phone_number'].toString());
+            },
+            icon: const Icon(
+              CupertinoIcons.bubble_left_bubble_right_fill,
+              color: Colors.greenAccent,
+              size: 30,
+            ),
           ),
         ],
       ),
@@ -185,16 +196,22 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
       children: [
         //Customer detail section
         Container(
-            width: size.width,
-            height: size.height * .35,
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: widget.containerColor),
-            child: buildCustomerDetail(size: size)),
+          width: size.width,
+          height: size.height * .35,
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.0),
+              color: widget.containerColor),
+          child: buildCustomerDetail(size: size),
+        ),
 
         //Customer notes section
-        Expanded(child: SizedBox(width: size.width, child: buildNotes())),
+        Expanded(
+          child: SizedBox(
+            width: size.width,
+            child: buildNotes(),
+          ),
+        ),
       ],
     );
   }
@@ -252,6 +269,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
   }
 
   Widget buildNotes() {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
     final stream = FirebaseDatabase.instance.ref().child(
         'customer/${widget.customerInfo['phone_number'].toString()}/notes');
 
@@ -263,7 +282,6 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-
             //Dropdown to change "State" of customers
             DropdownButton(
               value: dropDownValue,
@@ -292,6 +310,73 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           ],
         ),
 
+        //Dropdown for changing lead in charge
+        widget.currentStaffName == 'Anitha' ||
+                widget.currentStaffName == 'Devendiran' ||
+                widget.currentStaffName == 'Gowtham' ||
+                widget.currentStaffName == 'Jeeva S' ||
+                widget.currentStaffName == 'Pradeep Kanth'
+            ? Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: PopupMenuButton(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    position: PopupMenuPosition.under,
+                    elevation: 10.0,
+                    itemBuilder: (ctx) => List.generate(
+                      widget.prStaffNames.length,
+                      (index) {
+                        return PopupMenuItem(
+                          child: Text(
+                            widget.prStaffNames[index],
+                            style: TextStyle(
+                                fontFamily: ConstantFonts.sfProMedium,
+                                fontSize: 15),
+                          ),
+                          onTap: () {
+                            setState(() {
+                              leadName = widget.prStaffNames[index];
+                              addLeadToFirebase();
+                            });
+                          },
+                        );
+                      },
+                    ),
+                    child: Row(
+                      children: [
+                        Text(
+                          'Lead in charge -',
+                          style: TextStyle(
+                            fontFamily: ConstantFonts.sfProMedium,
+                            fontSize: 19,
+                            color: Colors.purple,
+                          ),
+                        ),
+                        SizedBox(width: width * 0.03),
+                        Container(
+                          height: height * 0.05,
+                          width: width * 0.5,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Colors.grey.withOpacity(0.4),
+                          ),
+                          child: Text(
+                            leadName,
+                            style: TextStyle(
+                              fontFamily: ConstantFonts.sfProMedium,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            : const SizedBox.shrink(),
         //Notes list
         StreamBuilder(
             stream: stream.onValue,
@@ -339,7 +424,15 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
 
   //adding notes
   void addNotes() {
-    Navigator.push(context, MaterialPageRoute(builder: (context)=> AddNotes(customerInfo: widget.customerInfo, currentStaffName: widget.currentStaffName,)));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AddNotes(
+          customerInfo: widget.customerInfo,
+          currentStaffName: widget.currentStaffName,
+        ),
+      ),
+    );
   }
 
   Widget buildField(
@@ -367,8 +460,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           value,
           cursorColor: Colors.purple,
           scrollPhysics: const ClampingScrollPhysics(),
-          style: TextStyle(
-              fontFamily: ConstantFonts.sfProMedium, fontSize: 14.0),
+          style:
+              TextStyle(fontFamily: ConstantFonts.sfProMedium, fontSize: 14.0),
         ),
       ),
       node: TimelineNode(
@@ -387,10 +480,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
       var snackBar = SnackBar(
         content: Text(
           'Select one state to change',
-          style: TextStyle(
-            fontSize: 17,
-            fontFamily: ConstantFonts.sfProMedium
-          ),
+          style: TextStyle(fontSize: 17, fontFamily: ConstantFonts.sfProMedium),
           textAlign: TextAlign.center,
         ),
         backgroundColor: Colors.red,
@@ -404,6 +494,30 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           .update(
         {
           'customer_state': dropDownValue,
+        },
+      );
+    }
+  }
+
+  void addLeadToFirebase() async {
+    if (leadName.isEmpty) {
+      var snackBar = SnackBar(
+        content: Text(
+          'Select a PR name to change',
+          style: TextStyle(fontSize: 17, fontFamily: ConstantFonts.sfProMedium),
+          textAlign: TextAlign.center,
+        ),
+        backgroundColor: Colors.red,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      // print('no data');
+    } else {
+      final ref = FirebaseDatabase.instance.ref();
+      ref
+          .child('customer/${widget.customerInfo['phone_number'].toString()}')
+          .update(
+        {
+          'LeadIncharge': leadName,
         },
       );
     }

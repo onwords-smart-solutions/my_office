@@ -10,9 +10,10 @@ import '../Constant/colors/constant_colors.dart';
 class CustomerItem extends StatefulWidget {
   final Map<Object?, Object?> customerInfo;
   final String currentStaffName;
+  final List<String> prNames;
 
   const CustomerItem(
-      {Key? key, required this.customerInfo, required this.currentStaffName})
+      {Key? key, required this.customerInfo, required this.currentStaffName, required this.prNames})
       : super(key: key);
 
   @override
@@ -149,7 +150,9 @@ class _CustomerItemState extends State<CustomerItem> {
                     nobColor: nobColor,
                     currentStaffName: widget.currentStaffName,
                     customerStatus: widget.customerInfo['customer_state']
-                        .toString(),))),
+                        .toString(),
+                    leadName:   widget.customerInfo['LeadIncharge'].toString(),
+                    prStaffNames: widget.prNames,),),),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.0),
         decoration: BoxDecoration(

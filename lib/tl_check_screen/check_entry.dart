@@ -223,7 +223,6 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
                                 onTap: () {
                                   setState(() {
                                     dummy = dropDown[i];
-
                                   });
                                 },
                               );
