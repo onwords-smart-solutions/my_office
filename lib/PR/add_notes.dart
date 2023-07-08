@@ -402,6 +402,7 @@ class _AddNotesState extends State<AddNotes> {
             'note': notesController.text.trim(),
             'time': DateFormat('kk:mm').format(now),
             'audio_file': url,
+            'reminder': dateController.text.trim(),
           });
           notesController.clear();
           dateController.clear();
@@ -501,6 +502,7 @@ class _AddNotesState extends State<AddNotes> {
               'entered_by': widget.currentStaffName,
               'note': notesController.text.trim(),
               'time': DateFormat('kk:mm').format(now),
+              'reminder': dateController.text.trim(),
             },
           );
           notesController.clear();

@@ -23,12 +23,18 @@ class ReminderScreen extends StatefulWidget {
 }
 
 class _ReminderScreenState extends State<ReminderScreen> {
+  List<ReminderModel> reminders = [];
   List<ReminderModel> allReminders = [];
+  List<ReminderModel> myReminders = [];
   bool isLoading = true;
+  String names = 'My Reminders';
+  final List<String> values = ['All Reminders', 'My Reminders'];
 
   //Function for accessing the customer reminders db
   void getReminders() {
+    reminders.clear();
     allReminders.clear();
+    myReminders.clear();
     final ref =
         FirebaseDatabase.instance.ref('customer_reminders/$selectedDate/');
     ref.once().then((data) {
@@ -50,6 +56,10 @@ class _ReminderScreenState extends State<ReminderScreen> {
           state: allData['State'].toString(),
           updatedBy: allData['Updated_by'].toString(),
         );
+
+        if (allData['Updated_by'].toString() == widget.staffInfo.name) {
+          myReminders.add(customerDetails);
+        }
         allReminders.add(customerDetails);
       }
       if (!mounted) return;
@@ -89,6 +99,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
 
   @override
   Widget build(BuildContext context) {
+    reminders = myReminders;
     return MainTemplate(
         subtitle: 'Look up your Reminders!',
         templateBody: buildReminder(),
@@ -96,6 +107,11 @@ class _ReminderScreenState extends State<ReminderScreen> {
   }
 
   Widget buildReminder() {
+    if (names == 'All Reminders') {
+      reminders = allReminders;
+    }else if(names == 'My Reminders'){
+      reminders = myReminders ;
+    }
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     return Column(
@@ -103,8 +119,41 @@ class _ReminderScreenState extends State<ReminderScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
             children: [
+              PopupMenuButton(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                position: PopupMenuPosition.under,
+                elevation: 10,
+                itemBuilder: (ctx) => List.generate(
+                  values.length,
+                  (i) {
+                    return PopupMenuItem(
+                      child: Text(
+                        values[i],
+                        style: TextStyle(
+                            fontFamily: ConstantFonts.sfProMedium,
+                            fontSize: 16),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          names = values[i];
+                        });
+                      },
+                    );
+                  },
+                ),
+                icon: const Icon(CupertinoIcons.sort_down),
+              ),
+              Text(
+                names,
+                style: TextStyle(
+                    fontFamily: ConstantFonts.sfProRegular,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 17),
+              ),
+              const Spacer(),
               GestureDetector(
                 onTap: () {
                   datePicker();
@@ -115,7 +164,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
                   size: height * 0.04,
                 ),
               ),
-              const SizedBox(width: 15),
+              SizedBox(width: width * 0.03),
               Text(
                 '$selectedDate',
                 style: TextStyle(
@@ -127,9 +176,9 @@ class _ReminderScreenState extends State<ReminderScreen> {
             ],
           ),
         ),
-        const SizedBox(height: 10),
+        SizedBox(height: height * 0.01),
         Text(
-          'Total reminders : ${allReminders.length}',
+          'Total reminders : ${reminders.length}',
           style: TextStyle(
             fontSize: 18,
             fontFamily: ConstantFonts.sfProBold,
@@ -143,116 +192,134 @@ class _ReminderScreenState extends State<ReminderScreen> {
                   ),
                 ),
               )
-            : allReminders.isNotEmpty
+            : reminders.isNotEmpty
                 ? Expanded(
                     child: SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),
                       child: ListView.builder(
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: allReminders.length,
+                        itemCount: reminders.length,
                         itemBuilder: (ctx, i) {
-                          return Container(
-                            margin: const EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              color: ConstantColor.background1Color,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  offset: const Offset(0.0, 2.0),
-                                  blurRadius: 8,
-                                )
-                              ],
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                            child: ListTile(
-                              leading: const Icon(
-                                CupertinoIcons.person_2_fill,
-                                color: CupertinoColors.systemPurple,
-                              ),
-                              trailing: CupertinoButton(
-                                pressedOpacity: 0.5,
-                                child: const Icon(CupertinoIcons.delete_solid,
-                                    color: CupertinoColors.destructiveRed),
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (ctx) {
-                                      return AlertDialog(
-                                        title: Text(
-                                          'Do you want to delete the reminder?',
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              fontFamily: ConstantFonts.sfProMedium,
-                                              color: CupertinoColors.label
-                                          ),
-                                        ),
-                                        actions: [
-                                          Container(
-                                            height: height * 0.05,
-                                            width: width * 0.2,
-                                            decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(20),
+                          return Column(
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: ConstantColor.background1Color,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      offset: const Offset(0.0, 2.0),
+                                      blurRadius: 8,
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: ListTile(
+                                  leading: const Icon(
+                                    CupertinoIcons.person_2_fill,
+                                    color: CupertinoColors.systemPurple,
+                                  ),
+                                  trailing: CupertinoButton(
+                                    pressedOpacity: 0.5,
+                                    child: const Icon(
+                                        CupertinoIcons.delete_solid,
+                                        color: CupertinoColors.destructiveRed),
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (ctx) {
+                                          return AlertDialog(
+                                            title: Text(
+                                              'Do you want to delete the reminder?',
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontFamily:
+                                                      ConstantFonts.sfProMedium,
+                                                  color: CupertinoColors.label),
                                             ),
-                                            child: MaterialButton(
-                                              child: Text(
-                                                'Yes',
-                                                style: TextStyle(
-                                                    fontSize: 17,
-                                                    fontFamily: ConstantFonts.sfProBold,
-                                                    color: CupertinoColors.destructiveRed),
+                                            actions: [
+                                              Container(
+                                                height: height * 0.05,
+                                                width: width * 0.2,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
+                                                child: MaterialButton(
+                                                  child: Text(
+                                                    'Yes',
+                                                    style: TextStyle(
+                                                        fontSize: 17,
+                                                        fontFamily:
+                                                            ConstantFonts
+                                                                .sfProBold,
+                                                        color: CupertinoColors
+                                                            .destructiveRed),
+                                                  ),
+                                                  onPressed: () async {
+                                                    await FirebaseDatabase
+                                                        .instance
+                                                        .ref(
+                                                            'customer_reminders/$selectedDate/${reminders[i].phoneNumber}')
+                                                        .remove();
+                                                    getReminders();
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
                                               ),
-                                              onPressed: () async {
-                                                await FirebaseDatabase.instance.ref('customer_reminders/$selectedDate/${allReminders[i].phoneNumber}').remove();
-                                              getReminders();
-                                              Navigator.of(context).pop();
-                                                },
-                                            ),
-                                          ),
-                                          Container(
-                                            height: height * 0.05,
-                                            width: width * 0.2,
-                                             decoration: BoxDecoration(
-                                             borderRadius: BorderRadius.circular(20),
-                                             ),
-                                            child: MaterialButton(
-                                              child: Text(
-                                                'No',
-                                                style: TextStyle(
-                                                  color: CupertinoColors.black,
-                                                    fontFamily: ConstantFonts.sfProBold,
-                                                    fontSize: 17),
+                                              Container(
+                                                height: height * 0.05,
+                                                width: width * 0.2,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
+                                                child: MaterialButton(
+                                                  child: Text(
+                                                    'No',
+                                                    style: TextStyle(
+                                                        color: CupertinoColors
+                                                            .black,
+                                                        fontFamily:
+                                                            ConstantFonts
+                                                                .sfProBold,
+                                                        fontSize: 17),
+                                                  ),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
                                               ),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                          ),
-                                        ],
+                                            ],
+                                          );
+                                        },
                                       );
                                     },
-                                  );
-                                },
-                              ),
-                              title: Text(
-                                allReminders[i].customerName,
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  fontFamily: ConstantFonts.sfProMedium,
-                                ),
-                              ),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => FullRemindersScreen(
-                                      staffInfo: widget.staffInfo,
-                                      fullReminders: allReminders[i],
+                                  ),
+                                  title: Text(
+                                    reminders[i].customerName,
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                      fontFamily: ConstantFonts.sfProMedium,
                                     ),
                                   ),
-                                );
-                              },
-                            ),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            FullRemindersScreen(
+                                          staffInfo: widget.staffInfo,
+                                          fullReminders: reminders[i],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
                           );
                         },
                       ),
@@ -266,7 +333,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
                           Lottie.asset('assets/animations/no_data.json',
                               height: 300.0),
                           Text(
-                            'No reminders saved!!',
+                            'No reminders set😞',
                             style: TextStyle(
                               color: ConstantColor.blackColor,
                               fontSize: 20,

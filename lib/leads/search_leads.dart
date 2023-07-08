@@ -39,7 +39,10 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
     'Installation Completed',
     'Others',
     'Hot lead',
-    'Black dots'
+    'Black dots',
+    'Visited',
+    'Need to visit',
+    'Quotation',
   ];
 
   String selectedStaff = '';

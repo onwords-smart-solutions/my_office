@@ -149,7 +149,7 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
          print(e);
        }return false;
      }).toList();
-    }else     if (dummy == 'Absentees'){
+    }else if (dummy == 'Absentees'){
       staffList = adminStaffNames.where((element) => element.entryTime.toString().isEmpty).toList();
     }else{
       staffList = adminStaffNames;

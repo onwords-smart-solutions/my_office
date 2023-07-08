@@ -5,6 +5,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
@@ -78,6 +79,7 @@ class _NoteItemState extends State<NoteItem> {
      audioPlayer.dispose();
      super.dispose();
    }
+
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery
@@ -141,7 +143,7 @@ class _NoteItemState extends State<NoteItem> {
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: Column(
               children: [
-                Text(
+                SelectableText(
                   widget.note,
                   style: TextStyle(
                     fontFamily: ConstantFonts.sfProMedium,

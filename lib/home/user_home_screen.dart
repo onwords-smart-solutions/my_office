@@ -311,14 +311,13 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     return staffInfo != null
         ? GridView.builder(
             itemCount: userAccessGridButtonsName.length,
-            padding:
-                const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
+            padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
             scrollDirection: Axis.vertical,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                childAspectRatio: 1/1.2,
-                crossAxisCount: 3,
-                crossAxisSpacing: 7.0,
-                mainAxisSpacing: 4,
+              childAspectRatio: 1 / 1.2,
+              crossAxisCount: 3,
+              crossAxisSpacing: 7.0,
+              mainAxisSpacing: 4,
             ),
             itemBuilder: (BuildContext context, int index) {
               final page = AppDefaults()
@@ -342,49 +341,47 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   }
 
   Widget buildButton(
-      {required String name,
-        required Image image,
-      required Widget page}) {
+      {required String name, required Image image, required Widget page}) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     return GestureDetector(
-      onTap: () {
-        HapticFeedback.heavyImpact();
-        Navigator.push(context, MaterialPageRoute(builder: (context) => page));
-      },
-      child:
-      Center(
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          elevation: 10,
-          child: Container(
-            height: height * 0.5,
-            decoration: BoxDecoration(
+        onTap: () {
+          HapticFeedback.heavyImpact();
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => page));
+        },
+        child: Center(
+          child: Card(
+            shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
-              color: const Color(0xff9384D1),
             ),
-            child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-            image,
-              AutoSizeText(
-                textAlign: TextAlign.center,
-                name,
-                style: TextStyle(
-                  fontFamily: ConstantFonts.sfProMedium,
-                  fontSize: 15,
-                  color: CupertinoColors.white,
-                ),
-                maxFontSize: 15,
-                minFontSize: 8,
-              )
-            ],
-        ),
+            elevation: 10,
+            child: Container(
+              height: height * 0.5,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                color: const Color(0xff9384D1),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  image,
+                  AutoSizeText(
+                    textAlign: TextAlign.center,
+                    name,
+                    style: TextStyle(
+                      fontFamily: ConstantFonts.sfProMedium,
+                      fontSize: 15,
+                      color: CupertinoColors.white,
+                    ),
+                    maxFontSize: 15,
+                    minFontSize: 8,
+                  )
+                ],
+              ),
+            ),
           ),
         ),
-      )
     );
   }
 
@@ -392,15 +389,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     showCupertinoDialog(
       context: context,
       builder: (BuildContext context) => CupertinoAlertDialog(
-        title: Text("No Internet Connection💀",
+        title: Text(
+          "No Internet Connection💀",
           style: TextStyle(
-          color: ConstantColor.headingTextColor,
-          fontFamily: ConstantFonts.sfProBold,
-          // fontWeight: FontWeight.w600,
-          fontSize: 18,
+            color: ConstantColor.headingTextColor,
+            fontFamily: ConstantFonts.sfProBold,
+            // fontWeight: FontWeight.w600,
+            fontSize: 18,
+          ),
         ),
-        ),
-        content: Text("Please check your internet connection",
+        content: Text(
+          "Please check your internet connection",
           style: TextStyle(
             color: ConstantColor.headingTextColor,
             fontFamily: ConstantFonts.sfProMedium,
@@ -424,7 +423,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 });
               }
             },
-            child: Text("OK",
+            child: Text(
+              "OK",
               style: TextStyle(
                 color: ConstantColor.backgroundColor,
                 fontFamily: ConstantFonts.sfProRegular,
@@ -469,9 +469,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                         Text(
                           'While prompted to update \nPress Update',
                           style: TextStyle(
-                              color: ConstantColor.backgroundColor,
-                              fontSize: 17,
-                              fontFamily: ConstantFonts.sfProMedium,),
+                            color: ConstantColor.backgroundColor,
+                            fontSize: 17,
+                            fontFamily: ConstantFonts.sfProMedium,
+                          ),
                         ),
                         Lottie.asset('assets/animations/app_update.json'),
                       ],

@@ -19,7 +19,10 @@ const List<String> list = [
   'Under Construction',
   'Installation Completed',
   'Others',
-  'Hot lead'
+  'Hot lead',
+  'Visited',
+  'Need to visit',
+  'Quotation',
 ];
 
 class CustomerDetailScreen extends StatefulWidget {
@@ -30,6 +33,7 @@ class CustomerDetailScreen extends StatefulWidget {
   final Color nobColor;
   final List<String> prStaffNames;
   final String leadName;
+  final String reminder;
 
   const CustomerDetailScreen(
       {Key? key,
@@ -39,7 +43,7 @@ class CustomerDetailScreen extends StatefulWidget {
       required this.nobColor,
       required this.customerStatus,
       required this.leadName,
-      required this.prStaffNames})
+      required this.prStaffNames, required this.reminder})
       : super(key: key);
 
   @override
@@ -167,7 +171,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                 color: Colors.lightBlueAccent,
                 size: 30,
               )),
-          IconButton(
+          TextButton(
             onPressed: () {
               setState(() {
                 openWhatsapp(
@@ -176,10 +180,11 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
               });
               // print(widget.customerInfo['phone_number'].toString());
             },
-            icon: const Icon(
-              CupertinoIcons.bubble_left_bubble_right_fill,
-              color: Colors.greenAccent,
-              size: 30,
+            child: SizedBox(
+              height: size.height * 0.05,
+              child: const Image(
+                image: AssetImage('assets/whatsapp.png'),
+              ),
             ),
           ),
         ],
@@ -233,6 +238,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
       'Enquired For',
       'Phone number',
       'Rating',
+      'Reminder date',
     ];
 
     return StreamBuilder(
@@ -253,10 +259,10 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
               data['inquired_for'].toString(),
               data['phone_number'].toString(),
               data['rating'].toString(),
+              widget.reminder,
             ];
 
             return ListView.builder(
-              physics: const BouncingScrollPhysics(),
               itemCount: fieldName.length,
               itemBuilder: (ctx, i) {
                 return buildField(
