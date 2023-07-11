@@ -345,43 +345,40 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     return GestureDetector(
-        onTap: () {
-          HapticFeedback.heavyImpact();
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => page));
-        },
-        child: Center(
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            elevation: 10,
-            child: Container(
-              height: height * 0.5,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: const Color(0xff9384D1),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  image,
-                  AutoSizeText(
-                    textAlign: TextAlign.center,
-                    name,
-                    style: TextStyle(
-                      fontFamily: ConstantFonts.sfProMedium,
-                      fontSize: 15,
-                      color: CupertinoColors.white,
-                    ),
-                    maxFontSize: 15,
-                    minFontSize: 8,
-                  )
-                ],
-              ),
-            ),
+      onTap: () {
+        HapticFeedback.heavyImpact();
+        Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+      },
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        elevation: 10,
+        child: Container(
+          height: height * 0.5,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            color: const Color(0xff9384D1),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              image,
+              AutoSizeText(
+                textAlign: TextAlign.center,
+                name,
+                style: TextStyle(
+                  fontFamily: ConstantFonts.sfProMedium,
+                  fontSize: 15,
+                  color: CupertinoColors.white,
+                ),
+                maxFontSize: 15,
+                minFontSize: 8,
+              )
+            ],
           ),
         ),
+      ),
     );
   }
 

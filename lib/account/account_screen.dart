@@ -73,7 +73,6 @@ class _AccountScreenState extends State<AccountScreen> {
     });
   }
 
-  //
   void pickImage(context) {
     showDialog(
         context: context,

@@ -45,7 +45,6 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
     await ref.child('staff').once().then((staffEntry) async {
       for (var data in staffEntry.snapshot.children) {
         var entry = data.value as Map<Object?, Object?>;
-        // log('data is $entry');
         final staffEntry = StaffAttendanceModel(
           uid: data.key.toString(),
           department: entry['department'].toString(),

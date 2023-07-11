@@ -7,7 +7,6 @@ import 'package:my_office/util/main_template.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 import 'package:intl/intl.dart';
-
 import '../models/staff_entry_model.dart';
 
 class AbsenteeScreen extends StatefulWidget {
@@ -68,7 +67,7 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
     List<StaffAttendanceModel> absenteesList =[];
     for (var staff in staffNames) {
       final time = await entryCheck(staff.uid);
-      log("NAMES ARE ${staff.name} $time");
+      log("NAMES ARE ${staff.uid} $time");
       if(time.isEmpty){
         absenteesList.add(staff);
       }
