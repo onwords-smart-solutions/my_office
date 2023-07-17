@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'note_item.dart';
 
 const List<String> list = [
+  'New leads',
   'Following Up',
   'Delayed',
   'Rejected from MGMT',
@@ -19,7 +20,7 @@ const List<String> list = [
   'Under Construction',
   'Installation Completed',
   'Others',
-  'Hot lead',
+  'Interested',
   'Visited',
   'Need to visit',
   'Quotation',
@@ -97,7 +98,13 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
             .toLowerCase()
             .contains('rejected from customer end')) {
       dropDownValue = 'Rejected from Customer';
-    } else {
+    } else if (widget.customerStatus.toLowerCase().contains('interested') ||
+        widget.customerStatus
+            .toLowerCase()
+            .contains('hot lead')) {
+      dropDownValue = 'Interested';
+    }
+    else {
       dropDownValue = widget.customerStatus;
       super.initState();
     }

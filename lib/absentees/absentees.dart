@@ -71,7 +71,6 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
       if(time.isEmpty){
         absenteesList.add(staff);
       }
-
     }
     if (!mounted) return;
     setState(() {

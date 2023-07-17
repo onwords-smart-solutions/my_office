@@ -81,7 +81,7 @@ class InvAndQtnPdf {
           ),
           SizedBox(height: 0.3 * PdfPageFormat.cm),
           Divider(),
-          buildTermsAndConditions(),
+          buildTermsAndConditions(clientModel),
         ],
         footer: (context) => buildFooter(clientModel, needGst),
       ),
@@ -365,9 +365,10 @@ class InvAndQtnPdf {
           createText('IFSC Code', 'HDFC0000787', false, 10, 0),
           createText('UPI', 'onwordspay@ybl', false, 10, 0),
           SizedBox(height: 3 * PdfPageFormat.mm),
-          customerDetails.docType == "INVOICE" ?
-          SizedBox.shrink() :
-          Row(children: [
+          Row(
+              children: [
+                customerDetails.docType == "INVOICE" ?
+                SizedBox.shrink() :
             createText('Scan To Pay', '', true, 10, 0),
             SizedBox(width: 1 * PdfPageFormat.mm),
             qr,
@@ -394,63 +395,147 @@ class InvAndQtnPdf {
         ],
       );
 
-  Widget buildTermsAndConditions() => Column(
+  Widget buildTermsAndConditions(ClientModel customerDetails,) =>
+      Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            buildBodyText("Terms and Conditions", true),
-            buildBodyText(
-                "It is recommended by the Company to use INVERTER (UPS) of 1KVA for our control modules and theSame shall be in Client's  Scope.",
-                true),
-            buildBodyText(
-                "The following facilities and services are to be provided by the client.",
-                true),
-            buildBodyText(
-                "1. Site Preparation including fabricator,carpentry, welder, civil and Masonry work.\n"
-                "2. Provision for suitable Wiring, Electricity Supply with suitable plugs, socket etc.\n"
-                "3. Cable identification and Termination of the cables laid by Client's Contractor on the Distribution Board etc. Dedicated Earth Connection required.\n"
-                "4. Wire cost and material cost, other than motor and control box which comes within the package.",
-                false),
-            Center(
-              child: buildBodyText(
-                  "*** Any additional work on behalf of client  will be quoted extra separately ***",
-                  true),
-            ),
-            buildBodyText("Warranty:", true),
-            buildBodyText(
-                'Service and replacement warranty will be provided for the products up to 1 year from the date of installation.',
-                false),
-            buildBodyText(
-                'The warranty will  cover the failures for the following reasons:',
-                true),
-            buildBodyText(
-                "1. Damage or defect caused by transportation, accident, misuse, lack of maintenance, improper usage or negligence on the part of Client; \n"
-                "2. Wilful damage or negligence, normal wear and tear;\n"
-                "Abuse or misuse of equipment/product;\n"
-                "3. Damage or defect caused by  earthquake  or other similar natural disasters;\n"
-                "4. Damage or defect caused by alteration, modification, conversion not authorised by Company in writing;\n"
-                "5. Repairs carried out by personnel other than Company's authorised service personnel's;\n"
-                "6. Defects or damages due to any other external means or causes are not covered under warranty.",
-                false),
-            buildBodyText("Payment:", true),
-            buildBodyText(
-                "50% of order amount should be paid as advance, balance 50% should be paid at the date of installation, There should not be any negotiation in final payment before handing over the Remote and other accessories.",
-                false),
-            buildBodyText("Delivery Period:", true),
-            buildBodyText(
-                "1-2 weeks after receipt of commercially & technically clear order with advance of 50%.",
-                false),
-            buildBodyText("Cancellation of Order: ", true),
-            buildBodyText(
-                "If the Order placed is cancelled by Client then the cancellation charges of 30% of the Order value shall be charged as  a Termination fee.",
-                false),
-            buildBodyText("Scope of Work: ", true),
-            buildBodyText(
-                "1. Instruction and Supervision of conduit work at the initial level and there after completion of conduit work and wiring  work  final inspection will be done.\n"
-                "2. Once the contractor finishes the Electrical work and civil work, we will start Installation of GateAutomation Modules.\n"
-                "3. Programming of all the above mentioned components.\n"
-                "4. Delivery to the client and mobile application integration if needed.",
-                false),
+
+            customerDetails.docCategory == 'GA' ?
+            Container(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      buildBodyText("Terms and Conditions", true),
+                      buildBodyText(
+                          "It is recommended by the Company to use INVERTER (UPS) of 1KVA for our control modules and theSame shall be in Client's  Scope.",
+                          true),
+                      buildBodyText(
+                          "The following facilities and services are to be provided by the client.",
+                          true),
+                      buildBodyText(
+                          "1. Site Preparation including fabricator,carpentry, welder, civil and Masonry work.\n"
+                              "2. Provision for suitable Wiring, Electricity Supply with suitable plugs, socket etc.\n"
+                              "3. Cable identification and Termination of the cables laid by Client's Contractor on the Distribution Board etc. Dedicated Earth Connection required.\n"
+                              "4. Wire cost and material cost, other than motor and control box which comes within the package.",
+                          false),
+                      Center(
+                        child: buildBodyText(
+                            "*** Any additional work on behalf of client  will be quoted extra separately ***",
+                            true),
+                      ),
+                      buildBodyText("Warranty:", true),
+                      buildBodyText(
+                          'Service and replacement warranty will be provided for the products up to 1 year from the date of installation.',
+                          false),
+
+
+                      buildBodyText(
+                          'The warranty will cover the failures for the following reasons:',
+                          true),
+                      buildBodyText(
+                          "1. Defects caused at the time of installation; \n"
+                              "2. Defects caused by manufacture; \n"
+                              "3. Defects caused by application / programming; \n",
+                          false),
+
+
+                      buildBodyText(
+                          'The warranty will not cover the failures for the following reasons:',
+                          true),
+                      buildBodyText(
+                          "1. Damage or defect caused by transportation, accident, misuse, lack of maintenance, improper usage or negligence on the part of Client; \n"
+                              "2. Wilful damage or negligence, normal wear and tear;\n"
+                              "Abuse or misuse of equipment/product;\n"
+                              "3. Damage or defect caused by  earthquake  or other similar natural disasters;\n"
+                              "4. Damage or defect caused by alteration, modification, conversion not authorised by Company in writing;\n"
+                              "5. Repairs carried out by personnel other than Company's authorised service personnel's;\n"
+                              "6. Defects or damages due to any other external means or causes are not covered under warranty.",
+                          false),
+                      buildBodyText("Payment:", true),
+                      buildBodyText(
+                          "50% of order amount should be paid as advance, balance 50% should be paid at the date of installation, There should not be any negotiation in final payment before handing over the Remote and other accessories.",
+                          false),
+                      buildBodyText("Delivery Period:", true),
+                      buildBodyText(
+                          "1-2 weeks after receipt of commercially & technically clear order with advance of 50%.",
+                          false),
+                      buildBodyText("Cancellation of Order: ", true),
+                      buildBodyText(
+                          "If the Order placed is cancelled by Client then the cancellation charges of 30% of the Order value shall be charged as  a Termination fee.",
+                          false),
+                      buildBodyText("Scope of Work: ", true),
+                      buildBodyText(
+                          "1. Instruction and Supervision of conduit work at the initial level and there after completion of conduit work and wiring  work  final inspection will be done.\n"
+                              "2. Once the contractor finishes the Electrical work and civil work, we will start Installation of GateAutomation Modules.\n"
+                              "3. Programming of all the above mentioned components.\n"
+                              "4. Delivery to the client and mobile application integration if needed.",
+                          false),
+                    ]
+                )
+            )
+                : customerDetails.docCategory == 'SS' ?
+            Container(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      buildBodyText("Terms and Conditions", true),
+                      buildBodyText(
+                          "It is recommended by the Company to use INVERTER (UPS) of 1KVA for our control modules and theSame shall be in Client's  Scope.",
+                          true),
+                      buildBodyText(
+                          "The following facilities and services are to be provided by the client.",
+                          true),
+                      buildBodyText(
+                          "1. Site Preparation including fabricator,carpentry, welder, civil and Masonry work.\n"
+                              "2. Provision for suitable Wiring, Electricity Supply with suitable plugs, socket etc.\n"
+                              "3. Cable identification and Termination of the cables laid by Client's Contractor on the Distribution Board etc. Dedicated Earth Connection required.\n"
+                              "4. Wire cost and material cost, other than motor and control box which comes within the package.",
+                          false),
+                      Center(
+                        child: buildBodyText(
+                            "*** Any additional work on behalf of client  will be quoted extra separately ***",
+                            true),
+                      ),
+                      buildBodyText("Warranty:", true),
+                      buildBodyText(
+                          'Service and replacement warranty will be provided for the products up to 1 year from the date of installation.',
+                          false),
+                      buildBodyText(
+                          'The warranty will not cover the failures for the following reasons:',
+                          true),
+                      buildBodyText(
+                          "1. Damage or defect caused by transportation, accident, misuse, lack of maintenance, improper usage or negligence on the part of Client; \n"
+                              "2. Wilful damage or negligence, normal wear and tear;\n"
+                              "Abuse or misuse of equipment/product;\n"
+                              "3. Damage or defect caused by  earthquake  or other similar natural disasters;\n"
+                              "4. Damage or defect caused by alteration, modification, conversion not authorised by Company in writing;\n"
+                              "5. Repairs carried out by personnel other than Company's authorised service personnel's;\n"
+                              "6. Defects or damages due to any other external means or causes are not covered under warranty.",
+                          false),
+                      buildBodyText("Payment:", true),
+                      buildBodyText(
+                          "50% of order amount should be paid as advance, balance 50% should be paid at the date of installation, There should not be any negotiation in final payment before handing over the Remote and other accessories.",
+                          false),
+                      buildBodyText("Delivery Period:", true),
+                      buildBodyText(
+                          "1-2 weeks after receipt of commercially & technically clear order with advance of 50%.",
+                          false),
+                      buildBodyText("Cancellation of Order: ", true),
+                      buildBodyText(
+                          "If the Order placed is cancelled by Client then the cancellation charges of 30% of the Order value shall be charged as  a Termination fee.",
+                          false),
+                      buildBodyText("Scope of Work: ", true),
+                      buildBodyText(
+                          "1. Instruction and Supervision of conduit work at the initial level and there after completion of conduit work and wiring  work  final inspection will be done.\n"
+                              "2. Once the contractor finishes the Electrical work and civil work, we will start Installation of GateAutomation Modules.\n"
+                              "3. Programming of all the above mentioned components.\n"
+                              "4. Delivery to the client and mobile application integration if needed.",
+                          false),
+                    ]
+                )
+            ) : SizedBox.shrink(),
+
           ]);
 
   pw.Text buildBodyText(String text, bool isHead) => Text(text,

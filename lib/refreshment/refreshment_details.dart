@@ -104,7 +104,6 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0)),
             child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
               child: Column(
                 children: [
                   buildHeadSection(),

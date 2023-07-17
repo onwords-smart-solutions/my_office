@@ -46,6 +46,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
   List<String> managementStaffNames = [];
   List<String> tlStaffNames = [];
+  List<String> rndTlStaffNames = [];
   List<String> userAccessGridButtonsName = [];
   List<String> userAccessGridButtonsPics = [];
 
@@ -62,6 +63,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       }
     });
     await getTlNames();
+    await getRndTlNames();
     getStaffDetail();
   }
 
@@ -75,6 +77,20 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           tlNames.add(tl.value.toString());
         }
         tlStaffNames = tlNames;
+      }
+    });
+  }
+
+  //Getting rnd tl names from database
+  Future<void> getRndTlNames() async {
+    List<String> rndTlNames = [];
+    final ref = FirebaseDatabase.instance.ref().child('special_access');
+    await ref.child('rnd_tl').once().then((value) {
+      if (value.snapshot.exists) {
+        for (var tl in value.snapshot.children) {
+          rndTlNames.add(tl.value.toString());
+        }
+        rndTlStaffNames = rndTlNames;
       }
     });
   }
@@ -106,6 +122,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       log('management names are $managementStaffNames');
       log('current user is ${data.name}');
       log('tl names are $tlStaffNames');
+      log('rnd tl names are $rndTlStaffNames');
       if (managementStaffNames.any((element) => element == data.name)) {
         userAccessGridButtonsName.addAll(AppDefaults.gridButtonsNames);
         userAccessGridButtonsName.remove('View suggestions');
@@ -127,6 +144,19 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
               AppDefaults.gridButtonsNames[i] == 'Check Virtual entry' ||
               AppDefaults.gridButtonsNames[i] == 'Entry time') {
+            userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
+            userAccessGridButtonsPics.add(AppDefaults.gridButtonPics[i]);
+          }
+        }
+      } else if (rndTlStaffNames.any((element) => element == data.name)) {
+        for (int i = 0; i < AppDefaults.gridButtonsNames.length; i++) {
+          if (AppDefaults.gridButtonsNames[i] == 'Work entry' ||
+              AppDefaults.gridButtonsNames[i] == 'Work details' ||
+              AppDefaults.gridButtonsNames[i] == 'Refreshment' ||
+              AppDefaults.gridButtonsNames[i] == 'Leave apply form' ||
+              AppDefaults.gridButtonsNames[i] == 'Leave approval' ||
+              AppDefaults.gridButtonsNames[i] == 'Suggestions' ||
+              AppDefaults.gridButtonsNames[i] == 'Virtual attendance') {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
             userAccessGridButtonsPics.add(AppDefaults.gridButtonPics[i]);
           }

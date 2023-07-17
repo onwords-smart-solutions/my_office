@@ -239,6 +239,13 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
       mode = 'AN';
     }
 
+    //Checking background running app with time in slider
+    if(today.hour < 9 ||(today.hour >= 11 && today.minute > 0 && today.hour <=13 && today.minute < 30) || (today.hour >= 15 && today.minute > 30)||today.hour>15){
+      showSnackBar(message: 'Refreshment time exceeded', color: Colors.red);
+      return;
+    }
+    log('TIME IS $today');
+
     if (item == 'Food') {
       int foodCount = 0;
       bool isFoodBooked = false;

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_office/Account/account_screen.dart';
 import 'package:my_office/PR/invoice_generator/screens/client_detials.dart';
 import 'package:my_office/PR/products/scan_qr.dart';
+import 'package:my_office/leave_details/leave_details.dart';
 import 'package:my_office/models/staff_model.dart';
 import '../Absentees/absentees.dart';
 import '../PR/pr_workdone/pr_work_details.dart';
@@ -12,7 +13,6 @@ import '../PR/products/point_calculations.dart';
 import '../PR/reminder_screen.dart';
 import '../PR/visit/visit_form_screen.dart';
 import '../PR/visit_check.dart';
-import '../employee_leave_status/employee_names.dart';
 import '../finance/finance_analysis.dart';
 import '../food_count/food_count_screen.dart';
 import '../late_workdone/late_entry.dart';
@@ -56,6 +56,7 @@ class AppDefaults {
     'PR Work details',
     'Scan QR',
     'PR Reminder',
+    'Leave details',
   ];
 
   static List<String> gridButtonPics = [
@@ -84,6 +85,7 @@ class AppDefaults {
     'assets/pr_work_details.png',
     'assets/qr_scanner_points.png',
     'assets/reminder.png',
+    'assets/leave_details.png',
   ];
 
   Widget getPage(String buttonName, StaffModel staffInfo) {
@@ -198,6 +200,9 @@ class AppDefaults {
         break;
       case 'PR Reminder':
         page =  ReminderScreen(staffInfo: staffInfo,);
+        break;
+      case 'Leave details':
+        page = const LeaveDetails();
         break;
     }
     return page;

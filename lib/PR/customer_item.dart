@@ -152,29 +152,39 @@ class _CustomerItemState extends State<CustomerItem> {
       tileColor = const Color(0xffd1ed8e);
       nobColor = Colors.white70;
     } else if (widget.customerInfo['customer_state']
-        .toString()
-        .toLowerCase()
-        .contains('hot lead')) {
+            .toString()
+            .toLowerCase()
+            .contains('interested') ||
+        (widget.customerInfo['customer_state']
+            .toString()
+            .toLowerCase()
+            .contains('hot lead'))) {
       tileColor = const Color(0xff9681EB);
       nobColor = Colors.white70;
-    }else if (widget.customerInfo['customer_state']
+    } else if (widget.customerInfo['customer_state']
         .toString()
         .toLowerCase()
         .contains('visited')) {
       tileColor = const Color(0xffE966A0);
       nobColor = Colors.white70;
-    }else if (widget.customerInfo['customer_state']
+    } else if (widget.customerInfo['customer_state']
         .toString()
         .toLowerCase()
         .contains('need to visit')) {
       tileColor = const Color(0xffC38154);
       nobColor = Colors.white70;
-    }else if (widget.customerInfo['customer_state']
+    } else if (widget.customerInfo['customer_state']
         .toString()
         .toLowerCase()
         .contains('quotation')) {
       tileColor = const Color(0xff62B6B7);
       nobColor = Colors.white70;
+    } else if (widget.customerInfo['customer_state']
+        .toString()
+        .toLowerCase()
+        .contains('new leads')) {
+      tileColor = const Color(0xff31C6D4);
+      nobColor = Colors.black26;
     }
 
     return GestureDetector(

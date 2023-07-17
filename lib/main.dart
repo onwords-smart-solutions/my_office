@@ -69,12 +69,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return
-      MultiProvider(providers: [
-        // ChangeNotifierProvider(
-        //   create: (context) => TaskData(),),
-        ChangeNotifierProvider(
-          create: (context) => InvoiceProvider(),),
-
+      MultiProvider(
+        providers: [
+        ChangeNotifierProvider(create: (context) => InvoiceProvider()),
       ],
         child: MaterialApp(
           title: 'My Office',
@@ -142,11 +139,8 @@ class AuthenticationScreen extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            // print('iam inside of home ');
-            // return const HomeScreen();
             return const UserHomeScreen();
           } else {
-            // print('iam inside of login ');
             return const LoginScreen();
           }
         },

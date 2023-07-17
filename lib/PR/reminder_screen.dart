@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,16 +23,14 @@ class ReminderScreen extends StatefulWidget {
 class _ReminderScreenState extends State<ReminderScreen> {
   List<ReminderModel> reminders = [];
   List<ReminderModel> allReminders = [];
-  List<ReminderModel> myReminders = [];
   bool isLoading = true;
   String names = 'My Reminders';
-  final List<String> values = ['All Reminders', 'My Reminders'];
+  final List<String> staffs = ['All Reminders', 'My Reminders'];
 
   //Function for accessing the customer reminders db
   void getReminders() {
     reminders.clear();
     allReminders.clear();
-    myReminders.clear();
     final ref =
         FirebaseDatabase.instance.ref('customer_reminders/$selectedDate/');
     ref.once().then((data) {
@@ -56,10 +52,6 @@ class _ReminderScreenState extends State<ReminderScreen> {
           state: allData['State'].toString(),
           updatedBy: allData['Updated_by'].toString(),
         );
-
-        if (allData['Updated_by'].toString() == widget.staffInfo.name) {
-          myReminders.add(customerDetails);
-        }
         allReminders.add(customerDetails);
       }
       if (!mounted) return;
@@ -90,16 +82,35 @@ class _ReminderScreenState extends State<ReminderScreen> {
     getReminders();
   }
 
+  //Fetching PR Staff Names from firebase database
+  void getPRStaffNames() {
+    final ref = FirebaseDatabase.instance.ref();
+    ref.child('staff').once().then((staffSnapshot) {
+      for (var data in staffSnapshot.snapshot.children) {
+        var fbData = data.value as Map<Object?, Object?>;
+        if (fbData['department'] == 'PR') {
+          final name = fbData['name'].toString();
+          staffs.add(name);
+        }
+      }
+
+      if (!mounted) return;
+      setState(() {
+
+      });
+    });
+  }
+
   @override
   void initState() {
     selectedDate = dateFormat.format(now);
     getReminders();
+    getPRStaffNames();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    reminders = myReminders;
     return MainTemplate(
         subtitle: 'Look up your Reminders!',
         templateBody: buildReminder(),
@@ -109,15 +120,18 @@ class _ReminderScreenState extends State<ReminderScreen> {
   Widget buildReminder() {
     if (names == 'All Reminders') {
       reminders = allReminders;
-    }else if(names == 'My Reminders'){
-      reminders = myReminders ;
+    } else if(names == 'My Reminders'){
+      reminders = allReminders.where((element) => element.updatedBy == widget.staffInfo.name).toList();
+    }
+    else{
+      reminders = allReminders.where((element) => element.updatedBy == names).toList();
     }
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 25),
+          padding: EdgeInsets.symmetric(horizontal: width * 0.02),
           child: Row(
             children: [
               PopupMenuButton(
@@ -127,18 +141,18 @@ class _ReminderScreenState extends State<ReminderScreen> {
                 position: PopupMenuPosition.under,
                 elevation: 10,
                 itemBuilder: (ctx) => List.generate(
-                  values.length,
+                  staffs.length,
                   (i) {
                     return PopupMenuItem(
                       child: Text(
-                        values[i],
+                        staffs[i],
                         style: TextStyle(
                             fontFamily: ConstantFonts.sfProMedium,
                             fontSize: 16),
                       ),
                       onTap: () {
                         setState(() {
-                          names = values[i];
+                          names = staffs[i];
                         });
                       },
                     );
@@ -195,7 +209,6 @@ class _ReminderScreenState extends State<ReminderScreen> {
             : reminders.isNotEmpty
                 ? Expanded(
                     child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
                       child: ListView.builder(
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,

@@ -26,9 +26,11 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
   List<Map<Object?, Object?>> allCustomer = [];
   List<Map<Object?, Object?>> currentCustomerList = [];
   List<Map<Object?, Object?>> searchCustomerInfo = [];
+  final ScrollController _scrolls = ScrollController();
 
   List<String> staffs = ['All', 'Not Assigned'];
   List<String> sortList = [
+    'New leads',
     'Following Up',
     'Delayed',
     'Onwords',
@@ -38,11 +40,11 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
     'Under Construction',
     'Installation Completed',
     'Others',
-    'Hot lead',
-    'Black dots',
+    'Interested',
     'Visited',
     'Need to visit',
     'Quotation',
+    'Black dots',
   ];
 
   String selectedStaff = '';
@@ -73,6 +75,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
       });
     });
   }
+
   int calculateDifference(DateTime date) {
     DateTime now = DateTime.now();
     return DateTime(date.year, date.month, date.day)
@@ -84,7 +87,6 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
       {required String createdBy,
       required String sortChoice,
       required bool ascending}) {
-
     bool isSame = false;
     if (createdBy.toLowerCase() ==
         widget.staffInfo.name.toString().toLowerCase()) {
@@ -121,13 +123,13 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
           //sorting list
           if (sortOption == 'Onwords') {
             if (data['customer_state']
-                .toString()
-                .toLowerCase()
-                .contains('rejected')  ||
+                    .toString()
+                    .toLowerCase()
+                    .contains('rejected') ||
                 data['customer_state']
-                .toString()
-                .toLowerCase()
-                .contains('onwords') ||
+                    .toString()
+                    .toLowerCase()
+                    .contains('onwords') ||
                 data['customer_state']
                     .toString()
                     .toLowerCase()
@@ -135,44 +137,61 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                 data['customer_state']
                     .toString()
                     .toLowerCase()
-                    .contains('rejected from customer') ) {
+                    .contains('rejected from customer')) {
               currentCustomerList.add(data);
             }
-          }else if(sortOption == 'Black dots'){
-          try{
-            //Getting all notes from customer data
-            final Map<Object?, Object?> allNotes =
-            data['notes'] as Map<Object?, Object?>;
-            final noteKeys = allNotes.keys.toList();
-
-            //Checking if key is empty or not
-            if (noteKeys.isNotEmpty) {
-              noteKeys.sort((a, b) => b.toString().compareTo(a.toString()));
-              final Map<Object?, Object?> firstNote =
-              allNotes[noteKeys[0]] as Map<Object?, Object?>;
-              final lastNoteDate = firstNote['date'].toString();
-              final lastNoteUpdatedOn = DateTime.parse(lastNoteDate);
-              print('date is $lastNoteUpdatedOn');
-              if (calculateDifference(lastNoteUpdatedOn) <= -7) {
-                currentCustomerList.add(data);
-              }
+          } else if (sortOption == 'Interested') {
+            if (data['customer_state']
+                    .toString()
+                    .toLowerCase()
+                    .contains('hot lead') ||
+                (data['customer_state']
+                    .toString()
+                    .toLowerCase()
+                    .contains('interested'))) {
+              currentCustomerList.add(data);
             }
-          }catch(e){
-            print('error is $e');
-          }
-          }
-          else if (data['customer_state']
+          } else if (sortOption == 'New leads') {
+            if (data['notes'].toString().toLowerCase() == 'null' &&
+                (data['LeadIncharge']
+                    .toString()
+                    .toLowerCase()
+                    .contains('not assigned'))) {
+              currentCustomerList.add(data);
+            }
+          } else if (sortOption == 'Black dots') {
+            try {
+              //Getting all notes from customer data
+              final Map<Object?, Object?> allNotes =
+                  data['notes'] as Map<Object?, Object?>;
+              final noteKeys = allNotes.keys.toList();
+
+              //Checking if key is empty or not
+              if (noteKeys.isNotEmpty) {
+                noteKeys.sort((a, b) => b.toString().compareTo(a.toString()));
+                final Map<Object?, Object?> firstNote =
+                    allNotes[noteKeys[0]] as Map<Object?, Object?>;
+                final lastNoteDate = firstNote['date'].toString();
+                final lastNoteUpdatedOn = DateTime.parse(lastNoteDate);
+                print('date is $lastNoteUpdatedOn');
+                if (calculateDifference(lastNoteUpdatedOn) <= -7) {
+                  currentCustomerList.add(data);
+                }
+              }
+            } catch (e) {
+              print('error is $e');
+            }
+          } else if (data['customer_state']
               .toString()
               .toLowerCase()
               .contains(sortChoice.toLowerCase())) {
             currentCustomerList.add(data);
           }
-        }else {
+        } else {
           currentCustomerList.add(data);
         }
       }
     }
-
 
     //Sorting list based on created date
     if (ascending) {
@@ -258,7 +277,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
         return nameLower.contains(searchQuery) ||
             phone.contains(searchQuery) ||
             location.contains(searchQuery) ||
-        id == searchQuery;
+            id == searchQuery;
       }).toList();
       setState(() {
         this.query = query;
@@ -348,7 +367,8 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                   return PopupMenuItem(
                     child: Text(
                       staffs[index],
-                      style: TextStyle(fontFamily: ConstantFonts.sfProMedium, fontSize: 15),
+                      style: TextStyle(
+                          fontFamily: ConstantFonts.sfProMedium, fontSize: 15),
                     ),
                     onTap: () {
                       getCustomerDetail(
@@ -361,7 +381,8 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                 return PopupMenuItem(
                   child: Text(
                     staffs[index],
-                    style: TextStyle(fontFamily: ConstantFonts.sfProMedium, fontSize: 15),
+                    style: TextStyle(
+                        fontFamily: ConstantFonts.sfProMedium, fontSize: 15),
                   ),
                   onTap: () {
                     getCustomerDetail(
@@ -380,46 +401,44 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
 
   Widget buildSortDropDown() {
     return PopupMenuButton(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        position: PopupMenuPosition.under,
-        elevation: 10.0,
-        itemBuilder: (ctx) => List.generate(
-              sortList.length,
-              (index) {
-                return PopupMenuItem(
-                  child: Text(
-                    sortList[index],
-                    style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
-                  ),
-                  onTap: () {
-                    getCustomerDetail(
-                        createdBy: selectedStaff == ''
-                            ? widget.staffInfo.name
-                            : selectedStaff,
-                        sortChoice: sortList[index],
-                        ascending: isAscending);
-                  },
-                );
-              },
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      position: PopupMenuPosition.under,
+      elevation: 10.0,
+      itemBuilder: (ctx) => List.generate(
+        sortList.length,
+        (index) {
+          return PopupMenuItem(
+            child: Text(
+              sortList[index],
+              style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
             ),
-        icon: const Icon(
-          Icons.filter_list_rounded,
-          color: Color(0xffB93DCB),
-          size: 25.0,
-        ),
+            onTap: () {
+              getCustomerDetail(
+                  createdBy: selectedStaff == ''
+                      ? widget.staffInfo.name
+                      : selectedStaff,
+                  sortChoice: sortList[index],
+                  ascending: isAscending);
+            },
+          );
+        },
+      ),
+      icon: const Icon(
+        Icons.filter_list_rounded,
+        color: Color(0xffB93DCB),
+        size: 25.0,
+      ),
     );
   }
 
   Widget buildFilterHint() {
-
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 5.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
-
+            padding:
+                const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
             decoration: BoxDecoration(
               color: const Color(0xff8355B7),
               borderRadius: BorderRadius.circular(50.0),
@@ -427,7 +446,9 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
             child: Text(
               'Leads of $selectedStaff',
               style: TextStyle(
-                  fontFamily: ConstantFonts.sfProMedium, fontSize: 14.0,color: Color(0xffF1F2F8)),
+                  fontFamily: ConstantFonts.sfProMedium,
+                  fontSize: 14.0,
+                  color: Color(0xffF1F2F8)),
             ),
           ),
           IconButton(
@@ -437,7 +458,10 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                   sortChoice: sortOption,
                   ascending: isAscending);
             },
-            icon: const Icon(CupertinoIcons.xmark_octagon_fill,size: 20.0,),
+            icon: const Icon(
+              CupertinoIcons.xmark_octagon_fill,
+              size: 20.0,
+            ),
             color: Colors.red,
           ),
         ],
@@ -498,15 +522,25 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                     children: [
                       Text(
                         'Total Count :${currentCustomerList.length}',
-                        style: TextStyle(fontFamily: ConstantFonts.sfProBold, fontSize: 15),
+                        style: TextStyle(
+                            fontFamily: ConstantFonts.sfProBold, fontSize: 15),
                       ),
                       Expanded(
-                        child: ListView.builder(
-                            itemCount: currentCustomerList.length,
-                            itemBuilder: (c, index) {
-                              return CustomerItem(
-                                  customerInfo: currentCustomerList[index], currentStaffName: widget.staffInfo.name, prNames: staffs,);
-                            }),
+                        child: Scrollbar(
+                          thickness: 7,
+                          radius: const Radius.circular(12),
+                          thumbVisibility: true,
+                          interactive: true,
+                          child: ListView.builder(
+                              itemCount: currentCustomerList.length,
+                              itemBuilder: (c, index) {
+                                return CustomerItem(
+                                  customerInfo: currentCustomerList[index],
+                                  currentStaffName: widget.staffInfo.name,
+                                  prNames: staffs,
+                                );
+                              }),
+                        ),
                       ),
                     ],
                   )
@@ -518,15 +552,22 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                           fontSize: 17.0),
                     ),
                   )
-        : searchCustomerInfo.isNotEmpty? ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            itemCount: searchCustomerInfo.length,
-            itemBuilder: (c, index) {
-              return CustomerItem(
-                  customerInfo: searchCustomerInfo[index], currentStaffName: widget.staffInfo.name, prNames: staffs,);
-            }):Padding(
-              padding: const EdgeInsets.only(top: 10.0),
-              child: Text('No result for $query',style: TextStyle(fontFamily: ConstantFonts.sfProMedium),),
-            );
+        : searchCustomerInfo.isNotEmpty
+            ? ListView.builder(
+                itemCount: searchCustomerInfo.length,
+                itemBuilder: (c, index) {
+                  return CustomerItem(
+                    customerInfo: searchCustomerInfo[index],
+                    currentStaffName: widget.staffInfo.name,
+                    prNames: staffs,
+                  );
+                })
+            : Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: Text(
+                  'No result for $query',
+                  style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
+                ),
+              );
   }
 }

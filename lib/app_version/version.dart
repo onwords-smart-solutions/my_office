@@ -1,7 +1,7 @@
 class AppConstants{
   //Android auto-update version checking
-  static String displayVersion = '1.1.27';
-  static String pubVersion = '1.1.27+47';
+  static String displayVersion = '1.1.29';
+  static String pubVersion = '1.1.29+49';
 
   //Ios auto-update version checking
   static String iosDisplayVersion = '1.1.20';

@@ -37,7 +37,7 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
   final virtualAttendance = FirebaseDatabase.instance.ref();
 
   String dummy = 'All';
-  final List<String> dropDown = ['All','Absentees', 'Late entry'];
+  final List<String> dropDown = ['All', 'Absentees', 'Late entry'];
 
   Future<void> staffDetails() async {
     adminStaffNames.clear();
@@ -132,25 +132,24 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
     int absent = 0;
 
     //Sorting
-    if (dummy == 'Late entry'){
-     staffList = adminStaffNames.where((element){
-       try {
-         final time = element
-             .entryTime
-             .toString()
-             .split(':');
-         if (int.parse(time[0]) > 9 ||
-             (int.parse(time[0]) == 9 &&
-                 int.parse(time[1]) > 30)) {
-          return true;
-         }
-       } catch (e) {
-         print(e);
-       }return false;
-     }).toList();
-    }else if (dummy == 'Absentees'){
-      staffList = adminStaffNames.where((element) => element.entryTime.toString().isEmpty).toList();
-    }else{
+    if (dummy == 'Late entry') {
+      staffList = adminStaffNames.where((element) {
+        try {
+          final time = element.entryTime.toString().split(':');
+          if (int.parse(time[0]) > 9 ||
+              (int.parse(time[0]) == 9 && int.parse(time[1]) > 30)) {
+            return true;
+          }
+        } catch (e) {
+          print(e);
+        }
+        return false;
+      }).toList();
+    } else if (dummy == 'Absentees') {
+      staffList = adminStaffNames
+          .where((element) => element.entryTime.toString().isEmpty)
+          .toList();
+    } else {
       staffList = adminStaffNames;
     }
 
@@ -163,11 +162,10 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
     }
     return isLoading
         ? ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            itemCount: 10,
+            itemCount: 50,
             itemBuilder: (context, i) {
-              return const Skeleton(
-                height: 60,
+              return Skeleton(
+                height: height * 0.08,
               );
             },
           )
@@ -245,10 +243,8 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
                       itemBuilder: (ctx, i) {
                         bool lateEntry = false;
                         try {
-                          final time = staffList[i]
-                              .entryTime
-                              .toString()
-                              .split(':');
+                          final time =
+                              staffList[i].entryTime.toString().split(':');
                           if (int.parse(time[0]) > 9 ||
                               (int.parse(time[0]) == 9 &&
                                   int.parse(time[1]) > 30)) {
@@ -348,6 +344,7 @@ class Skeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Container(
       height: height,
       width: width,
@@ -368,21 +365,21 @@ class Skeleton extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            const SizedBox(
-              width: 20,
+            SizedBox(
+              width: size.width * 0.05,
             ),
             Container(
-              height: 55,
-              width: 160,
+              height: size.height * 0.05,
+              width: size.width * 0.5,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 color: Colors.white,
               ),
             ),
-            const SizedBox(width: 40),
+            SizedBox(width: size.width * 0.055),
             Container(
-              height: 55,
-              width: 80,
+              height: size.height * 0.05,
+              width: size.width * 0.20,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
                 color: Colors.white,
