@@ -64,6 +64,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
 
   TextEditingController fileNameController = TextEditingController();
   TextEditingController estimateDateController = TextEditingController();
+  TextEditingController documentDateController = TextEditingController();
 
   double vatPercent = 0.09;
   double gst = 0.0;
@@ -170,6 +171,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
   void dispose() {
     fileNameController.dispose();
     estimateDateController.dispose();
+    documentDateController.dispose();
     super.dispose();
   }
 
@@ -212,16 +214,44 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Preview of Document',style: TextStyle(fontSize: 22, color: Colors.white,fontFamily: ConstantFonts.sfProMedium),),
+        title: Text(
+          'Preview of Document',
+          style: TextStyle(
+              fontSize: 22,
+              color: Colors.white,
+              fontFamily: ConstantFonts.sfProMedium),
+        ),
         centerTitle: true,
         elevation: 0,
         backgroundColor: ConstantColor.backgroundColor,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new,color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.calendar_today_rounded, color: Colors.white),
+            onPressed: () async {
+              DateTime? pickDate = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(2000),
+                //DateTime.now() - not to allow to choose before today.
+                lastDate: DateTime(2101),
+              );
+              if (pickDate != null) {
+                String formattedDate =
+                    DateFormat('yyyy-MM-dd').format(pickDate);
+                setState(() {
+                  documentDateController.text =
+                      formattedDate; //set output date to TextField value.
+                });
+              }
+            },
+          ),
+        ],
       ),
       body: Stack(
         children: [
@@ -275,7 +305,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                                 children: [
                                   Text('Customer Details',
                                       style: TextStyle(
-                                        fontFamily: ConstantFonts.sfProMedium,
+                                          fontFamily: ConstantFonts.sfProMedium,
                                           color: Colors.black)),
                                   createCustomerDetails(
                                     width,
@@ -333,19 +363,25 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                   Text('      Document Details',
+                                  Text('      Document Details',
                                       style: TextStyle(
-                                        fontFamily: ConstantFonts.sfProMedium,
+                                          fontFamily: ConstantFonts.sfProMedium,
                                           color: Colors.black)),
                                   Text(
+                                      ' Date of Document : ${documentDateController.text.isNotEmpty ? documentDateController.text : "Select Date"}',
+                                      style: TextStyle(
+                                          fontFamily: ConstantFonts.sfProMedium,
+                                          color: Colors.black,
+                                          fontSize: 10)),
+                                  Text(
                                       ' Doc-Type : #${customerDetails.docType}',
-                                      style:  TextStyle(
+                                      style: TextStyle(
                                           fontFamily: ConstantFonts.sfProMedium,
                                           color: Colors.black,
                                           fontSize: 10)),
                                   Text(
                                       ' Category : ${customerDetails.docCategory}',
-                                      style:  TextStyle(
+                                      style: TextStyle(
                                           fontFamily: ConstantFonts.sfProMedium,
                                           color: Colors.black,
                                           fontSize: 10)),
@@ -367,68 +403,70 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                         child: Column(
                           children: [
                             /// TABLE HEAD
-                        Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12),
-                                margin: const EdgeInsets.only(bottom: 3),
-                                height: height * .05,
-                                width: width * 1,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: CupertinoColors.systemGrey.withOpacity(0.4),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    tableHeading(
-                                        width, 'Items', width * .0005, true),
-                                    tableHeading(
-                                        width, 'Qty', width * .0003, true),
-                                    tableHeading(width, 'Unit Price',
-                                        width * .0006, true),
-                                    tableHeading(
-                                        width, 'Total', width * .0005, false),
-                                  ],
-                                ),
+                            Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
+                              margin: const EdgeInsets.only(bottom: 3),
+                              height: height * .05,
+                              width: width * 1,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                color:
+                                    CupertinoColors.systemGrey.withOpacity(0.4),
                               ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  tableHeading(
+                                      width, 'Items', width * .0005, true),
+                                  tableHeading(
+                                      width, 'Qty', width * .0003, true),
+                                  tableHeading(
+                                      width, 'Unit Price', width * .0006, true),
+                                  tableHeading(
+                                      width, 'Total', width * .0005, false),
+                                ],
+                              ),
+                            ),
 
                             /// TABLE CONTENT
-                              Container(
+                            Container(
                                 margin: const EdgeInsets.only(top: 3),
-                                  height: height * .4,
-                                  width: width * 1,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(20),
-                                  color: CupertinoColors.systemGrey.withOpacity(0.4),
-                                  ),
-                                  child: ListView.builder(
-                                      scrollDirection: Axis.vertical,
-                                      physics: const BouncingScrollPhysics(),
-                                      itemCount: productDetails.length,
-                                      itemBuilder:
-                                          (BuildContext context, index) {
-                                        final data = [
-                                          productDetails[index].productName,
-                                          productDetails[index]
-                                              .productQuantity
-                                              .toString(),
-                                          productDetails[index]
-                                              .productPrice
-                                              .toString(),
-                                          productDetails[index]
-                                              .subTotalList
-                                              .toString(),
-                                        ];
-                                        return Padding(
-                                          padding: const EdgeInsets.all(0),
-                                          child: Table(
-                                              // border: TableBorder.all(color: Colors.black),
+                                height: height * .4,
+                                width: width * 1,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: CupertinoColors.systemGrey
+                                      .withOpacity(0.4),
+                                ),
+                                child: ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    physics: const BouncingScrollPhysics(),
+                                    itemCount: productDetails.length,
+                                    itemBuilder: (BuildContext context, index) {
+                                      final data = [
+                                        productDetails[index].productName,
+                                        productDetails[index]
+                                            .productQuantity
+                                            .toString(),
+                                        productDetails[index]
+                                            .productPrice
+                                            .toString(),
+                                        productDetails[index]
+                                            .subTotalList
+                                            .toString(),
+                                      ];
+                                      return Padding(
+                                        padding: const EdgeInsets.all(0),
+                                        child: Table(
+                                            // border: TableBorder.all(color: Colors.black),
 
-                                              children: [
-                                                createTableRow(data),
-                                              ]),
-                                        );
-                                      })),
+                                            children: [
+                                              createTableRow(data),
+                                            ]),
+                                      );
+                                    })),
                             const Divider(
                               color: Colors.black,
                               indent: 5,
@@ -490,9 +528,23 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                                 width: width * 1,
                                 height: height * .08,
                                 child: Button('Save', () {
-                                  getDocLength();
-                                  _showDialog(
-                                      context, customerDetails, productDetails);
+                                  if (documentDateController.text.isEmpty) {
+                                    final snackBar = SnackBar(
+                                      backgroundColor: Colors.red,
+                                      content: Text(
+                                        'Please select date located  at the top right corner',
+                                        style: TextStyle(
+                                            fontFamily:
+                                                ConstantFonts.sfProMedium,
+                                            fontSize: 17),
+                                      ),
+                                    );
+                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                  } else {
+                                    getDocLength();
+                                    _showDialog(context, customerDetails,
+                                        productDetails);
+                                  }
                                 }).button()),
                             const SizedBox(
                               height: 20,
@@ -521,9 +573,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
           child: Center(
             child: Text(
               title,
-              style:  TextStyle(
-                fontFamily: ConstantFonts.sfProMedium
-              ),
+              style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
             ),
           ),
         ),
@@ -573,7 +623,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
               child: Text(
                 key,
                 style: TextStyle(
-                  fontFamily: ConstantFonts.sfProMedium,
+                    fontFamily: ConstantFonts.sfProMedium,
                     color: Colors.black,
                     fontSize: 10),
               ),
@@ -585,7 +635,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                 physics: const BouncingScrollPhysics(),
                 child: Text(
                   value,
-                  style:  TextStyle(
+                  style: TextStyle(
                     fontFamily: ConstantFonts.sfProMedium,
                     color: Colors.black,
                     fontSize: 10,
@@ -604,36 +654,37 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
     String value,
   ) {
     return SizedBox(
-        height: height * .03,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              // color: Colors.green,
-              width: 150,
-              child: Text(
-                key,
-                style:  TextStyle(
+      height: height * .03,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(
+            // color: Colors.green,
+            width: 150,
+            child: Text(
+              key,
+              style: TextStyle(
                   fontFamily: ConstantFonts.sfProMedium,
-                    color: Colors.black,
-                    fontSize: 12),
+                  color: Colors.black,
+                  fontSize: 12),
+            ),
+          ),
+          const Center(child: Text(':')),
+          SizedBox(
+            // color: Colors.transparent,
+            width: 150,
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              style: TextStyle(
+                fontFamily: ConstantFonts.sfProMedium,
+                color: Colors.black,
+                fontSize: 10,
               ),
             ),
-            const Center(child: Text(':')),
-            SizedBox(
-              // color: Colors.transparent,
-              width: 150,
-              child: Text(value,
-                  textAlign: TextAlign.end,
-                  style:  TextStyle(
-                    fontFamily: ConstantFonts.sfProMedium,
-                    color: Colors.black,
-                    fontSize: 10,
-                  ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -655,7 +706,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                   style: TextStyle(
                       color: ConstantColor.backgroundColor,
                       fontFamily: ConstantFonts.sfProMedium,
-                  fontSize: 16),
+                      fontSize: 16),
                 ),
                 content: Material(
                   color: Colors.transparent,
@@ -680,10 +731,10 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                         height: 5,
                       ),
                       clientModel.docType != 'QUOTATION'
-                          ?  Text(
+                          ? Text(
                               '  Date For Installation',
                               style: TextStyle(
-                                fontFamily: ConstantFonts.sfProMedium,
+                                  fontFamily: ConstantFonts.sfProMedium,
                                   fontSize: 13,
                                   color: Colors.black),
                             )
@@ -742,7 +793,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                               },
                             )
                           : const SizedBox(),
-                    ],//
+                    ], //
                   ),
                 ),
                 actions: <Widget>[
@@ -792,6 +843,8 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                           needGst: widget.gstNeed,
                           amountToPay: finalTotal.toInt(),
                           percentage: widget.percentage,
+                          documentDate:
+                              DateTime.parse(documentDateController.text),
                         );
 
                         DateTime currentPhoneDate = DateTime.now();

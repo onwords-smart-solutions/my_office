@@ -151,8 +151,8 @@ class _ClientDetailsState extends State<ClientDetails> {
                             icon: const Icon(Icons.call),
                             maxLength: 10,
                             validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter Customer Number';
+                              if (value == null || value.isEmpty || value.length != 10) {
+                                return 'Please enter customer number';
                               }
                               return null;
                             },

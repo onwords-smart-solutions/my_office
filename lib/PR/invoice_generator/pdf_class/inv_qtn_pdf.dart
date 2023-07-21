@@ -20,6 +20,7 @@ class InvAndQtnPdf {
   late int amountToPay;
   late bool needGst;
   late int percentage;
+  late DateTime documentDate;
 
   InvAndQtnPdf({
     required this.documentLen,
@@ -33,6 +34,7 @@ class InvAndQtnPdf {
     required this.amountToPay,
     required this.needGst,
     required this.percentage,
+    required this.documentDate,
   });
 
   Future<File> generate(ClientModel clientModel,
@@ -114,7 +116,7 @@ class InvAndQtnPdf {
                             fontWeight: FontWeight.normal,
                             color: PdfColors.red500,
                             fontSize: 20.0)),
-                    Text("Date :  ${Utils.formatDate(DateTime.now())}",
+                    Text("Date :  ${Utils.formatDate(documentDate)}",
                         style: TextStyle(
                             fontSize: 10, fontWeight: FontWeight.bold)),
                     SizedBox(height: 3),
