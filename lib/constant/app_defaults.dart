@@ -16,6 +16,7 @@ import '../PR/visit_check.dart';
 import '../finance/finance_analysis.dart';
 import '../food_count/food_count_screen.dart';
 import '../late_workdone/late_entry.dart';
+import '../leads/create_leads.dart';
 import '../leads/search_leads.dart';
 import '../leave_apply/leave_apply_screen.dart';
 import '../leave_approval/leave_approval_screen.dart';
@@ -57,6 +58,7 @@ class AppDefaults {
     'Scan QR',
     'PR Reminder',
     'Leave details',
+    'Create leads'
   ];
 
   static List<String> gridButtonPics = [
@@ -86,6 +88,7 @@ class AppDefaults {
     'assets/qr_scanner_points.png',
     'assets/reminder.png',
     'assets/leave_details.png',
+    'assets/create_leads.png',
   ];
 
   Widget getPage(String buttonName, StaffModel staffInfo) {
@@ -204,6 +207,10 @@ class AppDefaults {
       case 'Leave details':
         page = const LeaveDetails();
         break;
+      case 'Create leads':
+        page = CreateLeads(
+          staffName: staffInfo.name,
+        );
     }
     return page;
   }

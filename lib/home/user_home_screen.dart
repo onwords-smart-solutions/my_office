@@ -47,6 +47,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   List<String> managementStaffNames = [];
   List<String> tlStaffNames = [];
   List<String> rndTlStaffNames = [];
+  List<String> installationBoysNames = [];
   List<String> userAccessGridButtonsName = [];
   List<String> userAccessGridButtonsPics = [];
 
@@ -64,6 +65,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     });
     await getTlNames();
     await getRndTlNames();
+    await getInstallationNames();
     getStaffDetail();
   }
 
@@ -95,6 +97,20 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     });
   }
 
+  //Getting installation boys names from database
+  Future<void> getInstallationNames() async {
+    List<String> installationNames = [];
+    final ref = FirebaseDatabase.instance.ref().child('special_access');
+    await ref.child('installation').once().then((value) {
+      if (value.snapshot.exists) {
+        for (var tl in value.snapshot.children) {
+          installationNames.add(tl.value.toString());
+        }
+        installationBoysNames = installationNames;
+      }
+    });
+  }
+
   StaffModel? staffInfo;
   late StreamSubscription subscription;
   var isDeviceConnected = false;
@@ -119,19 +135,24 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   void getStaffDetail() async {
     final data = await _hiveOperations.getStaffDetail();
     setState(() {
-      log('management names are $managementStaffNames');
       log('current user is ${data.name}');
+      log('management names are $managementStaffNames');
       log('tl names are $tlStaffNames');
       log('rnd tl names are $rndTlStaffNames');
+      log('installation boys names are $installationBoysNames');
       if (managementStaffNames.any((element) => element == data.name)) {
-        userAccessGridButtonsName.addAll(AppDefaults.gridButtonsNames);
-        userAccessGridButtonsName.remove('View suggestions');
-        userAccessGridButtonsName.remove('Onyx');
-        userAccessGridButtonsName.remove('Late entry');
-        userAccessGridButtonsPics.addAll(AppDefaults.gridButtonPics);
-        userAccessGridButtonsPics.remove('assets/view_suggestions.png');
-        userAccessGridButtonsPics.remove('assets/onxy.png');
-        userAccessGridButtonsPics.remove('assets/late_entry.png');
+          userAccessGridButtonsName.addAll(AppDefaults.gridButtonsNames);
+          userAccessGridButtonsPics.addAll(AppDefaults.gridButtonPics);
+          if(staffInfo?.uid != 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2'){
+            userAccessGridButtonsName.remove('Create leads');
+            userAccessGridButtonsPics.remove('assets/create_leads.png');
+          }
+          userAccessGridButtonsName.remove('View suggestions');
+          userAccessGridButtonsName.remove('Onyx');
+          userAccessGridButtonsName.remove('Late entry');
+          userAccessGridButtonsPics.remove('assets/view_suggestions.png');
+          userAccessGridButtonsPics.remove('assets/onxy.png');
+          userAccessGridButtonsPics.remove('assets/late_entry.png');
       } else if (tlStaffNames.any((element) => element == data.name)) {
         for (int i = 0; i < AppDefaults.gridButtonsNames.length; i++) {
           if (AppDefaults.gridButtonsNames[i] == 'Work entry' ||
@@ -155,6 +176,18 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'Refreshment' ||
               AppDefaults.gridButtonsNames[i] == 'Leave apply form' ||
               AppDefaults.gridButtonsNames[i] == 'Leave approval' ||
+              AppDefaults.gridButtonsNames[i] == 'Suggestions' ||
+              AppDefaults.gridButtonsNames[i] == 'Virtual attendance') {
+            userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
+            userAccessGridButtonsPics.add(AppDefaults.gridButtonPics[i]);
+          }
+        }
+      } else if (installationBoysNames.any((element) => element == data.name)) {
+        for (int i = 0; i < AppDefaults.gridButtonsNames.length; i++) {
+          if (AppDefaults.gridButtonsNames[i] == 'Work entry' ||
+              AppDefaults.gridButtonsNames[i] == 'Refreshment' ||
+              AppDefaults.gridButtonsNames[i] == 'Leave apply form' ||
+              AppDefaults.gridButtonsNames[i] == 'Invoice generator' ||
               AppDefaults.gridButtonsNames[i] == 'Suggestions' ||
               AppDefaults.gridButtonsNames[i] == 'Virtual attendance') {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
@@ -280,7 +313,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
   @override
   void initState() {
-    checkAppVersion();
+    // checkAppVersion();
     getManagementNames();
     getConnectivity();
     setNotification();

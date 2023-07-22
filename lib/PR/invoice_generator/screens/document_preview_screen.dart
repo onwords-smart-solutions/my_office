@@ -161,6 +161,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
 
   @override
   void initState() {
+    documentDateController.text = DateFormat('yyyy-MM-dd').format(date).toString();
     getStaffDetail();
     getId();
     getDocLength();
@@ -528,23 +529,9 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                                 width: width * 1,
                                 height: height * .08,
                                 child: Button('Save', () {
-                                  if (documentDateController.text.isEmpty) {
-                                    final snackBar = SnackBar(
-                                      backgroundColor: Colors.red,
-                                      content: Text(
-                                        'Please select date located  at the top right corner',
-                                        style: TextStyle(
-                                            fontFamily:
-                                                ConstantFonts.sfProMedium,
-                                            fontSize: 17),
-                                      ),
-                                    );
-                                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                                  } else {
                                     getDocLength();
                                     _showDialog(context, customerDetails,
                                         productDetails);
-                                  }
                                 }).button()),
                             const SizedBox(
                               height: 20,
