@@ -85,6 +85,7 @@ class _ViewSuggestionsState extends State<ViewSuggestions> {
                     child: Icon(CupertinoIcons.bookmark_solid),
                   ),
                   title: Text(
+
                       allSuggestion[index]['message'].toString().length >= 30? '${allSuggestion[index]['message'].toString().substring(0, 30)} ...': allSuggestion[index]['message'].toString(),
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,

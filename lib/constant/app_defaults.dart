@@ -6,6 +6,7 @@ import 'package:my_office/PR/products/scan_qr.dart';
 import 'package:my_office/leave_details/leave_details.dart';
 import 'package:my_office/models/staff_model.dart';
 import '../Absentees/absentees.dart';
+import '../PR/invoice_generator/quotation_template/view/home_screen.dart';
 import '../PR/pr_workdone/pr_work_details.dart';
 import '../PR/pr_workdone/pr_work_entry.dart';
 import '../PR/products/new_product.dart';
@@ -58,7 +59,8 @@ class AppDefaults {
     'Scan QR',
     'PR Reminder',
     'Leave details',
-    'Create leads'
+    'Create leads',
+    'Quotation template',
   ];
 
   static List<String> gridButtonPics = [
@@ -89,6 +91,7 @@ class AppDefaults {
     'assets/reminder.png',
     'assets/leave_details.png',
     'assets/create_leads.png',
+    'assets/quotation_template.png',
   ];
 
   Widget getPage(String buttonName, StaffModel staffInfo) {
@@ -208,9 +211,11 @@ class AppDefaults {
         page = const LeaveDetails();
         break;
       case 'Create leads':
-        page = CreateLeads(
-          staffName: staffInfo.name,
-        );
+        page = CreateLeads(staffName: staffInfo.name);
+        break;
+      case 'Quotation template':
+        page = const Client1Details();
+        break;
     }
     return page;
   }

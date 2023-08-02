@@ -189,7 +189,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'Leave apply form' ||
               AppDefaults.gridButtonsNames[i] == 'Invoice generator' ||
               AppDefaults.gridButtonsNames[i] == 'Suggestions' ||
-              AppDefaults.gridButtonsNames[i] == 'Virtual attendance') {
+              AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
+              AppDefaults.gridButtonsNames[i] == 'Quotation template' ) {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
             userAccessGridButtonsPics.add(AppDefaults.gridButtonPics[i]);
           }
@@ -313,7 +314,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
   @override
   void initState() {
-    // checkAppVersion();
+    checkAppVersion();
     getManagementNames();
     getConnectivity();
     setNotification();

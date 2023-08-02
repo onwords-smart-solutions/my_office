@@ -18,6 +18,7 @@ import 'package:my_office/util/notification_services.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'PR/invoice_generator/models/providers.dart';
+import 'PR/invoice_generator/quotation_template/provider/providers.dart';
 import 'PR/invoice_generator/screens/client_detials.dart';
 import 'firebase_options.dart';
 import 'introduction/intro_screen.dart';
@@ -72,6 +73,7 @@ class _MyAppState extends State<MyApp> {
       MultiProvider(
         providers: [
         ChangeNotifierProvider(create: (context) => InvoiceProvider()),
+          ChangeNotifierProvider(create: (context) => Invoice1Provider()),
       ],
         child: MaterialApp(
           title: 'My Office',

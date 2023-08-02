@@ -152,11 +152,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
               currentCustomerList.add(data);
             }
           } else if (sortOption == 'New leads') {
-            if (data['notes'].toString().toLowerCase() == 'null' &&
-                (data['LeadIncharge']
-                    .toString()
-                    .toLowerCase()
-                    .contains('not assigned'))) {
+            if (data['notes'].toString().toLowerCase() == 'null') {
               currentCustomerList.add(data);
             }
           } else if (sortOption == 'Black dots') {
