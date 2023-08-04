@@ -32,9 +32,9 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
 
   void checkMorningTime() {
     final mngStart = DateTime(currentDateTime.year, currentDateTime.month,
-        currentDateTime.day, 9, 30);
+        currentDateTime.day, 10, 0);
     final mngEnd = DateTime(currentDateTime.year, currentDateTime.month,
-        currentDateTime.day, 11, 0);
+        currentDateTime.day, 10, 45);
     if (currentDateTime.isBefore(mngEnd) && currentDateTime.isAfter(mngStart)) {
       setState(() {
         isMngTea = true;
@@ -44,7 +44,7 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
 
   void checkEveningTime() {
     final evgStart = DateTime(currentDateTime.year, currentDateTime.month,
-        currentDateTime.day, 13, 30);
+        currentDateTime.day, 14, 0);
     final evgEnd = DateTime(currentDateTime.year, currentDateTime.month,
         currentDateTime.day, 15, 30);
     if (currentDateTime.isBefore(evgEnd) && currentDateTime.isAfter(evgStart)) {
@@ -161,31 +161,54 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
             child: Column(
               children: [
                 Lottie.asset('assets/animations/Time anime.json', height: 200),
+                const SizedBox(height: 20.0),
+                Text(
+                  'Wait until Refreshment portal opens...',
+                  style: TextStyle(
+                      fontFamily: ConstantFonts.sfProBold, fontSize: 18.0),
+                  textAlign: TextAlign.center,
+                ),
                 const SizedBox(height: 15.0),
-                Text(
-                  'Wait until refreshment portal opens...',
-                  style: TextStyle(
-                      fontFamily: ConstantFonts.sfProBold,
-                      color: Colors.deepPurple,
-                      fontSize: 18.0),
-                  textAlign: TextAlign.center,
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Morning refreshment and food time - ',
+                        style: TextStyle(
+                            fontFamily: ConstantFonts.sfProMedium,
+                            color: Colors.black,
+                            fontSize: 13.0),
+                      ),
+                      TextSpan(
+                        text: '(10:00 AM - 10:45 AM)',
+                        style: TextStyle(
+                            fontFamily: ConstantFonts.sfProMedium,
+                            color: Colors.purple,
+                            fontSize: 12.0),
+                      ),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 25.0),
-                Text(
-                  'Morning refreshment and food time: 9:30 AM - 11:00 AM',
-                  style: TextStyle(
-                      fontFamily: ConstantFonts.sfProMedium,
-                      color: Colors.brown,
-                      fontSize: 13.0),
-                  textAlign: TextAlign.center,
-                ),
-                Text(
-                  'Evening refreshment time: 1:30 PM - 3:30 PM',
-                  style: TextStyle(
-                      fontFamily: ConstantFonts.sfProMedium,
-                      color: Colors.brown,
-                      fontSize: 13.0),
-                  textAlign: TextAlign.center,
+                const SizedBox(height: 5),
+                RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Evening refreshment time - ',
+                        style: TextStyle(
+                            fontFamily: ConstantFonts.sfProMedium,
+                            color: Colors.black,
+                            fontSize: 13.0),
+                      ),
+                      TextSpan(
+                        text: '(2:00 PM - 3:30 PM)',
+                        style: TextStyle(
+                            fontFamily: ConstantFonts.sfProMedium,
+                            color: Colors.purple,
+                            fontSize: 12.0),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -240,7 +263,13 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
     }
 
     //Checking background running app with time in slider
-    if(today.hour < 9 ||(today.hour >= 11 && today.minute > 0 && today.hour <=13 && today.minute < 30) || (today.hour >= 15 && today.minute > 30)||today.hour>15){
+    if (today.hour < 9 ||
+        (today.hour >= 10 &&
+            today.minute > 45 &&
+            today.hour <= 14 &&
+            today.minute < 00) ||
+        (today.hour >= 15 && today.minute > 30) ||
+        today.hour > 15) {
       showSnackBar(message: 'Refreshment time exceeded', color: Colors.red);
       return;
     }
@@ -270,10 +299,9 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
             }
 
             // bookFood(foodCount: foodCount, date: format);
-            } else {
-              bookFood(foodCount: foodCount, date: format);
-            }
-
+          } else {
+            bookFood(foodCount: foodCount, date: format);
+          }
         },
       );
     } else {

@@ -143,7 +143,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       if (managementStaffNames.any((element) => element == data.name)) {
           userAccessGridButtonsName.addAll(AppDefaults.gridButtonsNames);
           userAccessGridButtonsPics.addAll(AppDefaults.gridButtonPics);
-          if(staffInfo?.uid != 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2'){
+          if(data.uid != 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2'){
             userAccessGridButtonsName.remove('Create leads');
             userAccessGridButtonsPics.remove('assets/create_leads.png');
           }

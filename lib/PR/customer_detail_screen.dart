@@ -330,7 +330,10 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                 widget.currentStaffName == 'Jeeva S' ||
                 widget.currentStaffName == 'Pradeep Kanth' ||
                 widget.currentStaffName == 'Arun Kumar' ||
-                widget.currentStaffName == 'Sakthivel Nagaraj'
+                widget.currentStaffName == 'Sakthivel Nagaraj' ||
+                widget.currentStaffName == 'Vasanth Kumar' ||
+                widget.currentStaffName == 'Rajkannan B' ||
+                widget.currentStaffName == 'Logesh P'
             ? Center(
                 child: Padding(
                   padding: const EdgeInsets.all(12),
