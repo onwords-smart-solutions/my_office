@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -28,6 +29,7 @@ import '../Constant/fonts/constant_font.dart';
 import '../app_version/version.dart';
 import '../constant/app_defaults.dart';
 import '../database/hive_operations.dart';
+import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({Key? key}) : super(key: key);
@@ -116,7 +118,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   var isDeviceConnected = false;
   bool isAlertSet = false;
 
-  //Checking internet connectivity
+  //CHECKING INTERNET CONNECTIVITY
   getConnectivity() {
     subscription = Connectivity()
         .onConnectivityChanged
@@ -131,28 +133,28 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     });
   }
 
-  //Getting staff details for accessing the home screen tabs
+  //GETTING STAFF DETAILS FOR CHECKING THE HOME SCREEN TABS
   void getStaffDetail() async {
     final data = await _hiveOperations.getStaffDetail();
     setState(() {
-      log('current user is ${data.name}');
-      log('management names are $managementStaffNames');
-      log('tl names are $tlStaffNames');
-      log('rnd tl names are $rndTlStaffNames');
-      log('installation boys names are $installationBoysNames');
+      // log('current user is ${data.name}');
+      // log('management names are $managementStaffNames');
+      // log('tl names are $tlStaffNames');
+      // log('rnd tl names are $rndTlStaffNames');
+      // log('installation boys names are $installationBoysNames');
       if (managementStaffNames.any((element) => element == data.name)) {
-          userAccessGridButtonsName.addAll(AppDefaults.gridButtonsNames);
-          userAccessGridButtonsPics.addAll(AppDefaults.gridButtonPics);
-          if(data.uid != 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2'){
-            userAccessGridButtonsName.remove('Create leads');
-            userAccessGridButtonsPics.remove('assets/create_leads.png');
-          }
-          userAccessGridButtonsName.remove('View suggestions');
-          userAccessGridButtonsName.remove('Onyx');
-          userAccessGridButtonsName.remove('Late entry');
-          userAccessGridButtonsPics.remove('assets/view_suggestions.png');
-          userAccessGridButtonsPics.remove('assets/onxy.png');
-          userAccessGridButtonsPics.remove('assets/late_entry.png');
+        userAccessGridButtonsName.addAll(AppDefaults.gridButtonsNames);
+        userAccessGridButtonsPics.addAll(AppDefaults.gridButtonPics);
+        if (data.uid != 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2') {
+          userAccessGridButtonsName.remove('Create leads');
+          userAccessGridButtonsPics.remove('assets/create_leads.png');
+        }
+        userAccessGridButtonsName.remove('View suggestions');
+        userAccessGridButtonsName.remove('Onyx');
+        userAccessGridButtonsName.remove('Late entry');
+        userAccessGridButtonsPics.remove('assets/view_suggestions.png');
+        userAccessGridButtonsPics.remove('assets/onxy.png');
+        userAccessGridButtonsPics.remove('assets/late_entry.png');
       } else if (tlStaffNames.any((element) => element == data.name)) {
         for (int i = 0; i < AppDefaults.gridButtonsNames.length; i++) {
           if (AppDefaults.gridButtonsNames[i] == 'Work entry' ||
@@ -164,7 +166,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'Suggestions' ||
               AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
               AppDefaults.gridButtonsNames[i] == 'Check Virtual entry' ||
-              AppDefaults.gridButtonsNames[i] == 'Entry time') {
+              AppDefaults.gridButtonsNames[i] == 'Entry time' ||
+              AppDefaults.gridButtonsNames[i] == 'Quotation template') {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
             userAccessGridButtonsPics.add(AppDefaults.gridButtonPics[i]);
           }
@@ -177,7 +180,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'Leave apply form' ||
               AppDefaults.gridButtonsNames[i] == 'Leave approval' ||
               AppDefaults.gridButtonsNames[i] == 'Suggestions' ||
-              AppDefaults.gridButtonsNames[i] == 'Virtual attendance') {
+              AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
+              AppDefaults.gridButtonsNames[i] == 'Quotation template') {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
             userAccessGridButtonsPics.add(AppDefaults.gridButtonPics[i]);
           }
@@ -190,7 +194,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'Invoice generator' ||
               AppDefaults.gridButtonsNames[i] == 'Suggestions' ||
               AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
-              AppDefaults.gridButtonsNames[i] == 'Quotation template' ) {
+              AppDefaults.gridButtonsNames[i] == 'Quotation template') {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
             userAccessGridButtonsPics.add(AppDefaults.gridButtonPics[i]);
           }
@@ -218,7 +222,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'PR Work done' ||
               AppDefaults.gridButtonsNames[i] == 'Sales points' ||
               AppDefaults.gridButtonsNames[i] == 'Scan QR' ||
-              AppDefaults.gridButtonsNames[i] == 'PR Reminder') {
+              AppDefaults.gridButtonsNames[i] == 'PR Reminder' ||
+              AppDefaults.gridButtonsNames[i] == 'Quotation template') {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
             userAccessGridButtonsPics.add(AppDefaults.gridButtonPics[i]);
           }
@@ -240,7 +245,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     });
   }
 
-  //Notification set
+  //SETTING NOTIFICATION FOR REFRESHMENT
   setNotification() async {
     final pref = await SharedPreferences.getInstance();
     final isNotificationSet = pref.getString('NotificationSetTime') ?? '';
@@ -248,7 +253,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         setTime: isNotificationSet);
   }
 
-  //CHECKING APP VERSION..
+  //CHECKING APP VERSION
   Future<void> checkAppVersion() async {
     final ref = FirebaseDatabase.instance.ref();
     ref.child('myOffice').once().then((value) {
@@ -262,9 +267,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     });
   }
 
-  //Getting device specific token from each device..
+  //GETTING ALL MOBILE DEVICE ID'S AS TOKENS
   FirebaseMessaging messaging = FirebaseMessaging.instance;
-
   Future<void> getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
@@ -277,7 +281,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     }
   }
 
-  //Saving device token in Firestore database..
+  //SAVING THE DEVICE TOKENS IN FIRESTORE DB
   Future<void> saveTokenToDb(String fcmToken) async {
     await FirebaseFirestore.instance
         .collection('Devices')
@@ -290,7 +294,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     });
   }
 
-  //Requesting permission for sending separate notifications to specific devices..
+  //REQUEST PERMISSION FOR SENDING DEVICE NOTIFICATIONS SEPARATELY
   void requestPermission() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     NotificationSettings settings = await messaging.requestPermission(
@@ -309,6 +313,18 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       print('user granted limited access');
     } else {
       print('user denied permission');
+    }
+  }
+
+  //TIME OF DAY GREETING IN HOME SCREEN
+  String greeting() {
+    var hour = DateTime.now().hour;
+    if (hour < 12) {
+      return "Good morning 🤗";
+    } else if (hour < 16) {
+      return "Good afternoon 🫡";
+    } else {
+      return "Good evening 😎";
     }
   }
 
@@ -363,7 +379,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return MainTemplate(
-      subtitle: 'Welcome back👋',
+      subtitle: greeting(),
       templateBody: buildMenuGrid(height, width),
       bgColor: ConstantColor.background1Color,
     );
@@ -460,7 +476,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           ),
         ),
         content: Text(
-          "Please check your internet connection",
+          "Please connect to a Wi-Fi / Mobile network 📶",
           style: TextStyle(
             color: ConstantColor.headingTextColor,
             fontFamily: ConstantFonts.sfProMedium,
@@ -547,7 +563,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     ),
               actions: [
                 isUpdating
-                    ? SizedBox.shrink()
+                    ? const SizedBox.shrink()
                     : CupertinoDialogAction(
                         isDefaultAction: true,
                         textStyle: TextStyle(
@@ -594,9 +610,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       await tempFile.create();
       await InstallPlugin.installApk(tempFile.path, 'com.onwords.office')
           .then((result) {
-        print('install apk $result');
+        // print('install apk $result');
       }).catchError((error) {
-        print('install apk error: $error');
+        // print('install apk error: $error');
       });
     } on FirebaseException {
       ScaffoldMessenger.of(context).showSnackBar(
