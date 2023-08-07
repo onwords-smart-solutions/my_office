@@ -68,7 +68,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
 
   @override
   void didChangeDependencies() {
-    widget.type == "SL-GA" ? addProducts = slidingGateData : widget.type == "SL-GA" ? swingGateData :addProducts = smartHomeData;
+    widget.type == "SL-GA" ? addProducts = slidingGateData : widget.type == "SW-GA" ? addProducts = swingGateData : addProducts = smartHomeData;
     super.didChangeDependencies();
   }
 
