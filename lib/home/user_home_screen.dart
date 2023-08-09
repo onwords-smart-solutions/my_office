@@ -152,9 +152,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         userAccessGridButtonsName.remove('View suggestions');
         userAccessGridButtonsName.remove('Onyx');
         userAccessGridButtonsName.remove('Late entry');
+        userAccessGridButtonsName.remove('Staff details');
         userAccessGridButtonsPics.remove('assets/view_suggestions.png');
         userAccessGridButtonsPics.remove('assets/onxy.png');
         userAccessGridButtonsPics.remove('assets/late_entry.png');
+        userAccessGridButtonsPics.remove('assets/staff_details.png');
       } else if (tlStaffNames.any((element) => element == data.name)) {
         for (int i = 0; i < AppDefaults.gridButtonsNames.length; i++) {
           if (AppDefaults.gridButtonsNames[i] == 'Work entry' ||
@@ -209,6 +211,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       } else if (data.department == 'APP') {
         userAccessGridButtonsName.addAll(AppDefaults.gridButtonsNames);
         userAccessGridButtonsPics.addAll(AppDefaults.gridButtonPics);
+        if (data.uid != '58JIRnAbechEMJl8edlLvRzHcW52') {
+          userAccessGridButtonsName.remove('Staff details');
+          userAccessGridButtonsPics.remove('assets/staff_details.png',);
+        }
       } else if (data.department == 'PR') {
         for (int i = 0; i < AppDefaults.gridButtonsNames.length; i++) {
           if (AppDefaults.gridButtonsNames[i] == 'Work entry' ||
@@ -322,9 +328,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     if (hour < 12) {
       return "Good morning 🤗";
     } else if (hour < 16) {
-      return "Good afternoon 🫡";
+      return "Good afternoon 😑";
     } else {
-      return "Good evening 😎";
+      return "Good evening 😏";
     }
   }
 

@@ -23,6 +23,7 @@ import '../leave_apply/leave_apply_screen.dart';
 import '../leave_approval/leave_approval_screen.dart';
 import '../onyx/announcement.dart';
 import '../refreshment/refreshment_screen.dart';
+import '../staff_details/staff_details.dart';
 import '../suggestions/suggestions.dart';
 import '../suggestions/view_suggestions.dart';
 import '../tl_check_screen/check_entry.dart';
@@ -61,6 +62,7 @@ class AppDefaults {
     'Leave details',
     'Create leads',
     'Quotation template',
+    'Staff details',
   ];
 
   static List<String> gridButtonPics = [
@@ -92,6 +94,7 @@ class AppDefaults {
     'assets/leave_details.png',
     'assets/create_leads.png',
     'assets/quotation_template.png',
+    'assets/staff_details.png',
   ];
 
   Widget getPage(String buttonName, StaffModel staffInfo) {
@@ -216,6 +219,8 @@ class AppDefaults {
       case 'Quotation template':
         page = const Client1Details();
         break;
+      case 'Staff details':
+        page = const StaffDetails();
     }
     return page;
   }

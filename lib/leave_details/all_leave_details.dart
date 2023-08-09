@@ -223,7 +223,7 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                   ? Column(
                       children: [
                         Lottie.asset(
-                            'assets/animations/leave_detail_animation.json'),
+                            'assets/animations/no_data.json'),
                         Text(
                           'No leaves has been submitted🤗',
                           style: TextStyle(
@@ -261,6 +261,14 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                                         color: Colors.green,
                                       ),
                                     ),
+                                    Text(
+                                      'Updated by - ${staffNames[i].updatedBy}',
+                                      style: TextStyle(
+                                        fontFamily: ConstantFonts.sfProMedium,
+                                        fontSize: 16,
+                                        color: Colors.green,
+                                      ),
+                                    ),
                                     SizedBox(height: size.height * 0.01),
                                   ],
                                 ),
@@ -292,6 +300,14 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                                             color: CupertinoColors.activeOrange,
                                           ),
                                         ),
+                                        Text(
+                                          'Updated by - ${staffNames[i].updatedBy}',
+                                          style: TextStyle(
+                                            fontFamily: ConstantFonts.sfProMedium,
+                                            fontSize: 16,
+                                            color: CupertinoColors.activeOrange,
+                                          ),
+                                        ),
                                         SizedBox(height: size.height * 0.01),
                                       ],
                                     ),
@@ -318,6 +334,14 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                                               style: TextStyle(
                                                 fontFamily:
                                                     ConstantFonts.sfProMedium,
+                                                fontSize: 16,
+                                                color: Colors.red,
+                                              ),
+                                            ),
+                                            Text(
+                                              'Updated by - ${staffNames[i].updatedBy}',
+                                              style: TextStyle(
+                                                fontFamily: ConstantFonts.sfProMedium,
                                                 fontSize: 16,
                                                 color: Colors.red,
                                               ),

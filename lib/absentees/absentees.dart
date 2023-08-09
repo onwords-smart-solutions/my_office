@@ -166,7 +166,7 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
             ),
           ),
           isLoading
-              ? Lottie.asset('assets/animations/new_loading.json')
+              ? Expanded(child: Lottie.asset('assets/animations/new_loading.json'))
               : absentees.isNotEmpty
               ? Expanded(
             child: ListView.builder(

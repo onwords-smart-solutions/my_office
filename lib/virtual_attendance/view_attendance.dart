@@ -140,8 +140,8 @@ class _ViewAttendanceScreenState extends State<ViewAttendanceScreen> {
           fontSize: 17,
           fontFamily: ConstantFonts.sfProBold,
         ),
-        ),
-        isLoading ? Lottie.asset('assets/animations/new_loading.json') :
+        ), 
+        isLoading ? Expanded(child: Lottie.asset('assets/animations/new_loading.json')) :
         fullAttendance.isNotEmpty
             ? Expanded(
                 child: ListView.builder(

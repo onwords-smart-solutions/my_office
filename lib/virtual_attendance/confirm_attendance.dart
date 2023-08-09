@@ -24,7 +24,7 @@ class ConfirmAttendanceScreen extends StatelessWidget {
           Lottie.asset('assets/animations/attendance.json',
               height: 400, fit: BoxFit.contain),
           Text(
-            'Wait Until your Entry is Registered!!',
+            'Wait, Until you are redirected to the home screen⌛',
             style: TextStyle(
               fontFamily: ConstantFonts.sfProMedium,
               fontSize: 20,

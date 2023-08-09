@@ -9,17 +9,17 @@ List<ListOfTable> smartHomeData = [
 ];
 
 List<ListOfTable> slidingGateData = [
-  ListOfTable(productName: 'Sliding Gate Motor - 600KG', productQuantity: 1, productPrice: 29696, subTotalList: 29696),
+  ListOfTable(productName: 'Sliding Gate Motor - 600KG', productQuantity: 1, productPrice: 34696, subTotalList: 34696),
   ListOfTable(productName: 'Sliding Gate 600 KG Controller', productQuantity: 1, productPrice: 9999, subTotalList: 9999),
   ListOfTable(productName: 'Safety Sensor', productQuantity: 1, productPrice: 3304, subTotalList: 3304),
-  ListOfTable(productName: 'Labour', productQuantity: 1, productPrice: 5000, subTotalList: 5000),
+  // ListOfTable(productName: 'Labour', productQuantity: 1, productPrice: 5000, subTotalList: 5000),
 ];
 
 List<ListOfTable> swingGateData = [
-  ListOfTable(productName: 'Swing Gate Arm - 600KG', productQuantity: 1, productPrice: 31696, subTotalList: 31696),
+  ListOfTable(productName: 'Swing Gate Arm - 600KG', productQuantity: 1, productPrice: 40000, subTotalList: 40000),
   ListOfTable(productName: 'Swing Gate Arm Controller', productQuantity: 1, productPrice: 9999, subTotalList: 9999),
-  ListOfTable(productName: 'Safety Sensor', productQuantity: 1, productPrice: 3304, subTotalList: 3304),
-  ListOfTable(productName: 'Labour', productQuantity: 1, productPrice: 5000, subTotalList: 5000),
+  // ListOfTable(productName: 'Safety Sensor', productQuantity: 1, productPrice: 3304, subTotalList: 3304),
+  // ListOfTable(productName: 'Labour', productQuantity: 1, productPrice: 5000, subTotalList: 5000),
 ];
 
 double get getSmartHomeSubTotal{
