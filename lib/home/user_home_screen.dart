@@ -326,11 +326,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   String greeting() {
     var hour = DateTime.now().hour;
     if (hour < 12) {
-      return "Good morning 🤗";
+      return "Good morning, Today's ur day🤗";
     } else if (hour < 16) {
-      return "Good afternoon 😑";
+      return "Good noon, Stay focused😍";
     } else {
-      return "Good evening 😏";
+      return "Good evening, Let's do it🤩";
     }
   }
 

@@ -326,6 +326,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                             FullRemindersScreen(
                                           staffInfo: widget.staffInfo,
                                           fullReminders: reminders[i],
+                                              prStaffs: staffs,
                                         ),
                                       ),
                                     );

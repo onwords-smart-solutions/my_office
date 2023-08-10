@@ -173,7 +173,7 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
                 widget.staffName == 'Devendiran' ||
                 widget.staffName == 'Anitha' ||
                 widget.staffName == 'Prem Kumar' ||
-                widget.staffName == 'Koushik Romel' ||
+                widget.staffName == 'Gipson Joseph' ||
                 widget.staffName == 'Jibin K John' ||
                 widget.staffName == 'Vinith' ||
                 widget.staffName == 'Raam Kumar' ||

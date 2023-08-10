@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
+import '../../../../Constant/fonts/constant_font.dart';
 import 'main_pdf_class.dart';
 import '../model/client_model.dart';
 import '../model/table_list.dart';
@@ -62,6 +63,18 @@ class InvAndQtnPdf {
           ),
           SizedBox(height: 0.3 * PdfPageFormat.cm),
           Divider(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('** NOTE : GST & LABOUR COST WILL BE CHARGED SEPARATELY **',
+                style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                    color: PdfColors.red
+                ),
+              ),
+            ],
+          ),
           buildTermsAndConditions(clientModel),
         ],
         footer: (context) => buildFooter(clientModel),

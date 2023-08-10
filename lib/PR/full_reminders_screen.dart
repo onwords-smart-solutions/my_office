@@ -7,11 +7,18 @@ import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 import '../models/reminder_model.dart';
 import '../util/screen_template.dart';
+import 'customer_detail_screen.dart';
 
 class FullRemindersScreen extends StatefulWidget {
   final ReminderModel fullReminders;
   final StaffModel staffInfo;
-  const FullRemindersScreen({super.key, required this.fullReminders, required this.staffInfo});
+  final List<String> prStaffs;
+
+  const FullRemindersScreen(
+      {super.key,
+      required this.fullReminders,
+      required this.staffInfo,
+      required this.prStaffs});
 
   @override
   State<FullRemindersScreen> createState() => _FullRemindersScreenState();
@@ -26,7 +33,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
     );
   }
 
-  Widget buildReminderScreen(){
+  Widget buildReminderScreen() {
     return Column(
       children: [
         Padding(
@@ -64,9 +71,9 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                     child: SelectableText(
                       widget.fullReminders.customerName,
                       style: TextStyle(
-                          color: ConstantColor.backgroundColor,
-                          fontSize: 14,
-                          fontFamily: ConstantFonts.sfProMedium,
+                        color: ConstantColor.backgroundColor,
+                        fontSize: 14,
+                        fontFamily: ConstantFonts.sfProMedium,
                       ),
                     ),
                   ),
@@ -94,9 +101,9 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                     child: SelectableText(
                       widget.fullReminders.city,
                       style: TextStyle(
-                          color: ConstantColor.backgroundColor,
-                          fontSize: 14,
-                          fontFamily: ConstantFonts.sfProMedium,
+                        color: ConstantColor.backgroundColor,
+                        fontSize: 14,
+                        fontFamily: ConstantFonts.sfProMedium,
                       ),
                     ),
                   ),
@@ -124,9 +131,9 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                     child: SelectableText(
                       widget.fullReminders.createdBy,
                       style: TextStyle(
-                          color: ConstantColor.backgroundColor,
-                          fontSize: 14,
-                          fontFamily: ConstantFonts.sfProMedium,
+                        color: ConstantColor.backgroundColor,
+                        fontSize: 14,
+                        fontFamily: ConstantFonts.sfProMedium,
                       ),
                     ),
                   ),
@@ -154,9 +161,9 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                     child: SelectableText(
                       widget.fullReminders.createdDate,
                       style: TextStyle(
-                          color: ConstantColor.backgroundColor,
-                          fontSize: 14,
-                          fontFamily: ConstantFonts.sfProMedium,
+                        color: ConstantColor.backgroundColor,
+                        fontSize: 14,
+                        fontFamily: ConstantFonts.sfProMedium,
                       ),
                     ),
                   ),
@@ -184,9 +191,9 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                     child: SelectableText(
                       widget.fullReminders.createdTime,
                       style: TextStyle(
-                          color: ConstantColor.backgroundColor,
-                          fontSize: 14,
-                          fontFamily: ConstantFonts.sfProMedium,
+                        color: ConstantColor.backgroundColor,
+                        fontSize: 14,
+                        fontFamily: ConstantFonts.sfProMedium,
                       ),
                     ),
                   ),
@@ -214,9 +221,9 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                     child: SelectableText(
                       widget.fullReminders.customerId,
                       style: TextStyle(
-                          color: ConstantColor.backgroundColor,
-                          fontSize: 14,
-                          fontFamily: ConstantFonts.sfProMedium,
+                        color: ConstantColor.backgroundColor,
+                        fontSize: 14,
+                        fontFamily: ConstantFonts.sfProMedium,
                       ),
                     ),
                   ),
@@ -244,9 +251,9 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                     child: SelectableText(
                       widget.fullReminders.dataFetchedBy,
                       style: TextStyle(
-                          color: ConstantColor.backgroundColor,
-                          fontSize: 14,
-                          fontFamily: ConstantFonts.sfProMedium,
+                        color: ConstantColor.backgroundColor,
+                        fontSize: 14,
+                        fontFamily: ConstantFonts.sfProMedium,
                       ),
                     ),
                   ),
@@ -274,9 +281,9 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                     child: SelectableText(
                       widget.fullReminders.emailId,
                       style: TextStyle(
-                          color: ConstantColor.backgroundColor,
-                          fontSize: 14,
-                          fontFamily: ConstantFonts.sfProMedium,
+                        color: ConstantColor.backgroundColor,
+                        fontSize: 14,
+                        fontFamily: ConstantFonts.sfProMedium,
                       ),
                     ),
                   ),
@@ -304,9 +311,9 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                     child: SelectableText(
                       widget.fullReminders.enquiredFor,
                       style: TextStyle(
-                          color: ConstantColor.backgroundColor,
-                          fontSize: 14,
-                          fontFamily: ConstantFonts.sfProMedium,
+                        color: ConstantColor.backgroundColor,
+                        fontSize: 14,
+                        fontFamily: ConstantFonts.sfProMedium,
                       ),
                     ),
                   ),
@@ -334,9 +341,9 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                     child: SelectableText(
                       widget.fullReminders.leadInCharge,
                       style: TextStyle(
-                          color: ConstantColor.backgroundColor,
-                          fontSize: 14,
-                          fontFamily: ConstantFonts.sfProMedium,
+                        color: ConstantColor.backgroundColor,
+                        fontSize: 14,
+                        fontFamily: ConstantFonts.sfProMedium,
                       ),
                     ),
                   ),
@@ -364,9 +371,9 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                     child: SelectableText(
                       widget.fullReminders.phoneNumber,
                       style: TextStyle(
-                          color: ConstantColor.backgroundColor,
-                          fontSize: 14,
-                          fontFamily: ConstantFonts.sfProMedium,
+                        color: ConstantColor.backgroundColor,
+                        fontSize: 14,
+                        fontFamily: ConstantFonts.sfProMedium,
                       ),
                     ),
                   ),
@@ -394,9 +401,9 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                     child: SelectableText(
                       widget.fullReminders.rating,
                       style: TextStyle(
-                          color: ConstantColor.backgroundColor,
-                          fontSize: 14,
-                          fontFamily: ConstantFonts.sfProMedium,
+                        color: ConstantColor.backgroundColor,
+                        fontSize: 14,
+                        fontFamily: ConstantFonts.sfProMedium,
                       ),
                     ),
                   ),
@@ -424,9 +431,9 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                     child: SelectableText(
                       widget.fullReminders.state,
                       style: TextStyle(
-                          color: ConstantColor.backgroundColor,
-                          fontSize: 14,
-                          fontFamily: ConstantFonts.sfProMedium,
+                        color: ConstantColor.backgroundColor,
+                        fontSize: 14,
+                        fontFamily: ConstantFonts.sfProMedium,
                       ),
                     ),
                   ),
@@ -454,9 +461,9 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                     child: SelectableText(
                       widget.fullReminders.updatedBy,
                       style: TextStyle(
-                          color: ConstantColor.backgroundColor,
-                          fontSize: 14,
-                          fontFamily: ConstantFonts.sfProMedium,
+                        color: ConstantColor.backgroundColor,
+                        fontSize: 14,
+                        fontFamily: ConstantFonts.sfProMedium,
                       ),
                     ),
                   ),
@@ -468,16 +475,25 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
         const SizedBox(height: 30),
         CupertinoButton(
           color: CupertinoColors.activeOrange,
-            pressedOpacity: 0.5,
-            borderRadius: BorderRadius.circular(20),
-            child: Text('Get leads',
+          pressedOpacity: 0.5,
+          borderRadius: BorderRadius.circular(20),
+          child: Text(
+            'Get leads',
             style: TextStyle(
               fontFamily: ConstantFonts.sfProBold,
               fontSize: 17,
-            ),),
-            onPressed: (){
-              Navigator.of(context).push(MaterialPageRoute(builder: (context)=> SearchLeadsScreen(staffInfo: widget.staffInfo),),);
-            },
+            ),
+          ),
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => SearchLeadsScreen(
+                    staffInfo: widget.staffInfo,
+                    query: widget.fullReminders.phoneNumber,
+                    selectedStaff: widget.fullReminders.updatedBy),
+              ),
+            );
+          },
         ),
       ],
     );

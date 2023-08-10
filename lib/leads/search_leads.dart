@@ -12,9 +12,15 @@ import 'package:pdf/widgets.dart' as pw;
 
 class SearchLeadsScreen extends StatefulWidget {
   final StaffModel staffInfo;
+  final String? query;
+  final String? selectedStaff;
 
-  const SearchLeadsScreen({Key? key, required this.staffInfo})
-      : super(key: key);
+  const SearchLeadsScreen({
+    Key? key,
+    required this.staffInfo,
+    this.query,
+    this.selectedStaff,
+  }) : super(key: key);
 
   @override
   State<SearchLeadsScreen> createState() => _SearchLeadsScreenState();
@@ -27,6 +33,25 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
   List<Map<Object?, Object?>> currentCustomerList = [];
   List<Map<Object?, Object?>> searchCustomerInfo = [];
   final ScrollController _scrolls = ScrollController();
+
+  //search method
+  void searchUser(String query) {
+    final searchedCustomer = currentCustomerList.where((customer) {
+      final nameLower = customer['name'].toString().toLowerCase();
+      final phone = customer['phone_number'].toString();
+      final location = customer['city'].toString().toLowerCase();
+      final id = customer['customer_id'].toString().toLowerCase();
+      final searchQuery = query.toLowerCase();
+      return nameLower.contains(searchQuery) ||
+          phone.contains(searchQuery) ||
+          location.contains(searchQuery) ||
+          id == searchQuery;
+    }).toList();
+    setState(() {
+      this.query = query;
+      searchCustomerInfo = searchedCustomer;
+    });
+  }
 
   List<String> staffs = ['All', 'Not Assigned'];
   List<String> sortList = [
@@ -64,8 +89,11 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
       }
 
       getCustomerDetail(
-          createdBy:
-              selectedStaff == '' ? widget.staffInfo.name : selectedStaff,
+          createdBy: widget.selectedStaff != null
+              ? widget.selectedStaff!
+              : selectedStaff == ''
+                  ? widget.staffInfo.name
+                  : selectedStaff,
           sortChoice: sortOption,
           ascending: isAscending);
       //For disabling loading screen
@@ -73,6 +101,9 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
       setState(() {
         isLoading = false;
       });
+      if (widget.query != null) {
+        searchUser(widget.query!);
+      }
     });
   }
 
@@ -226,6 +257,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
     searchTextController = TextEditingController();
     getCustomerFromFirebase();
     getPRStaffNames();
+
     super.initState();
   }
 
@@ -262,25 +294,6 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
   }
 
   Widget buildSearchBar({required double width}) {
-    //search method
-    void searchUser(String query) {
-      final searchedCustomer = currentCustomerList.where((customer) {
-        final nameLower = customer['name'].toString().toLowerCase();
-        final phone = customer['phone_number'].toString();
-        final location = customer['city'].toString().toLowerCase();
-        final id = customer['customer_id'].toString().toLowerCase();
-        final searchQuery = query.toLowerCase();
-        return nameLower.contains(searchQuery) ||
-            phone.contains(searchQuery) ||
-            location.contains(searchQuery) ||
-            id == searchQuery;
-      }).toList();
-      setState(() {
-        this.query = query;
-        searchCustomerInfo = searchedCustomer;
-      });
-    }
-
     return Container(
       width: width,
       margin: const EdgeInsets.only(right: 15.0, left: 15.0, bottom: 10.0),
