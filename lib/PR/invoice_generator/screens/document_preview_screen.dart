@@ -864,11 +864,11 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                               id = generateRandomString(5)
                                   .toUpperCase()
                                   .toString();
-                            } else {
+                            } else{
                               var snapshot = await firebaseStorage
                                   .ref()
                                   .child(
-                                      '${clientModel.docType}/INV${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
+                                      '${clientModel.docType}/${clientModel.docType == "INVOICE" ? "INV" : "PRO_INV"}${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
                                   .putFile(pdfFile);
                               var downloadUrl =
                                   await snapshot.ref.getDownloadURL();

@@ -23,6 +23,7 @@ import '../leave_apply/leave_apply_screen.dart';
 import '../leave_approval/leave_approval_screen.dart';
 import '../onyx/announcement.dart';
 import '../refreshment/refreshment_screen.dart';
+import '../rnd_form/installation_details.dart';
 import '../staff_details/staff_details.dart';
 import '../suggestions/suggestions.dart';
 import '../suggestions/view_suggestions.dart';
@@ -63,6 +64,7 @@ class AppDefaults {
     'Create leads',
     'Quotation template',
     'Staff details',
+    'Installation pdf',
   ];
 
   static List<String> gridButtonPics = [
@@ -95,6 +97,7 @@ class AppDefaults {
     'assets/create_leads.png',
     'assets/quotation_template.png',
     'assets/staff_details.png',
+    'assets/installation_image.png',
   ];
 
   Widget getPage(String buttonName, StaffModel staffInfo) {
@@ -221,6 +224,9 @@ class AppDefaults {
         break;
       case 'Staff details':
         page = const StaffDetails();
+        break;
+      case 'Installation pdf':
+        page = const InstallationDetails();
     }
     return page;
   }

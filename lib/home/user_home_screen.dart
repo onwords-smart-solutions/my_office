@@ -169,7 +169,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
               AppDefaults.gridButtonsNames[i] == 'Check Virtual entry' ||
               AppDefaults.gridButtonsNames[i] == 'Entry time' ||
-              AppDefaults.gridButtonsNames[i] == 'Quotation template') {
+              AppDefaults.gridButtonsNames[i] == 'Quotation template' ||
+              AppDefaults.gridButtonsNames[i] == 'Installation pdf'
+          ) {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
             userAccessGridButtonsPics.add(AppDefaults.gridButtonPics[i]);
           }
@@ -183,7 +185,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'Leave approval' ||
               AppDefaults.gridButtonsNames[i] == 'Suggestions' ||
               AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
-              AppDefaults.gridButtonsNames[i] == 'Quotation template') {
+              AppDefaults.gridButtonsNames[i] == 'Quotation template' ||
+              AppDefaults.gridButtonsNames[i] == 'Installation pdf'
+          ) {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
             userAccessGridButtonsPics.add(AppDefaults.gridButtonPics[i]);
           }
@@ -196,7 +200,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'Invoice generator' ||
               AppDefaults.gridButtonsNames[i] == 'Suggestions' ||
               AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
-              AppDefaults.gridButtonsNames[i] == 'Quotation template') {
+              AppDefaults.gridButtonsNames[i] == 'Quotation template' ||
+              AppDefaults.gridButtonsNames[i] == 'Installation pdf'
+          ) {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
             userAccessGridButtonsPics.add(AppDefaults.gridButtonPics[i]);
           }

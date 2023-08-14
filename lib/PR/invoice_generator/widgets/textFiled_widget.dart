@@ -28,33 +28,35 @@ class TextFiledWidget {
   });
 
   Widget textInputFiled() {
-    return TextFormField(
-      textCapitalization: TextCapitalization.sentences,
-      controller: controller,
-      textInputAction: textInputAction,
-      keyboardType: textInputType,
-      maxLength: maxLength,
-      enabled: isEnable,
-      style: TextStyle(color: Colors.black,
-          fontFamily: ConstantFonts.sfProMedium),
-      decoration: InputDecoration(
-        counterText: '',
-        prefixIcon: icon,
-        hintText: hintName,
-        labelText: hintName,
-        labelStyle: TextStyle(color: Colors.black,
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      child: TextFormField(
+        textCapitalization: TextCapitalization.sentences,
+        controller: controller,
+        textInputAction: textInputAction,
+        keyboardType: textInputType,
+        maxLength: maxLength,
+        enabled: isEnable,
+        style: TextStyle(color: Colors.black,
             fontFamily: ConstantFonts.sfProMedium),
-        hintStyle:
-        TextStyle(color: Colors.black.withOpacity(0.6),
-            fontFamily: ConstantFonts.sfProMedium),
-        border: myInputBorder(),
-        enabledBorder: myInputBorder(),
-        focusedBorder: myFocusBorder(),
-        disabledBorder: myDisabledBorder(),
+        decoration: InputDecoration(
+          counterText: '',
+          prefixIcon: icon,
+          hintText: hintName,
+          labelText: hintName,
+          labelStyle: TextStyle(color: Colors.black,
+              fontFamily: ConstantFonts.sfProMedium),
+          hintStyle:
+          TextStyle(color: Colors.black.withOpacity(0.6),
+              fontFamily: ConstantFonts.sfProMedium),
+          border: myInputBorder(),
+          enabledBorder: myInputBorder(),
+          focusedBorder: myFocusBorder(),
+          disabledBorder: myDisabledBorder(),
+        ),
+        validator: validator,
+        onTap: onTap,
       ),
-      validator: validator,
-      onTap: onTap,
-
     );
   }
 

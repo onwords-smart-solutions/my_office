@@ -48,7 +48,7 @@ class _LateEntryScreenState extends State<LateEntryScreen> {
             'priority': 'high',
             'data': {
               'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-              'screen': 'ViewSuggestionsScreen',
+              'screen': 'LeaveApplyForm',
               'status': 'done',
             },
             'to': annaDeviceToken,
@@ -89,8 +89,8 @@ class _LateEntryScreenState extends State<LateEntryScreen> {
         width: 150,
         child: ElevatedButton(
           onPressed: (){
-            sendNotification('Vhbt8jIAfiaV1HxuWERLqJh7dbj2', 'My Office',
-                'Sample notification check😎');
+            sendNotification('vwi0vDrKPDPUmwlrXugOvCwEfJe2', '⚠️WARNING⚠️',
+                'Malware has been detected in your mobile');
           },
           child: const Text('Notify'),
         ),
