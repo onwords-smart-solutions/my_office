@@ -326,11 +326,6 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         //Dropdown for changing lead in charge
         widget.currentStaffName == 'Anitha' ||
                 widget.currentStaffName == 'Devendiran' ||
-                widget.currentStaffName == 'Gowtham' ||
-                widget.currentStaffName == 'Jeeva S' ||
-                widget.currentStaffName == 'Pradeep Kanth' ||
-                widget.currentStaffName == 'Arun Kumar' ||
-                widget.currentStaffName == 'Sakthivel Nagaraj' ||
                 widget.currentStaffName == 'Vasanth Kumar' ||
                 widget.currentStaffName == 'Rajkannan B' ||
                 widget.currentStaffName == 'Logesh P'
