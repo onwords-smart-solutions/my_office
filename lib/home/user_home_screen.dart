@@ -18,6 +18,7 @@ import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/leave_apply/leave_apply_screen.dart';
 import 'package:my_office/leave_approval/leave_approval_screen.dart';
+import 'package:my_office/models/prdash_model.dart';
 import 'package:my_office/models/staff_model.dart';
 import 'package:my_office/suggestions/view_suggestions.dart';
 import 'package:my_office/util/main_template.dart';
@@ -25,6 +26,7 @@ import 'package:my_office/util/notification_services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import '../Constant/fonts/constant_font.dart';
 import '../app_version/version.dart';
 import '../constant/app_defaults.dart';
@@ -46,12 +48,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   final ScrollController _scrollController = ScrollController();
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
+  double prFixedAmount = 0.0;
+  double prTotalAmountNumber = 0.0;
+  int prTotalAmount = 0;
+  List<PRDashModel> prDashInfo = [];
   List<String> managementStaffNames = [];
   List<String> tlStaffNames = [];
   List<String> rndTlStaffNames = [];
   List<String> installationBoysNames = [];
   List<String> userAccessGridButtonsName = [];
   List<String> userAccessGridButtonsPics = [];
+  List<Map<String, dynamic>> prDashboard = [];
 
   //Getting management staff names form database
   Future<void> getManagementNames() async {
@@ -170,8 +177,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'Check Virtual entry' ||
               AppDefaults.gridButtonsNames[i] == 'Entry time' ||
               AppDefaults.gridButtonsNames[i] == 'Quotation template' ||
-              AppDefaults.gridButtonsNames[i] == 'Installation pdf'
-          ) {
+              AppDefaults.gridButtonsNames[i] == 'Installation pdf') {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
             userAccessGridButtonsPics.add(AppDefaults.gridButtonPics[i]);
           }
@@ -186,8 +192,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'Suggestions' ||
               AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
               AppDefaults.gridButtonsNames[i] == 'Quotation template' ||
-              AppDefaults.gridButtonsNames[i] == 'Installation pdf'
-          ) {
+              AppDefaults.gridButtonsNames[i] == 'Installation pdf') {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
             userAccessGridButtonsPics.add(AppDefaults.gridButtonPics[i]);
           }
@@ -201,8 +206,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'Suggestions' ||
               AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
               AppDefaults.gridButtonsNames[i] == 'Quotation template' ||
-              AppDefaults.gridButtonsNames[i] == 'Installation pdf'
-          ) {
+              AppDefaults.gridButtonsNames[i] == 'Installation pdf') {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
             userAccessGridButtonsPics.add(AppDefaults.gridButtonPics[i]);
           }
@@ -219,7 +223,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         userAccessGridButtonsPics.addAll(AppDefaults.gridButtonPics);
         if (data.uid != '58JIRnAbechEMJl8edlLvRzHcW52') {
           userAccessGridButtonsName.remove('Staff details');
-          userAccessGridButtonsPics.remove('assets/staff_details.png',);
+          userAccessGridButtonsPics.remove(
+            'assets/staff_details.png',
+          );
         }
       } else if (data.department == 'PR') {
         for (int i = 0; i < AppDefaults.gridButtonsNames.length; i++) {
@@ -281,6 +287,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
   //GETTING ALL MOBILE DEVICE ID'S AS TOKENS
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+
   Future<void> getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final token = prefs.getString('token') ?? '';
@@ -340,11 +347,52 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     }
   }
 
+  //GETTING PR DASHBOARD DETAILS FROM DB
+  void getDashboardDetails() {
+    double fixedAmount = 0.0;
+    double totalAmountNumber = 0.0;
+    int totalSalesNumber = 0;
+    List<PRDashModel> prDash = [];
+    var ref = FirebaseDatabase.instance.ref();
+    ref.child('PRDashboard/allteam').once().then((data) {
+      for (var prData in data.snapshot.children) {
+        final data = prData.value as Map<Object?, Object?>;
+
+        // -- getting fixed amount --
+        if (prData.key.toString() == 'fixedamount') {
+          fixedAmount = double.parse(data['amount'].toString());
+        } else {
+          // -- adding team details into model list --
+          prDash.add(PRDashModel(
+              amount: double.parse(data['amount'].toString()),
+              teamName: prData.key.toString(),
+              sales: int.parse(data['sales'].toString())));
+        }
+      }
+      for (var totalSales in prDash) {
+        totalSalesNumber += totalSales.sales;
+      }
+      for (var totalAmount in prDash){
+        totalAmountNumber += totalAmount.amount;
+      }
+       setState(() {
+         prFixedAmount = fixedAmount;
+         prDashInfo = prDash;
+         prTotalAmount = totalSalesNumber;
+         prTotalAmountNumber = totalAmountNumber;
+       });
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      buildPRDashboard();
+    });
+    }
+
   @override
   void initState() {
     checkAppVersion();
     getManagementNames();
     getConnectivity();
+    getDashboardDetails();
     setNotification();
     requestPermission();
 
@@ -388,13 +436,228 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.sizeOf(context).height;
+    final width = MediaQuery.sizeOf(context).width;
     return MainTemplate(
       subtitle: greeting(),
       templateBody: buildMenuGrid(height, width),
       bgColor: ConstantColor.background1Color,
     );
+  }
+
+  //DIALOG BOX FOR SHOWING PR DASHBOARD IN INIT STATE
+  buildPRDashboard() {
+    final context=this.context;
+    final size = MediaQuery.sizeOf(context);
+    return showDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                insetPadding:const EdgeInsets.all(15),
+                title: Center(
+                  child: Text(
+                    'PR Dashboard',
+                    style: TextStyle(
+                        fontFamily: ConstantFonts.sfProBold,
+                        color: Colors.purple),
+                  ),
+                ),
+                content: Column(
+                  children: [
+                    Text(
+                      'Sales Revenue',
+                      style: TextStyle(
+                        fontFamily: ConstantFonts.sfProBold,
+                        fontSize: 18,
+                      ),
+                    ),
+                    SizedBox(
+                      height: size.height * 0.2,
+                      width: size.width,
+                      child: ListView.builder(
+                        itemCount: prDashInfo.length,
+                        itemBuilder: (ctx, i) {
+                          String name = 'Alpha';
+                          Color color = Colors.deepPurple;
+
+                          switch (prDashInfo[i].teamName) {
+                            case 'team2':
+                              name = 'Bravo';
+                              color = Colors.redAccent;
+                              break;
+                            case 'team4':
+                              name = 'Delta';
+                              color = Colors.blue;
+                              break;
+                          }
+                          return prDashInfo[i].teamName == 'team3'
+                              ? const SizedBox.shrink()
+                              : ListTile(
+                                  leading: Icon(
+                                    Icons.leaderboard,
+                                    color: color,
+                                  ),
+                                  title: Text(
+                                    name,
+                                    style: TextStyle(
+                                      fontFamily: ConstantFonts.sfProMedium,
+                                      fontSize: 18,
+                                      color: color,
+                                    ),
+                                  ),
+                                  trailing: Text(
+                                    prDashInfo[i].sales.toString(),
+                                    style: TextStyle(
+                                      fontFamily: ConstantFonts.sfProMedium,
+                                      fontSize: 18,
+                                      color: color,
+                                    ),
+                                  ),
+                                );
+                        },
+                      ),
+                    ),
+                    Divider(
+                      height: size.height * 0.015,
+                      thickness: 1,
+                      color: Colors.black,
+                    ),
+                    Row(
+                      children: [
+                        const Spacer(flex: 3),
+                        Text(
+                          'Total',
+                          style: TextStyle(
+                              fontFamily: ConstantFonts.sfProBold,
+                              fontSize: 18),
+                        ),
+                        const Spacer(flex: 4),
+                        Text(
+                          '=',
+                          style: TextStyle(
+                              fontFamily: ConstantFonts.sfProBold,
+                              fontSize: 18),
+                        ),
+                        const Spacer(flex: 4),
+                        Text(
+                          '$prTotalAmount',
+                          style: TextStyle(
+                              fontFamily: ConstantFonts.sfProBold,
+                              fontSize: 18),
+                        ),
+                        const Spacer(flex: 1),
+                      ],
+                    ),
+                    Divider(
+                      height: size.height * 0.015,
+                      thickness: 1,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      height: size.height * 0.01,
+                    ),
+                    SizedBox(
+                      height: size.height * 0.4,
+                      width: size.width,
+                      child: SfCartesianChart(
+                        plotAreaBorderWidth: 0.0,
+                        primaryXAxis: CategoryAxis(
+                          labelStyle: TextStyle(
+                              fontFamily: ConstantFonts.sfProMedium,
+                              color: Colors.black),
+                          majorGridLines: const MajorGridLines(width: 0),
+                        ),
+                        primaryYAxis: NumericAxis(
+                            labelStyle: TextStyle(
+                                fontFamily: ConstantFonts.sfProMedium,
+                                color: Colors.black),
+                            majorGridLines: const MajorGridLines(width: 0)),
+                        series: <ColumnSeries<SalesData, String>>[
+                          ColumnSeries<SalesData, String>(
+                            dataLabelSettings: DataLabelSettings(
+                                isVisible: true,
+                                textStyle: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: ConstantFonts.sfProBold,
+                                  color: Colors.black,
+                                )),
+                            dataSource: getChartData(),
+                            xValueMapper: (SalesData sales, _) =>
+                                sales.sales,
+                            yValueMapper: (SalesData sales, _) =>
+                                sales.year,
+                            pointColorMapper: (SalesData sale, _) {
+                              if (sale.sales == 'Alpha') {
+                                return Colors.deepPurple;
+                              } else if (sale.sales == 'Bravo') {
+                                return Colors.redAccent;
+                              }
+                              return Colors.blue;
+                            },
+                            dataLabelMapper: (SalesData sales, _) =>
+                                sales.year.toInt().toString(),
+                          ),
+                        ],
+                        borderWidth: 0.0,
+                        title: ChartTitle(
+                          text: 'Sales Chart',
+                          textStyle: TextStyle(
+                              fontFamily: ConstantFonts.sfProBold,
+                              color: Colors.black),
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: Text(
+                        'Total  =  ${prTotalAmountNumber.toInt()}',
+                        style: TextStyle(
+                          fontFamily: ConstantFonts.sfProBold,
+                          fontSize: 17,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                actions: [
+                  FilledButton(
+                    style: FilledButton.styleFrom(
+                      elevation: 10,
+                      backgroundColor: Colors.purple.withOpacity(0.8),
+                    ),
+                    child: Text(
+                      'OK',
+                      style: TextStyle(
+                        fontFamily: ConstantFonts.sfProBold,
+                        fontSize: 17,
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+  }
+
+  List<SalesData> getChartData() {
+    List<SalesData> data = [];
+
+    for (var team in prDashInfo) {
+      if (team.teamName != 'team3') {
+        String name = 'Alpha';
+        if (team.teamName == 'team2') {
+          name = 'Bravo';
+        } else if (team.teamName == 'team4') {
+          name = 'Delta';
+        }
+
+        data.add(SalesData(team.amount, name));
+      }
+    }
+    return data;
   }
 
   Widget buildMenuGrid(double height, double width) {
@@ -637,4 +900,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       );
     }
   }
+}
+
+class SalesData {
+  SalesData(this.year, this.sales);
+
+  final String sales;
+  final double year;
 }
