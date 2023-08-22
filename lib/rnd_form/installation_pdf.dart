@@ -45,9 +45,9 @@ class InstallationDetailsScreen {
   late String wifiPassword;
   late String server;
   late String portForwarding;
-  late int localIp;
-  late int staticIp;
-  late int serverPort;
+  late double localIp;
+  late double staticIp;
+  late double serverPort;
   late String needSmartHome;
   late String voiceConfig;
   late String voiceUID;

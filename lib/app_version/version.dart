@@ -1,8 +1,8 @@
 class AppConstants{
 
   //PUBSPEC AND DEFAULT VERSION FOR ANDROID
-  static String displayVersion = '1.1.43';
-  static String pubVersion = '1.1.43+63';
+  static String displayVersion = '1.1.44';
+  static String pubVersion = '1.1.44+64';
 
   //PUBSPEC AND DEFAULT VERSION FOR IOS
   static String iosDisplayVersion = '1.1.20';

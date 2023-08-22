@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -102,7 +101,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       appBar: AppBar(
         backgroundColor: const Color(0xffDDE6E8),
         centerTitle: true,
-        title: Text('Installation Details', style: TextStyle(fontFamily: ConstantFonts.sfProMedium),),
+        title: Text('Installation Details', style: TextStyle(fontFamily : ConstantFonts.sfProMedium),),
       ),
       backgroundColor: const Color(0xffDDE6E8),
       body: Form(
@@ -182,13 +181,13 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   server: serverController.text,
                   portForwarding: portForwarding.toString(),
                   localIp: localIpController.text.isNotEmpty
-                      ? int.parse(localIpController.text.toString())
+                      ? double.parse(localIpController.text.toString())
                       : 0,
                   staticIp: staticIpController.text.isNotEmpty
-                      ? int.parse(staticIpController.text)
+                      ? double.parse(staticIpController.text)
                       : 0,
                   serverPort: serverPortController.text.isNotEmpty
-                      ? int.parse(serverPortController.text)
+                      ? double.parse(serverPortController.text)
                       : 0,
                   needSmartHome: needSmartHome,
                   voiceConfig: voiceConfig,
@@ -212,19 +211,19 @@ class _InstallationDetailsState extends State<InstallationDetails> {
 
                 final pdfFile = await data.generate(ajaxDeviceDetails);
                 final dir = await getExternalStorageDirectory();
-                final file = File(
-                    "${dir!.path}/${customerNameController.text}.pdf");
+                final file = File("${dir!.path}/${customerNameController.text}.pdf");
 
                 file.writeAsBytesSync(pdfFile.readAsBytesSync(),
                     flush: true);
 
                 OpenFile.open(file.path).then((value) {
-                  Navigator.pop(context);
+                  // Navigator.pop(context);
                 });
-                log(teamMembersName.length.toString());
+                // log(teamMembersName.length.toString());
               } else {
                 const snackBar = SnackBar(
-                  content: Center(child: Text('This field is required')),
+                  content: Center(child: Text('Fill Required Field'),
+                  ),
                   backgroundColor: (Colors.redAccent),
                   // action: SnackBarAction(
                   //   label: 'dismiss',
@@ -276,8 +275,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
           collapsedBackgroundColor: const Color(0xff5AC8FA).withAlpha(100),
           title: Text("Other Device",
               style: TextStyle(
-                fontSize: 18,
-                fontFamily: ConstantFonts.sfProBold
+                  fontSize: 18,
+                  fontFamily: ConstantFonts.sfProBold
               )),
           leading: const Icon(
             Icons.devices,
@@ -376,7 +375,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                       title: Text(
                                         'Delete this name?\n${extraDevice[index]}',
                                         style: TextStyle(
-                                          fontFamily: ConstantFonts.sfProMedium
+                                            fontFamily: ConstantFonts.sfProMedium
                                         ),
                                         textAlign: TextAlign.center,
                                       ),
@@ -789,7 +788,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   SizedBox(
                     height: size.height * 0.3,
                     child: Container(
-                        // padding: const EdgeInsets.all(20.0),
+                      // padding: const EdgeInsets.all(20.0),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           color: Colors.white70,
@@ -906,8 +905,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
           collapsedBackgroundColor: const Color(0xff5AC8FA).withAlpha(100),
           title: Text("Light Board 8 Channel",
               style: TextStyle(
-                fontSize: 18,
-                fontFamily: ConstantFonts.sfProBold
+                  fontSize: 18,
+                  fontFamily: ConstantFonts.sfProBold
               )),
           leading: const Icon(
             Icons.lightbulb_outline_rounded,
@@ -1008,7 +1007,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                       title: Text(
                                         'Delete this name?\n${lightBoard8ChannelDetails[index]}',
                                         style: TextStyle(
-                                          fontFamily: ConstantFonts.sfProMedium
+                                            fontFamily: ConstantFonts.sfProMedium
                                         ),
                                         textAlign: TextAlign.center,
                                       ),
@@ -1257,8 +1256,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
           collapsedBackgroundColor: const Color(0xff5AC8FA).withAlpha(100),
           title: Text("Gate Details",
               style: TextStyle(
-                fontSize: 18,
-                fontFamily: ConstantFonts.sfProBold
+                  fontSize: 18,
+                  fontFamily: ConstantFonts.sfProBold
               )),
           leading: const Icon(
             Icons.door_sliding_outlined,
@@ -1426,7 +1425,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                 child: Text(
                                   value,
                                   style:  TextStyle(
-                                    fontFamily: ConstantFonts.sfProMedium
+                                      fontFamily: ConstantFonts.sfProMedium
                                   ),
                                 ),
                               );
@@ -1621,7 +1620,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
           title: Text(
             "Router and Wifi Details",
             style: TextStyle(
-              fontSize: 18,
+                fontSize: 18,
                 fontFamily: ConstantFonts.sfProBold
             ),
           ),
@@ -1711,7 +1710,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
             "Server Details",
             style: TextStyle(
               fontSize: 18,
-                fontFamily: ConstantFonts.sfProBold,
+              fontFamily: ConstantFonts.sfProBold,
             ),
           ),
           leading: const Icon(
@@ -1917,13 +1916,13 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               ).textInputFiled(),
 
             textWithDropDown(
-              'BSNL',
+              'B_S_N_L',
               DropdownButtonFormField<String>(
                 value: bSNL.isNotEmpty ? bSNL : null,
                 style:
                 TextStyle(color: CupertinoColors.label, fontSize: 16, fontFamily: ConstantFonts.sfProMedium),
                 hint: const Text(
-                  'BSNL',
+                  'B_S_N_L',
                 ),
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(10.0),
@@ -1973,7 +1972,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 controller: bSNLUIDController,
                 textInputType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
-                hintName: 'BSNL UID',
+                hintName: 'B_S_N_L UID',
                 icon: const Icon(Icons.wifi),
                 maxLength: 100,
                 validator: (value) {
@@ -1990,7 +1989,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 controller: bSNLPassController,
                 textInputType: TextInputType.text,
                 textInputAction: TextInputAction.next,
-                hintName: 'BSNL Password',
+                hintName: 'B_S_N_L Password',
                 icon: const Icon(Icons.password),
                 maxLength: 100,
                 validator: (value) {
@@ -2144,8 +2143,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
           title: Text(
             "Customer Details",
             style: TextStyle(
-              fontSize: 18,
-              fontFamily: ConstantFonts.sfProBold
+                fontSize: 18,
+                fontFamily: ConstantFonts.sfProBold
             ),
           ),
           leading: const Icon(
@@ -2196,6 +2195,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Required Customer Number';
+                }else if(value.toString().length < 10) {
+                  return "Invalid Number";
                 }
                 return null;
               },
@@ -2209,12 +2210,12 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               hintName: 'Email',
               icon: const Icon(Icons.mail_outline_rounded),
               maxLength: 150,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Required Customer Email';
-                }
-                return null;
-              },
+              // validator: (value) {
+              //   if (value == null || value.isEmpty) {
+              //     return 'Required Customer Email';
+              //   }
+              //   return null;
+              // },
             ).textInputFiled(),
 
             ///Address
@@ -2303,7 +2304,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                       hint: Text(
                         "Need Smart Home",
                         style: TextStyle(
-                          fontFamily: ConstantFonts.sfProMedium
+                            fontFamily: ConstantFonts.sfProMedium
                         ),
                       ),
                       decoration: InputDecoration(
@@ -2311,9 +2312,9 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         border: myInputBorder(),
                         enabledBorder: myInputBorder(),
                         hintStyle: TextStyle(
-                          fontSize: 8,
-                          color: Colors.black.withOpacity(.2),
-                          fontFamily: ConstantFonts.sfProMedium
+                            fontSize: 8,
+                            color: Colors.black.withOpacity(.2),
+                            fontFamily: ConstantFonts.sfProMedium
                         ),
                         fillColor: Colors.transparent,
                         focusColor: Colors.transparent,
@@ -2360,7 +2361,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                       hint: Text(
                         "Need Gate",
                         style: TextStyle(
-                            fontFamily: ConstantFonts.sfProMedium,
+                          fontFamily: ConstantFonts.sfProMedium,
                         ),
                       ),
                       decoration: InputDecoration(
@@ -2463,52 +2464,53 @@ class _InstallationDetailsState extends State<InstallationDetails> {
             ),
             needGate == 'Yes'
                 ? textWithDropDown(
-                'Need App',
-                DropdownButtonFormField<String>(
-                  value: needApp.isNotEmpty ? needApp : null,
+              'Need App',
+              DropdownButtonFormField<String>(
+                value: needApp.isNotEmpty ? needApp : null,
+                style: TextStyle(
+                    color: CupertinoColors.label, fontSize: 16, fontFamily: ConstantFonts.sfProMedium),
+                hint: Text(
+                  "Need App",
                   style: TextStyle(
-                      color: CupertinoColors.label, fontSize: 16, fontFamily: ConstantFonts.sfProMedium),
-                  hint: Text(
-                    "Need App",
-                    style: TextStyle(
-                        fontFamily: ConstantFonts.sfProMedium
+                      fontFamily: ConstantFonts.sfProMedium
+                  ),
+                ),
+                decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.all(10.0),
+                    border: myInputBorder(),
+                    enabledBorder: myInputBorder(),
+                    fillColor: Colors.transparent,
+                    focusColor: Colors.transparent,
+                    // hoverColor: Colors.black,
+                    focusedBorder: myFocusBorder(),
+                    hintStyle: TextStyle(
+                        color: Colors.black.withOpacity(.2),
+                        fontWeight: FontWeight.w600)
+                  // isDense: true,
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Select an option Yes or No';
+                  }
+                  return null;
+                },
+                onChanged: (String? newValue) {
+                  setState(() {
+                    needApp = newValue!;
+                  });
+                },
+                items: optionValue
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
+                      style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
                     ),
-                  ),
-                  decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.all(10.0),
-                      border: myInputBorder(),
-                      enabledBorder: myInputBorder(),
-                      fillColor: Colors.transparent,
-                      focusColor: Colors.transparent,
-                      // hoverColor: Colors.black,
-                      focusedBorder: myFocusBorder(),
-                      hintStyle: TextStyle(
-                          color: Colors.black.withOpacity(.2),
-                          fontWeight: FontWeight.w600)
-                    // isDense: true,
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Select an option Yes or No';
-                    }
-                    return null;
-                  },
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      needApp = newValue!;
-                    });
-                  },
-                  items: optionValue
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(
-                        value,
-                        style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
-                      ),
-                    );
-                  }).toList(),
-                ))
+                  );
+                }).toList(),
+              ),
+            )
                 : const SizedBox(),
             SizedBox(
               height: size.height * 0.02,
@@ -2707,7 +2709,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
 
   OutlineInputBorder myInputBorder() {
     return OutlineInputBorder(
-      borderRadius: const BorderRadius.all(Radius.circular(20)),
+      borderRadius: const BorderRadius.all(Radius.circular(20),
+      ),
       borderSide: BorderSide(
         color: Colors.black.withOpacity(0.5),
         width: 1.5,

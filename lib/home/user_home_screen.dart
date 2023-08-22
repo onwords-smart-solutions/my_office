@@ -48,17 +48,13 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   final ScrollController _scrollController = ScrollController();
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  double prFixedAmount = 0.0;
-  double prTotalAmountNumber = 0.0;
-  int prTotalAmount = 0;
-  List<PRDashModel> prDashInfo = [];
   List<String> managementStaffNames = [];
   List<String> tlStaffNames = [];
   List<String> rndTlStaffNames = [];
   List<String> installationBoysNames = [];
   List<String> userAccessGridButtonsName = [];
   List<String> userAccessGridButtonsPics = [];
-  List<Map<String, dynamic>> prDashboard = [];
+  bool prDashVisible = false;
 
   //Getting management staff names form database
   Future<void> getManagementNames() async {
@@ -70,6 +66,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           names.add(mgmt.value.toString());
         }
         managementStaffNames = names;
+
       }
     });
     await getTlNames();
@@ -164,6 +161,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         userAccessGridButtonsPics.remove('assets/onxy.png');
         userAccessGridButtonsPics.remove('assets/late_entry.png');
         userAccessGridButtonsPics.remove('assets/staff_details.png');
+        prDashVisible = true;
       } else if (tlStaffNames.any((element) => element == data.name)) {
         for (int i = 0; i < AppDefaults.gridButtonsNames.length; i++) {
           if (AppDefaults.gridButtonsNames[i] == 'Work entry' ||
@@ -218,6 +216,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         userAccessGridButtonsPics.addAll(AppDefaults.gridButtonPics);
         userAccessGridButtonsPics.remove('assets/onxy.png');
         userAccessGridButtonsPics.remove('assets/late_entry.png');
+        prDashVisible = true;
       } else if (data.department == 'APP') {
         userAccessGridButtonsName.addAll(AppDefaults.gridButtonsNames);
         userAccessGridButtonsPics.addAll(AppDefaults.gridButtonPics);
@@ -227,6 +226,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             'assets/staff_details.png',
           );
         }
+        prDashVisible = true;
       } else if (data.department == 'PR') {
         for (int i = 0; i < AppDefaults.gridButtonsNames.length; i++) {
           if (AppDefaults.gridButtonsNames[i] == 'Work entry' ||
@@ -246,6 +246,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             userAccessGridButtonsPics.add(AppDefaults.gridButtonPics[i]);
           }
         }
+        prDashVisible = true;
       } else {
         for (int i = 0; i < AppDefaults.gridButtonsNames.length; i++) {
           if (AppDefaults.gridButtonsNames[i] == 'Work entry' ||
@@ -259,6 +260,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         }
       }
       staffInfo = data;
+      if (prDashVisible) {
+        getDashboardDetails().then((value) => buildPRDashboard());
+      }
       getToken();
     });
   }
@@ -348,13 +352,18 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   }
 
   //GETTING PR DASHBOARD DETAILS FROM DB
-  void getDashboardDetails() {
+  double prFixedAmount = 0.0;
+  double prTotalAmountNumber = 0.0;
+  int prTotalAmount = 0;
+  List<PRDashModel> prDashInfo = [];
+
+  Future<void> getDashboardDetails() async {
     double fixedAmount = 0.0;
     double totalAmountNumber = 0.0;
     int totalSalesNumber = 0;
     List<PRDashModel> prDash = [];
     var ref = FirebaseDatabase.instance.ref();
-    ref.child('PRDashboard/allteam').once().then((data) {
+    await ref.child('PRDashboard/allteam').once().then((data) {
       for (var prData in data.snapshot.children) {
         final data = prData.value as Map<Object?, Object?>;
 
@@ -372,27 +381,41 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       for (var totalSales in prDash) {
         totalSalesNumber += totalSales.sales;
       }
-      for (var totalAmount in prDash){
+      for (var totalAmount in prDash) {
         totalAmountNumber += totalAmount.amount;
       }
-       setState(() {
-         prFixedAmount = fixedAmount;
-         prDashInfo = prDash;
-         prTotalAmount = totalSalesNumber;
-         prTotalAmountNumber = totalAmountNumber;
-       });
+      setState(() {
+        prFixedAmount = fixedAmount;
+        prDashInfo = prDash;
+        prTotalAmount = totalSalesNumber;
+        prTotalAmountNumber = totalAmountNumber;
+      });
     });
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      buildPRDashboard();
-    });
+  }
+
+  List<SalesData> getChartData() {
+    List<SalesData> data = [];
+
+    for (var team in prDashInfo) {
+      if (team.teamName != 'team3') {
+        String name = 'Alpha';
+        if (team.teamName == 'team2') {
+          name = 'Bravo';
+        } else if (team.teamName == 'team4') {
+          name = 'Delta';
+        }
+
+        data.add(SalesData(team.amount, name));
+      }
     }
+    return data;
+  }
 
   @override
   void initState() {
     checkAppVersion();
     getManagementNames();
     getConnectivity();
-    getDashboardDetails();
     setNotification();
     requestPermission();
 
@@ -425,6 +448,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         );
       }
     });
+
     super.initState();
   }
 
@@ -447,217 +471,195 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
   //DIALOG BOX FOR SHOWING PR DASHBOARD IN INIT STATE
   buildPRDashboard() {
-    final context=this.context;
+    final context = this.context;
     final size = MediaQuery.sizeOf(context);
     return showDialog(
-            context: context,
-            barrierDismissible: true,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                insetPadding:const EdgeInsets.all(15),
-                title: Center(
-                  child: Text(
-                    'PR Dashboard',
-                    style: TextStyle(
-                        fontFamily: ConstantFonts.sfProBold,
-                        color: Colors.purple),
+      context: context,
+      barrierDismissible: true,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, setState) {
+          return AlertDialog(
+            insetPadding: const EdgeInsets.all(15),
+            title: Center(
+              child: Text(
+                'PR Dashboard',
+                style: TextStyle(
+                    fontFamily: ConstantFonts.sfProBold, color: Colors.purple),
+              ),
+            ),
+            content: Column(
+              children: [
+                Text(
+                  'Sales Revenue',
+                  style: TextStyle(
+                    fontFamily: ConstantFonts.sfProBold,
+                    fontSize: 18,
                   ),
                 ),
-                content: Column(
-                  children: [
-                    Text(
-                      'Sales Revenue',
-                      style: TextStyle(
-                        fontFamily: ConstantFonts.sfProBold,
-                        fontSize: 18,
-                      ),
-                    ),
-                    SizedBox(
-                      height: size.height * 0.2,
-                      width: size.width,
-                      child: ListView.builder(
-                        itemCount: prDashInfo.length,
-                        itemBuilder: (ctx, i) {
-                          String name = 'Alpha';
-                          Color color = Colors.deepPurple;
+                SizedBox(
+                  height: size.height * 0.2,
+                  width: size.width,
+                  child: ListView.builder(
+                    itemCount: prDashInfo.length,
+                    itemBuilder: (ctx, i) {
+                      String name = 'Alpha';
+                      Color color = Colors.deepPurple;
 
-                          switch (prDashInfo[i].teamName) {
-                            case 'team2':
-                              name = 'Bravo';
-                              color = Colors.redAccent;
-                              break;
-                            case 'team4':
-                              name = 'Delta';
-                              color = Colors.blue;
-                              break;
-                          }
-                          return prDashInfo[i].teamName == 'team3'
-                              ? const SizedBox.shrink()
-                              : ListTile(
-                                  leading: Icon(
-                                    Icons.leaderboard,
-                                    color: color,
-                                  ),
-                                  title: Text(
-                                    name,
-                                    style: TextStyle(
-                                      fontFamily: ConstantFonts.sfProMedium,
-                                      fontSize: 18,
-                                      color: color,
-                                    ),
-                                  ),
-                                  trailing: Text(
-                                    prDashInfo[i].sales.toString(),
-                                    style: TextStyle(
-                                      fontFamily: ConstantFonts.sfProMedium,
-                                      fontSize: 18,
-                                      color: color,
-                                    ),
-                                  ),
-                                );
-                        },
-                      ),
-                    ),
-                    Divider(
-                      height: size.height * 0.015,
-                      thickness: 1,
-                      color: Colors.black,
-                    ),
-                    Row(
-                      children: [
-                        const Spacer(flex: 3),
-                        Text(
-                          'Total',
-                          style: TextStyle(
-                              fontFamily: ConstantFonts.sfProBold,
-                              fontSize: 18),
-                        ),
-                        const Spacer(flex: 4),
-                        Text(
-                          '=',
-                          style: TextStyle(
-                              fontFamily: ConstantFonts.sfProBold,
-                              fontSize: 18),
-                        ),
-                        const Spacer(flex: 4),
-                        Text(
-                          '$prTotalAmount',
-                          style: TextStyle(
-                              fontFamily: ConstantFonts.sfProBold,
-                              fontSize: 18),
-                        ),
-                        const Spacer(flex: 1),
-                      ],
-                    ),
-                    Divider(
-                      height: size.height * 0.015,
-                      thickness: 1,
-                      color: Colors.black,
-                    ),
-                    SizedBox(
-                      height: size.height * 0.01,
-                    ),
-                    SizedBox(
-                      height: size.height * 0.4,
-                      width: size.width,
-                      child: SfCartesianChart(
-                        plotAreaBorderWidth: 0.0,
-                        primaryXAxis: CategoryAxis(
-                          labelStyle: TextStyle(
-                              fontFamily: ConstantFonts.sfProMedium,
-                              color: Colors.black),
-                          majorGridLines: const MajorGridLines(width: 0),
-                        ),
-                        primaryYAxis: NumericAxis(
-                            labelStyle: TextStyle(
-                                fontFamily: ConstantFonts.sfProMedium,
-                                color: Colors.black),
-                            majorGridLines: const MajorGridLines(width: 0)),
-                        series: <ColumnSeries<SalesData, String>>[
-                          ColumnSeries<SalesData, String>(
-                            dataLabelSettings: DataLabelSettings(
-                                isVisible: true,
-                                textStyle: TextStyle(
-                                  fontSize: 12,
-                                  fontFamily: ConstantFonts.sfProBold,
-                                  color: Colors.black,
-                                )),
-                            dataSource: getChartData(),
-                            xValueMapper: (SalesData sales, _) =>
-                                sales.sales,
-                            yValueMapper: (SalesData sales, _) =>
-                                sales.year,
-                            pointColorMapper: (SalesData sale, _) {
-                              if (sale.sales == 'Alpha') {
-                                return Colors.deepPurple;
-                              } else if (sale.sales == 'Bravo') {
-                                return Colors.redAccent;
-                              }
-                              return Colors.blue;
-                            },
-                            dataLabelMapper: (SalesData sales, _) =>
-                                sales.year.toInt().toString(),
-                          ),
-                        ],
-                        borderWidth: 0.0,
-                        title: ChartTitle(
-                          text: 'Sales Chart',
-                          textStyle: TextStyle(
-                              fontFamily: ConstantFonts.sfProBold,
-                              color: Colors.black),
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: Text(
-                        'Total  =  ${prTotalAmountNumber.toInt()}',
-                        style: TextStyle(
-                          fontFamily: ConstantFonts.sfProBold,
-                          fontSize: 17,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                actions: [
-                  FilledButton(
-                    style: FilledButton.styleFrom(
-                      elevation: 10,
-                      backgroundColor: Colors.purple.withOpacity(0.8),
-                    ),
-                    child: Text(
-                      'OK',
-                      style: TextStyle(
-                        fontFamily: ConstantFonts.sfProBold,
-                        fontSize: 17,
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
+                      switch (prDashInfo[i].teamName) {
+                        case 'team2':
+                          name = 'Bravo';
+                          color = Colors.redAccent;
+                          break;
+                        case 'team4':
+                          name = 'Delta';
+                          color = Colors.blue;
+                          break;
+                      }
+                      return prDashInfo[i].teamName == 'team3'
+                          ? const SizedBox.shrink()
+                          : ListTile(
+                              leading: Icon(
+                                Icons.leaderboard,
+                                color: color,
+                              ),
+                              title: Text(
+                                name,
+                                style: TextStyle(
+                                  fontFamily: ConstantFonts.sfProMedium,
+                                  fontSize: 18,
+                                  color: color,
+                                ),
+                              ),
+                              trailing: Text(
+                                prDashInfo[i].sales.toString(),
+                                style: TextStyle(
+                                  fontFamily: ConstantFonts.sfProMedium,
+                                  fontSize: 18,
+                                  color: color,
+                                ),
+                              ),
+                            );
                     },
                   ),
-                ],
-              );
-            },
+                ),
+                Divider(
+                  height: size.height * 0.015,
+                  thickness: 1,
+                  color: Colors.black,
+                ),
+                Row(
+                  children: [
+                    const Spacer(flex: 3),
+                    Text(
+                      'Total',
+                      style: TextStyle(
+                          fontFamily: ConstantFonts.sfProBold, fontSize: 18),
+                    ),
+                    const Spacer(flex: 4),
+                    Text(
+                      '=',
+                      style: TextStyle(
+                          fontFamily: ConstantFonts.sfProBold, fontSize: 18),
+                    ),
+                    const Spacer(flex: 4),
+                    Text(
+                      '$prTotalAmount',
+                      style: TextStyle(
+                          fontFamily: ConstantFonts.sfProBold, fontSize: 18),
+                    ),
+                    const Spacer(flex: 1),
+                  ],
+                ),
+                Divider(
+                  height: size.height * 0.015,
+                  thickness: 1,
+                  color: Colors.black,
+                ),
+                SizedBox(
+                  height: size.height * 0.01,
+                ),
+                SizedBox(
+                  height: size.height * 0.4,
+                  width: size.width,
+                  child: SfCartesianChart(
+                    plotAreaBorderWidth: 0.0,
+                    primaryXAxis: CategoryAxis(
+                      labelStyle: TextStyle(
+                          fontFamily: ConstantFonts.sfProMedium,
+                          color: Colors.black),
+                      majorGridLines: const MajorGridLines(width: 0),
+                    ),
+                    primaryYAxis: NumericAxis(
+                        labelStyle: TextStyle(
+                            fontFamily: ConstantFonts.sfProMedium,
+                            color: Colors.black),
+                        majorGridLines: const MajorGridLines(width: 0)),
+                    series: <ColumnSeries<SalesData, String>>[
+                      ColumnSeries<SalesData, String>(
+                        dataLabelSettings: DataLabelSettings(
+                            isVisible: true,
+                            textStyle: TextStyle(
+                              fontSize: 12,
+                              fontFamily: ConstantFonts.sfProBold,
+                              color: Colors.black,
+                            )),
+                        dataSource: getChartData(),
+                        xValueMapper: (SalesData sales, _) => sales.sales,
+                        yValueMapper: (SalesData sales, _) => sales.year,
+                        pointColorMapper: (SalesData sale, _) {
+                          if (sale.sales == 'Alpha') {
+                            return Colors.deepPurple;
+                          } else if (sale.sales == 'Bravo') {
+                            return Colors.redAccent;
+                          }
+                          return Colors.blue;
+                        },
+                        dataLabelMapper: (SalesData sales, _) =>
+                            sales.year.toInt().toString(),
+                      ),
+                    ],
+                    borderWidth: 0.0,
+                    title: ChartTitle(
+                      text: 'Sales Chart',
+                      textStyle: TextStyle(
+                          fontFamily: ConstantFonts.sfProBold,
+                          color: Colors.black),
+                    ),
+                  ),
+                ),
+                Center(
+                  child: Text(
+                    'Total  =  ${prTotalAmountNumber.toInt()}',
+                    style: TextStyle(
+                      fontFamily: ConstantFonts.sfProBold,
+                      fontSize: 17,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            actions: [
+              FilledButton(
+                style: FilledButton.styleFrom(
+                  elevation: 10,
+                  backgroundColor: Colors.purple.withOpacity(0.8),
+                ),
+                child: Text(
+                  'OK',
+                  style: TextStyle(
+                    fontFamily: ConstantFonts.sfProBold,
+                    fontSize: 17,
+                  ),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
           );
-  }
-
-  List<SalesData> getChartData() {
-    List<SalesData> data = [];
-
-    for (var team in prDashInfo) {
-      if (team.teamName != 'team3') {
-        String name = 'Alpha';
-        if (team.teamName == 'team2') {
-          name = 'Bravo';
-        } else if (team.teamName == 'team4') {
-          name = 'Delta';
-        }
-
-        data.add(SalesData(team.amount, name));
-      }
-    }
-    return data;
+        });
+      },
+    );
   }
 
   Widget buildMenuGrid(double height, double width) {
