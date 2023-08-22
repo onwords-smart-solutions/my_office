@@ -158,11 +158,12 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
 
     if (!mounted) return;
     if (pickedTime != null) {
-      DateTime parsedTime =
-          DateFormat.jm().parse(pickedTime.format(context).toString());
+      final today=DateTime.now();
+      DateTime parsedTime =DateTime(today.year,today.month,today.day,pickedTime.hour,pickedTime.minute);
 
       ///converting to DateTime so that we can further format on different pattern.
       String formattedTime = DateFormat('HH:mm').format(parsedTime);
+
 
       ///DateFormat() is from intl package, you can format the time on any pattern you need.
 
@@ -182,8 +183,8 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
 
     if (!mounted) return;
     if (pickedTime != null) {
-      DateTime parsedTime =
-          DateFormat.jm().parse(pickedTime.format(context).toString());
+      final today=DateTime.now();
+      DateTime parsedTime =DateTime(today.year,today.month,today.day,pickedTime.hour,pickedTime.minute);
 
       ///converting to DateTime so that we can further format on different pattern.
       // String formattedTime = DateFormat('HH:mm:ss').format(parsedTime);
