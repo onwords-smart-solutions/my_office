@@ -98,15 +98,15 @@ class _ProductDetailsState extends State<ProductDetails> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    itemNameController.dispose();
-    itemQtyController.dispose();
-    itemPriceController.dispose();
-    productName.dispose();
-    productPrice.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   itemNameController.dispose();
+  //   itemQtyController.dispose();
+  //   itemPriceController.dispose();
+  //   productName.dispose();
+  //   productPrice.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {

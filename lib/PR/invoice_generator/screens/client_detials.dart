@@ -41,15 +41,15 @@ class _ClientDetailsState extends State<ClientDetails> {
   ];
   List<String> docType = ['QUOTATION', 'PROFORMA_INVOICE', 'INVOICE'];
 
-  @override
-  void dispose() {
-    clientName.dispose();
-    clientStreet.dispose();
-    clientAddress.dispose();
-    clientGst.dispose();
-    clientPhone.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   clientName.dispose();
+  //   clientStreet.dispose();
+  //   clientAddress.dispose();
+  //   clientGst.dispose();
+  //   clientPhone.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {

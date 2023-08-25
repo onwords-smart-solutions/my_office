@@ -490,7 +490,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             content: Column(
               children: [
                 Text(
-                  'Sales Revenue',
+                  'Sales Count',
                   style: TextStyle(
                     fontFamily: ConstantFonts.sfProBold,
                     fontSize: 18,
@@ -620,7 +620,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     ],
                     borderWidth: 0.0,
                     title: ChartTitle(
-                      text: 'Sales Chart',
+                      text: 'Sales Points',
                       textStyle: TextStyle(
                           fontFamily: ConstantFonts.sfProBold,
                           color: Colors.black),
