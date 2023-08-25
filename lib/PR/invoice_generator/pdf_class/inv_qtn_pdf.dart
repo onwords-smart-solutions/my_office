@@ -285,14 +285,14 @@ class InvAndQtnPdf {
                     false, 10),
                 needGst
                     ? finalTotal(
-                        'CGST %',
+                        'CGST 9%',
                         Utils.formatPrice(cgst.toDouble().roundToDouble()),
                         false,
                         10)
                     : SizedBox(),
                 needGst
                     ? finalTotal(
-                        'SGST %',
+                        'SGST 9%',
                         Utils.formatPrice(sgst.toDouble().roundToDouble()),
                         false,
                         10)

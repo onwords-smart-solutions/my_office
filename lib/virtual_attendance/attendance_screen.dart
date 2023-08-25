@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
@@ -124,22 +125,28 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     if (!hasPermission) return;
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) async {
-      await _getAddressFromLatLng(position);
+      final address = await _getAddressFromLatLng(position);
+      log('address is $address');
+      await addAttendanceToDatabase(address, position);
     }).catchError((e) {
-      log('error is $e');
+      log('error is : $e');
     });
   }
 
-  Future<void> _getAddressFromLatLng(Position position) async {
-    log('called address function');
-    await placemarkFromCoordinates(position.latitude, position.longitude)
-        .then((List<Placemark> placemarks) async {
-      Placemark place = placemarks[0];
-      final address = '${place.street}, ${place.locality}, ${place.postalCode}';
-      await addAttendanceToDatabase(address, position);
-    }).catchError((e) {
-      debugPrint(e);
-    });
+  Future<String> _getAddressFromLatLng(Position position) async {
+    String address = 'Unable to fetch address';
+
+    try {
+      final data =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
+      address = '${data[0].street}, ${data[0].locality}, ${data[0].postalCode}';
+    } on PlatformException catch (e) {
+      log('Platform error $e');
+    } catch (e) {
+      log("ERROR $e");
+    }
+
+    return address;
   }
 
   @override
@@ -153,14 +160,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     return MainTemplate(
         subtitle: 'Register your Attendance!!',
         templateBody: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: attendance()),
+            physics: const BouncingScrollPhysics(), child: attendance()),
         bgColor: ConstantColor.background1Color);
   }
 
   Widget attendance() {
     return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Column(
         children: [
           const Image(
@@ -172,25 +179,25 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           isLoading
               ? Lottie.asset('assets/animations/new_loading.json')
               : isEntered
-              ? Column(
-            children: [
-              Text(
-                'Your Entry has already Registered!!!',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: ConstantFonts.sfProMedium,
-                ),
-              ),
-              Text(
-                'Leave the Screen...',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: ConstantFonts.sfProMedium,
-                ),
-              ),
-            ],
-          )
-              : submitButton(),
+                  ? Column(
+                      children: [
+                        Text(
+                          'Your Entry has already Registered!!!',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: ConstantFonts.sfProMedium,
+                          ),
+                        ),
+                        Text(
+                          'Leave the Screen...',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontFamily: ConstantFonts.sfProMedium,
+                          ),
+                        ),
+                      ],
+                    )
+                  : submitButton(),
         ],
       ),
     );
@@ -246,12 +253,12 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
-    Future.delayed(const Duration(seconds: 3)).then((value) {
+    Future.delayed(const Duration(seconds: 3),).then((value) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => const UserHomeScreen(),
           ),
-              (route) => false);
+          (route) => false);
     });
   }
 
@@ -276,21 +283,20 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 borderRadius: BorderRadius.circular(12),
               ),
               hintText: 'Reason is compulsory..',
-              hintStyle: TextStyle(color: Colors.grey.shade600,
-                fontSize: 16,
-                fontFamily: ConstantFonts.sfProMedium
-              ),
+              hintStyle: TextStyle(
+                  color: Colors.grey.shade600,
+                  fontSize: 16,
+                  fontFamily: ConstantFonts.sfProMedium),
             ),
-            onChanged: (value){
-              setState(() {
-              });
+            onChanged: (value) {
+              setState(() {});
             },
           ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 25),
           child: SwipeableButtonView(
-            isActive : reasonController.text.trim().isNotEmpty,
+            isActive: reasonController.text.trim().isNotEmpty,
             buttonText: '       SLIDE TO MARK ATTENDANCE',
             buttonWidget: const Icon(
               Icons.arrow_forward_ios_rounded,
@@ -301,9 +307,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             onWaitingProcess: () {
               Future.delayed(
                 const Duration(seconds: 1),
-                    () {
+                () {
                   setState(
-                        () {
+                    () {
                       isFinished = true;
                     },
                   );

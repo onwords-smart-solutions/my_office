@@ -21,6 +21,8 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
 
+
+
     <queries>
         <!-- If your app opens https URLs -->
         <intent>
@@ -113,6 +115,9 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@mipmap/ic_launcher" />
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDiU16rLh78x3n3W7h4hEYKXYt2jozrWpA"/>
 
 
     </application>

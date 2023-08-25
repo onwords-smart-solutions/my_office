@@ -27,12 +27,12 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
   double finalAmountWithoutGst = 0;
   double prPoint = 0;
 
-  @override
-  void dispose() {
-    discountController.dispose();
-    advancedAmountController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   discountController.dispose();
+  //   advancedAmountController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
