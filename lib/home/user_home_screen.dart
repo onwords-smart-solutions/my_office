@@ -141,11 +141,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   void getStaffDetail() async {
     final data = await _hiveOperations.getStaffDetail();
     setState(() {
-      // log('current user is ${data.name}');
-      // log('management names are $managementStaffNames');
-      // log('tl names are $tlStaffNames');
-      // log('rnd tl names are $rndTlStaffNames');
-      // log('installation boys names are $installationBoysNames');
       if (managementStaffNames.any((element) => element == data.name)) {
         userAccessGridButtonsName.addAll(AppDefaults.gridButtonsNames);
         userAccessGridButtonsPics.addAll(AppDefaults.gridButtonPics);

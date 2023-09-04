@@ -80,6 +80,8 @@
                 android:name="com.google.firebase.messaging.default_notification_icon"
                 android:resource="@drawable/suitcase" />
 
+            <meta-data android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyBXbP3LxWV40SyINNghIJRNpQ0SbAPqOFc"/>
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

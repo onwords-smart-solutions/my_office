@@ -22,7 +22,7 @@ import '../leads/search_leads.dart';
 import '../leave_apply/leave_apply_screen.dart';
 import '../leave_approval/leave_approval_screen.dart';
 import '../onyx/announcement.dart';
-import '../pr_location/live_tracking.dart';
+import '../proxy_attendance/attendance_screen.dart';
 import '../refreshment/refreshment_screen.dart';
 import '../rnd_form/installation_details.dart';
 import '../staff_details/staff_details.dart';
@@ -66,6 +66,7 @@ class AppDefaults {
     'Quotation template',
     'Staff details',
     'Installation pdf',
+    'Proxy attendance',
   ];
 
   static List<String> gridButtonPics = [
@@ -99,6 +100,7 @@ class AppDefaults {
     'assets/quotation_template.png',
     'assets/staff_details.png',
     'assets/installation_image.png',
+    'assets/proxy_attendance.png',
   ];
 
   Widget getPage(String buttonName, StaffModel staffInfo) {
@@ -229,8 +231,9 @@ class AppDefaults {
       case 'Installation pdf':
         page = const InstallationDetails();
         break;
-      case 'Live tracking':
-        page = const LiveTracking();
+      case 'Proxy attendance':
+        page = const ProxyAttendance();
+        break;
     }
     return page;
   }

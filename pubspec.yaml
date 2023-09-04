@@ -39,7 +39,6 @@ dependencies:
   auto_size_text:
   slide_to_confirm:
   percent_indicator:
-#  flutter_neumorphic:
   dropdown_button2:
   timelines:
   firebase_core:
