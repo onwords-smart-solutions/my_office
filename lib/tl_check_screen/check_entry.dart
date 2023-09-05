@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,11 +5,14 @@ import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/models/staff_entry_model.dart';
 import 'package:my_office/tl_check_screen/punch_item.dart';
-import 'package:shimmer/shimmer.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 import '../models/custom_punching_model.dart';
 import '../util/main_template.dart';
+
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
 
 class CheckEntryScreen extends StatefulWidget {
   final String userId;
@@ -172,21 +174,28 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
   }
 
   Widget _search() {
-    return CupertinoSearchTextField(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15.0),
-          color: Colors.grey.withOpacity(.3),
+    return Row(
+      children: [
+        Flexible(
+          child: CupertinoSearchTextField(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15.0),
+                color: Colors.grey.withOpacity(.3),
+              ),
+              onSubmitted: (value) => _sortedList.value = _punchingDetails.value
+                  .where((element) => element.name.toLowerCase().contains(value.trim().toLowerCase()))
+                  .toList(),
+              onChanged: (value) => _sortedList.value = _punchingDetails.value
+                  .where((element) => element.name.toLowerCase().contains(value.trim().toLowerCase()))
+                  .toList(),
+              padding: const EdgeInsets.all(10.0),
+              style: TextStyle(fontFamily: 'Poppins', color: Theme.of(context).primaryColor),
+              suffixIcon: const Icon(CupertinoIcons.xmark_circle_fill, color: Colors.grey),
+              prefixIcon: Icon(Icons.search_rounded, color: Theme.of(context).primaryColor)),
         ),
-        onSubmitted: (value) => _sortedList.value = _punchingDetails.value
-            .where((element) => element.name.toLowerCase().contains(value.trim().toLowerCase()))
-            .toList(),
-        onChanged: (value) => _sortedList.value = _punchingDetails.value
-            .where((element) => element.name.toLowerCase().contains(value.trim().toLowerCase()))
-            .toList(),
-        padding: const EdgeInsets.all(10.0),
-        style: TextStyle(fontFamily: 'Poppins', color: Theme.of(context).primaryColor),
-        suffixIcon: const Icon(CupertinoIcons.xmark_circle_fill, color: Colors.grey),
-        prefixIcon: Icon(Icons.search_rounded, color: Theme.of(context).primaryColor));
+        IconButton(onPressed: _printScreen, icon: Icon(Icons.print_rounded)),
+      ],
+    );
   }
 
   Widget _entryList() {
@@ -204,7 +213,7 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
                         : ValueListenableBuilder(
                             valueListenable: _sortedList,
                             builder: (ctx, sortedList, child) {
-                              sortedList.sort((a,b)=>a.name.compareTo(b.name));
+                              sortedList.sort((a, b) => a.name.compareTo(b.name));
 
                               return sortedList.isEmpty
                                   ? Center(
@@ -377,76 +386,145 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
     });
     return punchDetail;
   }
-}
 
-Future<DateTime?> _checkProxyCheckOut(String staffId, String dateFormat) async {
-  DateTime? checkOut;
-  await FirebaseDatabase.instance.ref('proxy_attendance/$staffId/$dateFormat').once().then((proxy) async {
-    if (proxy.snapshot.exists) {
-      if (proxy.snapshot.child('Check-out').exists) {
-        final data = proxy.snapshot.child('Check-out').value as Map<Object?, Object?>;
-        checkOut = DateTime.fromMillisecondsSinceEpoch(int.parse(data['Time'].toString()));
+  Future<DateTime?> _checkProxyCheckOut(String staffId, String dateFormat) async {
+    DateTime? checkOut;
+    await FirebaseDatabase.instance.ref('proxy_attendance/$staffId/$dateFormat').once().then((proxy) async {
+      if (proxy.snapshot.exists) {
+        if (proxy.snapshot.child('Check-out').exists) {
+          final data = proxy.snapshot.child('Check-out').value as Map<Object?, Object?>;
+          checkOut = DateTime.fromMillisecondsSinceEpoch(int.parse(data['Time'].toString()));
+        }
       }
-    }
-  });
-  return checkOut;
+    });
+    return checkOut;
+  }
+
+  Future<void> _printScreen() async {
+    final doc = pw.Document();
+
+    doc.addPage(pw.MultiPage(
+        margin: const pw.EdgeInsets.all(15.0),
+        build: (ctx) {
+          return List.generate(_sortedList.value.length, (index) {
+            PdfColor topContainerColor = PdfColors.green400;
+            String status = 'Present on Time';
+            String method = 'ID';
+
+            if (_sortedList.value[index].isProxy) {
+              method = 'Proxy';
+            }
+
+            if (_sortedList.value[index].checkInTime == null) {
+              topContainerColor = PdfColors.blueGrey600;
+              status = 'Absent today';
+            } else if (_sortedList.value[index].checkInTime!
+                        .difference(DateTime(
+                            _sortedList.value[index].checkInTime!.year,
+                            _sortedList.value[index].checkInTime!.month,
+                            _sortedList.value[index].checkInTime!.day,
+                            09,
+                            00))
+                        .inMinutes >
+                    10 &&
+                _sortedList.value[index].checkInTime!
+                        .difference(DateTime(
+                            _sortedList.value[index].checkInTime!.year,
+                            _sortedList.value[index].checkInTime!.month,
+                            _sortedList.value[index].checkInTime!.day,
+                            09,
+                            20))
+                        .inMinutes <=
+                    0) {
+              topContainerColor = PdfColors.deepOrange400;
+              status =
+                  'Late by ${_sortedList.value[index].checkInTime!.difference(DateTime(_sortedList.value[index].checkInTime!.year, _sortedList.value[index].checkInTime!.month, _sortedList.value[index].checkInTime!.day, 09, 00)).inMinutes - 10} mins';
+            } else if (_sortedList.value[index].checkInTime!
+                    .difference(DateTime(_sortedList.value[index].checkInTime!.year,
+                        _sortedList.value[index].checkInTime!.month, _sortedList.value[index].checkInTime!.day, 09, 00))
+                    .inMinutes >
+                20) {
+              topContainerColor = PdfColors.red400;
+              status =
+                  'Late by ${_sortedList.value[index].checkInTime!.difference(DateTime(_sortedList.value[index].checkInTime!.year, _sortedList.value[index].checkInTime!.month, _sortedList.value[index].checkInTime!.day, 09, 00)).inMinutes - 10} mins';
+            }
+
+            return pw.Container(
+              margin: const pw.EdgeInsets.only(bottom: 8.0),
+              decoration: pw.BoxDecoration(
+                borderRadius: pw.BorderRadius.circular(15.0),
+                color: PdfColors.grey300,
+              ),
+              child: pw.Row(
+                children: [
+                  pw.Expanded(
+                    child: pw.Padding(
+                      padding: const pw.EdgeInsets.all(8.0),
+                      child: pw.Column(
+                        crossAxisAlignment: pw.CrossAxisAlignment.start,
+                        children: [
+                          pw.Row(
+                            children: [
+                              pw.Flexible(
+                                child: pw.Text(
+                                  _sortedList.value[index].name,
+                                  style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 12.0),
+                                ),
+                              ),
+                              pw.Text(
+                                ' (${_sortedList.value[index].department})',
+                                style: const pw.TextStyle(fontSize: 10.0),
+                              ),
+                            ],
+                          ),
+                          if (_sortedList.value[index].checkInTime != null)
+                            pw.Text(
+                              'Check In : ${timeFormat(_sortedList.value[index].checkInTime!)}',
+                              style: const pw.TextStyle(fontSize: 10.0),
+                            ),
+                          if (_sortedList.value[index].checkInTime != null)
+                            pw.Text(
+                              _sortedList.value[index].checkOutTime == null
+                                  ? 'Check Out : No entry'
+                                  : 'Check Out : ${timeFormat(_sortedList.value[index].checkOutTime!)}',
+                              style: const pw.TextStyle(fontSize: 10.0),
+                            ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  pw.Column(
+                    children: [
+                      pw.Text(
+                        status,
+                        style: pw.TextStyle(color: topContainerColor),
+                      ),
+                      pw.Text(
+                        method,
+                        style: pw.TextStyle(color: topContainerColor),
+                      ),
+                    ],
+                  ),
+                  pw.Container(
+                    width: 30.0,
+                    height: 50.0,
+                    margin: const pw.EdgeInsets.only(left: 5.0),
+                    decoration: pw.BoxDecoration(
+                      color: topContainerColor,
+                      borderRadius: const pw.BorderRadius.horizontal(
+                        right: pw.Radius.circular(15.0),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          });
+        }));
+
+    await Printing.layoutPdf(onLayout: (PdfPageFormat format) async => doc.save());
+  }
 }
 
 /// date formatter
 String formatDate(DateTime date) => DateFormat.yMMMd().format(date);
-
-class Skeleton extends StatelessWidget {
-  const Skeleton({
-    Key? key,
-    this.height,
-    this.width,
-  }) : super(key: key);
-  final double? height, width;
-
-  @override
-  Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-    return Container(
-      height: height,
-      width: width,
-      margin: const EdgeInsets.all(5),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15), color: ConstantColor.background1Color),
-      child: Shimmer.fromColors(
-        baseColor: Colors.grey.shade400,
-        highlightColor: Colors.grey.shade100,
-        child: Row(
-          children: [
-            const CircleAvatar(
-              radius: 20,
-              child: Icon(
-                Icons.person,
-                color: Colors.white,
-              ),
-            ),
-            SizedBox(
-              width: size.width * 0.05,
-            ),
-            Container(
-              height: size.height * 0.05,
-              width: size.width * 0.5,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.white,
-              ),
-            ),
-            SizedBox(width: size.width * 0.055),
-            Container(
-              height: size.height * 0.05,
-              width: size.width * 0.20,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}

@@ -66,7 +66,7 @@ class PunchItem extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        ' [${punchDetail.department}]',
+                        ' (${punchDetail.department})',
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           color: Colors.black54,

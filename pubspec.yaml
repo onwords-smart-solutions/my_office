@@ -93,6 +93,7 @@ dependencies:
   flutter_polyline_points: ^2.0.0
   http:
   syncfusion_flutter_charts: ^22.2.9
+  printing: ^5.11.0
 
 dev_dependencies:
   flutter_test:
