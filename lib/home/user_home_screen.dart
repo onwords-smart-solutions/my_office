@@ -149,12 +149,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           userAccessGridButtonsPics.remove('assets/create_leads.png');
         }
         userAccessGridButtonsName.remove('View suggestions');
-        userAccessGridButtonsName.remove('Onyx');
-        userAccessGridButtonsName.remove('Late entry');
+        // userAccessGridButtonsName.remove('Onyx');
+        // userAccessGridButtonsName.remove('Late entry');
         userAccessGridButtonsName.remove('Staff details');
         userAccessGridButtonsPics.remove('assets/view_suggestions.png');
-        userAccessGridButtonsPics.remove('assets/onxy.png');
-        userAccessGridButtonsPics.remove('assets/late_entry.png');
+        // userAccessGridButtonsPics.remove('assets/onxy.png');
+        // userAccessGridButtonsPics.remove('assets/late_entry.png');
         userAccessGridButtonsPics.remove('assets/staff_details.png');
         prDashVisible = true;
       } else if (tlStaffNames.any((element) => element == data.name)) {
@@ -163,14 +163,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'Work details' ||
               AppDefaults.gridButtonsNames[i] == 'Refreshment' ||
               AppDefaults.gridButtonsNames[i] == 'Leave apply form' ||
-              AppDefaults.gridButtonsNames[i] == 'Absent details' ||
+              AppDefaults.gridButtonsNames[i] == 'Search leads' ||
+              AppDefaults.gridButtonsNames[i] == 'Invoice generator' ||
+              // AppDefaults.gridButtonsNames[i] == 'Absent details' ||
               AppDefaults.gridButtonsNames[i] == 'Leave approval' ||
               AppDefaults.gridButtonsNames[i] == 'Suggestions' ||
-              AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
-              AppDefaults.gridButtonsNames[i] == 'Check Virtual entry' ||
-              AppDefaults.gridButtonsNames[i] == 'Entry time' ||
+              // AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
+              // AppDefaults.gridButtonsNames[i] == 'Check Virtual entry' ||
+              AppDefaults.gridButtonsNames[i] == 'Attendance' ||
               AppDefaults.gridButtonsNames[i] == 'Quotation template' ||
-              AppDefaults.gridButtonsNames[i] == 'Installation pdf') {
+              AppDefaults.gridButtonsNames[i] == 'Installation pdf' ||
+          AppDefaults.gridButtonsNames[i] == 'Proxy attendance') {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
             userAccessGridButtonsPics.add(AppDefaults.gridButtonPics[i]);
           }
@@ -183,9 +186,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'Leave apply form' ||
               AppDefaults.gridButtonsNames[i] == 'Leave approval' ||
               AppDefaults.gridButtonsNames[i] == 'Suggestions' ||
-              AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
+              // AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
+              AppDefaults.gridButtonsNames[i] == 'Attendance' ||
               AppDefaults.gridButtonsNames[i] == 'Quotation template' ||
-              AppDefaults.gridButtonsNames[i] == 'Installation pdf') {
+              AppDefaults.gridButtonsNames[i] == 'Installation pdf' ||
+          AppDefaults.gridButtonsNames[i] == 'Proxy attendance') {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
             userAccessGridButtonsPics.add(AppDefaults.gridButtonPics[i]);
           }
@@ -197,7 +202,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'Leave apply form' ||
               AppDefaults.gridButtonsNames[i] == 'Invoice generator' ||
               AppDefaults.gridButtonsNames[i] == 'Suggestions' ||
-              AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
+              // AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
               AppDefaults.gridButtonsNames[i] == 'Quotation template' ||
               AppDefaults.gridButtonsNames[i] == 'Installation pdf') {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
@@ -206,11 +211,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         }
       } else if (data.department == 'ADMIN') {
         userAccessGridButtonsName.addAll(AppDefaults.gridButtonsNames);
-        userAccessGridButtonsName.remove('Onyx');
-        userAccessGridButtonsName.remove('Late entry');
+        // userAccessGridButtonsName.remove('Onyx');
+        // userAccessGridButtonsName.remove('Late entry');
         userAccessGridButtonsPics.addAll(AppDefaults.gridButtonPics);
-        userAccessGridButtonsPics.remove('assets/onxy.png');
-        userAccessGridButtonsPics.remove('assets/late_entry.png');
+        // userAccessGridButtonsPics.remove('assets/onxy.png');
+        // userAccessGridButtonsPics.remove('assets/late_entry.png');
         prDashVisible = true;
       } else if (data.department == 'APP') {
         userAccessGridButtonsName.addAll(AppDefaults.gridButtonsNames);
@@ -231,7 +236,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               AppDefaults.gridButtonsNames[i] == 'Visit' ||
               AppDefaults.gridButtonsNames[i] == 'Invoice generator' ||
               AppDefaults.gridButtonsNames[i] == 'Suggestions' ||
-              AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
+              // AppDefaults.gridButtonsNames[i] == 'Virtual attendance' ||
               AppDefaults.gridButtonsNames[i] == 'PR Work done' ||
               AppDefaults.gridButtonsNames[i] == 'Sales points' ||
               AppDefaults.gridButtonsNames[i] == 'Scan QR' ||
@@ -247,8 +252,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           if (AppDefaults.gridButtonsNames[i] == 'Work entry' ||
               AppDefaults.gridButtonsNames[i] == 'Refreshment' ||
               AppDefaults.gridButtonsNames[i] == 'Leave apply form' ||
-              AppDefaults.gridButtonsNames[i] == 'Suggestions' ||
-              AppDefaults.gridButtonsNames[i] == 'Virtual attendance') {
+              AppDefaults.gridButtonsNames[i] == 'Suggestions'
+              // AppDefaults.gridButtonsNames[i] == 'Virtual attendance'
+          ) {
             userAccessGridButtonsName.add(AppDefaults.gridButtonsNames[i]);
             userAccessGridButtonsPics.add(AppDefaults.gridButtonPics[i]);
           }

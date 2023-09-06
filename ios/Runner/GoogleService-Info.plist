@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>966384650165-3skje7chakbbe1oqlp710f3olbftumb0.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.966384650165-3skje7chakbbe1oqlp710f3olbftumb0</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCfCDfCw4QpH7-DZ3Kc_hr4o-ra8-OI_mo</string>
+	<key>GCM_SENDER_ID</key>
+	<string>966384650165</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.onwords.office</string>
+	<key>PROJECT_ID</key>
+	<string>adminconsole-updated</string>
+	<key>STORAGE_BUCKET</key>
+	<string>adminconsole-updated.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:966384650165:ios:bb37b58ce3ac02b095bbfc</string>
+	<key>DATABASE_URL</key>
+	<string>https://adminconsole-updated-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>

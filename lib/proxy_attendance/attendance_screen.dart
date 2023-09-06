@@ -14,21 +14,12 @@ import '../Constant/colors/constant_colors.dart';
 import '../models/staff_entry_model.dart';
 
 class ProxyAttendance extends StatefulWidget {
-  const ProxyAttendance({super.key});
+  final String uid;
+  final String name;
+  const ProxyAttendance({super.key, required this.uid, required this.name});
 
   @override
   State<ProxyAttendance> createState() => _ProxyAttendanceState();
-}
-
-enum Department {
-  app('APP'),
-  web('WEB'),
-  media('MEDIA'),
-  rnd('RND'),
-  pr('PR');
-
-  const Department(this.label);
-  final String label;
 }
 
 class Data {
@@ -39,7 +30,6 @@ class Data {
 }
 
 class _ProxyAttendanceState extends State<ProxyAttendance> {
-  Department? _department;
   StaffAttendanceModel? selectedStaff;
   List<StaffAttendanceModel> allStaffs = [];
   bool isLoading = true;
@@ -76,11 +66,12 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
   }
 
   int? _selectedIndex;
-  final List <Data> _choiceChipsList = [
-   Data('Check-in time', Colors.grey.shade400),
-    Data('Check-out time', Colors.grey.shade400),
+  final List<Data> _choiceChipsList = [
+    Data('Check-in', Colors.grey.shade400),
+    Data('Check-out', Colors.grey.shade400),
   ];
 
+  FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
@@ -97,256 +88,238 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
     );
   }
 
-    buildProxyAttendance(){
-      final List<DropdownMenuEntry<Department>> depNames =
-      <DropdownMenuEntry<Department>>[];
-      for (final Department names in Department.values) {
-        depNames.add(
-          DropdownMenuEntry<Department>(value: names, label: names.label),
-        );
-      }
-      final List<DropdownMenuEntry<StaffAttendanceModel>> staffNames =
-      <DropdownMenuEntry<StaffAttendanceModel>>[];
-      for (final StaffAttendanceModel names in allStaffs) {
-        staffNames.add(
-          DropdownMenuEntry<StaffAttendanceModel>(
-              value: names, label: names.name),
-        );
-      }
-
-      var height = MediaQuery.sizeOf(context).height;
-      var width = MediaQuery.sizeOf(context).width;
-      return allStaffs.isEmpty ?
-      Center(
-          child: Lottie.asset(
-        'assets/animations/new_loading.json',
-      )) :
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: width * 0.05),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: height * 0.04),
-              DropdownMenu<StaffAttendanceModel>(
-                width: width * 0.9,
-                inputDecorationTheme: InputDecorationTheme(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(color: Colors.black),
-                  ),
-                  labelStyle:
-                  TextStyle(fontFamily: ConstantFonts.sfProMedium),
-                  contentPadding: const EdgeInsets.all(15),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(color: Colors.black),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(color: Colors.black),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(color: Colors.red),
-                  ),
-                  errorStyle: TextStyle(
-                    fontFamily: ConstantFonts.sfProMedium,
-                  ),
-                ),
-                requestFocusOnTap: true,
-                textStyle: TextStyle(
-                  fontFamily: ConstantFonts.sfProMedium,
-                ),
-                enableFilter: true,
-                hintText: 'Staff name',
-                // errorText: 'Select a staff name',
-                controller: _nameController,
-                label: const Text('Staff name'),
-                dropdownMenuEntries: staffNames,
-                onSelected: (StaffAttendanceModel? name) {
-                  setState(() {
-                    selectedStaff = name;
-                  });
-                },
-              ),
-              SizedBox(height: height * 0.02),
-              DropdownMenu<Department>(
-                width: width * 0.9,
-                requestFocusOnTap: true,
-                inputDecorationTheme: InputDecorationTheme(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  labelStyle:
-                  TextStyle(fontFamily: ConstantFonts.sfProMedium),
-                  contentPadding: const EdgeInsets.all(15),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(color: Colors.black),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(color: Colors.black),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: const BorderSide(color: Colors.red),
-                  ),
-                  errorStyle: TextStyle(
-                    fontFamily: ConstantFonts.sfProMedium,
-                  ),
-                ),
-                textStyle: TextStyle(
-                  fontFamily: ConstantFonts.sfProMedium,
-                ),
-                enableFilter: true,
-                controller: _depController,
-                // errorText: 'Select a department',
-                label: const Text('Department'),
-                dropdownMenuEntries: depNames,
-                enableSearch: true,
-                onSelected: (Department? name) {
-                  setState(() {
-                    _department = name;
-                  });
-                },
-              ),
-              SizedBox(height: height * 0.02),
-              SizedBox(
-                width: width * 0.9,
-                child: TextFormField(
-                  textInputAction: TextInputAction.next,
-                  textCapitalization: TextCapitalization.sentences,
-                  controller: _timeController,
-                  autofocus: false,
-                  readOnly: true,
-                  onTap: () async {
-                    TimeOfDay? pickedTime = await showTimePicker(
-                      initialTime: TimeOfDay.now(),
-                      context: context,
-                    );
-
-                    if (!mounted) return;
-                    if (pickedTime != null) {
-                      final today = DateTime.now();
-                      DateTime parsedTime = DateTime(today.year, today.month,
-                          today.day, pickedTime.hour, pickedTime.minute);
-
-                      ///converting to DateTime so that we can further format on different pattern.
-                      String formattedTime =
-                      DateFormat('hh:mm:ss').format(parsedTime);
-
-                      ///DateFormat() is from intl package, you can format the time on any pattern you need.
-
-                      setState(() {
-                        timeOfStart = formattedTime;
-                        _timeController.text = DateFormat.jm().format(parsedTime);
-                      });
-                    }
-                  },
-                  style: TextStyle(
-                    // height: height * 0.0025,
-                      color: Colors.black,
-                      fontFamily: ConstantFonts.sfProMedium),
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.all(15),
-                    border: InputBorder.none,
-                    hintText: 'Choose time',
-                    hintStyle: TextStyle(
-                      // height: height * 0.005,
-                        color: Colors.grey,
-                        fontFamily: ConstantFonts.sfProMedium),
-                    filled: true,
-                    fillColor: ConstantColor.background1Color,
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                      const BorderSide(color: ConstantColor.blackColor),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.black),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.red),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: height * 0.02),
-              SizedBox(
-                width: width * 0.9,
-                child: TextFormField(
-                  textInputAction: TextInputAction.done,
-                  textCapitalization: TextCapitalization.sentences,
-                  controller: _reasonController,
-                  autofocus: false,
-                  keyboardType: TextInputType.name,
-                  maxLines: 2,
-                  style: TextStyle(
-                    // height: height * 0.0025,
-                      color: Colors.black,
-                      fontFamily: ConstantFonts.sfProMedium),
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.all(15),
-                    border: InputBorder.none,
-                    hintText: 'Reason for Proxy entry..',
-                    hintStyle: TextStyle(
-                      // height: height * 0.005,
-                        color: Colors.grey,
-                        fontFamily: ConstantFonts.sfProMedium),
-                    filled: true,
-                    fillColor: ConstantColor.background1Color,
-                    focusedBorder: OutlineInputBorder(
-                      borderSide:
-                      const BorderSide(color: ConstantColor.blackColor),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.black),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.red),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: height * 0.02),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Wrap(
-                    spacing: 6,
-                    direction: Axis.horizontal,
-                    children: choiceChips(),
-                  ),
-                ],
-              ),
-              SizedBox(height: height * 0.02),
-              ConfirmationSlider(
-                height: 60,
-                backgroundColor: ConstantColor.background1Color,
-                foregroundColor: ConstantColor.background1Color,
-                backgroundShape: BorderRadius.circular(40),
-                onConfirmation: (){
-                  saveToDb();
-                },
-                textStyle: TextStyle(
-                    fontFamily: ConstantFonts.sfProMedium,
-                    fontSize: 16
-                ),
-                text: 'SLIDE TO CONFIRM',
-                sliderButtonContent: const Icon(CupertinoIcons.person_alt_circle,size: 50, color: Colors.purple,),
-              ),
-              SizedBox(height: height * 0.04),
-            ],
+  buildProxyAttendance() {
+    final List<DropdownMenuEntry<StaffAttendanceModel>> staffNames =
+        <DropdownMenuEntry<StaffAttendanceModel>>[];
+    for (final StaffAttendanceModel names in allStaffs) {
+      staffNames.add(
+        DropdownMenuEntry<StaffAttendanceModel>(
+          value: names,
+          label: names.name,
+          style: ButtonStyle(
+            shape: MaterialStateProperty.resolveWith((states) {
+              OutlineInputBorder(borderRadius: BorderRadius.circular(10));
+            }),
+            textStyle: MaterialStateProperty.resolveWith(
+              (states) => TextStyle(
+                  fontSize: 17, fontFamily: ConstantFonts.sfProMedium),
+            ),
           ),
         ),
       );
     }
+
+    var height = MediaQuery.sizeOf(context).height;
+    var width = MediaQuery.sizeOf(context).width;
+    return allStaffs.isEmpty
+        ? Center(
+            child: Lottie.asset(
+            'assets/animations/new_loading.json',
+          ),
+    )
+        : SingleChildScrollView(
+            padding: EdgeInsets.only(left: width * 0.05,right: width * 0.05,bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: height * 0.3,
+                  child: const Image(
+                    image: AssetImage('assets/proxy_screen.png'),
+                  ),
+                ),
+                SizedBox(height: height * 0.02),
+                DropdownMenu<StaffAttendanceModel>(
+                  width: width * 0.9,
+                  inputDecorationTheme: InputDecorationTheme(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(color: Colors.black),
+                    ),
+                    labelStyle:
+                        TextStyle(fontFamily: ConstantFonts.sfProMedium),
+                    contentPadding: const EdgeInsets.all(15),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(color: Colors.black),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(color: Colors.black),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: const BorderSide(color: Colors.red),
+                    ),
+                    errorStyle: TextStyle(
+                      fontFamily: ConstantFonts.sfProMedium,
+                    ),
+                  ),
+
+                  requestFocusOnTap: true,
+                  menuHeight: height * 0.4,
+                  menuStyle: MenuStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith(
+                        (states) => Colors.purple.shade50),
+                    padding: MaterialStateProperty.resolveWith(
+                      (states) => const EdgeInsets.symmetric(horizontal: 10),
+                    ),
+                    elevation:
+                        MaterialStateProperty.resolveWith((states) => 10),
+                  ),
+                  textStyle: TextStyle(
+                    fontFamily: ConstantFonts.sfProMedium,
+                  ),
+                  enableFilter: true,
+                  hintText: 'Staff name',
+                  // errorText: 'Select a staff name',
+                  controller: _nameController,
+                  label: const Text('Staff name'),
+                  dropdownMenuEntries: staffNames,
+                  onSelected: (StaffAttendanceModel? name) {
+                    FocusScope.of(context).unfocus();
+                    setState(() {
+                      selectedStaff = name;
+                    });
+                  },
+                ),
+                SizedBox(height: height * 0.02),
+                SizedBox(
+                  width: width * 0.9,
+                  child: TextFormField(
+                    textInputAction: TextInputAction.next,
+                    textCapitalization: TextCapitalization.sentences,
+                    controller: _timeController,
+                    autofocus: false,
+                    readOnly: true,
+                    onTap: () async {
+                      TimeOfDay? pickedTime = await showTimePicker(
+                        initialTime: TimeOfDay.now(),
+                        context: context,
+                      );
+
+                      if (!mounted) return;
+                      if (pickedTime != null) {
+                        final today = DateTime.now();
+                        DateTime parsedTime = DateTime(today.year, today.month,
+                            today.day, pickedTime.hour, pickedTime.minute);
+
+                        ///converting to DateTime so that we can further format on different pattern.
+                        String formattedTime =
+                            DateFormat('hh:mm:ss').format(parsedTime);
+
+                        ///DateFormat() is from intl package, you can format the time on any pattern you need.
+
+                        setState(() {
+                          _timeController.text= DateFormat.jm().format(parsedTime);
+                           timeOfStart = parsedTime.millisecondsSinceEpoch.toString();
+
+                        });
+                      }
+                    },
+                    style: TextStyle(
+                        // height: height * 0.0025,
+                        color: Colors.black,
+                        fontFamily: ConstantFonts.sfProMedium),
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.all(15),
+                      border: InputBorder.none,
+                      hintText: 'Select time',
+                      hintStyle: TextStyle(
+                          // height: height * 0.005,
+                          color: Colors.grey,
+                          fontFamily: ConstantFonts.sfProMedium),
+                      filled: true,
+                      fillColor: ConstantColor.background1Color,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: ConstantColor.blackColor),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.black),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.red),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: height * 0.02),
+                SizedBox(
+                  width: width * 0.9,
+                  child: TextFormField(
+                    textInputAction: TextInputAction.done,
+                    textCapitalization: TextCapitalization.sentences,
+                    controller: _reasonController,
+                    autofocus: false,
+                    keyboardType: TextInputType.name,
+                    maxLines: 2,
+                    style: TextStyle(
+                        // height: height * 0.0025,
+                        color: Colors.black,
+                        fontFamily: ConstantFonts.sfProMedium),
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.all(15),
+                      border: InputBorder.none,
+                      hintText: 'Reason for Proxy entry..',
+                      hintStyle: TextStyle(
+                          // height: height * 0.005,
+                          color: Colors.grey,
+                          fontFamily: ConstantFonts.sfProMedium),
+                      filled: true,
+                      fillColor: ConstantColor.background1Color,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: ConstantColor.blackColor),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.black),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(color: Colors.red),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: height * 0.02),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Wrap(
+                      spacing: 6,
+                      direction: Axis.horizontal,
+                      children: choiceChips(),
+                    ),
+                  ],
+                ),
+                SizedBox(height: height * 0.02),
+                ConfirmationSlider(
+                  height: 60,
+                  backgroundColor: ConstantColor.background1Color,
+                  foregroundColor: ConstantColor.background1Color,
+                  backgroundShape: BorderRadius.circular(40),
+                  onConfirmation: () {
+                    saveToDb();
+                  },
+                  textStyle: TextStyle(
+                      fontFamily: ConstantFonts.sfProMedium, fontSize: 16),
+                  text: 'SLIDE TO CONFIRM',
+                  sliderButtonContent: const Icon(
+                    CupertinoIcons.person_alt_circle,
+                    size: 50,
+                    color: Colors.purple,
+                  ),
+                ),
+                SizedBox(height: height * 0.04),
+              ],
+            ),
+          );
+  }
 
   List<Widget> choiceChips() {
     List<Widget> chips = [];
@@ -372,8 +345,8 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
     return chips;
   }
 
-  void saveToDb(){
-    if(selectedStaff == null){
+  void saveToDb() {
+    if (selectedStaff == null) {
       final snackBar = SnackBar(
         content: Text(
           'Please select a staff name',
@@ -386,20 +359,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    } else if(_department == null){
-      final snackBar = SnackBar(
-        content: Text(
-          'Please select a department',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 17,
-            fontFamily: ConstantFonts.sfProMedium,
-          ),
-        ),
-        backgroundColor: Colors.red,
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }else if (_timeController.text.isEmpty){
+    }else if (_timeController.text.isEmpty) {
       final snackBar = SnackBar(
         content: Text(
           'Please select time',
@@ -412,10 +372,10 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }else if(_reasonController.text.isEmpty){
+    } else if (_reasonController.text.isEmpty) {
       final snackBar = SnackBar(
         content: Text(
-          'Please give a reason',
+          'Please give a valid reason',
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 17,
@@ -425,7 +385,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }else if (_selectedIndex == null){
+    } else if (_selectedIndex == null) {
       final snackBar = SnackBar(
         content: Text(
           'Please select check-in / check-out',
@@ -438,37 +398,73 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }else {
+    } else {
       DateTime now = DateTime.now();
       var timeStamp = DateFormat('yyyy-MM-dd').format(now);
-      var month = DateFormat('MM').format(now);
-      var year = DateFormat('yyyy').format(now);
       final ref = FirebaseDatabase.instance.ref();
-      ref.child(
-          'proxy_attendance/${selectedStaff!.uid}/$year/$month/$timeStamp').set(
-          {
-            'Name': selectedStaff!.name,
-            'Department': _department,
-            'Time': _timeController.text,
-            'Reason': _reasonController.text,
-            'Type': _selectedIndex,
-          }
-      );
-      _timeController.clear();
-      _reasonController.clear();
-      final snackBar = SnackBar(
-        content: Text(
-          'Staff attendance for ${selectedStaff!.name} has been registered',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 17,
-            fontFamily: ConstantFonts.sfProMedium,
+      if (_choiceChipsList[_selectedIndex!].label == 'Check-in') {
+        ref
+            .child(
+                'proxy_attendance/${selectedStaff!.uid}/$timeStamp/Check-in')
+            .set({
+          'Name': selectedStaff!.name,
+          'Department': selectedStaff!.department,
+          'Time': timeOfStart,
+          'Reason': _reasonController.text,
+          'Type': _choiceChipsList[_selectedIndex!].label,
+          'Proxy': widget.name,
+        });
+        final snackBar = SnackBar(
+          content: Text(
+            'Staff attendance for ${selectedStaff?.name} has been registered',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 17,
+              fontFamily: ConstantFonts.sfProMedium,
+            ),
           ),
-        ),
-        backgroundColor: Colors.green,
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          backgroundColor: Colors.green,
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        _timeController.clear();
+        _reasonController.clear();
+        setState(() {
+          _nameController.clear();
+          _depController.clear();
+         _selectedIndex = null;
+        });
+      } else {
+        ref
+            .child(
+                'proxy_attendance/${selectedStaff!.uid}/$timeStamp/Check-out')
+            .set({
+          'Name': selectedStaff!.name,
+          'Department': selectedStaff!.department,
+          'Time': timeOfStart,
+          'Reason': _reasonController.text,
+          'Type': _choiceChipsList[_selectedIndex!].label,
+          'Proxy': widget.name,
+        });
+        final snackBar = SnackBar(
+          content: Text(
+            'Staff attendance for ${selectedStaff?.name} has been registered',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 17,
+              fontFamily: ConstantFonts.sfProMedium,
+            ),
+          ),
+          backgroundColor: Colors.green,
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        _timeController.clear();
+        _reasonController.clear();
+        setState(() {
+          _nameController.clear();
+          _depController.clear();
+          _selectedIndex = null;
+        });
+      }
     }
   }
-  }
-
+}

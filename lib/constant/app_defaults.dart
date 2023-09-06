@@ -41,8 +41,8 @@ class AppDefaults {
     'Refreshment',
     'Food count',
     'Leave apply form',
-    'Onyx',
-    'Absent details',
+    // 'Onyx',
+    // 'Absent details',
     'Leave approval',
     'Search leads',
     'Visit',
@@ -50,12 +50,12 @@ class AppDefaults {
     'Invoice generator',
     'Finance',
     'Suggestions',
-    'Virtual attendance',
+    // 'Virtual attendance',
     'View suggestions',
-    'Check Virtual entry',
-    'Late entry',
+    // 'Check Virtual entry',
+    // 'Late entry',
     'PR Work done',
-    'Entry time',
+    'Attendance',
     'Create products',
     'Sales points',
     'PR Work details',
@@ -75,8 +75,8 @@ class AppDefaults {
     'assets/refreshment.png',
     'assets/food_count.png',
     'assets/leave_apply.png',
-    'assets/onxy.png',
-    'assets/absent_details.png',
+    // 'assets/onxy.png',
+    // 'assets/absent_details.png',
     'assets/leave_approval.png',
     'assets/search_leads.png',
     'assets/visit.png',
@@ -84,10 +84,10 @@ class AppDefaults {
     'assets/invoice.png',
     'assets/finance.png',
     'assets/suggestions.png',
-    'assets/virtual_attendance.png',
+    // 'assets/virtual_attendance.png',
     'assets/view_suggestions.png',
-    'assets/view_attendance.png',
-    'assets/late_entry.png',
+    // 'assets/view_attendance.png',
+    // 'assets/late_entry.png',
     'assets/pr_points.png',
     'assets/check_entry.png',
     'assets/new_products.png',
@@ -133,12 +133,12 @@ class AppDefaults {
           department: staffInfo.department,
         );
         break;
-      case 'Onyx':
-        page = const AnnouncementScreen();
-        break;
-      case 'Absent details':
-        page = const AbsenteeScreen();
-        break;
+      // case 'Onyx':
+      //   page = const AnnouncementScreen();
+      //   break;
+      // case 'Absent details':
+      //   page = const AbsenteeScreen();
+      //   break;
       case 'Leave approval':
         page = LeaveApprovalScreen(
           uid: staffInfo.uid,
@@ -151,7 +151,6 @@ class AppDefaults {
         break;
       case 'Visit':
         page = const VisitFromScreen();
-
         break;
       case 'Visit check':
         page = const VisitCheckScreen();
@@ -168,26 +167,26 @@ class AppDefaults {
           name: staffInfo.name,
         );
         break;
-      case 'Virtual attendance':
-        page = AttendanceScreen(
-          uid: staffInfo.uid,
-          name: staffInfo.name,
-        );
-        break;
+      // case 'Virtual attendance':
+      //   page = AttendanceScreen(
+      //     uid: staffInfo.uid,
+      //     name: staffInfo.name,
+      //   );
+      //   break;
       case 'View suggestions':
         page = const ViewSuggestions();
         break;
-      case 'Check Virtual entry':
-        page = ViewAttendanceScreen(
-          userId: staffInfo.uid,
-          staffName: staffInfo.name,
-        );
-        break;
-      case 'Late entry':
-        page = LateEntryScreen(
-          userId: staffInfo.uid,
-          staffName: staffInfo.name,
-        );
+      // case 'Check Virtual entry':
+      //   page = ViewAttendanceScreen(
+      //     userId: staffInfo.uid,
+      //     staffName: staffInfo.name,
+      //   );
+      //   break;
+      // case 'Late entry':
+      //   page = LateEntryScreen(
+      //     userId: staffInfo.uid,
+      //     staffName: staffInfo.name,
+      //   );
         break;
       case 'PR Work done':
         page = PrWorkDone(
@@ -195,7 +194,7 @@ class AppDefaults {
           staffName: staffInfo.name,
         );
         break;
-      case 'Entry time':
+      case 'Attendance':
         page = CheckEntryScreen(
           userId: staffInfo.uid,
           staffName: staffInfo.name,
@@ -232,7 +231,10 @@ class AppDefaults {
         page = const InstallationDetails();
         break;
       case 'Proxy attendance':
-        page = const ProxyAttendance();
+        page = ProxyAttendance(
+          uid: staffInfo.uid,
+          name: staffInfo.name,
+        );
         break;
     }
     return page;

@@ -58,6 +58,8 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen>
     'T47dl71za1eU8uIjEiRfkEC5t7q2',
     'cQCLDgIQTuaKZPEqWciHz8GtCZY2',
     'A5kpLL2U0UaOkPrw2GeI8llH49s1',
+    'jeAER0TbF0MNU2C1jsZoolaUzWy1',
+    'x7RbfotHBpfr7JZ88P9eABWtcQM2',
   ];
 
   Future<void> sendNotification(
