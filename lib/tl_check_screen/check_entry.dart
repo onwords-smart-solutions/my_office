@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -54,119 +56,142 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
   Widget _punchingTimeBody() {
     return Column(
       children: [
-        //search bar and total count
-        _search(),
-
-        // head section
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            //date picker
-            ValueListenableBuilder(
-                valueListenable: _selectedDate,
-                builder: (ctx, date, child) {
-                  return TextButton.icon(
-                    onPressed: _showDatePicker,
-                    icon: const Icon(Icons.calendar_month_rounded),
-                    label: Text(formatDate(date)),
-                  );
-                }),
-            //total
-            ValueListenableBuilder(
-                valueListenable: _isLoading,
-                builder: (ctx, isLoading, child) {
-                  return ValueListenableBuilder(
-                      valueListenable: _sortedList,
-                      builder: (ctx, sortedList, child) {
-                        return Row(
+        ValueListenableBuilder(
+            valueListenable: _isLoading,
+            builder: (ctx, isLoading, child) {
+              return isLoading
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Fetching data',
+                            style: TextStyle(
+                              fontFamily: ConstantFonts.sfProBold,
+                              fontSize: 18.0,
+                            )),
+                        const SizedBox(height: 5.0),
+                        const CircleAvatar(
+                          child: SizedBox(
+                            height: 20.0,
+                            width: 20.0,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2.0,
+                            ),
+                          ),
+                        )
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        //search bar and total count
+                        _search(),
+                        // head section
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              'Total : ${sortedList.length}',
-                              style: TextStyle(
-                                fontFamily: ConstantFonts.sfProBold,
-                                fontSize: 17.0,
+                            //date picker
+                            ValueListenableBuilder(
+                                valueListenable: _selectedDate,
+                                builder: (ctx, date, child) {
+                                  return TextButton.icon(
+                                    onPressed: _showDatePicker,
+                                    icon: const Icon(Icons.calendar_month_rounded),
+                                    label: Text(formatDate(date)),
+                                  );
+                                }),
+                            //total
+                            ValueListenableBuilder(
+                                valueListenable: _sortedList,
+                                builder: (ctx, sortedList, child) {
+                                  return Row(
+                                    children: [
+                                      Text(
+                                        'Total : ${sortedList.length}',
+                                        style: TextStyle(
+                                          fontFamily: ConstantFonts.sfProBold,
+                                          fontSize: 17.0,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }),
+                            //sorter
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: PopupMenuButton(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                position: PopupMenuPosition.under,
+                                elevation: 10,
+                                itemBuilder: (ctx) => List.generate(
+                                  _dropDown.length,
+                                  (i) {
+                                    return PopupMenuItem(
+                                      child: Text(
+                                        _dropDown[i],
+                                        style: TextStyle(fontFamily: ConstantFonts.sfProMedium, fontSize: 16),
+                                      ),
+                                      onTap: () {
+                                        _sortOption.value = _dropDown[i];
+                                        if (_dropDown[i] == 'All') {
+                                          _sortedList.value = _punchingDetails.value;
+                                        } else if (_dropDown[i] == 'Present') {
+                                          _sortedList.value = _punchingDetails.value
+                                              .where((element) => element.checkInTime != null)
+                                              .toList();
+                                        } else if (_dropDown[i] == 'Absentees') {
+                                          _sortedList.value = _punchingDetails.value
+                                              .where((element) => element.checkInTime == null)
+                                              .toList();
+                                        } else if (_dropDown[i] == 'Late Entry') {
+                                          _sortedList.value = _punchingDetails.value
+                                              .where(
+                                                (element) =>
+                                                    (element.checkInTime != null) &&
+                                                    (element.checkInTime!
+                                                            .difference(DateTime(
+                                                                element.checkInTime!.year,
+                                                                element.checkInTime!.month,
+                                                                element.checkInTime!.day,
+                                                                09,
+                                                                00))
+                                                            .inMinutes >
+                                                        10),
+                                              )
+                                              .toList();
+                                        } else if (_dropDown[i] == 'ID Tap') {
+                                          _sortedList.value = _punchingDetails.value
+                                              .where((element) => (!element.isProxy) && element.checkInTime != null)
+                                              .toList();
+                                        } else if (_dropDown[i] == 'Proxy') {
+                                          _sortedList.value =
+                                              _punchingDetails.value.where((element) => element.isProxy).toList();
+                                        }
+                                      },
+                                    );
+                                  },
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(CupertinoIcons.sort_down),
+                                    ValueListenableBuilder(
+                                        valueListenable: _sortOption,
+                                        builder: (ctx, sort, child) {
+                                          return Text(
+                                            sort,
+                                            style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
+                                          );
+                                        }),
+                                  ],
+                                ),
                               ),
                             ),
-                            if (isLoading) ...[
-                              const SizedBox(width: 10.0),
-                              const SizedBox(
-                                height: 20.0,
-                                width: 20.0,
-                                child: CircularProgressIndicator(strokeWidth: 2.0),
-                              )
-                            ]
                           ],
-                        );
-                      });
-                }),
-            //sorter
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: PopupMenuButton(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                position: PopupMenuPosition.under,
-                elevation: 10,
-                itemBuilder: (ctx) => List.generate(
-                  _dropDown.length,
-                  (i) {
-                    return PopupMenuItem(
-                      child: Text(
-                        _dropDown[i],
-                        style: TextStyle(fontFamily: ConstantFonts.sfProMedium, fontSize: 16),
-                      ),
-                      onTap: () {
-                        _sortOption.value = _dropDown[i];
-                        if (_dropDown[i] == 'All') {
-                          _sortedList.value = _punchingDetails.value;
-                        } else if (_dropDown[i] == 'Present') {
-                          _sortedList.value =
-                              _punchingDetails.value.where((element) => element.checkInTime != null).toList();
-                        } else if (_dropDown[i] == 'Absentees') {
-                          _sortedList.value =
-                              _punchingDetails.value.where((element) => element.checkInTime == null).toList();
-                        } else if (_dropDown[i] == 'Late Entry') {
-                          _sortedList.value = _punchingDetails.value
-                              .where(
-                                (element) =>
-                                    (element.checkInTime != null) &&
-                                    (element.checkInTime!
-                                            .difference(DateTime(element.checkInTime!.year, element.checkInTime!.month,
-                                                element.checkInTime!.day, 09, 00))
-                                            .inMinutes >
-                                        10),
-                              )
-                              .toList();
-                        } else if (_dropDown[i] == 'ID Tap') {
-                          _sortedList.value = _punchingDetails.value
-                              .where((element) => (!element.isProxy) && element.checkInTime != null)
-                              .toList();
-                        } else if (_dropDown[i] == 'Proxy') {
-                          _sortedList.value = _punchingDetails.value.where((element) => element.isProxy).toList();
-                        }
-                      },
+                        ),
+                      ],
                     );
-                  },
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(CupertinoIcons.sort_down),
-                    ValueListenableBuilder(
-                        valueListenable: _sortOption,
-                        builder: (ctx, sort, child) {
-                          return Text(
-                            sort,
-                            style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
-                          );
-                        }),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+            }),
         //list view
         Expanded(child: _entryList()),
       ],
@@ -193,7 +218,7 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
               suffixIcon: const Icon(CupertinoIcons.xmark_circle_fill, color: Colors.grey),
               prefixIcon: Icon(Icons.search_rounded, color: Theme.of(context).primaryColor)),
         ),
-        IconButton(onPressed: _printScreen, icon: Icon(Icons.print_rounded)),
+        IconButton(onPressed: _printScreen, icon: const Icon(Icons.print_rounded)),
       ],
     );
   }
@@ -241,13 +266,8 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
       lastDate: DateTime(2200),
     );
     if (date == null) return;
-    if (_isLoading.value) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(backgroundColor: Colors.red, content: Text('Please wait until current process finish')));
-    } else {
-      _selectedDate.value = date;
-      _getPunchingTime();
-    }
+    _selectedDate.value = date;
+    _getPunchingTime();
   }
 
   ///----FUNCTIONS---
@@ -284,6 +304,31 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
       _sortedList.notifyListeners();
       _punchingDetails.notifyListeners();
     }
+
+    // final data = await _checkTime('58JIRnAbechEMJl8edlLvRzHcW52', 'Devendiran', 'App');
+    // if (data != null) {
+    //   _punchingDetails.value.add(data);
+    //   _sortedList.value.add(data);
+    // } else {
+    //   _punchingDetails.value.add(
+    //     CustomPunchModel(
+    //       name: 'Devendiran',
+    //       staffId: '58JIRnAbechEMJl8edlLvRzHcW52',
+    //       department: 'App',
+    //       checkInTime: null,
+    //     ),
+    //   );
+    //   _sortedList.value.add(
+    //     CustomPunchModel(
+    //       name: 'Devendiran',
+    //       staffId: '58JIRnAbechEMJl8edlLvRzHcW52',
+    //       department: 'App',
+    //       checkInTime: null,
+    //     ),
+    //   );
+    // }
+    // _sortedList.notifyListeners();
+    // _punchingDetails.notifyListeners();
     _isLoading.value = false;
   }
 
@@ -307,6 +352,10 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
 
   Future<CustomPunchModel?> _checkTime(String staffId, String name, String department) async {
     CustomPunchModel? punchDetail;
+    bool isProxy = false;
+    DateTime? checkInTime;
+    DateTime? checkOutTime;
+
     String dateFormat = DateFormat('yyyy-MM-dd').format(_selectedDate.value);
     await FirebaseDatabase.instance.ref('fingerPrint/$staffId/$dateFormat').once().then((value) async {
       if (value.snapshot.exists) {
@@ -331,29 +380,62 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
         }
         // checking for check in and check out time
         if (allPunchedTime.isNotEmpty) {
-          DateTime? checkInTime;
-          DateTime? checkOutTime;
           allPunchedTime.sort();
-
           checkInTime = allPunchedTime.first;
-          if (allPunchedTime.last.difference(checkInTime).inMinutes > 5) {
-            checkOutTime = allPunchedTime.last;
+          if (allPunchedTime.length > 1) {
+            if (allPunchedTime.last.difference(checkInTime!).inMinutes > 5) {
+              checkOutTime = allPunchedTime.last;
+            }
           }
-
-          checkOutTime ??= await _checkProxyCheckOut(staffId, dateFormat);
-
-          punchDetail = CustomPunchModel(
-              name: name,
-              staffId: staffId,
-              department: department,
-              checkInTime: checkInTime,
-              checkOutTime: checkOutTime);
         }
-      } else {
-        //check in proxy attendance
-        punchDetail = await _checkProxyEntry(staffId, dateFormat, department);
       }
     });
+    //check in proxy attendance
+    final punchDetailFromProxy = await _checkProxyEntry(staffId, dateFormat, department);
+
+    if (punchDetailFromProxy != null) {
+      // check in time
+      if (punchDetailFromProxy.checkInTime != null) {
+        if (checkInTime == null) {
+          checkInTime = punchDetailFromProxy.checkInTime;
+          isProxy = true;
+        } else {
+          final check = checkInTime!.compareTo(punchDetailFromProxy.checkInTime!);
+          if (check == 1) {
+            if (checkOutTime == null) {
+              if (checkInTime!.difference(punchDetailFromProxy.checkInTime!).inMinutes > 5) {
+                checkOutTime = checkInTime;
+              }
+            }
+
+            checkInTime = punchDetailFromProxy.checkInTime!;
+            isProxy = true;
+          }
+        }
+      }
+
+      //check out time
+      if (punchDetailFromProxy.checkOutTime != null) {
+        if (checkOutTime == null) {
+          checkOutTime = punchDetailFromProxy.checkOutTime;
+          isProxy = true;
+        } else {
+          final check = checkOutTime!.compareTo(punchDetailFromProxy.checkOutTime!);
+          if (check == -1) {
+            checkOutTime = punchDetailFromProxy.checkOutTime!;
+            isProxy = true;
+          }
+        }
+      }
+    }
+
+    punchDetail = CustomPunchModel(
+        name: name,
+        staffId: staffId,
+        department: department,
+        checkInTime: checkInTime,
+        checkOutTime: checkOutTime,
+        isProxy: isProxy);
     return punchDetail;
   }
 
@@ -369,11 +451,14 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
         if (proxy.snapshot.child('Check-out').exists) {
           checkOutDetail = proxy.snapshot.child('Check-out').value as Map<Object?, Object?>;
         }
+
         punchDetail = CustomPunchModel(
             name: checkInDetail['Name'].toString(),
             staffId: staffId,
             department: department,
-            checkInTime: DateTime.fromMillisecondsSinceEpoch(int.parse(checkInDetail['Time'].toString())),
+            checkInTime: checkInDetail.isEmpty
+                ? null
+                : DateTime.fromMillisecondsSinceEpoch(int.parse(checkInDetail['Time'].toString())),
             checkOutTime: checkOutDetail.isEmpty
                 ? null
                 : DateTime.fromMillisecondsSinceEpoch(int.parse(checkOutDetail['Time'].toString())),

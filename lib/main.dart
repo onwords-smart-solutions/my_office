@@ -28,9 +28,7 @@ import 'models/visit_model.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp();
   //Hive database Setup
   await Hive.initFlutter();
   if (!Hive.isAdapterRegistered(StaffModelAdapter().typeId)) {
@@ -69,27 +67,26 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return
-      MultiProvider(
-        providers: [
+    return MultiProvider(
+      providers: [
         ChangeNotifierProvider(create: (context) => InvoiceProvider()),
-          ChangeNotifierProvider(create: (context) => Invoice1Provider()),
+        ChangeNotifierProvider(create: (context) => Invoice1Provider()),
       ],
-        child: MaterialApp(
-          title: 'My Office',
-          theme: ThemeData(
-            useMaterial3: true,
-            primarySwatch: Colors.amber,
-            scaffoldBackgroundColor: const Color(0xffEEEEEE),
-            fontFamily: 'sfPro',
-          ),
-          home: const InitialScreen(),
-          routes: {
-            '/visitResume': (_) => const VisitFromScreen(),
-            '/invoiceGenerator': (_) => const ClientDetails(),
-          },
+      child: MaterialApp(
+        title: 'My Office',
+        theme: ThemeData(
+          useMaterial3: true,
+          primarySwatch: Colors.amber,
+          scaffoldBackgroundColor: const Color(0xffEEEEEE),
+          fontFamily: 'sfPro',
         ),
-      );
+        home: const InitialScreen(),
+        routes: {
+          '/visitResume': (_) => const VisitFromScreen(),
+          '/invoiceGenerator': (_) => const ClientDetails(),
+        },
+      ),
+    );
   }
 }
 
@@ -100,20 +97,17 @@ class InitialScreen extends StatefulWidget {
   InitialScreenState createState() => InitialScreenState();
 }
 
-class InitialScreenState extends State<InitialScreen>
-    with AfterLayoutMixin<InitialScreen> {
+class InitialScreenState extends State<InitialScreen> with AfterLayoutMixin<InitialScreen> {
   Future checkFirstSeen() async {
     final navigation = Navigator.of(context);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool seen = (prefs.getBool('seen') ?? false);
 
     if (seen) {
-      navigation.pushReplacement(MaterialPageRoute(
-          builder: (context) => const AuthenticationScreen()));
+      navigation.pushReplacement(MaterialPageRoute(builder: (context) => const AuthenticationScreen()));
     } else {
       await prefs.setBool('seen', true);
-      navigation.pushReplacement(
-          MaterialPageRoute(builder: (context) => const IntroductionScreen()));
+      navigation.pushReplacement(MaterialPageRoute(builder: (context) => const IntroductionScreen()));
     }
   }
 

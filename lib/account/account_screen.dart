@@ -9,6 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
@@ -38,31 +39,24 @@ class _AccountScreenState extends State<AccountScreen> {
   final picker = ImagePicker();
 
   Future pickerGalleryImage(BuildContext context) async {
-    final pickedFile =
-        await picker.pickImage(source: ImageSource.gallery, imageQuality: 100);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery, imageQuality: 100);
     if (pickedFile != null) {
       pickUploadImage(File(pickedFile.path));
     }
   }
 
   Future pickerCameraImage(BuildContext context) async {
-    final pickedFile =
-        await picker.pickImage(source: ImageSource.camera, imageQuality: 100);
+    final pickedFile = await picker.pickImage(source: ImageSource.camera, imageQuality: 100);
     if (pickedFile != null) {
       pickUploadImage(File(pickedFile.path));
     }
   }
 
   Future<void> pickUploadImage(File image) async {
-    var profileImage = firebaseStorage
-        .ref()
-        .child('PROFILE IMAGE/${widget.staffDetails.uid}/');
+    var profileImage = firebaseStorage.ref().child('PROFILE IMAGE/${widget.staffDetails.uid}/');
     profileImage.putFile(File(image.path)).whenComplete(() async {
       final url = await profileImage.getDownloadURL();
-      FirebaseDatabase.instance
-          .ref()
-          .child('staff/${widget.staffDetails.uid}/')
-          .update({
+      FirebaseDatabase.instance.ref().child('staff/${widget.staffDetails.uid}/').update({
         'profileImage': url,
       });
 
@@ -84,8 +78,7 @@ class _AccountScreenState extends State<AccountScreen> {
             ),
             content: Container(
               height: MediaQuery.of(context).size.height * 0.135,
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(12)),
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
               child: Column(
                 children: [
                   ListTile(
@@ -93,13 +86,10 @@ class _AccountScreenState extends State<AccountScreen> {
                       pickerCameraImage(context);
                       Navigator.pop(context);
                     },
-                    leading: const Icon(Icons.camera_alt_rounded,
-                        color: ConstantColor.backgroundColor),
+                    leading: const Icon(Icons.camera_alt_rounded, color: ConstantColor.backgroundColor),
                     title: Text(
                       'Camera',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: ConstantFonts.sfProMedium),
+                      style: TextStyle(fontSize: 18, fontFamily: ConstantFonts.sfProMedium),
                     ),
                   ),
                   ListTile(
@@ -107,13 +97,10 @@ class _AccountScreenState extends State<AccountScreen> {
                       pickerGalleryImage(context);
                       Navigator.pop(context);
                     },
-                    leading: const Icon(Icons.photo_size_select_actual_rounded,
-                        color: ConstantColor.backgroundColor),
+                    leading: const Icon(Icons.photo_size_select_actual_rounded, color: ConstantColor.backgroundColor),
                     title: Text(
                       'Gallery',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: ConstantFonts.sfProMedium),
+                      style: TextStyle(fontSize: 18, fontFamily: ConstantFonts.sfProMedium),
                     ),
                   ),
                 ],
@@ -130,10 +117,7 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   Future<void> getImageUrl() async {
-    await FirebaseDatabase.instance
-        .ref('staff/${widget.staffDetails.uid}/')
-        .once()
-        .then((value) {
+    await FirebaseDatabase.instance.ref('staff/${widget.staffDetails.uid}/').once().then((value) {
       if (value.snapshot.exists) {
         final data = value.snapshot.value as Map<Object?, Object?>;
         final url = data['profileImage'];
@@ -149,223 +133,112 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
+    final size = MediaQuery.of(context).size;
     // print(imageUrl);
     return Scaffold(
-        body: Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(colors: [
-          Color(0xffEEF0FE),
-          Color(0xffEEF0FE),
-          Color(0xffEEF0FE),
-        ], end: Alignment.bottomRight, begin: Alignment.topLeft),
-      ),
-      child: Column(
-        children: [
-          Expanded(
-            child: Stack(
-              children: [
-                Positioned(
-                  top: height * 0.05,
-                  left: width * 0.2,
-                  right: width * 0.2,
-                  child: Column(
+      appBar: AppBar(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new_rounded),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          title: Text('Profile', style: TextStyle(fontFamily: ConstantFonts.sfProMedium)),
+          centerTitle: true),
+      body: Container(
+        width: size.width,
+        margin: const EdgeInsets.all(30.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20.0),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black26,
+              spreadRadius: 5.0,
+              blurRadius: 10.0,
+            ),
+          ],
+          color: Colors.white,
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // profile picture
+              Column(
+                children: [
+                  Stack(
+                    alignment: AlignmentDirectional.center,
                     children: [
-                      DelayedDisplay(
-                        delay: 0.6.seconds,
-                        child: WidgetCircularAnimator(
-                          innerColor: Colors.orange,
-                          outerColor: Colors.black,
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                              ),
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(100),
-                                  child: imageUrl.isEmpty
-                                      ? const Image(
-                                          image: AssetImage(
-                                              'assets/profile_icon.jpg'))
-                                      : CachedNetworkImage(
-                                          imageUrl: imageUrl,
-                                          fit: BoxFit.cover,
-                                          progressIndicatorBuilder: (context,
-                                                  url, downloadProgress) =>
-                                              CircularProgressIndicator(
-                                                color: ConstantColor.backgroundColor,
-                                                  value: downloadProgress
-                                                      .progress),
-                                          errorWidget: (context, url, error) =>
-                                              const Icon(
-                                            Icons.error,
-                                            color: Colors.red,
-                                          ),
-                                        )),
-                            ),
-                          ),
-                        ),
-                      ),
-                      DelayedDisplay(
-                        delay: 1.seconds,
-                        child: GestureDetector(
-                          onTap: () {
-                            pickImage(context);
-                          },
-                          child: Container(
-                            height: height * 0.05,
-                            width: width * 0.45,
-                            margin: const EdgeInsets.only(top: 25),
-                            decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.08),
-                                borderRadius: BorderRadius.circular(12)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Change image',
-                                  style: TextStyle(
-                                      fontSize: 17,
-                                      fontFamily: ConstantFonts.sfProMedium),
+                      Image.asset('assets/profile_overlay.png', height: size.width * .6),
+                      Container(
+                        height: size.width * .4,
+                        width: size.width * .4,
+                        clipBehavior: Clip.hardEdge,
+                        decoration: const BoxDecoration(shape: BoxShape.circle),
+                        child: imageUrl.isEmpty
+                            ? const Image(image: AssetImage('assets/profile_icon.jpg'))
+                            : CachedNetworkImage(
+                                imageUrl: imageUrl,
+                                fit: BoxFit.cover,
+                                progressIndicatorBuilder: (context, url, downloadProgress) => CircularProgressIndicator(
+                                    color: ConstantColor.backgroundColor, value: downloadProgress.progress),
+                                errorWidget: (context, url, error) => const Icon(
+                                  Icons.error,
+                                  color: Colors.red,
                                 ),
-                                const SizedBox(width: 5),
-                                const Icon(
-                                  Icons.image,
-                                  size: 20,
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
+                              ),
                       )
                     ],
                   ),
-                ),
-                Positioned(
-                  top: height * 0.40,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: width * 0.05),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: width * 0.10, vertical: height * 0.03),
-                    height: height * 0.4,
-                    decoration: BoxDecoration(
-                        // color: Colors.black,
-                        borderRadius: BorderRadius.circular(30)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        DelayedDisplay(
-                            delay: 1.seconds,
-                            child: buildText(height, width, 'Name',
-                                widget.staffDetails.name)),
-                        DelayedDisplay(
-                          delay: 1.2.seconds,
-                          child: buildText(height, width, 'Email',
-                              widget.staffDetails.email),
-                        ),
-                        DelayedDisplay(
-                            delay: 1.4.seconds,
-                            child: buildText(height, width, 'Department',
-                                widget.staffDetails.department)),
-                      ],
-                    ),
+                  TextButton(onPressed: () => pickImage(context), child: const Text('Edit')),
+                  Text(
+                    widget.staffDetails.name,
+                    style: TextStyle(fontFamily: ConstantFonts.sfProBold, fontSize: 25.0),
                   ),
-                ),
-                Positioned(
-                  top: height * 0.80,
-                  left: 0,
-                  right: 0,
-                  child: DelayedDisplay(
-                    delay: 1.6.seconds,
-                    child: Center(
-                      child: FilledButton.icon(
-                        onPressed: () async {
-                          final navigator = Navigator.of(context);
-                          await FirebaseAuth.instance.signOut();
-                          await HiveOperations().clearDetails();
-                          final pref = await SharedPreferences.getInstance();
-                          await pref.clear();
-
-                          navigator.pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                  builder: (_) => const LoginScreen()),
-                              (route) => false);
-                        },
-                        label: Text('Log out',
-                            style: TextStyle(
-                                fontSize: height * 0.023,
-                                fontFamily: ConstantFonts.sfProMedium,
-                            ),
-                        ),
-                        icon: const Icon(Icons.logout_rounded),
-                      ),
-                    ),
+                  Text(
+                    widget.staffDetails.email,
+                    style: TextStyle(fontFamily: ConstantFonts.sfProMedium, fontSize: 15.0),
                   ),
-                ),
-                Positioned(
-                  top: height * 0.88,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: DelayedDisplay(
-                      delay: 1.9.seconds,
-                      child: Text(
-                        'Version ${AppConstants.displayVersion}',
-                        style: TextStyle(
-                          color: CupertinoColors.systemGrey2,
-                          fontFamily: ConstantFonts.sfProMedium,
-                          fontSize: 17,
-                        ),
-                      ),
-                    ),
+                  Text(
+                    widget.staffDetails.department,
+                    style: TextStyle(fontFamily: ConstantFonts.sfProMedium, fontSize: 20.0),
                   ),
-                )
-              ],
-            ),
-          ),
-        ],
-      ),
-    ));
-  }
-
-  Widget buildText(double height, double width, String title, String value) =>
-      Container(
-        padding: EdgeInsets.symmetric(horizontal: width * 0.05),
-        margin: EdgeInsets.symmetric(vertical: height * 0.01),
-        height: height * 0.09,
-        decoration: BoxDecoration(
-            color: const Color(0xffEEF0FE),
-            borderRadius: BorderRadius.circular(20)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: height * 0.020,
-                fontFamily: ConstantFonts.sfProMedium,
-                color: Colors.black26,
+                ],
               ),
-            ),
-            Text(value,
-                style: TextStyle(
-                    fontSize: height * 0.020,
-                    fontFamily: ConstantFonts.sfProMedium,
-                    color: Colors.black87,
-                ),
-            ),
-            const Divider(
-              // height: height * 0.03,
-              color: Colors.black54,
-              thickness: 1.2,
-            ),
-          ],
+              const SizedBox(height: 20.0),
+              IconButton.filled(
+                  onPressed: () async {
+                    final navigator = Navigator.of(context);
+                    await FirebaseAuth.instance.signOut();
+                    await HiveOperations().clearDetails();
+                    final pref = await SharedPreferences.getInstance();
+                    await pref.clear();
+
+                    navigator.pushAndRemoveUntil(
+                        MaterialPageRoute(builder: (_) => const LoginScreen()), (route) => false);
+                  },
+                  style: IconButton.styleFrom(
+                      backgroundColor: Colors.orange.shade700, padding: const EdgeInsets.all(15.0), iconSize: 30.0),
+                  icon: const Icon(Icons.exit_to_app_rounded)),
+              const SizedBox(height: 20.0),
+              Stack(
+                alignment: AlignmentDirectional.center,
+                children: [
+                  Positioned(
+                      top: 20.0,
+                      child: Text(
+                        'Version : ${AppConstants.displayVersion}',
+                        style: const TextStyle(color: Colors.grey, fontSize: 13.0),
+                      )),
+                  //bottom style
+                  Image.asset('assets/id_bottom.png'),
+                ],
+              ),
+            ],
+          ),
         ),
-      );
+      ),
+    );
+  }
 }
