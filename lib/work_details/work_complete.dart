@@ -1,16 +1,9 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
-
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/models/staff_model.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
-import '../Account/account_screen.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 import '../models/work_done_model.dart';
@@ -28,13 +21,11 @@ class WorkCompleteViewScreen extends StatefulWidget {
 
 class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
   final staff = FirebaseDatabase.instance.ref().child("staff");
-  DateTime now = DateTime.now();
 
   // notifiers
   final ValueNotifier<bool> _isLoading = ValueNotifier(true);
   final ValueNotifier<DateTime> _selectedDate = ValueNotifier(DateTime.now());
   final ValueNotifier<List<WorkDoneModel>> _workReport = ValueNotifier([]);
-  var formatterDate = DateFormat('yyyy-MM-dd');
 
   @override
   void initState() {
@@ -163,7 +154,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
     getWorkDetails();
   }
 
-  getWorkDetails() async {
+  Future<void> getWorkDetails() async {
     _isLoading.value = true;
     _workReport.value.clear();
     await staff.once().then((value) {
@@ -199,6 +190,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                   percentage: percentage,
                 ),
               );
+
             }
             _workReport.value.add(
               WorkDoneModel(
@@ -209,6 +201,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                 reports: staffWorkDone,
               ),
             );
+            _workReport.notifyListeners();
           }
         }
       }

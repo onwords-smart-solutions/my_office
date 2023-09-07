@@ -46,7 +46,7 @@ class PunchItem extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.only(bottom: 15.0),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15.0), color: Colors.grey.withOpacity(.3)),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15.0), color: Colors.white),
       child: Row(
         children: [
           Expanded(
