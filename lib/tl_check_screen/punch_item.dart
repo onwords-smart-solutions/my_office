@@ -13,35 +13,62 @@ class PunchItem extends StatelessWidget {
     Color topContainerColor = Colors.green.shade400;
     IconData icon = Icons.badge_rounded;
     String status = 'Present on Time';
+    DateTime endTime = DateTime.now();
 
     if (punchDetail.isProxy) {
       icon = Icons.phone_android_rounded;
     }
 
+    if (punchDetail.checkOutTime != null) {
+      endTime = punchDetail.checkOutTime!;
+    }
+
     if (punchDetail.checkInTime == null) {
-      topContainerColor = Colors.grey.shade600;
+      topContainerColor = Colors.grey;
       status = 'Absent today';
     } else if (punchDetail.checkInTime!
-                .difference(DateTime(punchDetail.checkInTime!.year, punchDetail.checkInTime!.month,
-                    punchDetail.checkInTime!.day, 09, 00))
-                .inMinutes >
-            10 &&
+        .difference(DateTime(punchDetail.checkInTime!.year, punchDetail.checkInTime!.month,
+        punchDetail.checkInTime!.day, 09, 00))
+        .inMinutes >
+        0 &&
         punchDetail.checkInTime!
-                .difference(DateTime(punchDetail.checkInTime!.year, punchDetail.checkInTime!.month,
-                    punchDetail.checkInTime!.day, 09, 20))
-                .inMinutes <=
+            .difference(DateTime(punchDetail.checkInTime!.year, punchDetail.checkInTime!.month,
+            punchDetail.checkInTime!.day, 09, 10))
+            .inMinutes <=
+            0) {
+      topContainerColor = Colors.amber.shade500;
+      status =
+      'Late by ${punchDetail.checkInTime!
+          .difference(
+          DateTime(punchDetail.checkInTime!.year, punchDetail.checkInTime!.month, punchDetail.checkInTime!.day, 09, 00))
+          .inMinutes} mins';
+    } else if (punchDetail.checkInTime!
+        .difference(DateTime(punchDetail.checkInTime!.year, punchDetail.checkInTime!.month,
+        punchDetail.checkInTime!.day, 09, 00))
+        .inMinutes >
+        10 &&
+        punchDetail.checkInTime!
+            .difference(DateTime(punchDetail.checkInTime!.year, punchDetail.checkInTime!.month,
+            punchDetail.checkInTime!.day, 09, 20))
+            .inMinutes <=
             0) {
       topContainerColor = Colors.orangeAccent.shade400;
       status =
-          'Late by ${punchDetail.checkInTime!.difference(DateTime(punchDetail.checkInTime!.year, punchDetail.checkInTime!.month, punchDetail.checkInTime!.day, 09, 00)).inMinutes - 10} mins';
+      'Late by ${punchDetail.checkInTime!
+          .difference(
+          DateTime(punchDetail.checkInTime!.year, punchDetail.checkInTime!.month, punchDetail.checkInTime!.day, 09, 00))
+          .inMinutes} mins';
     } else if (punchDetail.checkInTime!
-            .difference(DateTime(
-                punchDetail.checkInTime!.year, punchDetail.checkInTime!.month, punchDetail.checkInTime!.day, 09, 00))
-            .inMinutes >
+        .difference(DateTime(
+        punchDetail.checkInTime!.year, punchDetail.checkInTime!.month, punchDetail.checkInTime!.day, 09, 00))
+        .inMinutes >
         20) {
       topContainerColor = Colors.red.shade400;
       status =
-          'Late by ${punchDetail.checkInTime!.difference(DateTime(punchDetail.checkInTime!.year, punchDetail.checkInTime!.month, punchDetail.checkInTime!.day, 09, 00)).inMinutes - 10} mins';
+      'Late by ${punchDetail.checkInTime!
+          .difference(
+          DateTime(punchDetail.checkInTime!.year, punchDetail.checkInTime!.month, punchDetail.checkInTime!.day, 09, 00))
+          .inMinutes} mins';
     }
 
     return Container(
@@ -98,17 +125,21 @@ class PunchItem extends StatelessWidget {
                 style: TextStyle(fontFamily: ConstantFonts.poppinsBold, color: topContainerColor),
               ),
               const SizedBox(height: 10.0),
-              if (punchDetail.checkInTime != null)
+              if (punchDetail.checkInTime != null) ...[
                 Icon(
                   icon,
                   color: topContainerColor,
                   size: 30.0,
-                )
+                ),
+                Text('Duration : ${duration(punchDetail.checkInTime!,endTime)}',style: TextStyle(fontFamily: ConstantFonts.sfProBold),)
+              ]
             ],
           ),
           Container(
             width: 30.0,
-            height: MediaQuery.sizeOf(context).height * .12,
+            height: MediaQuery
+                .sizeOf(context)
+                .height * .12,
             margin: const EdgeInsets.only(left: 5.0),
             decoration: BoxDecoration(
               color: topContainerColor,
@@ -124,3 +155,11 @@ class PunchItem extends StatelessWidget {
 }
 
 String timeFormat(DateTime time) => DateFormat.jm().format(time);
+
+String duration(DateTime start, DateTime end) {
+  final diff = end.difference(start);
+  int hours = diff.inHours;
+  int minutes = diff.inMinutes % 60;
+
+  return '${hours}h ${minutes}m';
+}
