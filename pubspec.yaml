@@ -94,6 +94,7 @@ dependencies:
   http:
   syncfusion_flutter_charts: ^22.2.9
   printing: ^5.11.0
+  page_transition: ^2.0.9
 
 dev_dependencies:
   flutter_test:
