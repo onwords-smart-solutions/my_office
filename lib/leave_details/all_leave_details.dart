@@ -130,7 +130,7 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                       child: Text(
                         month.keys.toList()[index],
                         style: TextStyle(
-                            fontFamily: ConstantFonts.sfProMedium,
+                           
                             fontSize: 15),
                       ),
                       onTap: () {
@@ -169,7 +169,7 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                 child: Center(
                   child: Text('Approved',
                   style: TextStyle(
-                    fontFamily: ConstantFonts.sfProMedium
+                     
                   ),
                   ),
                 ),
@@ -184,7 +184,7 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                child: Center(
                  child: Text('Pending',
                    style: TextStyle(
-                       fontFamily: ConstantFonts.sfProMedium
+                        
                    ),
                  ),
                ),
@@ -199,7 +199,7 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                 child: Center(
                   child: Text('Declined',
                     style: TextStyle(
-                        fontFamily: ConstantFonts.sfProMedium
+                         
                     ),
                   ),
                 ),
@@ -227,7 +227,7 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                         Text(
                           'No leaves has been submitted🤗',
                           style: TextStyle(
-                            fontFamily: ConstantFonts.sfProMedium,
+                           
                             fontSize: 20,
                           ),
                         ),
@@ -248,7 +248,7 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                                     Text(
                                       'Date - ${staffNames[i].date}',
                                       style: TextStyle(
-                                        fontFamily: ConstantFonts.sfProMedium,
+                                       
                                         color: Colors.green,
                                         fontSize: 16,
                                       ),
@@ -256,7 +256,7 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                                     Text(
                                       'Leave type - ${staffNames[i].type}',
                                       style: TextStyle(
-                                        fontFamily: ConstantFonts.sfProMedium,
+                                       
                                         fontSize: 16,
                                         color: Colors.green,
                                       ),
@@ -264,7 +264,7 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                                     Text(
                                       'Updated by - ${staffNames[i].updatedBy}',
                                       style: TextStyle(
-                                        fontFamily: ConstantFonts.sfProMedium,
+                                       
                                         fontSize: 16,
                                         color: Colors.green,
                                       ),
@@ -303,7 +303,7 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                                         Text(
                                           'Updated by - ${staffNames[i].updatedBy}',
                                           style: TextStyle(
-                                            fontFamily: ConstantFonts.sfProMedium,
+                                           
                                             fontSize: 16,
                                             color: CupertinoColors.activeOrange,
                                           ),
@@ -341,7 +341,7 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                                             Text(
                                               'Updated by - ${staffNames[i].updatedBy}',
                                               style: TextStyle(
-                                                fontFamily: ConstantFonts.sfProMedium,
+                                               
                                                 fontSize: 16,
                                                 color: Colors.red,
                                               ),

@@ -160,11 +160,11 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                 padding: const EdgeInsets.only(left: 18.0),
                                 child: DropDownTextField(
                                   textStyle: TextStyle(
-                                    fontFamily: ConstantFonts.sfProMedium,
+                                   
                                     fontSize: 17,
                                   ),
                                   listTextStyle: TextStyle(
-                                    fontFamily: ConstantFonts.sfProMedium,
+                                   
                                     fontSize: 17,
                                   ),
                                   controller: itermNameController,
@@ -183,7 +183,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                     hintText: '     Select Product',
                                     hintStyle: TextStyle(
                                       fontSize: 17,
-                                      fontFamily: ConstantFonts.sfProMedium,
+                                     
                                     ),
                                   ),
                                   validator: (value) {
@@ -228,7 +228,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                   child: TextFormField(
                                     style: TextStyle(
                                       fontSize: 16,
-                                      fontFamily: ConstantFonts.sfProMedium
+                                       
                                     ),
                                     textAlign: TextAlign.center,
                                     textInputAction: TextInputAction.done,
@@ -243,7 +243,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                         border: InputBorder.none,
                                         hintText: 'Quantity of Product',
                                     hintStyle: TextStyle(
-                                      fontFamily: ConstantFonts.sfProMedium,
+                                     
                                       fontSize: 17,
                                     ),
                                     ),
@@ -389,7 +389,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                         child: Text(
                                           'Name',
                                           style: TextStyle(
-                                            fontFamily: ConstantFonts.sfProMedium,
+                                           
                                             fontSize: height * 0.017,
                                           ),
                                         ),
@@ -405,7 +405,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                         child: Text(
                                           'Quantity',
                                           style: TextStyle(
-                                            fontFamily: ConstantFonts.sfProMedium,
+                                           
                                             fontSize: height * 0.017,
 
                                           ),
@@ -422,7 +422,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                           child: Text(
                                             'Rate',
                                             style: TextStyle(
-                                              fontFamily: ConstantFonts.sfProMedium,
+                                             
                                               fontSize: height * 0.017,
 
                                             ),
@@ -438,7 +438,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                           child: Text(
                                             'Total',
                                             style: TextStyle(
-                                              fontFamily: ConstantFonts.sfProMedium,
+                                             
                                               fontSize: height * 0.017,
                                             ),
                                           ),
@@ -636,7 +636,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                   child: TextFormField(
                                     style: TextStyle(
                                       fontSize: 16,
-                                      fontFamily: ConstantFonts.sfProMedium,
+                                     
                                     ),
                                     textInputAction: TextInputAction.done,
                                     validator: (value) {
@@ -660,7 +660,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                         hintText:
                                             'Enter below ${maximumDiscount.toString()} %',
                                     hintStyle: TextStyle(
-                                      fontFamily: ConstantFonts.sfProMedium,
+                                     
                                       fontSize: 17,
                                     )
                                     ),
@@ -777,7 +777,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
           trailing: Text(
             value,
             style: TextStyle(
-              fontFamily: ConstantFonts.sfProMedium,
+             
               fontSize: 14,
             ),
           ),
@@ -832,7 +832,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
               message,
               style: TextStyle(
                   fontSize: 17,
-                  fontFamily: ConstantFonts.sfProMedium),
+                   ),
             ),
           ),
         ),
@@ -898,14 +898,14 @@ class _PointViewState extends State<PointView> {
               'You have got',
               style: TextStyle(
                   color: Colors.white,
-                  fontFamily: ConstantFonts.sfProMedium,
+                 
                   fontSize: height * 0.05),
             ),
             Text(
               widget.points.toString(),
               style: TextStyle(
                   color: Colors.amber,
-                  fontFamily: ConstantFonts.sfProMedium,
+                 
                   fontSize: height * 0.05,
               ),
             ),
@@ -913,7 +913,7 @@ class _PointViewState extends State<PointView> {
               'points👍',
               style: TextStyle(
                   color: Colors.white,
-                  fontFamily: ConstantFonts.sfProMedium,
+                 
                   fontSize: height * 0.05),
             ),
             SizedBox(height: height * 0.3),

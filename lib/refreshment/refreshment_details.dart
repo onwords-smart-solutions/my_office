@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
 
 import '../util/custom_rect_tween.dart';
@@ -17,10 +18,12 @@ class RefreshmentDetails extends StatefulWidget {
 }
 
 class _RefreshmentDetailsState extends State<RefreshmentDetails> {
+  bool _isLoading = true;
   String _dayTime = 'Morning';
   int _coffeeCount = 0;
   int _teaCount = 0;
   int _foodCount = 0;
+  int _milkCount = 0;
   bool isFoodShow = true;
   late Timer _timer;
   var _data;
@@ -51,6 +54,8 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
         _data = snapshot.value;
         _coffeeCount = _data['coffee_count'] ?? 0;
         _teaCount = _data['tea_count'] ?? 0;
+        _milkCount = _data['milk_count'] ?? 0;
+        _isLoading = false;
       });
     }
 
@@ -83,150 +88,106 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
   @override
   Widget build(BuildContext context) {
     final currentTime = DateTime.now();
-    final foodEndTime =
-        DateTime(currentTime.year, currentTime.month, currentTime.day, 14, 0);
+    final foodEndTime = DateTime(currentTime.year, currentTime.month, currentTime.day, 14, 0);
 
     if (currentTime.isAfter(foodEndTime)) {
       isFoodShow = false;
     }
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: Hero(
-          tag: 'details',
-          createRectTween: (begin, end) {
-            return CustomRectTween(begin: begin!, end: end!);
-          },
-          child: Material(
-            color: Colors.white,
-            elevation: 20,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0)),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  buildHeadSection(),
-                  buildTeaSection(),
-                  buildCoffeeSection(),
-                  if (isFoodShow) buildFoodSection(),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildHeadSection() {
-    return Stack(
-      alignment: AlignmentDirectional.topEnd,
-      children: [
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.all(10.0),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15.0),
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.grey.withOpacity(.7),
-                    blurRadius: 10.0,
-                    offset: const Offset(0, 10))
-              ]),
-          child: Column(
-            children: [
-              Text(
-                'Refreshment Count',
-                style: TextStyle(
-                    color: const Color(0xff8355B7),
-                    fontSize: 16.0,
-                    fontFamily: ConstantFonts.sfProBold),
-              ),
-              Text(
-                _dayTime,
-                style: TextStyle(
-                    color: const Color(0xff8355B7),
-                    fontSize: 16.0,
-                    fontFamily: ConstantFonts.sfProMedium),
-              ),
-              const SizedBox(height: 20.0),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                physics: const BouncingScrollPhysics(),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * .8,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      //Tea Count
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Image.asset(
-                            'assets/tea.png',
-                            scale: 3,
-                          ),
-                          const SizedBox(width: 5.0),
-                          Text(
-                            'Tea $_teaCount',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15.0,
-                                fontFamily: ConstantFonts.sfProMedium),
-                          ),
-                        ],
-                      ),
-
-                      //Coffee Count
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Image.asset(
-                            'assets/coffee.png',
-                            scale: 3,
-                          ),
-                          const SizedBox(width: 5.0),
-                          Text('Coffee $_coffeeCount',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15.0,
-                                  fontFamily: ConstantFonts.sfProMedium)),
-                        ],
-                      ),
-
-                      //Food Count
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Image.asset(
-                            'assets/food.png',
-                            scale: 3.5,
-                          ),
-                          Text('Food $_foodCount',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15.0,
-                                  fontFamily: ConstantFonts.sfProMedium)),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-        IconButton(
+    return Scaffold(
+      appBar: AppBar(
+        surfaceTintColor: Colors.white,
+        backgroundColor: Colors.white,
+        leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(
             Iconsax.close_square5,
             color: Colors.redAccent,
           ),
-          splashRadius: 10.0,
         ),
-      ],
+        title: const Text(
+          'Refreshment Count',
+          style: TextStyle(
+            color: Color(0xff8355B7),
+            fontSize: 20.0,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        centerTitle: true,
+      ),
+      body: _isLoading
+          ? Center(child: Lottie.asset('assets/animations/new_loading.json'))
+          : Column(
+              children: [
+                buildHeadSection(),
+                Expanded(
+                  child: ListView(
+                    children: [
+                      buildTeaSection(),
+                      buildCoffeeSection(),
+                      buildMilkSection(),
+                      if (isFoodShow) buildFoodSection(),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+    );
+  }
+
+  Widget buildHeadSection() {
+    final Map<String, int> refreshmentDetail = {
+      'Tea': _teaCount,
+      'Coffee': _coffeeCount,
+      'Milk': _milkCount,
+    };
+
+    if (isFoodShow) {
+      refreshmentDetail.addAll({"Food": _foodCount});
+    }
+    List<Widget> refreshment = [];
+    refreshmentDetail.forEach((key, value) {
+      refreshment.add(
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              'assets/${key.toLowerCase()}.png',
+              width: 25.0,
+              height: 25.0,
+            ),
+            const SizedBox(width: 5.0),
+            Text(
+              '$key: $value',
+              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16.0),
+            ),
+          ],
+        ), // You can use any widget type here
+      );
+    });
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.only(bottom: 20.0),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(
+          bottom: Radius.circular(20.0),
+        ),
+      ),
+      child: Column(
+        children: [
+          Text(
+            _dayTime,
+            style: const TextStyle(color: Color(0xff8355B7), fontSize: 15.0, fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(height: 15.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: refreshment,
+          )
+        ],
+      ),
     );
   }
 
@@ -241,34 +202,43 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
     }
 
     return Container(
-      margin: const EdgeInsets.only(top: 25.0, left: 30.0),
+      margin: const EdgeInsets.only(left: 30.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Tea',
+          const Text('Tea',
               style: TextStyle(
-                  color: const Color(0xffDD9324),
-                  fontSize: 26.0,
-                  fontFamily: ConstantFonts.sfProMedium)),
+                color: Color(0xffDD9324),
+                fontSize: 26.0,
+              )),
           Container(
             margin: const EdgeInsets.only(left: 25.0, right: 5.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: listOfTea.length,
-                      padding: const EdgeInsets.symmetric(vertical: 5.0),
-                      physics: const BouncingScrollPhysics(),
-                      itemBuilder: (ctx, index) {
-                        return Text(listOfTea[index],
-                        style: TextStyle(
-                          fontFamily: ConstantFonts.sfProMedium,
-                          fontSize: 15,
-                        ),
-                        );
-                      }),
+                  child: listOfTea.isEmpty
+                      ? const Text(
+                          'No data',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey,
+                            fontSize: 18.0,
+                          ),
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: listOfTea.length,
+                          padding: const EdgeInsets.symmetric(vertical: 5.0),
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (ctx, index) {
+                            return Text(
+                              listOfTea[index],
+                              style: const TextStyle(
+                                fontSize: 15,
+                              ),
+                            );
+                          }),
                 ),
                 Image.asset(
                   'assets/tea_design.png',
@@ -296,11 +266,11 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Coffee',
+          const Text('Coffee',
               style: TextStyle(
-                  color: const Color(0xff5B3618),
-                  fontSize: 26.0,
-                  fontFamily: ConstantFonts.sfProMedium)),
+                color: Color(0xff5B3618),
+                fontSize: 26.0,
+              )),
           Container(
             // height: MediaQuery.of(context).size.height * .18,
             margin: const EdgeInsets.only(left: 25.0, right: 5.0),
@@ -308,22 +278,91 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: ListView.builder(
-                      itemCount: listOfCoffee.length,
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.symmetric(vertical: 5.0),
-                      physics: const BouncingScrollPhysics(),
-                      itemBuilder: (ctx, index) {
-                        return Text(listOfCoffee[index],
+                  child: listOfCoffee.isEmpty
+                      ? const Text(
+                          'No data',
                           style: TextStyle(
-                            fontFamily: ConstantFonts.sfProMedium,
-                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey,
+                            fontSize: 18.0,
                           ),
-                        );
-                      }),
+                        )
+                      : ListView.builder(
+                          itemCount: listOfCoffee.length,
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.symmetric(vertical: 5.0),
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (ctx, index) {
+                            return Text(
+                              listOfCoffee[index],
+                              style: const TextStyle(
+                                fontSize: 15,
+                              ),
+                            );
+                          }),
                 ),
                 Image.asset(
                   'assets/coffee_design.png',
+                  scale: 4.0,
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget buildMilkSection() {
+    List<String> listOfMilk = [];
+    if (_milkCount > 0) {
+      final Map<dynamic, dynamic> milk = _data['milk'];
+      final coffeeKeys = milk.keys;
+      for (var i in coffeeKeys) {
+        listOfMilk.add(milk[i]);
+      }
+    }
+    return Container(
+      margin: const EdgeInsets.only(top: 15.0, left: 30.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Milk',
+              style: TextStyle(
+                color: Colors.lightBlue.shade800,
+                fontSize: 26.0,
+              )),
+          Container(
+            margin: const EdgeInsets.only(left: 25.0, right: 5.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: listOfMilk.isEmpty
+                      ? const Text(
+                          'No data',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey,
+                            fontSize: 18.0,
+                          ),
+                        )
+                      : ListView.builder(
+                          itemCount: listOfMilk.length,
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.symmetric(vertical: 5.0),
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (ctx, index) {
+                            return Text(
+                              listOfMilk[index],
+                              style: const TextStyle(
+                                fontSize: 15,
+                              ),
+                            );
+                          }),
+                ),
+                Image.asset(
+                  'assets/tea_design.png',
                   scale: 4.0,
                 ),
               ],
@@ -348,11 +387,11 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Food',
+          const Text('Food',
               style: TextStyle(
-                  color: Colors.redAccent,
-                  fontSize: 26.0,
-                  fontFamily: ConstantFonts.sfProMedium)),
+                color: Colors.redAccent,
+                fontSize: 26.0,
+              )),
           Container(
             // height: MediaQuery.of(context).size.height * .18,
             margin: const EdgeInsets.only(left: 25.0, right: 5.0),
@@ -360,20 +399,29 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: listOfFood.length,
-                    padding: const EdgeInsets.symmetric(vertical: 5.0),
-                    physics: const BouncingScrollPhysics(),
-                    itemBuilder: (ctx, index) {
-                      return Text(listOfFood[index],
-                        style: TextStyle(
-                          fontFamily: ConstantFonts.sfProMedium,
-                          fontSize: 15,
+                  child: listOfFood.isEmpty
+                      ? const Text(
+                          'No data',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey,
+                            fontSize: 18.0,
+                          ),
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: listOfFood.length,
+                          padding: const EdgeInsets.symmetric(vertical: 5.0),
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (ctx, index) {
+                            return Text(
+                              listOfFood[index],
+                              style: const TextStyle(
+                                fontSize: 15,
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
                 ),
                 // Image.asset(
                 //   'assets/coffee_design.png',

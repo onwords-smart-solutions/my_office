@@ -201,7 +201,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
                             text: 'Profit with salary : ',
                             style: TextStyle(
                                 fontSize: 16,
-                                fontFamily: ConstantFonts.sfProMedium,
+
                                 color: Colors.black),
                             children: <TextSpan>[
                               TextSpan(
@@ -222,7 +222,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
                             text: 'Profit without salary : ',
                             style: TextStyle(
                                 fontSize: 16,
-                                fontFamily: ConstantFonts.sfProMedium,
+
                                 color: Colors.black),
                             children: <TextSpan>[
                               TextSpan(
@@ -310,7 +310,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
             AutoSizeText(
               name,
               style: TextStyle(
-                fontFamily: ConstantFonts.sfProMedium,
+
                 color: ConstantColor.blackColor,
               ),
               minFontSize: 20,

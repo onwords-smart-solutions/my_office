@@ -89,7 +89,7 @@ class _ViewSuggestionsState extends State<ViewSuggestions> {
                       allSuggestion[index]['message'].toString().length >= 30? '${allSuggestion[index]['message'].toString().substring(0, 30)} ...': allSuggestion[index]['message'].toString(),
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
-                      fontFamily: ConstantFonts.sfProMedium,
+                     
                       fontSize: 17,
                     ),
                   ),

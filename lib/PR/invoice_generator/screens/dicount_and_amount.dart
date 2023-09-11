@@ -76,7 +76,7 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title:  Text('Discount and Amount Info',style: TextStyle(fontSize: 22, fontFamily: ConstantFonts.sfProMedium, color: Colors.white),),
+        title:  Text('Discount and Amount Info',style: TextStyle(fontSize: 22, color: Colors.white),),
         centerTitle: true,
         elevation: 0,
         backgroundColor: ConstantColor.backgroundColor,
@@ -141,7 +141,7 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                               children: [
                                 Text('Available Discount - $discountPercentage %',
                                 style: TextStyle(
-                                  fontFamily: ConstantFonts.sfProMedium,
+                                 
                                   color: ConstantColor.backgroundColor,
                                   fontSize: 15
                                 ),),
@@ -185,7 +185,7 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                                 Text(
                                   "GST Need : ",
                                   style: TextStyle(
-                                    fontFamily: ConstantFonts.sfProMedium,
+                                   
                                       fontSize: height * 0.019,
                                       color: Colors.black),
                                 ),

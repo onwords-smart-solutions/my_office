@@ -116,7 +116,7 @@ class _LeaveDetailsState extends State<LeaveDetails> {
                           child: Text(
                             dropDown[i],
                             style: TextStyle(
-                                fontFamily: ConstantFonts.sfProMedium,
+                               
                                 fontSize: 16),
                           ),
                           onTap: () {
@@ -179,7 +179,7 @@ class _LeaveDetailsState extends State<LeaveDetails> {
                   ),
                   title: Text(
                     allStaffs[i].name,
-                    style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
+                    style: TextStyle( ),
                   ),
                   trailing: Text(
                     allStaffs[i].department,

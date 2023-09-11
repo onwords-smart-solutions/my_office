@@ -326,7 +326,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                   searchUser(value.toString());
                 },
                 style: TextStyle(
-                    fontFamily: ConstantFonts.sfProMedium,
+                     
                     fontSize: 15,
                     color: Colors.black),
               ),
@@ -377,7 +377,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                     child: Text(
                       staffs[index],
                       style: TextStyle(
-                          fontFamily: ConstantFonts.sfProMedium, fontSize: 15),
+                            fontSize: 15),
                     ),
                     onTap: () {
                       getCustomerDetail(
@@ -391,7 +391,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                   child: Text(
                     staffs[index],
                     style: TextStyle(
-                        fontFamily: ConstantFonts.sfProMedium, fontSize: 15),
+                          fontSize: 15),
                   ),
                   onTap: () {
                     getCustomerDetail(
@@ -419,7 +419,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
           return PopupMenuItem(
             child: Text(
               sortList[index],
-              style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
+              style: TextStyle( ),
             ),
             onTap: () {
               getCustomerDetail(
@@ -455,7 +455,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
             child: Text(
               'Leads of $selectedStaff',
               style: TextStyle(
-                  fontFamily: ConstantFonts.sfProMedium,
+                   
                   fontSize: 14.0,
                   color: Color(0xffF1F2F8)),
             ),
@@ -512,7 +512,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                 child: Text(
                   sortList[i],
                   style: TextStyle(
-                      fontFamily: ConstantFonts.sfProMedium,
+                     
                       fontSize: 13.0,
                       color: textColor),
                 ),
@@ -557,7 +557,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                     child: Text(
                       'No leads found!!',
                       style: TextStyle(
-                          fontFamily: ConstantFonts.sfProMedium,
+                         
                           fontSize: 17.0),
                     ),
                   )
@@ -575,7 +575,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                 padding: const EdgeInsets.only(top: 10.0),
                 child: Text(
                   'No result for $query',
-                  style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
+                  style: TextStyle( ),
                 ),
               );
   }

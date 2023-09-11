@@ -73,7 +73,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 14,
-                        fontFamily: ConstantFonts.sfProMedium,
+                       
                       ),
                     ),
                   ),
@@ -103,7 +103,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 14,
-                        fontFamily: ConstantFonts.sfProMedium,
+                       
                       ),
                     ),
                   ),
@@ -133,7 +133,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 14,
-                        fontFamily: ConstantFonts.sfProMedium,
+                       
                       ),
                     ),
                   ),
@@ -163,7 +163,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 14,
-                        fontFamily: ConstantFonts.sfProMedium,
+                       
                       ),
                     ),
                   ),
@@ -193,7 +193,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 14,
-                        fontFamily: ConstantFonts.sfProMedium,
+                       
                       ),
                     ),
                   ),
@@ -223,7 +223,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 14,
-                        fontFamily: ConstantFonts.sfProMedium,
+                       
                       ),
                     ),
                   ),
@@ -253,7 +253,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 14,
-                        fontFamily: ConstantFonts.sfProMedium,
+                       
                       ),
                     ),
                   ),
@@ -283,7 +283,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 14,
-                        fontFamily: ConstantFonts.sfProMedium,
+                       
                       ),
                     ),
                   ),
@@ -313,7 +313,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 14,
-                        fontFamily: ConstantFonts.sfProMedium,
+                       
                       ),
                     ),
                   ),
@@ -343,7 +343,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 14,
-                        fontFamily: ConstantFonts.sfProMedium,
+                       
                       ),
                     ),
                   ),
@@ -373,7 +373,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 14,
-                        fontFamily: ConstantFonts.sfProMedium,
+                       
                       ),
                     ),
                   ),
@@ -403,7 +403,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 14,
-                        fontFamily: ConstantFonts.sfProMedium,
+                       
                       ),
                     ),
                   ),
@@ -433,7 +433,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 14,
-                        fontFamily: ConstantFonts.sfProMedium,
+                       
                       ),
                     ),
                   ),
@@ -463,7 +463,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 14,
-                        fontFamily: ConstantFonts.sfProMedium,
+                       
                       ),
                     ),
                   ),

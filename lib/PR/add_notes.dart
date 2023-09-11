@@ -172,8 +172,7 @@ class _AddNotesState extends State<AddNotes> {
                   hintText: 'Enter your notes here..',
                   hintStyle: TextStyle(
                     color: CupertinoColors.systemGrey,
-                    fontSize: 16,
-                    fontFamily: ConstantFonts.sfProMedium,
+                    fontSize: 16
                   ),
                 ),
               ),
@@ -233,7 +232,6 @@ class _AddNotesState extends State<AddNotes> {
                   ),
                   hintText: 'Tap to pick a date',
                   hintStyle: TextStyle(
-                      fontFamily: ConstantFonts.sfProMedium,
                       fontSize: 16,
                       color: CupertinoColors.systemGrey
                   ),

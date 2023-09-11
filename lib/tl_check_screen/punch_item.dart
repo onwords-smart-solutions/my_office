@@ -105,14 +105,14 @@ class PunchItem extends StatelessWidget {
                   if (punchDetail.checkInTime != null)
                     Text(
                       'Check In : ${timeFormat(punchDetail.checkInTime!)}',
-                      style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
+                      style: TextStyle( ),
                     ),
                   if (punchDetail.checkInTime != null)
                     Text(
                       punchDetail.checkOutTime == null
                           ? 'Check Out : No entry'
                           : 'Check Out : ${timeFormat(punchDetail.checkOutTime!)}',
-                      style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
+                      style: TextStyle( ),
                     ),
                 ],
               ),

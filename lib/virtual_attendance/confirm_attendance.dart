@@ -26,7 +26,7 @@ class ConfirmAttendanceScreen extends StatelessWidget {
           Text(
             'Wait, Until you are redirected to the home screen⌛',
             style: TextStyle(
-              fontFamily: ConstantFonts.sfProMedium,
+             
               fontSize: 20,
               color: ConstantColor.backgroundColor,
             ),

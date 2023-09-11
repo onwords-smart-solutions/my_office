@@ -6,6 +6,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/models/staff_leave_model.dart';
+import 'package:my_office/services/notification_service.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 import 'package:http/http.dart' as http;
@@ -15,6 +16,7 @@ class LeaveApprovalScreen extends StatefulWidget {
   final String uid;
   final String name;
   final String department;
+
   const LeaveApprovalScreen({super.key, required this.uid, required this.name, required this.department});
 
   @override
@@ -55,12 +57,11 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                     String name = 'GHOST';
                     String status = 'Pending';
                     String department = 'Not provided';
-                    final leaveData =
-                        leaveRequest.value as Map<Object?, Object?>;
+                    final leaveData = leaveRequest.value as Map<Object?, Object?>;
                     try {
                       name = leaveData['name'].toString();
                       status = leaveData['status'].toString();
-                      department = leaveData['dep'].toString() == 'null' ? 'Not provided' :leaveData['dep'].toString();
+                      department = leaveData['dep'].toString() == 'null' ? 'Not provided' : leaveData['dep'].toString();
                     } catch (e) {
                       log('Error while fetching leave details $e');
                     }
@@ -82,8 +83,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
               }
             }
 
-            final index = staffLeaves.indexWhere(
-                (element) => element.status.toLowerCase().contains('pending'));
+            final index = staffLeaves.indexWhere((element) => element.status.toLowerCase().contains('pending'));
 
             if (index < 0) {
               return Center(
@@ -103,10 +103,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
             return ListView.builder(
                 itemCount: staffLeaves.length,
                 itemBuilder: (listCtx, index) {
-                  if (staffLeaves[index]
-                      .status
-                      .toLowerCase()
-                      .contains('pending')) {
+                  if (staffLeaves[index].status.toLowerCase().contains('pending')) {
                     return Container(
                       // height: height * 0.1,
                       margin: const EdgeInsets.all(10),
@@ -159,8 +156,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                                       child: textWidget('Date', 15),
                                     ),
                                     Expanded(
-                                      child: textWidget(
-                                          ':  ${staffLeaves[index].date}', 15),
+                                      child: textWidget(':  ${staffLeaves[index].date}', 15),
                                     ),
                                   ],
                                 ),
@@ -172,8 +168,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                                       child: textWidget('Reason', 15),
                                     ),
                                     Expanded(
-                                      child: reasonContainer(
-                                          staffLeaves[index].reason),
+                                      child: reasonContainer(staffLeaves[index].reason),
                                     ),
                                   ],
                                 ),
@@ -185,8 +180,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                                       child: textWidget('Leave Type', 15),
                                     ),
                                     Expanded(
-                                      child: textWidget(
-                                          ':  ${staffLeaves[index].type}', 15),
+                                      child: textWidget(':  ${staffLeaves[index].type}', 15),
                                     ),
                                   ],
                                 ),
@@ -198,8 +192,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                                       child: textWidget('Department', 15),
                                     ),
                                     Expanded(
-                                      child: textWidget(
-                                          ':  ${staffLeaves[index].department}', 15),
+                                      child: textWidget(':  ${staffLeaves[index].department}', 15),
                                     ),
                                   ],
                                 ),
@@ -213,81 +206,78 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                               GestureDetector(
                                 onTap: () {
                                   showDialog(
-                                    context: context,
-                                    builder: (context){
-                                      return   AlertDialog(
-                                        title: Text('Confirmation status',
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontFamily: ConstantFonts.sfProBold,
-                                              color: Colors.deepPurple
-                                          ),),
-                                        content: SingleChildScrollView(
-                                          child: ListBody(
-                                            children: [
-                                              Text('This is to confirm your approval status for leave request of the employee.',
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text(
+                                            'Confirmation status',
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontFamily: ConstantFonts.sfProBold,
+                                                color: Colors.deepPurple),
+                                          ),
+                                          content: SingleChildScrollView(
+                                            child: ListBody(
+                                              children: [
+                                                Text(
+                                                  'This is to confirm your approval status for leave request of the employee.',
+                                                  style: TextStyle(fontSize: 17, color: ConstantColor.headingTextColor),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              child: Text(
+                                                'Approve',
                                                 style: TextStyle(
                                                     fontSize: 17,
-                                                    fontFamily: ConstantFonts.sfProMedium,
-                                                    color: ConstantColor.headingTextColor
-                                                ),),
-                                            ],
-                                          ),
-                                        ),
-                                        actions: [
-                                          TextButton(
-                                            child: Text('Approve',
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  fontFamily: ConstantFonts.sfProBold,
-                                                  color: ConstantColor.pinkColor
-                                              ),),
-                                            onPressed: () async {
-                                              await changeRequest(
-                                                  staffLeaves[index], 'Approved');
-                                              setState(() {
-                                                approve = true;
-                                              });
-                                              sendNotification(staffLeaves[index].uid, 'My Office',
-                                                  'Your leave request has been Approved by ${widget.name}');
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          TextButton(
-                                            child: Text('Decline',
-                                            style: TextStyle(
-                                              fontSize: 17,
-                                              fontFamily: ConstantFonts.sfProBold,
-                                              color: Colors.red
-                                            ),
-                                            ),
-                                            onPressed: () async {
-                                              await changeRequest(
-                                              staffLeaves[index], 'Declined');
-                                              setState(() {
-                                                decline = true;
-                                              });
-                                              sendNotification(staffLeaves[index].uid, 'My Office',
-                                                  'Your leave request has been Declined by ${widget.name}');
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                          TextButton(
-                                            child: Text('Cancel',
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  fontFamily: ConstantFonts.sfProBold,
-                                                  color: ConstantColor.headingTextColor
+                                                    fontFamily: ConstantFonts.sfProBold,
+                                                    color: ConstantColor.pinkColor),
                                               ),
+                                              onPressed: () async {
+                                                await changeRequest(staffLeaves[index], 'Approved');
+                                                setState(() {
+                                                  approve = true;
+                                                });
+                                                sendNotification(staffLeaves[index].uid, 'Leave Response',
+                                                    'Your leave request has been Approved by ${widget.name}');
+                                                Navigator.of(context).pop();
+                                              },
                                             ),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                          ),
-                                        ],
-                                      );
-                                  }
-                                  );
+                                            TextButton(
+                                              child: Text(
+                                                'Decline',
+                                                style: TextStyle(
+                                                    fontSize: 17,
+                                                    fontFamily: ConstantFonts.sfProBold,
+                                                    color: Colors.red),
+                                              ),
+                                              onPressed: () async {
+                                                await changeRequest(staffLeaves[index], 'Declined');
+                                                setState(() {
+                                                  decline = true;
+                                                });
+                                                sendNotification(staffLeaves[index].uid, 'Leave Response',
+                                                    'Your leave request has been Declined by ${widget.name}');
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                            TextButton(
+                                              child: Text(
+                                                'Cancel',
+                                                style: TextStyle(
+                                                    fontSize: 17,
+                                                    fontFamily: ConstantFonts.sfProBold,
+                                                    color: ConstantColor.headingTextColor),
+                                              ),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      });
                                 },
                                 child: Container(
                                   height: height * 0.05,
@@ -305,7 +295,6 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                                     child: Text(
                                       'Tap to Approve/Cancel',
                                       style: TextStyle(
-                                        fontFamily: ConstantFonts.sfProMedium,
                                         color: ConstantColor.background1Color,
                                         fontSize: height * 0.021,
                                       ),
@@ -325,19 +314,20 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
           }
           //Loading section
           return Center(
-            child: Lottie.asset( "assets/animations/new_loading.json",),
+            child: Lottie.asset(
+              "assets/animations/new_loading.json",
+            ),
           );
         });
   }
 
   //Function to approve leave request
-  Future<void> changeRequest(
-      StaffLeaveModel leaveRequest, String status) async {
+  Future<void> changeRequest(StaffLeaveModel leaveRequest, String status) async {
     await ref
         .child(
             'leaveDetails/${leaveRequest.uid}/leaveApplied/${leaveRequest.year}/${leaveRequest.month}/${leaveRequest.date}')
         .update({
-      'updated_by' : widget.name,
+      'updated_by': widget.name,
       'status': status,
     });
     if (!mounted) return;
@@ -347,7 +337,6 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
           'Leave request for ${leaveRequest.name} has been $status',
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontFamily: ConstantFonts.sfProMedium,
             fontSize: 17,
           ),
         ),
@@ -397,10 +386,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
   Widget textWidget(String name, double size) {
     return AutoSizeText(
       name,
-      style: TextStyle(
-          fontSize: 17,
-          fontFamily: ConstantFonts.sfProMedium,
-          color: ConstantColor.blackColor),
+      style: TextStyle(fontSize: 17, color: ConstantColor.blackColor),
     );
   }
 
@@ -411,14 +397,10 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
       onTap: () {
         showDialog(
           context: context,
-          builder: (context) =>
-              AlertDialog(
+          builder: (context) => AlertDialog(
             title: Text(
               'Reason :',
-              style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: ConstantFonts.sfProBold,
-                  color: ConstantColor.blackColor),
+              style: TextStyle(fontSize: 20, fontFamily: ConstantFonts.sfProBold, color: ConstantColor.blackColor),
             ),
             elevation: 10,
             content: SingleChildScrollView(
@@ -426,11 +408,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
               child: ListTile(
                 title: Text(
                   reason,
-                  style: TextStyle(
-                      fontSize: 17,
-                      fontFamily: ConstantFonts.sfProMedium,
-                      color: ConstantColor.backgroundColor
-                  ),
+                  style: TextStyle(fontSize: 17, color: ConstantColor.backgroundColor),
                 ),
               ),
             ),
@@ -448,9 +426,8 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                   child: Text(
                     'OK',
                     style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: ConstantFonts.sfProMedium,
-                       ),
+                      fontSize: 20,
+                    ),
                   ),
                 ),
               ),
@@ -460,10 +437,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
       },
       child: Text(
         ':  $reason',
-        style: TextStyle(
-            fontSize: 17,
-            fontFamily: ConstantFonts.sfProMedium,
-            color: ConstantColor.blackColor),
+        style: const TextStyle(fontSize: 17, color: ConstantColor.blackColor),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
@@ -471,53 +445,15 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
   }
 
   //Leave approve status for employees
-  Future<void> sendNotification(
-      String userId, String title, String body) async {
-    FirebaseFirestore.instance
-        .collection('Devices')
-        .doc(userId)
-        .get()
-        .then((value) async {
-      if (value.exists) {
-        final data = value.data();
-        final mgmtDeviceToken = data!['Token'];
-        if (mgmtDeviceToken != null) {
-          const url = 'https://fcm.googleapis.com/fcm/send';
-          const serverKey =
-              'AAAAhAGZ-Jw:APA91bFk_GTSGX1LAj-ZxOW7DQn8Q69sYLStSB8lukQDlxBMmugrkQCsgIvuFm0fU5vBbVB5SATjaoO0mrCdsJm03ZEEZtaRdH-lQ9ZmX5RpYuyLytWyHVH7oDu-6LaShqrVE5vYHCqK'; // Your FCM server key
-          final headers = {
-            'Content-Type': 'application/json',
-            'Authorization': 'key=$serverKey',
-          };
-
-          final payload = {
-            'notification': {
-              'title': title,
-              'body': body,
-            },
-            'priority': 'high',
-            'data': {
-              'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-              'screen' : 'LeaveApplyForm',
-              'status': 'done',
-            },
-            'to': mgmtDeviceToken,
-          };
-
-          final response = await http.post(
-            Uri.parse(url),
-            headers: headers,
-            body: jsonEncode(payload),
-          );
-
-          if (response.statusCode == 200) {
-            print('Notification sent successfully!');
-          } else {
-            print(
-                'Error sending notification. Status code: ${response.statusCode}');
-          }
-        }
-      }
-    });
+  Future<void> sendNotification(String userId, String title, String body) async {
+    final tokens = await NotificationService().getDeviceFcm(userId: userId);
+    for (var token in tokens) {
+      await NotificationService().sendNotification(
+        title: title,
+        body: body,
+        token: token,
+        type: NotificationType.leaveRespond,
+      );
+    }
   }
 }

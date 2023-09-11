@@ -53,7 +53,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                 children: [
                   Text(
                     ascending ? 'Ascending' : 'Descending',
-                    style: TextStyle(color: Colors.black,fontSize: 15,fontFamily: ConstantFonts.sfProMedium),
+                    style: TextStyle(color: Colors.black,fontSize: 15, ),
                   ),
                   const Icon(Icons.arrow_downward,color: Colors.black,size: 20,),
                   const Icon(Icons.arrow_upward,color: Colors.black,size: 20,),
@@ -79,7 +79,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                 title: Text(
                   widget.allIncome[index].customerName,
                   style: TextStyle(
-                      fontFamily: ConstantFonts.sfProMedium,
+
                       color: ConstantColor.blackColor,
                       fontSize: 16),
                 ),

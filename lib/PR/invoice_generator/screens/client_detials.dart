@@ -61,7 +61,7 @@ class _ClientDetailsState extends State<ClientDetails> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Client Details',style: TextStyle(fontSize: 22, color: Colors.white,fontFamily: ConstantFonts.sfProMedium),),
+          title: Text('Client Details',style: TextStyle(fontSize: 22, color: Colors.white, ),),
           centerTitle: true,
           elevation: 0,
           backgroundColor: ConstantColor.backgroundColor,
@@ -184,10 +184,10 @@ class _ClientDetailsState extends State<ClientDetails> {
                                 width: 160,
                                 child: DropdownButtonFormField<String>(
                                   style: TextStyle(
-                                    fontFamily: ConstantFonts.sfProMedium,
+                                   
                                     color: Colors.black
                                   ),
-                                  hint: Text("Doc-Type", style: TextStyle(fontFamily: ConstantFonts.sfProMedium),),
+                                  hint: Text("Doc-Type", style: TextStyle( ),),
                                   decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.all(5.0),
                                     border: myInputBorder(),
@@ -212,7 +212,7 @@ class _ClientDetailsState extends State<ClientDetails> {
                                       value: value,
                                       child: Text(
                                         value,
-                                        style: TextStyle(fontSize: 10, fontFamily: ConstantFonts.sfProMedium),
+                                        style: TextStyle(fontSize: 10,  ),
                                       ),
                                     );
                                   }).toList(),
@@ -222,11 +222,11 @@ class _ClientDetailsState extends State<ClientDetails> {
                                 width: 160,
                                 child: DropdownButtonFormField<String>(
                                   style: TextStyle(
-                                    fontFamily: ConstantFonts.sfProMedium,
+                                   
                                     color: CupertinoColors.label,
                                     fontSize: 16
                                   ),
-                                  hint: Text("Category", style: TextStyle(fontFamily: ConstantFonts.sfProMedium),),
+                                  hint: Text("Category", style: TextStyle( ),),
                                   decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.all(5.0),
                                     border: myInputBorder(),

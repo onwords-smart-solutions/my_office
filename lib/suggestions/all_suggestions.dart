@@ -61,7 +61,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                   style: TextStyle(
                     color: ConstantColor.backgroundColor,
                     fontSize: 17,
-                    fontFamily: ConstantFonts.sfProMedium,
+                   
                   ),
                 ),
               ),
@@ -72,7 +72,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                   style: TextStyle(
                       color: ConstantColor.headingTextColor,
                       fontSize: 17,
-                      fontFamily: ConstantFonts.sfProMedium),
+                       ),
                 ),
               ),
             ],
@@ -89,7 +89,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                   style: TextStyle(
                     color: ConstantColor.backgroundColor,
                     fontSize: 17,
-                    fontFamily: ConstantFonts.sfProMedium,
+                   
                   ),
                 ),
               ),
@@ -100,7 +100,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                   style: TextStyle(
                       color: ConstantColor.headingTextColor,
                       fontSize: 17,
-                      fontFamily: ConstantFonts.sfProMedium),
+                       ),
                 ),
               ),
             ],
@@ -117,7 +117,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                   style: TextStyle(
                     color: ConstantColor.backgroundColor,
                     fontSize: 17,
-                    fontFamily: ConstantFonts.sfProMedium,
+                   
                   ),
                 ),
               ),
@@ -128,7 +128,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                   style: TextStyle(
                       color: ConstantColor.headingTextColor,
                       fontSize: 17,
-                      fontFamily: ConstantFonts.sfProMedium),
+                       ),
                 ),
               ),
             ],
@@ -164,7 +164,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                     style: TextStyle(
                       color: ConstantColor.backgroundColor,
                       fontSize: 17,
-                      fontFamily: ConstantFonts.sfProMedium,
+                     
                     ),
                   ),
                 ),
@@ -182,7 +182,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                     style: TextStyle(
                       color: ConstantColor.headingTextColor,
                       fontSize: 18,
-                      fontFamily: ConstantFonts.sfProMedium,
+                     
                     ),
                   ),
                 ),

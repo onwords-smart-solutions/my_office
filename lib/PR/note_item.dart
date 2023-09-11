@@ -121,14 +121,14 @@ class _NoteItemState extends State<NoteItem> {
                   Text(
                     widget.updatedDate,
                     style: TextStyle(
-                      fontFamily: ConstantFonts.sfProMedium,
+                     
                       fontSize: 12.0,
                     ),
                   ),
                   Text(
                     widget.updatedTime,
                     style: TextStyle(
-                      fontFamily: ConstantFonts.sfProMedium,
+                     
                       fontSize: 12.0,
                     ),
                   ),
@@ -146,7 +146,7 @@ class _NoteItemState extends State<NoteItem> {
                 SelectableText(
                   widget.note,
                   style: TextStyle(
-                    fontFamily: ConstantFonts.sfProMedium,
+                   
                     fontSize: 14.0,
                   ),
                 ),

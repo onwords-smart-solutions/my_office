@@ -53,7 +53,7 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   style: TextStyle(
                     color: ConstantColor.headingTextColor,
                     fontSize: 17,
-                    fontFamily: ConstantFonts.sfProMedium,
+                   
                   ),
                 ),
               ),
@@ -81,7 +81,7 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   style: TextStyle(
                     color: ConstantColor.headingTextColor,
                     fontSize: 17,
-                    fontFamily: ConstantFonts.sfProMedium,
+                   
                   ),
                 ),
               ),
@@ -109,7 +109,7 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   style: TextStyle(
                     color: ConstantColor.headingTextColor,
                     fontSize: 17,
-                    fontFamily: ConstantFonts.sfProMedium,
+                   
                   ),
                 ),
               ),
@@ -137,7 +137,7 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   style: TextStyle(
                     color: ConstantColor.headingTextColor,
                     fontSize: 17,
-                    fontFamily: ConstantFonts.sfProMedium,
+                   
                   ),
                 ),
               ),
@@ -165,7 +165,7 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   style: TextStyle(
                     color: ConstantColor.headingTextColor,
                     fontSize: 17,
-                    fontFamily: ConstantFonts.sfProMedium,
+                   
                   ),
                 ),
               ),
@@ -193,7 +193,7 @@ class _PrFullWorkDetailsState extends State<PrFullWorkDetails> {
                   style: TextStyle(
                     color: ConstantColor.headingTextColor,
                     fontSize: 17,
-                    fontFamily: ConstantFonts.sfProMedium,
+                   
                   ),
                 ),
               ),

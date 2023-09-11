@@ -254,7 +254,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     style: TextStyle(
                         fontSize: 18,
                         color: Colors.white,
-                        fontFamily: ConstantFonts.sfProMedium),
+                         ),
                   )
                 ],
               ),
@@ -305,7 +305,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 16,
-                            fontFamily: ConstantFonts.sfProMedium),
+                             ),
                       ),
                       CircleAvatar(
                         backgroundColor: const Color(0xff5AC8FA),
@@ -360,9 +360,9 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                 "${index + 1} : ",
                                 style: TextStyle(
                                     fontSize: 15,
-                                    fontFamily: ConstantFonts.sfProMedium),
+                                     ),
                               ),
-                              title: Text(extraDevice[index].toString(), style: TextStyle(fontFamily: ConstantFonts.sfProMedium),),
+                              title: Text(extraDevice[index].toString(), style: TextStyle( ),),
                               trailing: IconButton(
                                 icon: const Icon(
                                   Icons.close,
@@ -375,7 +375,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                       title: Text(
                                         'Delete this name?\n${extraDevice[index]}',
                                         style: TextStyle(
-                                            fontFamily: ConstantFonts.sfProMedium
+                                             
                                         ),
                                         textAlign: TextAlign.center,
                                       ),
@@ -426,7 +426,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         : Center(
                       child: Text(
                         'No Device Added',
-                        style: TextStyle(color: Colors.black, fontFamily: ConstantFonts.sfProMedium, fontSize: 17),
+                        style: TextStyle(color: Colors.black, fontSize: 17),
                       ),
                     ),
                   ),
@@ -480,7 +480,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 16,
-                            fontFamily: ConstantFonts.sfProMedium),
+                             ),
                       ),
                       CircleAvatar(
                         backgroundColor: const Color(0xff5AC8FA),
@@ -535,10 +535,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                 "${index + 1} : ",
                                 style: TextStyle(
                                     fontSize: 15,
-                                    fontFamily: ConstantFonts.sfProMedium),
+                                     ),
                               ),
                               title:
-                              Text(teamMembersName[index].toString(),style: TextStyle(fontFamily: ConstantFonts.sfProMedium),),
+                              Text(teamMembersName[index].toString(),style: TextStyle( ),),
                               trailing: IconButton(
                                 icon: const Icon(
                                   Icons.close,
@@ -550,7 +550,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                     builder: (_) => AlertDialog(
                                       title: Text(
                                         'Delete this name?\n${teamMembersName[index]}',
-                                        style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
+                                        style: TextStyle( ),
                                         textAlign: TextAlign.center,
                                       ),
                                       content: SizedBox(
@@ -601,7 +601,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         : Center(
                       child: Text(
                         'No Members Added',
-                        style: TextStyle(color: Colors.black, fontFamily: ConstantFonts.sfProMedium, fontSize: 17),
+                        style: TextStyle(color: Colors.black, fontSize: 17),
                       ),
                     ),
                   ),
@@ -655,7 +655,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 16,
-                            fontFamily: ConstantFonts.sfProMedium),
+                             ),
                       ),
                       CircleAvatar(
                         backgroundColor: const Color(0xff5AC8FA),
@@ -760,7 +760,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                             'Add',
                                             style: TextStyle(
                                                 color: Colors.black,
-                                                fontFamily: ConstantFonts.sfProMedium,
+                                               
                                                 fontSize: 18),
                                           ),
                                         ),
@@ -859,7 +859,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
           child: Center(
             child: Text(
               title,
-              style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
+              style: TextStyle( ),
             ),
           ),
         ),
@@ -935,7 +935,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 15,
-                            fontFamily: ConstantFonts.sfProMedium),
+                             ),
                       ),
                       CircleAvatar(
                         backgroundColor: const Color(0xff5AC8FA),
@@ -991,10 +991,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                 "R${index + 1} : ",
                                 style: TextStyle(
                                     fontSize: 15,
-                                    fontFamily: ConstantFonts.sfProMedium),
+                                     ),
                               ),
                               title: Text(lightBoard8ChannelDetails[index]
-                                  .toString(), style: TextStyle(fontFamily: ConstantFonts.sfProMedium),),
+                                  .toString(), style: TextStyle( ),),
                               trailing: IconButton(
                                 icon: const Icon(
                                   Icons.close,
@@ -1007,7 +1007,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                       title: Text(
                                         'Delete this name?\n${lightBoard8ChannelDetails[index]}',
                                         style: TextStyle(
-                                            fontFamily: ConstantFonts.sfProMedium
+                                             
                                         ),
                                         textAlign: TextAlign.center,
                                       ),
@@ -1059,7 +1059,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         : Center(
                       child: Text(
                         'List is Empty',
-                        style: TextStyle(fontSize: 17,color: Colors.black, fontFamily: ConstantFonts.sfProMedium),
+                        style: TextStyle(fontSize: 17,color: Colors.black,  ),
                       ),
                     ),
                   ),
@@ -1112,7 +1112,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: 15,
-                            fontFamily: ConstantFonts.sfProMedium),
+                             ),
                       ),
                       CircleAvatar(
                         backgroundColor: const Color(0xff5AC8FA),
@@ -1168,10 +1168,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                 "R${index + 1} : ",
                                 style: TextStyle(
                                     fontSize: 15,
-                                    fontFamily: ConstantFonts.sfProMedium),
+                                     ),
                               ),
                               title: Text(lightBoard4ChannelDetails[index]
-                                  .toString(), style: TextStyle(fontFamily: ConstantFonts.sfProMedium),),
+                                  .toString(), style: TextStyle( ),),
                               trailing: IconButton(
                                 icon: const Icon(
                                   Icons.close,
@@ -1233,7 +1233,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         : Center(
                       child: Text(
                         'List is Empty',
-                        style: TextStyle(color: Colors.black, fontSize: 17,fontFamily: ConstantFonts.sfProMedium),
+                        style: TextStyle(color: Colors.black, fontSize: 17, ),
                       ),
                     ),
                   ),
@@ -1336,7 +1336,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               DropdownButtonFormField<String>(
                 value: selectedGAType.isNotEmpty ? selectedGAType : null,
                 style:
-                TextStyle(color: CupertinoColors.label, fontSize: 16, fontFamily: ConstantFonts.sfProMedium),
+                TextStyle(color: CupertinoColors.label, fontSize: 16,  ),
                 hint: const Text(
                   "Gate Type",
                 ),
@@ -1369,7 +1369,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     value: value,
                     child: Text(
                       value,
-                      style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
+                      style: TextStyle( ),
                     ),
                   );
                 }).toList(),
@@ -1390,7 +1390,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                           DropdownButtonFormField<String>(
                             value: r1.isNotEmpty ? r1 : null,
                             style: TextStyle(
-                                color: CupertinoColors.label, fontSize: 16,fontFamily: ConstantFonts.sfProMedium),
+                                color: CupertinoColors.label, fontSize: 16, ),
                             hint: const Text(
                               "R1",
                             ),
@@ -1425,7 +1425,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                 child: Text(
                                   value,
                                   style:  TextStyle(
-                                      fontFamily: ConstantFonts.sfProMedium
+                                       
                                   ),
                                 ),
                               );
@@ -1442,7 +1442,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                           DropdownButtonFormField<String>(
                             value: r2.isNotEmpty ? r2 : null,
                             style: TextStyle(
-                                color: CupertinoColors.label, fontSize: 16, fontFamily: ConstantFonts.sfProMedium),
+                                color: CupertinoColors.label, fontSize: 16,  ),
                             hint: const Text(
                               "R2",
                             ),
@@ -1477,7 +1477,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                 child: Text(
                                   value,
                                   style: TextStyle(
-                                      fontFamily: ConstantFonts.sfProMedium),
+                                       ),
                                 ),
                               );
                             }).toList(),
@@ -1498,7 +1498,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                           DropdownButtonFormField<String>(
                             value: r3.isNotEmpty ? r3 : null,
                             style: TextStyle(
-                                color: CupertinoColors.label, fontSize: 16, fontFamily: ConstantFonts.sfProMedium),
+                                color: CupertinoColors.label, fontSize: 16,  ),
                             hint: const Text(
                               "R3",
                             ),
@@ -1533,7 +1533,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                 child: Text(
                                   value,
                                   style: TextStyle(
-                                      fontFamily: ConstantFonts.sfProMedium),
+                                       ),
                                 ),
                               );
                             }).toList(),
@@ -1551,7 +1551,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                           DropdownButtonFormField<String>(
                             value: r4.isNotEmpty ? r4 : null,
                             style: TextStyle(
-                                color: CupertinoColors.label, fontSize: 16,fontFamily: ConstantFonts.sfProMedium),
+                                color: CupertinoColors.label, fontSize: 16, ),
                             hint: const Text(
                               "R4",
                             ),
@@ -1586,7 +1586,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                 child: Text(
                                   value,
                                   style: TextStyle(
-                                      fontFamily: ConstantFonts.sfProMedium),
+                                       ),
                                 ),
                               );
                             }).toList(),
@@ -1787,7 +1787,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               DropdownButtonFormField<String>(
                 value: portForwarding.isNotEmpty ? portForwarding : null,
                 style:
-                TextStyle(color: CupertinoColors.label, fontSize: 16, fontFamily: ConstantFonts.sfProMedium),
+                TextStyle(color: CupertinoColors.label, fontSize: 16,  ),
                 hint: const Text(
                   'Port Forwarding',
                 ),
@@ -1822,7 +1822,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     value: value,
                     child: Text(
                       value,
-                      style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
+                      style: TextStyle( ),
                     ),
                   );
                 }).toList(),
@@ -1836,7 +1836,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               DropdownButtonFormField<String>(
                 value: voiceConfig.isNotEmpty ? voiceConfig : null,
                 style:
-                TextStyle(color: CupertinoColors.label, fontSize: 16,fontFamily: ConstantFonts.sfProMedium),
+                TextStyle(color: CupertinoColors.label, fontSize: 16, ),
                 hint: const Text(
                   'Voice Config',
                 ),
@@ -1871,7 +1871,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     value: value,
                     child: Text(
                       value,
-                      style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
+                      style: TextStyle( ),
                     ),
                   );
                 }).toList(),
@@ -1920,7 +1920,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               DropdownButtonFormField<String>(
                 value: bSNL.isNotEmpty ? bSNL : null,
                 style:
-                TextStyle(color: CupertinoColors.label, fontSize: 16, fontFamily: ConstantFonts.sfProMedium),
+                TextStyle(color: CupertinoColors.label, fontSize: 16,  ),
                 hint: const Text(
                   'B_S_N_L',
                 ),
@@ -1955,7 +1955,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     value: value,
                     child: Text(
                       value,
-                      style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
+                      style: TextStyle( ),
                     ),
                   );
                 }).toList(),
@@ -2249,8 +2249,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 decoration: InputDecoration(
                   counterText: '',
                   hintText: 'Installation Date',
-                  hintStyle: TextStyle(color: Colors.grey, fontFamily: ConstantFonts.sfProMedium ),
-                  labelStyle: TextStyle(color: Colors.black, fontFamily: ConstantFonts.sfProMedium),
+                  hintStyle: TextStyle(color: Colors.grey,   ),
+                  labelStyle: TextStyle(color: Colors.black,  ),
                   border: myInputBorder(),
                   enabledBorder: myInputBorder(),
                   focusedBorder: myFocusBorder(),
@@ -2300,11 +2300,11 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     DropdownButtonFormField<String>(
                       value: needSmartHome.isNotEmpty ? needSmartHome : null,
                       style: TextStyle(
-                          color: CupertinoColors.label, fontSize: 8, fontFamily: ConstantFonts.sfProMedium),
+                          color: CupertinoColors.label, fontSize: 8,  ),
                       hint: Text(
                         "Need Smart Home",
                         style: TextStyle(
-                            fontFamily: ConstantFonts.sfProMedium
+                             
                         ),
                       ),
                       decoration: InputDecoration(
@@ -2314,7 +2314,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         hintStyle: TextStyle(
                             fontSize: 8,
                             color: Colors.black.withOpacity(.2),
-                            fontFamily: ConstantFonts.sfProMedium
+                             
                         ),
                         fillColor: Colors.transparent,
                         focusColor: Colors.transparent,
@@ -2339,7 +2339,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                           value: value,
                           child: Text(
                             value,
-                            style: TextStyle(fontSize: 10,fontFamily: ConstantFonts.sfProMedium),
+                            style: TextStyle(fontSize: 10, ),
                           ),
                         );
                       }).toList(),
@@ -2357,11 +2357,11 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     DropdownButtonFormField<String>(
                       value: needGate.isNotEmpty ? needGate : null,
                       style: TextStyle(
-                          color: CupertinoColors.label, fontSize: 10,fontFamily: ConstantFonts.sfProMedium),
+                          color: CupertinoColors.label, fontSize: 10, ),
                       hint: Text(
                         "Need Gate",
                         style: TextStyle(
-                          fontFamily: ConstantFonts.sfProMedium,
+                         
                         ),
                       ),
                       decoration: InputDecoration(
@@ -2394,7 +2394,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                           value: value,
                           child: Text(
                             value,
-                            style: TextStyle(fontFamily: ConstantFonts.sfProMedium,fontWeight: FontWeight.w600),
+                            style: TextStyle(fontWeight: FontWeight.w600),
                           ),
                         );
                       }).toList(),
@@ -2413,11 +2413,11 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     DropdownButtonFormField<String>(
                       value: needAjax.isNotEmpty ? needAjax : null,
                       style: TextStyle(
-                          color: CupertinoColors.label, fontSize: 10, fontFamily: ConstantFonts.sfProMedium),
+                          color: CupertinoColors.label, fontSize: 10,  ),
                       hint: Text(
                         "Need Ajax",
                         style: TextStyle(
-                            fontFamily: ConstantFonts.sfProMedium
+                             
                         ),
                       ),
                       decoration: InputDecoration(
@@ -2450,7 +2450,6 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                           value: value,
                           child: Text(
                             value,
-                            style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
                           ),
                         );
                       }).toList(),
@@ -2468,12 +2467,9 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               DropdownButtonFormField<String>(
                 value: needApp.isNotEmpty ? needApp : null,
                 style: TextStyle(
-                    color: CupertinoColors.label, fontSize: 16, fontFamily: ConstantFonts.sfProMedium),
+                    color: CupertinoColors.label, fontSize: 16,  ),
                 hint: Text(
                   "Need App",
-                  style: TextStyle(
-                      fontFamily: ConstantFonts.sfProMedium
-                  ),
                 ),
                 decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(10.0),
@@ -2505,7 +2501,6 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     value: value,
                     child: Text(
                       value,
-                      style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
                     ),
                   );
                 }).toList(),
@@ -2518,7 +2513,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
             if (needSmartHome == 'Yes' || needApp == 'Yes')
               Column(
                 children: [
-                  Text('App Details', style: TextStyle(fontFamily: ConstantFonts.sfProMedium),),
+                  Text('App Details', style: TextStyle( ),),
 
                   /// Email id
                   TextFiledWidget(
@@ -2585,7 +2580,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
         Text(
           "  $title",
           style: TextStyle(
-            fontFamily: ConstantFonts.sfProMedium,
+           
             fontSize: 15,
           ),
         ),
@@ -2652,7 +2647,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       context: context,
       builder: (_) => AlertDialog(
         // title: const Text('Enter Person Name'),
-        title: Text(title, style: TextStyle(fontFamily: ConstantFonts.sfProMedium),),
+        title: Text(title, style: TextStyle( ),),
         content: SizedBox(
           height: 150,
           child: Column(
@@ -2696,7 +2691,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   'Add',
                   style: TextStyle(
                       color: Colors.black,
-                      fontFamily: ConstantFonts.sfProMedium,
+                     
                       fontSize: 18),
                 ),
               ),

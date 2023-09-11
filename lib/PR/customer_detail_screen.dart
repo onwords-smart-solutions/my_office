@@ -151,7 +151,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         title: Text(widget.customerInfo['name'].toString(),
             style: TextStyle(
                 color: Colors.white,
-                fontFamily: ConstantFonts.sfProMedium,
+               
                 fontSize: 18.0)),
         titleSpacing: 0.0,
         actions: [
@@ -303,7 +303,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
               style: TextStyle(
                   color: Colors.black,
                   fontSize: 17,
-                  fontFamily: ConstantFonts.sfProMedium),
+                   ),
               icon: const Icon(
                 Icons.arrow_drop_down_circle_outlined,
               ),
@@ -345,7 +345,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                           child: Text(
                             widget.prStaffNames[index],
                             style: TextStyle(
-                                fontFamily: ConstantFonts.sfProMedium,
+                               
                                 fontSize: 15),
                           ),
                           onTap: () {
@@ -362,7 +362,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                         Text(
                           'Lead in charge -',
                           style: TextStyle(
-                            fontFamily: ConstantFonts.sfProMedium,
+                           
                             fontSize: 19,
                             color: Colors.purple,
                           ),
@@ -379,7 +379,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                           child: Text(
                             leadName,
                             style: TextStyle(
-                              fontFamily: ConstantFonts.sfProMedium,
+                             
                               fontSize: 16,
                             ),
                           ),
@@ -461,7 +461,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           cursorColor: Colors.purple,
           scrollPhysics: const ClampingScrollPhysics(),
           style:
-              TextStyle(fontFamily: ConstantFonts.sfProMedium, fontSize: 14.0),
+              TextStyle( fontSize: 14.0),
         ),
       ),
       contents: Container(
@@ -474,7 +474,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           cursorColor: Colors.purple,
           scrollPhysics: const ClampingScrollPhysics(),
           style:
-              TextStyle(fontFamily: ConstantFonts.sfProMedium, fontSize: 14.0),
+              TextStyle( fontSize: 14.0),
         ),
       ),
       node: TimelineNode(
@@ -493,7 +493,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
       var snackBar = SnackBar(
         content: Text(
           'Select one state to change',
-          style: TextStyle(fontSize: 17, fontFamily: ConstantFonts.sfProMedium),
+          style: TextStyle(fontSize: 17,  ),
           textAlign: TextAlign.center,
         ),
         backgroundColor: Colors.red,
@@ -517,7 +517,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
       var snackBar = SnackBar(
         content: Text(
           'Select a PR name to change',
-          style: TextStyle(fontSize: 17, fontFamily: ConstantFonts.sfProMedium),
+          style: TextStyle(fontSize: 17,  ),
           textAlign: TextAlign.center,
         ),
         backgroundColor: Colors.red,

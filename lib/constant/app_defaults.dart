@@ -4,6 +4,7 @@ import 'package:my_office/Account/account_screen.dart';
 import 'package:my_office/PR/invoice_generator/screens/client_detials.dart';
 import 'package:my_office/PR/products/scan_qr.dart';
 import 'package:my_office/leave_details/leave_details.dart';
+import 'package:my_office/models/staff_access_model.dart';
 import 'package:my_office/models/staff_model.dart';
 import '../Absentees/absentees.dart';
 import '../PR/invoice_generator/quotation_template/view/home_screen.dart';
@@ -34,203 +35,170 @@ import '../virtual_attendance/view_attendance.dart';
 import '../work_details/work_complete.dart';
 import '../work_entry/work_entry.dart';
 
+const serverKey =
+    'AAAAhAGZ-Jw:APA91bFk_GTSGX1LAj-ZxOW7DQn8Q69sYLStSB8lukQDlxBMmugrkQCsgIvuFm0fU5vBbVB5SATjaoO0mrCdsJm03ZEEZtaRdH-lQ9ZmX5RpYuyLytWyHVH7oDu-6LaShqrVE5vYHCqK';
+
+class MenuTitle {
+  static const String workEntry = 'Work Entry';
+  static const String refreshment = 'Refreshment';
+  static const String leavePortal = 'Leave Portal';
+  static const String suggestion = 'Suggestions';
+  static const String workDetail = 'Work Detail';
+  static const String foodCount = 'Food Count';
+  static const String leaveApproval = 'Leave Approval';
+  static const String searchLead = 'Search Leads';
+  static const String prVisit = 'PR Visit';
+  static const String prVisitCheck = 'PR Visit Check';
+  static const String createInvoice = 'Create Invoice';
+  static const String finance = 'Finance';
+  static const String viewSuggestions = 'View Suggestions';
+  static const String prWorkDone = 'PR WorkDone';
+  static const String attendance = 'Attendance';
+  static const String createProduct = 'Create Product';
+  static const String salesPoint = 'Sales Point';
+  static const String prWorkDetails = 'PR Work Detail';
+  static const String scanQR = 'Scan QR';
+  static const String prReminder = 'PR Reminder';
+  static const String leaveDetails = 'Leave Detail';
+  static const String createLead = 'Create Lead';
+  static const String quotationTemplate = 'Quotation Template';
+  static const String staffDetail = 'Staff Detail';
+  static const String installationPDF = 'Installation PDF';
+  static const String proxyAttendance = 'Proxy Attendance';
+}
+
 class AppDefaults {
-  static List<String> gridButtonsNames = [
-    'Work entry',
-    'Work details',
-    'Refreshment',
-    'Food count',
-    'Leave apply form',
-    // 'Onyx',
-    // 'Absent details',
-    'Leave approval',
-    'Search leads',
-    'Visit',
-    'Visit check',
-    'Invoice generator',
-    'Finance',
-    'Suggestions',
-    // 'Virtual attendance',
-    'View suggestions',
-    // 'Check Virtual entry',
-    // 'Late entry',
-    'PR Work done',
-    'Attendance',
-    'Create products',
-    'Sales points',
-    'PR Work details',
-    'Scan QR',
-    'PR Reminder',
-    'Leave details',
-    'Create leads',
-    'Quotation template',
-    'Staff details',
-    'Installation pdf',
-    'Proxy attendance',
+  static List<StaffAccessModel> allAccess = [
+    StaffAccessModel(title: MenuTitle.workEntry, image: 'assets/work_entry.png'),
+    StaffAccessModel(title: MenuTitle.refreshment, image: 'assets/refreshment.png'),
+    StaffAccessModel(title: MenuTitle.leavePortal, image: 'assets/leave_apply.png'),
+    StaffAccessModel(title: MenuTitle.suggestion, image: 'assets/suggestions.png'),
+    StaffAccessModel(title: MenuTitle.workDetail, image: 'assets/work_details.png'),
+    StaffAccessModel(title: MenuTitle.foodCount, image: 'assets/food_count.png'),
+    StaffAccessModel(title: MenuTitle.leaveApproval, image: 'assets/leave_approval.png'),
+    StaffAccessModel(title: MenuTitle.searchLead, image: 'assets/search_leads.png'),
+    StaffAccessModel(title: MenuTitle.prVisit, image: 'assets/visit.png'),
+    StaffAccessModel(title: MenuTitle.prVisitCheck, image: 'assets/visit_check.png'),
+    StaffAccessModel(title: MenuTitle.createInvoice, image: 'assets/invoice.png'),
+    StaffAccessModel(title: MenuTitle.finance, image: 'assets/finance.png'),
+    StaffAccessModel(title: MenuTitle.viewSuggestions, image: 'assets/view_suggestions.png'),
+    StaffAccessModel(title: MenuTitle.prWorkDone, image: 'assets/pr_points.png'),
+    StaffAccessModel(title: MenuTitle.attendance, image: 'assets/virtual_attendance.png'),
+    StaffAccessModel(title: MenuTitle.createProduct, image: 'assets/new_products.png'),
+    StaffAccessModel(title: MenuTitle.salesPoint, image: 'assets/points_calculation.png'),
+    StaffAccessModel(title: MenuTitle.prWorkDetails, image: 'assets/pr_work_details.png'),
+    StaffAccessModel(title: MenuTitle.scanQR, image: 'assets/qr_scanner_points.png'),
+    StaffAccessModel(title: MenuTitle.prReminder, image: 'assets/reminder.png'),
+    StaffAccessModel(title: MenuTitle.leaveDetails, image: 'assets/leave_details.png'),
+    StaffAccessModel(title: MenuTitle.createLead, image: 'assets/create_leads.png'),
+    StaffAccessModel(title: MenuTitle.quotationTemplate, image: 'assets/quotation_template.png'),
+    StaffAccessModel(title: MenuTitle.staffDetail, image: 'assets/staff_details.png'),
+    StaffAccessModel(title: MenuTitle.installationPDF, image: 'assets/installation_image.png'),
+    StaffAccessModel(title: MenuTitle.proxyAttendance, image: 'assets/proxy_attendance.png'),
   ];
 
-  static List<String> gridButtonPics = [
-    'assets/work_entry.png',
-    'assets/work_details.png',
-    'assets/refreshment.png',
-    'assets/food_count.png',
-    'assets/leave_apply.png',
-    // 'assets/onxy.png',
-    // 'assets/absent_details.png',
-    'assets/leave_approval.png',
-    'assets/search_leads.png',
-    'assets/visit.png',
-    'assets/visit_check.png',
-    'assets/invoice.png',
-    'assets/finance.png',
-    'assets/suggestions.png',
-    // 'assets/virtual_attendance.png',
-    'assets/view_suggestions.png',
-    // 'assets/view_attendance.png',
-    // 'assets/late_entry.png',
-    'assets/pr_points.png',
-    'assets/check_entry.png',
-    'assets/new_products.png',
-    'assets/points_calculation.png',
-    'assets/pr_work_details.png',
-    'assets/qr_scanner_points.png',
-    'assets/reminder.png',
-    'assets/leave_details.png',
-    'assets/create_leads.png',
-    'assets/quotation_template.png',
-    'assets/staff_details.png',
-    'assets/installation_image.png',
-    'assets/proxy_attendance.png',
-  ];
-
-  Widget getPage(String buttonName, StaffModel staffInfo) {
-    Widget page = AccountScreen(staffDetails: staffInfo);
-    switch (buttonName) {
-      case 'Work entry':
+  static Widget getPage(String title, StaffModel staffInfo) {
+    Widget page = const AccountScreen();
+    switch (title) {
+      case MenuTitle.workEntry:
         page = WorkEntryScreen(
           userId: staffInfo.uid,
           staffName: staffInfo.name,
         );
         break;
-      case 'Work details':
+      case MenuTitle.workDetail:
         page = WorkCompleteViewScreen(
           userDetails: staffInfo,
         );
         break;
-      case 'Refreshment':
+      case MenuTitle.refreshment:
         page = RefreshmentScreen(
           uid: staffInfo.uid,
           name: staffInfo.name,
         );
         break;
-      case 'Food count':
+      case MenuTitle.foodCount:
         page = const FoodCountScreen();
         break;
-      case 'Leave apply form':
-        page = LeaveApplyScreen(
-          name: staffInfo.name,
-          uid: staffInfo.uid,
-          department: staffInfo.department,
-        );
+      case MenuTitle.leavePortal:
+        page = const LeaveApplyScreen();
         break;
-      // case 'Onyx':
-      //   page = const AnnouncementScreen();
-      //   break;
-      // case 'Absent details':
-      //   page = const AbsenteeScreen();
-      //   break;
-      case 'Leave approval':
+
+      case MenuTitle.leaveApproval:
         page = LeaveApprovalScreen(
           uid: staffInfo.uid,
           name: staffInfo.name,
           department: staffInfo.department,
         );
         break;
-      case 'Search leads':
+      case MenuTitle.searchLead:
         page = SearchLeadsScreen(staffInfo: staffInfo);
         break;
-      case 'Visit':
+      case MenuTitle.prVisit:
         page = const VisitFromScreen();
         break;
-      case 'Visit check':
+      case MenuTitle.prVisitCheck:
         page = const VisitCheckScreen();
         break;
-      case 'Invoice generator':
+      case MenuTitle.createInvoice:
         page = const ClientDetails();
         break;
-      case 'Finance':
+      case MenuTitle.finance:
         page = const FinanceScreen();
         break;
-      case 'Suggestions':
-        page = SuggestionScreen(
-          uid: staffInfo.uid,
-          name: staffInfo.name,
-        );
+      case MenuTitle.suggestion:
+        page = const SuggestionScreen();
         break;
-      // case 'Virtual attendance':
-      //   page = AttendanceScreen(
-      //     uid: staffInfo.uid,
-      //     name: staffInfo.name,
-      //   );
-      //   break;
-      case 'View suggestions':
+
+      case MenuTitle.viewSuggestions:
         page = const ViewSuggestions();
         break;
-      // case 'Check Virtual entry':
-      //   page = ViewAttendanceScreen(
-      //     userId: staffInfo.uid,
-      //     staffName: staffInfo.name,
-      //   );
-      //   break;
-      // case 'Late entry':
-      //   page = LateEntryScreen(
-      //     userId: staffInfo.uid,
-      //     staffName: staffInfo.name,
-      //   );
-        break;
-      case 'PR Work done':
+
+      case MenuTitle.prWorkDone:
         page = PrWorkDone(
           userId: staffInfo.uid,
           staffName: staffInfo.name,
         );
         break;
-      case 'Attendance':
+      case MenuTitle.attendance:
         page = CheckEntryScreen(
           userId: staffInfo.uid,
           staffName: staffInfo.name,
         );
         break;
-      case 'Create products':
+      case MenuTitle.createProduct:
         page = const CreateNewProduct();
         break;
-      case 'Sales points':
+      case MenuTitle.salesPoint:
         page = const PointCalculationsScreen();
         break;
-      case 'PR Work details':
+      case MenuTitle.prWorkDetails:
         page = const PrWorkDetails();
         break;
-      case 'Scan QR':
+      case MenuTitle.scanQR:
         page = const ScanQRScreen();
         break;
-      case 'PR Reminder':
-        page =  ReminderScreen(staffInfo: staffInfo,);
+      case MenuTitle.prReminder:
+        page = ReminderScreen(
+          staffInfo: staffInfo,
+        );
         break;
-      case 'Leave details':
+      case MenuTitle.leaveDetails:
         page = const LeaveDetails();
         break;
-      case 'Create leads':
+      case MenuTitle.createLead:
         page = CreateLeads(staffName: staffInfo.name);
         break;
-      case 'Quotation template':
+      case MenuTitle.quotationTemplate:
         page = const Client1Details();
         break;
-      case 'Staff details':
+      case MenuTitle.staffDetail:
         page = const StaffDetails();
         break;
-      case 'Installation pdf':
+      case MenuTitle.installationPDF:
         page = const InstallationDetails();
         break;
-      case 'Proxy attendance':
+      case MenuTitle.proxyAttendance:
         page = ProxyAttendance(
           uid: staffInfo.uid,
           name: staffInfo.name,

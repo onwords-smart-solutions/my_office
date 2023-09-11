@@ -91,12 +91,12 @@ class _ScanQRScreenState extends State<ScanQRScreen> {
                           'PR point is  : $note',
                           style: TextStyle(
                               fontSize: 22,
-                              fontFamily: ConstantFonts.sfProMedium,
+                             
                               color: CupertinoColors.activeOrange,),
                         )
                       : Text('Scan a QR code', style: TextStyle(
                       fontSize: 20,
-                      fontFamily: ConstantFonts.sfProMedium,
+                     
                       color: Colors.white,
                   ),
                   ),

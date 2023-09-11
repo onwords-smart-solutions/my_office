@@ -114,7 +114,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     // final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Product Details',style: TextStyle(fontFamily: ConstantFonts.sfProMedium,
+        title: const Text('Product Details',style: TextStyle(
         fontSize: 22,
           color: Colors.white
         ),),
@@ -152,7 +152,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         Text(manualEntry ? 'Change to DropDown' : 'Change to Manual Entry',
                         style: TextStyle(
                           fontSize: 17,
-                          fontFamily: ConstantFonts.sfProMedium,
+                         
                           color: CupertinoColors.systemPurple
                         ),),
                         const SizedBox(
@@ -229,7 +229,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     ? '  Enter Product Name\n'  : '  Select Product\n',
                 style: TextStyle(
                     fontSize: 17,
-                    fontFamily: ConstantFonts.sfProMedium),
+                     ),
               ),
               isManualEntry
                   ? TextFiledWidget(
@@ -275,12 +275,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                     searchDecoration: InputDecoration(
                       hintText: "Select Product",
                       hintStyle: TextStyle(
-                        fontFamily: ConstantFonts.sfProMedium,
+                       
                       ),
                     ),
 
                     listTextStyle: TextStyle(
-                        fontFamily: ConstantFonts.sfProMedium,
+                       
                         fontSize: 16),
                     validator: (value) {
                       if (value == null) {

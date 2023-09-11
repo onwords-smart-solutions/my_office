@@ -234,7 +234,7 @@ class _CreateNewProductState extends State<CreateNewProduct> {
                 border: InputBorder.none,
                 hintText: name,
                 hintStyle: TextStyle(
-                    fontFamily: ConstantFonts.sfProMedium,
+                   
                      fontSize: 16,
                      color: Colors.black54),
               ),

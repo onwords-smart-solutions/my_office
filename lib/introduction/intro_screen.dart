@@ -53,7 +53,7 @@ class IntroductionScreen extends StatelessWidget {
           GradientText(
             'Manage your daily',
             style: TextStyle(
-              fontFamily: ConstantFonts.sfProMedium,
+
               color: ConstantColor.blackColor,
               fontSize: height * 0.040,
             ),
@@ -67,7 +67,7 @@ class IntroductionScreen extends StatelessWidget {
           GradientText(
             'works with our',
             style: TextStyle(
-              fontFamily: ConstantFonts.sfProMedium,
+
               color: ConstantColor.blackColor,
               fontSize: height * 0.040,
             ),
@@ -81,7 +81,7 @@ class IntroductionScreen extends StatelessWidget {
           GradientText(
             'Work Manager',
             style: TextStyle(
-              fontFamily: ConstantFonts.sfProMedium,
+
               color: ConstantColor.blackColor,
               fontSize: height * 0.040,
             ),
@@ -95,7 +95,7 @@ class IntroductionScreen extends StatelessWidget {
           GradientText(
             'from here!!',
             style: TextStyle(
-              fontFamily: ConstantFonts.sfProMedium,
+
               color: ConstantColor.blackColor,
               fontSize: height * 0.040,
             ),

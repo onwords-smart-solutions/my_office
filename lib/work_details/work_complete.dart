@@ -74,7 +74,6 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                                 Text(
                                   'No work done submitted yet!!',
                                   style: TextStyle(
-                                    fontFamily: ConstantFonts.sfProMedium,
                                     color: ConstantColor.blackColor,
                                     fontSize: 20,
                                   ),
@@ -123,7 +122,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                                         ),
                                         subtitle: Text(
                                           workReports[index].department,
-                                          style: TextStyle(fontFamily: ConstantFonts.sfProMedium, fontSize: 13.0),
+                                          style: TextStyle(fontSize: 13.0),
                                         ),
                                         trailing: Icon(
                                           Icons.arrow_forward_ios_rounded,
@@ -190,7 +189,6 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                   percentage: percentage,
                 ),
               );
-
             }
             _workReport.value.add(
               WorkDoneModel(

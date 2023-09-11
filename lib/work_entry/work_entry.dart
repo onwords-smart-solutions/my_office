@@ -281,7 +281,9 @@ class _WorkEntryScreenState extends State<WorkEntryScreen> with TickerProviderSt
       labelColor: Colors.white,
       unselectedLabelColor: ConstantColor.blackColor,
       automaticIndicatorColorAdjustment: true,
-      labelStyle: TextStyle(fontSize: 17, fontFamily: ConstantFonts.sfProMedium),
+      labelStyle: TextStyle(
+        fontSize: 17,
+      ),
       tabs: [
         Container(
           height: height * 0.05,
@@ -292,7 +294,6 @@ class _WorkEntryScreenState extends State<WorkEntryScreen> with TickerProviderSt
               'Work Entry',
               style: TextStyle(
                 fontSize: 17,
-                fontFamily: ConstantFonts.sfProMedium,
               ),
             ),
           ),
@@ -306,7 +307,6 @@ class _WorkEntryScreenState extends State<WorkEntryScreen> with TickerProviderSt
               'Work History',
               style: TextStyle(
                 fontSize: 17,
-                fontFamily: ConstantFonts.sfProMedium,
               ),
             ),
           ),
@@ -395,15 +395,16 @@ class _WorkEntryScreenState extends State<WorkEntryScreen> with TickerProviderSt
                                   inputFormatters: [
                                     LengthLimitingTextInputFormatter(3),
                                   ],
-                                  style:
-                                      TextStyle(height: 1, color: Colors.black, fontFamily: ConstantFonts.sfProMedium),
+                                  style: TextStyle(
+                                    height: 1,
+                                    color: Colors.black,
+                                  ),
                                   controller: _percentController,
                                   keyboardType: TextInputType.number,
                                   textInputAction: TextInputAction.done,
                                   decoration: InputDecoration(
                                     // fillColor: const Color(0xffFBF8FF),
-                                    hintStyle: TextStyle(
-                                        fontFamily: ConstantFonts.sfProMedium, fontSize: 16, color: Colors.black54
+                                    hintStyle: TextStyle(fontSize: 16, color: Colors.black54
                                         // (0xffFBF8FF)
                                         ),
                                     contentPadding: const EdgeInsets.all(20),
@@ -423,7 +424,9 @@ class _WorkEntryScreenState extends State<WorkEntryScreen> with TickerProviderSt
                                   },
                                 ),
                                 btnOkText: 'Done',
-                                buttonsTextStyle: TextStyle(fontSize: 17, fontFamily: ConstantFonts.sfProMedium),
+                                buttonsTextStyle: TextStyle(
+                                  fontSize: 17,
+                                ),
                                 btnOkOnPress: () {
                                   setState(() {
                                     // debugPrint(_percentController.text.toString());
@@ -451,15 +454,11 @@ class _WorkEntryScreenState extends State<WorkEntryScreen> with TickerProviderSt
                                 const Icon(Icons.percent),
                                 Text(
                                   _percentController.text.isEmpty ? '--' : _percentController.text,
-                                  style: TextStyle(
-                                    fontFamily: ConstantFonts.sfProMedium,
-                                  ),
+                                  style: TextStyle(),
                                 ),
                                 Text(
                                   'Percentage',
-                                  style: TextStyle(
-                                    fontFamily: ConstantFonts.sfProMedium,
-                                  ),
+                                  style: TextStyle(),
                                 )
                               ],
                             ),
@@ -652,7 +651,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen> with TickerProviderSt
         : Center(
             child: Text(
               'No Works Completed!!',
-              style: TextStyle(fontFamily: ConstantFonts.sfProMedium, color: Colors.black, fontSize: 17),
+              style: TextStyle(color: Colors.black, fontSize: 17),
             ),
           );
   }
@@ -668,7 +667,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen> with TickerProviderSt
       linearGradient: const LinearGradient(colors: [Color(0xff21d4fd), Color(0xffb721ff)]),
       center: Text(
         percentage,
-        style: TextStyle(fontFamily: ConstantFonts.sfProMedium, fontSize: 17),
+        style: TextStyle(fontSize: 17),
       ),
     );
   }
@@ -678,7 +677,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen> with TickerProviderSt
       padding: const EdgeInsets.all(8),
       child: SelectableText(
         name,
-        style: TextStyle(fontSize: size, fontFamily: ConstantFonts.sfProMedium, color: ConstantColor.blackColor),
+        style: TextStyle(fontSize: size, color: ConstantColor.blackColor),
       ),
     );
   }
@@ -704,7 +703,10 @@ class _WorkEntryScreenState extends State<WorkEntryScreen> with TickerProviderSt
         onTap: () {
           setState(() {});
         },
-        style: TextStyle(fontSize: height * 0.02, color: Colors.black, fontFamily: ConstantFonts.sfProMedium),
+        style: TextStyle(
+          fontSize: height * 0.02,
+          color: Colors.black,
+        ),
         decoration: InputDecoration(
           fillColor: Colors.white.withOpacity(0.5),
           border: InputBorder.none,
@@ -717,7 +719,9 @@ class _WorkEntryScreenState extends State<WorkEntryScreen> with TickerProviderSt
               });
             },
           ),
-          hintStyle: TextStyle(color: Colors.black.withOpacity(0.5), fontFamily: ConstantFonts.sfProMedium),
+          hintStyle: TextStyle(
+            color: Colors.black.withOpacity(0.5),
+          ),
           filled: true,
           // fillColor: Colors.transparent,
           contentPadding: const EdgeInsets.only(left: 14.0, bottom: 6.0, top: 8.0),
@@ -747,7 +751,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen> with TickerProviderSt
           child: Center(
             child: Text(
               message,
-              style: TextStyle(fontFamily: ConstantFonts.sfProMedium, fontSize: 17),
+              style: TextStyle(fontSize: 17),
             ),
           ),
         ),
@@ -794,13 +798,12 @@ class ButtonWidget extends StatelessWidget {
             icon,
             Text(
               val,
-              style: TextStyle(fontFamily: ConstantFonts.sfProMedium, color: Colors.black),
+              style: const TextStyle(color: Colors.black),
             ),
             Text(
               title,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.black,
-                fontFamily: ConstantFonts.sfProMedium,
               ),
             ),
           ],

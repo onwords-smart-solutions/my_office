@@ -33,7 +33,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Product Table',style: TextStyle(fontSize: 22,color: Colors.white, fontFamily: ConstantFonts.sfProMedium),),
+        title: Text('Product Table',style: TextStyle(fontSize: 22,color: Colors.white,  ),),
         centerTitle: true,
         elevation: 0,
         backgroundColor: ConstantColor.backgroundColor,
@@ -115,7 +115,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                     maxFontSize: 25,
                     minFontSize: 15,
                     style: TextStyle(
-                      fontFamily: ConstantFonts.sfProMedium,
+                     
                       fontSize: 16,
                     ),
                   ),
@@ -132,7 +132,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         'Tap on the product to delete..',
                         style: TextStyle(
                           fontSize: 15,
-                          fontFamily: ConstantFonts.sfProMedium,
+                         
                           color: Colors.black.withOpacity(0.4),
                         ),
                       ),
@@ -191,7 +191,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
             child: Text(
               title,
               style: TextStyle(
-                  fontFamily: ConstantFonts.sfProMedium,
+                 
                   fontSize: 17),
             ),
           ),
@@ -214,7 +214,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
           (cell) {
             final style = TextStyle(
               fontWeight: isHeader ? FontWeight.bold : FontWeight.w600,
-              fontFamily: ConstantFonts.sfProMedium,
+             
               fontSize: 15
             );
             return Padding(
@@ -247,7 +247,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   child: Text(
                     'Do you want to delete this product?',
                     style: TextStyle(
-                        fontFamily: ConstantFonts.sfProMedium,
+                       
                         fontSize: 17),
                   ),
                 ),

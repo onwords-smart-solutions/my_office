@@ -168,7 +168,7 @@ class _PrWorkDoneState extends State<PrWorkDone> {
                         style: TextStyle(
                           color: ConstantColor.headingTextColor,
                           fontSize: 17,
-                          fontFamily: ConstantFonts.sfProMedium,
+                         
                         ),
                       ),
                     ),
@@ -195,7 +195,7 @@ class _PrWorkDoneState extends State<PrWorkDone> {
                         style: TextStyle(
                           color: ConstantColor.headingTextColor,
                           fontSize: 17,
-                          fontFamily: ConstantFonts.sfProMedium,
+                         
                         ),
                       ),
                     ),
@@ -222,7 +222,7 @@ class _PrWorkDoneState extends State<PrWorkDone> {
                         style: TextStyle(
                           color: ConstantColor.headingTextColor,
                           fontSize: 17,
-                          fontFamily: ConstantFonts.sfProMedium,
+                         
                         ),
                       ),
                     ),
@@ -249,7 +249,7 @@ class _PrWorkDoneState extends State<PrWorkDone> {
                         style: TextStyle(
                           color: ConstantColor.headingTextColor,
                           fontSize: 17,
-                          fontFamily: ConstantFonts.sfProMedium,
+                         
                         ),
                       ),
                     ),
@@ -276,7 +276,7 @@ class _PrWorkDoneState extends State<PrWorkDone> {
                         style: TextStyle(
                           color: ConstantColor.headingTextColor,
                           fontSize: 17,
-                          fontFamily: ConstantFonts.sfProMedium,
+                         
                         ),
                       ),
                     ),
@@ -303,7 +303,7 @@ class _PrWorkDoneState extends State<PrWorkDone> {
                         style: TextStyle(
                           color: ConstantColor.headingTextColor,
                           fontSize: 17,
-                          fontFamily: ConstantFonts.sfProMedium,
+                         
                         ),
                       ),
                     ),

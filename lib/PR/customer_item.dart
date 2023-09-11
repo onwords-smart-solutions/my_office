@@ -305,7 +305,7 @@ class _CustomerItemState extends State<CustomerItem> {
         child: Text(
           field,
           style:
-              TextStyle(fontFamily: ConstantFonts.sfProMedium, fontSize: 14.0),
+              TextStyle(fontSize: 14.0),
         ),
       ),
       contents: Container(
@@ -319,7 +319,7 @@ class _CustomerItemState extends State<CustomerItem> {
                   Text(
                     '$value     ',
                     style: TextStyle(
-                      fontFamily: ConstantFonts.sfProMedium,
+                     
                       fontSize: 14.0,
                     ),
                   ),
@@ -332,7 +332,7 @@ class _CustomerItemState extends State<CustomerItem> {
             : Text(
                 value,
                 style: TextStyle(
-                    fontFamily: ConstantFonts.sfProMedium, fontSize: 14.0),
+                    fontSize: 14.0),
               ),
       ),
       node: TimelineNode(

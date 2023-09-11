@@ -106,7 +106,7 @@ class _FoodCountScreenState extends State<FoodCountScreen> {
                                 Text(
                                   'No list for selected month',
                                   style: TextStyle(
-                                    fontFamily: ConstantFonts.sfProMedium,
+
                                     color: ConstantColor.blackColor,
                                     fontSize: 20,
                                   ),
@@ -151,7 +151,7 @@ class _FoodCountScreenState extends State<FoodCountScreen> {
                                         ),
                                         subtitle: Text(
                                           foodList[index].department,
-                                          style: TextStyle(fontFamily: ConstantFonts.sfProMedium, fontSize: 13.0),
+                                          style: TextStyle(  fontSize: 13.0),
                                         ),
                                         trailing: Text(
                                           'Count : ${foodList[index].foodDates.length}',
@@ -184,7 +184,7 @@ class _FoodCountScreenState extends State<FoodCountScreen> {
             return PopupMenuItem(
               child: Text(
                 month.keys.toList()[index],
-                style: TextStyle(fontFamily: ConstantFonts.sfProMedium, fontSize: 15),
+                style: TextStyle(  fontSize: 15),
               ),
               onTap: () {
                 _currentMonth.value = month.keys.toList()[index];

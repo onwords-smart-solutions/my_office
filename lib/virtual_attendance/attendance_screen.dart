@@ -185,14 +185,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                           'Your Entry has already Registered!!!',
                           style: TextStyle(
                             fontSize: 20,
-                            fontFamily: ConstantFonts.sfProMedium,
+                           
                           ),
                         ),
                         Text(
                           'Leave the Screen...',
                           style: TextStyle(
                             fontSize: 20,
-                            fontFamily: ConstantFonts.sfProMedium,
+                           
                           ),
                         ),
                       ],
@@ -214,7 +214,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 18,
-            fontFamily: ConstantFonts.sfProMedium,
+           
           ),
         ),
         backgroundColor: Colors.red,
@@ -246,7 +246,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 17,
-            fontFamily: ConstantFonts.sfProMedium,
+           
           ),
         ),
         backgroundColor: Colors.green,
@@ -274,7 +274,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             scrollPhysics: const BouncingScrollPhysics(),
             maxLines: 3,
             style: TextStyle(
-              fontFamily: ConstantFonts.sfProMedium,
+             
               fontSize: 16,
             ),
             decoration: InputDecoration(
@@ -286,7 +286,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               hintStyle: TextStyle(
                   color: Colors.grey.shade600,
                   fontSize: 16,
-                  fontFamily: ConstantFonts.sfProMedium),
+                   ),
             ),
             onChanged: (value) {
               setState(() {});

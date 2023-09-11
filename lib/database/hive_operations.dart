@@ -13,10 +13,44 @@ class HiveOperations with ChangeNotifier {
   }
 
 //GETTING STAFF DATA
-  Future<StaffModel> getStaffDetail() async {
+  Future<StaffModel?> getStaffDetail() async {
     final staff = await Hive.openBox<StaffModel>('user_db');
-    final data = staff.values.first;
-    return data;
+    if (staff.isNotEmpty) {
+      final data = staff.values.first;
+      return data;
+    }
+    return null;
+  }
+
+  Future<void> updateStaffImage(String url) async {
+    final box = await Hive.openBox<StaffModel>('user_db');
+    final staff = box.getAt(0);
+    if (staff != null) {
+      staff.profilePic = url;
+      await box.deleteAt(0);
+      await box.add(staff);
+    }
+  }
+
+
+  Future<void> updateStaffUniqueId(String id) async {
+    final box = await Hive.openBox<StaffModel>('user_db');
+    final staff = box.getAt(0);
+    if (staff != null) {
+      staff.uniqueId = id;
+      await box.deleteAt(0);
+      await box.add(staff);
+    }
+  }
+
+  Future<void> updateStaffDOB(int timeStamp) async {
+    final box = await Hive.openBox<StaffModel>('user_db');
+    final staff = box.getAt(0);
+    if (staff != null) {
+      staff.dob = timeStamp;
+      await box.deleteAt(0);
+      await box.add(staff);
+    }
   }
 
 //CLEARING DATA

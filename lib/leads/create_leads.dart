@@ -71,7 +71,7 @@ class _CreateLeadsState extends State<CreateLeads> {
                     child: TextField(
                       controller: name,
                       keyboardType: TextInputType.name,
-                      style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
+                      style: TextStyle( ),
                       textCapitalization: TextCapitalization.words,
                       textInputAction: TextInputAction.next,
                       decoration: const InputDecoration(
@@ -103,7 +103,7 @@ class _CreateLeadsState extends State<CreateLeads> {
                       controller: phoneNumber,
                       maxLength: 10,
                       keyboardType: TextInputType.number,
-                      style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
+                      style: TextStyle( ),
                       textInputAction: TextInputAction.next,
                       decoration: const InputDecoration(
                         border: InputBorder.none,
@@ -134,7 +134,7 @@ class _CreateLeadsState extends State<CreateLeads> {
                     child: TextField(
                       controller: emailId,
                       keyboardType: TextInputType.emailAddress,
-                      style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
+                      style: TextStyle( ),
                       textInputAction: TextInputAction.next,
                       decoration: const InputDecoration(
                         border: InputBorder.none,
@@ -164,7 +164,7 @@ class _CreateLeadsState extends State<CreateLeads> {
                     child: TextField(
                       controller: city,
                       keyboardType: TextInputType.text,
-                      style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
+                      style: TextStyle( ),
                       textInputAction: TextInputAction.next,
                       textCapitalization: TextCapitalization.words,
                       decoration: const InputDecoration(
@@ -195,7 +195,7 @@ class _CreateLeadsState extends State<CreateLeads> {
                     child: TextField(
                       controller: inquiredFor,
                       keyboardType: TextInputType.text,
-                      style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
+                      style: TextStyle( ),
                       textInputAction: TextInputAction.next,
                       textCapitalization: TextCapitalization.words,
                       decoration: const InputDecoration(
@@ -226,7 +226,7 @@ class _CreateLeadsState extends State<CreateLeads> {
                     child: TextField(
                       controller: dataFetchedBy,
                       keyboardType: TextInputType.text,
-                      style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
+                      style: TextStyle( ),
                       textInputAction: TextInputAction.done,
                       textCapitalization: TextCapitalization.words,
                       decoration: const InputDecoration(
@@ -248,7 +248,7 @@ class _CreateLeadsState extends State<CreateLeads> {
           },
           child: Text(
             'Create lead',
-            style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
+            style: TextStyle( ),
           ),
         ),
       ],
@@ -264,7 +264,7 @@ class _CreateLeadsState extends State<CreateLeads> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 17,
-            fontFamily: ConstantFonts.sfProMedium,
+
           ),
         ),
         backgroundColor: Colors.red,
@@ -278,7 +278,7 @@ class _CreateLeadsState extends State<CreateLeads> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 17,
-            fontFamily: ConstantFonts.sfProMedium,
+
           ),
         ),
         backgroundColor: Colors.red,
@@ -292,7 +292,7 @@ class _CreateLeadsState extends State<CreateLeads> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 17,
-            fontFamily: ConstantFonts.sfProMedium,
+
           ),
         ),
         backgroundColor: Colors.red,
@@ -306,7 +306,7 @@ class _CreateLeadsState extends State<CreateLeads> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 17,
-            fontFamily: ConstantFonts.sfProMedium,
+
           ),
         ),
         backgroundColor: Colors.red,
@@ -320,7 +320,7 @@ class _CreateLeadsState extends State<CreateLeads> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 17,
-            fontFamily: ConstantFonts.sfProMedium,
+
           ),
         ),
         backgroundColor: Colors.red,
@@ -334,7 +334,7 @@ class _CreateLeadsState extends State<CreateLeads> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 17,
-            fontFamily: ConstantFonts.sfProMedium,
+
           ),
         ),
         backgroundColor: Colors.red,

@@ -147,7 +147,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
                       child: Text(
                         staffs[i],
                         style: TextStyle(
-                            fontFamily: ConstantFonts.sfProMedium,
+                           
                             fontSize: 16),
                       ),
                       onTap: () {
@@ -315,7 +315,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                     reminders[i].customerName,
                                     style: TextStyle(
                                       fontSize: 17,
-                                      fontFamily: ConstantFonts.sfProMedium,
+                                     
                                     ),
                                   ),
                                   onTap: () {

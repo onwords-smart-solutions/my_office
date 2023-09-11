@@ -176,14 +176,14 @@ class _ViewAttendanceScreenState extends State<ViewAttendanceScreen> {
                         title: Text(
                           fullAttendance[index]['Name'].toString(),
                           style: TextStyle(
-                              fontFamily: ConstantFonts.sfProMedium,
+                             
                               color: ConstantColor.blackColor,
                               fontSize: 17),
                         ),
                         trailing: Text(
                           fullAttendance[index]['Time'].toString(),
                           style: TextStyle(
-                              fontFamily: ConstantFonts.sfProMedium,
+                             
                               color: ConstantColor.blackColor,
                               fontSize: 16),
                         ),

@@ -66,7 +66,7 @@ class _Client1DetailsState extends State<Client1Details> {
         title: Text(
           'Client Details',
           style: TextStyle(
-            fontFamily: ConstantFonts.sfProMedium,
+           
             fontSize: 22,
             color: Colors.white,
           ),
@@ -187,7 +187,7 @@ class _Client1DetailsState extends State<Client1Details> {
                               child: DropdownButtonFormField<String>(
                                 style: TextStyle(
                                   color: CupertinoColors.label,
-                                  fontFamily: ConstantFonts.sfProMedium,
+                                 
                                   fontSize: 16,
                                 ),
                                 hint: const Text(
@@ -202,7 +202,7 @@ class _Client1DetailsState extends State<Client1Details> {
                                     // hoverColor: Colors.black,
                                     focusedBorder: myFocusBorder(),
                                     errorStyle: TextStyle(
-                                        fontFamily: ConstantFonts.sfProMedium)),
+                                         )),
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
                                     return 'Select Doc-Category';
@@ -270,7 +270,7 @@ class _Client1DetailsState extends State<Client1Details> {
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
-                          fontFamily: ConstantFonts.sfProMedium,
+                         
                         ),
                       ),
                     ),
@@ -341,7 +341,7 @@ class TextFiledWidget {
       enabled: isEnable,
       style: TextStyle(
         color: Colors.black,
-        fontFamily: ConstantFonts.sfProMedium,
+       
       ),
       decoration: InputDecoration(
         counterText: '',
@@ -350,14 +350,14 @@ class TextFiledWidget {
         labelText: hintName,
         labelStyle: TextStyle(
           color: Colors.black,
-          fontFamily: ConstantFonts.sfProMedium,
+         
         ),
         hintStyle: TextStyle(
           color: Colors.black.withOpacity(0.6),
-          fontFamily: ConstantFonts.sfProMedium,
+         
         ),
         errorStyle: TextStyle(
-          fontFamily: ConstantFonts.sfProMedium,
+         
         ),
         border: myInputBorder(),
         enabledBorder: myInputBorder(),

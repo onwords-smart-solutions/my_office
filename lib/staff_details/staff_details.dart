@@ -126,7 +126,7 @@ class _StaffDetailsState extends State<StaffDetails> {
                               'Tap to View staff details',
                               style: TextStyle(
                                   color: Colors.grey,
-                                  fontFamily: ConstantFonts.sfProMedium),
+                                   ),
                             )
                           ],
                         ),
@@ -142,7 +142,7 @@ class _StaffDetailsState extends State<StaffDetails> {
                               'Long press to Delete staff details',
                               style: TextStyle(
                                   color: Colors.grey,
-                                  fontFamily: ConstantFonts.sfProMedium),
+                                   ),
                             )
                           ],
                         ),
@@ -163,7 +163,7 @@ class _StaffDetailsState extends State<StaffDetails> {
                           child: Text(
                             dropDown[i],
                             style: TextStyle(
-                                fontFamily: ConstantFonts.sfProMedium,
+                               
                                 fontSize: 16),
                           ),
                           onTap: () {
@@ -237,7 +237,7 @@ class _StaffDetailsState extends State<StaffDetails> {
                                 '⚠️Warning!!!',
                                 style: TextStyle(
                                     fontSize: 18,
-                                    fontFamily: ConstantFonts.sfProMedium,
+                                   
                                     color: CupertinoColors.destructiveRed),
                               ),
                               content: RichText(
@@ -245,14 +245,14 @@ class _StaffDetailsState extends State<StaffDetails> {
                                   text: 'Do you want to delete all details of ',
                                   style: TextStyle(
                                       fontSize: 17,
-                                      fontFamily: ConstantFonts.sfProMedium,
+                                     
                                       color: Colors.black),
                                   children: [
                                     TextSpan(
                                       text: allStaffs[i].name,
                                       style: TextStyle(
                                           fontSize: 17,
-                                          fontFamily: ConstantFonts.sfProMedium,
+                                         
                                           color: Colors.red),
                                     ),
                                     TextSpan(
@@ -331,7 +331,7 @@ class _StaffDetailsState extends State<StaffDetails> {
                           Text(
                             allStaffs[i].name,
                             style: TextStyle(
-                              fontFamily: ConstantFonts.sfProMedium,
+                             
                               color: department == "APP"
                                   ? const Color(0xff6527BE)
                                   : department == 'RND'

@@ -57,7 +57,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                     style: TextStyle(
                         color: Colors.black,
                         fontSize: 15,
-                        fontFamily: ConstantFonts.sfProMedium),
+                         ),
                   ),
                   const Icon(
                     Icons.arrow_downward,
@@ -90,7 +90,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                 title: Text(
                   widget.allExpense[index].productName,
                   style: TextStyle(
-                      fontFamily: ConstantFonts.sfProMedium,
+
                       color: ConstantColor.blackColor,
                       fontSize: 16),
                 ),

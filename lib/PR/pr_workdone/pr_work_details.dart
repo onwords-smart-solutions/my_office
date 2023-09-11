@@ -161,7 +161,7 @@ class _PrWorkDetailsState extends State<PrWorkDetails> {
                               title: Text(
                                 prStaffNames[i].name,
                                 style: TextStyle(
-                                    fontFamily: ConstantFonts.sfProMedium,
+                                   
                                     color: ConstantColor.blackColor,
                                     fontSize:
                                         MediaQuery.of(context).size.height *

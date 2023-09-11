@@ -22,13 +22,15 @@ class StaffModelAdapter extends TypeAdapter<StaffModel> {
       department: fields[3] as String,
       email: fields[2] as String,
       profilePic: fields[4] as String,
+      dob: fields[5] ?? 0,
+      uniqueId: fields[6] ?? '',
     );
   }
 
   @override
   void write(BinaryWriter writer, StaffModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.uid)
       ..writeByte(1)
@@ -38,7 +40,11 @@ class StaffModelAdapter extends TypeAdapter<StaffModel> {
       ..writeByte(3)
       ..write(obj.department)
       ..writeByte(4)
-      ..write(obj.profilePic);
+      ..write(obj.profilePic)
+      ..writeByte(5)
+      ..write(obj.dob)
+      ..writeByte(6)
+      ..write(obj.uniqueId);
   }
 
   @override
@@ -47,7 +53,5 @@ class StaffModelAdapter extends TypeAdapter<StaffModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is StaffModelAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is StaffModelAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

@@ -71,7 +71,7 @@ class _FullStaffDetailsState extends State<FullStaffDetails> {
                   SelectableText(
                     widget.allDetails.name,
                     style: TextStyle(
-                        fontFamily: ConstantFonts.sfProMedium,
+                       
                         fontSize: 17,
                       color: Colors.purple,
                     ),
@@ -93,7 +93,7 @@ class _FullStaffDetailsState extends State<FullStaffDetails> {
                 SelectableText(
                   widget.allDetails.department,
                   style: TextStyle(
-                      fontFamily: ConstantFonts.sfProMedium,
+                     
                       fontSize: 17,
                     color: Colors.purple,
                   ),
@@ -116,7 +116,7 @@ class _FullStaffDetailsState extends State<FullStaffDetails> {
                   child: SelectableText(
                     widget.allDetails.emailId!,
                     style: TextStyle(
-                        fontFamily: ConstantFonts.sfProMedium,
+                       
                         fontSize: 17,
                       color: Colors.purple,
                     ),

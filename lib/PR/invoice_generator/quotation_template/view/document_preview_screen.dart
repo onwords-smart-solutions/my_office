@@ -115,7 +115,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
           'Preview of Document',
           style: TextStyle(
             fontSize: 22,
-            fontFamily: ConstantFonts.sfProMedium,
+           
             color: Colors.white,
           ),
         ),
@@ -190,7 +190,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                                   'Customer Details',
                                     style: TextStyle(
                                         color: Colors.black,
-                                      fontFamily: ConstantFonts.sfProMedium
+                                       
                                     ),
                                 ),
                                 createCustomerDetails(
@@ -249,16 +249,16 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('      Document Details',
-                                    style: TextStyle(color: Colors.black, fontFamily: ConstantFonts.sfProMedium),
+                                    style: TextStyle(color: Colors.black,  ),
                                 ),
                                 Text(' Doc-Type : #${customerDetails.docType}',
                                     style: TextStyle(
-                                        color: Colors.black, fontSize: 10,fontFamily: ConstantFonts.sfProMedium),
+                                        color: Colors.black, fontSize: 10, ),
                                 ),
                                 Text(
                                     ' Category : ${customerDetails.docCategory}',
                                     style: TextStyle(
-                                        color: Colors.black, fontSize: 10,fontFamily: ConstantFonts.sfProMedium),
+                                        color: Colors.black, fontSize: 10, ),
                                 ),
                               ],
                             ),
@@ -393,7 +393,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                                   'Save',
                                   style: TextStyle(
                                       color: Colors.white,
-                                    fontFamily: ConstantFonts.sfProMedium,
+                                   
                                     fontSize: 20
                                       ),
                                 ),
@@ -427,7 +427,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
             child: Text(
               title,
               style: TextStyle(
-                fontFamily: ConstantFonts.sfProMedium
+                 
               ),
             ),
           ),
@@ -457,7 +457,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                 child: Text(
                   cell,
                   style: TextStyle(
-                    fontFamily: ConstantFonts.sfProMedium
+                     
                   ),
                 ),
               ),
@@ -480,7 +480,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                 key,
                 style: TextStyle(
                     color: Colors.black,
-                    fontFamily: ConstantFonts.sfProMedium,
+                   
                     fontSize: 10),
               ),
             ),
@@ -493,7 +493,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                   value,
                   style: TextStyle(
                     color: Colors.black,
-                    fontFamily: ConstantFonts.sfProMedium,
+                   
                     fontSize: 10,
                   ),
                 ),
@@ -522,7 +522,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
               key,
               style: TextStyle(
                   color: Colors.black,
-                  fontFamily: ConstantFonts.sfProMedium,
+                 
                   fontSize: 12,
               ),
             ),
@@ -539,7 +539,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 10,
-                fontFamily: ConstantFonts.sfProMedium,
+               
               ),
             ),
           ),

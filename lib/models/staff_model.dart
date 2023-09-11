@@ -5,15 +5,19 @@ part 'staff_model.g.dart';
 @HiveType(typeId: 0)
 class StaffModel {
   @HiveField(0)
-  final String uid;
+  String uid;
   @HiveField(1)
-  final String name;
+  String name;
   @HiveField(2)
-  final String email;
+  String email;
   @HiveField(3)
-  final String department;
+  String department;
   @HiveField(4)
-  final String profilePic;
+  String profilePic;
+  @HiveField(5)
+  int dob;
+  @HiveField(6)
+  String uniqueId;
 
   StaffModel({
     required this.uid,
@@ -21,5 +25,7 @@ class StaffModel {
     required this.department,
     required this.email,
     required this.profilePic,
+    required this.dob,
+    required this.uniqueId,
   });
 }

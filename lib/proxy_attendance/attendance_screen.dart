@@ -102,7 +102,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
             }),
             textStyle: MaterialStateProperty.resolveWith(
               (states) => TextStyle(
-                  fontSize: 17, fontFamily: ConstantFonts.sfProMedium),
+                  fontSize: 17,  ),
             ),
           ),
         ),
@@ -136,7 +136,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                       borderSide: const BorderSide(color: Colors.black),
                     ),
                     labelStyle:
-                        TextStyle(fontFamily: ConstantFonts.sfProMedium),
+                        TextStyle( ),
                     contentPadding: const EdgeInsets.all(15),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
@@ -151,7 +151,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                       borderSide: const BorderSide(color: Colors.red),
                     ),
                     errorStyle: TextStyle(
-                      fontFamily: ConstantFonts.sfProMedium,
+                     
                     ),
                   ),
 
@@ -167,7 +167,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                         MaterialStateProperty.resolveWith((states) => 10),
                   ),
                   textStyle: TextStyle(
-                    fontFamily: ConstantFonts.sfProMedium,
+                   
                   ),
                   enableFilter: true,
                   hintText: 'Staff name',
@@ -219,7 +219,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                     style: TextStyle(
                         // height: height * 0.0025,
                         color: Colors.black,
-                        fontFamily: ConstantFonts.sfProMedium),
+                         ),
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.all(15),
                       border: InputBorder.none,
@@ -227,7 +227,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                       hintStyle: TextStyle(
                           // height: height * 0.005,
                           color: Colors.grey,
-                          fontFamily: ConstantFonts.sfProMedium),
+                           ),
                       filled: true,
                       fillColor: ConstantColor.background1Color,
                       focusedBorder: OutlineInputBorder(
@@ -259,7 +259,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                     style: TextStyle(
                         // height: height * 0.0025,
                         color: Colors.black,
-                        fontFamily: ConstantFonts.sfProMedium),
+                         ),
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.all(15),
                       border: InputBorder.none,
@@ -267,7 +267,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                       hintStyle: TextStyle(
                           // height: height * 0.005,
                           color: Colors.grey,
-                          fontFamily: ConstantFonts.sfProMedium),
+                           ),
                       filled: true,
                       fillColor: ConstantColor.background1Color,
                       focusedBorder: OutlineInputBorder(
@@ -307,7 +307,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                     saveToDb();
                   },
                   textStyle: TextStyle(
-                      fontFamily: ConstantFonts.sfProMedium, fontSize: 16),
+                      fontSize: 16),
                   text: 'SLIDE TO CONFIRM',
                   sliderButtonContent: const Icon(
                     CupertinoIcons.person_alt_circle,
@@ -353,7 +353,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 17,
-            fontFamily: ConstantFonts.sfProMedium,
+           
           ),
         ),
         backgroundColor: Colors.red,
@@ -366,7 +366,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 17,
-            fontFamily: ConstantFonts.sfProMedium,
+           
           ),
         ),
         backgroundColor: Colors.red,
@@ -379,7 +379,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 17,
-            fontFamily: ConstantFonts.sfProMedium,
+           
           ),
         ),
         backgroundColor: Colors.red,
@@ -392,7 +392,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 17,
-            fontFamily: ConstantFonts.sfProMedium,
+           
           ),
         ),
         backgroundColor: Colors.red,
@@ -420,7 +420,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 17,
-              fontFamily: ConstantFonts.sfProMedium,
+             
             ),
           ),
           backgroundColor: Colors.green,
@@ -451,7 +451,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 17,
-              fontFamily: ConstantFonts.sfProMedium,
+             
             ),
           ),
           backgroundColor: Colors.green,

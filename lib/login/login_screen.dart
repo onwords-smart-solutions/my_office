@@ -1,18 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/database/hive_operations.dart';
 import 'package:my_office/login/qr_code_scan.dart';
-import 'package:my_office/login/singIn_screen.dart';
 import 'package:my_office/models/staff_model.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 import '../home/user_home_screen.dart';
+import '../main.dart';
+import '../provider/user_provider.dart';
+import '../util/custom_snackbar.dart';
 import 'forget_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -32,8 +33,6 @@ class _LoginScreenState extends State<LoginScreen> {
   String _password = '';
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -62,24 +61,25 @@ class _LoginScreenState extends State<LoginScreen> {
               left: width * 0.05,
               // right: width*0.0,
               child: RichText(
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: 'Hi There!!\n',
-                    style: TextStyle(
-                      fontFamily: ConstantFonts.sfProMedium,
-                      color: ConstantColor.blackColor,
-                      fontSize: height * 0.035,
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Hi There!!\n',
+                      style: TextStyle(
+                       
+                        color: ConstantColor.blackColor,
+                        fontSize: height * 0.035,
+                      ),
                     ),
-                  ),
-                  TextSpan(
-                    text: 'Welcome To Team Onwords😎',
-                    style: TextStyle(
-                      fontFamily: ConstantFonts.sfProMedium,
-                      color: ConstantColor.blackColor,
-                      fontSize: height * 0.020,
+                    TextSpan(
+                      text: 'Welcome To Team Onwords😎',
+                      style: TextStyle(
+                       
+                        color: ConstantColor.blackColor,
+                        fontSize: height * 0.020,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
                 ),
               ),
             ),
@@ -116,23 +116,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         autofocus: false,
                         keyboardType: TextInputType.emailAddress,
                         style: TextStyle(
-                            fontSize: height * 0.02,
-                            color: Colors.black,
-                            fontFamily: ConstantFonts.sfProMedium),
+                            fontSize: height * 0.02, color: Colors.black,  ),
                         decoration: InputDecoration(
                           prefixIcon: const Icon(CupertinoIcons.mail_solid),
                           border: InputBorder.none,
                           hintText: 'Email',
                           hintStyle: TextStyle(
-                              fontSize: height * 0.02,
-                              color: Colors.grey,
-                              fontFamily: ConstantFonts.sfProMedium
-                          ),
+                              fontSize: height * 0.02, color: Colors.grey,  ),
                           filled: true,
                           fillColor: ConstantColor.background1Color,
                           focusedBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: ConstantColor.blackColor),
+                            borderSide: const BorderSide(color: ConstantColor.blackColor),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           enabledBorder: UnderlineInputBorder(
@@ -167,25 +161,18 @@ class _LoginScreenState extends State<LoginScreen> {
                         keyboardType: TextInputType.visiblePassword,
                         obscureText: !_showPassword,
                         style: TextStyle(
-                            fontSize: height * 0.02,
-                            color: Colors.black,
-                            fontFamily: ConstantFonts.sfProMedium),
+                            fontSize: height * 0.02, color: Colors.black,  ),
                         decoration: InputDecoration(
                           prefixIcon: const Icon(CupertinoIcons.padlock_solid),
                           border: InputBorder.none,
                           hintText: 'Password',
                           filled: true,
                           hintStyle: TextStyle(
-                              fontSize: height * 0.02,
-                              color: Colors.grey,
-                              fontFamily: ConstantFonts.sfProMedium
-                          ),
+                              fontSize: height * 0.02, color: Colors.grey,  ),
                           fillColor: ConstantColor.background1Color,
-                          contentPadding: const EdgeInsets.only(
-                              left: 14.0, bottom: 6.0, top: 8.0),
+                          contentPadding: const EdgeInsets.only(left: 14.0, bottom: 6.0, top: 8.0),
                           focusedBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(
-                                color: ConstantColor.blackColor),
+                            borderSide: const BorderSide(color: ConstantColor.blackColor),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           enabledBorder: UnderlineInputBorder(
@@ -198,9 +185,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           suffixIcon: IconButton(
                             icon: Icon(
-                              _showPassword
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
+                              _showPassword ? Icons.visibility_off : Icons.visibility,
                               color: Colors.black.withOpacity(0.5),
                             ),
                             onPressed: () {
@@ -236,7 +221,6 @@ class _LoginScreenState extends State<LoginScreen> {
               child: buildGestureDetector(height),
             ),
 
-
             //SCAN QR CODE...
             // Positioned(
             //   top: height * 0.85,
@@ -258,25 +242,23 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget scanQrCode(){
+  Widget scanQrCode() {
     return Container(
       height: 35,
       width: 20,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: ConstantColor.backgroundColor
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: ConstantColor.backgroundColor),
       child: GestureDetector(
-        onTap: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=> const QrCodeScan()));
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => const QrCodeScan()));
         },
         child: const Center(
-          child: Text('Scan Qr',
-          style: TextStyle(
-            fontSize: 16,
-            color: ConstantColor.background1Color,
-            fontWeight: FontWeight.w600,
-          ),
+          child: Text(
+            'Scan Qr',
+            style: TextStyle(
+              fontSize: 16,
+              color: ConstantColor.background1Color,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
       ),
@@ -290,33 +272,31 @@ class _LoginScreenState extends State<LoginScreen> {
       borderRadius: BorderRadius.circular(10),
       onTap: submitForm,
       child: Ink(
-          height: height * 0.07,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            gradient: const LinearGradient(
-              colors: [
-                Color(0xffD136D4),
-                Color(0xff7652B2),
-              ],
-            ),
+        height: height * 0.07,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          gradient: const LinearGradient(
+            colors: [
+              Color(0xffD136D4),
+              Color(0xff7652B2),
+            ],
           ),
-          child: Center(
-
-            child: _isLoading
-                ? Lottie.asset(
-                    "assets/animations/loading.json",
-                  )
-                : Text(
-                    'Log in',
-                    style: TextStyle(
-                      fontFamily: ConstantFonts.sfProMedium,
-                      color: ConstantColor.background1Color,
-                      fontSize: height * 0.033,
-                    ),
+        ),
+        child: Center(
+          child: _isLoading
+              ? Lottie.asset(
+                  "assets/animations/loading.json",
+                )
+              : Text(
+                  'Log in',
+                  style: TextStyle(
+                   
+                    color: ConstantColor.background1Color,
+                    fontSize: height * 0.033,
                   ),
-          ),
+                ),
+        ),
       ),
-
     );
   }
 
@@ -324,8 +304,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => screen));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => screen));
         });
       },
       child: RichText(
@@ -360,13 +339,12 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           GestureDetector(
             onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => screen));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => screen));
             },
             child: Text(
               'Forgot password?',
               style: TextStyle(
-                fontFamily: ConstantFonts.sfProMedium,
+               
                 color: ConstantColor.pinkColor,
                 fontSize: height * 0.02,
               ),
@@ -406,39 +384,41 @@ class _LoginScreenState extends State<LoginScreen> {
         _isLoading = false;
       });
       if (e.code.contains('Invalid-email')) {
-        showErrorSnackbar(message: 'Provide a valid email');
+        CustomSnackBar.showErrorSnackbar(message: 'Provide a valid email', context: context);
       } else if (e.code.contains('user-not-found')) {
-        showErrorSnackbar(message: 'No user associates with this email');
+        CustomSnackBar.showErrorSnackbar(message: 'No user associates with this email', context: context);
       } else if (e.code.contains('wrong-password')) {
-        showErrorSnackbar(message: 'Invalid password');
+        CustomSnackBar.showErrorSnackbar(message: 'Invalid password', context: context);
       } else {
-        showErrorSnackbar(message: 'Something went wrong. try again!');
+        CustomSnackBar.showErrorSnackbar(message: 'Something went wrong. try again!', context: context);
       }
     }
   }
 
-  void getStaffDetails({required UserCredential userCredential}) {
+  Future<void> getStaffDetails({required UserCredential userCredential}) async {
     final navigator = Navigator.of(context);
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     final staffLocation = FirebaseDatabase.instance.ref().child("staff");
-    staffLocation.child(userCredential.user!.uid).once().then((details) async {
-      if (details.snapshot.value != null) {
-        Map<Object?, Object?> data =
-            details.snapshot.value as Map<Object?, Object?>;
+    await staffLocation.child(userCredential.user!.uid).once().then((details) async {
+      if (details.snapshot.exists) {
+        Map<Object?, Object?> data = details.snapshot.value as Map<Object?, Object?>;
         final staffInfo = StaffModel(
+          dob: data['dob'] == null ? 0 : int.parse(data['dob'].toString()),
           name: data['name'].toString(),
           uid: userCredential.user!.uid,
           email: data['email'].toString(),
           department: data['department'].toString(),
           profilePic: data['profileImage'].toString(),
+          uniqueId: ''
         );
-
-        await HiveOperations().addStaffDetail(staff: staffInfo);
+        await userProvider.addUser(staffInfo);
         // Moving to home-screen
         navigator.pushAndRemoveUntil(
-            MaterialPageRoute(builder: (_) => const UserHomeScreen()),
-            (route) => false);
+          MaterialPageRoute(builder: (_) => const AuthenticationScreen()),
+          (route) => false,
+        );
       } else {
-        showErrorSnackbar(message: 'Something went wrong. Try again later!');
+        CustomSnackBar.showErrorSnackbar(message: 'Something went wrong. Try again', context: context);
         try {
           FirebaseAuth.instance.signOut();
         } catch (e) {
@@ -446,29 +426,5 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       }
     });
-  }
-
-  //SNACK BAR
-  void showErrorSnackbar({required String message}) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: const Duration(seconds: 3),
-        backgroundColor: Colors.red,
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(10.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        elevation: 0.0,
-        content: Text(
-          message,
-          style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Poppins',
-              fontSize: 12.0),
-        ),
-      ),
-    );
   }
 }

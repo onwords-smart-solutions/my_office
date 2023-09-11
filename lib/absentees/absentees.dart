@@ -194,7 +194,7 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
                       title: Text(
                         absentees[i].name,
                         style: TextStyle(
-                            fontFamily: ConstantFonts.sfProMedium,
+                           
                             color: ConstantColor.blackColor,
                             fontSize:
                             MediaQuery

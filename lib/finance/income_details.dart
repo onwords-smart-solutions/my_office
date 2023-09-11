@@ -71,7 +71,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 16,
-                        fontFamily: ConstantFonts.sfProMedium),
+                         ),
                   ),
                 ),
               ],
@@ -100,7 +100,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 16,
-                        fontFamily: ConstantFonts.sfProMedium),
+                         ),
                   ),
                 ),
               ],
@@ -129,7 +129,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 16,
-                        fontFamily: ConstantFonts.sfProMedium),
+                         ),
                   ),
                 ),
               ],
@@ -158,7 +158,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 16,
-                        fontFamily: ConstantFonts.sfProMedium),
+                         ),
                   ),
                 ),
               ],
@@ -187,7 +187,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 16,
-                        fontFamily: ConstantFonts.sfProMedium),
+                         ),
                   ),
                 ),
               ],
@@ -216,7 +216,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 16,
-                        fontFamily: ConstantFonts.sfProMedium),
+                         ),
                   ),
                 ),
               ],
@@ -245,7 +245,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 16,
-                        fontFamily: ConstantFonts.sfProMedium),
+                         ),
                   ),
                 ),
               ],
@@ -274,7 +274,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 16,
-                        fontFamily: ConstantFonts.sfProMedium),
+                         ),
                   ),
                 ),
               ],
@@ -303,7 +303,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 16,
-                        fontFamily: ConstantFonts.sfProMedium),
+                         ),
                   ),
                 ),
               ],
@@ -332,7 +332,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                     style: TextStyle(
                         color: ConstantColor.backgroundColor,
                         fontSize: 16,
-                        fontFamily: ConstantFonts.sfProMedium),
+                         ),
                   ),
                 ),
               ],

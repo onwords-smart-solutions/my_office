@@ -129,7 +129,7 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
                                     return PopupMenuItem(
                                       child: Text(
                                         _dropDown[i],
-                                        style: TextStyle(fontFamily: ConstantFonts.sfProMedium, fontSize: 16),
+                                        style: TextStyle(fontSize: 16),
                                       ),
                                       onTap: () {
                                         _sortOption.value = _dropDown[i];
@@ -180,7 +180,7 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
                                         builder: (ctx, sort, child) {
                                           return Text(
                                             sort,
-                                            style: TextStyle(fontFamily: ConstantFonts.sfProMedium),
+                                            style: TextStyle(),
                                           );
                                         }),
                                   ],
@@ -304,31 +304,6 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
       _sortedList.notifyListeners();
       _punchingDetails.notifyListeners();
     }
-
-    // final data = await _checkTime('58JIRnAbechEMJl8edlLvRzHcW52', 'Devendiran', 'App');
-    // if (data != null) {
-    //   _punchingDetails.value.add(data);
-    //   _sortedList.value.add(data);
-    // } else {
-    //   _punchingDetails.value.add(
-    //     CustomPunchModel(
-    //       name: 'Devendiran',
-    //       staffId: '58JIRnAbechEMJl8edlLvRzHcW52',
-    //       department: 'App',
-    //       checkInTime: null,
-    //     ),
-    //   );
-    //   _sortedList.value.add(
-    //     CustomPunchModel(
-    //       name: 'Devendiran',
-    //       staffId: '58JIRnAbechEMJl8edlLvRzHcW52',
-    //       department: 'App',
-    //       checkInTime: null,
-    //     ),
-    //   );
-    // }
-    // _sortedList.notifyListeners();
-    // _punchingDetails.notifyListeners();
     _isLoading.value = false;
   }
 
@@ -470,19 +445,6 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
       }
     });
     return punchDetail;
-  }
-
-  Future<DateTime?> _checkProxyCheckOut(String staffId, String dateFormat) async {
-    DateTime? checkOut;
-    await FirebaseDatabase.instance.ref('proxy_attendance/$staffId/$dateFormat').once().then((proxy) async {
-      if (proxy.snapshot.exists) {
-        if (proxy.snapshot.child('Check-out').exists) {
-          final data = proxy.snapshot.child('Check-out').value as Map<Object?, Object?>;
-          checkOut = DateTime.fromMillisecondsSinceEpoch(int.parse(data['Time'].toString()));
-        }
-      }
-    });
-    return checkOut;
   }
 
   Future<void> _printScreen() async {

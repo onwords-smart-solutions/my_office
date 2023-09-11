@@ -1,25 +1,16 @@
-import 'dart:convert';
-import 'dart:developer';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/Constant/fonts/constant_font.dart';
-import 'package:my_office/suggestions/view_suggestions.dart';
 import 'package:my_office/util/main_template.dart';
 import '../Constant/colors/constant_colors.dart';
-import 'package:http/http.dart' as http;
+
+import '../services/notification_service.dart';
 
 class SuggestionScreen extends StatefulWidget {
-  final String uid;
-  final String name;
 
-  const SuggestionScreen({Key? key, required this.uid, required this.name})
-      : super(key: key);
+  const SuggestionScreen({Key? key}) : super(key: key);
 
   @override
   State<SuggestionScreen> createState() => _SuggestionScreenState();
@@ -45,62 +36,27 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
     super.dispose();
   }
 
-  Future<void> sendNotification(
-      String userId, String title, String body) async {
-    FirebaseFirestore.instance
-        .collection('Devices')
-        .doc(userId)
-        .get()
-        .then((value) async {
-      if (value.exists) {
-        final data = value.data();
-        final annaDeviceToken = data!['Token'];
-        if (annaDeviceToken != null) {
-          const url = 'https://fcm.googleapis.com/fcm/send';
-          const serverKey =
-              'AAAAhAGZ-Jw:APA91bFk_GTSGX1LAj-ZxOW7DQn8Q69sYLStSB8lukQDlxBMmugrkQCsgIvuFm0fU5vBbVB5SATjaoO0mrCdsJm03ZEEZtaRdH-lQ9ZmX5RpYuyLytWyHVH7oDu-6LaShqrVE5vYHCqK'; // Your FCM server key
-          final headers = {
-            'Content-Type': 'application/json',
-            'Authorization': 'key=$serverKey',
-          };
+  Future<void> sendNotification(String userId, String title, String body) async {
+    final tokens = await NotificationService().getDeviceFcm(userId: userId);
+    final dTokens = await NotificationService().getDeviceFcm(userId: '58JIRnAbechEMJl8edlLvRzHcW52');
+    final jTokens = await NotificationService().getDeviceFcm(userId: 'Ae6DcpP2XmbtEf88OA8oSHQVpFB2');
+    tokens.addAll(dTokens);
+    tokens.addAll(jTokens);
 
-          final payload = {
-            'notification': {
-              'title': title,
-              'body': body,
-            },
-            'priority': 'high',
-            'data': {
-              'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-              'screen': 'ViewSuggestionsScreen',
-              'status': 'done',
-            },
-            'to': annaDeviceToken,
-          };
-
-          final response = await http.post(
-            Uri.parse(url),
-            headers: headers,
-            body: jsonEncode(payload),
-          );
-
-          if (response.statusCode == 200) {
-            print('Notification sent successfully!');
-          } else {
-            print(
-                'Error sending notification. Status code: ${response.statusCode}');
-          }
-        }
-      }
-    });
+    for (var token in tokens) {
+      await NotificationService().sendNotification(
+        title: title,
+        body: body,
+        token: token,
+        type: NotificationType.suggestion,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return MainTemplate(
-        subtitle: 'Throw some Suggestions!!',
-        templateBody: suggestions(),
-        bgColor: ConstantColor.background1Color);
+        subtitle: 'Throw some Suggestions!!', templateBody: suggestions(), bgColor: ConstantColor.background1Color);
   }
 
   Widget suggestions() {
@@ -113,7 +69,6 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
               TextField(
                 style: TextStyle(
                   fontSize: 17,
-                  fontFamily: ConstantFonts.sfProMedium,
                 ),
                 textCapitalization: TextCapitalization.sentences,
                 textInputAction: TextInputAction.done,
@@ -125,18 +80,14 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
-                    borderSide: const BorderSide(
-                        color: CupertinoColors.systemGrey, width: 2),
+                    borderSide: const BorderSide(color: CupertinoColors.systemGrey, width: 2),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
-                    borderSide: const BorderSide(
-                        color: CupertinoColors.systemPurple, width: 2),
+                    borderSide: const BorderSide(color: CupertinoColors.systemPurple, width: 2),
                   ),
                   hintText: 'Fill up your suggestions!!',
-                  hintStyle: TextStyle(
-                    fontFamily: ConstantFonts.sfProMedium,
-                  ),
+                  hintStyle: TextStyle(),
                 ),
               ),
               const SizedBox(height: 5),
@@ -144,9 +95,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
                 alignment: Alignment.bottomLeft,
                 child: Text(
                   '  Character count: $characterCount',
-                  style: TextStyle(
-                    fontFamily: ConstantFonts.sfProMedium,
-                  ),
+                  style: TextStyle(),
                 ),
               ),
             ],
@@ -159,8 +108,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
           child: FilledButton(
             onPressed: () {
               addSuggestionToDatabase();
-              sendNotification('Vhbt8jIAfiaV1HxuWERLqJh7dbj2', 'My Office',
-                  'New suggestion has arrived..');
+              sendNotification('Vhbt8jIAfiaV1HxuWERLqJh7dbj2', 'Suggestion', 'New suggestion has been arrived');
             },
             child: Text(
               "Submit",
@@ -184,7 +132,6 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 17,
-            fontFamily: ConstantFonts.sfProMedium,
           ),
         ),
         backgroundColor: Colors.red,
@@ -198,7 +145,6 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 17,
-            fontFamily: ConstantFonts.sfProMedium,
           ),
         ),
         backgroundColor: Colors.red,
@@ -217,13 +163,12 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
         },
       );
       suggestionsController.clear();
-      final snackBar = SnackBar(
+      final snackBar = const SnackBar(
         content: Text(
           'Suggestions has been submitted',
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 17,
-            fontFamily: ConstantFonts.sfProMedium,
           ),
         ),
         backgroundColor: Colors.green,
