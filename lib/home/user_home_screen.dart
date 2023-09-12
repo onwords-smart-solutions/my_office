@@ -199,11 +199,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
   Widget _search(Size size, UserProvider userProvider) {
     return Container(
-      height: size.height * .08,
-      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: size.height * .02),
-      width: double.infinity,
-      decoration: const BoxDecoration(color: Colors.white),
-      child: GestureDetector(
+      padding: const EdgeInsets.all(20.0),
+      color: Colors.white,
+      child: TextField(
         onTap: () {
           HapticFeedback.mediumImpact();
           showSearch(
@@ -214,21 +212,21 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             ),
           );
         },
-        child: Container(
-          padding: const EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: BorderRadius.circular(12.0),
+        readOnly: true,
+        decoration: InputDecoration(
+          suffixIcon: const Icon(CupertinoIcons.search, color: Colors.grey),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
+          filled: true,
+          fillColor: Theme.of(context).scaffoldBackgroundColor,
+          hintText: 'Search',
+          hintStyle: const TextStyle(fontWeight: FontWeight.w500, color: Colors.grey),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+            borderSide: BorderSide.none,
           ),
-          child: const Row(
-            children: [
-              Icon(CupertinoIcons.search, color: Colors.grey),
-              SizedBox(width: 10.0),
-              Text(
-                'Search',
-                style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500),
-              ),
-            ],
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15.0),
+            borderSide: BorderSide.none,
           ),
         ),
       ),
