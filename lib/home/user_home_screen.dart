@@ -58,7 +58,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     final context = this.context;
     _getInfoItemDetails();
     _motivationIndex = _homeViewModel.getRandomNumber();
-    _checkAppVersion();
+    // _checkAppVersion();
     _getStaffAccess();
     _getNetworkStatus();
     _notificationService.storeFCM(context: context);
@@ -78,6 +78,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               appBar: AppBar(
                 surfaceTintColor: Colors.white,
                 backgroundColor: Colors.white,
+                centerTitle: false,
                 leading: GestureDetector(
                   onTap: () {
                     HapticFeedback.mediumImpact();
@@ -243,6 +244,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   //CHECKING INTERNET CONNECTIVITY
   _getNetworkStatus() async {
     final connectivityResult = await (Connectivity().checkConnectivity());
+    log('network is $connectivityResult');
     if (connectivityResult == ConnectivityResult.wifi ||
         connectivityResult == ConnectivityResult.ethernet ||
         connectivityResult == ConnectivityResult.mobile ||

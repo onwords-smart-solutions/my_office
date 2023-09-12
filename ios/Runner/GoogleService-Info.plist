@@ -3,21 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>966384650165-3skje7chakbbe1oqlp710f3olbftumb0.apps.googleusercontent.com</string>
+	<string>566962550940-jndvpeqgs2a9h5gejdarem6f79j72ue9.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.966384650165-3skje7chakbbe1oqlp710f3olbftumb0</string>
+	<string>com.googleusercontent.apps.566962550940-jndvpeqgs2a9h5gejdarem6f79j72ue9</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>566962550940-1ru38h04avgqitv9v266323fho0fh20k.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCfCDfCw4QpH7-DZ3Kc_hr4o-ra8-OI_mo</string>
+	<string>AIzaSyA1OvIixPi5cuA93Ys1p9jCioB7tbbH1pM</string>
 	<key>GCM_SENDER_ID</key>
-	<string>966384650165</string>
+	<string>566962550940</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.onwords.office</string>
 	<key>PROJECT_ID</key>
-	<string>adminconsole-updated</string>
+	<string>marketing-data-d141d</string>
 	<key>STORAGE_BUCKET</key>
-	<string>adminconsole-updated.appspot.com</string>
+	<string>marketing-data-d141d.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +31,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:966384650165:ios:bb37b58ce3ac02b095bbfc</string>
+	<string>1:566962550940:ios:b446b7c69cd527b09e5559</string>
 	<key>DATABASE_URL</key>
-	<string>https://adminconsole-updated-default-rtdb.firebaseio.com</string>
+	<string>https://marketing-data-d141d-default-rtdb.firebaseio.com</string>
 </dict>
 </plist>

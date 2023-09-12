@@ -26,8 +26,26 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>This app requires access to Camera to change the Profile image.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app requires Microphone access for getting results generated with speech.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app requires access to Photo library for changing the Profile image.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>This app requires access to Speech recognition for using your audio and generate it in the form of text.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

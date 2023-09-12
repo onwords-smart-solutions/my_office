@@ -53,13 +53,14 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCfCDfCw4QpH7-DZ3Kc_hr4o-ra8-OI_mo',
-    appId: '1:966384650165:ios:bb37b58ce3ac02b095bbfc',
-    messagingSenderId: '966384650165',
-    projectId: 'adminconsole-updated',
-    databaseURL: 'https://adminconsole-updated-default-rtdb.firebaseio.com',
-    storageBucket: 'adminconsole-updated.appspot.com',
-    iosClientId: '966384650165-3skje7chakbbe1oqlp710f3olbftumb0.apps.googleusercontent.com',
+    apiKey: 'AIzaSyA1OvIixPi5cuA93Ys1p9jCioB7tbbH1pM',
+    appId: '1:566962550940:ios:b446b7c69cd527b09e5559',
+    messagingSenderId: '566962550940',
+    projectId: 'marketing-data-d141d',
+    databaseURL: 'https://marketing-data-d141d-default-rtdb.firebaseio.com',
+    storageBucket: 'marketing-data-d141d.appspot.com',
+    androidClientId: '566962550940-1ru38h04avgqitv9v266323fho0fh20k.apps.googleusercontent.com',
+    iosClientId: '566962550940-jndvpeqgs2a9h5gejdarem6f79j72ue9.apps.googleusercontent.com',
     iosBundleId: 'com.onwords.office',
   );
 }

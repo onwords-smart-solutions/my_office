@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:my_office/leave_apply/leave_apply_screen.dart';
+import 'package:my_office/refreshment/refreshment_screen.dart';
 import 'package:my_office/suggestions/suggestions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
@@ -51,19 +52,19 @@ class NotificationService {
   void _onNotificationClick(RemoteMessage? message) {
     if (message == null) return;
     try {
-      if (message.data['type'] == NotificationType.leaveNotification ) {
+      if (message.data['type'] == NotificationType.leaveNotification) {
         navigationKey.currentState!.push(
           MaterialPageRoute(
             builder: (_) => const LeaveApplyScreen(),
           ),
         );
-      } else if (message.data['type'] == NotificationType.leaveRespond ) {
+      } else if (message.data['type'] == NotificationType.leaveRespond) {
         navigationKey.currentState!.push(
           MaterialPageRoute(
             builder: (_) => const LeaveApplyScreen(),
           ),
         );
-      }else if (message.data['type'] == NotificationType.suggestion) {
+      } else if (message.data['type'] == NotificationType.suggestion) {
         navigationKey.currentState!.push(
           MaterialPageRoute(
             builder: (_) => const ViewSuggestions(),
@@ -77,7 +78,8 @@ class NotificationService {
 
   // initialization of FCM
   Future<void> initFCMNotifications() async {
-    await _firebaseMessaging.requestPermission(alert: true, announcement: false, badge: true, sound: true);
+    await _firebaseMessaging.requestPermission(
+        alert: true, announcement: false, badge: true, sound: true);
     _initPushNotifications();
   }
 
@@ -93,8 +95,11 @@ class NotificationService {
             final tokenData = device.value as Map<Object?, Object?>;
 
             /// Removing duplicate token if device id is same and identifier is different
-            if (device.key != userProvider.user!.uniqueId && tokenData['deviceId'].toString() == deviceId) {
-              await removeFCM(userId: userProvider.user!.uid, uniqueId: device.key.toString());
+            if (device.key != userProvider.user!.uniqueId &&
+                tokenData['deviceId'].toString() == deviceId) {
+              await removeFCM(
+                  userId: userProvider.user!.uid,
+                  uniqueId: device.key.toString());
             }
           }
         }
@@ -105,7 +110,8 @@ class NotificationService {
     }
   }
 
-  Future<void> removeFCM({required String userId, required String uniqueId}) async {
+  Future<void> removeFCM(
+      {required String userId, required String uniqueId}) async {
     await userRef.child('$userId/$uniqueId').remove();
   }
 
@@ -140,7 +146,10 @@ class NotificationService {
   }
 
   Future<void> sendNotification(
-      {required String title, required String body, required String token, String? type}) async {
+      {required String title,
+      required String body,
+      required String token,
+      String? type}) async {
     try {
       const url = 'https://fcm.googleapis.com/fcm/send';
       final headers = {
@@ -181,47 +190,67 @@ class NotificationService {
     tz.initializeTimeZones();
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@drawable/suitcase');
-    const InitializationSettings settings = InitializationSettings(
-      android: initializationSettingsAndroid,
+    final DarwinInitializationSettings initializationSettingsIOS =
+        DarwinInitializationSettings(
+      requestSoundPermission: true,
+      requestBadgePermission: true,
+      requestAlertPermission: true,
+      onDidReceiveLocalNotification:
+          (int id, String? title, String? body, String? payload) async {},
     );
-    _notifications.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!.requestPermission();
+    InitializationSettings settings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
+    );
+    _notifications
+        .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin>()!
+        .requestPermissions(
+          alert: true,
+          badge: true,
+          sound: true,
+        );
     await _notifications.initialize(
       settings,
     );
   }
 
   Future<NotificationDetails> _notificationDetails() async {
-    AndroidNotificationDetails androidNotificationDetails = const AndroidNotificationDetails('My Office', 'Refreshment',
-        groupKey: 'com.onwords.office',
-        channelDescription: 'Notifications for refreshment reminder',
-        importance: Importance.max,
-        priority: Priority.high,
-        enableLights: true,
-        sound: RawResourceAndroidNotificationSound('office'),
-        autoCancel: false,
-        // audioAttributesUsage: AudioAttributesUsage.notification,
-        playSound: true,
-        fullScreenIntent: true,
-        onlyAlertOnce: false,
-        enableVibration: true,
-        channelAction: AndroidNotificationChannelAction.createIfNotExists,
-        color: Color(0xff8355B7));
+    AndroidNotificationDetails androidNotificationDetails =
+        const AndroidNotificationDetails('My Office', 'Refreshment',
+            groupKey: 'com.onwords.office',
+            channelDescription: 'Notifications for refreshment reminder',
+            importance: Importance.max,
+            priority: Priority.high,
+            enableLights: true,
+            sound: RawResourceAndroidNotificationSound('office'),
+            autoCancel: false,
+            // audioAttributesUsage: AudioAttributesUsage.notification,
+            playSound: true,
+            fullScreenIntent: true,
+            onlyAlertOnce: false,
+            enableVibration: true,
+            channelAction: AndroidNotificationChannelAction.createIfNotExists,
+            color: Color(0xff8355B7));
     return NotificationDetails(android: androidNotificationDetails);
   }
 
   //showing notification function
-  Future<void> showDailyNotificationWithPayload({required String setTime}) async {
+  Future<void> showDailyNotificationWithPayload(
+      {required String setTime}) async {
     //Notification setting main function
     setNotification() async {
       final pref = await SharedPreferences.getInstance();
       final currentTime = DateTime.now();
-      final notTimeMng = DateTime(currentTime.year, currentTime.month, currentTime.day, 9, 30);
-      final notTimeEvg = DateTime(currentTime.year, currentTime.month, currentTime.day, 14, 00);
+      final notTimeMng =
+          DateTime(currentTime.year, currentTime.month, currentTime.day, 9, 30);
+      final notTimeEvg = DateTime(
+          currentTime.year, currentTime.month, currentTime.day, 14, 00);
 
       final detail = await _notificationDetails();
 
       const title = 'Refreshment time';
-      const body = 'Don\'t forget to update your refreshment preferences.';
+      const body = 'Place your Refreshment orders here.';
       // 10 AM
 
       for (int i = 0; i < 8; i++) {
@@ -240,7 +269,8 @@ class NotificationService {
               body,
               tz.TZDateTime.from(notificationTimeMorning, tz.local),
               detail,
-              uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+              uiLocalNotificationDateInterpretation:
+                  UILocalNotificationDateInterpretation.absoluteTime,
               androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
             );
           }
@@ -259,7 +289,8 @@ class NotificationService {
               tz.TZDateTime.from(notificationTimeEvening, tz.local),
               detail,
               androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-              uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+              uiLocalNotificationDateInterpretation:
+                  UILocalNotificationDateInterpretation.absoluteTime,
             );
           }
         }
@@ -272,7 +303,9 @@ class NotificationService {
     DateTime currentTime = DateTime.now();
     if (setTime.isNotEmpty) {
       final notificationSetTime = DateTime.parse(setTime);
-      if (currentTime.compareTo(notificationSetTime.add(const Duration(days: 6))) > 0) {
+      if (currentTime
+              .compareTo(notificationSetTime.add(const Duration(days: 6))) >
+          0) {
         //notification set time is passed
         setNotification();
       }
