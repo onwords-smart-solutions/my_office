@@ -110,76 +110,78 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
                       SliverFillRemaining(
                         hasScrollBody: false,
                         child: (!isMng && !isEvg)
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  const SizedBox(height: 20.0),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: size.width * .08),
-                                    child: Align(
-                                      alignment: AlignmentDirectional.centerStart,
-                                      child: Text(
-                                        'Refreshment Portal',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.deepPurple.shade800,
-                                            fontSize: 25.0),
+                            ? Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                                      child: Align(
+                                        alignment: AlignmentDirectional.centerStart,
+                                        child: Text(
+                                          'Refreshment Portal',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.deepPurple.shade800,
+                                              fontSize: 25.0),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(height: size.height * .06),
-                                  const Text(
-                                    'Wait until Refreshment portal opens...',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 20.0,
-                                      color: Colors.black,
+                                    SizedBox(height: size.height * .06),
+                                    const Text(
+                                      'Wait until Refreshment portal opens...',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 20.0,
+                                        color: Colors.black,
+                                      ),
+                                      textAlign: TextAlign.center,
                                     ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  const SizedBox(height: 15.0),
-                                  RichText(
-                                    text: const TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: 'Morning refreshment and food time - ',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500,
+                                    const SizedBox(height: 15.0),
+                                    RichText(
+                                      text: const TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: 'Morning refreshment and food time - ',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
-                                        ),
-                                        TextSpan(
-                                          text: '(09:00 AM - 10:45 AM)',
-                                          style: TextStyle(
-                                            color: Colors.purple,
-                                            fontWeight: FontWeight.w500,
+                                          TextSpan(
+                                            text: '(09:00 AM - 10:45 AM)',
+                                            style: TextStyle(
+                                              color: Colors.purple,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  RichText(
-                                    text: const TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: 'Evening refreshment time - ',
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w500,
+                                    const SizedBox(height: 5),
+                                    RichText(
+                                      text: const TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: 'Evening refreshment time - ',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
-                                        ),
-                                        TextSpan(
-                                          text: '(2:00 PM - 3:30 PM)',
-                                          style: TextStyle(
-                                            color: Colors.purple,
-                                            fontWeight: FontWeight.w500,
+                                          TextSpan(
+                                            text: '(2:00 PM - 3:30 PM)',
+                                            style: TextStyle(
+                                              color: Colors.purple,
+                                              fontWeight: FontWeight.w500,
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               )
                             : Padding(
                                 padding: EdgeInsets.symmetric(horizontal: size.width * .08),

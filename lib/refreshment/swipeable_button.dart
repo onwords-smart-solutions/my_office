@@ -49,18 +49,20 @@ class SwipeableButton extends StatelessWidget {
           return AnimatedSwitcher(
             duration: const Duration(seconds: 1),
             switchInCurve: Curves.easeInOut,
-            child: isOrdering
-                ? const CircleAvatar(
-                    backgroundColor: Colors.deepPurple,
-                    child: SizedBox(
-                      width: 30.0,
-                      height: 30.0,
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                        strokeWidth: 2.0,
+            child:isOrdering
+                ? const Center(
+                  child: CircleAvatar(
+                      backgroundColor: Colors.deepPurple,
+                      child: SizedBox(
+                        width: 30.0,
+                        height: 30.0,
+                        child: CircularProgressIndicator(
+                          color: Colors.white,
+                          strokeWidth: 2.0,
+                        ),
                       ),
                     ),
-                  )
+                )
                 : ConfirmationSlider(
                     onConfirmation: () async {
                       HapticFeedback.mediumImpact();

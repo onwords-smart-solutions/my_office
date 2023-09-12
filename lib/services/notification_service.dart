@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import '../constant/app_defaults.dart';
 import '../main.dart';
+import '../suggestions/view_suggestions.dart';
 
 class NotificationType {
   static const leaveNotification = 'leaveApplied';
@@ -50,17 +51,22 @@ class NotificationService {
   void _onNotificationClick(RemoteMessage? message) {
     if (message == null) return;
     try {
-      if (message.data['type'] == NotificationType.leaveNotification ||
-          message.data['type'] == NotificationType.leaveRespond) {
+      if (message.data['type'] == NotificationType.leaveNotification ) {
         navigationKey.currentState!.push(
           MaterialPageRoute(
             builder: (_) => const LeaveApplyScreen(),
           ),
         );
-      } else if (message.data['type'] == NotificationType.suggestion) {
+      } else if (message.data['type'] == NotificationType.leaveRespond ) {
         navigationKey.currentState!.push(
           MaterialPageRoute(
-            builder: (_) => const SuggestionScreen(),
+            builder: (_) => const LeaveApplyScreen(),
+          ),
+        );
+      }else if (message.data['type'] == NotificationType.suggestion) {
+        navigationKey.currentState!.push(
+          MaterialPageRoute(
+            builder: (_) => const ViewSuggestions(),
           ),
         );
       }

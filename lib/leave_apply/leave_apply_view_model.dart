@@ -13,7 +13,7 @@ class LeaveApplyViewModel {
 
   List<String> leaveTypes = ['General', 'Sick', 'Permission'];
 
-  Future<void> sendLeaveNotification(String title, String body) async {
+  Future<void> sendLeaveNotification(String title, String body, String name) async {
     List<String> members = [
       '58JIRnAbechEMJl8edlLvRzHcW52',
       'Ae6DcpP2XmbtEf88OA8oSHQVpFB2',
@@ -26,6 +26,9 @@ class LeaveApplyViewModel {
     names.addAll(tl);
     names.addAll(rndTl);
     names.addAll(mgmt);
+
+    //removing name if applying staff contain in notification list
+    names.remove(name);
 
     final ids = await _firebaseService.getUserId(userNames: names);
     members.addAll(ids);
@@ -58,7 +61,7 @@ class LeaveApplyViewModel {
       'dep': department,
     });
     refreshHistory();
-    sendLeaveNotification('Permission Request', 'New permission has been applied by $name');
+    sendLeaveNotification('Permission Request', 'New permission has been applied by $name', name);
   }
 
   Future<void> applyLeave({
@@ -81,7 +84,7 @@ class LeaveApplyViewModel {
       'dep': department,
     });
     refreshHistory();
-    sendLeaveNotification('$type Leave Request', 'New $type leave has been applied by $name');
+    sendLeaveNotification('$type Leave Request', 'New $type leave has been applied by $name', name);
   }
 
   String _dateFormatter(DateTime date) => DateFormat('yyyy-MM-dd').format(date);

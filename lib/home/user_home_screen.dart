@@ -42,7 +42,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   final NotificationService _notificationService = NotificationService();
   int _motivationIndex = 0;
   late StreamSubscription subscription;
-  final List<String> _suggestions = [];
 
   //notifiers
   final ValueNotifier<List<StaffAccessModel>> _staffAccess = ValueNotifier([]);
@@ -211,8 +210,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             context: context,
             delegate: CustomSearchDelegate(
               allAccess: _staffAccess.value,
-              addToSuggestion: _addToSuggestion,
-              suggestion: _suggestions,
               staffInfo: userProvider.user!,
             ),
           );
@@ -339,9 +336,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     if (_entryDetail.value!.checkOutTime == null) {
       _timer = Timer.periodic(const Duration(seconds: 3), (timer) async {
         final now = DateTime.now();
-        log('called timer with now $now and end time is ${_endTime.value}');
         if (now.minute != _endTime.value.minute) {
-          log('called inner body from timer');
           _endTime.value = now;
           _endTime.notifyListeners();
           final data = await _homeViewModel.getPunchingTime(context);
@@ -468,12 +463,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     } on FirebaseException {
       Navigator.of(context).pop();
       CustomSnackBar.showErrorSnackbar(message: 'Unable to update my office. Try again', context: context);
-    }
-  }
-
-  void _addToSuggestion(String query) {
-    if (!_suggestions.contains(query)) {
-      _suggestions.add(query);
     }
   }
 
