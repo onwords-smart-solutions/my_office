@@ -36,15 +36,13 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
     final String format = '${_today.year}-$month-$day';
     String mode = '';
 
-
-      if (_today.hour <= 11) {
-        _dayTime = 'Morning';
-        mode = 'FN';
-      } else {
-        _dayTime = 'Evening';
-        mode = 'AN';
-      }
-
+    if (_today.hour <= 11) {
+      _dayTime = 'Morning';
+      mode = 'FN';
+    } else {
+      _dayTime = 'Evening';
+      mode = 'AN';
+    }
 
     final ref = FirebaseDatabase.instance.ref();
     final snapshot = await ref.child('/refreshments/$format/$mode').get();
@@ -55,7 +53,6 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
         _coffeeCount = _data['coffee_count'] ?? 0;
         _teaCount = _data['tea_count'] ?? 0;
         _milkCount = _data['milk_count'] ?? 0;
-
 
     }
 
@@ -68,6 +65,7 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
         _foodCount = _foodData['lunch_count'] ?? 0;
 
     }
+
     setState(() {
       _isLoading = false;
     });
