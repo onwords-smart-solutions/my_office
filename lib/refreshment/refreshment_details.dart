@@ -36,38 +36,39 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
     final String format = '${_today.year}-$month-$day';
     String mode = '';
 
-    setState(() {
-      if (_today.hour <= 11) {
-        _dayTime = 'Morning';
-        mode = 'FN';
-      } else {
-        _dayTime = 'Evening';
-        mode = 'AN';
-      }
-    });
+    if (_today.hour <= 11) {
+      _dayTime = 'Morning';
+      mode = 'FN';
+    } else {
+      _dayTime = 'Evening';
+      mode = 'AN';
+    }
 
     final ref = FirebaseDatabase.instance.ref();
     final snapshot = await ref.child('/refreshments/$format/$mode').get();
     if (snapshot.exists) {
       if (!mounted) return;
-      setState(() {
+
         _data = snapshot.value;
         _coffeeCount = _data['coffee_count'] ?? 0;
         _teaCount = _data['tea_count'] ?? 0;
         _milkCount = _data['milk_count'] ?? 0;
-        _isLoading = false;
-      });
+
     }
 
     //Food section
     final foodSnapshot = await ref.child('/refreshments/$format/Lunch').get();
     if (foodSnapshot.exists) {
       if (!mounted) return;
-      setState(() {
+
         _foodData = foodSnapshot.value;
         _foodCount = _foodData['lunch_count'] ?? 0;
-      });
+
     }
+
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override

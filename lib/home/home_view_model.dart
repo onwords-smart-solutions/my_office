@@ -124,7 +124,8 @@ class HomeViewModel {
             menuItems.title == MenuTitle.suggestion ||
             menuItems.title == MenuTitle.createInvoice ||
             menuItems.title == MenuTitle.quotationTemplate ||
-            menuItems.title == MenuTitle.installationPDF) {
+            menuItems.title == MenuTitle.installationPDF ||
+            menuItems.title == MenuTitle.installationEntry) {
           allAccess.add(menuItems);
         }
       }
