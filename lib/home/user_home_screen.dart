@@ -38,7 +38,6 @@ class UserHomeScreen extends StatefulWidget {
 }
 
 class _UserHomeScreenState extends State<UserHomeScreen> {
-  Timer? _timer;
   final NotificationService _notificationService = NotificationService();
   int _motivationIndex = 0;
   late StreamSubscription subscription;
@@ -81,19 +80,23 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 leading: GestureDetector(
                   onTap: () {
                     HapticFeedback.mediumImpact();
-                    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const AccountScreen()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => const AccountScreen()));
                   },
                   child: Container(
                     margin: const EdgeInsets.only(left: 10.0),
                     clipBehavior: Clip.hardEdge,
                     decoration: const BoxDecoration(shape: BoxShape.circle),
                     child: userProvider.user!.profilePic.isEmpty
-                        ? const Image(image: AssetImage('assets/profile_icon.jpg'))
+                        ? const Image(
+                            image: AssetImage('assets/profile_icon.jpg'))
                         : CachedNetworkImage(
                             imageUrl: userProvider.user!.profilePic,
                             fit: BoxFit.cover,
-                            progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                CircularProgressIndicator(value: downloadProgress.progress),
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) =>
+                                    CircularProgressIndicator(
+                                        value: downloadProgress.progress),
                             errorWidget: (context, url, error) => const Icon(
                               Icons.error,
                               color: Colors.red,
@@ -169,14 +172,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 valueListenable: _staffAccess,
                 builder: (ctx, staffAccess, child) {
                   return staffAccess.isEmpty
-                      ? Lottie.asset('assets/animations/new_loading.json', height: size.height * .6)
-                      : Consumer<UserProvider>(builder: (ctx, userProvider, child) {
+                      ? Lottie.asset('assets/animations/new_loading.json',
+                          height: size.height * .6)
+                      : Consumer<UserProvider>(
+                          builder: (ctx, userProvider, child) {
                           return GridView.builder(
                             itemCount: staffAccess.length,
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
                             padding: const EdgeInsets.all(10.0),
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
                               crossAxisSpacing: 15.0,
                               mainAxisSpacing: 30,
@@ -215,11 +221,13 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         readOnly: true,
         decoration: InputDecoration(
           suffixIcon: const Icon(CupertinoIcons.search, color: Colors.grey),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
           filled: true,
           fillColor: Theme.of(context).scaffoldBackgroundColor,
           hintText: 'Search',
-          hintStyle: const TextStyle(fontWeight: FontWeight.w500, color: Colors.grey),
+          hintStyle:
+              const TextStyle(fontWeight: FontWeight.w500, color: Colors.grey),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15.0),
             borderSide: BorderSide.none,
@@ -237,7 +245,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   _getStaffAccess() async {
     BuildContext context = this.context;
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-    _staffAccess.value = await _homeViewModel.getStaffAccess(staff: userProvider.user!);
+    _staffAccess.value =
+        await _homeViewModel.getStaffAccess(staff: userProvider.user!);
   }
 
   //CHECKING INTERNET CONNECTIVITY
@@ -268,7 +277,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   }
 
   _getConnectivityStream() {
-    subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) async {
+    subscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) async {
       if (result == ConnectivityResult.wifi ||
           result == ConnectivityResult.ethernet ||
           result == ConnectivityResult.mobile ||
@@ -298,7 +309,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         context: context,
         title: message.notification!.title.toString(),
         content: message.notification!.body.toString(),
-        actionButton: TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Ok')),
+        actionButton: TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Ok')),
         barrierDismissible: true,
       );
     });
@@ -308,7 +321,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   _setNotification() async {
     final pref = await SharedPreferences.getInstance();
     final isNotificationSet = pref.getString('NotificationSetTime') ?? '';
-    _notificationService.showDailyNotificationWithPayload(setTime: isNotificationSet);
+    _notificationService.showDailyNotificationWithPayload(
+        setTime: isNotificationSet);
   }
 
   //CHECKING APP VERSION
@@ -318,8 +332,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       if (value.snapshot.exists) {
         final data = value.snapshot.value as Map<Object?, Object?>;
         final updatedVersion = data['versionNumber'];
+        final updates = data['updates'].toString();
         if (AppConstants.pubVersion != updatedVersion) {
-          _showUpdateAppDialog();
+          _showUpdateAppDialog(updates);
         }
       }
     });
@@ -331,26 +346,30 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     _bdayStaffs.value = await _homeViewModel.getAllBirthday();
     if (!mounted) return;
     _entryDetail.value = await _homeViewModel.getPunchingTime(context);
-    if (_entryDetail.value!.checkOutTime == null) {
-      _timer = Timer.periodic(const Duration(seconds: 3), (timer) async {
-        final now = DateTime.now();
-        if (now.minute != _endTime.value.minute) {
-          _endTime.value = now;
-          _endTime.notifyListeners();
-          final data = await _homeViewModel.getPunchingTime(context);
-          if (data.checkInTime != null) {
-            _entryDetail.value = data;
-            _entryDetail.notifyListeners();
-          }
-          if (data.checkOutTime != null) {
-            timer.cancel();
-          }
+
+    Timer.periodic(const Duration(seconds: 3), (timer) async {
+      final now = DateTime.now();
+
+      //checking for date change
+      if (now.day != _endTime.value.day) {
+        _bdayStaffs.value = await _homeViewModel.getAllBirthday();
+        if (!mounted) return;
+        _entryDetail.value = await _homeViewModel.getPunchingTime(context);
+        _endTime.value = now;
+      } else if (now.minute != _endTime.value.minute &&
+          _entryDetail.value!.checkOutTime == null) {
+        _endTime.value = now;
+        _endTime.notifyListeners();
+        final data = await _homeViewModel.getPunchingTime(context);
+        if (data.checkInTime != null) {
+          _entryDetail.value = data;
+          _entryDetail.notifyListeners();
         }
-      });
-    }
+      }
+    });
   }
 
-  _showUpdateAppDialog() {
+  _showUpdateAppDialog(String message) {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -388,7 +407,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                                     const SizedBox(height: 20.0),
                                     LinearProgressIndicator(
                                       minHeight: 5.0,
-                                      value: totalMb <= 0.0 ? 0.0 : (downloadedMb / totalMb),
+                                      value: totalMb <= 0.0
+                                          ? 0.0
+                                          : (downloadedMb / totalMb),
                                       borderRadius: BorderRadius.circular(20.0),
                                     ),
                                     const SizedBox(height: 5.0),
@@ -399,28 +420,34 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                                             ? 'calculating'
                                             : '${downloadedMb.round()} MB / ${totalMb.round()} MB',
                                         style: const TextStyle(
-                                            fontWeight: FontWeight.w700, fontSize: 12.0, color: Colors.grey),
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 12.0,
+                                            color: Colors.grey),
                                       ),
                                     ),
                                   ],
                                 )
-                              : const Text(
-                                  "You are currently using an outdated version. Update the app to use the latest features..",
-                                  style: TextStyle(fontSize: 15.0),
+                              : Text(
+                                  message.isNotEmpty
+                                      ? message
+                                      : "You are currently using an outdated version. Update the app to use the latest features..",
+                                  style: const TextStyle(fontSize: 15.0),
                                 ),
                           actions: [
                             isUpdating
                                 ? const SizedBox.shrink()
                                 : TextButton(
                                     onPressed: () async {
-                                      final permission = await Permission.requestInstallPackages.isGranted;
+                                      final permission = await Permission
+                                          .requestInstallPackages.isGranted;
                                       if (permission) {
                                         setState(() {
                                           isUpdating = true;
                                         });
                                         _onClickInstallApk();
                                       } else {
-                                        await Permission.requestInstallPackages.request();
+                                        await Permission.requestInstallPackages
+                                            .request();
                                       }
                                     },
                                     child: const Text("Update Now"),
@@ -439,7 +466,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   }
 
   Future<void> _onClickInstallApk() async {
-    final resultPath = FirebaseStorage.instance.ref('MY OFFICE APK/app-release.apk');
+    final resultPath =
+        FirebaseStorage.instance.ref('MY OFFICE APK/app-release.apk');
     final appDocDir = await getExternalStorageDirectory();
     final String appDocPath = appDocDir!.path;
     final File tempFile = File('$appDocPath/MY_OFFICE_UPDATED.apk');
@@ -452,15 +480,20 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
         if (_totalMB.value == _downloadedMB.value) {
           await tempFile.create();
-          await InstallPlugin.installApk(tempFile.path, 'com.onwords.office').then((result) {}).catchError((error) {
+          await InstallPlugin.installApk(tempFile.path, 'com.onwords.office')
+              .then((result) {})
+              .catchError((error) {
             Navigator.of(context).pop();
-            CustomSnackBar.showErrorSnackbar(message: 'Unable to update my office. Try again', context: context);
+            CustomSnackBar.showErrorSnackbar(
+                message: 'Unable to update my office. Try again',
+                context: context);
           });
         }
       });
     } on FirebaseException {
       Navigator.of(context).pop();
-      CustomSnackBar.showErrorSnackbar(message: 'Unable to update my office. Try again', context: context);
+      CustomSnackBar.showErrorSnackbar(
+          message: 'Unable to update my office. Try again', context: context);
     }
   }
 
@@ -474,9 +507,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     _entryDetail.dispose();
     _bdayStaffs.dispose();
     subscription.cancel();
-    if (_timer != null) {
-      _timer!.cancel();
-    }
+
     super.dispose();
   }
 

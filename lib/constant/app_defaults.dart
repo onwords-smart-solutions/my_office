@@ -97,7 +97,7 @@ class AppDefaults {
     StaffAccessModel(title: MenuTitle.staffDetail, image: 'assets/staff_details.png'),
     StaffAccessModel(title: MenuTitle.installationPDF, image: 'assets/installation_image.png'),
     StaffAccessModel(title: MenuTitle.proxyAttendance, image: 'assets/proxy_attendance.png'),
-    StaffAccessModel(title: MenuTitle.installationEntry, image: 'assets/installation_entry.png'),
+    // StaffAccessModel(title: MenuTitle.installationEntry, image: 'assets/installation_entry.png'),
   ];
 
   static Widget getPage(String title, StaffModel staffInfo) {

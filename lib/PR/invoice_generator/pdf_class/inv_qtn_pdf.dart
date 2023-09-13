@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -48,6 +49,7 @@ class InvAndQtnPdf {
     final qrImage = pw.MemoryImage(pic);
 
     pdf.addPage(
+
       MultiPage(
         header: (context) => buildLogo(
           assetImage,
@@ -145,8 +147,8 @@ class InvAndQtnPdf {
   Widget builderQR(pw.MemoryImage img) {
     return Container(
       margin: const EdgeInsets.only(left: -7),
-      height: 100, //150,
-      width: 80, //150,
+      height: 150, //150,
+      width: 130, //150,
       child: pw.Image(img),
     );
   }
@@ -269,89 +271,86 @@ class InvAndQtnPdf {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           bankDetails(builderQR(img), customerDetails),
-          SizedBox(width: 120),
-          Expanded(
-            // flex: 1,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                finalTotal(
-                    'Total', Utils.formatPrice(total.toDouble()), false, 10),
-                discount != 0
-                    ? finalTotal('Discount $percentage%',
-                        Utils.formatPrice(discount.toDouble()), false, 10)
-                    : SizedBox.shrink(),
-                finalTotal('SubTotal', Utils.formatPrice(subTotal.toDouble()),
-                    false, 10),
-                needGst
-                    ? finalTotal(
-                        'CGST 9%',
-                        Utils.formatPrice(cgst.toDouble().roundToDouble()),
-                        false,
-                        10)
-                    : SizedBox(),
-                needGst
-                    ? finalTotal(
-                        'SGST 9%',
-                        Utils.formatPrice(sgst.toDouble().roundToDouble()),
-                        false,
-                        10)
-                    : SizedBox(),
-                SizedBox(height: 2 * PdfPageFormat.mm),
-                Container(height: 1, width: 180, color: PdfColors.grey400),
-                SizedBox(height: 0.5 * PdfPageFormat.mm),
-                Container(height: 1, width: 180, color: PdfColors.grey400),
-                SizedBox(height: 0.8 * PdfPageFormat.mm),
-                finalTotal('Grand Total',
-                    Utils.formatPrice(grandTotal.toDouble()), true, 12),
-                SizedBox(height: 0.8 * PdfPageFormat.mm),
-                Container(height: 1, width: 180, color: PdfColors.grey400),
-                SizedBox(height: 0.5 * PdfPageFormat.mm),
-                Container(height: 1, width: 180, color: PdfColors.grey400),
-                SizedBox(height: 2 * PdfPageFormat.mm),
-                customerDetails.docType == "PROFORMA_INVOICE"
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                            advance != 0
-                                ? finalTotal(
-                                    'Advanced',
-                                    Utils.formatPrice(advance.toDouble()),
-                                    false,
-                                    10)
-                                : SizedBox.shrink(),
-                            SizedBox(height: 2 * PdfPageFormat.mm),
-                            Container(
-                                height: 1,
-                                width: 180,
-                                color: PdfColors.grey400),
-                            SizedBox(height: 0.5 * PdfPageFormat.mm),
-                            Container(
-                                height: 1,
-                                width: 180,
-                                color: PdfColors.grey400),
-                            SizedBox(height: 0.8 * PdfPageFormat.mm),
-                            finalTotal(
-                                'Balance',
-                                Utils.formatPrice(amountToPay.toDouble()),
-                                true,
-                                12),
-                            SizedBox(height: 0.8 * PdfPageFormat.mm),
-                            Container(
-                                height: 1,
-                                width: 180,
-                                color: PdfColors.grey400),
-                            SizedBox(height: 0.5 * PdfPageFormat.mm),
-                            Container(
-                                height: 1,
-                                width: 180,
-                                color: PdfColors.grey400),
-                          ])
-                    : customerDetails.docType == "INVOICE"
-                        ? buildPaidImg(paidImg)
-                        : SizedBox(),
-              ],
-            ),
+          Spacer(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              finalTotal(
+                  'Total', Utils.formatPrice(total.toDouble()), false, 10),
+              discount != 0
+                  ? finalTotal('Discount $percentage%',
+                      Utils.formatPrice(discount.toDouble()), false, 10)
+                  : SizedBox.shrink(),
+              finalTotal('SubTotal', Utils.formatPrice(subTotal.toDouble()),
+                  false, 10),
+              needGst
+                  ? finalTotal(
+                      'CGST 9%',
+                      Utils.formatPrice(cgst.toDouble().roundToDouble()),
+                      false,
+                      10)
+                  : SizedBox(),
+              needGst
+                  ? finalTotal(
+                      'SGST 9%',
+                      Utils.formatPrice(sgst.toDouble().roundToDouble()),
+                      false,
+                      10)
+                  : SizedBox(),
+              SizedBox(height: 2 * PdfPageFormat.mm),
+              Container(height: 1, width: 180, color: PdfColors.grey400),
+              SizedBox(height: 0.5 * PdfPageFormat.mm),
+              Container(height: 1, width: 180, color: PdfColors.grey400),
+              SizedBox(height: 0.8 * PdfPageFormat.mm),
+              finalTotal('Grand Total',
+                  Utils.formatPrice(grandTotal.toDouble()), true, 12),
+              SizedBox(height: 0.8 * PdfPageFormat.mm),
+              Container(height: 1, width: 180, color: PdfColors.grey400),
+              SizedBox(height: 0.5 * PdfPageFormat.mm),
+              Container(height: 1, width: 180, color: PdfColors.grey400),
+              SizedBox(height: 2 * PdfPageFormat.mm),
+              customerDetails.docType == "PROFORMA_INVOICE"
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                          advance != 0
+                              ? finalTotal(
+                                  'Advanced',
+                                  Utils.formatPrice(advance.toDouble()),
+                                  false,
+                                  10)
+                              : SizedBox.shrink(),
+                          SizedBox(height: 2 * PdfPageFormat.mm),
+                          Container(
+                              height: 1,
+                              width: 180,
+                              color: PdfColors.grey400),
+                          SizedBox(height: 0.5 * PdfPageFormat.mm),
+                          Container(
+                              height: 1,
+                              width: 180,
+                              color: PdfColors.grey400),
+                          SizedBox(height: 0.8 * PdfPageFormat.mm),
+                          finalTotal(
+                              'Balance',
+                              Utils.formatPrice(amountToPay.toDouble()),
+                              true,
+                              12),
+                          SizedBox(height: 0.8 * PdfPageFormat.mm),
+                          Container(
+                              height: 1,
+                              width: 180,
+                              color: PdfColors.grey400),
+                          SizedBox(height: 0.5 * PdfPageFormat.mm),
+                          Container(
+                              height: 1,
+                              width: 180,
+                              color: PdfColors.grey400),
+                        ])
+                  : customerDetails.docType == "INVOICE"
+                      ? buildPaidImg(paidImg)
+                      : SizedBox(),
+            ],
           ),
         ],
       ),
@@ -370,8 +369,8 @@ class InvAndQtnPdf {
           Row(
               children: [
                 customerDetails.docType == "INVOICE" ?
-                SizedBox.shrink() :
-            createText('Scan To Pay', '', true, 10, 0),
+                SizedBox.shrink():
+                createText('Scan To Pay', '', true, 10, 0),
             SizedBox(width: 1 * PdfPageFormat.mm),
             qr,
           ])

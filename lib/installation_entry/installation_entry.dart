@@ -52,7 +52,7 @@ class InstallationEntry extends StatelessWidget {
                     itemCount: snapshot.data!.snapshot.children.length,
                     itemBuilder: (ctx, index) {
                       return ListTile(
-                        tileColor: Colors.white,
+                        // tileColor: Colors.white,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0),
                         ),
