@@ -202,14 +202,7 @@ class NotificationService {
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
     );
-    _notifications
-        .resolvePlatformSpecificImplementation<
-            IOSFlutterLocalNotificationsPlugin>()!
-        .requestPermissions(
-          alert: true,
-          badge: true,
-          sound: true,
-        );
+
     await _notifications.initialize(
       settings,
     );

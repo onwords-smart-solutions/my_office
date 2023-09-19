@@ -449,6 +449,8 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
 
   Future<void> _printScreen() async {
     final doc = pw.Document();
+    DateTime endTime = DateTime.now();
+
 
     doc.addPage(pw.MultiPage(
         margin: const pw.EdgeInsets.all(15.0),
@@ -460,6 +462,11 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
 
             if (_sortedList.value[index].isProxy) {
               method = 'Proxy';
+            }
+
+
+            if (_sortedList.value[index].checkOutTime != null) {
+              endTime = _sortedList.value[index].checkOutTime!;
             }
 
             if (_sortedList.value[index].checkInTime == null) {
@@ -540,6 +547,7 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
                       ),
                     ),
                   ),
+
                   pw.Column(
                     children: [
                       pw.Text(
@@ -550,6 +558,11 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
                         method,
                         style: pw.TextStyle(color: topContainerColor),
                       ),
+
+                      if (_sortedList.value[index].checkInTime != null) ...[
+
+                        pw.Text('Duration : ${duration(_sortedList.value[index].checkInTime!,endTime)}',)
+                      ]
                     ],
                   ),
                   pw.Container(
@@ -575,3 +588,11 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
 
 /// date formatter
 String formatDate(DateTime date) => DateFormat.yMMMd().format(date);
+
+String duration(DateTime start, DateTime end) {
+  final diff = end.difference(start);
+  int hours = diff.inHours;
+  int minutes = diff.inMinutes % 60;
+
+  return '${hours}h ${minutes}m';
+}

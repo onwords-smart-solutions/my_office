@@ -215,7 +215,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Preview of Document',
           style: TextStyle(
               fontSize: 22,
@@ -304,7 +304,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                               ),
                               child: Column(
                                 children: [
-                                  Text('Customer Details',
+                                  const Text('Customer Details',
                                       style: TextStyle(
                                          
                                           color: Colors.black)),
@@ -364,25 +364,25 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text('      Document Details',
+                                  const Text('      Document Details',
                                       style: TextStyle(
                                          
                                           color: Colors.black)),
                                   Text(
                                       ' Date of Document : ${documentDateController.text.isNotEmpty ? documentDateController.text : "Select Date"}',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                          
                                           color: Colors.black,
                                           fontSize: 10)),
                                   Text(
                                       ' Doc-Type : #${customerDetails.docType}',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                          
                                           color: Colors.black,
                                           fontSize: 10)),
                                   Text(
                                       ' Category : ${customerDetails.docCategory}',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                          
                                           color: Colors.black,
                                           fontSize: 10)),
@@ -560,7 +560,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
           child: Center(
             child: Text(
               title,
-              style: TextStyle( ),
+              style: const TextStyle( ),
             ),
           ),
         ),
@@ -609,7 +609,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
               width: 60,
               child: Text(
                 key,
-                style: TextStyle(
+                style: const TextStyle(
                    
                     color: Colors.black,
                     fontSize: 10),
@@ -622,7 +622,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                 physics: const BouncingScrollPhysics(),
                 child: Text(
                   value,
-                  style: TextStyle(
+                  style: const TextStyle(
                    
                     color: Colors.black,
                     fontSize: 10,
@@ -650,7 +650,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
             width: 150,
             child: Text(
               key,
-              style: TextStyle(
+              style: const TextStyle(
                  
                   color: Colors.black,
                   fontSize: 12),
@@ -663,7 +663,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
             child: Text(
               value,
               textAlign: TextAlign.end,
-              style: TextStyle(
+              style: const TextStyle(
                
                 color: Colors.black,
                 fontSize: 10,
@@ -688,7 +688,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
             child: Form(
               key: formKey,
               child: CupertinoAlertDialog(
-                title: Text(
+                title: const Text(
                   "Document Details\n",
                   style: TextStyle(
                       color: ConstantColor.backgroundColor,
@@ -718,7 +718,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                         height: 5,
                       ),
                       clientModel.docType != 'QUOTATION'
-                          ? Text(
+                          ? const Text(
                               '  Date For Installation',
                               style: TextStyle(
                                  
@@ -735,16 +735,16 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                               textInputAction: TextInputAction.done,
                               maxLength: 15,
                               readOnly: true,
-                              style: TextStyle(
+                              style: const TextStyle(
                                
                               ),
                               decoration: InputDecoration(
                                 counterText: '',
                                 hintText: 'Estimated Date',
-                                hintStyle: TextStyle(
+                                hintStyle: const TextStyle(
                                  
                                 ),
-                                labelStyle: TextStyle(
+                                labelStyle: const TextStyle(
                                  
                                 ),
                                 border: myInputBorder(),
@@ -785,7 +785,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                 ),
                 actions: <Widget>[
                   CupertinoDialogAction(
-                    child: Text(
+                    child: const Text(
                       "Cancel",
                       style: TextStyle(
                           color: Colors.black,
@@ -796,7 +796,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                     },
                   ),
                   CupertinoDialogAction(
-                    child: Text(
+                    child: const Text(
                       "Save",
                       style: TextStyle(
                           color: Colors.black,
@@ -952,7 +952,8 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                                     'EST${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
                                 .set(quotation);
                           }
-                        }).then((value) {
+                        })
+                            .then((value) {
                           fileNameController.clear();
                           listOfDocLength.clear();
                           estimateDateController.clear();
@@ -965,7 +966,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                               MaterialPageRoute(
                                   builder: (_) => const UserHomeScreen()),
                               (route) => false);
-                          // Navigator.pushNamedAndRemoveUntil(context, '/invoiceGenerator', (route) => false);
+                          Navigator.pushNamedAndRemoveUntil(context, '/invoiceGenerator', (route) => false);
                         });
                       }
                     },

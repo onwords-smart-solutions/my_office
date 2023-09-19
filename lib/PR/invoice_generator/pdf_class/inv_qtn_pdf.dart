@@ -208,7 +208,7 @@ class InvAndQtnPdf {
         item.subTotalList,
       ];
     }).toList();
-    return Table.fromTextArray(
+    return TableHelper.fromTextArray(
         headers: headers,
         data: data,
         cellStyle: const TextStyle(fontSize: 9),
@@ -449,13 +449,17 @@ class InvAndQtnPdf {
                               "2. Wilful damage or negligence, normal wear and tear;\n"
                               "Abuse or misuse of equipment/product;\n"
                               "3. Damage or defect caused by  earthquake  or other similar natural disasters;\n"
-                              "4. Damage or defect caused by alteration, modification, conversion not authorised by Company in writing;\n"
-                              "5. Repairs carried out by personnel other than Company's authorised service personnel's;\n"
-                              "6. Defects or damages due to any other external means or causes are not covered under warranty.",
+                              "4. Repairs carried out by personnel other than Company's authorised service personnel's;\n"
+                              "5. Defects or damages due to any other external means or causes are not covered under warranty;\n"
+                              "6. Damage or defect caused by alteration, modification, conversion not authorised by Company in writing. In case of Refund, 30% of the total value will be deducted.",
+                          false),
+                      buildBodyText('Post Installation', true),
+                      buildBodyText(
+                          "Service due to gate modification will be charged from minimum 5k to maximum, according to the distance we cover.",
                           false),
                       buildBodyText("Payment:", true),
                       buildBodyText(
-                          "50% of order amount should be paid as advance, balance 50% should be paid at the date of installation, There should not be any negotiation in final payment before handing over the Remote and other accessories.",
+                          "50% of order amount should be paid as advance, and 40% should be paid at the date of installation, balance 10% will be received after the installation. There should not be any negotiation in final payment before handing over the Remote and other accessories.",
                           false),
                       buildBodyText("Delivery Period:", true),
                       buildBodyText(
@@ -510,13 +514,17 @@ class InvAndQtnPdf {
                               "2. Wilful damage or negligence, normal wear and tear;\n"
                               "Abuse or misuse of equipment/product;\n"
                               "3. Damage or defect caused by  earthquake  or other similar natural disasters;\n"
-                              "4. Damage or defect caused by alteration, modification, conversion not authorised by Company in writing;\n"
-                              "5. Repairs carried out by personnel other than Company's authorised service personnel's;\n"
-                              "6. Defects or damages due to any other external means or causes are not covered under warranty.",
+                              "4. Repairs carried out by personnel other than Company's authorised service personnel's;\n"
+                              "5. Defects or damages due to any other external means or causes are not covered under warranty.\n"
+                              "6. Damage or defect caused by alteration, modification, conversion not authorised by Company in writing. In case of Refund, 30% of the total value will be deducted.",
                           false),
+                      buildBodyText('Post Installation', true),
+                      buildBodyText(
+                      "Service due to gate modification will be charged from minimum 5k to maximum, according to the distance we cover.",
+                      false),
                       buildBodyText("Payment:", true),
                       buildBodyText(
-                          "50% of order amount should be paid as advance, balance 50% should be paid at the date of installation, There should not be any negotiation in final payment before handing over the Remote and other accessories.",
+                          "50% of order amount should be paid as advance, and 40% should be paid at the date of installation, balance 10% will be received after the installation. There should not be any negotiation in final payment before handing over the Remote and other accessories.",
                           false),
                       buildBodyText("Delivery Period:", true),
                       buildBodyText(
@@ -533,7 +541,80 @@ class InvAndQtnPdf {
                               "3. Programming of all the above mentioned components.\n"
                               "4. Delivery to the client and mobile application integration if needed.",
                           false),
-                    ]
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                         Column(
+                           children:[
+                             SizedBox(height: 10),
+                             Text(
+                               'Yours sincerely,',
+                               style: pw.TextStyle(
+                                 fontWeight: pw.FontWeight.bold,
+                                 fontSize: 11,
+                               ),
+                             ),
+                             SizedBox(height: 20),
+                             Text(
+                               'PR Name : ',
+                               style: pw.TextStyle(
+                                 fontWeight: pw.FontWeight.bold,
+                                 fontSize: 11,
+                               ),
+                             ),
+                             Text(
+                               'Date         : ',
+                               style: pw.TextStyle(
+                                 fontWeight: pw.FontWeight.bold,
+                                 fontSize: 11,
+                               ),
+                             ),
+                             Text(
+                               'PR ID       : ',
+                               style: pw.TextStyle(
+                                 fontWeight: pw.FontWeight.bold,
+                                 fontSize: 11,
+                               ),
+                             ),
+                           ],
+                         ),
+                         Column(
+                           children: [
+                             SizedBox(height: 10),
+                             Text(
+                               'Accepted & Acknowledged by,',
+                               style: pw.TextStyle(
+                                 fontWeight: pw.FontWeight.bold,
+                                 fontSize: 11,
+                               ),
+                             ),
+                             SizedBox(height: 20),
+                             Text(
+                               'Customer name      : ',
+                               style: pw.TextStyle(
+                                 fontWeight: pw.FontWeight.bold,
+                                 fontSize: 11,
+                               ),
+                             ),
+                             Text(
+                               'Date                         : ',
+                               style: pw.TextStyle(
+                                 fontWeight: pw.FontWeight.bold,
+                                 fontSize: 11,
+                               ),
+                             ),
+                             Text(
+                               'Customer mobile    : ',
+                               style: pw.TextStyle(
+                                 fontWeight: pw.FontWeight.bold,
+                                 fontSize: 11,
+                               ),
+                             ),
+                           ]
+                         )
+                        ],
+                      ),
+                    ],
                 )
             ) : SizedBox.shrink(),
 

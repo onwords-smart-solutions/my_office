@@ -29,6 +29,7 @@ import '../app_version/version.dart';
 import '../models/custom_punching_model.dart';
 import '../models/staff_access_model.dart';
 import '../models/staff_model.dart';
+import 'onyx_screen.dart';
 
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({Key? key}) : super(key: key);
@@ -123,6 +124,13 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     ),
                   ],
                 ),
+              ),
+              floatingActionButton: FloatingActionButton(
+                backgroundColor: Colors.deepPurple,
+                onPressed: (){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const OnyxScreen()));
+                },
+                child: Image.asset('assets/onyx_thala.png', scale: 1.5,),
               ),
               body: _body(userProvider, size),
             );
