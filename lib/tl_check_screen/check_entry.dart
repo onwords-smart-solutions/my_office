@@ -61,136 +61,136 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
             builder: (ctx, isLoading, child) {
               return isLoading
                   ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text('Fetching data',
-                            style: TextStyle(
-                              fontFamily: ConstantFonts.sfProBold,
-                              fontSize: 18.0,
-                            )),
-                        const SizedBox(height: 5.0),
-                        const CircleAvatar(
-                          child: SizedBox(
-                            height: 20.0,
-                            width: 20.0,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2.0,
-                            ),
-                          ),
-                        )
-                      ],
-                    )
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('Fetching data',
+                      style: TextStyle(
+                        fontFamily: ConstantFonts.sfProBold,
+                        fontSize: 18.0,
+                      )),
+                  const SizedBox(height: 5.0),
+                  const CircleAvatar(
+                    child: SizedBox(
+                      height: 20.0,
+                      width: 20.0,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.0,
+                      ),
+                    ),
+                  )
+                ],
+              )
                   : Column(
-                      children: [
-                        //search bar and total count
-                        _search(),
-                        // head section
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            //date picker
-                            ValueListenableBuilder(
-                                valueListenable: _selectedDate,
-                                builder: (ctx, date, child) {
-                                  return TextButton.icon(
-                                    onPressed: _showDatePicker,
-                                    icon: const Icon(Icons.calendar_month_rounded),
-                                    label: Text(formatDate(date)),
-                                  );
-                                }),
-                            //total
-                            ValueListenableBuilder(
-                                valueListenable: _sortedList,
-                                builder: (ctx, sortedList, child) {
-                                  return Row(
-                                    children: [
-                                      Text(
-                                        'Total : ${sortedList.length}',
-                                        style: TextStyle(
-                                          fontFamily: ConstantFonts.sfProBold,
-                                          fontSize: 17.0,
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                }),
-                            //sorter
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                              child: PopupMenuButton(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                children: [
+                  //search bar and total count
+                  _search(),
+                  // head section
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      //date picker
+                      ValueListenableBuilder(
+                          valueListenable: _selectedDate,
+                          builder: (ctx, date, child) {
+                            return TextButton.icon(
+                              onPressed: _showDatePicker,
+                              icon: const Icon(Icons.calendar_month_rounded),
+                              label: Text(formatDate(date)),
+                            );
+                          }),
+                      //total
+                      ValueListenableBuilder(
+                          valueListenable: _sortedList,
+                          builder: (ctx, sortedList, child) {
+                            return Row(
+                              children: [
+                                Text(
+                                  'Total : ${sortedList.length}',
+                                  style: TextStyle(
+                                    fontFamily: ConstantFonts.sfProBold,
+                                    fontSize: 17.0,
+                                  ),
                                 ),
-                                position: PopupMenuPosition.under,
-                                elevation: 10,
-                                itemBuilder: (ctx) => List.generate(
-                                  _dropDown.length,
-                                  (i) {
-                                    return PopupMenuItem(
-                                      child: Text(
-                                        _dropDown[i],
-                                        style: TextStyle(fontSize: 16),
-                                      ),
-                                      onTap: () {
-                                        _sortOption.value = _dropDown[i];
-                                        if (_dropDown[i] == 'All') {
-                                          _sortedList.value = _punchingDetails.value;
-                                        } else if (_dropDown[i] == 'Present') {
-                                          _sortedList.value = _punchingDetails.value
-                                              .where((element) => element.checkInTime != null)
-                                              .toList();
-                                        } else if (_dropDown[i] == 'Absentees') {
-                                          _sortedList.value = _punchingDetails.value
-                                              .where((element) => element.checkInTime == null)
-                                              .toList();
-                                        } else if (_dropDown[i] == 'Late Entry') {
-                                          _sortedList.value = _punchingDetails.value
-                                              .where(
-                                                (element) =>
-                                                    (element.checkInTime != null) &&
-                                                    (element.checkInTime!
-                                                            .difference(DateTime(
-                                                                element.checkInTime!.year,
-                                                                element.checkInTime!.month,
-                                                                element.checkInTime!.day,
-                                                                09,
-                                                                00))
-                                                            .inMinutes >
-                                                        10),
-                                              )
-                                              .toList();
-                                        } else if (_dropDown[i] == 'ID Tap') {
-                                          _sortedList.value = _punchingDetails.value
-                                              .where((element) => (!element.isProxy) && element.checkInTime != null)
-                                              .toList();
-                                        } else if (_dropDown[i] == 'Proxy') {
-                                          _sortedList.value =
-                                              _punchingDetails.value.where((element) => element.isProxy).toList();
-                                        }
-                                      },
+                              ],
+                            );
+                          }),
+                      //sorter
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: PopupMenuButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          position: PopupMenuPosition.under,
+                          elevation: 10,
+                          itemBuilder: (ctx) => List.generate(
+                            _dropDown.length,
+                                (i) {
+                              return PopupMenuItem(
+                                child: Text(
+                                  _dropDown[i],
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                onTap: () {
+                                  _sortOption.value = _dropDown[i];
+                                  if (_dropDown[i] == 'All') {
+                                    _sortedList.value = _punchingDetails.value;
+                                  } else if (_dropDown[i] == 'Present') {
+                                    _sortedList.value = _punchingDetails.value
+                                        .where((element) => element.checkInTime != null)
+                                        .toList();
+                                  } else if (_dropDown[i] == 'Absentees') {
+                                    _sortedList.value = _punchingDetails.value
+                                        .where((element) => element.checkInTime == null)
+                                        .toList();
+                                  } else if (_dropDown[i] == 'Late Entry') {
+                                    _sortedList.value = _punchingDetails.value
+                                        .where(
+                                          (element) =>
+                                      (element.checkInTime != null) &&
+                                          (element.checkInTime!
+                                              .difference(DateTime(
+                                              element.checkInTime!.year,
+                                              element.checkInTime!.month,
+                                              element.checkInTime!.day,
+                                              09,
+                                              00))
+                                              .inMinutes >
+                                              10),
+                                    )
+                                        .toList();
+                                  } else if (_dropDown[i] == 'ID Tap') {
+                                    _sortedList.value = _punchingDetails.value
+                                        .where((element) => (!element.isProxy) && element.checkInTime != null)
+                                        .toList();
+                                  } else if (_dropDown[i] == 'Proxy') {
+                                    _sortedList.value =
+                                        _punchingDetails.value.where((element) => element.isProxy).toList();
+                                  }
+                                },
+                              );
+                            },
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(CupertinoIcons.sort_down),
+                              ValueListenableBuilder(
+                                  valueListenable: _sortOption,
+                                  builder: (ctx, sort, child) {
+                                    return Text(
+                                      sort,
+                                      style: TextStyle(),
                                     );
-                                  },
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Icon(CupertinoIcons.sort_down),
-                                    ValueListenableBuilder(
-                                        valueListenable: _sortOption,
-                                        builder: (ctx, sort, child) {
-                                          return Text(
-                                            sort,
-                                            style: TextStyle(),
-                                          );
-                                        }),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
+                                  }),
+                            ],
+                          ),
                         ),
-                      ],
-                    );
+                      ),
+                    ],
+                  ),
+                ],
+              );
             }),
         //list view
         Expanded(child: _entryList()),
@@ -236,22 +236,22 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
                     return (loading && punchingList.isEmpty)
                         ? Center(child: Lottie.asset('assets/animations/new_loading.json'))
                         : ValueListenableBuilder(
-                            valueListenable: _sortedList,
-                            builder: (ctx, sortedList, child) {
-                              sortedList.sort((a, b) => a.name.compareTo(b.name));
+                        valueListenable: _sortedList,
+                        builder: (ctx, sortedList, child) {
+                          sortedList.sort((a, b) => a.name.compareTo(b.name));
 
-                              return sortedList.isEmpty
-                                  ? Center(
-                                      child: Text(
-                                      'No details found',
-                                      style: TextStyle(fontFamily: ConstantFonts.sfProBold, fontSize: 16.0),
-                                    ))
-                                  : ListView.builder(
-                                      itemCount: sortedList.length,
-                                      itemBuilder: (ctx, index) {
-                                        return PunchItem(punchDetail: sortedList[index]);
-                                      });
-                            });
+                          return sortedList.isEmpty
+                              ? Center(
+                              child: Text(
+                                'No details found',
+                                style: TextStyle(fontFamily: ConstantFonts.sfProBold, fontSize: 16.0),
+                              ))
+                              : ListView.builder(
+                              itemCount: sortedList.length,
+                              itemBuilder: (ctx, index) {
+                                return PunchItem(punchDetail: sortedList[index]);
+                              });
+                        });
                   },
                 );
               });
@@ -449,6 +449,8 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
 
   Future<void> _printScreen() async {
     final doc = pw.Document();
+    DateTime endTime = DateTime.now();
+
 
     doc.addPage(pw.MultiPage(
         margin: const pw.EdgeInsets.all(15.0),
@@ -462,38 +464,43 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
               method = 'Proxy';
             }
 
+
+            if (_sortedList.value[index].checkOutTime != null) {
+              endTime = _sortedList.value[index].checkOutTime!;
+            }
+
             if (_sortedList.value[index].checkInTime == null) {
               topContainerColor = PdfColors.blueGrey600;
               status = 'Absent today';
             } else if (_sortedList.value[index].checkInTime!
-                        .difference(DateTime(
-                            _sortedList.value[index].checkInTime!.year,
-                            _sortedList.value[index].checkInTime!.month,
-                            _sortedList.value[index].checkInTime!.day,
-                            09,
-                            00))
-                        .inMinutes >
-                    10 &&
+                .difference(DateTime(
+                _sortedList.value[index].checkInTime!.year,
+                _sortedList.value[index].checkInTime!.month,
+                _sortedList.value[index].checkInTime!.day,
+                09,
+                00))
+                .inMinutes >
+                10 &&
                 _sortedList.value[index].checkInTime!
-                        .difference(DateTime(
-                            _sortedList.value[index].checkInTime!.year,
-                            _sortedList.value[index].checkInTime!.month,
-                            _sortedList.value[index].checkInTime!.day,
-                            09,
-                            20))
-                        .inMinutes <=
+                    .difference(DateTime(
+                    _sortedList.value[index].checkInTime!.year,
+                    _sortedList.value[index].checkInTime!.month,
+                    _sortedList.value[index].checkInTime!.day,
+                    09,
+                    20))
+                    .inMinutes <=
                     0) {
               topContainerColor = PdfColors.deepOrange400;
               status =
-                  'Late by ${_sortedList.value[index].checkInTime!.difference(DateTime(_sortedList.value[index].checkInTime!.year, _sortedList.value[index].checkInTime!.month, _sortedList.value[index].checkInTime!.day, 09, 00)).inMinutes - 10} mins';
+              'Late by ${_sortedList.value[index].checkInTime!.difference(DateTime(_sortedList.value[index].checkInTime!.year, _sortedList.value[index].checkInTime!.month, _sortedList.value[index].checkInTime!.day, 09, 00)).inMinutes - 10} mins';
             } else if (_sortedList.value[index].checkInTime!
-                    .difference(DateTime(_sortedList.value[index].checkInTime!.year,
-                        _sortedList.value[index].checkInTime!.month, _sortedList.value[index].checkInTime!.day, 09, 00))
-                    .inMinutes >
+                .difference(DateTime(_sortedList.value[index].checkInTime!.year,
+                _sortedList.value[index].checkInTime!.month, _sortedList.value[index].checkInTime!.day, 09, 00))
+                .inMinutes >
                 20) {
               topContainerColor = PdfColors.red400;
               status =
-                  'Late by ${_sortedList.value[index].checkInTime!.difference(DateTime(_sortedList.value[index].checkInTime!.year, _sortedList.value[index].checkInTime!.month, _sortedList.value[index].checkInTime!.day, 09, 00)).inMinutes - 10} mins';
+              'Late by ${_sortedList.value[index].checkInTime!.difference(DateTime(_sortedList.value[index].checkInTime!.year, _sortedList.value[index].checkInTime!.month, _sortedList.value[index].checkInTime!.day, 09, 00)).inMinutes - 10} mins';
             }
 
             return pw.Container(
@@ -540,6 +547,7 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
                       ),
                     ),
                   ),
+
                   pw.Column(
                     children: [
                       pw.Text(
@@ -550,6 +558,11 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
                         method,
                         style: pw.TextStyle(color: topContainerColor),
                       ),
+
+                      if (_sortedList.value[index].checkInTime != null) ...[
+
+                        pw.Text('Duration : ${duration(_sortedList.value[index].checkInTime!,endTime)}',)
+                      ]
                     ],
                   ),
                   pw.Container(
@@ -575,3 +588,11 @@ class _CheckEntryScreenState extends State<CheckEntryScreen> {
 
 /// date formatter
 String formatDate(DateTime date) => DateFormat.yMMMd().format(date);
+
+String duration(DateTime start, DateTime end) {
+  final diff = end.difference(start);
+  int hours = diff.inHours;
+  int minutes = diff.inMinutes % 60;
+
+  return '${hours}h ${minutes}m';
+}

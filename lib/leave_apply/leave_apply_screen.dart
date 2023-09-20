@@ -81,6 +81,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen> {
   }
 
   Future<void> _getLeaveHistory() async {
+    _history.value.clear();
     _loading.value = true;
     final context = this.context;
     final userProvider = Provider.of<UserProvider>(context, listen: false);

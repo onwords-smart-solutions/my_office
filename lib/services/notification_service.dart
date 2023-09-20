@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:my_office/leave_apply/leave_apply_screen.dart';
-import 'package:my_office/suggestions/suggestions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
@@ -16,6 +15,7 @@ import 'package:my_office/provider/user_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import '../constant/app_defaults.dart';
+import '../leave_approval/leave_approval_screen.dart';
 import '../main.dart';
 import '../suggestions/view_suggestions.dart';
 
@@ -54,7 +54,7 @@ class NotificationService {
       if (message.data['type'] == NotificationType.leaveNotification ) {
         navigationKey.currentState!.push(
           MaterialPageRoute(
-            builder: (_) => const LeaveApplyScreen(),
+            builder: (_) => const LeaveApprovalScreen(),
           ),
         );
       } else if (message.data['type'] == NotificationType.leaveRespond ) {

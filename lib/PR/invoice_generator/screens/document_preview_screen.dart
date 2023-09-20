@@ -47,7 +47,7 @@ class InvoicePreviewScreen extends StatefulWidget {
       required this.gstNeed,
       required this.percentage,
       required this.discountAmount,
-      required this.prPoint})
+      required this.prPoint,})
       : super(key: key);
 
   @override
@@ -110,7 +110,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                 if (element2.key == Utils.formatMonth(date)) {
                   for (var element3 in element2.children) {
                     listOfDocLength.add(element3.key);
-                    dev.log('length ${listOfDocLength.length}');
+                    // dev.log('length ${listOfDocLength.length}');
                   }
                 }
               }
@@ -149,7 +149,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
     var r = Random();
     const characters = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz';
     return List.generate(
-        len, (index) => characters[r.nextInt(characters.length)]).join();
+        len, (index) => characters[r.nextInt(characters.length)],).join();
   }
 
   void getStaffDetail() async {
@@ -215,7 +215,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Preview of Document',
           style: TextStyle(
               fontSize: 22,
@@ -267,7 +267,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                       'upi://pay?pa=onwordspay@ybl&pn=Onwords Smart Solutions&tr=&am=${grandTotal < 80000 ? grandTotal : ''}&cu=INR&mode=01&purpose=10&orgid=-&sign=-&tn=$transactionNote&note=${widget.prPoint}',
                   version: QrVersions.auto,
                   size: 200.0,
-                )),
+                ),),
           ),
           Positioned(
             top: 0,
@@ -285,12 +285,12 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                       Container(
                         margin: const EdgeInsets.only(top: 10),
                         padding: const EdgeInsets.symmetric(
-                            vertical: 08, horizontal: 03),
+                            vertical: 08, horizontal: 03,),
                         height: height * .2,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border:
-                                Border.all(color: Colors.black26, width: 2)),
+                                Border.all(color: Colors.black26, width: 2),),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -304,10 +304,10 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                               ),
                               child: Column(
                                 children: [
-                                  Text('Customer Details',
+                                  const Text('Customer Details',
                                       style: TextStyle(
                                          
-                                          color: Colors.black)),
+                                          color: Colors.black,),),
                                   createCustomerDetails(
                                     width,
                                     customerDetails,
@@ -364,28 +364,28 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text('      Document Details',
+                                  const Text('      Document Details',
                                       style: TextStyle(
                                          
-                                          color: Colors.black)),
+                                          color: Colors.black,),),
                                   Text(
                                       ' Date of Document : ${documentDateController.text.isNotEmpty ? documentDateController.text : "Select Date"}',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                          
                                           color: Colors.black,
-                                          fontSize: 10)),
+                                          fontSize: 10,),),
                                   Text(
                                       ' Doc-Type : #${customerDetails.docType}',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                          
                                           color: Colors.black,
-                                          fontSize: 10)),
+                                          fontSize: 10,),),
                                   Text(
                                       ' Category : ${customerDetails.docCategory}',
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                          
                                           color: Colors.black,
-                                          fontSize: 10)),
+                                          fontSize: 10,),),
                                 ],
                               ),
                             ),
@@ -420,13 +420,13 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   tableHeading(
-                                      width, 'Items', width * .0005, true),
+                                      width, 'Items', width * .0005, true,),
                                   tableHeading(
-                                      width, 'Qty', width * .0003, true),
+                                      width, 'Qty', width * .0003, true,),
                                   tableHeading(
-                                      width, 'Unit Price', width * .0006, true),
+                                      width, 'Unit Price', width * .0006, true,),
                                   tableHeading(
-                                      width, 'Total', width * .0005, false),
+                                      width, 'Total', width * .0005, false,),
                                 ],
                               ),
                             ),
@@ -465,9 +465,9 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
 
                                             children: [
                                               createTableRow(data),
-                                            ]),
+                                            ],),
                                       );
-                                    })),
+                                    },),),
                             const Divider(
                               color: Colors.black,
                               indent: 5,
@@ -485,38 +485,38 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                               child: Column(
                                 children: [
                                   totalAmountDetails(width, height, 'Total  ',
-                                      Utils.formatPrice(total.toDouble())),
+                                      Utils.formatPrice(total.toDouble()),),
                                   totalAmountDetails(
                                       width,
                                       height,
                                       'Discount ${widget.percentage} %  ',
-                                      Utils.formatPrice(widget.discountAmount)),
+                                      Utils.formatPrice(widget.discountAmount),),
                                   totalAmountDetails(
                                       width,
                                       height,
                                       'Sub Total  ',
                                       Utils.formatPrice(
-                                          widget.finalAmountWithoutGst)),
+                                          widget.finalAmountWithoutGst,),),
                                   totalAmountDetails(width, height, 'CGST %  ',
-                                      Utils.formatPrice(gst)),
+                                      Utils.formatPrice(gst),),
                                   totalAmountDetails(width, height, 'SGST %  ',
-                                      Utils.formatPrice(gst)),
+                                      Utils.formatPrice(gst),),
                                   totalAmountDetails(
                                       width,
                                       height,
                                       'Grand Total  ',
-                                      Utils.formatPrice(grandTotal)),
+                                      Utils.formatPrice(grandTotal),),
                                   totalAmountDetails(
                                       width,
                                       height,
                                       'Advanced  ',
-                                      Utils.formatPrice(widget.advanceAmount)),
+                                      Utils.formatPrice(widget.advanceAmount),),
                                   totalAmountDetails(
                                     width,
                                     height,
                                     'Amount payable  ',
                                     Utils.formatPrice(finalTotal),
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
@@ -531,8 +531,8 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                                 child: Button('Save', () {
                                     getDocLength();
                                     _showDialog(context, customerDetails,
-                                        productDetails);
-                                }).button()),
+                                        productDetails,);
+                                }).button(),),
                             const SizedBox(
                               height: 20,
                             ),
@@ -544,14 +544,14 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
   Widget tableHeading(
-      double width, String title, double widthVal, bool isTrue) {
+      double width, String title, double widthVal, bool isTrue,) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -560,7 +560,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
           child: Center(
             child: Text(
               title,
-              style: TextStyle( ),
+              style: const TextStyle( ),
             ),
           ),
         ),
@@ -598,7 +598,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
       );
 
   Widget createCustomerDetails(double width, ClientModel customerDetails,
-      String key, String value, double val) {
+      String key, String value, double val,) {
     return SizedBox(
         width: width * .6,
         height: val,
@@ -609,10 +609,10 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
               width: 60,
               child: Text(
                 key,
-                style: TextStyle(
+                style: const TextStyle(
                    
                     color: Colors.black,
-                    fontSize: 10),
+                    fontSize: 10,),
               ),
             ),
             const Text(':'),
@@ -622,7 +622,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                 physics: const BouncingScrollPhysics(),
                 child: Text(
                   value,
-                  style: TextStyle(
+                  style: const TextStyle(
                    
                     color: Colors.black,
                     fontSize: 10,
@@ -631,7 +631,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
               ),
             ),
           ],
-        ));
+        ),);
   }
 
   Widget totalAmountDetails(
@@ -650,10 +650,10 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
             width: 150,
             child: Text(
               key,
-              style: TextStyle(
+              style: const TextStyle(
                  
                   color: Colors.black,
-                  fontSize: 12),
+                  fontSize: 12,),
             ),
           ),
           const Center(child: Text(':')),
@@ -663,7 +663,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
             child: Text(
               value,
               textAlign: TextAlign.end,
-              style: TextStyle(
+              style: const TextStyle(
                
                 color: Colors.black,
                 fontSize: 10,
@@ -676,7 +676,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
   }
 
   _showDialog(BuildContext context, ClientModel clientModel,
-      List<ListOfTable> productDetailsModel) {
+      List<ListOfTable> productDetailsModel,) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -688,12 +688,12 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
             child: Form(
               key: formKey,
               child: CupertinoAlertDialog(
-                title: Text(
+                title: const Text(
                   "Document Details\n",
                   style: TextStyle(
                       color: ConstantColor.backgroundColor,
                      
-                      fontSize: 16),
+                      fontSize: 16,),
                 ),
                 content: Material(
                   color: Colors.transparent,
@@ -718,12 +718,12 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                         height: 5,
                       ),
                       clientModel.docType != 'QUOTATION'
-                          ? Text(
+                          ? const Text(
                               '  Date For Installation',
                               style: TextStyle(
                                  
                                   fontSize: 13,
-                                  color: Colors.black),
+                                  color: Colors.black,),
                             )
                           : const SizedBox(),
                       const SizedBox(
@@ -735,16 +735,16 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                               textInputAction: TextInputAction.done,
                               maxLength: 15,
                               readOnly: true,
-                              style: TextStyle(
+                              style: const TextStyle(
                                
                               ),
                               decoration: InputDecoration(
                                 counterText: '',
                                 hintText: 'Estimated Date',
-                                hintStyle: TextStyle(
+                                hintStyle: const TextStyle(
                                  
                                 ),
-                                labelStyle: TextStyle(
+                                labelStyle: const TextStyle(
                                  
                                 ),
                                 border: myInputBorder(),
@@ -785,7 +785,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                 ),
                 actions: <Widget>[
                   CupertinoDialogAction(
-                    child: Text(
+                    child: const Text(
                       "Cancel",
                       style: TextStyle(
                           color: Colors.black,
@@ -796,7 +796,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                     },
                   ),
                   CupertinoDialogAction(
-                    child: Text(
+                    child: const Text(
                       "Save",
                       style: TextStyle(
                           color: Colors.black,
@@ -812,8 +812,8 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                                   child: SizedBox(
                                       child: Lottie.asset(
                                 'assets/animations/loading.json',
-                              )));
-                            });
+                              ),),);
+                            },);
                         await _convertImage();
                         setState(() {
                           docLen = listOfDocLength.length + 1;
@@ -842,13 +842,13 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                         final firebaseStorage = FirebaseStorage.instance;
 
                         final pdfFile = await x.generate(
-                            clientModel, productDetailsModel, convertedImage!);
+                            clientModel, productDetailsModel, convertedImage!,);
                         final dir = await getExternalStorageDirectory();
                         final file =
                             File("${dir!.path}/${fileNameController.text}.pdf");
 
                         file.writeAsBytesSync(pdfFile.readAsBytesSync(),
-                            flush: true);
+                            flush: true,);
 
                         OpenFile.open(file.path).then((value) async {
                           ///...............FIREBASE..........////
@@ -868,7 +868,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                               var snapshot = await firebaseStorage
                                   .ref()
                                   .child(
-                                      '${clientModel.docType}/${clientModel.docType == "INVOICE" ? "INV" : "PRO_INV"}${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
+                                      '${clientModel.docType}/${clientModel.docType == "INVOICE" ? "INV" : "PRO_INV"}${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}',)
                                   .putFile(pdfFile);
                               var downloadUrl =
                                   await snapshot.ref.getDownloadURL();
@@ -883,7 +883,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                               var snapshotInstallation = await firebaseStorage
                                   .ref()
                                   .child(
-                                      'INSTALLATION-INVOICE/INV${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
+                                      'INSTALLATION-INVOICE/INV${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}',)
                                   .putFile(installationPdfFile);
                               var downloadUrlInstallation =
                                   await snapshotInstallation.ref
@@ -915,14 +915,14 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                                   .child('QuotationAndInvoice')
                                   .child(clientModel.docType == 'INVOICE'
                                       ? 'INVOICE'
-                                      : 'PROFORMA_INVOICE')
+                                      : 'PROFORMA_INVOICE',)
                                   .child('${Utils.formatYear(date)}')
                                   .child('${Utils.formatMonth(date)}')
                                   .child(
-                                      '${clientModel.docType == 'INVOICE' ? 'INV_' : 'PRO_INV_'}${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
+                                      '${clientModel.docType == 'INVOICE' ? 'INV_' : 'PRO_INV_'}${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}',)
                                   .set(clientModel.docType == 'INVOICE'
                                       ? invoice
-                                      : proformaInvoice);
+                                      : proformaInvoice,);
                             }
                           }
 
@@ -931,7 +931,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                             var snapshot = await firebaseStorage
                                 .ref()
                                 .child(
-                                    'QUOTATION/EST${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
+                                    'QUOTATION/EST${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}',)
                                 .putFile(pdfFile);
                             var downloadUrl =
                                 await snapshot.ref.getDownloadURL();
@@ -949,7 +949,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                                 .child('${Utils.formatYear(date)}')
                                 .child('${Utils.formatMonth(date)}')
                                 .child(
-                                    'EST${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
+                                    'EST${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}',)
                                 .set(quotation);
                           }
                         }).then((value) {
@@ -963,8 +963,8 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                           Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                  builder: (_) => const UserHomeScreen()),
-                              (route) => false);
+                                  builder: (_) => const UserHomeScreen(),),
+                              (route) => false,);
                           // Navigator.pushNamedAndRemoveUntil(context, '/invoiceGenerator', (route) => false);
                         });
                       }
@@ -974,7 +974,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
               ),
             ),
           );
-        });
+        },);
       },
     );
   }
@@ -985,7 +985,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
         borderSide: BorderSide(
           color: Colors.black.withOpacity(0.3),
           width: 2,
-        ));
+        ),);
   }
 
   OutlineInputBorder myFocusBorder() {
@@ -996,7 +996,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
         borderSide: BorderSide(
           color: Colors.black.withOpacity(0.3),
           width: 2,
-        ));
+        ),);
   }
 
   OutlineInputBorder myDisabledBorder() {
@@ -1007,6 +1007,6 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
         borderSide: BorderSide(
           color: Colors.black.withOpacity(0.3),
           width: 2,
-        ));
+        ),);
   }
 }

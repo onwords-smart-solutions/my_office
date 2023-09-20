@@ -128,11 +128,7 @@ class AppDefaults {
         break;
 
       case MenuTitle.leaveApproval:
-        page = LeaveApprovalScreen(
-          uid: staffInfo.uid,
-          name: staffInfo.name,
-          department: staffInfo.department,
-        );
+        page = const LeaveApprovalScreen();
         break;
       case MenuTitle.searchLead:
         page = SearchLeadsScreen(staffInfo: staffInfo);
