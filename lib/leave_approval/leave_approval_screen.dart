@@ -6,18 +6,16 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/models/staff_leave_model.dart';
+import 'package:my_office/provider/user_provider.dart';
 import 'package:my_office/services/notification_service.dart';
+import 'package:provider/provider.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 import 'package:http/http.dart' as http;
 import '../util/main_template.dart';
 
 class LeaveApprovalScreen extends StatefulWidget {
-  final String uid;
-  final String name;
-  final String department;
-
-  const LeaveApprovalScreen({super.key, required this.uid, required this.name, required this.department});
+  const LeaveApprovalScreen({super.key});
 
   @override
   State<LeaveApprovalScreen> createState() => _LeaveApprovalScreenState();
@@ -40,294 +38,340 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
   Widget buildLeaveApproval() {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
+    final user = Provider.of<UserProvider>(context, listen: false);
 
     return StreamBuilder(
-        stream: ref.child('leaveDetails').onValue,
-        builder: (ctx, snapshot) {
-          if (snapshot.hasData) {
-            List<StaffLeaveModel> staffLeaves = [];
-            //Looping in all users
-            for (var uid in snapshot.data!.snapshot.children) {
-              //Looping inside each year
-              for (var year in uid.child('leaveApplied').children) {
-                //Looping inside each month
-                for (var month in year.children) {
-                  //Looping inside each leave applied
-                  for (var leaveRequest in month.children) {
-                    String name = 'GHOST';
-                    String status = 'Pending';
-                    String department = 'Not provided';
-                    final leaveData = leaveRequest.value as Map<Object?, Object?>;
-                    try {
-                      name = leaveData['name'].toString();
-                      status = leaveData['status'].toString();
-                      department = leaveData['dep'].toString() == 'null' ? 'Not provided' : leaveData['dep'].toString();
-                    } catch (e) {
-                      log('Error while fetching leave details $e');
-                    }
-
-                    final data = StaffLeaveModel(
-                        name: name,
-                        uid: uid.key.toString(),
-                        date: leaveRequest.key.toString(),
-                        status: status,
-                        month: month.key.toString(),
-                        year: year.key.toString(),
-                        reason: leaveData['reason'].toString(),
-                        type: leaveData['type'].toString(),
-                        department: department);
-
-                    staffLeaves.add(data);
+      stream: ref.child('leaveDetails').onValue,
+      builder: (ctx, snapshot) {
+        if (snapshot.hasData) {
+          List<StaffLeaveModel> staffLeaves = [];
+          //Looping in all users
+          for (var uid in snapshot.data!.snapshot.children) {
+            //Looping inside each year
+            for (var year in uid.child('leaveApplied').children) {
+              //Looping inside each month
+              for (var month in year.children) {
+                //Looping inside each leave applied
+                for (var leaveRequest in month.children) {
+                  String name = 'GHOST';
+                  String status = 'Pending';
+                  String department = 'Not provided';
+                  final leaveData = leaveRequest.value as Map<Object?, Object?>;
+                  try {
+                    name = leaveData['name'].toString();
+                    status = leaveData['status'].toString();
+                    department = leaveData['dep'].toString() == 'null'
+                        ? 'Not provided'
+                        : leaveData['dep'].toString();
+                  } catch (e) {
+                    log('Error while fetching leave details $e');
                   }
+
+                  final data = StaffLeaveModel(
+                    name: name,
+                    uid: uid.key.toString(),
+                    date: leaveRequest.key.toString(),
+                    status: status,
+                    month: month.key.toString(),
+                    year: year.key.toString(),
+                    reason: leaveData['reason'].toString(),
+                    type: leaveData['type'].toString(),
+                    department: department,
+                  );
+
+                  staffLeaves.add(data);
                 }
               }
             }
+          }
 
-            final index = staffLeaves.indexWhere((element) => element.status.toLowerCase().contains('pending'));
+          final index = staffLeaves.indexWhere(
+            (element) => element.status.toLowerCase().contains('pending'),
+          );
 
-            if (index < 0) {
-              return Center(
-                child: Text(
-                  'No leave forms available!!',
-                  style: TextStyle(
-                    fontFamily: ConstantFonts.sfProRegular,
-                    fontWeight: FontWeight.w600,
-                    color: ConstantColor.backgroundColor,
-                    fontSize: 20,
-                  ),
+          if (index < 0) {
+            return Center(
+              child: Text(
+                'No leave forms available!!',
+                style: TextStyle(
+                  fontFamily: ConstantFonts.sfProRegular,
+                  fontWeight: FontWeight.w600,
+                  color: ConstantColor.backgroundColor,
+                  fontSize: 20,
                 ),
-              );
-            }
-            staffLeaves.sort((a, b) => b.date.compareTo(a.date));
-            //DISPLAYING ALL LEAVE REQUEST
-            return ListView.builder(
-                itemCount: staffLeaves.length,
-                itemBuilder: (listCtx, index) {
-                  if (staffLeaves[index].status.toLowerCase().contains('pending')) {
-                    return Container(
-                      // height: height * 0.1,
-                      margin: const EdgeInsets.all(10),
-                      padding: const EdgeInsets.all(15),
-                      decoration: BoxDecoration(
-                        color: ConstantColor.background1Color,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            offset: const Offset(-0.0, 5.0),
-                            blurRadius: 8,
-                          ),
-                        ],
-                        borderRadius: BorderRadius.circular(11),
+              ),
+            );
+          }
+          staffLeaves.sort((a, b) => b.date.compareTo(a.date));
+          //DISPLAYING ALL LEAVE REQUEST
+          return ListView.builder(
+            itemCount: staffLeaves.length,
+            itemBuilder: (listCtx, index) {
+              if (staffLeaves[index].status.toLowerCase().contains('pending')) {
+                return Container(
+                  // height: height * 0.1,
+                  margin: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    color: ConstantColor.background1Color,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        offset: const Offset(-0.0, 5.0),
+                        blurRadius: 8,
                       ),
-                      child: Column(
+                    ],
+                    borderRadius: BorderRadius.circular(11),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          // color: ConstantColor.backgroundColor.withOpacity(0.09),
+                          gradient: LinearGradient(
+                            colors: [
+                              const Color(0xff7652B2).withOpacity(0.09),
+                              const Color(0xffD136D4).withOpacity(0.0),
+                            ],
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            textWidget(staffLeaves[index].name, 15.0),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.all(10.0),
+                        color: Colors.transparent,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 10.0),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: width * .4,
+                                  child: textWidget('Date', 15),
+                                ),
+                                Expanded(
+                                  child: textWidget(
+                                    ':  ${staffLeaves[index].date}',
+                                    15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10.0),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: width * .4,
+                                  child: textWidget('Reason', 15),
+                                ),
+                                Expanded(
+                                  child: reasonContainer(
+                                    staffLeaves[index].reason,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10.0),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: width * .4,
+                                  child: textWidget('Leave Type', 15),
+                                ),
+                                Expanded(
+                                  child: textWidget(
+                                    ':  ${staffLeaves[index].type}',
+                                    15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10.0),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: width * .4,
+                                  child: textWidget('Department', 15),
+                                ),
+                                Expanded(
+                                  child: textWidget(
+                                    ':  ${staffLeaves[index].department}',
+                                    15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10.0),
+                          ],
+                        ),
+                      ),
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              // color: ConstantColor.backgroundColor.withOpacity(0.09),
-                              gradient: LinearGradient(
-                                colors: [
-                                  const Color(0xff7652B2).withOpacity(0.09),
-                                  const Color(0xffD136D4).withOpacity(0.0),
-                                ],
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                textWidget(staffLeaves[index].name, 15.0),
-                              ],
-                            ),
-                          ),
-                          Container(
-                            margin: const EdgeInsets.all(10.0),
-                            color: Colors.transparent,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: 10.0),
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: width * .4,
-                                      child: textWidget('Date', 15),
-                                    ),
-                                    Expanded(
-                                      child: textWidget(':  ${staffLeaves[index].date}', 15),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 10.0),
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: width * .4,
-                                      child: textWidget('Reason', 15),
-                                    ),
-                                    Expanded(
-                                      child: reasonContainer(staffLeaves[index].reason),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 10.0),
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: width * .4,
-                                      child: textWidget('Leave Type', 15),
-                                    ),
-                                    Expanded(
-                                      child: textWidget(':  ${staffLeaves[index].type}', 15),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 10.0),
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: width * .4,
-                                      child: textWidget('Department', 15),
-                                    ),
-                                    Expanded(
-                                      child: textWidget(':  ${staffLeaves[index].department}', 15),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 10.0),
-                              ],
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: Text(
-                                            'Confirmation status',
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                fontFamily: ConstantFonts.sfProBold,
-                                                color: Colors.deepPurple),
-                                          ),
-                                          content: SingleChildScrollView(
-                                            child: ListBody(
-                                              children: [
-                                                Text(
-                                                  'This is to confirm your approval status for leave request of the employee.',
-                                                  style: TextStyle(fontSize: 17, color: ConstantColor.headingTextColor),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              child: Text(
-                                                'Approve',
-                                                style: TextStyle(
-                                                    fontSize: 17,
-                                                    fontFamily: ConstantFonts.sfProBold,
-                                                    color: ConstantColor.pinkColor),
-                                              ),
-                                              onPressed: () async {
-                                                await changeRequest(staffLeaves[index], 'Approved');
-                                                setState(() {
-                                                  approve = true;
-                                                });
-                                                sendNotification(staffLeaves[index].uid, 'Leave Response',
-                                                    'Your leave request has been Approved by ${widget.name}');
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                            TextButton(
-                                              child: Text(
-                                                'Decline',
-                                                style: TextStyle(
-                                                    fontSize: 17,
-                                                    fontFamily: ConstantFonts.sfProBold,
-                                                    color: Colors.red),
-                                              ),
-                                              onPressed: () async {
-                                                await changeRequest(staffLeaves[index], 'Declined');
-                                                setState(() {
-                                                  decline = true;
-                                                });
-                                                sendNotification(staffLeaves[index].uid, 'Leave Response',
-                                                    'Your leave request has been Declined by ${widget.name}');
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                            TextButton(
-                                              child: Text(
-                                                'Cancel',
-                                                style: TextStyle(
-                                                    fontSize: 17,
-                                                    fontFamily: ConstantFonts.sfProBold,
-                                                    color: ConstantColor.headingTextColor),
-                                              ),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      });
-                                },
-                                child: Container(
-                                  height: height * 0.05,
-                                  width: width * 0.6,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    gradient: const LinearGradient(
-                                      colors: [
-                                        Color(0xffD136D4),
-                                        Color(0xff7652B2),
-                                      ],
-                                    ),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      'Tap to Approve/Cancel',
+                          GestureDetector(
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text(
+                                      'Confirmation status',
                                       style: TextStyle(
-                                        color: ConstantColor.background1Color,
-                                        fontSize: height * 0.021,
+                                        fontSize: 20,
+                                        fontFamily: ConstantFonts.sfProBold,
+                                        color: Colors.deepPurple,
                                       ),
                                     ),
+                                    content: const SingleChildScrollView(
+                                      child: ListBody(
+                                        children: [
+                                          Text(
+                                            'This is to confirm your approval status for leave request of the employee.',
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              color: ConstantColor
+                                                  .headingTextColor,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        child: Text(
+                                          'Approve',
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            fontFamily: ConstantFonts.sfProBold,
+                                            color: ConstantColor.pinkColor,
+                                          ),
+                                        ),
+                                        onPressed: () async {
+                                          await changeRequest(
+                                            staffLeaves[index],
+                                            'Approved',
+                                          );
+                                          setState(() {
+                                            approve = true;
+                                          });
+                                          sendNotification(
+                                            staffLeaves[index].uid,
+                                            'Leave Response',
+                                            'Your leave request has been Approved by ${user.user!.name}',
+                                          );
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: Text(
+                                          'Decline',
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            fontFamily: ConstantFonts.sfProBold,
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                        onPressed: () async {
+                                          await changeRequest(
+                                            staffLeaves[index],
+                                            'Declined',
+                                          );
+                                          setState(() {
+                                            decline = true;
+                                          });
+                                          sendNotification(
+                                            staffLeaves[index].uid,
+                                            'Leave Response',
+                                            'Your leave request has been Declined by ${user.user!.name}',
+                                          );
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                      TextButton(
+                                        child: Text(
+                                          'Cancel',
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            fontFamily: ConstantFonts.sfProBold,
+                                            color:
+                                                ConstantColor.headingTextColor,
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: Container(
+                              height: height * 0.05,
+                              width: width * 0.6,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(12),
+                                gradient: const LinearGradient(
+                                  colors: [
+                                    Color(0xffD136D4),
+                                    Color(0xff7652B2),
+                                  ],
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Tap to Approve/Cancel',
+                                  style: TextStyle(
+                                    color: ConstantColor.background1Color,
+                                    fontSize: height * 0.021,
                                   ),
                                 ),
                               ),
-                            ],
-                          )
+                            ),
+                          ),
                         ],
                       ),
-                    );
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                });
-          }
-          //Loading section
-          return Center(
-            child: Lottie.asset(
-              "assets/animations/new_loading.json",
-            ),
+                    ],
+                  ),
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            },
           );
-        });
+        }
+        //Loading section
+        return Center(
+          child: Lottie.asset(
+            "assets/animations/new_loading.json",
+          ),
+        );
+      },
+    );
   }
 
   //Function to approve leave request
-  Future<void> changeRequest(StaffLeaveModel leaveRequest, String status) async {
+  Future<void> changeRequest(
+    StaffLeaveModel leaveRequest,
+    String status,
+  ) async {
+    final user = Provider.of<UserProvider>(context, listen: false);
     await ref
         .child(
-            'leaveDetails/${leaveRequest.uid}/leaveApplied/${leaveRequest.year}/${leaveRequest.month}/${leaveRequest.date}')
+      'leaveDetails/${leaveRequest.uid}/leaveApplied/${leaveRequest.year}/${leaveRequest.month}/${leaveRequest.date}',
+    )
         .update({
-      'updated_by': widget.name,
+      'updated_by': user.user!.name,
       'status': status,
     });
     if (!mounted) return;
@@ -336,7 +380,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
         content: Text(
           'Leave request for ${leaveRequest.name} has been $status',
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 17,
           ),
         ),
@@ -386,7 +430,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
   Widget textWidget(String name, double size) {
     return AutoSizeText(
       name,
-      style: TextStyle(fontSize: 17, color: ConstantColor.blackColor),
+      style: const TextStyle(fontSize: 17, color: ConstantColor.blackColor),
     );
   }
 
@@ -400,7 +444,11 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
           builder: (context) => AlertDialog(
             title: Text(
               'Reason :',
-              style: TextStyle(fontSize: 20, fontFamily: ConstantFonts.sfProBold, color: ConstantColor.blackColor),
+              style: TextStyle(
+                fontSize: 20,
+                fontFamily: ConstantFonts.sfProBold,
+                color: ConstantColor.blackColor,
+              ),
             ),
             elevation: 10,
             content: SingleChildScrollView(
@@ -408,7 +456,10 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
               child: ListTile(
                 title: Text(
                   reason,
-                  style: TextStyle(fontSize: 17, color: ConstantColor.backgroundColor),
+                  style: const TextStyle(
+                    fontSize: 17,
+                    color: ConstantColor.backgroundColor,
+                  ),
                 ),
               ),
             ),
@@ -423,7 +474,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text(
+                  child: const Text(
                     'OK',
                     style: TextStyle(
                       fontSize: 20,
@@ -445,7 +496,11 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
   }
 
   //Leave approve status for employees
-  Future<void> sendNotification(String userId, String title, String body) async {
+  Future<void> sendNotification(
+    String userId,
+    String title,
+    String body,
+  ) async {
     final tokens = await NotificationService().getDeviceFcm(userId: userId);
     for (var token in tokens) {
       await NotificationService().sendNotification(

@@ -71,70 +71,77 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
-    return Consumer<UserProvider>(builder: (ctx, userProvider, child) {
-      return userProvider.user == null
-          ? const NoUser()
-          : Scaffold(
-              appBar: AppBar(
-                surfaceTintColor: Colors.white,
-                backgroundColor: Colors.white,
-                centerTitle: false,
-                leading: GestureDetector(
-                  onTap: () {
-                    HapticFeedback.mediumImpact();
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => const AccountScreen()));
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 10.0),
-                    clipBehavior: Clip.hardEdge,
-                    decoration: const BoxDecoration(shape: BoxShape.circle),
-                    child: userProvider.user!.profilePic.isEmpty
-                        ? const Image(
-                            image: AssetImage('assets/profile_icon.jpg'))
-                        : CachedNetworkImage(
-                            imageUrl: userProvider.user!.profilePic,
-                            fit: BoxFit.cover,
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) =>
-                                    CircularProgressIndicator(
-                                        value: downloadProgress.progress),
-                            errorWidget: (context, url, error) => const Icon(
-                              Icons.error,
-                              color: Colors.red,
+    return Consumer<UserProvider>(
+      builder: (ctx, userProvider, child) {
+        return userProvider.user == null
+            ? const NoUser()
+            : Scaffold(
+                appBar: AppBar(
+                  surfaceTintColor: Colors.white,
+                  backgroundColor: Colors.white,
+                  centerTitle: false,
+                  leading: GestureDetector(
+                    onTap: () {
+                      HapticFeedback.mediumImpact();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const AccountScreen(),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 10.0),
+                      clipBehavior: Clip.hardEdge,
+                      decoration: const BoxDecoration(shape: BoxShape.circle),
+                      child: userProvider.user!.profilePic.isEmpty
+                          ? const Image(
+                              image: AssetImage('assets/profile_icon.jpg'),
+                            )
+                          : CachedNetworkImage(
+                              imageUrl: userProvider.user!.profilePic,
+                              fit: BoxFit.cover,
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) =>
+                                      CircularProgressIndicator(
+                                value: downloadProgress.progress,
+                              ),
+                              errorWidget: (context, url, error) => const Icon(
+                                Icons.error,
+                                color: Colors.red,
+                              ),
                             ),
-                          ),
+                    ),
+                  ),
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        'assets/onwords.png',
+                        height: 14,
+                        fit: BoxFit.cover,
+                      ),
+                      Text(
+                        'Hello, ${userProvider.user!.name}',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 25.0,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                title: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Image.asset(
-                      'assets/onwords.png',
-                      height: 14,
-                      fit: BoxFit.cover,
-                    ),
-                    Text(
-                      'Hello, ${userProvider.user!.name}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 25.0,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              floatingActionButton: FloatingActionButton(
-                backgroundColor: Colors.deepPurple,
-                onPressed: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => const OnyxScreen()));
-                },
-                child: Image.asset('assets/onyx_thala.png', scale: 1.5,),
-              ),
-              body: _body(userProvider, size),
-            );
-    });
+                // floatingActionButton: FloatingActionButton(
+                //   backgroundColor: Colors.deepPurple,
+                //   onPressed: (){
+                //     Navigator.of(context).push(MaterialPageRoute(builder: (context) => const OnyxScreen()));
+                //   },
+                //   child: Image.asset('assets/onyx_thala.png', scale: 1.5,),
+                // ),
+                body: _body(userProvider, size),
+              );
+      },
+    );
   }
 
   Widget _body(UserProvider userProvider, Size size) {
@@ -144,70 +151,78 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         //search bar
         _search(size, userProvider),
         Expanded(
-            child: ListView(
-          children: [
-            //info
-            ValueListenableBuilder(
+          child: ListView(
+            children: [
+              //info
+              ValueListenableBuilder(
                 valueListenable: _bdayStaffs,
                 builder: (ctx, birthdayList, child) {
                   return ValueListenableBuilder(
-                      valueListenable: _entryDetail,
-                      builder: (ctx, staffEntry, child) {
-                        return ValueListenableBuilder(
-                            valueListenable: _endTime,
-                            builder: (ctx, endTime, child) {
-                              return InfoItem(
-                                staff: userProvider.user!,
-                                todayBirthdayList: birthdayList,
-                                quoteIndex: _motivationIndex,
-                                staffEntryDetail: staffEntry,
-                                endTime: endTime,
-                              );
-                            });
-                      });
-                }),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              child: Text(
-                'Utilities',
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 20.0,
-                  color: Colors.black38.withOpacity(.7),
+                    valueListenable: _entryDetail,
+                    builder: (ctx, staffEntry, child) {
+                      return ValueListenableBuilder(
+                        valueListenable: _endTime,
+                        builder: (ctx, endTime, child) {
+                          return InfoItem(
+                            staff: userProvider.user!,
+                            todayBirthdayList: birthdayList,
+                            quoteIndex: _motivationIndex,
+                            staffEntryDetail: staffEntry,
+                            endTime: endTime,
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: Text(
+                  'Utilities',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 20.0,
+                    color: Colors.black38.withOpacity(.7),
+                  ),
                 ),
               ),
-            ),
-            ValueListenableBuilder(
+              ValueListenableBuilder(
                 valueListenable: _staffAccess,
                 builder: (ctx, staffAccess, child) {
                   return staffAccess.isEmpty
-                      ? Lottie.asset('assets/animations/new_loading.json',
-                          height: size.height * .6)
+                      ? Lottie.asset(
+                          'assets/animations/new_loading.json',
+                          height: size.height * .6,
+                        )
                       : Consumer<UserProvider>(
                           builder: (ctx, userProvider, child) {
-                          return GridView.builder(
-                            itemCount: staffAccess.length,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            padding: const EdgeInsets.all(10.0),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              crossAxisSpacing: 15.0,
-                              mainAxisSpacing: 30,
-                            ),
-                            itemBuilder: (BuildContext context, int index) {
-                              return HomeMenuItem(
-                                title: staffAccess[index].title,
-                                image: staffAccess[index].image,
-                                staff: userProvider.user!,
-                              );
-                            },
-                          );
-                        });
-                }),
-          ],
-        ))
+                            return GridView.builder(
+                              itemCount: staffAccess.length,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              padding: const EdgeInsets.all(10.0),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                crossAxisSpacing: 15.0,
+                                mainAxisSpacing: 30,
+                              ),
+                              itemBuilder: (BuildContext context, int index) {
+                                return HomeMenuItem(
+                                  title: staffAccess[index].title,
+                                  image: staffAccess[index].image,
+                                  staff: userProvider.user!,
+                                );
+                              },
+                            );
+                          },
+                        );
+                },
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -271,17 +286,19 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       _haveNetwork.value = false;
       if (!mounted) return;
       CustomAlerts.showAlertDialog(
-          context: context,
-          title: 'Check your network connection',
-          content: 'Unable to connect to the network at this moment',
-          actionButton: TextButton(
-              onPressed: () {
-                if (_haveNetwork.value) {
-                  Navigator.of(context).pop();
-                }
-              },
-              child: const Text('Try again')),
-          barrierDismissible: false);
+        context: context,
+        title: 'Check your network connection',
+        content: 'Unable to connect to the network at this moment',
+        actionButton: TextButton(
+          onPressed: () {
+            if (_haveNetwork.value) {
+              Navigator.of(context).pop();
+            }
+          },
+          child: const Text('Try again'),
+        ),
+        barrierDismissible: false,
+      );
     }
     _getConnectivityStream();
   }
@@ -298,17 +315,19 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       } else {
         _haveNetwork.value = false;
         CustomAlerts.showAlertDialog(
-            context: context,
-            title: 'Check your network connection',
-            content: 'Unable to connect to the network at this moment',
-            actionButton: TextButton(
-                onPressed: () {
-                  if (_haveNetwork.value) {
-                    Navigator.of(context).pop();
-                  }
-                },
-                child: const Text('Try again')),
-            barrierDismissible: false);
+          context: context,
+          title: 'Check your network connection',
+          content: 'Unable to connect to the network at this moment',
+          actionButton: TextButton(
+            onPressed: () {
+              if (_haveNetwork.value) {
+                Navigator.of(context).pop();
+              }
+            },
+            child: const Text('Try again'),
+          ),
+          barrierDismissible: false,
+        );
       }
     });
   }
@@ -320,8 +339,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         title: message.notification!.title.toString(),
         content: message.notification!.body.toString(),
         actionButton: TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Ok')),
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Ok'),
+        ),
         barrierDismissible: true,
       );
     });
@@ -332,7 +352,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     final pref = await SharedPreferences.getInstance();
     final isNotificationSet = pref.getString('NotificationSetTime') ?? '';
     _notificationService.showDailyNotificationWithPayload(
-        setTime: isNotificationSet);
+      setTime: isNotificationSet,
+    );
   }
 
   //CHECKING APP VERSION
@@ -343,7 +364,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         final data = value.snapshot.value as Map<Object?, Object?>;
         final updatedVersion = data['versionNumber'];
         final updates = data['updates'].toString();
-        if (AppConstants.pubVersion != updatedVersion) {
+        if (AppConstants.iosDisplayVersion != updatedVersion) {
           _showUpdateAppDialog(updates);
         }
       }
@@ -388,84 +409,87 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         return WillPopScope(
           child: StatefulBuilder(
             builder: (BuildContext context, setState) => ValueListenableBuilder(
-                valueListenable: _totalMB,
-                builder: (ctx, totalMb, child) {
-                  return ValueListenableBuilder(
-                      valueListenable: _downloadedMB,
-                      builder: (ctx, downloadedMb, child) {
-                        return AlertDialog(
-                          title: isUpdating
-                              ? Text(
-                                  totalMb <= 0.0
-                                      ? 'Downloading.. 0%'
-                                      : 'Downloading.. ${((downloadedMb / totalMb) * 100).round()} %',
-                                  style: const TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.deepPurple,
-                                  ),
-                                )
-                              : const Text("New Update Available!!"),
-                          content: isUpdating
-                              ? Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Text(
-                                      'While prompted to update press Update',
-                                      style: TextStyle(fontSize: 15.0),
-                                    ),
-                                    const SizedBox(height: 20.0),
-                                    LinearProgressIndicator(
-                                      minHeight: 5.0,
-                                      value: totalMb <= 0.0
-                                          ? 0.0
-                                          : (downloadedMb / totalMb),
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
-                                    const SizedBox(height: 5.0),
-                                    Align(
-                                      alignment: AlignmentDirectional.centerEnd,
-                                      child: Text(
-                                        totalMb <= 0.0
-                                            ? 'calculating'
-                                            : '${downloadedMb.round()} MB / ${totalMb.round()} MB',
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: 12.0,
-                                            color: Colors.grey),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : Text(
-                                  message.isNotEmpty
-                                      ? message
-                                      : "You are currently using an outdated version. Update the app to use the latest features..",
-                                  style: const TextStyle(fontSize: 15.0),
+              valueListenable: _totalMB,
+              builder: (ctx, totalMb, child) {
+                return ValueListenableBuilder(
+                  valueListenable: _downloadedMB,
+                  builder: (ctx, downloadedMb, child) {
+                    return AlertDialog(
+                      title: isUpdating
+                          ? Text(
+                              totalMb <= 0.0
+                                  ? 'Downloading.. 0%'
+                                  : 'Downloading.. ${((downloadedMb / totalMb) * 100).round()} %',
+                              style: const TextStyle(
+                                fontSize: 20.0,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.deepPurple,
+                              ),
+                            )
+                          : const Text("New Update Available!!"),
+                      content: isUpdating
+                          ? Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Text(
+                                  'While prompted to update press Update',
+                                  style: TextStyle(fontSize: 15.0),
                                 ),
-                          actions: [
-                            isUpdating
-                                ? const SizedBox.shrink()
-                                : TextButton(
-                                    onPressed: () async {
-                                      final permission = await Permission
-                                          .requestInstallPackages.isGranted;
-                                      if (permission) {
-                                        setState(() {
-                                          isUpdating = true;
-                                        });
-                                        _onClickInstallApk();
-                                      } else {
-                                        await Permission.requestInstallPackages
-                                            .request();
-                                      }
-                                    },
-                                    child: const Text("Update Now"),
+                                const SizedBox(height: 20.0),
+                                LinearProgressIndicator(
+                                  minHeight: 5.0,
+                                  value: totalMb <= 0.0
+                                      ? 0.0
+                                      : (downloadedMb / totalMb),
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                const SizedBox(height: 5.0),
+                                Align(
+                                  alignment: AlignmentDirectional.centerEnd,
+                                  child: Text(
+                                    totalMb <= 0.0
+                                        ? 'calculating'
+                                        : '${downloadedMb.round()} MB / ${totalMb.round()} MB',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 12.0,
+                                      color: Colors.grey,
+                                    ),
                                   ),
-                          ],
-                        );
-                      });
-                }),
+                                ),
+                              ],
+                            )
+                          : Text(
+                              message.isNotEmpty
+                                  ? message
+                                  : "You are currently using an outdated version. Update the app to use the latest features..",
+                              style: const TextStyle(fontSize: 15.0),
+                            ),
+                      actions: [
+                        isUpdating
+                            ? const SizedBox.shrink()
+                            : TextButton(
+                                onPressed: () async {
+                                  final permission = await Permission
+                                      .requestInstallPackages.isGranted;
+                                  if (permission) {
+                                    setState(() {
+                                      isUpdating = true;
+                                    });
+                                    _onClickInstallApk();
+                                  } else {
+                                    await Permission.requestInstallPackages
+                                        .request();
+                                  }
+                                },
+                                child: const Text("Update Now"),
+                              ),
+                      ],
+                    );
+                  },
+                );
+              },
+            ),
           ),
           onWillPop: () async {
             return false;
@@ -495,15 +519,18 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               .catchError((error) {
             Navigator.of(context).pop();
             CustomSnackBar.showErrorSnackbar(
-                message: 'Unable to update my office. Try again',
-                context: context);
+              message: 'Unable to update my office. Try again',
+              context: context,
+            );
           });
         }
       });
     } on FirebaseException {
       Navigator.of(context).pop();
       CustomSnackBar.showErrorSnackbar(
-          message: 'Unable to update my office. Try again', context: context);
+        message: 'Unable to update my office. Try again',
+        context: context,
+      );
     }
   }
 

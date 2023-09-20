@@ -79,7 +79,9 @@ class HomeViewModel {
     return names;
   }
 
-  Future<List<StaffAccessModel>> getStaffAccess({required StaffModel staff}) async {
+  Future<List<StaffAccessModel>> getStaffAccess({
+    required StaffModel staff,
+  }) async {
     List<StaffAccessModel> allAccess = [];
 
     final managementList = await getManagementList();
@@ -94,7 +96,8 @@ class HomeViewModel {
           if (staff.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2') {
             allAccess.add(menuItems);
           }
-        } else if (menuItems.title != MenuTitle.viewSuggestions || menuItems.title != MenuTitle.staffDetail) {
+        } else if (menuItems.title != MenuTitle.viewSuggestions ||
+            menuItems.title != MenuTitle.staffDetail) {
           allAccess.add(menuItems);
         }
       }
@@ -112,7 +115,8 @@ class HomeViewModel {
             menuItems.title == MenuTitle.leaveApproval ||
             menuItems.title == MenuTitle.quotationTemplate ||
             menuItems.title == MenuTitle.installationPDF ||
-            menuItems.title == MenuTitle.proxyAttendance) {
+            menuItems.title == MenuTitle.proxyAttendance ||
+            menuItems.title == MenuTitle.scanQR) {
           allAccess.add(menuItems);
         }
       }
@@ -131,7 +135,8 @@ class HomeViewModel {
       }
 
       //adding for app and admin access
-      else if (staff.department.toLowerCase() == 'admin' || staff.department.toLowerCase() == 'app') {
+      else if (staff.department.toLowerCase() == 'admin' ||
+          staff.department.toLowerCase() == 'app') {
         allAccess.add(menuItems);
       } else if (staff.department.toLowerCase() == 'pr') {
         if (menuItems.title == MenuTitle.workEntry ||
@@ -181,7 +186,11 @@ class HomeViewModel {
     }
   }
 
-  Future<CustomPunchModel?> _checkTime(String staffId, String name, String department) async {
+  Future<CustomPunchModel?> _checkTime(
+    String staffId,
+    String name,
+    String department,
+  ) async {
     CustomPunchModel? punchDetail;
     final today = DateTime.now();
     bool isProxy = false;
@@ -189,7 +198,10 @@ class HomeViewModel {
     DateTime? checkOutTime;
 
     String dateFormat = DateFormat('yyyy-MM-dd').format(today);
-    await FirebaseDatabase.instance.ref('fingerPrint/$staffId/$dateFormat').once().then((value) async {
+    await FirebaseDatabase.instance
+        .ref('fingerPrint/$staffId/$dateFormat')
+        .once()
+        .then((value) async {
       if (value.snapshot.exists) {
         List<DateTime> allPunchedTime = [];
         for (var tapTime in value.snapshot.children) {
@@ -223,7 +235,8 @@ class HomeViewModel {
       }
     });
     //check in proxy attendance
-    final punchDetailFromProxy = await _checkProxyEntry(staffId, dateFormat, department);
+    final punchDetailFromProxy =
+        await _checkProxyEntry(staffId, dateFormat, department);
 
     if (punchDetailFromProxy != null) {
       // check in time
@@ -232,10 +245,14 @@ class HomeViewModel {
           checkInTime = punchDetailFromProxy.checkInTime;
           isProxy = true;
         } else {
-          final check = checkInTime!.compareTo(punchDetailFromProxy.checkInTime!);
+          final check =
+              checkInTime!.compareTo(punchDetailFromProxy.checkInTime!);
           if (check == 1) {
             if (checkOutTime == null) {
-              if (checkInTime!.difference(punchDetailFromProxy.checkInTime!).inMinutes > 5) {
+              if (checkInTime!
+                      .difference(punchDetailFromProxy.checkInTime!)
+                      .inMinutes >
+                  5) {
                 checkOutTime = checkInTime;
               }
             }
@@ -252,7 +269,8 @@ class HomeViewModel {
           checkOutTime = punchDetailFromProxy.checkOutTime;
           isProxy = true;
         } else {
-          final check = checkOutTime!.compareTo(punchDetailFromProxy.checkOutTime!);
+          final check =
+              checkOutTime!.compareTo(punchDetailFromProxy.checkOutTime!);
           if (check == -1) {
             checkOutTime = punchDetailFromProxy.checkOutTime!;
             isProxy = true;
@@ -262,43 +280,60 @@ class HomeViewModel {
     }
 
     punchDetail = CustomPunchModel(
-        name: name,
-        staffId: staffId,
-        department: department,
-        checkInTime: checkInTime,
-        checkOutTime: checkOutTime,
-        isProxy: isProxy);
+      name: name,
+      staffId: staffId,
+      department: department,
+      checkInTime: checkInTime,
+      checkOutTime: checkOutTime,
+      isProxy: isProxy,
+    );
     return punchDetail;
   }
 
-  Future<CustomPunchModel?> _checkProxyEntry(String staffId, String dateFormat, String department) async {
+  Future<CustomPunchModel?> _checkProxyEntry(
+    String staffId,
+    String dateFormat,
+    String department,
+  ) async {
     CustomPunchModel? punchDetail;
-    await FirebaseDatabase.instance.ref('proxy_attendance/$staffId/$dateFormat').once().then((proxy) async {
+    await FirebaseDatabase.instance
+        .ref('proxy_attendance/$staffId/$dateFormat')
+        .once()
+        .then((proxy) async {
       if (proxy.snapshot.exists) {
         Map<Object?, Object?> checkInDetail = {};
         Map<Object?, Object?> checkOutDetail = {};
         if (proxy.snapshot.child('Check-in').exists) {
-          checkInDetail = proxy.snapshot.child('Check-in').value as Map<Object?, Object?>;
+          checkInDetail =
+              proxy.snapshot.child('Check-in').value as Map<Object?, Object?>;
         }
         if (proxy.snapshot.child('Check-out').exists) {
-          checkOutDetail = proxy.snapshot.child('Check-out').value as Map<Object?, Object?>;
+          checkOutDetail =
+              proxy.snapshot.child('Check-out').value as Map<Object?, Object?>;
         }
 
         punchDetail = CustomPunchModel(
-            name: checkInDetail['Name'].toString(),
-            staffId: staffId,
-            department: department,
-            checkInTime: checkInDetail.isEmpty
-                ? null
-                : DateTime.fromMillisecondsSinceEpoch(int.parse(checkInDetail['Time'].toString())),
-            checkOutTime: checkOutDetail.isEmpty
-                ? null
-                : DateTime.fromMillisecondsSinceEpoch(int.parse(checkOutDetail['Time'].toString())),
-            checkInProxyBy: checkInDetail['Proxy'].toString(),
-            checkInReason: checkInDetail['Reason'].toString(),
-            checkOutProxyBy: checkOutDetail.isEmpty ? '' : checkOutDetail['Name'].toString(),
-            checkOutReason: checkOutDetail.isEmpty ? '' : checkOutDetail['Reason'].toString(),
-            isProxy: true);
+          name: checkInDetail['Name'].toString(),
+          staffId: staffId,
+          department: department,
+          checkInTime: checkInDetail.isEmpty
+              ? null
+              : DateTime.fromMillisecondsSinceEpoch(
+                  int.parse(checkInDetail['Time'].toString()),
+                ),
+          checkOutTime: checkOutDetail.isEmpty
+              ? null
+              : DateTime.fromMillisecondsSinceEpoch(
+                  int.parse(checkOutDetail['Time'].toString()),
+                ),
+          checkInProxyBy: checkInDetail['Proxy'].toString(),
+          checkInReason: checkInDetail['Reason'].toString(),
+          checkOutProxyBy:
+              checkOutDetail.isEmpty ? '' : checkOutDetail['Name'].toString(),
+          checkOutReason:
+              checkOutDetail.isEmpty ? '' : checkOutDetail['Reason'].toString(),
+          isProxy: true,
+        );
       }
     });
     return punchDetail;
@@ -311,7 +346,8 @@ class HomeViewModel {
     for (var staff in allStaff) {
       if (staff.dob != 0) {
         final staffBirthday = DateTime.fromMillisecondsSinceEpoch(staff.dob);
-        if (staffBirthday.month == today.month && staffBirthday.day == today.day) {
+        if (staffBirthday.month == today.month &&
+            staffBirthday.day == today.day) {
           bdayStaffs.add(staff);
         }
       }
@@ -330,7 +366,9 @@ class HomeViewModel {
           name: entry['name'].toString(),
           email: entry['email'].toString(),
           uniqueId: '',
-          profilePic: entry['profileImage'] == null ? '' : entry['profileImage'].toString(),
+          profilePic: entry['profileImage'] == null
+              ? ''
+              : entry['profileImage'].toString(),
           dob: entry['dob'] == null ? 0 : int.parse(entry['dob'].toString()),
         );
 
@@ -342,6 +380,7 @@ class HomeViewModel {
 
   int getRandomNumber() {
     Random random = Random();
-    return random.nextInt(44); // Generates a random number from 0 to 44 (inclusive).
+    return random
+        .nextInt(44); // Generates a random number from 0 to 44 (inclusive).
   }
 }

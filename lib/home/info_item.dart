@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -5,50 +7,93 @@ import 'package:shimmer/shimmer.dart';
 import '../models/custom_punching_model.dart';
 import '../models/staff_model.dart';
 
-class InfoItem extends StatelessWidget {
+class InfoItem extends StatefulWidget {
   final StaffModel staff;
   final CustomPunchModel? staffEntryDetail;
   final List<StaffModel> todayBirthdayList;
   final DateTime endTime;
   final int quoteIndex;
 
-  const InfoItem(
-      {Key? key,
-      required this.staff,
-      required this.staffEntryDetail,
-      required this.todayBirthdayList,
-      required this.quoteIndex,
-      required this.endTime})
-      : super(key: key);
+  const InfoItem({
+    Key? key,
+    required this.staff,
+    required this.staffEntryDetail,
+    required this.todayBirthdayList,
+    required this.quoteIndex,
+    required this.endTime,
+  }) : super(key: key);
+
+  @override
+  State<InfoItem> createState() => _InfoItemState();
+}
+
+class _InfoItemState extends State<InfoItem> {
+  PageController pageController = PageController();
+  int currentIndex = 0;
+
+  void startAutoScroll(){
+    Timer.periodic(const Duration(seconds: 3), (Timer timer) {
+      if (currentIndex < widget.todayBirthdayList.length ) {
+        currentIndex++;
+      }else{
+        currentIndex = 0;
+      }
+      try {
+        pageController.animateToPage(
+          currentIndex % widget.todayBirthdayList.length,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      } catch (e, s) {
+        print(s);
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    startAutoScroll();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
 
-    final image = todayBirthdayList.isEmpty
+    final image = widget.todayBirthdayList.isEmpty
         ? Positioned(
-            right: 0,
-            top: 10,
-            child: Image.asset(
-              // 'assets/cake.png',
-              'assets/info_pic.png',
-              width: size.width * .35,
-              fit: BoxFit.cover,
-            ))
+      right: 0,
+      top: 10,
+      child: Image.asset(
+        // 'assets/cake.png',
+        'assets/info_pic.png',
+        width: size.width * .35,
+        fit: BoxFit.cover,
+      ),
+    )
         : Positioned(
-            right: -5,
-            top: 0,
-            child: Image.asset(
-              'assets/cake.png',
-              width: size.width * .34,
-              fit: BoxFit.cover,
-            ),
-          );
+      right: -5,
+      top: 0,
+      child: Image.asset(
+        'assets/cake.png',
+        width: size.width * .34,
+        fit: BoxFit.cover,
+      ),
+    );
     return Stack(
       children: [
         Container(
           width: size.width,
-          margin: EdgeInsets.symmetric(vertical: size.height * .03, horizontal: 10.0),
+          margin: EdgeInsets.symmetric(
+            vertical: size.height * .03,
+            horizontal: 10.0,
+          ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30.0),
             boxShadow: const [
@@ -103,7 +148,10 @@ class InfoItem extends StatelessWidget {
                     padding: const EdgeInsets.all(10.0),
                     child: Column(
                       children: [
-                        if (todayBirthdayList.isEmpty) _motivationSection() else _birthdaySection(size),
+                        if (widget.todayBirthdayList.isEmpty)
+                          _motivationSection()
+                        else
+                          _birthdaySection(size),
                         const SizedBox(height: 10.0),
                         _staffEntryInfo(size),
                       ],
@@ -115,13 +163,13 @@ class InfoItem extends StatelessWidget {
           ),
         ),
         //image
-        image
+        image,
       ],
     );
   }
 
   Widget _motivationSection() {
-    final message = motivationalQuotes[quoteIndex].split('-');
+    final message = motivationalQuotes[widget.quoteIndex].split('-');
     final quote = message.first;
     final author = message.length > 1 ? message.last : '';
     return Column(
@@ -163,139 +211,188 @@ class InfoItem extends StatelessWidget {
         children: [
           Flexible(
             child: PageView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: todayBirthdayList.length,
-                onPageChanged: (i) {
-                  birthdayPageIndex.value = i;
-                },
-                itemBuilder: (ctx, index) {
-                  return SizedBox(
-                    width: size.width * .65,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: size.width * .2,
-                          width: size.width * .2,
-                          margin: const EdgeInsets.only(right: 8.0),
-                          clipBehavior: Clip.hardEdge,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                          ),
-                          child: todayBirthdayList[index].profilePic.isEmpty
-                              ? const Image(image: AssetImage('assets/profile_icon.jpg'))
-                              : CachedNetworkImage(
-                                  imageUrl: todayBirthdayList[index].profilePic,
-                                  fit: BoxFit.cover,
-                                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                      CircularProgressIndicator(value: downloadProgress.progress),
-                                  errorWidget: (context, url, error) => const Icon(
-                                    Icons.error,
-                                    color: Colors.red,
-                                  ),
-                                ),
+              controller: pageController,
+              scrollBehavior: const ScrollBehavior(),
+              scrollDirection: Axis.horizontal,
+              itemCount: widget.todayBirthdayList.length,
+              onPageChanged: (int page) {
+                currentIndex = page;
+                birthdayPageIndex.value = page;
+              },
+              itemBuilder: (ctx, index) {
+                return SizedBox(
+                  width: size.width * .65,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: size.width * .2,
+                        width: size.width * .2,
+                        margin: const EdgeInsets.only(right: 8.0),
+                        clipBehavior: Clip.hardEdge,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
                         ),
-                        Expanded(
-                          child: Text(
-                            'Today marks the birthday celebration of ${todayBirthdayList[index].name}',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 20.0,
-                            ),
-                          ),
+                        child: widget.todayBirthdayList[index].profilePic.isEmpty
+                            ? const Image(
+                          image: AssetImage('assets/profile_icon.jpg'),
                         )
-                      ],
-                    ),
-                  );
-                }),
-          ),
-          if (todayBirthdayList.length > 1)
-            ValueListenableBuilder(
-                valueListenable: birthdayPageIndex,
-                builder: (ctx, pageIndex, child) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                        todayBirthdayList.length,
-                        (index) => Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                              child: CircleAvatar(
-                                radius: 4,
-                                backgroundColor: index == pageIndex ? Colors.white : Colors.white30,
+                            : CachedNetworkImage(
+                          imageUrl: widget.todayBirthdayList[index].profilePic,
+                          fit: BoxFit.cover,
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) =>
+                              CircularProgressIndicator(
+                                value: downloadProgress.progress,
                               ),
-                            )),
-                  );
-                })
+                          errorWidget: (context, url, error) =>
+                          const Icon(
+                            Icons.error,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          'Happy Birthday ${widget.todayBirthdayList[index].name}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 19.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+          if (widget.todayBirthdayList.length > 1)
+            ValueListenableBuilder(
+              valueListenable: birthdayPageIndex,
+              builder: (ctx, pageIndex, child) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(
+                    widget.todayBirthdayList.length,
+                        (index) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                      child: CircleAvatar(
+                        radius: 4,
+                        backgroundColor:
+                        index == pageIndex ? Colors.white : Colors.white30,
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
         ],
       ),
     );
   }
 
   Widget _staffEntryInfo(Size size) {
-    if (staffEntryDetail == null) {
+    if (widget.staffEntryDetail == null) {
       return Align(
         alignment: AlignmentDirectional.centerStart,
         child: Shimmer.fromColors(
-            baseColor: Colors.grey,
-            highlightColor: Colors.white,
-            enabled: true,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 8.0,
-                  width: size.width * .2,
-                  margin: const EdgeInsets.only(bottom: 5.0,left: 10.0),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15.0),
-                    color: Colors.white54
-                  ),
+          baseColor: Colors.grey,
+          highlightColor: Colors.white,
+          enabled: true,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 8.0,
+                width: size.width * .2,
+                margin: const EdgeInsets.only(bottom: 5.0, left: 10.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15.0),
+                  color: Colors.white54,
                 ),
-                Container(
-                  height: 8.0,
-                  width: size.width * .3,
-                  margin: const EdgeInsets.only(left: 10.0),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15.0),
-                      color: Colors.white54
-                  ),
-                )
-              ],
-            )),
+              ),
+              Container(
+                height: 8.0,
+                width: size.width * .3,
+                margin: const EdgeInsets.only(left: 10.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15.0),
+                  color: Colors.white54,
+                ),
+              ),
+            ],
+          ),
+        ),
       );
     }
 
     Color color = Colors.green;
 
-    if (staffEntryDetail!.checkInTime == null) {
+    if (widget.staffEntryDetail!.checkInTime == null) {
       color = Colors.grey;
-    } else if (staffEntryDetail!.checkInTime!
-                .difference(DateTime(staffEntryDetail!.checkInTime!.year, staffEntryDetail!.checkInTime!.month,
-                    staffEntryDetail!.checkInTime!.day, 09, 00))
-                .inMinutes >
-            0 &&
-        staffEntryDetail!.checkInTime!
-                .difference(DateTime(staffEntryDetail!.checkInTime!.year, staffEntryDetail!.checkInTime!.month,
-                    staffEntryDetail!.checkInTime!.day, 09, 10))
-                .inMinutes <=
+    } else if (widget.staffEntryDetail!.checkInTime!
+        .difference(
+      DateTime(
+        widget.staffEntryDetail!.checkInTime!.year,
+        widget.staffEntryDetail!.checkInTime!.month,
+        widget.staffEntryDetail!.checkInTime!.day,
+        09,
+        00,
+      ),
+    )
+        .inMinutes >
+        0 &&
+        widget.staffEntryDetail!.checkInTime!
+            .difference(
+          DateTime(
+            widget.staffEntryDetail!.checkInTime!.year,
+            widget.staffEntryDetail!.checkInTime!.month,
+            widget.staffEntryDetail!.checkInTime!.day,
+            09,
+            10,
+          ),
+        )
+            .inMinutes <=
             0) {
       color = Colors.amber.shade500;
-    } else if (staffEntryDetail!.checkInTime!
-                .difference(DateTime(staffEntryDetail!.checkInTime!.year, staffEntryDetail!.checkInTime!.month,
-                    staffEntryDetail!.checkInTime!.day, 09, 00))
-                .inMinutes >
-            10 &&
-        staffEntryDetail!.checkInTime!
-                .difference(DateTime(staffEntryDetail!.checkInTime!.year, staffEntryDetail!.checkInTime!.month,
-                    staffEntryDetail!.checkInTime!.day, 09, 20))
-                .inMinutes <=
+    } else if (widget.staffEntryDetail!.checkInTime!
+        .difference(
+      DateTime(
+        widget.staffEntryDetail!.checkInTime!.year,
+        widget.staffEntryDetail!.checkInTime!.month,
+        widget.staffEntryDetail!.checkInTime!.day,
+        09,
+        00,
+      ),
+    )
+        .inMinutes >
+        10 &&
+        widget.staffEntryDetail!.checkInTime!
+            .difference(
+          DateTime(
+            widget.staffEntryDetail!.checkInTime!.year,
+            widget.staffEntryDetail!.checkInTime!.month,
+            widget.staffEntryDetail!.checkInTime!.day,
+            09,
+            20,
+          ),
+        )
+            .inMinutes <=
             0) {
       color = Colors.orangeAccent.shade400;
-    } else if (staffEntryDetail!.checkInTime!
-            .difference(DateTime(staffEntryDetail!.checkInTime!.year, staffEntryDetail!.checkInTime!.month,
-                staffEntryDetail!.checkInTime!.day, 09, 00))
-            .inMinutes >
+    } else if (widget.staffEntryDetail!.checkInTime!
+        .difference(
+      DateTime(
+        widget.staffEntryDetail!.checkInTime!.year,
+        widget.staffEntryDetail!.checkInTime!.month,
+        widget.staffEntryDetail!.checkInTime!.day,
+        09,
+        00,
+      ),
+    )
+        .inMinutes >
         20) {
       color = Colors.red.shade400;
     }
@@ -303,34 +400,49 @@ class InfoItem extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        if (staffEntryDetail!.checkInTime == null)
+        if (widget.staffEntryDetail!.checkInTime == null)
           const Text(
             'Off the premises 😒',
-            style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w700, fontSize: 15.0),
+            style: TextStyle(
+              color: Colors.grey,
+              fontWeight: FontWeight.w700,
+              fontSize: 15.0,
+            ),
           )
         else
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Check-In     : ${timeFormat(staffEntryDetail!.checkInTime!)}',
-                style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.white70),
+                'Check-In     : ${timeFormat(widget.staffEntryDetail!.checkInTime!)}',
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white70,
+                ),
               ),
               Text(
-                'Check-Out : ${staffEntryDetail!.checkOutTime == null ? 'No entry' : timeFormat(staffEntryDetail!.checkOutTime!)}',
-                style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.white70),
+                'Check-Out : ${widget.staffEntryDetail!.checkOutTime == null ? 'No entry' : timeFormat(widget.staffEntryDetail!.checkOutTime!)}',
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white70,
+                ),
               ),
             ],
           ),
         Row(
           children: [
-            if (staffEntryDetail!.checkInTime != null)
+            if (widget.staffEntryDetail!.checkInTime != null)
               Text(
                 duration(
-                  staffEntryDetail!.checkInTime!,
-                  staffEntryDetail!.checkOutTime == null ? endTime : staffEntryDetail!.checkOutTime!,
+                  widget.staffEntryDetail!.checkInTime!,
+                  widget.staffEntryDetail!.checkOutTime == null
+                      ? widget.endTime
+                      : widget.staffEntryDetail!.checkOutTime!,
                 ),
-                style: const TextStyle(fontWeight: FontWeight.w500, color: Colors.white70),
+                style: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.white70,
+                ),
               ),
             Container(
               width: 5.0,
@@ -340,9 +452,9 @@ class InfoItem extends StatelessWidget {
                 color: color,
                 borderRadius: BorderRadius.circular(15.0),
               ),
-            )
+            ),
           ],
-        )
+        ),
       ],
     );
   }

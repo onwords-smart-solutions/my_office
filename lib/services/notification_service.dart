@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:my_office/leave_apply/leave_apply_screen.dart';
+import 'package:my_office/leave_approval/leave_approval_screen.dart';
 import 'package:my_office/refreshment/refreshment_screen.dart';
 import 'package:my_office/suggestions/suggestions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -55,7 +56,7 @@ class NotificationService {
       if (message.data['type'] == NotificationType.leaveNotification) {
         navigationKey.currentState!.push(
           MaterialPageRoute(
-            builder: (_) => const LeaveApplyScreen(),
+            builder: (_) => const LeaveApprovalScreen(),
           ),
         );
       } else if (message.data['type'] == NotificationType.leaveRespond) {
@@ -79,7 +80,11 @@ class NotificationService {
   // initialization of FCM
   Future<void> initFCMNotifications() async {
     await _firebaseMessaging.requestPermission(
-        alert: true, announcement: false, badge: true, sound: true);
+      alert: true,
+      announcement: false,
+      badge: true,
+      sound: true,
+    );
     _initPushNotifications();
   }
 
@@ -98,8 +103,9 @@ class NotificationService {
             if (device.key != userProvider.user!.uniqueId &&
                 tokenData['deviceId'].toString() == deviceId) {
               await removeFCM(
-                  userId: userProvider.user!.uid,
-                  uniqueId: device.key.toString());
+                userId: userProvider.user!.uid,
+                uniqueId: device.key.toString(),
+              );
             }
           }
         }
@@ -110,8 +116,10 @@ class NotificationService {
     }
   }
 
-  Future<void> removeFCM(
-      {required String userId, required String uniqueId}) async {
+  Future<void> removeFCM({
+    required String userId,
+    required String uniqueId,
+  }) async {
     await userRef.child('$userId/$uniqueId').remove();
   }
 
@@ -145,11 +153,12 @@ class NotificationService {
     return id;
   }
 
-  Future<void> sendNotification(
-      {required String title,
-      required String body,
-      required String token,
-      String? type}) async {
+  Future<void> sendNotification({
+    required String title,
+    required String body,
+    required String token,
+    String? type,
+  }) async {
     try {
       const url = 'https://fcm.googleapis.com/fcm/send';
       final headers = {
@@ -210,27 +219,30 @@ class NotificationService {
 
   Future<NotificationDetails> _notificationDetails() async {
     AndroidNotificationDetails androidNotificationDetails =
-        const AndroidNotificationDetails('My Office', 'Refreshment',
-            groupKey: 'com.onwords.office',
-            channelDescription: 'Notifications for refreshment reminder',
-            importance: Importance.max,
-            priority: Priority.high,
-            enableLights: true,
-            sound: RawResourceAndroidNotificationSound('office'),
-            autoCancel: false,
-            // audioAttributesUsage: AudioAttributesUsage.notification,
-            playSound: true,
-            fullScreenIntent: true,
-            onlyAlertOnce: false,
-            enableVibration: true,
-            channelAction: AndroidNotificationChannelAction.createIfNotExists,
-            color: Color(0xff8355B7));
+        const AndroidNotificationDetails(
+      'My Office', 'Refreshment',
+      groupKey: 'com.onwords.office',
+      channelDescription: 'Notifications for refreshment reminder',
+      importance: Importance.max,
+      priority: Priority.high,
+      enableLights: true,
+      sound: RawResourceAndroidNotificationSound('office'),
+      autoCancel: false,
+      // audioAttributesUsage: AudioAttributesUsage.notification,
+      playSound: true,
+      fullScreenIntent: true,
+      onlyAlertOnce: false,
+      enableVibration: true,
+      channelAction: AndroidNotificationChannelAction.createIfNotExists,
+      color: Color(0xff8355B7),
+    );
     return NotificationDetails(android: androidNotificationDetails);
   }
 
   //showing notification function
-  Future<void> showDailyNotificationWithPayload(
-      {required String setTime}) async {
+  Future<void> showDailyNotificationWithPayload({
+    required String setTime,
+  }) async {
     //Notification setting main function
     setNotification() async {
       final pref = await SharedPreferences.getInstance();
@@ -238,7 +250,12 @@ class NotificationService {
       final notTimeMng =
           DateTime(currentTime.year, currentTime.month, currentTime.day, 9, 30);
       final notTimeEvg = DateTime(
-          currentTime.year, currentTime.month, currentTime.day, 14, 00);
+        currentTime.year,
+        currentTime.month,
+        currentTime.day,
+        14,
+        00,
+      );
 
       final detail = await _notificationDetails();
 

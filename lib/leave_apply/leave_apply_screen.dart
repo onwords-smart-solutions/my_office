@@ -64,16 +64,20 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen> {
             LeaveForm(getLeaveHistory: _getLeaveHistory),
             //leave history
             ValueListenableBuilder(
-                valueListenable: _loading,
-                builder: (ctx, loading, child) {
-                  return ValueListenableBuilder(
-                      valueListenable: _history,
-                      builder: (ctx, history, child) {
-                        return (loading && history.isEmpty)
-                            ? Center(child: Lottie.asset("assets/animations/new_loading.json"))
-                            : LeaveHistory(history: history);
-                      });
-                }),
+              valueListenable: _loading,
+              builder: (ctx, loading, child) {
+                return ValueListenableBuilder(
+                  valueListenable: _history,
+                  builder: (ctx, history, child) {
+                    return (loading && history.isEmpty)
+                        ? Center(
+                            child: Lottie.asset(
+                                "assets/animations/new_loading.json"))
+                        : LeaveHistory(history: history);
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -81,11 +85,15 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen> {
   }
 
   Future<void> _getLeaveHistory() async {
+    _history.value.clear();
     _loading.value = true;
     final context = this.context;
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     final ref = FirebaseDatabase.instance.ref('leaveDetails');
-    await ref.child('${userProvider.user!.uid}/leaveApplied').once().then((leave) {
+    await ref
+        .child('${userProvider.user!.uid}/leaveApplied')
+        .once()
+        .then((leave) {
       if (leave.snapshot.exists) {
         for (var year in leave.snapshot.children) {
           for (var month in year.children) {
@@ -94,8 +102,11 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen> {
               final dateFromFb = info['date'].toString().split('-');
               final reason = info['reason'].toString();
               final status = info['status'].toString();
-              final updatedBy = info['updated_by'] == null ? '' : info['updated_by'].toString();
-              final date = DateTime(int.parse(dateFromFb[0]), int.parse(dateFromFb[1]), int.parse(dateFromFb[2]), 0, 0);
+              final updatedBy = info['updated_by'] == null
+                  ? ''
+                  : info['updated_by'].toString();
+              final date = DateTime(int.parse(dateFromFb[0]),
+                  int.parse(dateFromFb[1]), int.parse(dateFromFb[2]), 0, 0);
               _history.value.add(
                 LeaveHistoryModel(
                   date: date,

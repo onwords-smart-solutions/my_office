@@ -40,15 +40,15 @@ class InvoicePreviewScreen extends StatefulWidget {
   final int percentage;
   final bool gstNeed;
 
-  const InvoicePreviewScreen(
-      {Key? key,
-      required this.finalAmountWithoutGst,
-      required this.advanceAmount,
-      required this.gstNeed,
-      required this.percentage,
-      required this.discountAmount,
-      required this.prPoint})
-      : super(key: key);
+  const InvoicePreviewScreen({
+    Key? key,
+    required this.finalAmountWithoutGst,
+    required this.advanceAmount,
+    required this.gstNeed,
+    required this.percentage,
+    required this.discountAmount,
+    required this.prPoint,
+  }) : super(key: key);
 
   @override
   State<InvoicePreviewScreen> createState() => _InvoicePreviewScreenState();
@@ -149,7 +149,9 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
     var r = Random();
     const characters = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz';
     return List.generate(
-        len, (index) => characters[r.nextInt(characters.length)]).join();
+      len,
+      (index) => characters[r.nextInt(characters.length)],
+    ).join();
   }
 
   void getStaffDetail() async {
@@ -161,7 +163,8 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
 
   @override
   void initState() {
-    documentDateController.text = DateFormat('yyyy-MM-dd').format(date).toString();
+    documentDateController.text =
+        DateFormat('yyyy-MM-dd').format(date).toString();
     getStaffDetail();
     getId();
     getDocLength();
@@ -218,9 +221,9 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
         title: const Text(
           'Preview of Document',
           style: TextStyle(
-              fontSize: 22,
-              color: Colors.white,
-               ),
+            fontSize: 22,
+            color: Colors.white,
+          ),
         ),
         centerTitle: true,
         elevation: 0,
@@ -261,13 +264,14 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
             left: 0,
             right: 0,
             child: RepaintBoundary(
-                key: _globalKey,
-                child: QrImageView(
-                  data:
-                      'upi://pay?pa=onwordspay@ybl&pn=Onwords Smart Solutions&tr=&am=${grandTotal < 80000 ? grandTotal : ''}&cu=INR&mode=01&purpose=10&orgid=-&sign=-&tn=$transactionNote&note=${widget.prPoint}',
-                  version: QrVersions.auto,
-                  size: 200.0,
-                )),
+              key: _globalKey,
+              child: QrImageView(
+                data:
+                    'upi://pay?pa=onwordspay@ybl&pn=Onwords Smart Solutions&tr=&am=${grandTotal < 80000 ? grandTotal : ''}&cu=INR&mode=01&purpose=10&orgid=-&sign=-&tn=$transactionNote&note=${widget.prPoint}',
+                version: QrVersions.auto,
+                size: 200.0,
+              ),
+            ),
           ),
           Positioned(
             top: 0,
@@ -285,12 +289,14 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                       Container(
                         margin: const EdgeInsets.only(top: 10),
                         padding: const EdgeInsets.symmetric(
-                            vertical: 08, horizontal: 03),
+                          vertical: 08,
+                          horizontal: 03,
+                        ),
                         height: height * .2,
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border:
-                                Border.all(color: Colors.black26, width: 2)),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.black26, width: 2),
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -304,10 +310,12 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                               ),
                               child: Column(
                                 children: [
-                                  const Text('Customer Details',
-                                      style: TextStyle(
-                                         
-                                          color: Colors.black)),
+                                  const Text(
+                                    'Customer Details',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
                                   createCustomerDetails(
                                     width,
                                     customerDetails,
@@ -364,28 +372,33 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text('      Document Details',
-                                      style: TextStyle(
-                                         
-                                          color: Colors.black)),
+                                  const Text(
+                                    '      Document Details',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                    ),
+                                  ),
                                   Text(
-                                      ' Date of Document : ${documentDateController.text.isNotEmpty ? documentDateController.text : "Select Date"}',
-                                      style: const TextStyle(
-                                         
-                                          color: Colors.black,
-                                          fontSize: 10)),
+                                    ' Date of Document : ${documentDateController.text.isNotEmpty ? documentDateController.text : "Select Date"}',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 10,
+                                    ),
+                                  ),
                                   Text(
-                                      ' Doc-Type : #${customerDetails.docType}',
-                                      style: const TextStyle(
-                                         
-                                          color: Colors.black,
-                                          fontSize: 10)),
+                                    ' Doc-Type : #${customerDetails.docType}',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 10,
+                                    ),
+                                  ),
                                   Text(
-                                      ' Category : ${customerDetails.docCategory}',
-                                      style: const TextStyle(
-                                         
-                                          color: Colors.black,
-                                          fontSize: 10)),
+                                    ' Category : ${customerDetails.docCategory}',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 10,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -420,54 +433,73 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   tableHeading(
-                                      width, 'Items', width * .0005, true),
+                                    width,
+                                    'Items',
+                                    width * .0005,
+                                    true,
+                                  ),
                                   tableHeading(
-                                      width, 'Qty', width * .0003, true),
+                                    width,
+                                    'Qty',
+                                    width * .0003,
+                                    true,
+                                  ),
                                   tableHeading(
-                                      width, 'Unit Price', width * .0006, true),
+                                    width,
+                                    'Unit Price',
+                                    width * .0006,
+                                    true,
+                                  ),
                                   tableHeading(
-                                      width, 'Total', width * .0005, false),
+                                    width,
+                                    'Total',
+                                    width * .0005,
+                                    false,
+                                  ),
                                 ],
                               ),
                             ),
 
                             /// TABLE CONTENT
                             Container(
-                                margin: const EdgeInsets.only(top: 3),
-                                height: height * .4,
-                                width: width * 1,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  color: CupertinoColors.systemGrey
-                                      .withOpacity(0.4),
-                                ),
-                                child: ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    physics: const BouncingScrollPhysics(),
-                                    itemCount: productDetails.length,
-                                    itemBuilder: (BuildContext context, index) {
-                                      final data = [
-                                        productDetails[index].productName,
-                                        productDetails[index]
-                                            .productQuantity
-                                            .toString(),
-                                        productDetails[index]
-                                            .productPrice
-                                            .toString(),
-                                        productDetails[index]
-                                            .subTotalList
-                                            .toString(),
-                                      ];
-                                      return Padding(
-                                        padding: const EdgeInsets.all(0),
-                                        child: Table(
-                                            // border: TableBorder.all(color: Colors.black),
+                              margin: const EdgeInsets.only(top: 3),
+                              height: height * .4,
+                              width: width * 1,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color:
+                                    CupertinoColors.systemGrey.withOpacity(0.4),
+                              ),
+                              child: ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                physics: const BouncingScrollPhysics(),
+                                itemCount: productDetails.length,
+                                itemBuilder: (BuildContext context, index) {
+                                  final data = [
+                                    productDetails[index].productName,
+                                    productDetails[index]
+                                        .productQuantity
+                                        .toString(),
+                                    productDetails[index]
+                                        .productPrice
+                                        .toString(),
+                                    productDetails[index]
+                                        .subTotalList
+                                        .toString(),
+                                  ];
+                                  return Padding(
+                                    padding: const EdgeInsets.all(0),
+                                    child: Table(
+                                      // border: TableBorder.all(color: Colors.black),
 
-                                            children: [
-                                              createTableRow(data),
-                                            ]),
-                                      );
-                                    })),
+                                      children: [
+                                        createTableRow(data),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
                             const Divider(
                               color: Colors.black,
                               indent: 5,
@@ -484,39 +516,56 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                               ),
                               child: Column(
                                 children: [
-                                  totalAmountDetails(width, height, 'Total  ',
-                                      Utils.formatPrice(total.toDouble())),
                                   totalAmountDetails(
-                                      width,
-                                      height,
-                                      'Discount ${widget.percentage} %  ',
-                                      Utils.formatPrice(widget.discountAmount)),
+                                    width,
+                                    height,
+                                    'Total  ',
+                                    Utils.formatPrice(total.toDouble()),
+                                  ),
                                   totalAmountDetails(
-                                      width,
-                                      height,
-                                      'Sub Total  ',
-                                      Utils.formatPrice(
-                                          widget.finalAmountWithoutGst)),
-                                  totalAmountDetails(width, height, 'CGST %  ',
-                                      Utils.formatPrice(gst)),
-                                  totalAmountDetails(width, height, 'SGST %  ',
-                                      Utils.formatPrice(gst)),
+                                    width,
+                                    height,
+                                    'Discount ${widget.percentage} %  ',
+                                    Utils.formatPrice(widget.discountAmount),
+                                  ),
                                   totalAmountDetails(
-                                      width,
-                                      height,
-                                      'Grand Total  ',
-                                      Utils.formatPrice(grandTotal)),
+                                    width,
+                                    height,
+                                    'Sub Total  ',
+                                    Utils.formatPrice(
+                                      widget.finalAmountWithoutGst,
+                                    ),
+                                  ),
                                   totalAmountDetails(
-                                      width,
-                                      height,
-                                      'Advanced  ',
-                                      Utils.formatPrice(widget.advanceAmount)),
+                                    width,
+                                    height,
+                                    'CGST %  ',
+                                    Utils.formatPrice(gst),
+                                  ),
+                                  totalAmountDetails(
+                                    width,
+                                    height,
+                                    'SGST %  ',
+                                    Utils.formatPrice(gst),
+                                  ),
+                                  totalAmountDetails(
+                                    width,
+                                    height,
+                                    'Grand Total  ',
+                                    Utils.formatPrice(grandTotal),
+                                  ),
+                                  totalAmountDetails(
+                                    width,
+                                    height,
+                                    'Advanced  ',
+                                    Utils.formatPrice(widget.advanceAmount),
+                                  ),
                                   totalAmountDetails(
                                     width,
                                     height,
                                     'Amount payable  ',
                                     Utils.formatPrice(finalTotal),
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
@@ -526,13 +575,17 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
 
                             /// PDF BUTTON
                             SizedBox(
-                                width: width * 1,
-                                height: height * .08,
-                                child: Button('Save', () {
-                                    getDocLength();
-                                    _showDialog(context, customerDetails,
-                                        productDetails);
-                                }).button()),
+                              width: width * 1,
+                              height: height * .08,
+                              child: Button('Save', () {
+                                getDocLength();
+                                _showDialog(
+                                  context,
+                                  customerDetails,
+                                  productDetails,
+                                );
+                              }).button(),
+                            ),
                             const SizedBox(
                               height: 20,
                             ),
@@ -544,14 +597,18 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
   Widget tableHeading(
-      double width, String title, double widthVal, bool isTrue) {
+    double width,
+    String title,
+    double widthVal,
+    bool isTrue,
+  ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -560,7 +617,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
           child: Center(
             child: Text(
               title,
-              style: const TextStyle( ),
+              style: const TextStyle(),
             ),
           ),
         ),
@@ -582,7 +639,6 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
           (cell) {
             final style = TextStyle(
               fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
-             
             );
             return Padding(
               padding: const EdgeInsets.all(8),
@@ -597,41 +653,46 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
         ).toList(),
       );
 
-  Widget createCustomerDetails(double width, ClientModel customerDetails,
-      String key, String value, double val) {
+  Widget createCustomerDetails(
+    double width,
+    ClientModel customerDetails,
+    String key,
+    String value,
+    double val,
+  ) {
     return SizedBox(
-        width: width * .6,
-        height: val,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: 60,
-              child: Text(
-                key,
-                style: const TextStyle(
-                   
-                    color: Colors.black,
-                    fontSize: 10),
+      width: width * .6,
+      height: val,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(
+            width: 60,
+            child: Text(
+              key,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 10,
               ),
             ),
-            const Text(':'),
-            const SizedBox(width: 10),
-            Expanded(
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Text(
-                  value,
-                  style: const TextStyle(
-                   
-                    color: Colors.black,
-                    fontSize: 10,
-                  ),
+          ),
+          const Text(':'),
+          const SizedBox(width: 10),
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Text(
+                value,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 10,
                 ),
               ),
             ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 
   Widget totalAmountDetails(
@@ -651,9 +712,9 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
             child: Text(
               key,
               style: const TextStyle(
-                 
-                  color: Colors.black,
-                  fontSize: 12),
+                color: Colors.black,
+                fontSize: 12,
+              ),
             ),
           ),
           const Center(child: Text(':')),
@@ -664,7 +725,6 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
               value,
               textAlign: TextAlign.end,
               style: const TextStyle(
-               
                 color: Colors.black,
                 fontSize: 10,
               ),
@@ -675,339 +735,361 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
     );
   }
 
-  _showDialog(BuildContext context, ClientModel clientModel,
-      List<ListOfTable> productDetailsModel) {
+  _showDialog(
+    BuildContext context,
+    ClientModel clientModel,
+    List<ListOfTable> productDetailsModel,
+  ) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return StatefulBuilder(builder: (context, setState) {
-          return WillPopScope(
-            onWillPop: () async {
-              return false;
-            },
-            child: Form(
-              key: formKey,
-              child: CupertinoAlertDialog(
-                title: const Text(
-                  "Document Details\n",
-                  style: TextStyle(
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return WillPopScope(
+              onWillPop: () async {
+                return false;
+              },
+              child: Form(
+                key: formKey,
+                child: CupertinoAlertDialog(
+                  title: const Text(
+                    "Document Details\n",
+                    style: TextStyle(
                       color: ConstantColor.backgroundColor,
-                     
-                      fontSize: 16),
-                ),
-                content: Material(
-                  color: Colors.transparent,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextFiledWidget(
-                        controller: fileNameController,
-                        textInputType: TextInputType.name,
-                        textInputAction: TextInputAction.done,
-                        hintName: 'File Name',
-                        icon: const Icon(Icons.file_present),
-                        maxLength: 10,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'File Name Required';
-                          }
-                          return null;
-                        },
-                      ).textInputFiled(),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      clientModel.docType != 'QUOTATION'
-                          ? const Text(
-                              '  Date For Installation',
-                              style: TextStyle(
-                                 
+                      fontSize: 16,
+                    ),
+                  ),
+                  content: Material(
+                    color: Colors.transparent,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextFiledWidget(
+                          controller: fileNameController,
+                          textInputType: TextInputType.name,
+                          textInputAction: TextInputAction.done,
+                          hintName: 'File Name',
+                          icon: const Icon(Icons.file_present),
+                          maxLength: 10,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'File Name Required';
+                            }
+                            return null;
+                          },
+                        ).textInputFiled(),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        clientModel.docType != 'QUOTATION'
+                            ? const Text(
+                                '  Date For Installation',
+                                style: TextStyle(
                                   fontSize: 13,
-                                  color: Colors.black),
-                            )
-                          : const SizedBox(),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      clientModel.docType != 'QUOTATION'
-                          ? TextFormField(
-                              controller: estimateDateController,
-                              textInputAction: TextInputAction.done,
-                              maxLength: 15,
-                              readOnly: true,
-                              style: const TextStyle(
-                               
-                              ),
-                              decoration: InputDecoration(
-                                counterText: '',
-                                hintText: 'Estimated Date',
-                                hintStyle: const TextStyle(
-                                 
+                                  color: Colors.black,
                                 ),
-                                labelStyle: const TextStyle(
-                                 
+                              )
+                            : const SizedBox(),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        clientModel.docType != 'QUOTATION'
+                            ? TextFormField(
+                                controller: estimateDateController,
+                                textInputAction: TextInputAction.done,
+                                maxLength: 15,
+                                readOnly: true,
+                                style: const TextStyle(),
+                                decoration: InputDecoration(
+                                  counterText: '',
+                                  hintText: 'Estimated Date',
+                                  hintStyle: const TextStyle(),
+                                  labelStyle: const TextStyle(),
+                                  border: myInputBorder(),
+                                  enabledBorder: myInputBorder(),
+                                  focusedBorder: myFocusBorder(),
+                                  disabledBorder: myDisabledBorder(),
                                 ),
-                                border: myInputBorder(),
-                                enabledBorder: myInputBorder(),
-                                focusedBorder: myFocusBorder(),
-                                disabledBorder: myDisabledBorder(),
-                              ),
-                              keyboardType: TextInputType.datetime,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Date Required';
-                                }
-                                return null;
-                              },
-                              onTap: () async {
-                                DateTime? pickedDate = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime(2000),
-                                  //DateTime.now() - not to allow to choose before today.
-                                  lastDate: DateTime(2101),
-                                );
+                                keyboardType: TextInputType.datetime,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Date Required';
+                                  }
+                                  return null;
+                                },
+                                onTap: () async {
+                                  DateTime? pickedDate = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2000),
+                                    //DateTime.now() - not to allow to choose before today.
+                                    lastDate: DateTime(2101),
+                                  );
 
-                                if (pickedDate != null) {
-                                  String formattedDate =
-                                      DateFormat('yyyy-MM-dd')
-                                          .format(pickedDate);
-                                  setState(() {
-                                    estimateDateController.text =
-                                        formattedDate; //set output date to TextField value.
-                                  });
-                                }
-                              },
-                            )
-                          : const SizedBox(),
-                    ], //
-                  ),
-                ),
-                actions: <Widget>[
-                  CupertinoDialogAction(
-                    child: const Text(
-                      "Cancel",
-                      style: TextStyle(
-                          color: Colors.black,
-                           ),
+                                  if (pickedDate != null) {
+                                    String formattedDate =
+                                        DateFormat('yyyy-MM-dd')
+                                            .format(pickedDate);
+                                    setState(() {
+                                      estimateDateController.text =
+                                          formattedDate; //set output date to TextField value.
+                                    });
+                                  }
+                                },
+                              )
+                            : const SizedBox(),
+                      ], //
                     ),
-                    onPressed: () async {
-                      Navigator.of(context).pop();
-                    },
                   ),
-                  CupertinoDialogAction(
-                    child: const Text(
-                      "Save",
-                      style: TextStyle(
+                  actions: <Widget>[
+                    CupertinoDialogAction(
+                      child: const Text(
+                        "Cancel",
+                        style: TextStyle(
                           color: Colors.black,
-                           ),
+                        ),
+                      ),
+                      onPressed: () async {
+                        Navigator.of(context).pop();
+                      },
                     ),
-                    onPressed: () async {
-                      if (formKey.currentState!.validate()) {
-                        showDialog(
+                    CupertinoDialogAction(
+                      child: const Text(
+                        "Save",
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                      onPressed: () async {
+                        if (formKey.currentState!.validate()) {
+                          showDialog(
                             context: context,
                             barrierDismissible: true,
                             builder: (context) {
                               return Center(
-                                  child: SizedBox(
-                                      child: Lottie.asset(
-                                'assets/animations/loading.json',
-                              )));
-                            });
-                        await _convertImage();
-                        setState(() {
-                          docLen = listOfDocLength.length + 1;
-                        });
-                        InvAndQtnPdf x = InvAndQtnPdf(
-                          total: double.parse(lisTotal.toString()),
-                          documentLen: docLen.toInt(),
-                          subTotal: widget.finalAmountWithoutGst.toDouble(),
-                          cgst: gst.toDouble(),
-                          sgst: gst.toDouble(),
-                          discount: widget.discountAmount.toDouble(),
-                          advance: widget.advanceAmount.toDouble(),
-                          grandTotal: grandTotal.toInt(),
-                          needGst: widget.gstNeed,
-                          amountToPay: finalTotal.toInt(),
-                          percentage: widget.percentage,
-                          documentDate:
-                              DateTime.parse(documentDateController.text),
-                        );
+                                child: SizedBox(
+                                  child: Lottie.asset(
+                                    'assets/animations/loading.json',
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                          await _convertImage();
+                          setState(() {
+                            docLen = listOfDocLength.length + 1;
+                          });
+                          InvAndQtnPdf x = InvAndQtnPdf(
+                            total: double.parse(lisTotal.toString()),
+                            documentLen: docLen.toInt(),
+                            subTotal: widget.finalAmountWithoutGst.toDouble(),
+                            cgst: gst.toDouble(),
+                            sgst: gst.toDouble(),
+                            discount: widget.discountAmount.toDouble(),
+                            advance: widget.advanceAmount.toDouble(),
+                            grandTotal: grandTotal.toInt(),
+                            needGst: widget.gstNeed,
+                            amountToPay: finalTotal.toInt(),
+                            percentage: widget.percentage,
+                            documentDate:
+                                DateTime.parse(documentDateController.text),
+                          );
 
-                        DateTime currentPhoneDate = DateTime.now();
-                        Timestamp myTimeStamp =
-                            Timestamp.fromDate(currentPhoneDate);
-                        final databaseReference =
-                            FirebaseDatabase.instance.ref();
-                        final firebaseStorage = FirebaseStorage.instance;
+                          DateTime currentPhoneDate = DateTime.now();
+                          Timestamp myTimeStamp =
+                              Timestamp.fromDate(currentPhoneDate);
+                          final databaseReference =
+                              FirebaseDatabase.instance.ref();
+                          final firebaseStorage = FirebaseStorage.instance;
 
-                        final pdfFile = await x.generate(
-                            clientModel, productDetailsModel, convertedImage!);
-                        final dir = await getExternalStorageDirectory();
-                        final file =
-                            File("${dir!.path}/${fileNameController.text}.pdf");
+                          final pdfFile = await x.generate(
+                            clientModel,
+                            productDetailsModel,
+                            convertedImage!,
+                          );
+                          final dir = await getExternalStorageDirectory();
+                          final file = File(
+                              "${dir!.path}/${fileNameController.text}.pdf");
 
-                        file.writeAsBytesSync(pdfFile.readAsBytesSync(),
-                            flush: true);
+                          file.writeAsBytesSync(
+                            pdfFile.readAsBytesSync(),
+                            flush: true,
+                          );
 
-                        OpenFile.open(file.path).then((value) async {
-                          ///...............FIREBASE..........////
-                          /// INVOICE OR PROFORMA_INVOICE
-                          if (clientModel.docType == "INVOICE" ||
-                              clientModel.docType == "PROFORMA_INVOICE") {
-                            String id = generateRandomString(5)
-                                .toUpperCase()
-                                .toString();
-                            if (alreadyGeneratedId
-                                .any((element) => element == id)) {
-                              dev.log('Already Id Created. Create New one');
-                              id = generateRandomString(5)
+                          OpenFile.open(file.path).then((value) async {
+                            ///...............FIREBASE..........////
+                            /// INVOICE OR PROFORMA_INVOICE
+                            if (clientModel.docType == "INVOICE" ||
+                                clientModel.docType == "PROFORMA_INVOICE") {
+                              String id = generateRandomString(5)
                                   .toUpperCase()
                                   .toString();
-                            } else{
+                              if (alreadyGeneratedId
+                                  .any((element) => element == id)) {
+                                dev.log('Already Id Created. Create New one');
+                                id = generateRandomString(5)
+                                    .toUpperCase()
+                                    .toString();
+                              } else {
+                                var snapshot = await firebaseStorage
+                                    .ref()
+                                    .child(
+                                      '${clientModel.docType}/${clientModel.docType == "INVOICE" ? "INV" : "PRO_INV"}${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}',
+                                    )
+                                    .putFile(pdfFile);
+                                var downloadUrl =
+                                    await snapshot.ref.getDownloadURL();
+
+                                /// INSTALLATION-INVOICE......
+                                final installationPdfFile =
+                                    await InstallationPdf(
+                                  documentLen: docLen,
+                                  estimateDate: DateTime.parse(
+                                      estimateDateController.text),
+                                ).generate(clientModel, productDetailsModel);
+
+                                var snapshotInstallation = await firebaseStorage
+                                    .ref()
+                                    .child(
+                                      'INSTALLATION-INVOICE/INV${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}',
+                                    )
+                                    .putFile(installationPdfFile);
+                                var downloadUrlInstallation =
+                                    await snapshotInstallation.ref
+                                        .getDownloadURL();
+
+                                var invoice = {
+                                  'Customer_name': clientModel.name,
+                                  'Status': 'Processing',
+                                  'TimeStamp': myTimeStamp.seconds,
+                                  'CreatedBy': staffInfo?.email,
+                                  'mobile_number': clientModel.phone,
+                                  'document_link': downloadUrl,
+                                  'installation_document_link':
+                                      downloadUrlInstallation,
+                                };
+                                var proformaInvoice = {
+                                  'Customer_name': clientModel.name,
+                                  'id': "#$id",
+                                  'Status': 'Processing',
+                                  'TimeStamp': myTimeStamp.seconds,
+                                  'CreatedBy': staffInfo?.email,
+                                  'mobile_number': clientModel.phone,
+                                  'document_link': downloadUrl,
+                                  'installation_document_link':
+                                      downloadUrlInstallation,
+                                };
+
+                                databaseReference
+                                    .child('QuotationAndInvoice')
+                                    .child(
+                                      clientModel.docType == 'INVOICE'
+                                          ? 'INVOICE'
+                                          : 'PROFORMA_INVOICE',
+                                    )
+                                    .child('${Utils.formatYear(date)}')
+                                    .child('${Utils.formatMonth(date)}')
+                                    .child(
+                                      '${clientModel.docType == 'INVOICE' ? 'INV_' : 'PRO_INV_'}${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}',
+                                    )
+                                    .set(
+                                      clientModel.docType == 'INVOICE'
+                                          ? invoice
+                                          : proformaInvoice,
+                                    );
+                              }
+                            }
+
+                            // /// QUOTATION
+                            else {
                               var snapshot = await firebaseStorage
                                   .ref()
                                   .child(
-                                      '${clientModel.docType}/${clientModel.docType == "INVOICE" ? "INV" : "PRO_INV"}${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
+                                    'QUOTATION/EST${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}',
+                                  )
                                   .putFile(pdfFile);
                               var downloadUrl =
                                   await snapshot.ref.getDownloadURL();
-
-                              /// INSTALLATION-INVOICE......
-                              final installationPdfFile = await InstallationPdf(
-                                documentLen: docLen,
-                                estimateDate:
-                                    DateTime.parse(estimateDateController.text),
-                              ).generate(clientModel, productDetailsModel);
-
-                              var snapshotInstallation = await firebaseStorage
-                                  .ref()
-                                  .child(
-                                      'INSTALLATION-INVOICE/INV${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
-                                  .putFile(installationPdfFile);
-                              var downloadUrlInstallation =
-                                  await snapshotInstallation.ref
-                                      .getDownloadURL();
-
-                              var invoice = {
+                              var quotation = {
                                 'Customer_name': clientModel.name,
                                 'Status': 'Processing',
                                 'TimeStamp': myTimeStamp.seconds,
                                 'CreatedBy': staffInfo?.email,
                                 'mobile_number': clientModel.phone,
                                 'document_link': downloadUrl,
-                                'installation_document_link':
-                                    downloadUrlInstallation,
                               };
-                              var proformaInvoice = {
-                                'Customer_name': clientModel.name,
-                                'id': "#$id",
-                                'Status': 'Processing',
-                                'TimeStamp': myTimeStamp.seconds,
-                                'CreatedBy': staffInfo?.email,
-                                'mobile_number': clientModel.phone,
-                                'document_link': downloadUrl,
-                                'installation_document_link':
-                                    downloadUrlInstallation,
-                              };
-
                               databaseReference
                                   .child('QuotationAndInvoice')
-                                  .child(clientModel.docType == 'INVOICE'
-                                      ? 'INVOICE'
-                                      : 'PROFORMA_INVOICE')
+                                  .child('QUOTATION')
                                   .child('${Utils.formatYear(date)}')
                                   .child('${Utils.formatMonth(date)}')
                                   .child(
-                                      '${clientModel.docType == 'INVOICE' ? 'INV_' : 'PRO_INV_'}${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
-                                  .set(clientModel.docType == 'INVOICE'
-                                      ? invoice
-                                      : proformaInvoice);
+                                    'EST${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}',
+                                  )
+                                  .set(quotation);
                             }
-                          }
-
-                          // /// QUOTATION
-                          else {
-                            var snapshot = await firebaseStorage
-                                .ref()
-                                .child(
-                                    'QUOTATION/EST${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
-                                .putFile(pdfFile);
-                            var downloadUrl =
-                                await snapshot.ref.getDownloadURL();
-                            var quotation = {
-                              'Customer_name': clientModel.name,
-                              'Status': 'Processing',
-                              'TimeStamp': myTimeStamp.seconds,
-                              'CreatedBy': staffInfo?.email,
-                              'mobile_number': clientModel.phone,
-                              'document_link': downloadUrl,
-                            };
-                            databaseReference
-                                .child('QuotationAndInvoice')
-                                .child('QUOTATION')
-                                .child('${Utils.formatYear(date)}')
-                                .child('${Utils.formatMonth(date)}')
-                                .child(
-                                    'EST${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}')
-                                .set(quotation);
-                          }
-                        })
-                            .then((value) {
-                          fileNameController.clear();
-                          listOfDocLength.clear();
-                          estimateDateController.clear();
-                          grandTotal = 0;
-                          gst = 0;
-                          Provider.of<InvoiceProvider>(context, listen: false)
-                              .clearAllData();
-                          Navigator.pushAndRemoveUntil(
+                          }).then((value) {
+                            fileNameController.clear();
+                            listOfDocLength.clear();
+                            estimateDateController.clear();
+                            grandTotal = 0;
+                            gst = 0;
+                            Provider.of<InvoiceProvider>(context, listen: false)
+                                .clearAllData();
+                            Navigator.pushAndRemoveUntil(
                               context,
                               MaterialPageRoute(
-                                  builder: (_) => const UserHomeScreen()),
-                              (route) => false);
-                          Navigator.pushNamedAndRemoveUntil(context, '/invoiceGenerator', (route) => false);
-                        });
-                      }
-                    },
-                  ),
-                ],
+                                builder: (_) => const UserHomeScreen(),
+                              ),
+                              (route) => false,
+                            );
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/invoiceGenerator', (route) => false);
+                          });
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
-        });
+            );
+          },
+        );
       },
     );
   }
 
   OutlineInputBorder myInputBorder() {
     return OutlineInputBorder(
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
-        borderSide: BorderSide(
-          color: Colors.black.withOpacity(0.3),
-          width: 2,
-        ));
+      borderRadius: const BorderRadius.all(Radius.circular(20)),
+      borderSide: BorderSide(
+        color: Colors.black.withOpacity(0.3),
+        width: 2,
+      ),
+    );
   }
 
   OutlineInputBorder myFocusBorder() {
     return OutlineInputBorder(
-        borderRadius: const BorderRadius.all(
-          Radius.circular(20),
-        ),
-        borderSide: BorderSide(
-          color: Colors.black.withOpacity(0.3),
-          width: 2,
-        ));
+      borderRadius: const BorderRadius.all(
+        Radius.circular(20),
+      ),
+      borderSide: BorderSide(
+        color: Colors.black.withOpacity(0.3),
+        width: 2,
+      ),
+    );
   }
 
   OutlineInputBorder myDisabledBorder() {
     return OutlineInputBorder(
-        borderRadius: const BorderRadius.all(
-          Radius.circular(20),
-        ),
-        borderSide: BorderSide(
-          color: Colors.black.withOpacity(0.3),
-          width: 2,
-        ));
+      borderRadius: const BorderRadius.all(
+        Radius.circular(20),
+      ),
+      borderSide: BorderSide(
+        color: Colors.black.withOpacity(0.3),
+        width: 2,
+      ),
+    );
   }
 }
