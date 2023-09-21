@@ -31,6 +31,10 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app requires access to Location for accessing the location of the customer.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>This app requires access to Location services for providing accurate location-based services to the customer.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>This app requires access to Camera to change the Profile image.</string>
 	<key>NSMicrophoneUsageDescription</key>

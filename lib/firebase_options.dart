@@ -24,12 +24,12 @@ class DefaultFirebaseOptions {
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
-        return android;
-      case TargetPlatform.iOS:
         throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
+          'DefaultFirebaseOptions have not been configured for android - '
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
+      case TargetPlatform.iOS:
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -52,12 +52,15 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCCTeiCYTB_npcWKKxl-Oj0StQLTmaFOaE',
-    appId: '1:566962550940:android:de7b887f5d7b96ab9e5559',
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyA1OvIixPi5cuA93Ys1p9jCioB7tbbH1pM',
+    appId: '1:566962550940:ios:b446b7c69cd527b09e5559',
     messagingSenderId: '566962550940',
     projectId: 'marketing-data-d141d',
     databaseURL: 'https://marketing-data-d141d-default-rtdb.firebaseio.com',
     storageBucket: 'marketing-data-d141d.appspot.com',
+    androidClientId: '566962550940-1ru38h04avgqitv9v266323fho0fh20k.apps.googleusercontent.com',
+    iosClientId: '566962550940-jndvpeqgs2a9h5gejdarem6f79j72ue9.apps.googleusercontent.com',
+    iosBundleId: 'com.onwords.office',
   );
 }
