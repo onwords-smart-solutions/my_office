@@ -131,13 +131,13 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     ],
                   ),
                 ),
-                // floatingActionButton: FloatingActionButton(
-                //   backgroundColor: Colors.deepPurple,
-                //   onPressed: (){
-                //     Navigator.of(context).push(MaterialPageRoute(builder: (context) => const OnyxScreen()));
-                //   },
-                //   child: Image.asset('assets/onyx_thala.png', scale: 1.5,),
-                // ),
+                floatingActionButton: FloatingActionButton(
+                  backgroundColor: Colors.deepPurple,
+                  onPressed: (){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => const OnyxScreen()));
+                  },
+                  child: Image.asset('assets/onyx_thala.png', scale: 1.5,),
+                ),
                 body: _body(userProvider, size),
               );
       },

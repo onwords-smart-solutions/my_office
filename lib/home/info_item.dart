@@ -36,7 +36,9 @@ class _InfoItemState extends State<InfoItem> {
       if (currentIndex < widget.todayBirthdayList.length ) {
         currentIndex++;
       }else{
-        currentIndex = 0;
+        if(widget.todayBirthdayList.length == 1){
+          timer.cancel();
+        }
       }
       try {
         pageController.animateToPage(

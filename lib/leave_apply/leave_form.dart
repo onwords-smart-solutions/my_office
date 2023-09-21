@@ -60,42 +60,50 @@ class _LeaveFormState extends State<LeaveForm> {
             _leaveTypeWidget(),
             const SizedBox(height: 20.0),
             ValueListenableBuilder(
-                valueListenable: _leaveType,
-                builder: (ctx, leaveType, child) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (leaveType == 'Permission') ...[
-                        _heading('Duration'),
-                        _durationWidget(),
-                      ] else ...[
-                        _heading('Leave Mode'),
-                        SizedBox(width: double.infinity, child: _leaveModeWidget()),
-                        const SizedBox(height: 20.0),
-                        _heading('From'),
-                        _fromTimeWidget(),
-                        const SizedBox(height: 20.0),
-                        ValueListenableBuilder(
-                            valueListenable: _leaveMode,
-                            builder: (ctx, mode, child) {
-                              return mode == 'Half Day'
-                                  ? const SizedBox.shrink()
-                                  : Column(
+              valueListenable: _leaveType,
+              builder: (ctx, leaveType, child) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (leaveType == 'Permission') ...[
+                      _heading('Duration'),
+                      _durationWidget(),
+                    ] else ...[
+                      _heading('Leave Mode'),
+                      SizedBox(
+                        width: double.infinity,
+                        child: _leaveModeWidget(),
+                      ),
+                      const SizedBox(height: 20.0),
+                      _heading('From'),
+                      _fromTimeWidget(),
+                      const SizedBox(height: 20.0),
+                      ValueListenableBuilder(
+                        valueListenable: _leaveMode,
+                        builder: (ctx, mode, child) {
+                          return mode == 'Half Day'
+                              ? const SizedBox.shrink()
+                              : Column(
+                                  children: [
+                                    Row(
                                       children: [
-                                        Row(
-                                          children: [
-                                            _heading('To'),
-                                            const Text('  (optional)', style: TextStyle(color: Colors.grey)),
-                                          ],
+                                        _heading('To'),
+                                        const Text(
+                                          '  (optional)',
+                                          style: TextStyle(color: Colors.grey),
                                         ),
-                                        _toTimeWidget(),
                                       ],
-                                    );
-                            }),
-                      ]
+                                    ),
+                                    _toTimeWidget(),
+                                  ],
+                                );
+                        },
+                      ),
                     ],
-                  );
-                }),
+                  ],
+                );
+              },
+            ),
             const SizedBox(height: 20.0),
             _heading('Reason'),
             _reasonField(),
@@ -109,63 +117,65 @@ class _LeaveFormState extends State<LeaveForm> {
 
   Widget _leaveTypeWidget() {
     return ValueListenableBuilder(
-        valueListenable: _leaveType,
-        builder: (ctx, leaveType, child) {
-          return CupertinoSlidingSegmentedControl<String>(
-            backgroundColor: Colors.white,
-            thumbColor: Colors.deepPurple,
-            groupValue: leaveType,
-            children: {
-              for (var type in _leaveApplyViewModel.leaveTypes)
-                type: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                    type,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      color: leaveType == type ? Colors.white : Colors.grey,
-                    ),
+      valueListenable: _leaveType,
+      builder: (ctx, leaveType, child) {
+        return CupertinoSlidingSegmentedControl<String>(
+          backgroundColor: Colors.white,
+          thumbColor: Colors.deepPurple,
+          groupValue: leaveType,
+          children: {
+            for (var type in _leaveApplyViewModel.leaveTypes)
+              type: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Text(
+                  type,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: leaveType == type ? Colors.white : Colors.grey,
                   ),
-                )
-            },
-            onValueChanged: (value) => _leaveType.value = value!,
-          );
-        });
+                ),
+              ),
+          },
+          onValueChanged: (value) => _leaveType.value = value!,
+        );
+      },
+    );
   }
 
   Widget _leaveModeWidget() {
     return ValueListenableBuilder(
-        valueListenable: _leaveMode,
-        builder: (ctx, leaveMode, child) {
-          return CupertinoSlidingSegmentedControl<String>(
-            backgroundColor: Colors.white,
-            thumbColor: Colors.deepPurple,
-            groupValue: leaveMode,
-            children: {
-              'Full Day': Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(
-                  'Full Day',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    color: leaveMode == 'Full Day' ? Colors.white : Colors.grey,
-                  ),
+      valueListenable: _leaveMode,
+      builder: (ctx, leaveMode, child) {
+        return CupertinoSlidingSegmentedControl<String>(
+          backgroundColor: Colors.white,
+          thumbColor: Colors.deepPurple,
+          groupValue: leaveMode,
+          children: {
+            'Full Day': Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text(
+                'Full Day',
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  color: leaveMode == 'Full Day' ? Colors.white : Colors.grey,
                 ),
               ),
-              "Half Day": Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text(
-                  'Half Day',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    color: leaveMode == 'Half Day' ? Colors.white : Colors.grey,
-                  ),
+            ),
+            "Half Day": Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text(
+                'Half Day',
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  color: leaveMode == 'Half Day' ? Colors.white : Colors.grey,
                 ),
-              )
-            },
-            onValueChanged: (value) => _leaveMode.value = value!,
-          );
-        });
+              ),
+            ),
+          },
+          onValueChanged: (value) => _leaveMode.value = value!,
+        );
+      },
+    );
   }
 
   Widget _fromTimeWidget() {
@@ -181,16 +191,17 @@ class _LeaveFormState extends State<LeaveForm> {
         borderRadius: BorderRadius.circular(15.0),
       ),
       title: ValueListenableBuilder(
-          valueListenable: _fromDate,
-          builder: (ctx, fromDate, child) {
-            return Text(
-              fromDate == null ? 'Pick Date' : _formatDate(fromDate),
-              style: TextStyle(
-                fontWeight: fromDate == null ? FontWeight.w500 : FontWeight.w700,
-                color: fromDate == null ? Colors.grey : Colors.black,
-              ),
-            );
-          }),
+        valueListenable: _fromDate,
+        builder: (ctx, fromDate, child) {
+          return Text(
+            fromDate == null ? 'Pick Date' : _formatDate(fromDate),
+            style: TextStyle(
+              fontWeight: fromDate == null ? FontWeight.w500 : FontWeight.w700,
+              color: fromDate == null ? Colors.grey : Colors.black,
+            ),
+          );
+        },
+      ),
       trailing: const Icon(
         Icons.calendar_month_rounded,
         color: Colors.grey,
@@ -211,16 +222,17 @@ class _LeaveFormState extends State<LeaveForm> {
         borderRadius: BorderRadius.circular(15.0),
       ),
       title: ValueListenableBuilder(
-          valueListenable: _toDate,
-          builder: (ctx, toDate, child) {
-            return Text(
-              toDate == null ? 'Pick Date' : _formatDate(toDate),
-              style: TextStyle(
-                fontWeight: toDate == null ? FontWeight.w500 : FontWeight.w700,
-                color: toDate == null ? Colors.grey : Colors.black,
-              ),
-            );
-          }),
+        valueListenable: _toDate,
+        builder: (ctx, toDate, child) {
+          return Text(
+            toDate == null ? 'Pick Date' : _formatDate(toDate),
+            style: TextStyle(
+              fontWeight: toDate == null ? FontWeight.w500 : FontWeight.w700,
+              color: toDate == null ? Colors.grey : Colors.black,
+            ),
+          );
+        },
+      ),
       trailing: const Icon(
         Icons.calendar_month_rounded,
         color: Colors.grey,
@@ -346,61 +358,69 @@ class _LeaveFormState extends State<LeaveForm> {
             : child!;
       },
       child: FilledButton(
-          onPressed: _submitForm,
-          style: FilledButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              padding: const EdgeInsets.all(15.0)),
-          child: ValueListenableBuilder(
-              valueListenable: _leaveType,
-              builder: (ctx, leaveType, child) {
+        onPressed: _submitForm,
+        style: FilledButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          padding: const EdgeInsets.all(15.0),
+        ),
+        child: ValueListenableBuilder(
+          valueListenable: _leaveType,
+          builder: (ctx, leaveType, child) {
+            return ValueListenableBuilder(
+              valueListenable: _fromDate,
+              builder: (ctx, fromDate, child) {
                 return ValueListenableBuilder(
-                    valueListenable: _fromDate,
-                    builder: (ctx, fromDate, child) {
-                      return ValueListenableBuilder(
-                          valueListenable: _toDate,
-                          builder: (ctx, toDate, child) {
-                            String text = 'Apply leave';
+                  valueListenable: _toDate,
+                  builder: (ctx, toDate, child) {
+                    String text = 'Apply leave';
 
-                            if (leaveType == 'Permission') {
-                              text = 'Request permission';
-                            }
-                            if (fromDate != null && toDate == null) {
-                              text = 'Apply leave for 1 day';
-                            }
+                    if (leaveType == 'Permission') {
+                      text = 'Request permission';
+                    }
+                    if (fromDate != null && toDate == null) {
+                      text = 'Apply leave for 1 day';
+                    }
 
-                            if (fromDate != null && toDate != null) {
-                              int count = 0;
-                              for (DateTime date = fromDate;
-                                  date.isBefore(toDate) || date.isAtSameMomentAs(toDate);
-                                  date = date.add(const Duration(days: 1))) {
-                                if (date.weekday != DateTime.sunday) {
-                                  count++;
-                                }
-                              }
-                              if (count > 1) {
-                                text = 'Apply leave for $count days';
-                              } else {
-                                text = 'Apply leave for 1 day';
-                              }
-                            }
-                            return Text(
-                              text,
-                              style: const TextStyle(fontWeight: FontWeight.w700),
-                            );
-                          });
-                    });
-              })),
+                    if (fromDate != null && toDate != null) {
+                      int count = 0;
+                      for (DateTime date = fromDate;
+                          date.isBefore(toDate) ||
+                              date.isAtSameMomentAs(toDate);
+                          date = date.add(const Duration(days: 1))) {
+                        if (date.weekday != DateTime.sunday) {
+                          count++;
+                        }
+                      }
+                      if (count > 1) {
+                        text = 'Apply leave for $count days';
+                      } else {
+                        text = 'Apply leave for 1 day';
+                      }
+                    }
+                    return Text(
+                      text,
+                      style: const TextStyle(fontWeight: FontWeight.w700),
+                    );
+                  },
+                );
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 
-  Widget _heading(String title) => Text(title,
-      style: const TextStyle(
-        fontWeight: FontWeight.w500,
-        fontSize: 20.0,
-        color: Colors.grey,
-      ));
+  Widget _heading(String title) => Text(
+        title,
+        style: const TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 20.0,
+          color: Colors.grey,
+        ),
+      );
 
   String _formatDate(DateTime date) => DateFormat.yMMMEd().format(date);
 
@@ -426,35 +446,46 @@ class _LeaveFormState extends State<LeaveForm> {
       // -- permission --
       if (_leaveType.value == 'Permission') {
         await _leaveApplyViewModel.applyPermission(
-            date: DateTime.now(),
-            duration: _duration,
-            reason: _reason,
-            uid: user!.uid,
-            name: user.name,
-            department: user.department,
-            refreshHistory: widget.getLeaveHistory);
+          date: DateTime.now(),
+          duration: _duration,
+          reason: _reason,
+          uid: user!.uid,
+          name: user.name,
+          department: user.department,
+          refreshHistory: widget.getLeaveHistory,
+        );
         if (!mounted) return;
-        CustomSnackBar.showSuccessSnackbar(message: 'Permission has been applied', context: context);
+        CustomSnackBar.showSuccessSnackbar(
+          message: 'Permission has been applied',
+          context: context,
+        );
         _resetControllers();
       } else {
         // -- half day --
         if (_leaveMode.value == 'Half Day') {
           if (_fromDate.value == null) {
             _isLoading.value = false;
-            CustomSnackBar.showErrorSnackbar(message: 'Please select from date', context: context);
+            CustomSnackBar.showErrorSnackbar(
+              message: 'Please select from date',
+              context: context,
+            );
           } else {
             await _leaveApplyViewModel.applyLeave(
-                date: _fromDate.value!,
-                mode: _leaveMode.value,
-                type: _leaveType.value,
-                reason: _reason,
-                uid: user!.uid,
-                name: user.name,
-                department: user.department,
-                refreshHistory: widget.getLeaveHistory);
+              date: _fromDate.value!,
+              mode: _leaveMode.value,
+              type: _leaveType.value,
+              reason: _reason,
+              uid: user!.uid,
+              name: user.name,
+              department: user.department,
+              refreshHistory: widget.getLeaveHistory,
+            );
             if (!mounted) return;
             CustomSnackBar.showSuccessSnackbar(
-                message: '${_leaveType.value} leave has been applied for ${_leaveMode.value}', context: context);
+              message:
+                  '${_leaveType.value} leave has been applied for ${_leaveMode.value}',
+              context: context,
+            );
             _resetControllers();
           }
         }
@@ -462,42 +493,53 @@ class _LeaveFormState extends State<LeaveForm> {
         else {
           if (_fromDate.value == null) {
             _isLoading.value = false;
-            CustomSnackBar.showErrorSnackbar(message: 'Please select from date', context: context);
+            CustomSnackBar.showErrorSnackbar(
+              message: 'Please select from date',
+              context: context,
+            );
           } else {
             if (_toDate.value != null) {
               for (DateTime date = _fromDate.value!;
-                  date.isBefore(_toDate.value!) || date.isAtSameMomentAs(_toDate.value!);
+                  date.isBefore(_toDate.value!) ||
+                      date.isAtSameMomentAs(_toDate.value!);
                   date = date.add(const Duration(days: 1))) {
                 if (date.weekday != DateTime.sunday) {
                   await _leaveApplyViewModel.applyLeave(
-                      date: date,
-                      mode: _leaveMode.value,
-                      type: _leaveType.value,
-                      reason: _reason,
-                      uid: user!.uid,
-                      name: user.name,
-                      department: user.department,
-                      refreshHistory: widget.getLeaveHistory);
+                    date: date,
+                    mode: _leaveMode.value,
+                    type: _leaveType.value,
+                    reason: _reason,
+                    uid: user!.uid,
+                    name: user.name,
+                    department: user.department,
+                    refreshHistory: widget.getLeaveHistory,
+                  );
                 }
               }
               if (!mounted) return;
               CustomSnackBar.showSuccessSnackbar(
-                  message: '${_leaveType.value} leave has been applied', context: context);
+                message: '${_leaveType.value} leave has been applied',
+                context: context,
+              );
               _resetControllers();
             } else {
               //single day
               await _leaveApplyViewModel.applyLeave(
-                  date: _fromDate.value!,
-                  mode: _leaveMode.value,
-                  type: _leaveType.value,
-                  reason: _reason,
-                  uid: user!.uid,
-                  name: user.name,
-                  department: user.department,
-                  refreshHistory: widget.getLeaveHistory);
+                date: _fromDate.value!,
+                mode: _leaveMode.value,
+                type: _leaveType.value,
+                reason: _reason,
+                uid: user!.uid,
+                name: user.name,
+                department: user.department,
+                refreshHistory: widget.getLeaveHistory,
+              );
               if (!mounted) return;
               CustomSnackBar.showSuccessSnackbar(
-                  message: '${_leaveType.value} leave has been applied for ${_leaveMode.value}', context: context);
+                message:
+                    '${_leaveType.value} leave has been applied for ${_leaveMode.value}',
+                context: context,
+              );
               _resetControllers();
             }
           }

@@ -16,6 +16,7 @@ import '../models/staff_entry_model.dart';
 class ProxyAttendance extends StatefulWidget {
   final String uid;
   final String name;
+
   const ProxyAttendance({super.key, required this.uid, required this.name});
 
   @override
@@ -33,12 +34,15 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
   StaffAttendanceModel? selectedStaff;
   List<StaffAttendanceModel> allStaffs = [];
   bool isLoading = true;
-  String? timeOfStart;
   bool isMngTea = false;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _depController = TextEditingController();
   final TextEditingController _reasonController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+
+  DateTime dateStamp = DateTime.now();
+  DateTime? initialTime;
 
   //Getting staff names form db
   void allStaffNames() {
@@ -71,11 +75,48 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
     Data('Check-out', Colors.grey.shade400),
   ];
 
-  FocusNode _focusNode = FocusNode();
+  //time picker for proxy
+  void timePicker ()async {
+    TimeOfDay? pickedTime = await showTimePicker(
+      initialTime: TimeOfDay.now(),
+      context: context,
+    );
+    if (!mounted) return;
+    if (pickedTime != null) {
+      DateTime parsedTime = DateTime(
+        dateStamp.year,
+        dateStamp.month,
+        dateStamp.day,
+        pickedTime.hour,
+        pickedTime.minute,
+      );
+      setState(() {
+        initialTime = parsedTime;
+      });
+    }
+  }
+
+  //date picker for proxy
+  void dateTime() async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2023),
+      lastDate: DateTime(2100),
+    );
+    if (pickedDate != null) {
+      setState(() {
+        dateStamp = pickedDate;
+      });
+    } else {
+      print('Date is not selected');
+    }
+  }
 
   @override
   void initState() {
     allStaffNames();
+    _dateController.text = '';
     super.initState();
   }
 
@@ -101,8 +142,9 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
               OutlineInputBorder(borderRadius: BorderRadius.circular(10));
             }),
             textStyle: MaterialStateProperty.resolveWith(
-              (states) => TextStyle(
-                  fontSize: 17,  ),
+              (states) => const TextStyle(
+                fontSize: 17,
+              ),
             ),
           ),
         ),
@@ -114,11 +156,15 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
     return allStaffs.isEmpty
         ? Center(
             child: Lottie.asset(
-            'assets/animations/new_loading.json',
-          ),
-    )
+              'assets/animations/new_loading.json',
+            ),
+          )
         : SingleChildScrollView(
-            padding: EdgeInsets.only(left: width * 0.05,right: width * 0.05,bottom: MediaQuery.of(context).viewInsets.bottom),
+            padding: EdgeInsets.only(
+              left: width * 0.05,
+              right: width * 0.05,
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
             child: Column(
               children: [
                 SizedBox(
@@ -128,6 +174,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                   ),
                 ),
                 SizedBox(height: height * 0.02),
+                //staff name drop down
                 DropdownMenu<StaffAttendanceModel>(
                   width: width * 0.9,
                   inputDecorationTheme: InputDecorationTheme(
@@ -135,8 +182,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                       borderRadius: BorderRadius.circular(20),
                       borderSide: const BorderSide(color: Colors.black),
                     ),
-                    labelStyle:
-                        TextStyle( ),
+                    labelStyle: const TextStyle(),
                     contentPadding: const EdgeInsets.all(15),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
@@ -150,25 +196,22 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                       borderRadius: BorderRadius.circular(20),
                       borderSide: const BorderSide(color: Colors.red),
                     ),
-                    errorStyle: TextStyle(
-                     
-                    ),
+                    errorStyle: const TextStyle(),
                   ),
 
                   requestFocusOnTap: true,
                   menuHeight: height * 0.4,
                   menuStyle: MenuStyle(
                     backgroundColor: MaterialStateProperty.resolveWith(
-                        (states) => Colors.purple.shade50),
+                      (states) => Colors.purple.shade50,
+                    ),
                     padding: MaterialStateProperty.resolveWith(
                       (states) => const EdgeInsets.symmetric(horizontal: 10),
                     ),
                     elevation:
                         MaterialStateProperty.resolveWith((states) => 10),
                   ),
-                  textStyle: TextStyle(
-                   
-                  ),
+                  textStyle: const TextStyle(),
                   enableFilter: true,
                   hintText: 'Staff name',
                   // errorText: 'Select a staff name',
@@ -183,70 +226,48 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                   },
                 ),
                 SizedBox(height: height * 0.02),
-                SizedBox(
-                  width: width * 0.9,
-                  child: TextFormField(
-                    textInputAction: TextInputAction.next,
-                    textCapitalization: TextCapitalization.sentences,
-                    controller: _timeController,
-                    autofocus: false,
-                    readOnly: true,
-                    onTap: () async {
-                      TimeOfDay? pickedTime = await showTimePicker(
-                        initialTime: TimeOfDay.now(),
-                        context: context,
-                      );
-
-                      if (!mounted) return;
-                      if (pickedTime != null) {
-                        final today = DateTime.now();
-                        DateTime parsedTime = DateTime(today.year, today.month,
-                            today.day, pickedTime.hour, pickedTime.minute);
-
-                        ///converting to DateTime so that we can further format on different pattern.
-                        String formattedTime =
-                            DateFormat('hh:mm:ss').format(parsedTime);
-
-                        ///DateFormat() is from intl package, you can format the time on any pattern you need.
-
-                        setState(() {
-                          _timeController.text= DateFormat.jm().format(parsedTime);
-                           timeOfStart = parsedTime.millisecondsSinceEpoch.toString();
-
-                        });
-                      }
-                    },
+                //time picker
+                ListTile(
+                  tileColor: Colors.transparent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    side: const BorderSide(color: Colors.black),
+                  ),
+                  autofocus: false,
+                  onTap: timePicker,
+                  title: Text(
+                   initialTime == null ? 'Select time' : DateFormat('hh:mm a').format(initialTime!),
                     style: TextStyle(
-                        // height: height * 0.0025,
-                        color: Colors.black,
-                         ),
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.all(15),
-                      border: InputBorder.none,
-                      hintText: 'Select time',
-                      hintStyle: TextStyle(
-                          // height: height * 0.005,
-                          color: Colors.grey,
-                           ),
-                      filled: true,
-                      fillColor: ConstantColor.background1Color,
-                      focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(color: ConstantColor.blackColor),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.black),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.red),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
+                      color: initialTime == null ? Colors.grey : Colors.black,
                     ),
                   ),
                 ),
                 SizedBox(height: height * 0.02),
+                //date picker
+                ListTile(
+                  tileColor: Colors.transparent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    side: const BorderSide(color: Colors.black),
+                  ),
+                  autofocus: false,
+                  onTap: dateTime,
+                  trailing: IconButton(
+                    onPressed: dateTime,
+                    icon: Icon(
+                      Icons.date_range,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  title: Text(
+                    DateFormat('yyyy-MM-dd').format(dateStamp),
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                SizedBox(height: height * 0.02),
+                //reason
                 SizedBox(
                   width: width * 0.9,
                   child: TextFormField(
@@ -256,18 +277,18 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                     autofocus: false,
                     keyboardType: TextInputType.name,
                     maxLines: 2,
-                    style: TextStyle(
-                        // height: height * 0.0025,
-                        color: Colors.black,
-                         ),
+                    style: const TextStyle(
+                      // height: height * 0.0025,
+                      color: Colors.black,
+                    ),
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.all(15),
                       border: InputBorder.none,
                       hintText: 'Reason for Proxy entry..',
-                      hintStyle: TextStyle(
-                          // height: height * 0.005,
-                          color: Colors.grey,
-                           ),
+                      hintStyle: const TextStyle(
+                        // height: height * 0.005,
+                        color: Colors.grey,
+                      ),
                       filled: true,
                       fillColor: ConstantColor.background1Color,
                       focusedBorder: OutlineInputBorder(
@@ -287,6 +308,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                   ),
                 ),
                 SizedBox(height: height * 0.02),
+                //check in and check out selector
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -298,6 +320,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                   ],
                 ),
                 SizedBox(height: height * 0.02),
+                //confirmation slider
                 ConfirmationSlider(
                   height: 60,
                   backgroundColor: ConstantColor.background1Color,
@@ -306,8 +329,9 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                   onConfirmation: () {
                     saveToDb();
                   },
-                  textStyle: TextStyle(
-                      fontSize: 16),
+                  textStyle: const TextStyle(
+                    fontSize: 16,
+                  ),
                   text: 'SLIDE TO CONFIRM',
                   sliderButtonContent: const Icon(
                     CupertinoIcons.person_alt_circle,
@@ -347,69 +371,71 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
 
   void saveToDb() {
     if (selectedStaff == null) {
-      final snackBar = SnackBar(
+      const snackBar = SnackBar(
+        duration: Duration(seconds: 2),
         content: Text(
           'Please select a staff name',
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 17,
-           
           ),
         ),
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }else if (_timeController.text.isEmpty) {
-      final snackBar = SnackBar(
+    } else if (initialTime == null) {
+      const snackBar = SnackBar(
+        duration: Duration(seconds: 2),
         content: Text(
           'Please select time',
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 17,
-           
           ),
         ),
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    } else if (_reasonController.text.isEmpty) {
-      final snackBar = SnackBar(
+    }else if (_reasonController.text.isEmpty) {
+      const snackBar = SnackBar(
+        duration: Duration(seconds: 2),
         content: Text(
           'Please give a valid reason',
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 17,
-           
           ),
         ),
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else if (_selectedIndex == null) {
-      final snackBar = SnackBar(
+      const snackBar = SnackBar(
+        duration: Duration(seconds: 2),
         content: Text(
           'Please select check-in / check-out',
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 17,
-           
           ),
         ),
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
-      DateTime now = DateTime.now();
-      var timeStamp = DateFormat('yyyy-MM-dd').format(now);
+
+      final date = DateFormat('yyyy-MM-dd').format(dateStamp);
+      final pickedTime = DateTime(dateStamp.year, dateStamp.month, dateStamp.day, initialTime!.hour, initialTime!.minute);
       final ref = FirebaseDatabase.instance.ref();
       if (_choiceChipsList[_selectedIndex!].label == 'Check-in') {
         ref
             .child(
-                'proxy_attendance/${selectedStaff!.uid}/$timeStamp/Check-in')
+          'proxy_attendance/${selectedStaff!.uid}/$date/Check-in',
+        )
             .set({
           'Name': selectedStaff!.name,
           'Department': selectedStaff!.department,
-          'Time': timeOfStart,
+          'Time': pickedTime.millisecondsSinceEpoch,
           'Reason': _reasonController.text,
           'Type': _choiceChipsList[_selectedIndex!].label,
           'Proxy': widget.name,
@@ -418,51 +444,52 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
           content: Text(
             'Staff attendance for ${selectedStaff?.name} has been registered',
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 17,
-             
             ),
           ),
           backgroundColor: Colors.green,
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        _timeController.clear();
-        _reasonController.clear();
-        setState(() {
-          _nameController.clear();
-          _depController.clear();
-         _selectedIndex = null;
-        });
-      } else {
-        ref
-            .child(
-                'proxy_attendance/${selectedStaff!.uid}/$timeStamp/Check-out')
-            .set({
-          'Name': selectedStaff!.name,
-          'Department': selectedStaff!.department,
-          'Time': timeOfStart,
-          'Reason': _reasonController.text,
-          'Type': _choiceChipsList[_selectedIndex!].label,
-          'Proxy': widget.name,
-        });
-        final snackBar = SnackBar(
-          content: Text(
-            'Staff attendance for ${selectedStaff?.name} has been registered',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 17,
-             
-            ),
-          ),
-          backgroundColor: Colors.green,
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        _timeController.clear();
         _reasonController.clear();
         setState(() {
           _nameController.clear();
           _depController.clear();
           _selectedIndex = null;
+          initialTime = null;
+          dateStamp = DateTime.now();
+        });
+      } else {
+        ref
+            .child(
+          'proxy_attendance/${selectedStaff!.uid}/$date/Check-out',
+        )
+            .set({
+          'Name': selectedStaff!.name,
+          'Department': selectedStaff!.department,
+          'Time': pickedTime.millisecondsSinceEpoch,
+          'Reason': _reasonController.text,
+          'Type': _choiceChipsList[_selectedIndex!].label,
+          'Proxy': widget.name,
+        });
+        final snackBar = SnackBar(
+          content: Text(
+            'Staff attendance for ${selectedStaff?.name} has been registered',
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 17,
+            ),
+          ),
+          backgroundColor: Colors.green,
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        _reasonController.clear();
+        setState(() {
+          _nameController.clear();
+          _depController.clear();
+          _selectedIndex = null;
+          initialTime = null;
+          dateStamp = DateTime.now();
         });
       }
     }

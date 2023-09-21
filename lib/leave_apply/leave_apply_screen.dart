@@ -72,7 +72,9 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen> {
                     return (loading && history.isEmpty)
                         ? Center(
                             child: Lottie.asset(
-                                "assets/animations/new_loading.json"))
+                              "assets/animations/new_loading.json",
+                            ),
+                          )
                         : LeaveHistory(history: history);
                   },
                 );
@@ -105,8 +107,13 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen> {
               final updatedBy = info['updated_by'] == null
                   ? ''
                   : info['updated_by'].toString();
-              final date = DateTime(int.parse(dateFromFb[0]),
-                  int.parse(dateFromFb[1]), int.parse(dateFromFb[2]), 0, 0);
+              final date = DateTime(
+                int.parse(dateFromFb[0]),
+                int.parse(dateFromFb[1]),
+                int.parse(dateFromFb[2]),
+                0,
+                0,
+              );
               _history.value.add(
                 LeaveHistoryModel(
                   date: date,

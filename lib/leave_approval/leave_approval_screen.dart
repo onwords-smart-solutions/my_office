@@ -4,6 +4,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/models/staff_leave_model.dart';
 import 'package:my_office/provider/user_provider.dart';
@@ -25,6 +26,11 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
   final ref = FirebaseDatabase.instance.ref();
   bool decline = false;
   bool approve = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -219,102 +225,262 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           GestureDetector(
-                            onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: Text(
-                                      'Confirmation status',
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontFamily: ConstantFonts.sfProBold,
-                                        color: Colors.deepPurple,
+                            onTap: () async {
+
+                              final count = await checkLeaveStatus(staffLeaves[index].date);
+                              if(count >= 3){
+                                if(!mounted) return;
+                                showDialog(
+                                  context: context,
+                                  builder: (ctx) {
+                                    return AlertDialog(
+                                      title: const Text(
+                                        'Leave Approval limit!!',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.red,
+                                        ),
                                       ),
-                                    ),
-                                    content: const SingleChildScrollView(
-                                      child: ListBody(
-                                        children: [
-                                          Text(
-                                            'This is to confirm your approval status for leave request of the employee.',
+                                      content: const SingleChildScrollView(
+                                        child: ListBody(
+                                          children: [
+                                            Text(
+                                              'Leave approval limit for the day has already reached 3. Do you want to approve this leave?.',
+                                              style: TextStyle(
+                                                fontSize: 17,
+                                                color: ConstantColor
+                                                    .headingTextColor,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      actions: [
+                                        FilledButton.tonal(
+                                          child: const Text(
+                                            'Continue',
                                             style: TextStyle(
                                               fontSize: 17,
-                                              color: ConstantColor
-                                                  .headingTextColor,
+                                              fontWeight: FontWeight.w700,
+                                              color: ConstantColor.pinkColor,
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                    actions: [
-                                      TextButton(
-                                        child: Text(
-                                          'Approve',
-                                          style: TextStyle(
-                                            fontSize: 17,
-                                            fontFamily: ConstantFonts.sfProBold,
-                                            color: ConstantColor.pinkColor,
-                                          ),
+                                          onPressed: () {
+                                            Navigator.pop(ctx);
+                                            showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDialog(
+                                                  title: Text(
+                                                    'Confirmation status',
+                                                    style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontFamily: ConstantFonts.sfProBold,
+                                                      color: Colors.deepPurple,
+                                                    ),
+                                                  ),
+                                                  content: const SingleChildScrollView(
+                                                    child: ListBody(
+                                                      children: [
+                                                        Text(
+                                                          'This is the confirmation status for Employee leave request.',
+                                                          style: TextStyle(
+                                                            fontSize: 17,
+                                                            color: ConstantColor
+                                                                .headingTextColor,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  actions: [
+                                                    TextButton(
+                                                      child: Text(
+                                                        'Approve',
+                                                        style: TextStyle(
+                                                          fontSize: 17,
+                                                          fontFamily: ConstantFonts.sfProBold,
+                                                          color: ConstantColor.pinkColor,
+                                                        ),
+                                                      ),
+                                                      onPressed: () async {
+                                                        await changeRequest(
+                                                          staffLeaves[index],
+                                                          'Approved',
+                                                        );
+                                                        setState(() {
+                                                          approve = true;
+                                                        });
+                                                        sendNotification(
+                                                          staffLeaves[index].uid,
+                                                          'Leave Response',
+                                                          'Your leave request has been Approved by ${user.user!.name}',
+                                                        );
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                    ),
+                                                    TextButton(
+                                                      child: Text(
+                                                        'Decline',
+                                                        style: TextStyle(
+                                                          fontSize: 17,
+                                                          fontFamily: ConstantFonts.sfProBold,
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
+                                                      onPressed: () async {
+                                                        await changeRequest(
+                                                          staffLeaves[index],
+                                                          'Declined',
+                                                        );
+                                                        setState(() {
+                                                          decline = true;
+                                                        });
+                                                        sendNotification(
+                                                          staffLeaves[index].uid,
+                                                          'Leave Response',
+                                                          'Your leave request has been Declined by ${user.user!.name}',
+                                                        );
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                    ),
+                                                    TextButton(
+                                                      child: Text(
+                                                        'Cancel',
+                                                        style: TextStyle(
+                                                          fontSize: 17,
+                                                          fontFamily: ConstantFonts.sfProBold,
+                                                          color:
+                                                          ConstantColor.headingTextColor,
+                                                        ),
+                                                      ),
+                                                      onPressed: () {
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            );
+                                          },
                                         ),
-                                        onPressed: () async {
-                                          await changeRequest(
-                                            staffLeaves[index],
-                                            'Approved',
-                                          );
-                                          setState(() {
-                                            approve = true;
-                                          });
-                                          sendNotification(
-                                            staffLeaves[index].uid,
-                                            'Leave Response',
-                                            'Your leave request has been Approved by ${user.user!.name}',
-                                          );
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                      TextButton(
-                                        child: Text(
-                                          'Decline',
-                                          style: TextStyle(
-                                            fontSize: 17,
-                                            fontFamily: ConstantFonts.sfProBold,
-                                            color: Colors.red,
+                                        FilledButton.tonal(
+                                          child: const Text(
+                                            'Cancel',
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w700,
+                                              color: Colors.red,
+                                            ),
                                           ),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
                                         ),
-                                        onPressed: () async {
-                                          await changeRequest(
-                                            staffLeaves[index],
-                                            'Declined',
-                                          );
-                                          setState(() {
-                                            decline = true;
-                                          });
-                                          sendNotification(
-                                            staffLeaves[index].uid,
-                                            'Leave Response',
-                                            'Your leave request has been Declined by ${user.user!.name}',
-                                          );
-                                          Navigator.of(context).pop();
-                                        },
+                                      ],
+                                    );
+                                  },
+                                );
+                              }else{
+                                if(!mounted) return;
+                                 showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text(
+                                        'Confirmation status',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.deepPurple,
+                                        ),
                                       ),
-                                      TextButton(
-                                        child: Text(
-                                          'Cancel',
-                                          style: TextStyle(
-                                            fontSize: 17,
-                                            fontFamily: ConstantFonts.sfProBold,
-                                            color:
-                                                ConstantColor.headingTextColor,
+                                      content: const SingleChildScrollView(
+                                        child: ListBody(
+                                          children: [
+                                            Text(
+                                              'This is the confirmation status for Employee leave request.',
+                                              style: TextStyle(
+                                                fontSize: 17,
+                                                color: ConstantColor
+                                                    .headingTextColor,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          child: Text(
+                                            'Approve',
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              fontFamily: ConstantFonts.sfProBold,
+                                              color: ConstantColor.pinkColor,
+                                            ),
                                           ),
+                                          onPressed: () async {
+                                            await changeRequest(
+                                              staffLeaves[index],
+                                              'Approved',
+                                            );
+                                            setState(() {
+                                              approve = true;
+                                            });
+                                            sendNotification(
+                                              staffLeaves[index].uid,
+                                              'Leave Response',
+                                              'Your leave request has been Approved by ${user.user!.name}',
+                                            );
+                                            Navigator.of(context).pop();
+                                          },
                                         ),
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
+                                        TextButton(
+                                          child: Text(
+                                            'Decline',
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              fontFamily: ConstantFonts.sfProBold,
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                          onPressed: () async {
+                                            await changeRequest(
+                                              staffLeaves[index],
+                                              'Declined',
+                                            );
+                                            setState(() {
+                                              decline = true;
+                                            });
+                                            sendNotification(
+                                              staffLeaves[index].uid,
+                                              'Leave Response',
+                                              'Your leave request has been Declined by ${user.user!.name}',
+                                            );
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                        TextButton(
+                                          child: Text(
+                                            'Cancel',
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              fontFamily: ConstantFonts.sfProBold,
+                                              color:
+                                                  ConstantColor.headingTextColor,
+                                            ),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
+
                             },
                             child: Container(
                               height: height * 0.05,
@@ -358,6 +524,25 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
         );
       },
     );
+  }
+
+  //Function to check 3 approved leaves
+  Future<int> checkLeaveStatus(String date) async {
+final splittedDate=date.split('-');
+    int statusCount = 0;
+    await ref.child('leaveDetails').once().then((value) async {
+      for (var staff in value.snapshot.children) {
+        if (staff
+                .child('leaveApplied/${splittedDate[0]}/${splittedDate[1]}/$date/status')
+                .value
+                .toString() ==
+            'Approved') {
+          statusCount += 1;
+        }
+      }
+    });
+    log('Leave Count for $date is $statusCount');
+    return statusCount;
   }
 
   //Function to approve leave request
