@@ -314,7 +314,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         _haveNetwork.value = false;
         CustomAlerts.showAlertDialog(
           context: context,
-          title: 'Check your network connection🛜',
+          title: 'Check your network connection',
           content: 'Unable to connect to the network at this moment',
           actionButton: TextButton(
             onPressed: () {

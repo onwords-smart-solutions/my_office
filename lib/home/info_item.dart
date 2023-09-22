@@ -36,7 +36,9 @@ class _InfoItemState extends State<InfoItem> {
       if (currentIndex < widget.todayBirthdayList.length ) {
         currentIndex++;
       }else{
-        currentIndex = 0;
+        if(widget.todayBirthdayList.length == 1 || widget.todayBirthdayList.isEmpty){
+          timer.cancel();
+        }
       }
       try {
         pageController.animateToPage(
@@ -58,7 +60,7 @@ class _InfoItemState extends State<InfoItem> {
 
   @override
   void dispose() {
-   pageController.dispose();
+    pageController.dispose();
     super.dispose();
   }
 
@@ -68,24 +70,24 @@ class _InfoItemState extends State<InfoItem> {
 
     final image = widget.todayBirthdayList.isEmpty
         ? Positioned(
-            right: 0,
-            top: 10,
-            child: Image.asset(
-              // 'assets/cake.png',
-              'assets/info_pic.png',
-              width: size.width * .35,
-              fit: BoxFit.cover,
-            ),
-          )
+      right: 0,
+      top: 10,
+      child: Image.asset(
+        // 'assets/cake.png',
+        'assets/info_pic.png',
+        width: size.width * .35,
+        fit: BoxFit.cover,
+      ),
+    )
         : Positioned(
-            right: -5,
-            top: 0,
-            child: Image.asset(
-              'assets/cake.png',
-              width: size.width * .34,
-              fit: BoxFit.cover,
-            ),
-          );
+      right: -5,
+      top: 0,
+      child: Image.asset(
+        'assets/cake.png',
+        width: size.width * .34,
+        fit: BoxFit.cover,
+      ),
+    );
     return Stack(
       children: [
         Container(
@@ -212,16 +214,13 @@ class _InfoItemState extends State<InfoItem> {
           Flexible(
             child: PageView.builder(
               controller: pageController,
-              scrollBehavior: ScrollBehavior(),
+              scrollBehavior: const ScrollBehavior(),
               scrollDirection: Axis.horizontal,
               itemCount: widget.todayBirthdayList.length,
               onPageChanged: (int page) {
-                  currentIndex = page;
-                  birthdayPageIndex.value = page;
+                currentIndex = page;
+                birthdayPageIndex.value = page;
               },
-              // onPageChanged: (i) {
-              //   birthdayPageIndex.value = i;
-              // },
               itemBuilder: (ctx, index) {
                 return SizedBox(
                   width: size.width * .65,
@@ -238,22 +237,22 @@ class _InfoItemState extends State<InfoItem> {
                         ),
                         child: widget.todayBirthdayList[index].profilePic.isEmpty
                             ? const Image(
-                                image: AssetImage('assets/profile_icon.jpg'),
-                              )
+                          image: AssetImage('assets/profile_icon.jpg'),
+                        )
                             : CachedNetworkImage(
-                                imageUrl: widget.todayBirthdayList[index].profilePic,
-                                fit: BoxFit.cover,
-                                progressIndicatorBuilder:
-                                    (context, url, downloadProgress) =>
-                                        CircularProgressIndicator(
-                                  value: downloadProgress.progress,
-                                ),
-                                errorWidget: (context, url, error) =>
-                                    const Icon(
-                                  Icons.error,
-                                  color: Colors.red,
-                                ),
+                          imageUrl: widget.todayBirthdayList[index].profilePic,
+                          fit: BoxFit.cover,
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) =>
+                              CircularProgressIndicator(
+                                value: downloadProgress.progress,
                               ),
+                          errorWidget: (context, url, error) =>
+                          const Icon(
+                            Icons.error,
+                            color: Colors.red,
+                          ),
+                        ),
                       ),
                       Expanded(
                         child: Text(
@@ -279,12 +278,12 @@ class _InfoItemState extends State<InfoItem> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(
                     widget.todayBirthdayList.length,
-                    (index) => Padding(
+                        (index) => Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 2.0),
                       child: CircleAvatar(
                         radius: 4,
                         backgroundColor:
-                            index == pageIndex ? Colors.white : Colors.white30,
+                        index == pageIndex ? Colors.white : Colors.white30,
                       ),
                     ),
                   ),
@@ -336,66 +335,66 @@ class _InfoItemState extends State<InfoItem> {
     if (widget.staffEntryDetail!.checkInTime == null) {
       color = Colors.grey;
     } else if (widget.staffEntryDetail!.checkInTime!
-                .difference(
-                  DateTime(
-                    widget.staffEntryDetail!.checkInTime!.year,
-                    widget.staffEntryDetail!.checkInTime!.month,
-                    widget.staffEntryDetail!.checkInTime!.day,
-                    09,
-                    00,
-                  ),
-                )
-                .inMinutes >
-            0 &&
+        .difference(
+      DateTime(
+        widget.staffEntryDetail!.checkInTime!.year,
+        widget.staffEntryDetail!.checkInTime!.month,
+        widget.staffEntryDetail!.checkInTime!.day,
+        09,
+        00,
+      ),
+    )
+        .inMinutes >
+        0 &&
         widget.staffEntryDetail!.checkInTime!
-                .difference(
-                  DateTime(
-                    widget.staffEntryDetail!.checkInTime!.year,
-                    widget.staffEntryDetail!.checkInTime!.month,
-                    widget.staffEntryDetail!.checkInTime!.day,
-                    09,
-                    10,
-                  ),
-                )
-                .inMinutes <=
+            .difference(
+          DateTime(
+            widget.staffEntryDetail!.checkInTime!.year,
+            widget.staffEntryDetail!.checkInTime!.month,
+            widget.staffEntryDetail!.checkInTime!.day,
+            09,
+            10,
+          ),
+        )
+            .inMinutes <=
             0) {
       color = Colors.amber.shade500;
     } else if (widget.staffEntryDetail!.checkInTime!
-                .difference(
-                  DateTime(
-                    widget.staffEntryDetail!.checkInTime!.year,
-                    widget.staffEntryDetail!.checkInTime!.month,
-                    widget.staffEntryDetail!.checkInTime!.day,
-                    09,
-                    00,
-                  ),
-                )
-                .inMinutes >
-            10 &&
+        .difference(
+      DateTime(
+        widget.staffEntryDetail!.checkInTime!.year,
+        widget.staffEntryDetail!.checkInTime!.month,
+        widget.staffEntryDetail!.checkInTime!.day,
+        09,
+        00,
+      ),
+    )
+        .inMinutes >
+        10 &&
         widget.staffEntryDetail!.checkInTime!
-                .difference(
-                  DateTime(
-                    widget.staffEntryDetail!.checkInTime!.year,
-                    widget.staffEntryDetail!.checkInTime!.month,
-                    widget.staffEntryDetail!.checkInTime!.day,
-                    09,
-                    20,
-                  ),
-                )
-                .inMinutes <=
+            .difference(
+          DateTime(
+            widget.staffEntryDetail!.checkInTime!.year,
+            widget.staffEntryDetail!.checkInTime!.month,
+            widget.staffEntryDetail!.checkInTime!.day,
+            09,
+            20,
+          ),
+        )
+            .inMinutes <=
             0) {
       color = Colors.orangeAccent.shade400;
     } else if (widget.staffEntryDetail!.checkInTime!
-            .difference(
-              DateTime(
-                widget.staffEntryDetail!.checkInTime!.year,
-                widget.staffEntryDetail!.checkInTime!.month,
-                widget.staffEntryDetail!.checkInTime!.day,
-                09,
-                00,
-              ),
-            )
-            .inMinutes >
+        .difference(
+      DateTime(
+        widget.staffEntryDetail!.checkInTime!.year,
+        widget.staffEntryDetail!.checkInTime!.month,
+        widget.staffEntryDetail!.checkInTime!.day,
+        09,
+        00,
+      ),
+    )
+        .inMinutes >
         20) {
       color = Colors.red.shade400;
     }
