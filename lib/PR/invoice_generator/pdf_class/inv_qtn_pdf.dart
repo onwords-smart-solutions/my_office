@@ -43,7 +43,7 @@ class InvAndQtnPdf {
     List<ListOfTable> productDetailsModel,
     Uint8List pic,
   ) async {
-    final pdf = Document();
+    final pdf = Document(pageMode: PdfPageMode.outlines);
 
     var assetImage = pw.MemoryImage(
       (await rootBundle.load('assets/logo1.png')).buffer.asUint8List(),
@@ -55,6 +55,7 @@ class InvAndQtnPdf {
 
     pdf.addPage(
       MultiPage(
+        pageFormat: PdfPageFormat.a4,
         header: (context) => buildLogo(
           assetImage,
           clientModel,
@@ -95,6 +96,48 @@ class InvAndQtnPdf {
         footer: (context) => buildFooter(clientModel, needGst),
       ),
     );
+
+    // MultiPage(
+    //   pageFormat: PdfPageFormat.a4,
+    //   header: (context) => buildLogo(
+    //     assetImage,
+    //     clientModel,
+    //   ),
+    //   build: (context) => [
+    //     SizedBox(height: 2 * PdfPageFormat.mm),
+    //     Row(
+    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         supplierDetails(),
+    //         SizedBox(width: 30 * PdfPageFormat.mm),
+    //         customerDetails(clientModel),
+    //       ],
+    //     ),
+    //     SizedBox(height: 3 * PdfPageFormat.mm),
+    //     productTable(productDetailsModel),
+    //     Divider(),
+    //     totalAmountDetails(
+    //       total,
+    //       subTotal,
+    //       cgst,
+    //       sgst,
+    //       discount,
+    //       advance,
+    //       grandTotal,
+    //       amountToPay,
+    //       needGst,
+    //       percentage,
+    //       qrImage,
+    //       paidImage,
+    //       clientModel,
+    //     ),
+    //     SizedBox(height: 0.3 * PdfPageFormat.cm),
+    //     Divider(),
+    //     buildTermsAndConditions(clientModel),
+    //   ],
+    //   footer: (context) => buildFooter(clientModel, needGst),
+    // ),
     return MainPDFClass.saveDocument(
       fileName: '${clientModel.name}.${clientModel.docType}.pdf',
       pdf: pdf,
@@ -234,18 +277,11 @@ class InvAndQtnPdf {
         item.subTotalList,
       ];
     }).toList();
-    return Table.fromTextArray(
+    return TableHelper.fromTextArray(
       headers: headers,
       data: data,
       cellStyle: const TextStyle(fontSize: 9),
-      border: const TableBorder(
-          // left: BorderSide(),
-          // right: BorderSide(),
-          // top: BorderSide(),
-          // bottom: BorderSide(),
-          // horizontalInside: BorderSide(),
-          // verticalInside: BorderSide(),
-          ),
+      border: const TableBorder(),
       headerStyle: TextStyle(
         fontWeight: FontWeight.bold,
         fontSize: 10,
@@ -253,14 +289,6 @@ class InvAndQtnPdf {
       ),
       headerDecoration: const BoxDecoration(color: PdfColors.red700),
       cellHeight: 25,
-      // headerAlignments: {
-      //   0: Alignment.center,
-      //   1: Alignment.center,
-      //   2: Alignment.center,
-      //   3: Alignment.center,
-      //   4: Alignment.center,
-      //   5: Alignment.center,
-      // },
       columnWidths: {
         0: const FixedColumnWidth(230.0), // fixed to 100 width
         1: const FlexColumnWidth(50.0),
@@ -470,10 +498,12 @@ class InvAndQtnPdf {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       buildBodyText("Terms and Conditions", true),
+                      SizedBox(height: 3),
                       buildBodyText(
                         "It is recommended by the Company to use INVERTER (UPS) of 1KVA for our control modules and theSame shall be in Client's  Scope.",
                         true,
                       ),
+                      SizedBox(height: 3),
                       buildBodyText(
                         "The following facilities and services are to be provided by the client.",
                         true,
@@ -485,17 +515,20 @@ class InvAndQtnPdf {
                         "4. Wire cost and material cost, other than motor and control box which comes within the package.",
                         false,
                       ),
+                      SizedBox(height: 5),
                       Center(
                         child: buildBodyText(
                           "*** Any additional work on behalf of client  will be quoted extra separately ***",
                           true,
                         ),
                       ),
+                      SizedBox(height: 5),
                       buildBodyText("Warranty:", true),
                       buildBodyText(
                         'Service and replacement warranty will be provided for the products up to 1 year from the date of installation.',
                         false,
                       ),
+                      SizedBox(height: 3),
                       buildBodyText(
                         'The warranty will cover the failures for the following reasons:',
                         true,
@@ -506,6 +539,7 @@ class InvAndQtnPdf {
                         "3. Defects caused by application / programming; \n",
                         false,
                       ),
+                      SizedBox(height: 3),
                       buildBodyText(
                         'The warranty will not cover the failures for the following reasons:',
                         true,
@@ -520,21 +554,25 @@ class InvAndQtnPdf {
                         "6. Defects or damages due to any other external means or causes are not covered under warranty.",
                         false,
                       ),
+                      SizedBox(height: 3),
                       buildBodyText("Payment:", true),
                       buildBodyText(
                         "50% of amount should be paid as advance, balance 40% of amount should be paid upon product delivery, and remaining 10% of amount after installation. Incase of Refund, 30% of the total value will be deducted.",
                         false,
                       ),
+                      SizedBox(height: 3),
                       buildBodyText("Delivery Period:", true),
                       buildBodyText(
                         "1-2 weeks after receipt of commercially & technically clear order with advance of 50%.",
                         false,
                       ),
+                      SizedBox(height: 3),
                       buildBodyText("Cancellation of Order: ", true),
                       buildBodyText(
                         "If the Order placed is cancelled by Client then the cancellation charges of 30% of the Order value shall be charged as  a Termination fee.",
                         false,
                       ),
+                      SizedBox(height: 3),
                       buildBodyText("Scope of Work: ", true),
                       buildBodyText(
                         "1. Instruction and Supervision of conduit work at the initial level and there after completion of conduit work and wiring  work  final inspection will be done.\n"
@@ -543,81 +581,144 @@ class InvAndQtnPdf {
                         "4. Delivery to the client and mobile application integration if needed.",
                         false,
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      //Tabular column for employee and customer acknowledgement
+                      SizedBox(height: 15),
+                      Table(
+                        border: TableBorder.all(color: PdfColors.black),
+                        defaultColumnWidth: const FixedColumnWidth(100.0),
                         children: [
-                          Column(
+                          TableRow(
                             children: [
-                              SizedBox(height: 2),
-                              Text(
-                                'Yours sincerely,',
-                                style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(height: 5),
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Yours sincerely,',
+                                        style: const TextStyle(
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 2),
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        '_________',
+                                      ),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Date ',
+                                          style: const TextStyle(
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                        SizedBox(width: 35),
+                                        Text(':'),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'PR Name ',
+                                          style: const TextStyle(
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                        SizedBox(width: 12),
+                                        Text(':'),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'PR Id ',
+                                          style: const TextStyle(
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                        SizedBox(width: 30),
+                                        Text(':'),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5),
+                                  ],
                                 ),
                               ),
-                              SizedBox(height: 2),
-                              Text(
-                                '__________',
-                              ),
-                              SizedBox(height: 2),
-                              Text(
-                                'PR Name : ',
-                                style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
-                                ),
-                              ),
-                              Text(
-                                'Date         : ',
-                                style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
-                                ),
-                              ),
-                              Text(
-                                'PR ID       : ',
-                                style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              SizedBox(height: 2),
-                              Text(
-                                'Accepted & Acknowledged by,',
-                                style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
-                                ),
-                              ),
-                              SizedBox(height: 2),
-                              Text(
-                                '______________',
-                              ),
-                              SizedBox(height: 2),
-                              Text(
-                                'Customer name      : ',
-                                style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
-                                ),
-                              ),
-                              Text(
-                                'Date                         : ',
-                                style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
-                                ),
-                              ),
-                              Text(
-                                'Customer mobile    : ',
-                                style: pw.TextStyle(
-                                  fontWeight: pw.FontWeight.bold,
-                                  fontSize: 10,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(height: 5),
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'Accepted & Acknowledged by,',
+                                        style: const TextStyle(
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 2),
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        '_______________',
+                                      ),
+                                    ),
+                                    SizedBox(height: 5),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Date ',
+                                          style: const TextStyle(
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                        SizedBox(width: 63),
+                                        Text(':'),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Customer name ',
+                                          style: const TextStyle(
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                        SizedBox(width: 13),
+                                        Text(':'),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Customer mobile ',
+                                          style: const TextStyle(
+                                            fontSize: 10,
+                                          ),
+                                        ),
+                                        SizedBox(width: 9),
+                                        Text(':'),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5),
+                                  ],
                                 ),
                               ),
                             ],
@@ -633,10 +734,12 @@ class InvAndQtnPdf {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           buildBodyText("Terms and Conditions", true),
+                          SizedBox(height: 5),
                           buildBodyText(
                             "It is recommended by the Company to use INVERTER (UPS) of 1KVA for our control modules and theSame shall be in Client's  Scope.",
                             true,
                           ),
+                          SizedBox(height: 5),
                           buildBodyText(
                             "The following facilities and services are to be provided by the client.",
                             true,
@@ -648,17 +751,20 @@ class InvAndQtnPdf {
                             "4. Wire cost and material cost, other than motor and control box which comes within the package.",
                             false,
                           ),
+                          SizedBox(height: 5),
                           Center(
                             child: buildBodyText(
                               "*** Any additional work on behalf of client  will be quoted extra separately ***",
                               true,
                             ),
                           ),
+                          SizedBox(height: 5),
                           buildBodyText("Warranty:", true),
                           buildBodyText(
                             'Service and replacement warranty will be provided for the products up to 1 year from the date of installation.',
                             false,
                           ),
+                          SizedBox(height: 5),
                           buildBodyText(
                             'The warranty will not cover the failures for the following reasons:',
                             true,
@@ -673,21 +779,25 @@ class InvAndQtnPdf {
                             "6. Defects or damages due to any other external means or causes are not covered under warranty.",
                             false,
                           ),
+                          SizedBox(height: 5),
                           buildBodyText("Payment:", true),
                           buildBodyText(
                             "50% of amount should be paid as advance, balance 40% of amount should be paid upon product delivery, and remaining 10% of amount after installation. Incase of Refund, 30% of the total value will be deducted.",
                             false,
                           ),
+                          SizedBox(height: 5),
                           buildBodyText("Delivery Period:", true),
                           buildBodyText(
                             "1-2 weeks after receipt of commercially & technically clear order with advance of 50%.",
                             false,
                           ),
+                          SizedBox(height: 5),
                           buildBodyText("Cancellation of Order: ", true),
                           buildBodyText(
                             "If the Order placed is cancelled by Client then the cancellation charges of 30% of the Order value shall be charged as  a Termination fee.",
                             false,
                           ),
+                          SizedBox(height: 5),
                           buildBodyText("Scope of Work: ", true),
                           buildBodyText(
                             "1. Instruction and Supervision of conduit work at the initial level and there after completion of conduit work and wiring  work  final inspection will be done.\n"
@@ -696,81 +806,144 @@ class InvAndQtnPdf {
                             "4. Delivery to the client and mobile application integration if needed.",
                             false,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          //Tabular column for employee and customer acknowledgement
+                          SizedBox(height: 15),
+                          Table(
+                            border: TableBorder.all(color: PdfColors.black),
+                            defaultColumnWidth: const FixedColumnWidth(100.0),
                             children: [
-                              Column(
+                              TableRow(
                                 children: [
-                                  SizedBox(height: 2),
-                                  Text(
-                                    'Yours sincerely,',
-                                    style: pw.TextStyle(
-                                      fontWeight: pw.FontWeight.bold,
-                                      fontSize: 10,
+                                  Padding(
+                                    padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(height: 5),
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            'Yours sincerely,',
+                                            style: const TextStyle(
+                                              fontSize: 10,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: 2),
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            '_________',
+                                          ),
+                                        ),
+                                        SizedBox(height: 5),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Date ',
+                                              style: const TextStyle(
+                                                fontSize: 10,
+                                              ),
+                                            ),
+                                            SizedBox(width: 35),
+                                            Text(':'),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'PR Name ',
+                                              style: const TextStyle(
+                                                fontSize: 10,
+                                              ),
+                                            ),
+                                            SizedBox(width: 12),
+                                            Text(':'),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'PR Id ',
+                                              style: const TextStyle(
+                                                fontSize: 10,
+                                              ),
+                                            ),
+                                            SizedBox(width: 30),
+                                            Text(':'),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5),
+                                      ],
                                     ),
                                   ),
-                                  SizedBox(height: 2),
-                                  Text(
-                                    '__________',
-                                  ),
-                                  SizedBox(height: 2),
-                                  Text(
-                                    'PR Name : ',
-                                    style: pw.TextStyle(
-                                      fontWeight: pw.FontWeight.bold,
-                                      fontSize: 10,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Date         : ',
-                                    style: pw.TextStyle(
-                                      fontWeight: pw.FontWeight.bold,
-                                      fontSize: 10,
-                                    ),
-                                  ),
-                                  Text(
-                                    'PR ID       : ',
-                                    style: pw.TextStyle(
-                                      fontWeight: pw.FontWeight.bold,
-                                      fontSize: 10,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                children: [
-                                  SizedBox(height: 2),
-                                  Text(
-                                    'Accepted & Acknowledged by,',
-                                    style: pw.TextStyle(
-                                      fontWeight: pw.FontWeight.bold,
-                                      fontSize: 10,
-                                    ),
-                                  ),
-                                  SizedBox(height: 2),
-                                  Text(
-                                    '______________',
-                                  ),
-                                  SizedBox(height: 2),
-                                  Text(
-                                    'Customer name      : ',
-                                    style: pw.TextStyle(
-                                      fontWeight: pw.FontWeight.bold,
-                                      fontSize: 10,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Date                         : ',
-                                    style: pw.TextStyle(
-                                      fontWeight: pw.FontWeight.bold,
-                                      fontSize: 10,
-                                    ),
-                                  ),
-                                  Text(
-                                    'Customer mobile    : ',
-                                    style: pw.TextStyle(
-                                      fontWeight: pw.FontWeight.bold,
-                                      fontSize: 10,
+                                  Padding(
+                                    padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(height: 5),
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            'Accepted & Acknowledged by,',
+                                            style: const TextStyle(
+                                              fontSize: 10,
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: 2),
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            '_______________',
+                                          ),
+                                        ),
+                                        SizedBox(height: 5),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Date ',
+                                              style: const TextStyle(
+                                                fontSize: 10,
+                                              ),
+                                            ),
+                                            SizedBox(width: 63),
+                                            Text(':'),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Customer name ',
+                                              style: const TextStyle(
+                                                fontSize: 10,
+                                              ),
+                                            ),
+                                            SizedBox(width: 13),
+                                            Text(':'),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Customer mobile ',
+                                              style: const TextStyle(
+                                                fontSize: 10,
+                                              ),
+                                            ),
+                                            SizedBox(width: 9),
+                                            Text(':'),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5),
+                                      ],
                                     ),
                                   ),
                                 ],
@@ -787,7 +960,7 @@ class InvAndQtnPdf {
   pw.Text buildBodyText(String text, bool isHead) => Text(
         text,
         style: TextStyle(
-          fontSize: 11,
+          fontSize: 10,
           fontWeight: isHead ? FontWeight.bold : FontWeight.normal,
         ),
       );

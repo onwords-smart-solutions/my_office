@@ -926,7 +926,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                             }
                           }
 
-                          // /// QUOTATION
+                          /// QUOTATION
                           else {
                             var snapshot = await firebaseStorage
                                 .ref()
@@ -965,7 +965,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                               MaterialPageRoute(
                                   builder: (_) => const UserHomeScreen(),),
                               (route) => false,);
-                          // Navigator.pushNamedAndRemoveUntil(context, '/invoiceGenerator', (route) => false);
+                          // Navigator.pushNamedAndRemoveUntil(context, '/InvoicePreviewScreen', (route) => false);
                         });
                       }
                     },

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class ApiOperations {
-  String api = 'http://13.126.117.5:8118/';
+  String api = 'http://13.126.117.5/';
 
   Future<String> askOnyx({
     required String command,

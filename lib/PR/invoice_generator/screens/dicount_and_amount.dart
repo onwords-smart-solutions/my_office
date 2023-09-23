@@ -52,7 +52,7 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
     for (var invoice in invoiceList) {
       minTotalAmount += invoice.minPrice * invoice.productQuantity;
     }
-    for(var invoice in invoiceList){
+    for (var invoice in invoiceList) {
       obcTotal += invoice.obcPrice * invoice.productQuantity;
     }
 
@@ -70,18 +70,19 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
         int.parse(discountPercentage.toString()) /
         100;
 
-
-
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title:  Text('Discount and Amount Info',style: TextStyle(fontSize: 22, color: Colors.white),),
+        title: const Text(
+          'Discount and Amount Info',
+          style: TextStyle(fontSize: 22, color: Colors.white),
+        ),
         centerTitle: true,
         elevation: 0,
         backgroundColor: ConstantColor.backgroundColor,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new,color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -107,21 +108,36 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                       Container(
                         height: height * .28,
                         decoration: BoxDecoration(
-                            // color: Colors.blueGrey,
-                            border:
-                                Border.all(color: Colors.black.withOpacity(0.3), width: 2),
-                            borderRadius: BorderRadius.circular(20)),
+                          // color: Colors.blueGrey,
+                          border: Border.all(
+                            color: Colors.black.withOpacity(0.3),
+                            width: 2,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            buildListTile(height, 'Max Total Amount',
-                                maxTotalAmount.toString()),
-                            buildListTile(height, 'Min Total Amount',
-                                minTotalAmount.toString()),
-                            buildListTile(height, 'Percentage',
-                                discountPercentage.toString()),
-                            buildListTile(height, 'Discount Amount',
-                                discountAmount.toString()),
+                            buildListTile(
+                              height,
+                              'Max Total Amount',
+                              maxTotalAmount.toString(),
+                            ),
+                            buildListTile(
+                              height,
+                              'Min Total Amount',
+                              minTotalAmount.toString(),
+                            ),
+                            buildListTile(
+                              height,
+                              'Percentage',
+                              discountPercentage.toString(),
+                            ),
+                            buildListTile(
+                              height,
+                              'Discount Amount',
+                              discountAmount.toString(),
+                            ),
                           ],
                         ),
                       ),
@@ -132,27 +148,30 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                           Container(
                             margin: const EdgeInsets.symmetric(vertical: 5),
                             height: height * .16,
-                            width: width*.5,
+                            width: width * .5,
                             decoration: BoxDecoration(
                               // color: Colors.blueGrey,
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Column(
                               children: [
-                                Text('Available Discount - $discountPercentage %',
-                                style: TextStyle(
-                                 
-                                  color: ConstantColor.backgroundColor,
-                                  fontSize: 15
-                                ),),
+                                Text(
+                                  'Available Discount - $discountPercentage %',
+                                  style: const TextStyle(
+                                    color: ConstantColor.backgroundColor,
+                                    fontSize: 15,
+                                  ),
+                                ),
                                 const SizedBox(height: 15),
                                 TextFiledWidget(
                                   controller: discountController,
                                   textInputType: TextInputType.number,
                                   textInputAction: TextInputAction.done,
-                                  hintName:
-                                  'Fill below $discountPercentage%',
-                                  icon: const Icon(Icons.percent, color: Colors.black,),
+                                  hintName: 'Fill below $discountPercentage%',
+                                  icon: const Icon(
+                                    Icons.percent,
+                                    color: Colors.black,
+                                  ),
                                   maxLength: 3,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -160,7 +179,9 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                                     } else if (value.toString().contains('.')) {
                                       return 'Enter Only Single Value';
                                     } else if (int.parse(value) >
-                                        int.parse(discountPercentage.toString())) {
+                                        int.parse(
+                                          discountPercentage.toString(),
+                                        )) {
                                       return 'Enter less then $discountPercentage %';
                                     }
                                     return null;
@@ -169,14 +190,17 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                               ],
                             ),
                           ),
+
                           /// NEED GST
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             height: height * .078,
-
                             decoration: BoxDecoration(
                               // color: Colors.blueGrey,
-                              border: Border.all(color: Colors.black.withOpacity(0.3), width: 2),
+                              border: Border.all(
+                                color: Colors.black.withOpacity(0.3),
+                                width: 2,
+                              ),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Row(
@@ -185,17 +209,18 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                                 Text(
                                   "GST Need : ",
                                   style: TextStyle(
-                                   
-                                      fontSize: height * 0.019,
-                                      color: Colors.black),
+                                    fontSize: height * 0.019,
+                                    color: Colors.black,
+                                  ),
                                 ),
                                 Checkbox(
-                                    value: gstNeed,
-                                    onChanged: (val) {
-                                      setState(() {
-                                        gstNeed = val!;
-                                      });
-                                    })
+                                  value: gstNeed,
+                                  onChanged: (val) {
+                                    setState(() {
+                                      gstNeed = val!;
+                                    });
+                                  },
+                                ),
                               ],
                             ),
                           ),
@@ -203,22 +228,34 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                       ),
 
                       /// ADVANCE AMOUNT
-                      invoiceProvider.getCustomerDetails.docType == 'PROFORMA_INVOICE'
+                      invoiceProvider.getCustomerDetails.docType ==
+                              'PROFORMA_INVOICE'
                           ? Container(
                               height: height * .15,
                               decoration: BoxDecoration(
-                                  // color: Colors.blueGrey,
-                                  borderRadius: BorderRadius.circular(20)),
+                                // color: Colors.blueGrey,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
                               child: Column(
                                 children: [
-                                  Text('Advanced Amount', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, fontFamily: ConstantFonts.sfProRegular),),
+                                  Text(
+                                    'Advanced Amount',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 16,
+                                      fontFamily: ConstantFonts.sfProRegular,
+                                    ),
+                                  ),
                                   const SizedBox(height: 10),
                                   TextFiledWidget(
                                     controller: advancedAmountController,
                                     textInputType: TextInputType.number,
                                     textInputAction: TextInputAction.done,
                                     hintName: 'Advance',
-                                    icon: const Icon(Icons.money, color: Colors.black),
+                                    icon: const Icon(
+                                      Icons.money,
+                                      color: Colors.black,
+                                    ),
                                     maxLength: 10,
                                     // validator: (value) {
                                     //   if (value == null || value.isEmpty) {
@@ -246,27 +283,30 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                     log('$finalAmountWithoutGst');
                     log('$discountAmount');
 
-
                     prPoint = (double.parse(finalAmountWithoutGst.toString()) -
-                        double.parse(obcTotal.toString())) /
+                            double.parse(obcTotal.toString())) /
                         1000;
                     log('PR POINT : ${prPoint.toString()}');
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => InvoicePreviewScreen(
-                                  finalAmountWithoutGst: finalAmountWithoutGst,
-                                  advanceAmount:
-                                      advancedAmountController.text.isNotEmpty
-                                          ? double.parse(
-                                                  advancedAmountController.text)
-                                              .toDouble()
-                                          : 0,
-                                  gstNeed: gstNeed,
-                                  discountAmount:
-                                      double.parse(discountAmount.toString())
-                                          .toDouble(), percentage: int.parse(discountController.text), prPoint: prPoint,
-                                ),),);
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => InvoicePreviewScreen(
+                          finalAmountWithoutGst: finalAmountWithoutGst,
+                          advanceAmount:
+                              advancedAmountController.text.isNotEmpty
+                                  ? double.parse(
+                                      advancedAmountController.text,
+                                    ).toDouble()
+                                  : 0,
+                          gstNeed: gstNeed,
+                          discountAmount:
+                              double.parse(discountAmount.toString())
+                                  .toDouble(),
+                          percentage: int.parse(discountController.text),
+                          prPoint: prPoint,
+                        ),
+                      ),
+                    );
                   }
                 }).button(),
               ],
@@ -288,7 +328,11 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
           ),
           trailing: Text(
             value,
-            style: TextStyle(fontFamily: ConstantFonts.sfProBold,fontSize: 15,color: CupertinoColors.systemPurple),
+            style: TextStyle(
+              fontFamily: ConstantFonts.sfProBold,
+              fontSize: 15,
+              color: CupertinoColors.systemPurple,
+            ),
           ),
         ),
       ),
