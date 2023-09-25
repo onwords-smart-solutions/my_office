@@ -53,6 +53,16 @@ class HiveOperations with ChangeNotifier {
     }
   }
 
+  Future<void> updatePhoneNumber(int phone) async {
+    final box = await Hive.openBox<StaffModel>('user_db');
+    final staff = box.getAt(0);
+    if(staff != null){
+      staff.phoneNumber = phone;
+      await box.deleteAt(0);
+      await box.add(staff);
+    }
+  }
+
 //CLEARING DATA
   Future<void> clearDetails() async {
     final userDB = await Hive.openBox<StaffModel>('user_db');

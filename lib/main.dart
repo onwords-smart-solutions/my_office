@@ -11,6 +11,7 @@ import 'package:my_office/PR/visit/visit_form_screen.dart';
 import 'package:my_office/home/user_home_screen.dart';
 import 'package:my_office/login/login_screen.dart';
 import 'package:my_office/models/staff_model.dart';
+import 'package:my_office/phone_number_screen.dart';
 import 'package:my_office/provider/user_provider.dart';
 import 'package:my_office/birthday_picker_screen.dart';
 import 'package:my_office/services/notification_service.dart';
@@ -148,6 +149,8 @@ class AuthenticationScreen extends StatelessWidget {
                 return userProvider.user != null
                     ? userProvider.user!.dob == 0
                         ? BirthdayPickerScreen()
+                : userProvider.user!.phoneNumber == 0
+                ? const PhoneNumberScreen()
                         : child!
                     : const Loading();
               },

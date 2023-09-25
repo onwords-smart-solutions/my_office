@@ -16,7 +16,7 @@ class CustomSnackBar {
         showCloseIcon: true,
         content: Text(
           message,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12.0, color: Colors.white),
+          style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 15.0, color: Colors.white),
         ),
       ),
     );

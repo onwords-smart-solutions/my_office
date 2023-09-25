@@ -12,9 +12,11 @@ class PrWorkDone extends StatefulWidget {
   final String userId;
   final String staffName;
 
-  const PrWorkDone(
-      {Key? key, required this.userId, required this.staffName})
-      : super(key: key);
+  const PrWorkDone({
+    Key? key,
+    required this.userId,
+    required this.staffName,
+  }) : super(key: key);
 
   @override
   State<PrWorkDone> createState() => _PrWorkDoneState();
@@ -36,7 +38,9 @@ class _PrWorkDoneState extends State<PrWorkDone> {
     messageController.clear();
     pointsController.clear();
     quoteController.clear();
-    visitController.clear();
+    visitedController.clear();
+    salesController.clear();
+    visitsArrangedController.clear();
 
     prDatabase
         .child('${widget.userId}/$yearFormat/$monthFormat/$dateFormat')
@@ -51,9 +55,14 @@ class _PrWorkDoneState extends State<PrWorkDone> {
         messageController.text = newPrPoints['message'].toString();
         pointsController.text = newPrPoints['points'].toString();
         quoteController.text = newPrPoints['quote'].toString();
-        visitController.text = newPrPoints['visit'].toString();
-
-      } catch (e) {log('$e');}
+        visitedController.text = newPrPoints['visited'].toString();
+        salesController.text = newPrPoints['sales'].toString();
+        visitsArrangedController.text =
+            newPrPoints['visits_arranged'].toString();
+      } catch (e) {
+        log('$e');
+      }
+      if(mounted) return;
       setState(() {
         isLoading = false;
       });
@@ -80,7 +89,9 @@ class _PrWorkDoneState extends State<PrWorkDone> {
   TextEditingController messageController = TextEditingController();
   TextEditingController pointsController = TextEditingController();
   TextEditingController quoteController = TextEditingController();
-  TextEditingController visitController = TextEditingController();
+  TextEditingController salesController = TextEditingController();
+  TextEditingController visitsArrangedController = TextEditingController();
+  TextEditingController visitedController = TextEditingController();
 
   @override
   void initState() {
@@ -99,13 +110,15 @@ class _PrWorkDoneState extends State<PrWorkDone> {
   }
 
   Widget prPointsScreen() {
-    return Column(
-      children: [
-        currentDatePicker(),
-        prData(),
-        const SizedBox(height: 30),
-        submitButton(),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          currentDatePicker(),
+          prData(),
+          const SizedBox(height: 30),
+          submitButton(),
+        ],
+      ),
     );
   }
 
@@ -121,7 +134,6 @@ class _PrWorkDoneState extends State<PrWorkDone> {
               child: FilledButton.tonal(
                 style: FilledButton.styleFrom(
                   foregroundColor: CupertinoColors.systemPurple,
-                  elevation: 10,
                 ),
                 onPressed: () {
                   datePicker();
@@ -148,180 +160,242 @@ class _PrWorkDoneState extends State<PrWorkDone> {
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Table(
-              columnWidths: const {
-                0: FlexColumnWidth(3),
-                1: FlexColumnWidth(3),
-              },
-              border: TableBorder.all(
-                borderRadius: BorderRadius.circular(10),
-                color: ConstantColor.backgroundColor,
-                width: 2,
+        columnWidths: const {
+          0: FlexColumnWidth(3),
+          1: FlexColumnWidth(3),
+        },
+        border: TableBorder.all(
+          borderRadius: BorderRadius.circular(10),
+          color: ConstantColor.backgroundColor,
+          width: 2,
+        ),
+        children: [
+          TableRow(
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+                child: Text(
+                  "Calls",
+                  style: TextStyle(
+                    color: ConstantColor.headingTextColor,
+                    fontSize: 17,
+                  ),
+                ),
               ),
-              children: [
-                TableRow(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      child: Text(
-                        "Calls",
-                        style: TextStyle(
-                          color: ConstantColor.headingTextColor,
-                          fontSize: 17,
-                         
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: TextField(
-                        controller: callsController,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.call),
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ],
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: TextField(
+                  controller: callsController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.call),
+                    border: InputBorder.none,
+                  ),
                 ),
-                TableRow(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      child: Text(
-                        "Invoice",
-                        style: TextStyle(
-                          color: ConstantColor.headingTextColor,
-                          fontSize: 17,
-                         
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: TextField(
-                        controller: invoiceController,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.inventory),
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ],
+              ),
+            ],
+          ),
+          TableRow(
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
                 ),
-                TableRow(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      child: Text(
-                        "Message",
-                        style: TextStyle(
-                          color: ConstantColor.headingTextColor,
-                          fontSize: 17,
-                         
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: TextField(
-                        controller: messageController,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.message_rounded),
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ],
+                child: Text(
+                  "Invoice",
+                  style: TextStyle(
+                    color: ConstantColor.headingTextColor,
+                    fontSize: 17,
+                  ),
                 ),
-                TableRow(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      child: Text(
-                        "Points",
-                        style: TextStyle(
-                          color: ConstantColor.headingTextColor,
-                          fontSize: 17,
-                         
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: TextField(
-                        controller: pointsController,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.point_of_sale_rounded),
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: TextField(
+                  controller: invoiceController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.inventory),
+                    border: InputBorder.none,
+                  ),
                 ),
-                TableRow(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      child: Text(
-                        "Quote",
-                        style: TextStyle(
-                          color: ConstantColor.headingTextColor,
-                          fontSize: 17,
-                         
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: TextField(
-                        controller: quoteController,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.request_quote_rounded),
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ],
+              ),
+            ],
+          ),
+          TableRow(
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
                 ),
-                TableRow(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      child: Text(
-                        "Visit",
-                        style: TextStyle(
-                          color: ConstantColor.headingTextColor,
-                          fontSize: 17,
-                         
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: TextField(
-                        controller: visitController,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          icon: Icon(Icons.directions_walk_rounded),
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ],
+                child: Text(
+                  "Message",
+                  style: TextStyle(
+                    color: ConstantColor.headingTextColor,
+                    fontSize: 17,
+                  ),
                 ),
-              ],
-            ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: TextField(
+                  controller: messageController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.message_rounded),
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          TableRow(
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+                child: Text(
+                  "Points",
+                  style: TextStyle(
+                    color: ConstantColor.headingTextColor,
+                    fontSize: 17,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: TextField(
+                  controller: pointsController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.point_of_sale_rounded),
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          TableRow(
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+                child: Text(
+                  "Quote",
+                  style: TextStyle(
+                    color: ConstantColor.headingTextColor,
+                    fontSize: 17,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: TextField(
+                  controller: quoteController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.request_quote_rounded),
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          TableRow(
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+                child: Text(
+                  "Visited",
+                  style: TextStyle(
+                    color: ConstantColor.headingTextColor,
+                    fontSize: 17,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: TextField(
+                  controller: visitedController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.directions_walk_rounded),
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          TableRow(
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+                child: Text(
+                  "Sales",
+                  style: TextStyle(
+                    color: ConstantColor.headingTextColor,
+                    fontSize: 17,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: TextField(
+                  controller: salesController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.nat),
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          TableRow(
+            children: [
+              const Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+                child: Text(
+                  "Visits arranged",
+                  style: TextStyle(
+                    color: ConstantColor.headingTextColor,
+                    fontSize: 17,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: TextField(
+                  controller: visitsArrangedController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.place),
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -350,30 +424,50 @@ class _PrWorkDoneState extends State<PrWorkDone> {
     var yearFormat = DateFormat('yyyy').format(dateTime);
 
     await prDatabase.child(widget.userId).update({
-      'name': widget.staffName
+      'name': widget.staffName,
     });
-      prDatabase.child('${widget.userId}/$yearFormat/$monthFormat/$dateFormat').update(
-        {
-          'calls': callsController.text.isEmpty ? 0 : int.parse( callsController.text.trim()),
-          'invoice': invoiceController.text.isEmpty ? 0 : int.parse( invoiceController.text.trim()),
-          'message': messageController.text.isEmpty ? 0 : int.parse( messageController.text.trim()),
-          'points': pointsController.text.isEmpty ? 0 : int.parse( pointsController.text.trim()),
-          'quote': quoteController.text.isEmpty ? 0 : int.parse( quoteController.text.trim()),
-          'visit': visitController.text.isEmpty ? 0 : int.parse( visitController.text.trim()),
-        },
-      );
-      final snackBar = SnackBar(
-        content: Text(
-          'Data has been submitted!!',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 16,
-            fontFamily: ConstantFonts.sfProRegular,
-            fontWeight: FontWeight.w500,
-          ),
+    prDatabase
+        .child('${widget.userId}/$yearFormat/$monthFormat/$dateFormat')
+        .update(
+      {
+        'calls': callsController.text.isEmpty
+            ? 0
+            : int.parse(callsController.text.trim()),
+        'invoice': invoiceController.text.isEmpty
+            ? 0
+            : int.parse(invoiceController.text.trim()),
+        'message': messageController.text.isEmpty
+            ? 0
+            : int.parse(messageController.text.trim()),
+        'points': pointsController.text.isEmpty
+            ? 0
+            : int.parse(pointsController.text.trim()),
+        'quote': quoteController.text.isEmpty
+            ? 0
+            : int.parse(quoteController.text.trim()),
+        'visited': visitedController.text.isEmpty
+            ? 0
+            : int.parse(visitedController.text.trim()),
+        'sales': salesController.text.isEmpty
+            ? 0
+            : int.parse(salesController.text.trim()),
+        'visitsArranged': visitsArrangedController.text.isEmpty
+            ? 0
+            : int.parse(visitsArrangedController.text.trim()),
+      },
+    );
+    final snackBar = SnackBar(
+      content: Text(
+        'Data has been submitted!!',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 16,
+          fontFamily: ConstantFonts.sfProRegular,
+          fontWeight: FontWeight.w500,
         ),
-        backgroundColor: Colors.green,
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
+      ),
+      backgroundColor: Colors.green,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+}

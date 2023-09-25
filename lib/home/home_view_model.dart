@@ -360,6 +360,7 @@ class HomeViewModel {
               ? ''
               : entry['profileImage'].toString(),
           dob: entry['dob'] == null ? 0 : int.parse(entry['dob'].toString()),
+          phoneNumber: entry['phoneNumber'] == null ? 0 : int.parse(entry['phoneNumber'].toString()),
         );
 
         staffs.add(staffEntry);

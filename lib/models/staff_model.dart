@@ -18,6 +18,8 @@ class StaffModel {
   int dob;
   @HiveField(6)
   String uniqueId;
+  @HiveField(7)
+  int phoneNumber;
 
   StaffModel({
     required this.uid,
@@ -26,6 +28,7 @@ class StaffModel {
     required this.email,
     required this.profilePic,
     required this.dob,
+    required this.phoneNumber,
     required this.uniqueId,
   });
 }

@@ -21,7 +21,8 @@ class BirthdayPickerScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: const Text(
           'Pick Birthday',
-          style: TextStyle(fontWeight: FontWeight.w700, color: Colors.deepPurple),
+          style:
+              TextStyle(fontWeight: FontWeight.w700, color: Colors.deepPurple),
         ),
         centerTitle: true,
       ),
@@ -54,63 +55,74 @@ class BirthdayPickerScreen extends StatelessWidget {
             ),
           ),
           ValueListenableBuilder(
-              valueListenable: _birthday,
-              builder: (ctx, birthday, child) {
-                return Column(
-                  children: [
-                    ListTile(
-                      onTap: () => _showDatePicker(context, MediaQuery.sizeOf(context)),
-                      title: Text(
-                        birthday == null ? 'Pick birthday' : _dateFormat(birthday),
-                        style: TextStyle(
-                          fontWeight: birthday == null ? FontWeight.w500 : FontWeight.w700,
-                          color: birthday == null ? Colors.grey : Colors.black,
-                        ),
-                      ),
-                      tileColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      trailing: const Icon(
-                        Icons.cake_rounded,
-                        color: Colors.grey,
+            valueListenable: _birthday,
+            builder: (ctx, birthday, child) {
+              return Column(
+                children: [
+                  ListTile(
+                    onTap: () =>
+                        _showDatePicker(context, MediaQuery.sizeOf(context)),
+                    title: Text(
+                      birthday == null
+                          ? 'Pick birthday'
+                          : _dateFormat(birthday),
+                      style: TextStyle(
+                        fontWeight: birthday == null
+                            ? FontWeight.w500
+                            : FontWeight.w700,
+                        color: birthday == null ? Colors.grey : Colors.black,
                       ),
                     ),
-                    const SizedBox(height: 20.0),
-                    if (birthday != null)
-                      ValueListenableBuilder(
-                          valueListenable: _loading,
-                          builder: (ctx, loading, child) {
-                            return SizedBox(
-                              width: double.infinity,
-                              child: loading
-                                  ? const CircleAvatar(
-                                      backgroundColor: Colors.deepPurple,
-                                      child: SizedBox(
-                                        width: 30.0,
-                                        height: 30.0,
-                                        child: CircularProgressIndicator(
-                                          color: Colors.white,
-                                          strokeWidth: 2.0,
-                                        ),
-                                      ),
-                                    )
-                                  : FilledButton(
-                                      onPressed: () =>_submitForm(context),
-                                      style: FilledButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(12.0),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        'Continue',
-                                        style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.0),
-                                      )),
-                            );
-                          })
-                  ],
-                );
-              })
+                    tileColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    trailing: const Icon(
+                      Icons.cake_rounded,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  const SizedBox(height: 20.0),
+                  if (birthday != null)
+                    ValueListenableBuilder(
+                      valueListenable: _loading,
+                      builder: (ctx, loading, child) {
+                        return SizedBox(
+                          width: double.infinity,
+                          child: loading
+                              ? const CircleAvatar(
+                                  backgroundColor: Colors.deepPurple,
+                                  child: SizedBox(
+                                    width: 30.0,
+                                    height: 30.0,
+                                    child: CircularProgressIndicator(
+                                      color: Colors.white,
+                                      strokeWidth: 2.0,
+                                    ),
+                                  ),
+                                )
+                              : FilledButton(
+                                  onPressed: () => _submitForm(context),
+                                  style: FilledButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12.0),
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Continue',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 16.0,
+                                    ),
+                                  ),
+                                ),
+                        );
+                      },
+                    ),
+                ],
+              );
+            },
+          ),
         ],
       ),
     );
@@ -140,8 +152,10 @@ class BirthdayPickerScreen extends StatelessWidget {
       builder: (BuildContext ctx) => Container(
         height: size.height * .4,
         padding: const EdgeInsets.all(20.0),
-        decoration:
-            const BoxDecoration(borderRadius: BorderRadius.vertical(top: Radius.circular(30.0)), color: Colors.white),
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(30.0)),
+          color: Colors.white,
+        ),
         margin: EdgeInsets.only(
           bottom: MediaQuery.of(ctx).viewInsets.bottom,
         ),
@@ -149,18 +163,20 @@ class BirthdayPickerScreen extends StatelessWidget {
           children: [
             Expanded(child: child),
             SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                    onPressed: () => Navigator.of(ctx).pop(),
-                    style: FilledButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),
-                    ),
-                    child: const Text(
-                      'Ok',
-                      style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.0),
-                    )))
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: () => Navigator.of(ctx).pop(),
+                style: FilledButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                ),
+                child: const Text(
+                  'Ok',
+                  style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.0),
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -174,18 +190,24 @@ class BirthdayPickerScreen extends StatelessWidget {
     _loading.value = true;
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     if (_birthday.value == null) {
-      CustomSnackBar.showErrorSnackbar(message: 'Please choose your date of birth', context: context);
+      CustomSnackBar.showErrorSnackbar(
+        message: 'Please choose your date of birth',
+        context: context,
+      );
       _loading.value = false;
     } else {
-      await FirebaseDatabase.instance.ref('staff/${userProvider.user!.uid}').update({
+      await FirebaseDatabase.instance
+          .ref('staff/${userProvider.user!.uid}')
+          .update({
         'dob': _birthday.value!.millisecondsSinceEpoch,
       });
       await userProvider.updateDOB(_birthday.value!);
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-            builder: (_) => const AuthenticationScreen(),
-          ),
-          (route) => false);
+        MaterialPageRoute(
+          builder: (_) => const AuthenticationScreen(),
+        ),
+        (route) => false,
+      );
     }
   }
 }
