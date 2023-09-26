@@ -2,7 +2,7 @@ name: my_office
 description: A new Flutter project.
 publish_to: 'none'
 
-version: 2.0.4+74
+version: 2.0.5+75
 
 environment:
   sdk: '>=2.18.6 <3.0.0'
@@ -73,6 +73,7 @@ dependencies:
   crop_your_image: ^0.7.5
   device_info_plus: ^9.0.3
   loading_animation_widget: ^1.2.0+4
+  flutter_tts: ^3.8.3
 
 dev_dependencies:
   flutter_test:

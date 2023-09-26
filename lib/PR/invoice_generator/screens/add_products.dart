@@ -26,7 +26,7 @@ class _ProductDetailsState extends State<ProductDetails> {
 
   ///CONTROLLERS
   SingleValueDropDownController itemNameController =
-  SingleValueDropDownController();
+      SingleValueDropDownController();
   TextEditingController itemPriceController = TextEditingController();
   TextEditingController itemQtyController = TextEditingController();
 
@@ -114,15 +114,21 @@ class _ProductDetailsState extends State<ProductDetails> {
     // final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Product Details',style: TextStyle(
-        fontSize: 22,
-          color: Colors.white
-        ),),
+        title: const Text(
+          'Product Details',
+          style: TextStyle(
+            fontSize: 22,
+            color: Colors.white,
+          ),
+        ),
         centerTitle: true,
         elevation: 0,
         backgroundColor: ConstantColor.backgroundColor,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new,color: Colors.white,),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.white,
+          ),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -136,40 +142,40 @@ class _ProductDetailsState extends State<ProductDetails> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
+              const SizedBox(
                 // color: Colors.blue,
                 width: 300,
-                child: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        manualEntry = !manualEntry;
-                        log(manualEntry.toString());
-                      });
-                    },
-                    icon: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(manualEntry ? 'Change to DropDown' : 'Change to Manual Entry',
-                        style: TextStyle(
-                          fontSize: 17,
-                         
-                          color: CupertinoColors.systemPurple
-                        ),),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        manualEntry
-                            ? const Icon(CupertinoIcons.arrow_2_circlepath)
-                            : const Icon(CupertinoIcons.plus_rectangle_fill_on_rectangle_fill),
-                      ],
-                    )),
+                // child: IconButton(
+                //     onPressed: () {
+                //       setState(() {
+                //         manualEntry = !manualEntry;
+                //         log(manualEntry.toString());
+                //       });
+                //     },
+                // icon: Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     Text(manualEntry ? 'Change to DropDown' : 'Change to Manual Entry',
+                //     style: TextStyle(
+                //       fontSize: 17,
+                //
+                //       color: CupertinoColors.systemPurple
+                //     ),),
+                //     const SizedBox(
+                //       width: 10,
+                //     ),
+                //     manualEntry
+                //         ? const Icon(CupertinoIcons.arrow_2_circlepath)
+                //         : const Icon(CupertinoIcons.plus_rectangle_fill_on_rectangle_fill),
+                //   ],
+                // )),
               ),
 
               /// Product Details
-              productDetails(height,manualEntry),
+              productDetails(height, manualEntry),
 
               /// Next Button
-              addButton(height,manualEntry),
+              addButton(height, manualEntry),
             ],
           ),
         ),
@@ -178,35 +184,47 @@ class _ProductDetailsState extends State<ProductDetails> {
   }
 
   Widget addButton(
-      double height,
-      bool isManual
-      ) {
+    double height,
+    bool isManual,
+  ) {
     return Container(
-        margin: EdgeInsets.only(top: height * 0.25),
-        child: Button('Add Product', () {
-          if (formKey.currentState!.validate()) {
-            // minPriceList.add(int.parse(itemQtyController.text) *
-            //     int.parse(minPriceStringVal.toString()));
-            //
-            // obcPriceList.add(int.parse(itemQtyController.text) *
-            //     int.parse(obcPriceStringVal.toString()));
+      margin: EdgeInsets.only(top: height * 0.25),
+      child: Button('Add Product', () {
+        if (formKey.currentState!.validate()) {
+          // minPriceList.add(int.parse(itemQtyController.text) *
+          //     int.parse(minPriceStringVal.toString()));
+          //
+          // obcPriceList.add(int.parse(itemQtyController.text) *
+          //     int.parse(obcPriceStringVal.toString()));
 
-            Provider.of<InvoiceProvider>(context, listen: false).addProduct(
-              ListOfTable(
-                  productName: isManual ? productName.text :itemNameController.dropDownValue!.name,
-                  productQuantity: int.parse(itemQtyController.text),
-                  productPrice: int.parse(itemPriceController.text),
-                  subTotalList: isManual ? int.parse(itemQtyController.text) * int.parse(itemPriceController.text.toString()) :  int.parse(itemQtyController.text) * int.parse(maxPriceStringVal.toString()),
-                  minPrice: isManual ? int.parse(itemPriceController.text) : int.parse(minPriceStringVal.toString()),
-                  obcPrice: isManual ? int.parse(itemPriceController.text) : int.parse(obcPriceStringVal.toString())),
-            );
-            Navigator.pop(context);
+          Provider.of<InvoiceProvider>(context, listen: false).addProduct(
+            ListOfTable(
+              productName: isManual
+                  ? productName.text
+                  : itemNameController.dropDownValue!.name,
+              productQuantity: int.parse(itemQtyController.text),
+              productPrice: int.parse(itemPriceController.text),
+              subTotalList: isManual
+                  ? int.parse(itemQtyController.text) *
+                      int.parse(itemPriceController.text.toString())
+                  : int.parse(itemQtyController.text) *
+                      int.parse(maxPriceStringVal.toString()),
+              minPrice: isManual
+                  ? int.parse(itemPriceController.text)
+                  : int.parse(minPriceStringVal.toString()),
+              obcPrice: isManual
+                  ? int.parse(itemPriceController.text)
+                  : int.parse(obcPriceStringVal.toString()),
+            ),
+          );
+          Navigator.pop(context);
 
-            log('MAX Price${maxPriceStringVal.toString()}');
-            log('MIN Price${minPriceStringVal.toString()}');
-            log('OBC Price${obcPriceStringVal.toString()}');
-          }
-        }).button());
+          log('MAX Price${maxPriceStringVal.toString()}');
+          log('MIN Price${minPriceStringVal.toString()}');
+          log('OBC Price${obcPriceStringVal.toString()}');
+        }
+      }).button(),
+    );
   }
 
   Widget productDetails(double height, bool isManualEntry) {
@@ -215,7 +233,8 @@ class _ProductDetailsState extends State<ProductDetails> {
       height: height * 0.3,
       decoration: BoxDecoration(
         // color: Colors.blueGrey,
-          borderRadius: BorderRadius.circular(20)),
+        borderRadius: BorderRadius.circular(20),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -225,80 +244,86 @@ class _ProductDetailsState extends State<ProductDetails> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                isManualEntry
-                    ? '  Enter Product Name\n'  : '  Select Product\n',
-                style: TextStyle(
-                    fontSize: 17,
-                     ),
+                isManualEntry ? '  Enter Product Name\n' : '  Select Product\n',
+                style: const TextStyle(
+                  fontSize: 17,
+                ),
               ),
               isManualEntry
                   ? TextFiledWidget(
-                isEnable: true,
-                controller: productName,
-                textInputType: TextInputType.name,
-                textInputAction: TextInputAction.next,
-                hintName: 'Product Name',
-                icon: const Icon(Icons.currency_rupee_rounded,
-                    color: Colors.black),
-                maxLength: 1000,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Fill Product Name';
-                  }
-                  return null;
-                },
-              ).textInputFiled()
+                      isEnable: true,
+                      controller: productName,
+                      textInputType: TextInputType.name,
+                      textInputAction: TextInputAction.next,
+                      hintName: 'Product Name',
+                      icon: const Icon(
+                        Icons.currency_rupee_rounded,
+                        color: Colors.black,
+                      ),
+                      maxLength: 1000,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Fill Product Name';
+                        }
+                        return null;
+                      },
+                    ).textInputFiled()
                   : Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                height: height * .08,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                      color: Colors.black.withOpacity(0.3), width: 2),
-                ),
-                alignment: Alignment.bottomCenter,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: DropDownTextField(
-                    // initialValue: "name4",
-                    controller: itemNameController,
-                    textStyle: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontFamily: ConstantFonts.sfProRegular),
-                    clearOption: true,
-                    enableSearch: true,
-                    dropDownIconProperty: IconProperty(
-                        icon: Icons.arrow_drop_down, color: Colors.black),
-                    clearIconProperty: IconProperty(
-                        color: Colors.black, icon: Icons.clear),
-                    // dropdownColor: Colors.orange,
-                    searchDecoration: InputDecoration(
-                      hintText: "Select Product",
-                      hintStyle: TextStyle(
-                       
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      height: height * .08,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                          color: Colors.black.withOpacity(0.3),
+                          width: 2,
+                        ),
+                      ),
+                      alignment: Alignment.bottomCenter,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: DropDownTextField(
+                          // initialValue: "name4",
+                          controller: itemNameController,
+                          textStyle: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: ConstantFonts.sfProRegular,
+                          ),
+                          clearOption: true,
+                          enableSearch: true,
+                          dropDownIconProperty: IconProperty(
+                            icon: Icons.arrow_drop_down,
+                            color: Colors.black,
+                          ),
+                          clearIconProperty: IconProperty(
+                            color: Colors.black,
+                            icon: Icons.clear,
+                          ),
+                          // dropdownColor: Colors.orange,
+                          searchDecoration: const InputDecoration(
+                            hintText: "Select Product",
+                            hintStyle: TextStyle(),
+                          ),
+
+                          listTextStyle: const TextStyle(
+                            fontSize: 16,
+                          ),
+                          validator: (value) {
+                            if (value == null) {
+                              return "Required Product Name";
+                            } else {
+                              return null;
+                            }
+                          },
+                          dropDownItemCount: 6,
+                          dropDownList: productList,
+                          onChanged: (val) {
+                            selectedItemName =
+                                itemNameController.dropDownValue?.name;
+                            getSelectedProductsDetails();
+                          },
+                        ),
                       ),
                     ),
-
-                    listTextStyle: TextStyle(
-                       
-                        fontSize: 16),
-                    validator: (value) {
-                      if (value == null) {
-                        return "Required Product Name";
-                      } else {
-                        return null;
-                      }
-                    },
-                    dropDownItemCount: 6,
-                    dropDownList: productList,
-                    onChanged: (val) {
-                      selectedItemName =
-                          itemNameController.dropDownValue?.name;
-                      getSelectedProductsDetails();
-                    },
-                  ),
-                ),
-              ),
             ],
           ),
 
@@ -314,8 +339,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                   textInputType: TextInputType.number,
                   textInputAction: TextInputAction.next,
                   hintName: 'Product Price',
-                  icon: const Icon(Icons.currency_rupee_rounded,
-                      color: Colors.black),
+                  icon: const Icon(
+                    Icons.currency_rupee_rounded,
+                    color: Colors.black,
+                  ),
                   maxLength: 20,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -345,7 +372,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                 ).textInputFiled(),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

@@ -9,6 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:install_plugin_v2/install_plugin_v2.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/home/custom_search_delegate.dart';
@@ -38,6 +39,7 @@ import 'api_operations.dart';
 //onyx variables
 final ValueNotifier<bool> isListening = ValueNotifier(false);
 final ValueNotifier<bool> isLoading = ValueNotifier(false);
+final ValueNotifier<bool> isPlayPause = ValueNotifier(false);
 final ValueNotifier<String> recognizedWords = ValueNotifier('');
 final ValueNotifier<String> replyFromOnyx = ValueNotifier('');
 
@@ -66,8 +68,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   //Onyx Screen contents
   final ApiOperations _apiOperations = ApiOperations();
   final SpeechToText _speechToText = SpeechToText();
+  final FlutterTts flutterTts = FlutterTts();
 
   void _initSpeech() async {
+    final context=this.context;
     await _speechToText.initialize(
       onStatus: (value) async {
         if (value == 'listening') {
@@ -77,19 +81,15 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
           if (recognizedWords.value.isNotEmpty && value == 'done') {
             isLoading.value = true;
-            final result = await _apiOperations.askOnyx(
-              command: recognizedWords.value.trim(),
-              context: context,
-            );
-            if (result.toString().isNotEmpty) {
-              replyFromOnyx.value = result.toString().trim();
-            }
+            await callOnyx(context,recognizedWords.value);
             isLoading.value = false;
           }
         }
       },
     );
   }
+
+
 
   void _startListening() async {
     await _speechToText.listen(onResult: _onSpeechResult);
@@ -116,6 +116,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     _setNotification();
     _setupFCMListener(context);
     _initSpeech();
+
     super.initState();
   }
 
