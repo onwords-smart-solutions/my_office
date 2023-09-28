@@ -31,7 +31,6 @@ import '../app_version/version.dart';
 import '../models/custom_punching_model.dart';
 import '../models/staff_access_model.dart';
 import '../models/staff_model.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'api_operations.dart';
@@ -41,7 +40,7 @@ final ValueNotifier<bool> isListening = ValueNotifier(false);
 final ValueNotifier<bool> isLoading = ValueNotifier(false);
 final ValueNotifier<bool> isPlayPause = ValueNotifier(false);
 final ValueNotifier<String> recognizedWords = ValueNotifier('');
-final ValueNotifier<String> replyFromOnyx = ValueNotifier('');
+final ValueNotifier<Map<String, dynamic>> replyFromOnyx = ValueNotifier({});
 
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({Key? key}) : super(key: key);
@@ -185,11 +184,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 body: _body(userProvider, size),
 
                 //Onyx button
+          floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
                 floatingActionButton: FloatingActionButton(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(100),
                   ),
-                  backgroundColor: Colors.deepPurple,
+                  backgroundColor: const Color(0xff793FDF),
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
