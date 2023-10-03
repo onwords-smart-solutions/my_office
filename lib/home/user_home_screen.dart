@@ -24,6 +24,8 @@ import 'package:my_office/util/custom_alerts.dart';
 import 'package:my_office/util/custom_snackbar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:porcupine_flutter/porcupine_error.dart';
+import 'package:porcupine_flutter/porcupine_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Account/account_screen.dart';
@@ -39,6 +41,7 @@ import 'api_operations.dart';
 final ValueNotifier<bool> isListening = ValueNotifier(false);
 final ValueNotifier<bool> isLoading = ValueNotifier(false);
 final ValueNotifier<bool> isPlayPause = ValueNotifier(false);
+final ValueNotifier<bool> hasNavigated = ValueNotifier(true);
 final ValueNotifier<String> recognizedWords = ValueNotifier('');
 final ValueNotifier<Map<String, dynamic>> replyFromOnyx = ValueNotifier({});
 
@@ -65,30 +68,33 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   final ValueNotifier<List<StaffModel>> _bdayStaffs = ValueNotifier([]);
 
   //Onyx Screen contents
-  final ApiOperations _apiOperations = ApiOperations();
   final SpeechToText _speechToText = SpeechToText();
   final FlutterTts flutterTts = FlutterTts();
 
   void _initSpeech() async {
-    final context=this.context;
+    final context = this.context;
     await _speechToText.initialize(
       onStatus: (value) async {
+        log('values are $value');
         if (value == 'listening') {
           isListening.value = true;
         } else {
           isListening.value = false;
-
           if (recognizedWords.value.isNotEmpty && value == 'done') {
             isLoading.value = true;
-            await callOnyx(context,recognizedWords.value);
+            await callOnyx(context, recognizedWords.value, initPicovoice);
             isLoading.value = false;
           }
+        }
+
+        if (recognizedWords.value.isEmpty && value == 'done') {
+          hasNavigated.value = true;
+          Navigator.pop(context);
+          initPicovoice();
         }
       },
     );
   }
-
-
 
   void _startListening() async {
     await _speechToText.listen(onResult: _onSpeechResult);
@@ -99,7 +105,80 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   }
 
   void _onSpeechResult(SpeechRecognitionResult result) {
+    log('words are ${result.recognizedWords}');
     recognizedWords.value = result.recognizedWords;
+  }
+
+  //Wake word contents
+  PorcupineManager? _porcupineManager;
+
+  Future<void> initPicovoice() async {
+    try {
+      _porcupineManager = await PorcupineManager.fromKeywordPaths(
+        "P83pzg2YjU/r/owHBvm0sSaJ69TsB6Ju8MZReSlaL42jOaL4Jptlbg==",
+        ['assets/wake_word/Onyx_en_android_v2_2_0.ppn'],
+        wakeWordCallback,
+      );
+      await startPorcupine();
+    } catch (err) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error from $err'),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.red,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+
+        ),
+      );
+    }
+  }
+
+  Future<void> startPorcupine() async {
+    try {
+      await _porcupineManager?.start();
+    } catch (e) {
+      print('Start exception: $e');
+    }
+  }
+
+  Future<void> stopPorcupine() async {
+    try {
+      await _porcupineManager?.stop();
+    } catch (e) {
+      print('Stop exception is $e');
+    }
+  }
+
+  Future<void> wakeWordCallback(int index) async {
+    print('Wake word detected in main screen ${hasNavigated.value}');
+    await stopPorcupine();
+    if (hasNavigated.value) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => Onyx(
+            onListen: _startListening,
+            onStop: _stopListening,
+          ),
+        ),
+      );
+    } else {
+      _startListening();
+    }
+    hasNavigated.value = false;
+  }
+
+  void requestMicrophonePermission() async {
+    var status = await Permission.microphone.status;
+    if (status.isDenied) {
+      status = await Permission.microphone.request();
+    }
+    if (status.isGranted) {
+      print('Microphone access granted');
+    } else {
+      print('Microphone access denied');
+    }
   }
 
   @override
@@ -115,7 +194,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     _setNotification();
     _setupFCMListener(context);
     _initSpeech();
-
+    initPicovoice();
     super.initState();
   }
 
@@ -183,28 +262,29 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 ),
                 body: _body(userProvider, size),
 
-                //Onyx button
-          floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
-                floatingActionButton: FloatingActionButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  backgroundColor: const Color(0xff793FDF),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => Onyx(
-                          onListen: _startListening,
-                          onStop: _stopListening,
-                        ),
-                      ),
-                    );
-                  },
-                  child: Image.asset(
-                    'assets/onyx_thala.png',
-                    scale: 1.7,
-                  ),
-                ),
+                // Onyx button
+                // floatingActionButtonAnimator:
+                //     FloatingActionButtonAnimator.scaling,
+                // floatingActionButton: FloatingActionButton(
+                //   shape: RoundedRectangleBorder(
+                //     borderRadius: BorderRadius.circular(100),
+                //   ),
+                //   backgroundColor: const Color(0xff793FDF),
+                //   onPressed: () {
+                //     Navigator.of(context).push(
+                //       MaterialPageRoute(
+                //         builder: (_) => Onyx(
+                //           onListen: _startListening,
+                //           onStop: _stopListening,
+                //         ),
+                //       ),
+                //     );
+                //   },
+                //   child: Image.asset(
+                //     'assets/onyx_thala.png',
+                //     scale: 1.7,
+                //   ),
+                // ),
               );
       },
     );
@@ -217,76 +297,79 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         //search bar
         _search(size, userProvider),
         Expanded(
-          child: ListView(
-            children: [
-              //info
-              ValueListenableBuilder(
-                valueListenable: _bdayStaffs,
-                builder: (ctx, birthdayList, child) {
-                  return ValueListenableBuilder(
-                    valueListenable: _entryDetail,
-                    builder: (ctx, staffEntry, child) {
-                      return ValueListenableBuilder(
-                        valueListenable: _endTime,
-                        builder: (ctx, endTime, child) {
-                          return InfoItem(
-                            staff: userProvider.user!,
-                            todayBirthdayList: birthdayList,
-                            quoteIndex: _motivationIndex,
-                            staffEntryDetail: staffEntry,
-                            endTime: endTime,
-                          );
-                        },
-                      );
-                    },
-                  );
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: Text(
-                  'Utilities',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 20.0,
-                    color: Colors.black38.withOpacity(.7),
-                  ),
-                ),
-              ),
-              ValueListenableBuilder(
-                valueListenable: _staffAccess,
-                builder: (ctx, staffAccess, child) {
-                  return staffAccess.isEmpty
-                      ? Lottie.asset(
-                          'assets/animations/new_loading.json',
-                          height: size.height * .6,
-                        )
-                      : Consumer<UserProvider>(
-                          builder: (ctx, userProvider, child) {
-                            return GridView.builder(
-                              itemCount: staffAccess.length,
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              padding: const EdgeInsets.all(10.0),
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                crossAxisSpacing: 15.0,
-                                mainAxisSpacing: 30,
-                              ),
-                              itemBuilder: (BuildContext context, int index) {
-                                return HomeMenuItem(
-                                  title: staffAccess[index].title,
-                                  image: staffAccess[index].image,
-                                  staff: userProvider.user!,
-                                );
-                              },
+          child: RefreshIndicator(
+            onRefresh: initPicovoice,
+            child: ListView(
+              children: [
+                //info
+                ValueListenableBuilder(
+                  valueListenable: _bdayStaffs,
+                  builder: (ctx, birthdayList, child) {
+                    return ValueListenableBuilder(
+                      valueListenable: _entryDetail,
+                      builder: (ctx, staffEntry, child) {
+                        return ValueListenableBuilder(
+                          valueListenable: _endTime,
+                          builder: (ctx, endTime, child) {
+                            return InfoItem(
+                              staff: userProvider.user!,
+                              todayBirthdayList: birthdayList,
+                              quoteIndex: _motivationIndex,
+                              staffEntryDetail: staffEntry,
+                              endTime: endTime,
                             );
                           },
                         );
-                },
-              ),
-            ],
+                      },
+                    );
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Text(
+                    'Utilities',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20.0,
+                      color: Colors.black38.withOpacity(.7),
+                    ),
+                  ),
+                ),
+                ValueListenableBuilder(
+                  valueListenable: _staffAccess,
+                  builder: (ctx, staffAccess, child) {
+                    return staffAccess.isEmpty
+                        ? Lottie.asset(
+                            'assets/animations/new_loading.json',
+                            height: size.height * .6,
+                          )
+                        : Consumer<UserProvider>(
+                            builder: (ctx, userProvider, child) {
+                              return GridView.builder(
+                                itemCount: staffAccess.length,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                padding: const EdgeInsets.all(10.0),
+                                gridDelegate:
+                                    const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  crossAxisSpacing: 15.0,
+                                  mainAxisSpacing: 30,
+                                ),
+                                itemBuilder: (BuildContext context, int index) {
+                                  return HomeMenuItem(
+                                    title: staffAccess[index].title,
+                                    image: staffAccess[index].image,
+                                    staff: userProvider.user!,
+                                  );
+                                },
+                              );
+                            },
+                          );
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -622,9 +705,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     _entryDetail.dispose();
     _bdayStaffs.dispose();
     subscription.cancel();
-    recognizedWords.dispose();
-    isListening.dispose();
-    replyFromOnyx.dispose();
     super.dispose();
   }
 

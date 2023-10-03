@@ -2,7 +2,7 @@ name: my_office
 description: A new Flutter project.
 publish_to: 'none'
 
-version: 2.0.5+75
+version: 2.0.7+77
 
 environment:
   sdk: '>=2.18.6 <3.0.0'
@@ -75,6 +75,8 @@ dependencies:
   loading_animation_widget: ^1.2.0+4
   flutter_tts: ^3.8.3
   porcupine_flutter: ^2.2.2
+  flutter_voice_processor: ^1.1.0
+  flutter_snowboy: ^0.1.2+1
 
 dev_dependencies:
   flutter_test:
@@ -89,6 +91,7 @@ flutter:
     - assets/
     - assets/animations/
     - assets/visit/
+    - assets/wake_word/Onyx_en_android_v2_2_0.ppn
   fonts:
     - family: sfPro
       fonts:

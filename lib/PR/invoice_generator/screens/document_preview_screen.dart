@@ -692,7 +692,6 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                   "Document Details\n",
                   style: TextStyle(
                       color: ConstantColor.backgroundColor,
-                     
                       fontSize: 16,),
                 ),
                 content: Material(
@@ -706,7 +705,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                         textInputAction: TextInputAction.done,
                         hintName: 'File Name',
                         icon: const Icon(Icons.file_present),
-                        maxLength: 10,
+                        maxLength: 30,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'File Name Required';

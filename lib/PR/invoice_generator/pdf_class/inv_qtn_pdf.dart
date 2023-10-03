@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
@@ -96,48 +97,6 @@ class InvAndQtnPdf {
         footer: (context) => buildFooter(clientModel, needGst),
       ),
     );
-
-    // MultiPage(
-    //   pageFormat: PdfPageFormat.a4,
-    //   header: (context) => buildLogo(
-    //     assetImage,
-    //     clientModel,
-    //   ),
-    //   build: (context) => [
-    //     SizedBox(height: 2 * PdfPageFormat.mm),
-    //     Row(
-    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //       crossAxisAlignment: CrossAxisAlignment.start,
-    //       children: [
-    //         supplierDetails(),
-    //         SizedBox(width: 30 * PdfPageFormat.mm),
-    //         customerDetails(clientModel),
-    //       ],
-    //     ),
-    //     SizedBox(height: 3 * PdfPageFormat.mm),
-    //     productTable(productDetailsModel),
-    //     Divider(),
-    //     totalAmountDetails(
-    //       total,
-    //       subTotal,
-    //       cgst,
-    //       sgst,
-    //       discount,
-    //       advance,
-    //       grandTotal,
-    //       amountToPay,
-    //       needGst,
-    //       percentage,
-    //       qrImage,
-    //       paidImage,
-    //       clientModel,
-    //     ),
-    //     SizedBox(height: 0.3 * PdfPageFormat.cm),
-    //     Divider(),
-    //     buildTermsAndConditions(clientModel),
-    //   ],
-    //   footer: (context) => buildFooter(clientModel, needGst),
-    // ),
     return MainPDFClass.saveDocument(
       fileName: '${clientModel.name}.${clientModel.docType}.pdf',
       pdf: pdf,

@@ -758,6 +758,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
+  flutter_snowboy:
+    dependency: "direct main"
+    description:
+      name: flutter_snowboy
+      sha256: e920c7350f23d06a4d83c570196850d89d78234f20b072f0ad480482a6da2e9d
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.2+1"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -780,7 +788,7 @@ packages:
     source: hosted
     version: "3.8.3"
   flutter_voice_processor:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_voice_processor
       sha256: fb511a2f0ca9540c4b7c6715515389d27b5bbd332138ab3a300078fb243a0caf
