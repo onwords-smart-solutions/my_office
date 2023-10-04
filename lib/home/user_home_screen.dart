@@ -82,7 +82,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           isListening.value = false;
           if (recognizedWords.value.isNotEmpty && value == 'done') {
             isLoading.value = true;
-            await callOnyx(context, recognizedWords.value, initPicovoice);
+            await callOnyx(context, recognizedWords.value,);
             isLoading.value = false;
           }
         }
@@ -115,8 +115,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   Future<void> initPicovoice() async {
     try {
       _porcupineManager = await PorcupineManager.fromKeywordPaths(
-        "P83pzg2YjU/r/owHBvm0sSaJ69TsB6Ju8MZReSlaL42jOaL4Jptlbg==",
+        "RcjpX2kR+cxVxE+gWeNky6I6iv3eFasLOD5reWH85vX0PKjKQX0NTQ==",
         ['assets/wake_word/Onyx_en_android_v2_2_0.ppn'],
+        sensitivities: [0.3],
         wakeWordCallback,
       );
       await startPorcupine();
@@ -129,7 +130,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-
         ),
       );
     }
@@ -194,7 +194,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     _setNotification();
     _setupFCMListener(context);
     _initSpeech();
-    initPicovoice();
+    // initPicovoice();
     super.initState();
   }
 
@@ -263,28 +263,28 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 body: _body(userProvider, size),
 
                 // Onyx button
-                // floatingActionButtonAnimator:
-                //     FloatingActionButtonAnimator.scaling,
-                // floatingActionButton: FloatingActionButton(
-                //   shape: RoundedRectangleBorder(
-                //     borderRadius: BorderRadius.circular(100),
-                //   ),
-                //   backgroundColor: const Color(0xff793FDF),
-                //   onPressed: () {
-                //     Navigator.of(context).push(
-                //       MaterialPageRoute(
-                //         builder: (_) => Onyx(
-                //           onListen: _startListening,
-                //           onStop: _stopListening,
-                //         ),
-                //       ),
-                //     );
-                //   },
-                //   child: Image.asset(
-                //     'assets/onyx_thala.png',
-                //     scale: 1.7,
-                //   ),
-                // ),
+                floatingActionButtonAnimator:
+                    FloatingActionButtonAnimator.scaling,
+                floatingActionButton: FloatingActionButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  backgroundColor: const Color(0xff793FDF),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => Onyx(
+                          onListen: _startListening,
+                          onStop: _stopListening,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Image.asset(
+                    'assets/onyx_thala.png',
+                    scale: 1.7,
+                  ),
+                ),
               );
       },
     );
@@ -297,79 +297,76 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         //search bar
         _search(size, userProvider),
         Expanded(
-          child: RefreshIndicator(
-            onRefresh: initPicovoice,
-            child: ListView(
-              children: [
-                //info
-                ValueListenableBuilder(
-                  valueListenable: _bdayStaffs,
-                  builder: (ctx, birthdayList, child) {
-                    return ValueListenableBuilder(
-                      valueListenable: _entryDetail,
-                      builder: (ctx, staffEntry, child) {
-                        return ValueListenableBuilder(
-                          valueListenable: _endTime,
-                          builder: (ctx, endTime, child) {
-                            return InfoItem(
-                              staff: userProvider.user!,
-                              todayBirthdayList: birthdayList,
-                              quoteIndex: _motivationIndex,
-                              staffEntryDetail: staffEntry,
-                              endTime: endTime,
+          child: ListView(
+            children: [
+              //info
+              ValueListenableBuilder(
+                valueListenable: _bdayStaffs,
+                builder: (ctx, birthdayList, child) {
+                  return ValueListenableBuilder(
+                    valueListenable: _entryDetail,
+                    builder: (ctx, staffEntry, child) {
+                      return ValueListenableBuilder(
+                        valueListenable: _endTime,
+                        builder: (ctx, endTime, child) {
+                          return InfoItem(
+                            staff: userProvider.user!,
+                            todayBirthdayList: birthdayList,
+                            quoteIndex: _motivationIndex,
+                            staffEntryDetail: staffEntry,
+                            endTime: endTime,
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: Text(
+                  'Utilities',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 20.0,
+                    color: Colors.black38.withOpacity(.7),
+                  ),
+                ),
+              ),
+              ValueListenableBuilder(
+                valueListenable: _staffAccess,
+                builder: (ctx, staffAccess, child) {
+                  return staffAccess.isEmpty
+                      ? Lottie.asset(
+                          'assets/animations/new_loading.json',
+                          height: size.height * .6,
+                        )
+                      : Consumer<UserProvider>(
+                          builder: (ctx, userProvider, child) {
+                            return GridView.builder(
+                              itemCount: staffAccess.length,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              padding: const EdgeInsets.all(10.0),
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                crossAxisSpacing: 15.0,
+                                mainAxisSpacing: 30,
+                              ),
+                              itemBuilder: (BuildContext context, int index) {
+                                return HomeMenuItem(
+                                  title: staffAccess[index].title,
+                                  image: staffAccess[index].image,
+                                  staff: userProvider.user!,
+                                );
+                              },
                             );
                           },
                         );
-                      },
-                    );
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Text(
-                    'Utilities',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 20.0,
-                      color: Colors.black38.withOpacity(.7),
-                    ),
-                  ),
-                ),
-                ValueListenableBuilder(
-                  valueListenable: _staffAccess,
-                  builder: (ctx, staffAccess, child) {
-                    return staffAccess.isEmpty
-                        ? Lottie.asset(
-                            'assets/animations/new_loading.json',
-                            height: size.height * .6,
-                          )
-                        : Consumer<UserProvider>(
-                            builder: (ctx, userProvider, child) {
-                              return GridView.builder(
-                                itemCount: staffAccess.length,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                padding: const EdgeInsets.all(10.0),
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 3,
-                                  crossAxisSpacing: 15.0,
-                                  mainAxisSpacing: 30,
-                                ),
-                                itemBuilder: (BuildContext context, int index) {
-                                  return HomeMenuItem(
-                                    title: staffAccess[index].title,
-                                    image: staffAccess[index].image,
-                                    staff: userProvider.user!,
-                                  );
-                                },
-                              );
-                            },
-                          );
-                  },
-                ),
-              ],
-            ),
+                },
+              ),
+            ],
           ),
         ),
       ],

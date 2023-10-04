@@ -80,7 +80,7 @@ class HomeViewModel {
   }
 
   Future<List<StaffAccessModel>> getStaffAccess(
-      {required StaffModel staff}) async {
+      {required StaffModel staff,}) async {
     List<StaffAccessModel> allAccess = [];
 
     final managementList = await getManagementList();
@@ -186,7 +186,7 @@ class HomeViewModel {
   }
 
   Future<CustomPunchModel?> _checkTime(
-      String staffId, String name, String department) async {
+      String staffId, String name, String department,) async {
     CustomPunchModel? punchDetail;
     final today = DateTime.now();
     bool isProxy = false;
@@ -281,12 +281,12 @@ class HomeViewModel {
         department: department,
         checkInTime: checkInTime,
         checkOutTime: checkOutTime,
-        isProxy: isProxy);
+        isProxy: isProxy,);
     return punchDetail;
   }
 
   Future<CustomPunchModel?> _checkProxyEntry(
-      String staffId, String dateFormat, String department) async {
+      String staffId, String dateFormat, String department,) async {
     CustomPunchModel? punchDetail;
     await FirebaseDatabase.instance
         .ref('proxy_attendance/$staffId/$dateFormat')
@@ -311,11 +311,11 @@ class HomeViewModel {
             checkInTime: checkInDetail.isEmpty
                 ? null
                 : DateTime.fromMillisecondsSinceEpoch(
-                    int.parse(checkInDetail['Time'].toString())),
+                    int.parse(checkInDetail['Time'].toString()),),
             checkOutTime: checkOutDetail.isEmpty
                 ? null
                 : DateTime.fromMillisecondsSinceEpoch(
-                    int.parse(checkOutDetail['Time'].toString())),
+                    int.parse(checkOutDetail['Time'].toString()),),
             checkInProxyBy: checkInDetail['Proxy'].toString(),
             checkInReason: checkInDetail['Reason'].toString(),
             checkOutProxyBy:
@@ -323,7 +323,7 @@ class HomeViewModel {
             checkOutReason: checkOutDetail.isEmpty
                 ? ''
                 : checkOutDetail['Reason'].toString(),
-            isProxy: true);
+            isProxy: true,);
       }
     });
     return punchDetail;
