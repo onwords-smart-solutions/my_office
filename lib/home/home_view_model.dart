@@ -1,6 +1,5 @@
 import 'dart:developer' as dev;
 import 'dart:math';
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
@@ -186,144 +185,95 @@ class HomeViewModel {
   }
 
   Future<CustomPunchModel?> _checkTime(
-      String staffId, String name, String department,) async {
+      String staffId, String name, String department,)
+  async {
     CustomPunchModel? punchDetail;
-    final today = DateTime.now();
     bool isProxy = false;
     DateTime? checkInTime;
     DateTime? checkOutTime;
+    String proxyInBy = '';
+    String proxyOutBy = '';
+    String proxyInReason = '';
+    String proxyOutReason = '';
 
-    String dateFormat = DateFormat('yyyy-MM-dd').format(today);
+    String yearFormat = DateFormat('yyyy').format(DateTime.now());
+    String monthFormat = DateFormat('MM').format(DateTime.now());
+    String dateFormat = DateFormat('dd').format(DateTime.now());
     await FirebaseDatabase.instance
-        .ref('fingerPrint/$staffId/$dateFormat')
+        .ref('attendance/$yearFormat/$monthFormat/$dateFormat/$staffId')
         .once()
         .then((value) async {
       if (value.snapshot.exists) {
-        List<DateTime> allPunchedTime = [];
-        for (var tapTime in value.snapshot.children) {
-          String? tapTimeString = tapTime.key;
-          if (tapTimeString != null) {
-            //spitting time based on colon
-            final timeList = tapTimeString.split(':');
+        final attendanceData = value.snapshot.value as Map<Object?, Object?>;
+        final checkIn = attendanceData['check_in'];
+        final checkOut = attendanceData['check_out'];
 
-            //converting splitted time into datetime format
-            final tapTimeDateFormat = DateTime(
-              today.year,
-              today.month,
-              today.day,
-              int.parse(timeList[0]),
-              int.parse(timeList[1]),
-              int.parse(timeList[2]),
-            );
-            allPunchedTime.add(tapTimeDateFormat);
+        //check in time data
+        if (checkIn != null) {
+          checkInTime = DateTime(
+            DateTime.now().year,
+            DateTime.now().month,
+            DateTime.now().day,
+            int.parse(
+              checkIn.toString().split(':')[0],
+            ),
+            int.parse(
+              checkIn.toString().split(':')[1],
+            ),
+          );
+          try {
+
+            final proxyInByName =
+            attendanceData['proxy_in'] as Map<Object?, Object?>;
+            proxyInBy = proxyInByName['proxy_by'].toString();
+            final proxyInByReason =
+            attendanceData['proxy_in'] as Map<Object?, Object?>;
+            proxyInReason = proxyInByReason['reason'].toString();
+            isProxy=true;
+          } catch (e) {
+            dev.log('Check in exception is $e');
           }
         }
-        // checking for check in and check out time
-        if (allPunchedTime.isNotEmpty) {
-          allPunchedTime.sort();
-          checkInTime = allPunchedTime.first;
-          if (allPunchedTime.length > 1) {
-            if (allPunchedTime.last.difference(checkInTime!).inMinutes > 5) {
-              checkOutTime = allPunchedTime.last;
-            }
+
+        //check out time data
+        if (checkOut != null) {
+          checkOutTime = DateTime(
+            DateTime.now().year,
+            DateTime.now().month,
+            DateTime.now().day,
+            int.parse(
+              checkOut.toString().split(':')[0],
+            ),
+            int.parse(
+              checkOut.toString().split(':')[1],
+            ),
+          );
+          try {
+            final proxyOutByName =
+            attendanceData['proxy_out'] as Map<Object?, Object?>;
+            proxyOutBy = proxyOutByName['proxy_by'].toString();
+            final proxyOutByReason =
+            attendanceData['proxy_out'] as Map<Object?, Object?>;
+            proxyOutReason = proxyOutByReason['reason'].toString();
+            isProxy=true;
+          } catch (e) {
+            dev.log('Check out exception is $e');
           }
-        }
-      }
-    });
-    //check in proxy attendance
-    final punchDetailFromProxy =
-        await _checkProxyEntry(staffId, dateFormat, department);
-
-    if (punchDetailFromProxy != null) {
-      // check in time
-      if (punchDetailFromProxy.checkInTime != null) {
-        if (checkInTime == null) {
-          checkInTime = punchDetailFromProxy.checkInTime;
-          isProxy = true;
-        } else {
-          final check =
-              checkInTime!.compareTo(punchDetailFromProxy.checkInTime!);
-          if (check == 1) {
-            if (checkOutTime == null) {
-              if (checkInTime!
-                      .difference(punchDetailFromProxy.checkInTime!)
-                      .inMinutes >
-                  5) {
-                checkOutTime = checkInTime;
-              }
-            }
-
-            checkInTime = punchDetailFromProxy.checkInTime!;
-            isProxy = true;
-          }
-        }
-      }
-
-      //check out time
-      if (punchDetailFromProxy.checkOutTime != null) {
-        if (checkOutTime == null) {
-          checkOutTime = punchDetailFromProxy.checkOutTime;
-          isProxy = true;
-        } else {
-          final check =
-              checkOutTime!.compareTo(punchDetailFromProxy.checkOutTime!);
-          if (check == -1) {
-            checkOutTime = punchDetailFromProxy.checkOutTime!;
-            isProxy = true;
-          }
-        }
-      }
-    }
-
-    punchDetail = CustomPunchModel(
-        name: name,
-        staffId: staffId,
-        department: department,
-        checkInTime: checkInTime,
-        checkOutTime: checkOutTime,
-        isProxy: isProxy,);
-    return punchDetail;
-  }
-
-  Future<CustomPunchModel?> _checkProxyEntry(
-      String staffId, String dateFormat, String department,) async {
-    CustomPunchModel? punchDetail;
-    await FirebaseDatabase.instance
-        .ref('proxy_attendance/$staffId/$dateFormat')
-        .once()
-        .then((proxy) async {
-      if (proxy.snapshot.exists) {
-        Map<Object?, Object?> checkInDetail = {};
-        Map<Object?, Object?> checkOutDetail = {};
-        if (proxy.snapshot.child('Check-in').exists) {
-          checkInDetail =
-              proxy.snapshot.child('Check-in').value as Map<Object?, Object?>;
-        }
-        if (proxy.snapshot.child('Check-out').exists) {
-          checkOutDetail =
-              proxy.snapshot.child('Check-out').value as Map<Object?, Object?>;
         }
 
         punchDetail = CustomPunchModel(
-            name: checkInDetail['Name'].toString(),
-            staffId: staffId,
-            department: department,
-            checkInTime: checkInDetail.isEmpty
-                ? null
-                : DateTime.fromMillisecondsSinceEpoch(
-                    int.parse(checkInDetail['Time'].toString()),),
-            checkOutTime: checkOutDetail.isEmpty
-                ? null
-                : DateTime.fromMillisecondsSinceEpoch(
-                    int.parse(checkOutDetail['Time'].toString()),),
-            checkInProxyBy: checkInDetail['Proxy'].toString(),
-            checkInReason: checkInDetail['Reason'].toString(),
-            checkOutProxyBy:
-                checkOutDetail.isEmpty ? '' : checkOutDetail['Name'].toString(),
-            checkOutReason: checkOutDetail.isEmpty
-                ? ''
-                : checkOutDetail['Reason'].toString(),
-            isProxy: true,);
+          name: name,
+          staffId: staffId,
+          department: department,
+          checkInTime: checkInTime,
+          checkOutTime: checkOutTime,
+          checkInProxyBy: proxyInBy,
+          checkInReason: proxyInReason,
+          checkOutProxyBy: proxyOutBy,
+          checkOutReason: proxyOutReason,
+          isProxy: isProxy,
+        );
+
       }
     });
     return punchDetail;
