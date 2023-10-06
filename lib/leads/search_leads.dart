@@ -257,7 +257,6 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
     searchTextController = TextEditingController();
     getCustomerFromFirebase();
     getPRStaffNames();
-
     super.initState();
   }
 

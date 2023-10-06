@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 
 import '../Constant/fonts/constant_font.dart';
@@ -33,8 +34,8 @@ class IntroductionScreen extends StatelessWidget {
     return Container(
       height: height * 0.45,
       width: double.infinity,
-      child: Image.asset(
-        'assets/intro_pic.jpg',
+      child: SvgPicture.asset(
+        'assets/intro_pic.svg',
       ),
     );
   }

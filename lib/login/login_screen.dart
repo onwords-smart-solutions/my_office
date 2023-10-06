@@ -409,8 +409,8 @@ class _LoginScreenState extends State<LoginScreen> {
           email: data['email'].toString(),
           department: data['department'].toString(),
           profilePic: data['profileImage'].toString(),
-          uniqueId: ''
-        );
+          uniqueId: '',
+          phoneNumber: data['phoneNumber'] == null ? 0 : int.parse(data['phoneNumber'].toString()),         );
         await userProvider.addUser(staffInfo);
         // Moving to home-screen
         navigator.pushAndRemoveUntil(
