@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -404,13 +406,13 @@ class _LoginScreenState extends State<LoginScreen> {
         Map<Object?, Object?> data = details.snapshot.value as Map<Object?, Object?>;
         final staffInfo = StaffModel(
           dob: data['dob'] == null ? 0 : int.parse(data['dob'].toString()),
-          phoneNumber: data['phoneNumber'] == null ? 0 : int.parse(data['phoneNumber'].toString()), 
+          phoneNumber: data['mobile'] == null ? 0 : int.parse(data['mobile'].toString()),
           name: data['name'].toString(),
           uid: userCredential.user!.uid,
           email: data['email'].toString(),
           department: data['department'].toString(),
           profilePic: data['profileImage'].toString(),
-          uniqueId: ''
+          uniqueId: '',
         );
         await userProvider.addUser(staffInfo);
         // Moving to home-screen
