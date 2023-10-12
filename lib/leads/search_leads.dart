@@ -32,7 +32,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
   List<Map<Object?, Object?>> allCustomer = [];
   List<Map<Object?, Object?>> currentCustomerList = [];
   List<Map<Object?, Object?>> searchCustomerInfo = [];
-  final ScrollController _scrolls = ScrollController();
+  bool isLongPressed = false;
 
   //search method
   void searchUser(String query) {
@@ -89,13 +89,14 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
       }
 
       getCustomerDetail(
-          createdBy: widget.selectedStaff != null
-              ? widget.selectedStaff!
-              : selectedStaff == ''
-                  ? widget.staffInfo.name
-                  : selectedStaff,
-          sortChoice: sortOption,
-          ascending: isAscending);
+        createdBy: widget.selectedStaff != null
+            ? widget.selectedStaff!
+            : selectedStaff == ''
+                ? widget.staffInfo.name
+                : selectedStaff,
+        sortChoice: sortOption,
+        ascending: isAscending,
+      );
       //For disabling loading screen
       if (!mounted) return;
       setState(() {
@@ -114,10 +115,11 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
         .inDays;
   }
 
-  void getCustomerDetail(
-      {required String createdBy,
-      required String sortChoice,
-      required bool ascending}) {
+  void getCustomerDetail({
+    required String createdBy,
+    required String sortChoice,
+    required bool ascending,
+  }) {
     bool isSame = false;
     if (createdBy.toLowerCase() ==
         widget.staffInfo.name.toString().toLowerCase()) {
@@ -222,13 +224,17 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
 
     //Sorting list based on created date
     if (ascending) {
-      currentCustomerList.sort((a, b) => (a['created_date'])
-          .toString()
-          .compareTo(b['created_date'].toString()));
+      currentCustomerList.sort(
+        (a, b) => (a['created_date'])
+            .toString()
+            .compareTo(b['created_date'].toString()),
+      );
     } else {
-      currentCustomerList.sort((a, b) => (b['created_date'])
-          .toString()
-          .compareTo(a['created_date'].toString()));
+      currentCustomerList.sort(
+        (a, b) => (b['created_date'])
+            .toString()
+            .compareTo(a['created_date'].toString()),
+      );
     }
 
     //For disabling loading screen
@@ -270,9 +276,10 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
   @override
   Widget build(BuildContext context) {
     return MainTemplate(
-        subtitle: 'Search leads here!!',
-        templateBody: buildScreen(),
-        bgColor: ConstantColor.background1Color);
+      subtitle: 'Search leads here!!',
+      templateBody: buildScreen(),
+      bgColor: ConstantColor.background1Color,
+    );
   }
 
   Widget buildScreen() {
@@ -282,11 +289,12 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
       children: [
         buildSearchBar(width: width),
         Container(
-            height: height * .05,
-            width: width,
-            alignment: AlignmentDirectional.center,
-            padding: const EdgeInsets.symmetric(vertical: 5.0),
-            child: buildSortHint()),
+          height: height * .05,
+          width: width,
+          alignment: AlignmentDirectional.center,
+          padding: const EdgeInsets.symmetric(vertical: 5.0),
+          child: buildSortHint(),
+        ),
         if (selectedStaff != '') buildFilterHint(),
         Expanded(child: buildCustomerList()),
       ],
@@ -301,9 +309,10 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
         height: 40.0,
         padding: const EdgeInsets.only(left: 10.0),
         decoration: BoxDecoration(
-            color: ConstantColor.background1Color,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: const Color(0xffA4A1A6), width: 1.0)),
+          color: ConstantColor.background1Color,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: const Color(0xffA4A1A6), width: 1.0),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -325,10 +334,10 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                 onChanged: (value) {
                   searchUser(value.toString());
                 },
-                style: TextStyle(
-                     
-                    fontSize: 15,
-                    color: Colors.black),
+                style: const TextStyle(
+                  fontSize: 15,
+                  color: Colors.black,
+                ),
               ),
             ),
             const VerticalDivider(
@@ -342,11 +351,12 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
             IconButton(
               onPressed: () {
                 getCustomerDetail(
-                    createdBy: selectedStaff == ''
-                        ? widget.staffInfo.name
-                        : selectedStaff,
-                    sortChoice: sortOption,
-                    ascending: !isAscending);
+                  createdBy: selectedStaff == ''
+                      ? widget.staffInfo.name
+                      : selectedStaff,
+                  sortChoice: sortOption,
+                  ascending: !isAscending,
+                );
               },
               icon: Icon(
                 isAscending
@@ -365,47 +375,51 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
 
   Widget buildDropDown() {
     return PopupMenuButton(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-        position: PopupMenuPosition.under,
-        elevation: 10.0,
-        itemBuilder: (ctx) => List.generate(
-              staffs.length,
-              (index) {
-                if (staffs[index] == 'All') {
-                  return PopupMenuItem(
-                    child: Text(
-                      staffs[index],
-                      style: TextStyle(
-                            fontSize: 15),
-                    ),
-                    onTap: () {
-                      getCustomerDetail(
-                          createdBy: 'All',
-                          sortChoice: sortOption,
-                          ascending: isAscending);
-                    },
-                  );
-                }
-                return PopupMenuItem(
-                  child: Text(
-                    staffs[index],
-                    style: TextStyle(
-                          fontSize: 15),
-                  ),
-                  onTap: () {
-                    getCustomerDetail(
-                        createdBy: staffs[index],
-                        sortChoice: sortOption,
-                        ascending: isAscending);
-                  },
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      position: PopupMenuPosition.under,
+      elevation: 10.0,
+      itemBuilder: (ctx) => List.generate(
+        staffs.length,
+        (index) {
+          if (staffs[index] == 'All') {
+            return PopupMenuItem(
+              child: Text(
+                staffs[index],
+                style: const TextStyle(
+                  fontSize: 15,
+                ),
+              ),
+              onTap: () {
+                getCustomerDetail(
+                  createdBy: 'All',
+                  sortChoice: sortOption,
+                  ascending: isAscending,
                 );
               },
+            );
+          }
+          return PopupMenuItem(
+            child: Text(
+              staffs[index],
+              style: const TextStyle(
+                fontSize: 15,
+              ),
             ),
-        icon: Image.asset(
-          'assets/filter.png',
-          scale: 4.5,
-        ));
+            onTap: () {
+              getCustomerDetail(
+                createdBy: staffs[index],
+                sortChoice: sortOption,
+                ascending: isAscending,
+              );
+            },
+          );
+        },
+      ),
+      icon: Image.asset(
+        'assets/filter.png',
+        scale: 4.5,
+      ),
+    );
   }
 
   Widget buildSortDropDown() {
@@ -419,15 +433,15 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
           return PopupMenuItem(
             child: Text(
               sortList[index],
-              style: TextStyle( ),
+              style: const TextStyle(),
             ),
             onTap: () {
               getCustomerDetail(
-                  createdBy: selectedStaff == ''
-                      ? widget.staffInfo.name
-                      : selectedStaff,
-                  sortChoice: sortList[index],
-                  ascending: isAscending);
+                createdBy:
+                    selectedStaff == '' ? widget.staffInfo.name : selectedStaff,
+                sortChoice: sortList[index],
+                ascending: isAscending,
+              );
             },
           );
         },
@@ -454,18 +468,19 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
             ),
             child: Text(
               'Leads of $selectedStaff',
-              style: TextStyle(
-                   
-                  fontSize: 14.0,
-                  color: Color(0xffF1F2F8)),
+              style: const TextStyle(
+                fontSize: 14.0,
+                color: Color(0xffF1F2F8),
+              ),
             ),
           ),
           IconButton(
             onPressed: () {
               getCustomerDetail(
-                  createdBy: widget.staffInfo.name,
-                  sortChoice: sortOption,
-                  ascending: isAscending);
+                createdBy: widget.staffInfo.name,
+                sortChoice: sortOption,
+                ascending: isAscending,
+              );
             },
             icon: const Icon(
               CupertinoIcons.xmark_octagon_fill,
@@ -480,46 +495,49 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
 
   Widget buildSortHint() {
     return ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: sortList.length,
-        physics: const BouncingScrollPhysics(),
-        itemBuilder: (ctx, i) {
-          Color containerColor = sortOption == sortList[i]
-              ? const Color(0xff8355B7)
-              : const Color(0xffF1F2F8);
-          Color textColor = sortOption == sortList[i]
-              ? Colors.white
-              : const Color(0xff8355B7);
+      scrollDirection: Axis.horizontal,
+      itemCount: sortList.length,
+      physics: const BouncingScrollPhysics(),
+      itemBuilder: (ctx, i) {
+        Color containerColor = sortOption == sortList[i]
+            ? const Color(0xff8355B7)
+            : const Color(0xffF1F2F8);
+        Color textColor =
+            sortOption == sortList[i] ? Colors.white : const Color(0xff8355B7);
 
-          return GestureDetector(
-            onTap: () {
-              getCustomerDetail(
-                  createdBy: selectedStaff == ''
-                      ? widget.staffInfo.name
-                      : selectedStaff,
-                  sortChoice: sortOption == sortList[i] ? '' : sortList[i],
-                  ascending: isAscending);
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 15.0),
-              margin: const EdgeInsets.symmetric(horizontal: 5.0),
-              decoration: BoxDecoration(
-                  color: containerColor,
-                  borderRadius: BorderRadius.circular(50.0),
-                  border:
-                      Border.all(width: 1.0, color: const Color(0xff8355B7))),
-              child: Center(
-                child: Text(
-                  sortList[i],
-                  style: TextStyle(
-                     
-                      fontSize: 13.0,
-                      color: textColor),
+        return GestureDetector(
+          onTap: () {
+            setState(() {
+              isLongPressed = true;
+            });
+            isLongPressed ? Navigator.of(context).pop :getCustomerDetail(
+              createdBy:
+                  selectedStaff == '' ? widget.staffInfo.name : selectedStaff,
+              sortChoice: sortOption == sortList[i] ? '' : sortList[i],
+              ascending: isAscending,
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            margin: const EdgeInsets.symmetric(horizontal: 5.0),
+            decoration: BoxDecoration(
+              color: containerColor,
+              borderRadius: BorderRadius.circular(50.0),
+              border: Border.all(width: 1.0, color: const Color(0xff8355B7)),
+            ),
+            child: Center(
+              child: Text(
+                sortList[i],
+                style: TextStyle(
+                  fontSize: 13.0,
+                  color: textColor,
                 ),
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 
   Widget buildCustomerList() {
@@ -532,7 +550,9 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                       Text(
                         'Total Count :${currentCustomerList.length}',
                         style: TextStyle(
-                            fontFamily: ConstantFonts.sfProBold, fontSize: 15),
+                          fontFamily: ConstantFonts.sfProBold,
+                          fontSize: 15,
+                        ),
                       ),
                       Expanded(
                         child: Scrollbar(
@@ -541,24 +561,25 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                           thumbVisibility: true,
                           interactive: true,
                           child: ListView.builder(
-                              itemCount: currentCustomerList.length,
-                              itemBuilder: (c, index) {
-                                return CustomerItem(
-                                  customerInfo: currentCustomerList[index],
-                                  currentStaffName: widget.staffInfo.name,
-                                  prNames: staffs,
-                                );
-                              }),
+                            itemCount: currentCustomerList.length,
+                            itemBuilder: (c, index) {
+                              return CustomerItem(
+                                customerInfo: currentCustomerList[index],
+                                currentStaffName: widget.staffInfo.name,
+                                prNames: staffs,
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ],
                   )
-                : Center(
+                : const Center(
                     child: Text(
                       'No leads found!!',
                       style: TextStyle(
-                         
-                          fontSize: 17.0),
+                        fontSize: 17.0,
+                      ),
                     ),
                   )
         : searchCustomerInfo.isNotEmpty
@@ -570,12 +591,13 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                     currentStaffName: widget.staffInfo.name,
                     prNames: staffs,
                   );
-                })
+                },
+              )
             : Padding(
                 padding: const EdgeInsets.only(top: 10.0),
                 child: Text(
                   'No result for $query',
-                  style: TextStyle( ),
+                  style: const TextStyle(),
                 ),
               );
   }

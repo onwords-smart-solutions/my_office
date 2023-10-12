@@ -108,10 +108,11 @@
 
         <service
             android:name="com.dexterous.flutterlocalnotifications.ForegroundService"
-            android:exported="false"
+            android:exported="true"
             android:stopWithTask="false" />
 
-        <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+        <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />

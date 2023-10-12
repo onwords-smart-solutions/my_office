@@ -184,7 +184,7 @@ class NotificationService {
     const InitializationSettings settings = InitializationSettings(
       android: initializationSettingsAndroid,
     );
-    _notifications.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!.requestPermission();
+    _notifications.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()!.requestNotificationsPermission();
     await _notifications.initialize(
       settings,
     );

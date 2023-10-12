@@ -14,7 +14,7 @@ class CustomAlerts {
         builder: (ctx) {
           return WillPopScope(
             onWillPop: () async => false,
-            child: AlertDialog.adaptive(
+            child: AlertDialog(
               title: Text(title),
               content: Text(content),
               actions: [
