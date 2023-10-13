@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +9,6 @@ import 'package:my_office/util/main_template.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
 import '../PR/customer_item.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
 
 class SearchLeadsScreen extends StatefulWidget {
   final StaffModel staffInfo;
@@ -32,7 +32,12 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
   List<Map<Object?, Object?>> allCustomer = [];
   List<Map<Object?, Object?>> currentCustomerList = [];
   List<Map<Object?, Object?>> searchCustomerInfo = [];
-  bool isLongPressed = false;
+  List<Map<Object?, Object?>> _selectedCustomers = [];
+
+  bool isLeadChange = false;
+  bool isSelectAll = false;
+
+  //
 
   //search method
   void searchUser(String query) {
@@ -296,7 +301,9 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
           child: buildSortHint(),
         ),
         if (selectedStaff != '') buildFilterHint(),
-        Expanded(child: buildCustomerList()),
+        Expanded(
+          child: buildCustomerList(),
+        ),
       ],
     );
   }
@@ -458,19 +465,22 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 5.0),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
-            decoration: BoxDecoration(
-              color: const Color(0xff8355B7),
-              borderRadius: BorderRadius.circular(50.0),
-            ),
-            child: Text(
-              'Leads of $selectedStaff',
-              style: const TextStyle(
-                fontSize: 14.0,
-                color: Color(0xffF1F2F8),
+          Flexible(
+            child: Container(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
+              decoration: BoxDecoration(
+                color: const Color(0xff8355B7),
+                borderRadius: BorderRadius.circular(50.0),
+              ),
+              child: Text(
+                'Leads of $selectedStaff',
+                style: const TextStyle(
+                  fontSize: 14.0,
+                  color: Color(0xffF1F2F8),
+                ),
               ),
             ),
           ),
@@ -488,6 +498,60 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
             ),
             color: Colors.red,
           ),
+          if (isLeadChange)
+            Row(
+              children: [
+                Text(_selectedCustomers.length.toString(),style: const TextStyle(fontWeight: FontWeight.w500),),
+                Checkbox(
+                  value: isSelectAll,
+                  onChanged: (value) {
+                    setState(() {
+                      isSelectAll = value ?? false;
+                    });
+                    if (isSelectAll) {
+                      _selectedCustomers.clear();
+                      _selectedCustomers.addAll(currentCustomerList);
+                    } else {
+                      _selectedCustomers.clear();
+                    }
+                  },),
+                PopupMenuButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  position: PopupMenuPosition.under,
+                  elevation: 10.0,
+                  itemBuilder: (ctx) => List.generate(
+                    staffs.length,
+                        (index) {
+                      return PopupMenuItem(
+                        child: Text(
+                          staffs[index],
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        onTap: () => changeLead(staffs[index]),
+                      );
+                    },
+                  ),
+                  icon: const Icon(
+                    Icons.settings_accessibility_rounded,
+                    color: Color(0xffB93DCB),
+                    size: 25.0,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      _selectedCustomers.clear();
+                      isLeadChange = false;
+                    });
+                  },
+                  icon: const Icon(Icons.close),
+                ),
+              ],
+            ),
         ],
       ),
     );
@@ -507,10 +571,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
 
         return GestureDetector(
           onTap: () {
-            setState(() {
-              isLongPressed = true;
-            });
-            isLongPressed ? Navigator.of(context).pop :getCustomerDetail(
+            getCustomerDetail(
               createdBy:
                   selectedStaff == '' ? widget.staffInfo.name : selectedStaff,
               sortChoice: sortOption == sortList[i] ? '' : sortList[i],
@@ -563,10 +624,51 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                           child: ListView.builder(
                             itemCount: currentCustomerList.length,
                             itemBuilder: (c, index) {
-                              return CustomerItem(
-                                customerInfo: currentCustomerList[index],
-                                currentStaffName: widget.staffInfo.name,
-                                prNames: staffs,
+                              return GestureDetector(
+                                onTap: isLeadChange
+                                    ? () {
+                                        addOrRemoveCustomer(
+                                          currentCustomerList[index],
+                                        );
+                                      }
+                                    : null,
+                                onLongPress: () {
+                                  if(widget.staffInfo.name == 'Anitha' ||
+                                      widget.staffInfo.name == 'Devendiran' ||
+                                      widget.staffInfo.name == 'Rajkannan B' ||
+                                      widget.staffInfo.name == 'Logesh P'){
+                                    setState(() {
+                                      isLeadChange = true;
+                                    });
+                                  }else{
+                                    setState(() {
+                                      isLeadChange = false;
+                                    });
+                                  }
+                                },
+                                child: Container(
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 2.0),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        isSelected(currentCustomerList[index])
+                                            ? ConstantColor.backgroundColor
+                                                .withOpacity(.8)
+                                            : null,
+                                  ),
+                                  child: Opacity(
+                                    opacity:
+                                        isSelected(currentCustomerList[index])
+                                            ? .7
+                                            : 1,
+                                    child: CustomerItem(
+                                      isLeadChange: isLeadChange,
+                                      customerInfo: currentCustomerList[index],
+                                      currentStaffName: widget.staffInfo.name,
+                                      prNames: staffs,
+                                    ),
+                                  ),
+                                ),
                               );
                             },
                           ),
@@ -587,6 +689,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                 itemCount: searchCustomerInfo.length,
                 itemBuilder: (c, index) {
                   return CustomerItem(
+                    isLeadChange: isLeadChange,
                     customerInfo: searchCustomerInfo[index],
                     currentStaffName: widget.staffInfo.name,
                     prNames: staffs,
@@ -600,5 +703,47 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                   style: const TextStyle(),
                 ),
               );
+  }
+
+  // ******************* LEAD CHANGE FUNCTIONS ************************
+  void addOrRemoveCustomer(Map<Object?, Object?> customer) {
+    setState(() {
+      if (_selectedCustomers.contains(customer)) {
+        _selectedCustomers.remove(customer);
+      } else {
+        _selectedCustomers.add(customer);
+      }
+    });
+    log('selected customers are $_selectedCustomers');
+  }
+
+  bool isSelected(Map<Object?, Object?> customer) =>
+      _selectedCustomers.contains(customer);
+
+  changeLead(String staff) async {
+    final ref = FirebaseDatabase.instance.ref();
+
+    for (var customer in _selectedCustomers) {
+      // updating in firebase
+      await ref.child('customer/${customer['phone_number'].toString()}').update(
+        {'LeadIncharge': staff},
+      );
+      final index = allCustomer.indexWhere(
+          (element) => element['phone_number'] == customer['phone_number']);
+      final cIndex = currentCustomerList.indexWhere(
+          (element) => element['phone_number'] == customer['phone_number']);
+
+      if (index > -1) {
+        allCustomer[index]['LeadIncharge'] = staff;
+      }
+      if (cIndex > -1) {
+        currentCustomerList[cIndex]['LeadIncharge'] = staff;
+      }
+    }
+    setState(() {
+      _selectedCustomers.clear();
+      isLeadChange = false;
+      isSelectAll = false;
+    });
   }
 }
