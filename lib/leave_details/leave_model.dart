@@ -8,6 +8,8 @@ class LeaveModel{
   late String type;
   late String updatedBy;
   late String isApproved;
+  double? duration;
+  late String? mode;
 
   LeaveModel({
     required this.date,
@@ -19,5 +21,7 @@ class LeaveModel{
     required this.type,
     required this.updatedBy,
     required this.isApproved,
+    required this.duration,
+    required this.mode,
 });
 }

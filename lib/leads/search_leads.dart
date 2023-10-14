@@ -36,8 +36,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
 
   bool isLeadChange = false;
   bool isSelectAll = false;
-
-  //
+  bool isDataLoading = false;
 
   //search method
   void searchUser(String query) {
@@ -499,59 +498,67 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
             color: Colors.red,
           ),
           if (isLeadChange)
-            Row(
-              children: [
-                Text(_selectedCustomers.length.toString(),style: const TextStyle(fontWeight: FontWeight.w500),),
-                Checkbox(
-                  value: isSelectAll,
-                  onChanged: (value) {
-                    setState(() {
-                      isSelectAll = value ?? false;
-                    });
-                    if (isSelectAll) {
-                      _selectedCustomers.clear();
-                      _selectedCustomers.addAll(currentCustomerList);
-                    } else {
-                      _selectedCustomers.clear();
-                    }
-                  },),
-                PopupMenuButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  position: PopupMenuPosition.under,
-                  elevation: 10.0,
-                  itemBuilder: (ctx) => List.generate(
-                    staffs.length,
-                        (index) {
-                      return PopupMenuItem(
-                        child: Text(
-                          staffs[index],
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                          ),
+            isDataLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Row(
+                    children: [
+                      Text(
+                        _selectedCustomers.length.toString(),
+                        style: const TextStyle(fontWeight: FontWeight.w500),
+                      ),
+                      Checkbox(
+                        value: isSelectAll,
+                        onChanged: (value) {
+                          setState(() {
+                            isSelectAll = value ?? false;
+                          });
+                          if (isSelectAll) {
+                            _selectedCustomers.clear();
+                            _selectedCustomers.addAll(currentCustomerList);
+                          } else {
+                            _selectedCustomers.clear();
+                          }
+                        },
+                      ),
+                      PopupMenuButton(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
                         ),
-                        onTap: () => changeLead(staffs[index]),
-                      );
-                    },
+                        position: PopupMenuPosition.under,
+                        elevation: 10.0,
+                        itemBuilder: (ctx) => List.generate(
+                          staffs.length,
+                          (index) {
+                            return PopupMenuItem(
+                              child: Text(
+                                staffs[index],
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              onTap: () => changeLead(staffs[index]),
+                            );
+                          },
+                        ),
+                        icon: const Icon(
+                          Icons.settings_accessibility_rounded,
+                          color: Color(0xffB93DCB),
+                          size: 25.0,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _selectedCustomers.clear();
+                            isLeadChange = false;
+                          });
+                        },
+                        icon: const Icon(Icons.close),
+                      ),
+                    ],
                   ),
-                  icon: const Icon(
-                    Icons.settings_accessibility_rounded,
-                    color: Color(0xffB93DCB),
-                    size: 25.0,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      _selectedCustomers.clear();
-                      isLeadChange = false;
-                    });
-                  },
-                  icon: const Icon(Icons.close),
-                ),
-              ],
-            ),
         ],
       ),
     );
@@ -633,14 +640,14 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                                       }
                                     : null,
                                 onLongPress: () {
-                                  if(widget.staffInfo.name == 'Anitha' ||
+                                  if (widget.staffInfo.name == 'Anitha' ||
                                       widget.staffInfo.name == 'Devendiran' ||
                                       widget.staffInfo.name == 'Rajkannan B' ||
-                                      widget.staffInfo.name == 'Logesh P'){
+                                      widget.staffInfo.name == 'Logesh P') {
                                     setState(() {
                                       isLeadChange = true;
                                     });
-                                  }else{
+                                  } else {
                                     setState(() {
                                       isLeadChange = false;
                                     });
@@ -721,6 +728,9 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
       _selectedCustomers.contains(customer);
 
   changeLead(String staff) async {
+    setState(() {
+      isDataLoading = true;
+    });
     final ref = FirebaseDatabase.instance.ref();
 
     for (var customer in _selectedCustomers) {
@@ -729,10 +739,11 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
         {'LeadIncharge': staff},
       );
       final index = allCustomer.indexWhere(
-          (element) => element['phone_number'] == customer['phone_number']);
+        (element) => element['phone_number'] == customer['phone_number'],
+      );
       final cIndex = currentCustomerList.indexWhere(
-          (element) => element['phone_number'] == customer['phone_number']);
-
+        (element) => element['phone_number'] == customer['phone_number'],
+      );
       if (index > -1) {
         allCustomer[index]['LeadIncharge'] = staff;
       }
@@ -744,6 +755,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
       _selectedCustomers.clear();
       isLeadChange = false;
       isSelectAll = false;
+      isDataLoading = false;
     });
   }
 }

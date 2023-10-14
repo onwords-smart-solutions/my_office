@@ -36,20 +36,20 @@ class _PrWorkDetailsState extends State<PrWorkDetails> {
       if (staffEntry.snapshot.exists) {
         for (var uid in staffEntry.snapshot.children) {
           try {
-
             final workDone = uid.child('${now.year}/$month/$date').value
                 as Map<Object?, Object?>;
             log('message ${uid.value}');
             final staffData = uid.value as Map<Object?, Object?>;
             final data = PRWorkDoneModel(
-                calls: int.parse(workDone['calls'].toString()),
-                invoice: int.parse(workDone['invoice'].toString()),
-                message: int.parse(workDone['message'].toString()),
-                points: int.parse(workDone['points'].toString()),
-                quote: int.parse(workDone['quote'].toString()),
-                visit: int.parse(workDone['visit'].toString()),
-                name: staffData['name'].toString(),
-                uid: uid.key.toString());
+              calls: int.parse(workDone['calls'].toString()),
+              invoice: int.parse(workDone['invoice'].toString()),
+              message: int.parse(workDone['message'].toString()),
+              points: int.parse(workDone['points'].toString()),
+              quote: int.parse(workDone['quote'].toString()),
+              visit: int.parse(workDone['visit'].toString()),
+              name: staffData['name'].toString(),
+              uid: uid.key.toString(),
+            );
             prWork.add(data);
           } catch (e) {
             log("ERROR IN GET FB $e");
@@ -113,7 +113,7 @@ class _PrWorkDetailsState extends State<PrWorkDetails> {
               style: TextStyle(
                 color: ConstantColor.headingTextColor,
                 fontSize: 18,
-                fontFamily: ConstantFonts.sfProBold
+                fontFamily: ConstantFonts.sfProBold,
               ),
             ),
           ],
@@ -161,11 +161,10 @@ class _PrWorkDetailsState extends State<PrWorkDetails> {
                               title: Text(
                                 prStaffNames[i].name,
                                 style: TextStyle(
-                                   
-                                    color: ConstantColor.blackColor,
-                                    fontSize:
-                                        MediaQuery.of(context).size.height *
-                                            0.021),
+                                  color: ConstantColor.blackColor,
+                                  fontSize: MediaQuery.of(context).size.height *
+                                      0.021,
+                                ),
                               ),
                             ),
                           ),
@@ -178,18 +177,20 @@ class _PrWorkDetailsState extends State<PrWorkDetails> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Lottie.asset('assets/animations/no_data.json',
-                              height: 300.0),
-                        Text(
-                          'No Work-done Registered!!',
-                          style: TextStyle(
-                            color: ConstantColor.blackColor,
-                            fontSize: 20,
-                            fontFamily: ConstantFonts.sfProRegular,
-                            fontWeight: FontWeight.w600,
+                          Lottie.asset(
+                            'assets/animations/no_data.json',
+                            height: 300.0,
                           ),
-                        ),
-                      ],
+                          Text(
+                            'No Work-done Registered!!',
+                            style: TextStyle(
+                              color: ConstantColor.blackColor,
+                              fontSize: 20,
+                              fontFamily: ConstantFonts.sfProRegular,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
