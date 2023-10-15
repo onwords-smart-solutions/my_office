@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
-
-import '../Constant/fonts/constant_font.dart';
 import '../login/login_screen.dart';
 
 class IntroductionScreen extends StatelessWidget {
@@ -23,7 +21,10 @@ class IntroductionScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         elevation: 10,
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context)=> const LoginScreen()));
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const LoginScreen(),
+              ),
+          );
         },
         child: buttonWidget(),
       ),
@@ -31,7 +32,7 @@ class IntroductionScreen extends StatelessWidget {
   }
 
   Widget imageWidget(double height) {
-    return Container(
+    return SizedBox(
       height: height * 0.45,
       width: double.infinity,
       child: SvgPicture.asset(
@@ -43,7 +44,9 @@ class IntroductionScreen extends StatelessWidget {
   Widget textWidget(double height, double width) {
     return Container(
       margin: EdgeInsets.symmetric(
-          vertical: height * 0.05, horizontal: width * 0.05),
+        vertical: height * 0.05,
+        horizontal: width * 0.05,
+      ),
       height: height * 0.25,
       width: double.infinity,
       color: Colors.transparent,
@@ -54,7 +57,6 @@ class IntroductionScreen extends StatelessWidget {
           GradientText(
             'Manage your daily',
             style: TextStyle(
-
               color: ConstantColor.blackColor,
               fontSize: height * 0.040,
             ),
@@ -68,21 +70,19 @@ class IntroductionScreen extends StatelessWidget {
           GradientText(
             'works with our',
             style: TextStyle(
-
               color: ConstantColor.blackColor,
               fontSize: height * 0.040,
             ),
             gradient: const LinearGradient(
               colors: [
                 Colors.black,
-                Colors.black
+                Colors.black,
               ],
             ),
           ),
           GradientText(
             'Work Manager',
             style: TextStyle(
-
               color: ConstantColor.blackColor,
               fontSize: height * 0.040,
             ),
@@ -96,7 +96,6 @@ class IntroductionScreen extends StatelessWidget {
           GradientText(
             'from here!!',
             style: TextStyle(
-
               color: ConstantColor.blackColor,
               fontSize: height * 0.040,
             ),

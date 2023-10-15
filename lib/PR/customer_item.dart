@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:my_office/Constant/fonts/constant_font.dart';
 import 'package:my_office/PR/customer_detail_screen.dart';
 import 'package:timelines/timelines.dart';
 
@@ -11,19 +10,24 @@ class CustomerItem extends StatefulWidget {
   final Map<Object?, Object?> customerInfo;
   final String currentStaffName;
   final List<String> prNames;
+  final bool isLeadChange;
 
-  const CustomerItem(
-      {Key? key,
-      required this.customerInfo,
-      required this.currentStaffName,
-      required this.prNames})
-      : super(key: key);
+  const CustomerItem({
+    Key? key,
+    required this.customerInfo,
+    required this.currentStaffName,
+    required this.prNames,
+    required this.isLeadChange,
+  }) : super(key: key);
 
   @override
   State<CustomerItem> createState() => _CustomerItemState();
 }
 
-class _CustomerItemState extends State<CustomerItem> {
+class _CustomerItemState extends State<CustomerItem>
+    with AutomaticKeepAliveClientMixin {
+  bool isChecked = false;
+
   @override
   Widget build(BuildContext context) {
     String lastNote = 'Notes not updated';
@@ -34,14 +38,14 @@ class _CustomerItemState extends State<CustomerItem> {
     if (widget.customerInfo['notes'] != null) {
       //Getting all notes from customer data
       final Map<Object?, Object?> allNotes =
-          widget.customerInfo['notes'] as Map<Object?, Object?>;
+      widget.customerInfo['notes'] as Map<Object?, Object?>;
       final noteKeys = allNotes.keys.toList();
 
       //Checking if key is empty or not
       if (noteKeys.isNotEmpty) {
         noteKeys.sort((a, b) => b.toString().compareTo(a.toString()));
         final Map<Object?, Object?> firstNote =
-            allNotes[noteKeys[0]] as Map<Object?, Object?>;
+        allNotes[noteKeys[0]] as Map<Object?, Object?>;
         lastNote = firstNote['note'].toString();
         lastNoteDate = firstNote['date'].toString();
       }
@@ -50,14 +54,14 @@ class _CustomerItemState extends State<CustomerItem> {
     if (widget.customerInfo['notes'] != null) {
       //Getting all reminders from customer data
       final Map<Object?, Object?> allReminders =
-          widget.customerInfo['notes'] as Map<Object?, Object?>;
+      widget.customerInfo['notes'] as Map<Object?, Object?>;
       final reminder = allReminders.keys.toList();
 
       //Checking if reminder is empty or not
       if (reminder.isNotEmpty) {
         reminder.sort((a, b) => b.toString().compareTo(a.toString()));
         final Map<Object?, Object?> firstReminder =
-            allReminders[reminder[0]] as Map<Object?, Object?>;
+        allReminders[reminder[0]] as Map<Object?, Object?>;
         fullReminder = firstReminder['reminder'].toString();
       }
     }
@@ -94,9 +98,9 @@ class _CustomerItemState extends State<CustomerItem> {
 
     //Changing color based on customer state
     if (widget.customerInfo['customer_state']
-            .toString()
-            .toLowerCase()
-            .contains('rejected') ||
+        .toString()
+        .toLowerCase()
+        .contains('rejected') ||
         widget.customerInfo['customer_state']
             .toString()
             .toLowerCase()
@@ -152,9 +156,9 @@ class _CustomerItemState extends State<CustomerItem> {
       tileColor = const Color(0xffd1ed8e);
       nobColor = Colors.white70;
     } else if (widget.customerInfo['customer_state']
-            .toString()
-            .toLowerCase()
-            .contains('interested') ||
+        .toString()
+        .toLowerCase()
+        .contains('interested') ||
         (widget.customerInfo['customer_state']
             .toString()
             .toLowerCase()
@@ -186,16 +190,18 @@ class _CustomerItemState extends State<CustomerItem> {
       tileColor = const Color(0xff31C6D4);
       nobColor = Colors.black26;
     }
-
     return GestureDetector(
-      onTap: () => Navigator.of(context).push(
+      onTap: widget.isLeadChange
+          ? null
+          : () => Navigator.of(context).push(
         MaterialPageRoute(
           builder: (_) => CustomerDetailScreen(
             customerInfo: widget.customerInfo,
             containerColor: tileColor,
             nobColor: nobColor,
             currentStaffName: widget.currentStaffName,
-            customerStatus: widget.customerInfo['customer_state'].toString(),
+            customerStatus:
+            widget.customerInfo['customer_state'].toString(),
             leadName: widget.customerInfo['LeadIncharge'].toString(),
             prStaffNames: widget.prNames,
             reminder: fullReminder,
@@ -210,67 +216,78 @@ class _CustomerItemState extends State<CustomerItem> {
             BoxShadow(
               color: Colors.black.withOpacity(0.3),
               blurRadius: 8,
-            )
+            ),
           ],
           borderRadius: BorderRadius.circular(15),
         ),
         child: Column(
           children: [
             buildField(
-                field: fields[0],
-                value: values[0],
-                nobColor: nobColor,
-                size: size),
+              field: fields[0],
+              value: values[0],
+              nobColor: nobColor,
+              size: size,
+            ),
             buildField(
-                field: fields[1],
-                value: values[1],
-                nobColor: nobColor,
-                size: size),
+              field: fields[1],
+              value: values[1],
+              nobColor: nobColor,
+              size: size,
+            ),
             buildField(
-                field: fields[2],
-                value: values[2],
-                nobColor: nobColor,
-                size: size),
+              field: fields[2],
+              value: values[2],
+              nobColor: nobColor,
+              size: size,
+            ),
             buildField(
-                field: fields[3],
-                value: values[3],
-                nobColor: nobColor,
-                size: size),
+              field: fields[3],
+              value: values[3],
+              nobColor: nobColor,
+              size: size,
+            ),
             buildField(
-                field: fields[4],
-                value: values[4],
-                nobColor: nobColor,
-                size: size),
+              field: fields[4],
+              value: values[4],
+              nobColor: nobColor,
+              size: size,
+            ),
             buildField(
-                field: fields[5],
-                value: values[5],
-                nobColor: nobColor,
-                size: size),
+              field: fields[5],
+              value: values[5],
+              nobColor: nobColor,
+              size: size,
+            ),
             buildField(
-                field: fields[6],
-                value: values[6],
-                nobColor: nobColor,
-                size: size),
+              field: fields[6],
+              value: values[6],
+              nobColor: nobColor,
+              size: size,
+            ),
             buildField(
-                field: fields[7],
-                value: values[7],
-                nobColor: nobColor,
-                size: size),
+              field: fields[7],
+              value: values[7],
+              nobColor: nobColor,
+              size: size,
+            ),
             buildField(
-                field: fields[8],
-                value: values[8],
-                nobColor: nobColor,
-                size: size),
+              field: fields[8],
+              value: values[8],
+              nobColor: nobColor,
+              size: size,
+            ),
             buildField(
-                field: fields[9],
-                value: values[9],
-                nobColor: nobColor,
-                size: size),
+              field: fields[9],
+              value: values[9],
+              nobColor: nobColor,
+              size: size,
+            ),
             buildField(
-                field: fields[010],
-                value: values[010],
-                nobColor: nobColor,
-                size: size),
+              field: fields[010],
+              value: values[010],
+              nobColor: nobColor,
+              size: size,
+            ),
           ],
         ),
       ),
@@ -284,11 +301,12 @@ class _CustomerItemState extends State<CustomerItem> {
         .inDays;
   }
 
-  Widget buildField(
-      {required String field,
-      required String value,
-      required Color nobColor,
-      required Size size}) {
+  Widget buildField({
+    required String field,
+    required String value,
+    required Color nobColor,
+    required Size size,
+  }) {
     bool isTimeToUpdate = false;
     if (field == "Note updated" && value.isNotEmpty) {
       final lastNoteUpdate = DateTime.parse(value);
@@ -304,36 +322,35 @@ class _CustomerItemState extends State<CustomerItem> {
         width: size.width * .3,
         child: Text(
           field,
-          style:
-              TextStyle(fontSize: 14.0),
+          style: const TextStyle(fontSize: 14.0),
         ),
       ),
       contents: Container(
         padding:
-            const EdgeInsets.only(left: 8.0, top: 5.0, right: 8.0, bottom: 3),
+        const EdgeInsets.only(left: 8.0, top: 5.0, right: 8.0, bottom: 3),
         width: size.width * .7,
         // height: 20.0,
         child: isTimeToUpdate
             ? Row(
-                children: [
-                  Text(
-                    '$value     ',
-                    style: TextStyle(
-                     
-                      fontSize: 14.0,
-                    ),
-                  ),
-                  const CircleAvatar(
-                    radius: 8,
-                    backgroundColor: Colors.black,
-                  )
-                ],
-              )
-            : Text(
-                value,
-                style: TextStyle(
-                    fontSize: 14.0),
+          children: [
+            Text(
+              '$value     ',
+              style: const TextStyle(
+                fontSize: 14.0,
               ),
+            ),
+            const CircleAvatar(
+              radius: 8,
+              backgroundColor: Colors.black,
+            ),
+          ],
+        )
+            : Text(
+          value,
+          style: const TextStyle(
+            fontSize: 14.0,
+          ),
+        ),
       ),
       node: TimelineNode(
         indicator: DotIndicator(
@@ -345,4 +362,8 @@ class _CustomerItemState extends State<CustomerItem> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
