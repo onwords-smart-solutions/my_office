@@ -8,10 +8,10 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/PR/visit/visit_form_screen.dart';
-import 'package:my_office/firebase_options.dart';
 import 'package:my_office/home/user_home_screen.dart';
 import 'package:my_office/login/login_screen.dart';
 import 'package:my_office/models/staff_model.dart';
+import 'package:my_office/phone_number_screen.dart';
 import 'package:my_office/provider/user_provider.dart';
 import 'package:my_office/birthday_picker_screen.dart';
 import 'package:my_office/services/notification_service.dart';
@@ -29,9 +29,7 @@ final navigationKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform
-  );
+  await Firebase.initializeApp();
   //Hive database Setup
   await Hive.initFlutter();
   if (!Hive.isAdapterRegistered(StaffModelAdapter().typeId)) {
@@ -45,7 +43,7 @@ Future<void> main() async {
     DeviceOrientation.portraitDown,
     DeviceOrientation.portraitUp,
   ]).then(
-    (value) => runApp(
+        (value) => runApp(
       const MyApp(),
     ),
   );
@@ -150,8 +148,10 @@ class AuthenticationScreen extends StatelessWidget {
               builder: (ctx, userProvider, child) {
                 return userProvider.user != null
                     ? userProvider.user!.dob == 0
-                        ? BirthdayPickerScreen()
-                        : child!
+                    ? BirthdayPickerScreen()
+                    : userProvider.user!.phoneNumber == 0
+                    ? const PhoneNumberScreen()
+                    : child!
                     : const Loading();
               },
               child: const UserHomeScreen(),

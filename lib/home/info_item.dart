@@ -36,7 +36,7 @@ class _InfoItemState extends State<InfoItem> {
       if (currentIndex < widget.todayBirthdayList.length ) {
         currentIndex++;
       }else{
-        if(widget.todayBirthdayList.length == 1){
+        if(widget.todayBirthdayList.length == 1 || widget.todayBirthdayList.isEmpty){
           timer.cancel();
         }
       }

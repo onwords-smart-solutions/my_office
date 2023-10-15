@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:my_office/database/hive_operations.dart';
 import 'package:my_office/models/staff_model.dart';
 import 'package:my_office/services/notification_service.dart';
@@ -50,6 +51,15 @@ class UserProvider with ChangeNotifier {
       _user!.dob = timeStamp;
       notifyListeners();
       _hiveOperations.updateStaffDOB(timeStamp);
+    }
+  }
+
+  Future<void> updatePhoneNumber (int phone) async{
+    if(_user != null){
+      final phoneNumber = phone;
+      _user!.phoneNumber = phoneNumber;
+      notifyListeners();
+      _hiveOperations.updatePhoneNumber(phoneNumber);
     }
   }
 

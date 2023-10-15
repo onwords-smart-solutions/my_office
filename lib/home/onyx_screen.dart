@@ -1,245 +1,383 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:speech_to_text/speech_recognition_result.dart';
-import 'package:speech_to_text/speech_to_text.dart';
+import 'package:flutter_tts/flutter_tts.dart';
+import 'package:lottie/lottie.dart';
+import 'package:my_office/home/api_operations.dart';
+import 'package:my_office/home/user_home_screen.dart';
+import 'package:porcupine_flutter/porcupine_error.dart';
+import 'package:porcupine_flutter/porcupine_manager.dart';
+import '../Constant/colors/constant_colors.dart';
 
-import 'api_operations.dart';
+final ValueNotifier<String> tapped = ValueNotifier('');
 
-class OnyxScreen extends StatefulWidget {
-  const OnyxScreen({Key? key}) : super(key: key);
+class Onyx extends StatefulWidget {
+  final VoidCallback onListen;
+  final VoidCallback onStop;
+
+  const Onyx({
+    super.key,
+    required this.onListen,
+    required this.onStop,
+  });
 
   @override
-  State<OnyxScreen> createState() => _OnyxScreenState();
+  State<Onyx> createState() => _OnyxState();
 }
 
-class _OnyxScreenState extends State<OnyxScreen> {
+class _OnyxState extends State<Onyx> {
   final TextEditingController _messageController = TextEditingController();
-  final ApiOperations _apiOperations = ApiOperations();
-  final SpeechToText _speechToText = SpeechToText();
-  bool _isFirst = true;
-  bool _isListening = false;
-  String _recognizedWords = '';
-  String _reply = '';
-  bool isCalled = false;
 
-  void _initSpeech(BuildContext context) async {
-    log('called');
-    await _speechToText.initialize(onStatus: (value) async {
-      if (value == 'listening') {
-        if(mounted){
-          setState(() {
-            _recognizedWords = '';
-            _isListening = true;
-            _isFirst = false;
-            _reply = '';
-          });
-        }
-      } else {
-        if(mounted){
-          setState(() {
-            _isListening = false;
-          });
-        }
-        if(mounted){
-          if (_recognizedWords.isNotEmpty && value == 'done') {
-            final result = await _apiOperations.askOnyx(
-              command: _recognizedWords.trim(), context: this.context,);
-            if (result.toString().isNotEmpty) {
-              setState(() {
-                _reply = result.toString().trim();
-              });
-            }
-          }
-        }
-      }
-    },);
+  final FlutterTts flutterTts = FlutterTts();
+
+  String capitalizeFirstLetter(String text) {
+    if (text.isNotEmpty) {
+      return text[0].toUpperCase() + text.substring(1);
+    }
+    return text;
   }
 
-  void _startListening() async {
-    await _speechToText.listen(onResult: _onSpeechResult);
-    setState(() {
+  //Wake word contents
+  PorcupineManager? _porcupineManager;
 
-    });
+  Future<void> initPicovoice() async {
+    try {
+      _porcupineManager = await PorcupineManager.fromKeywordPaths(
+        "RcjpX2kR+cxVxE+gWeNky6I6iv3eFasLOD5reWH85vX0PKjKQX0NTQ==",
+        ['assets/wake_word/Onyx_en_android_v2_2_0.ppn'],
+        wakeWordCallback,
+      );
+      await startPorcupine();
+    } catch (err) {
+      print('Init exception: $err');
+    }
   }
 
-  void _stopListening() async {
-    await _speechToText.stop();
-    setState(() {
-
-    });
+  Future<void> startPorcupine() async {
+    try {
+      await _porcupineManager?.start();
+    } on PorcupineException catch (e) {
+      print('Start exception: ${e.message}');
+    }
   }
 
-  void _onSpeechResult(SpeechRecognitionResult result) {
-    setState(() {
-      _recognizedWords = result.recognizedWords;
-    });
+  Future<void> stopPorcupine() async {
+    try {
+      await _porcupineManager?.stop();
+    } on PorcupineException catch (e) {
+      print('Stop exception is ${e.message}');
+    }
   }
 
-  @override
-  void initState() {
-    final context = this.context;
-    _initSpeech(context);
-    super.initState();
+  Future<void> wakeWordCallback(int index) async {
+    print('Wake word detected in onyx screen ${hasNavigated.value}');
+    await stopPorcupine();
+    widget.onListen();
   }
 
-  @override
-  void dispose() {
-    _messageController.dispose();
-    _speechToText.cancel();
-    _speechToText.stop();
-    super.dispose();
-  }
+  // @override
+  // void initState() {
+  //   widget.onListen();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Onyx Speech'),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: const Text(
+          'Onyx AI Assistant',
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+          ),
         ),
-        body: Stack(
-          alignment: AlignmentDirectional.bottomCenter,
-          children: [
-            buildTextBody(),
-            Positioned(bottom: 140.0, child: buildMicButton()),
-            buildTextField(),
-          ],
-        ),);
-  }
-
-  Widget buildMicButton() {
-    return ElevatedButton(
-
-        onPressed: () {
-          _isListening ? _stopListening() : _startListening();
+        centerTitle: true,
+        actions: [
+          ValueListenableBuilder(
+            valueListenable: isPlayPause,
+            builder: (ctx, isListen, child) {
+              return CircleAvatar(
+                child: IconButton(
+                  color: ConstantColor.backgroundColor,
+                  onPressed: () {
+                    if (isListen) {
+                      flutterTts.pause();
+                      isPlayPause.value = false;
+                    } else {
+                      flutterTts.speak(replyFromOnyx.value['response']);
+                      isPlayPause.value = true;
+                    }
+                  },
+                  icon: Icon(
+                    isListen ? Icons.pause : Icons.play_arrow,
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+            hasNavigated.value = true;
+          },
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+        ),
+      ),
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+      body: ValueListenableBuilder(
+        valueListenable: replyFromOnyx,
+        builder: (ctx, response, child) {
+          return ValueListenableBuilder(
+            valueListenable: recognizedWords,
+            builder: (ctx, pickedWords, child) {
+              return ValueListenableBuilder(
+                valueListenable: isListening,
+                builder: (ctx, isListen, child) {
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: ListView(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: 5,
+                          ),
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(14),
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(15),
+                                  topRight: Radius.circular(15),
+                                  bottomLeft: Radius.circular(15),
+                                ),
+                                color: Color(0xff6F61C0),
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      'You : ${capitalizeFirstLetter(pickedWords)}',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  ValueListenableBuilder(
+                                    valueListenable: replyFromOnyx,
+                                    builder: (ctx, response, child) {
+                                      return response.isNotEmpty
+                                          ? ValueListenableBuilder(
+                                        valueListenable: tapped,
+                                        builder: (ctx, tap, child) {
+                                          return Row(
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  tapped.value = 'like';
+                                                  await ApiOperations()
+                                                      .likeOnyx(
+                                                    button: 'like',
+                                                    context: context,
+                                                  );
+                                                },
+                                                child: Icon(
+                                                  tap == 'like'
+                                                      ? CupertinoIcons
+                                                      .hand_thumbsup_fill
+                                                      : CupertinoIcons
+                                                      .hand_thumbsup,
+                                                  color: Colors.white70,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 10),
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  tapped.value =
+                                                  'dislike';
+                                                  await ApiOperations()
+                                                      .dislikeOnyx(
+                                                    button: 'dislike',
+                                                    context: context,
+                                                  );
+                                                },
+                                                child: Icon(
+                                                  tap == 'dislike'
+                                                      ? CupertinoIcons
+                                                      .hand_thumbsdown_fill
+                                                      : CupertinoIcons
+                                                      .hand_thumbsdown,
+                                                  color: Colors.red,
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      )
+                                          : const SizedBox.shrink();
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            ValueListenableBuilder(
+                              valueListenable: replyFromOnyx,
+                              builder: (ctx, response, child) {
+                                return Container(
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(15),
+                                      bottomRight: Radius.circular(15),
+                                      bottomLeft: Radius.circular(15),
+                                    ),
+                                    color: response.isEmpty
+                                        ? Colors.transparent
+                                        : Colors.white,
+                                  ),
+                                  child: ValueListenableBuilder(
+                                    valueListenable: isLoading,
+                                    builder: (ctx, loading, child) {
+                                      return loading
+                                          ? Center(
+                                        child: Lottie.asset(
+                                          'assets/animations/onyx_loading.json',
+                                          height: 80,
+                                        ),
+                                      )
+                                          : SelectableText(
+                                        'Onyx : ${response['response']}',
+                                        style: TextStyle(
+                                          color: response.isEmpty
+                                              ? Colors.transparent
+                                              : Colors.black,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: MediaQuery.sizeOf(context).height * .08,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ValueListenableBuilder(
+                              valueListenable: isListening,
+                              builder: (ctx, isListen, child) {
+                                return CircleAvatar(
+                                  maxRadius: 25,
+                                  child: IconButton(
+                                    color: Colors.deepPurple,
+                                    tooltip: 'Onyx',
+                                    onPressed: widget.onListen,
+                                    icon: Icon(
+                                      isListen ? Icons.mic : Icons.mic_off,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            const SizedBox(width: 10),
+                            buildTextField(context),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+          );
         },
-        style: IconButton.styleFrom(
-
-            backgroundColor: Colors.deepPurple,
-            foregroundColor: Colors.white,
-            shape: RoundedRectangleBorder(
-
-                borderRadius: BorderRadius.circular(100.0),),
-            padding: const EdgeInsets.all(20.0),),
-        child: Icon(
-          _isListening ? Icons.stop_rounded : Icons.mic,
-          size: 30.0,
-        ),
+      ),
     );
   }
 
-  Widget buildTextField() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+  Widget buildTextField(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.sizeOf(context).width * .8,
       child: TextField(
         controller: _messageController,
         textCapitalization: TextCapitalization.sentences,
         textInputAction: TextInputAction.send,
+        style: const TextStyle(
+          fontWeight: FontWeight.w500,
+        ),
         onSubmitted: (value) async {
           if (value.trim().isNotEmpty) {
-            setState(() {
-              _reply = '';
-              _isFirst = false;
-              _recognizedWords = value.trim();
-            });
-            _messageController.clear();
-            final result = await _apiOperations.askOnyx(
-                command: value.trim(), context: context,);
-            if (result.isNotEmpty) {
-              setState(() {
-                _reply = result.trim();
-              });
+            isLoading.value = true;
+            recognizedWords.value = _messageController.text;
+            try {
+              _messageController.clear();
+              callOnyx(context, recognizedWords.value,);
+            } catch (e, s) {
+              print(s);
             }
           }
         },
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
-          hintText: 'Type here',
+          hintText: 'Shoot your queries..',
+          hintStyle: const TextStyle(
+            // height: 2,
+            fontWeight: FontWeight.w500,
+            color: Colors.grey,
+          ),
           contentPadding: const EdgeInsets.symmetric(horizontal: 15),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide(
-              width: 1,
+              width: 1.5,
               color: Colors.grey.withOpacity(.7),
             ),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(15),
             borderSide: const BorderSide(width: 1.5, color: Colors.deepPurple),
           ),
         ),
       ),
     );
   }
+}
 
-  Widget buildTextBody() {
-    return _reply.isEmpty
-        ? Center(
-      child: _isListening
-          ? const Text('Listening....',
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16.0,
-              color: Colors.deepPurple,),)
-          : _isFirst
-          ? const Text('Tap mic to speak or Type your query',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16.0,
-              color: Colors.grey,),)
-          : _recognizedWords.isEmpty
-          ? const Text('Couldn\'t capture any words. Try again!',
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16.0,
-              color: Colors.black,),)
-          : Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(_recognizedWords,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18.0,
-                  color: Colors.deepPurple,),),
-          const SizedBox(height: 20.0),
-          LoadingAnimationWidget.staggeredDotsWave(
-              color: Colors.deepPurple, size: 50.0,),
-        ],
-      ),
-    )
-        : SizedBox(
-      width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SelectableText(
-              'Q: $_recognizedWords'.toUpperCase(),
-              style: const TextStyle(fontSize: 15.0, color: Colors.black,fontWeight: FontWeight.bold,),
-            ),
-          ),
-          Expanded(
-            child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.only(
-                    top: 10.0, left: 10.0, right: 10.0,),
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: SelectableText(
-                    _reply,
-                    style: const TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,),
-                  ),
-                ),),
-          ),
-        ],
-      ),
-    );
+Future<void> callOnyx(
+    BuildContext context,
+    dynamic command,
+    ) async {
+  replyFromOnyx.value = {};
+  tapped.value = '';
+  FlutterTts flutterTts = FlutterTts();
+  final result = await ApiOperations().askOnyx(
+    command: command.trim(),
+    context: context,
+  );
+  if (result.isNotEmpty) {
+    flutterTts.setCompletionHandler(() {
+      isPlayPause.value = false;
+      log('called text');
+    });
+    isPlayPause.value = true;
+    await flutterTts.setLanguage("en-IN");
+    await flutterTts.setPitch(1.0); //0.5 to 2.0
+    await flutterTts.setSpeechRate(0.5);
+    await flutterTts.speak(result['response']);
+    isLoading.value = false;
+    replyFromOnyx.value = result;
   }
 }

@@ -9,6 +9,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:install_plugin_v2/install_plugin_v2.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/home/custom_search_delegate.dart';
@@ -22,14 +23,25 @@ import 'package:my_office/util/custom_alerts.dart';
 import 'package:my_office/util/custom_snackbar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:porcupine_flutter/porcupine_manager.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 import '../Account/account_screen.dart';
 import '../app_version/version.dart';
 import '../models/custom_punching_model.dart';
 import '../models/staff_access_model.dart';
 import '../models/staff_model.dart';
 import 'onyx_screen.dart';
+
+//onyx variables
+final ValueNotifier<bool> isListening = ValueNotifier(false);
+final ValueNotifier<bool> isLoading = ValueNotifier(false);
+final ValueNotifier<bool> isPlayPause = ValueNotifier(false);
+final ValueNotifier<bool> hasNavigated = ValueNotifier(true);
+final ValueNotifier<String> recognizedWords = ValueNotifier('');
+final ValueNotifier<Map<String, dynamic>> replyFromOnyx = ValueNotifier({});
 
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({Key? key}) : super(key: key);
@@ -53,6 +65,123 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   final ValueNotifier<DateTime> _endTime = ValueNotifier(DateTime.now());
   final ValueNotifier<List<StaffModel>> _bdayStaffs = ValueNotifier([]);
 
+  //Onyx Screen contents
+  final SpeechToText _speechToText = SpeechToText();
+  final FlutterTts flutterTts = FlutterTts();
+
+  void _initSpeech() async {
+    final context = this.context;
+    await _speechToText.initialize(
+      onStatus: (value) async {
+        log('values are $value');
+        if (value == 'listening') {
+          isListening.value = true;
+        } else {
+          isListening.value = false;
+          if (recognizedWords.value.isNotEmpty && value == 'done') {
+            isLoading.value = true;
+            await callOnyx(
+              context,
+              recognizedWords.value,
+            );
+            isLoading.value = false;
+          }
+        }
+
+        if (recognizedWords.value.isEmpty && value == 'done') {
+          hasNavigated.value = true;
+          Navigator.pop(context);
+          initPicovoice();
+        }
+      },
+    );
+  }
+
+  void _startListening() async {
+    await _speechToText.listen(onResult: _onSpeechResult);
+  }
+
+  void _stopListening() async {
+    await _speechToText.stop();
+  }
+
+  void _onSpeechResult(SpeechRecognitionResult result) {
+    log('words are ${result.recognizedWords}');
+    recognizedWords.value = result.recognizedWords;
+  }
+
+  //Wake word contents
+  PorcupineManager? _porcupineManager;
+
+  Future<void> initPicovoice() async {
+    try {
+      _porcupineManager = await PorcupineManager.fromKeywordPaths(
+        "RcjpX2kR+cxVxE+gWeNky6I6iv3eFasLOD5reWH85vX0PKjKQX0NTQ==",
+        ['assets/wake_word/Onyx_en_android_v2_2_0.ppn'],
+        sensitivities: [0.3],
+        wakeWordCallback,
+      );
+      await startPorcupine();
+    } catch (err) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error from $err'),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.red,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> startPorcupine() async {
+    try {
+      await _porcupineManager?.start();
+    } catch (e) {
+      print('Start exception: $e');
+    }
+  }
+
+  Future<void> stopPorcupine() async {
+    try {
+      await _porcupineManager?.stop();
+    } catch (e) {
+      print('Stop exception is $e');
+    }
+  }
+
+  Future<void> wakeWordCallback(int index) async {
+    print('Wake word detected in main screen ${hasNavigated.value}');
+    await stopPorcupine();
+    if (hasNavigated.value) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => Onyx(
+            onListen: _startListening,
+            onStop: _stopListening,
+          ),
+        ),
+      );
+    } else {
+      _startListening();
+    }
+    hasNavigated.value = false;
+  }
+
+  void requestMicrophonePermission() async {
+    var status = await Permission.microphone.status;
+    if (status.isDenied) {
+      status = await Permission.microphone.request();
+    }
+    if (status.isGranted) {
+      print('Microphone access granted');
+    } else {
+      print('Microphone access denied');
+    }
+  }
+
   @override
   void initState() {
     final context = this.context;
@@ -65,6 +194,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     _notificationService.initFCMNotifications();
     _setNotification();
     _setupFCMListener(context);
+    _initSpeech();
+    // initPicovoice();
     super.initState();
   }
 
@@ -82,7 +213,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   centerTitle: false,
                   leading: GestureDetector(
                     onTap: () {
-                      HapticFeedback.mediumImpact();
+                      HapticFeedback.selectionClick();
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => const AccountScreen(),
@@ -131,13 +262,23 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     ],
                   ),
                 ),
-                // floatingActionButton: FloatingActionButton(
-                //   backgroundColor: Colors.deepPurple,
-                //   onPressed: (){
-                //     Navigator.of(context).push(MaterialPageRoute(builder: (context) => const OnyxScreen()));
-                //   },
-                //   child: Image.asset('assets/onyx_thala.png', scale: 1.5,),
-                // ),
+                floatingActionButton: FloatingActionButton(
+                  backgroundColor: Colors.deepPurple,
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => Onyx(
+                          onListen: _startListening,
+                          onStop: _stopListening,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Image.asset(
+                    'assets/onyx_thala.png',
+                    scale: 1.7,
+                  ),
+                ),
                 body: _body(userProvider, size),
               );
       },
