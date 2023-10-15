@@ -105,7 +105,9 @@ class _StaffDetailsState extends State<StaffDetails> {
               Text(
                 'Total staffs: ${allStaffs.length}',
                 style: TextStyle(
-                    fontSize: 18, fontFamily: ConstantFonts.sfProBold),
+                  fontSize: 18,
+                  fontFamily: ConstantFonts.sfProBold,
+                ),
               ),
               SizedBox(height: size.height * 0.02),
               Row(
@@ -122,12 +124,12 @@ class _StaffDetailsState extends State<StaffDetails> {
                               color: Colors.grey,
                             ),
                             SizedBox(width: size.width * 0.02),
-                            Text(
+                            const Text(
                               'Tap to View staff details',
                               style: TextStyle(
-                                  color: Colors.grey,
-                                   ),
-                            )
+                                color: Colors.grey,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -138,12 +140,12 @@ class _StaffDetailsState extends State<StaffDetails> {
                           children: [
                             const Icon(Icons.info, color: Colors.grey),
                             SizedBox(width: size.width * 0.02),
-                            Text(
+                            const Text(
                               'Long press to Delete staff details',
                               style: TextStyle(
-                                  color: Colors.grey,
-                                   ),
-                            )
+                                color: Colors.grey,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -162,9 +164,9 @@ class _StaffDetailsState extends State<StaffDetails> {
                         return PopupMenuItem(
                           child: Text(
                             dropDown[i],
-                            style: TextStyle(
-                               
-                                fontSize: 16),
+                            style: const TextStyle(
+                              fontSize: 16,
+                            ),
                           ),
                           onTap: () {
                             setState(() {
@@ -192,20 +194,21 @@ class _StaffDetailsState extends State<StaffDetails> {
                   Text(
                     department,
                     style: TextStyle(
-                        fontFamily: ConstantFonts.sfProRegular,
-                        fontWeight: FontWeight.w600,
-                        color: department == "APP"
-                            ? const Color(0xff6527BE)
-                            : department == 'RND'
-                                ? const Color(0xff0EA293)
-                                : department == 'MEDIA'
-                                    ? const Color(0xffDB005B)
-                                    : department == 'WEB'
-                                        ? const Color(0xff9A208C)
-                                        : department == 'PR'
-                                            ? const Color(0xffF24C3D)
-                                            : Colors.black,
-                        fontSize: 17),
+                      fontFamily: ConstantFonts.sfProRegular,
+                      fontWeight: FontWeight.w600,
+                      color: department == "APP"
+                          ? const Color(0xff6527BE)
+                          : department == 'RND'
+                              ? const Color(0xff0EA293)
+                              : department == 'MEDIA'
+                                  ? const Color(0xffDB005B)
+                                  : department == 'WEB'
+                                      ? const Color(0xff9A208C)
+                                      : department == 'PR'
+                                          ? const Color(0xffF24C3D)
+                                          : Colors.black,
+                      fontSize: 17,
+                    ),
                   ),
                 ],
               ),
@@ -223,44 +226,47 @@ class _StaffDetailsState extends State<StaffDetails> {
                   itemBuilder: (ctx, i) {
                     return GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
                             builder: (ctx) => FullStaffDetails(
-                                  allDetails: allStaffs[i],
-                                )));
+                              allDetails: allStaffs[i],
+                            ),
+                          ),
+                        );
                       },
                       onLongPress: () {
                         showDialog(
                           context: context,
                           builder: (ctx) {
                             return AlertDialog(
-                              title: Text(
+                              title: const Text(
                                 '⚠️Warning!!!',
                                 style: TextStyle(
-                                    fontSize: 18,
-                                   
-                                    color: CupertinoColors.destructiveRed),
+                                  fontSize: 18,
+                                  color: CupertinoColors.destructiveRed,
+                                ),
                               ),
                               content: RichText(
                                 text: TextSpan(
                                   text: 'Do you want to delete all details of ',
-                                  style: TextStyle(
-                                      fontSize: 17,
-                                     
-                                      color: Colors.black),
+                                  style: const TextStyle(
+                                    fontSize: 17,
+                                    color: Colors.black,
+                                  ),
                                   children: [
                                     TextSpan(
                                       text: allStaffs[i].name,
-                                      style: TextStyle(
-                                          fontSize: 17,
-                                         
-                                          color: Colors.red),
+                                      style: const TextStyle(
+                                        fontSize: 17,
+                                        color: Colors.red,
+                                      ),
                                     ),
                                     TextSpan(
                                       text: ' from Onwords database?',
                                       style: TextStyle(
-                                          fontSize: 17,
-                                          fontFamily:
-                                              ConstantFonts.sfProMedium),
+                                        fontSize: 17,
+                                        fontFamily: ConstantFonts.sfProMedium,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -276,10 +282,10 @@ class _StaffDetailsState extends State<StaffDetails> {
                                     child: Text(
                                       'Yes',
                                       style: TextStyle(
-                                          fontSize: 17,
-                                          fontFamily: ConstantFonts.sfProBold,
-                                          color:
-                                              CupertinoColors.destructiveRed),
+                                        fontSize: 17,
+                                        fontFamily: ConstantFonts.sfProBold,
+                                        color: CupertinoColors.destructiveRed,
+                                      ),
                                     ),
                                     onPressed: () async {
                                       await FirebaseDatabase.instance
@@ -287,15 +293,18 @@ class _StaffDetailsState extends State<StaffDetails> {
                                           .remove();
                                       await FirebaseDatabase.instance
                                           .ref(
-                                              'staff_details/${allStaffs[i].uid}')
+                                            'staff_details/${allStaffs[i].uid}',
+                                          )
                                           .remove();
                                       await FirebaseDatabase.instance
                                           .ref(
-                                              'fingerPrint/${allStaffs[i].uid}')
+                                            'fingerPrint/${allStaffs[i].uid}',
+                                          )
                                           .remove();
                                       await FirebaseDatabase.instance
                                           .ref(
-                                              'virtualAttendance/${allStaffs[i].uid}')
+                                            'virtualAttendance/${allStaffs[i].uid}',
+                                          )
                                           .remove();
                                       allStaffNames();
                                       Navigator.of(context).pop();
@@ -312,9 +321,10 @@ class _StaffDetailsState extends State<StaffDetails> {
                                     child: Text(
                                       'No',
                                       style: TextStyle(
-                                          color: CupertinoColors.black,
-                                          fontFamily: ConstantFonts.sfProBold,
-                                          fontSize: 17),
+                                        color: CupertinoColors.black,
+                                        fontFamily: ConstantFonts.sfProBold,
+                                        fontSize: 17,
+                                      ),
                                     ),
                                     onPressed: () {
                                       Navigator.of(context).pop();
@@ -331,7 +341,6 @@ class _StaffDetailsState extends State<StaffDetails> {
                           Text(
                             allStaffs[i].name,
                             style: TextStyle(
-                             
                               color: department == "APP"
                                   ? const Color(0xff6527BE)
                                   : department == 'RND'
@@ -353,21 +362,26 @@ class _StaffDetailsState extends State<StaffDetails> {
                               child: allStaffs[i].profileImage!.isEmpty
                                   ? const Image(
                                       image:
-                                          AssetImage('assets/profile_pic.png'))
+                                          AssetImage('assets/profile_pic.png'),
+                                    )
                                   : CachedNetworkImage(
                                       imageUrl: allStaffs[i].profileImage!,
                                       fit: BoxFit.cover,
-                                      progressIndicatorBuilder: (context, url,
-                                              downloadProgress) =>
+                                      progressIndicatorBuilder: (
+                                        context,
+                                        url,
+                                        downloadProgress,
+                                      ) =>
                                           CircularProgressIndicator(
-                                              color:
-                                                  ConstantColor.backgroundColor,
-                                              strokeWidth: 2,
-                                              value: downloadProgress.progress),
+                                        color: ConstantColor.backgroundColor,
+                                        strokeWidth: 2,
+                                        value: downloadProgress.progress,
+                                      ),
                                       errorWidget: (context, url, error) =>
                                           const Image(
                                         image: AssetImage(
-                                            'assets/profile_pic.png'),
+                                          'assets/profile_pic.png',
+                                        ),
                                       ),
                                     ),
                             ),
@@ -377,7 +391,7 @@ class _StaffDetailsState extends State<StaffDetails> {
                     );
                   },
                 ),
-              )
+              ),
             ],
           );
   }

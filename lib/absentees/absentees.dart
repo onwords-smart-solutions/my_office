@@ -37,7 +37,7 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
     );
     if (newDate == null) return;
     setState(
-          () {
+      () {
         dateTime = newDate;
       },
     );
@@ -58,17 +58,16 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
           department: entry['department'].toString(),
           name: entry['name'].toString(),
         );
-        if(staffEntry.name != 'Nikhil Deepak') {
+        if (staffEntry.name != 'Nikhil Deepak') {
           staffNames.add(staffEntry);
         }
       }
-
     });
-    List<StaffAttendanceModel> absenteesList =[];
+    List<StaffAttendanceModel> absenteesList = [];
     for (var staff in staffNames) {
       final time = await entryCheck(staff.uid);
       log("NAMES ARE ${staff.uid} $time");
-      if(time.isEmpty){
+      if (time.isEmpty) {
         absenteesList.add(staff);
       }
     }
@@ -124,123 +123,121 @@ class _AbsenteeScreenState extends State<AbsenteeScreen> {
   @override
   Widget build(BuildContext context) {
     return MainTemplate(
-        subtitle: 'Absentees list!!',
-        templateBody: bodyContent(),
-        bgColor: ConstantColor.background1Color);
+      subtitle: 'Absentees list!!',
+      templateBody: bodyContent(),
+      bgColor: ConstantColor.background1Color,
+    );
   }
 
   Widget bodyContent() {
-      return Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    datePicker();
-                  },
-                  child: Image.asset(
-                    'assets/calender.png',
-                    scale: 3,
-                  ),
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  datePicker();
+                },
+                child: Image.asset(
+                  'assets/calender.png',
+                  scale: 3,
                 ),
-                const SizedBox(width: 15),
-                Text(
-                  DateFormat('yyyy-MM-dd').format(dateTime),
-                  style: TextStyle(
-                    fontFamily: ConstantFonts.sfProBold,
-                    fontSize: 17,
-                    color: ConstantColor.backgroundColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 10),
-          Text('Total absentees : ${absentees.length}',
-            style: TextStyle(
-              fontSize: 17,
-              fontFamily: ConstantFonts.sfProBold,
-            ),
-          ),
-          isLoading
-              ? Expanded(child: Lottie.asset('assets/animations/new_loading.json'))
-              : absentees.isNotEmpty
-              ? Expanded(
-            child: ListView.builder(
-              itemCount: absentees.length,
-              itemBuilder: (ctx, i) {
-                return Container(
-                  margin: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: ConstantColor.background1Color,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        offset: const Offset(0.0, 2.0),
-                        blurRadius: 8,
-                      )
-                    ],
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Center(
-                    child: ListTile(
-                      leading: const CircleAvatar(
-                        radius: 20,
-                        child: Icon(CupertinoIcons.person_2_fill),
-                      ),
-                      title: Text(
-                        absentees[i].name,
-                        style: TextStyle(
-                           
-                            color: ConstantColor.blackColor,
-                            fontSize:
-                            MediaQuery
-                                .of(context)
-                                .size
-                                .height *
-                                0.021),
-                      ),
-                      trailing: Text(
-                        absentees[i].department,
-                        style: TextStyle(
-                            fontFamily: ConstantFonts.sfProBold,
-                            color: CupertinoColors.destructiveRed,
-                            fontSize:
-                            MediaQuery
-                                .of(context)
-                                .size
-                                .height *
-                                0.021),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-          )
-              : Expanded(
-            child: Center(
-              child: Column(
-                children: [
-                  Lottie.asset('assets/animations/no_data.json',
-                      height: 300),
-                  Text(
-                    'Everyone is Present today🤔',
-                    style: TextStyle(
-                      color: ConstantColor.backgroundColor,
-                      fontSize: 20,
-                      fontFamily: ConstantFonts.sfProRegular,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
               ),
-            ),
+              const SizedBox(width: 15),
+              Text(
+                DateFormat('yyyy-MM-dd').format(dateTime),
+                style: TextStyle(
+                  fontFamily: ConstantFonts.sfProBold,
+                  fontSize: 17,
+                  color: ConstantColor.backgroundColor,
+                ),
+              ),
+            ],
           ),
-        ],
-      );
-    }
+        ),
+        const SizedBox(height: 10),
+        Text(
+          'Total absentees : ${absentees.length}',
+          style: TextStyle(
+            fontSize: 17,
+            fontFamily: ConstantFonts.sfProBold,
+          ),
+        ),
+        isLoading
+            ? Expanded(
+                child: Lottie.asset('assets/animations/new_loading.json'))
+            : absentees.isNotEmpty
+                ? Expanded(
+                    child: ListView.builder(
+                      itemCount: absentees.length,
+                      itemBuilder: (ctx, i) {
+                        return Container(
+                          margin: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: ConstantColor.background1Color,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                offset: const Offset(0.0, 2.0),
+                                blurRadius: 8,
+                              ),
+                            ],
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Center(
+                            child: ListTile(
+                              leading: const CircleAvatar(
+                                radius: 20,
+                                child: Icon(CupertinoIcons.person_2_fill),
+                              ),
+                              title: Text(
+                                absentees[i].name,
+                                style: TextStyle(
+                                  color: ConstantColor.blackColor,
+                                  fontSize: MediaQuery.of(context).size.height *
+                                      0.021,
+                                ),
+                              ),
+                              trailing: Text(
+                                absentees[i].department,
+                                style: TextStyle(
+                                  fontFamily: ConstantFonts.sfProBold,
+                                  color: CupertinoColors.destructiveRed,
+                                  fontSize: MediaQuery.of(context).size.height *
+                                      0.021,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                : Expanded(
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Lottie.asset(
+                            'assets/animations/no_data.json',
+                            height: 300,
+                          ),
+                          Text(
+                            'Everyone is Present today🤔',
+                            style: TextStyle(
+                              color: ConstantColor.backgroundColor,
+                              fontSize: 20,
+                              fontFamily: ConstantFonts.sfProRegular,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+      ],
+    );
   }
+}
