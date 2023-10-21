@@ -67,7 +67,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
           child: Column(
             children: [
               TextField(
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 17,
                 ),
                 textCapitalization: TextCapitalization.sentences,
@@ -87,7 +87,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
                     borderSide: const BorderSide(color: CupertinoColors.systemPurple, width: 2),
                   ),
                   hintText: 'Fill up your suggestions!!',
-                  hintStyle: TextStyle(),
+                  hintStyle: const TextStyle(),
                 ),
               ),
               const SizedBox(height: 5),
@@ -95,7 +95,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
                 alignment: Alignment.bottomLeft,
                 child: Text(
                   '  Character count: $characterCount',
-                  style: TextStyle(),
+                  style: const TextStyle(),
                 ),
               ),
             ],
@@ -125,8 +125,8 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
 
   void addSuggestionToDatabase() async {
     if (suggestionsController.text.trim().isEmpty) {
-      final snackBar = SnackBar(
-        duration: const Duration(seconds: 3),
+      final snackBar = const SnackBar(
+        duration: Duration(seconds: 3),
         content: Text(
           'Suggestions should not be empty!!',
           textAlign: TextAlign.center,
@@ -139,7 +139,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       // print('no data');
     } else if (suggestionsController.text.length < 20) {
-      final snackBar = SnackBar(
+      final snackBar = const SnackBar(
         content: Text(
           'Too short for a Suggestion',
           textAlign: TextAlign.center,

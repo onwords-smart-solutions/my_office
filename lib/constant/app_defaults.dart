@@ -8,6 +8,7 @@ import 'package:my_office/leave_details/leave_details.dart';
 import 'package:my_office/models/staff_access_model.dart';
 import 'package:my_office/models/staff_model.dart';
 import '../PR/invoice_generator/quotation_template/view/home_screen.dart';
+import '../PR/pr_dashboard.dart';
 import '../PR/pr_workdone/pr_work_details.dart';
 import '../PR/pr_workdone/pr_work_entry.dart';
 import '../PR/products/new_product.dart';
@@ -62,13 +63,14 @@ class MenuTitle {
   static const String installationPDF = 'Installation PDF';
   static const String proxyAttendance = 'Proxy Attendance';
   static const String installationEntry = 'Installation Entry';
+  static const String prDashboard = 'PrDashboard';
 }
 
 class AppDefaults {
   static List<StaffAccessModel> allAccess = [
     StaffAccessModel(title: MenuTitle.workEntry, image: 'assets/work_entry.png'),
     StaffAccessModel(title: MenuTitle.refreshment, image: 'assets/refreshment.png'),
-    StaffAccessModel(title: MenuTitle.leavePortal, image: 'assets/leave_apply.png'),
+    // StaffAccessModel(title: MenuTitle.leavePortal, image: 'assets/leave_apply.png'),
     StaffAccessModel(title: MenuTitle.suggestion, image: 'assets/suggestions.png'),
     StaffAccessModel(title: MenuTitle.workDetail, image: 'assets/work_details.png'),
     StaffAccessModel(title: MenuTitle.foodCount, image: 'assets/food_count.png'),
@@ -93,6 +95,7 @@ class AppDefaults {
     StaffAccessModel(title: MenuTitle.installationPDF, image: 'assets/installation_image.png'),
     StaffAccessModel(title: MenuTitle.proxyAttendance, image: 'assets/proxy_attendance.png'),
     // StaffAccessModel(title: MenuTitle.installationEntry, image: 'assets/installation_entry.png'),
+    StaffAccessModel(title: MenuTitle.prDashboard, image: 'assets/pr_dashboard.png'),
   ];
 
   static Widget getPage(String title, StaffModel staffInfo) {
@@ -200,6 +203,9 @@ class AppDefaults {
         break;
       case MenuTitle.installationEntry:
         page = const InstallationEntry();
+        break;
+      case MenuTitle.prDashboard:
+        page = const PrDashboard();
         break;
     }
     return page;
