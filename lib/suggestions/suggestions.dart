@@ -9,8 +9,10 @@ import '../Constant/colors/constant_colors.dart';
 import '../services/notification_service.dart';
 
 class SuggestionScreen extends StatefulWidget {
+  final String uid;
+  final String name;
 
-  const SuggestionScreen({Key? key}) : super(key: key);
+  const SuggestionScreen({Key? key, required this.uid, required this.name}) : super(key: key);
 
   @override
   State<SuggestionScreen> createState() => _SuggestionScreenState();
@@ -36,10 +38,13 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
     super.dispose();
   }
 
-  Future<void> sendNotification(String userId, String title, String body) async {
+  Future<void> sendNotification(String userId, String title,
+      String body,) async {
     final tokens = await NotificationService().getDeviceFcm(userId: userId);
-    final dTokens = await NotificationService().getDeviceFcm(userId: '58JIRnAbechEMJl8edlLvRzHcW52');
-    final jTokens = await NotificationService().getDeviceFcm(userId: 'Ae6DcpP2XmbtEf88OA8oSHQVpFB2');
+    final dTokens = await NotificationService().getDeviceFcm(
+      userId: '58JIRnAbechEMJl8edlLvRzHcW52',);
+    final jTokens = await NotificationService().getDeviceFcm(
+      userId: 'Ae6DcpP2XmbtEf88OA8oSHQVpFB2',);
     tokens.addAll(dTokens);
     tokens.addAll(jTokens);
 
@@ -56,7 +61,9 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
   @override
   Widget build(BuildContext context) {
     return MainTemplate(
-        subtitle: 'Throw some Suggestions!!', templateBody: suggestions(), bgColor: ConstantColor.background1Color);
+      subtitle: 'Throw some Suggestions!!',
+      templateBody: suggestions(),
+      bgColor: ConstantColor.background1Color,);
   }
 
   Widget suggestions() {
@@ -80,14 +87,18 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
-                    borderSide: const BorderSide(color: CupertinoColors.systemGrey, width: 2),
+                    borderSide: const BorderSide(
+                      color: CupertinoColors.systemGrey, width: 2,),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
-                    borderSide: const BorderSide(color: CupertinoColors.systemPurple, width: 2),
+                    borderSide: const BorderSide(
+                      color: CupertinoColors.systemPurple, width: 2,),
                   ),
-                  hintText: 'Fill up your suggestions!!',
-                  hintStyle: const TextStyle(),
+                  hintText: 'Fill up some useful suggestions!!',
+                  hintStyle: TextStyle(
+                    color: Colors.grey.shade500,
+                  ),
                 ),
               ),
               const SizedBox(height: 5),
@@ -108,7 +119,8 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
           child: FilledButton(
             onPressed: () {
               addSuggestionToDatabase();
-              sendNotification('Vhbt8jIAfiaV1HxuWERLqJh7dbj2', 'Suggestion', 'New suggestion has been arrived');
+              sendNotification('Vhbt8jIAfiaV1HxuWERLqJh7dbj2', 'Suggestion',
+                'New suggestion has been arrived',);
             },
             child: Text(
               "Submit",
@@ -124,30 +136,38 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
   }
 
   void addSuggestionToDatabase() async {
-    if (suggestionsController.text.trim().isEmpty) {
-      final snackBar = const SnackBar(
-        duration: Duration(seconds: 3),
-        content: Text(
+    if (suggestionsController.text
+        .trim()
+        .isEmpty) {
+      final snackBar = SnackBar(
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        content: const Text(
           'Suggestions should not be empty!!',
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 17,
+            fontWeight: FontWeight.w500,
           ),
         ),
         backgroundColor: Colors.red,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      // print('no data');
     } else if (suggestionsController.text.length < 20) {
-      final snackBar = const SnackBar(
-        content: Text(
+      final snackBar = SnackBar(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        behavior: SnackBarBehavior.floating,
+        content: const Text(
           'Too short for a Suggestion',
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 17,
+            fontWeight: FontWeight.w500,
           ),
         ),
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.orange,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     } else {
@@ -160,15 +180,20 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
           'message': suggestionsController.text.trim(),
           'time': DateFormat('kk:mm').format(now),
           'isread': false,
-        },
+          'uid' : widget.uid,
+          },
       );
       suggestionsController.clear();
-      final snackBar = const SnackBar(
-        content: Text(
+      final snackBar = SnackBar(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        behavior: SnackBarBehavior.floating,
+        content: const Text(
           'Suggestions has been submitted',
           textAlign: TextAlign.center,
           style: TextStyle(
-            fontSize: 17,
+            fontWeight: FontWeight.w500,
           ),
         ),
         backgroundColor: Colors.green,

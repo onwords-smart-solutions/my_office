@@ -4,7 +4,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:my_office/Constant/fonts/constant_font.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../util/main_template.dart';
 import 'all_suggestions.dart';
@@ -45,9 +44,10 @@ class _ViewSuggestionsState extends State<ViewSuggestions> {
   @override
   Widget build(BuildContext context) {
     return MainTemplate(
-        subtitle: 'Check for Suggestions!!',
-        templateBody: viewSuggestionsPage(),
-        bgColor: ConstantColor.background1Color);
+      subtitle: 'Check for Suggestions!!',
+      templateBody: viewSuggestionsPage(),
+      bgColor: ConstantColor.background1Color,
+    );
   }
 
   Widget viewSuggestionsPage() {
@@ -67,7 +67,7 @@ class _ViewSuggestionsState extends State<ViewSuggestions> {
                       color: Colors.black.withOpacity(0.2),
                       offset: const Offset(0.0, 2.0),
                       blurRadius: 8,
-                    )
+                    ),
                   ],
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -75,8 +75,9 @@ class _ViewSuggestionsState extends State<ViewSuggestions> {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) =>
-                            AllSuggestions(fullSuggestions: allSuggestion[index]),
+                        builder: (context) => AllSuggestions(
+                            fullSuggestions: allSuggestion[index],
+                        ),
                       ),
                     );
                   },
@@ -85,11 +86,11 @@ class _ViewSuggestionsState extends State<ViewSuggestions> {
                     child: Icon(CupertinoIcons.bookmark_solid),
                   ),
                   title: Text(
-
-                      allSuggestion[index]['message'].toString().length >= 30? '${allSuggestion[index]['message'].toString().substring(0, 30)} ...': allSuggestion[index]['message'].toString(),
-                    style: TextStyle(
+                    allSuggestion[index]['message'].toString().length >= 30
+                        ? '${allSuggestion[index]['message'].toString().substring(0, 30)} ...'
+                        : allSuggestion[index]['message'].toString(),
+                    style: const TextStyle(
                       color: ConstantColor.headingTextColor,
-                     
                       fontSize: 17,
                     ),
                   ),
