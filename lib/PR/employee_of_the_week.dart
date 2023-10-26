@@ -35,7 +35,7 @@ class _BestEmployeeState extends State<BestEmployee> {
           profileImage: names['profileImage'].toString(),
           emailId: names['email'].toString(),
         );
-        if (staffNames.department == "PR") {
+        if (staffNames.name != "Nikhil Deepak") {
           allStaffs.add(staffNames);
         }
       }
@@ -189,10 +189,10 @@ class _BestEmployeeState extends State<BestEmployee> {
             ),
             textStyle: const TextStyle(),
             enableFilter: true,
-            hintText: 'PR Staff name',
+            hintText: 'Staff name',
             controller: employeeName,
             label: Text(
-              'PR Staff name',
+              'Staff name',
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 color: Colors.grey.shade500,

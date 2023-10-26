@@ -78,8 +78,9 @@ class HomeViewModel {
     return names;
   }
 
-  Future<List<StaffAccessModel>> getStaffAccess(
-      {required StaffModel staff,}) async {
+  Future<List<StaffAccessModel>> getStaffAccess({
+    required StaffModel staff,
+  }) async {
     List<StaffAccessModel> allAccess = [];
 
     final managementList = await getManagementList();
@@ -95,7 +96,9 @@ class HomeViewModel {
             allAccess.add(menuItems);
           }
         } else if (menuItems.title != MenuTitle.viewSuggestions ||
-            menuItems.title != MenuTitle.staffDetail) {
+            menuItems.title != MenuTitle.staffDetail ||
+            menuItems.title != MenuTitle.employeeOfTheWeek ||
+            menuItems.title != MenuTitle.prDashboard) {
           allAccess.add(menuItems);
         }
       }
@@ -185,8 +188,10 @@ class HomeViewModel {
   }
 
   Future<CustomPunchModel?> _checkTime(
-      String staffId, String name, String department,)
-  async {
+    String staffId,
+    String name,
+    String department,
+  ) async {
     CustomPunchModel? punchDetail;
     bool isProxy = false;
     DateTime? checkInTime;
@@ -222,14 +227,13 @@ class HomeViewModel {
             ),
           );
           try {
-
             final proxyInByName =
-            attendanceData['proxy_in'] as Map<Object?, Object?>;
+                attendanceData['proxy_in'] as Map<Object?, Object?>;
             proxyInBy = proxyInByName['proxy_by'].toString();
             final proxyInByReason =
-            attendanceData['proxy_in'] as Map<Object?, Object?>;
+                attendanceData['proxy_in'] as Map<Object?, Object?>;
             proxyInReason = proxyInByReason['reason'].toString();
-            isProxy=true;
+            isProxy = true;
           } catch (e) {
             dev.log('Check in exception is $e');
           }
@@ -250,12 +254,12 @@ class HomeViewModel {
           );
           try {
             final proxyOutByName =
-            attendanceData['proxy_out'] as Map<Object?, Object?>;
+                attendanceData['proxy_out'] as Map<Object?, Object?>;
             proxyOutBy = proxyOutByName['proxy_by'].toString();
             final proxyOutByReason =
-            attendanceData['proxy_out'] as Map<Object?, Object?>;
+                attendanceData['proxy_out'] as Map<Object?, Object?>;
             proxyOutReason = proxyOutByReason['reason'].toString();
-            isProxy=true;
+            isProxy = true;
           } catch (e) {
             dev.log('Check out exception is $e');
           }
@@ -273,7 +277,6 @@ class HomeViewModel {
           checkOutReason: proxyOutReason,
           isProxy: isProxy,
         );
-
       }
     });
     return punchDetail;
@@ -310,7 +313,9 @@ class HomeViewModel {
               ? ''
               : entry['profileImage'].toString(),
           dob: entry['dob'] == null ? 0 : int.parse(entry['dob'].toString()),
-          phoneNumber: entry['mobile'] == null ? 0 : int.parse(entry['mobile'].toString()),
+          phoneNumber: entry['mobile'] == null
+              ? 0
+              : int.parse(entry['mobile'].toString()),
         );
 
         staffs.add(staffEntry);
