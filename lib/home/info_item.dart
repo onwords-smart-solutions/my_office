@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
@@ -28,26 +30,71 @@ class InfoItem extends StatefulWidget {
 }
 
 class _InfoItemState extends State<InfoItem> {
-  PageController pageController = PageController();
+  final PageController _pageController = PageController();
+  final PageController _prController = PageController();
+  StaffModel? employeeOfTheWeek;
+  String? reason = '';
   int currentIndex = 0;
 
-  void startAutoScroll(){
+  void startAutoScroll() {
     Timer.periodic(const Duration(seconds: 3), (Timer timer) {
-      if (currentIndex < widget.todayBirthdayList.length ) {
-        currentIndex++;
-      }else{
-        if(widget.todayBirthdayList.length == 1 || widget.todayBirthdayList.isEmpty){
-          timer.cancel();
-        }
+      if (widget.todayBirthdayList.isEmpty ||
+          widget.todayBirthdayList.length == 1) {
+        timer.cancel();
+        return;
       }
+      currentIndex = (currentIndex ?? 0) + 1;
+      if (currentIndex >= widget.todayBirthdayList.length) {
+        currentIndex = 0;
+      }
+
       try {
-        pageController.animateToPage(
-          currentIndex % widget.todayBirthdayList.length,
+        _pageController.animateToPage(
+          currentIndex,
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeInOut,
         );
       } catch (e, s) {
-        print(s);
+        print("Error: $e");
+        print("Stack trace: $s");
+      }
+    });
+  }
+
+  Future<void> getPrDetails() async {
+    final ref = FirebaseDatabase.instance.ref();
+
+    ref.child('PRDashboard/employee_of_week').once().then((value) async {
+      if (value.snapshot.exists) {
+        final data = value.snapshot.value as Map<Object?, Object?>;
+
+        final uid = data['person'].toString();
+        reason = data['reason'].toString();
+
+        if(uid != 'null' && uid.isNotEmpty){
+          await ref.child('staff/$uid').once().then((value) {
+            final staffDetails = value.snapshot.value as Map<Object?, Object?>;
+            try {
+              employeeOfTheWeek = StaffModel(
+                uid: uid,
+                name: staffDetails['name'].toString(),
+                department: staffDetails['department'].toString(),
+                email: staffDetails['email'].toString(),
+                profilePic: staffDetails['profileImage'].toString(),
+                dob: staffDetails['dob'] == null
+                    ? 0
+                    : int.parse(staffDetails['dob'].toString()),
+                phoneNumber: staffDetails['mobile'] == null
+                    ? 0
+                    : int.parse(staffDetails['mobile'].toString()),
+                uniqueId: '',
+              );
+            } catch (e) {
+              log('Error from $e');
+            }
+            setState(() {});
+          });
+        }
       }
     });
   }
@@ -55,12 +102,14 @@ class _InfoItemState extends State<InfoItem> {
   @override
   void initState() {
     startAutoScroll();
+    getPrDetails();
     super.initState();
   }
 
   @override
   void dispose() {
-    pageController.dispose();
+    _pageController.dispose();
+    _prController.dispose();
     super.dispose();
   }
 
@@ -151,7 +200,18 @@ class _InfoItemState extends State<InfoItem> {
                     child: Column(
                       children: [
                         if (widget.todayBirthdayList.isEmpty)
-                          _motivationSection()
+                          AspectRatio(
+                            aspectRatio: 16 / 9,
+                            child: PageView(
+                              scrollDirection: Axis.horizontal,
+                              controller: _prController,
+                              children: [
+                                if (employeeOfTheWeek != null)
+                                  _prEmployeeOfTheWeek(),
+                                _motivationSection(),
+                              ],
+                            ),
+                          )
                         else
                           _birthdaySection(size),
                         const SizedBox(height: 10.0),
@@ -170,6 +230,78 @@ class _InfoItemState extends State<InfoItem> {
     );
   }
 
+  Widget _prEmployeeOfTheWeek() {
+    final size = MediaQuery.sizeOf(context);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text(
+          'Employee of the Week',
+          style: TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 18,
+            color: Colors.tealAccent,
+          ),
+        ),
+        Expanded(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                height: size.width * .15,
+                width: size.width * .15,
+                margin: const EdgeInsets.only(right: 8.0),
+                clipBehavior: Clip.hardEdge,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                ),
+                child: CachedNetworkImage(
+                  imageUrl: employeeOfTheWeek!.profilePic,
+                  fit: BoxFit.cover,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      CircularProgressIndicator(
+                        value: downloadProgress.progress,
+                      ),
+                  errorWidget: (context, url, error) => const Icon(
+                    Icons.error,
+                    color: Colors.red,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      employeeOfTheWeek!.name,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Flexible(
+                      child: Text(
+                        reason!,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _motivationSection() {
     final message = motivationalQuotes[widget.quoteIndex].split('-');
     final quote = message.first;
@@ -183,7 +315,7 @@ class _InfoItemState extends State<InfoItem> {
           style: const TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.w700,
-            fontSize: 20.0,
+            fontSize: 18.0,
           ),
         ),
         //author
@@ -213,7 +345,7 @@ class _InfoItemState extends State<InfoItem> {
         children: [
           Flexible(
             child: PageView.builder(
-              controller: pageController,
+              controller: _pageController,
               scrollBehavior: const ScrollBehavior(),
               scrollDirection: Axis.horizontal,
               itemCount: widget.todayBirthdayList.length,
@@ -235,12 +367,14 @@ class _InfoItemState extends State<InfoItem> {
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                         ),
-                        child: widget.todayBirthdayList[index].profilePic.isEmpty
+                        child: widget
+                            .todayBirthdayList[index].profilePic.isEmpty
                             ? const Image(
                           image: AssetImage('assets/profile_icon.jpg'),
                         )
                             : CachedNetworkImage(
-                          imageUrl: widget.todayBirthdayList[index].profilePic,
+                          imageUrl:
+                          widget.todayBirthdayList[index].profilePic,
                           fit: BoxFit.cover,
                           progressIndicatorBuilder:
                               (context, url, downloadProgress) =>
@@ -491,22 +625,31 @@ List<String> motivationalQuotes = [
   "\"Success usually comes to those who are too busy to be looking for it.\" - Henry David Thoreau",
   "\"Success is not in what you have, but who you are.\" - Bo Bennett",
   "\"If you're offered a seat on a rocket ship, don't ask what seat! Just get on.\" - Sheryl Sandberg",
-  "\"The only thing that stands between you and your dream is the will to try and the belief that it is actually possible.\"",
   "\"Failure is not the opposite of success; it's part of success.\" - Deva",
   "\"The harder you work, the luckier you get.\" - Gary Player",
-  "\"I can't change the direction of the wind, but I can adjust my sails to always reach my destination.\" - Jimmy Dean",
   "\"Success is walking from failure to failure with no loss of enthusiasm.\" - Winston Churchill",
   "\"Don't be pushed around by the fears in your mind. Be led by the dreams in your heart.\"",
   "\"Opportunities don't happen. You create them.\" - Chris Grosser",
-  "\"Success is not the result of spontaneous combustion. You must set yourself on fire.\" - Arnold H. Glasow",
   "\"The key to success is to focus on goals, not obstacles.\" - Jibin",
   "\"The only place where success comes before work is in the dictionary.\" - Vidal Sassoon",
-  "\"Believe in yourself and all that you are. Know that there is something inside you that is greater than any obstacle.\" - Christian D. Larson",
   "\"Do what you love, and you'll never have to work a day in your life.\" - Confucius",
   "\"The expert in anything was once a beginner.\" - Helen Hayes",
   "\"You are the designer of your destiny; you are the author of your story.\"",
   "\"If you are not willing to risk the usual, you will have to settle for the ordinary.\" - Jim Rohn",
   "\"The journey of a thousand miles begins with a single step.\" - Lao Tzu",
+  "\"The only way to do great work is to love what you do.\" - Steve Jobs",
+  "\"Innovation distinguishes between a leader and a follower.\" - Steve Jobs",
+  "\"The best way to predict the future is to invent it.\" - Alan Kay",
+  "\"The most dangerous phrase in the language is, 'We've always done it this way.'\" - Grace Hopper",
+  "\"I find that the harder I work, the more luck I seem to have.\" - Thomas Jefferson",
+  "\"The computer was born to solve problems that did not exist before.\" - Bill Gates",
+  "\"Don't watch the clock; do what it does. Keep going.\" - Sam Levenson",
+  "\"The best time to plant a tree was 20 years ago. The second best time is now.\" - Chinese Proverb",
+  "\"It's not that we use technology, we live technology.\" - Godfrey Reggio",
+  "\"The great growling engine of change - technology.\" - Alvin Toffler",
+  "\"The art challenges the technology, and the technology inspires the art.\" - John Lasseter",
+  "\"The only thing that's constant is change.\" - Heraclitus",
+  "\"It's not about ideas. It's about making ideas happen.\" - Scott Belsky",
 ];
 
 String timeFormat(DateTime time) => DateFormat.jm().format(time);
