@@ -332,7 +332,10 @@ class _OnyxState extends State<Onyx> {
             recognizedWords.value = _messageController.text;
             try {
               _messageController.clear();
-              callOnyx(context, recognizedWords.value,);
+              callOnyx(
+                context,
+                recognizedWords.value,
+              );
             } catch (e, s) {
               print(s);
             }
