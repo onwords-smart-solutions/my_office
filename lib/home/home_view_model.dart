@@ -95,9 +95,9 @@ class HomeViewModel {
           if (staff.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2') {
             allAccess.add(menuItems);
           }
-        } else if (menuItems.title != MenuTitle.viewSuggestions ||
-            menuItems.title != MenuTitle.staffDetail ||
-            menuItems.title != MenuTitle.employeeOfTheWeek ||
+        } else if (menuItems.title != MenuTitle.viewSuggestions &&
+            menuItems.title != MenuTitle.staffDetail &&
+            menuItems.title != MenuTitle.employeeOfTheWeek &&
             menuItems.title != MenuTitle.prDashboard) {
           allAccess.add(menuItems);
         }
@@ -152,6 +152,14 @@ class HomeViewModel {
             menuItems.title == MenuTitle.scanQR ||
             menuItems.title == MenuTitle.prReminder ||
             menuItems.title == MenuTitle.quotationTemplate) {
+          allAccess.add(menuItems);
+        }
+      } else if (staff.department.toLowerCase() == 'hr') {
+        if (menuItems.title == MenuTitle.workEntry ||
+            menuItems.title == MenuTitle.refreshment ||
+            menuItems.title == MenuTitle.leavePortal ||
+            menuItems.title == MenuTitle.suggestion ||
+            menuItems.title == MenuTitle.attendance) {
           allAccess.add(menuItems);
         }
       } else {
