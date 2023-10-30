@@ -9,7 +9,7 @@ class LeaveApplyViewModel {
   final HomeViewModel _homeViewModel = HomeViewModel();
   final NotificationService _firebaseNotification = NotificationService();
   final FirebaseOperation _firebaseService = FirebaseOperation();
-  final _leaveRef = FirebaseDatabase.instance.ref('leaveDetails');
+  final _leaveRef = FirebaseDatabase.instance.ref('leave_details');
 
   List<String> leaveTypes = ['General', 'Sick', 'Permission'];
 
@@ -51,17 +51,16 @@ class LeaveApplyViewModel {
     required String department,
     required Function refreshHistory,
   }) async {
-    await _leaveRef.child('$uid/leaveApplied/${date.year}/${_monthFormatter(date)}/${_dateFormatter(date)}').set({
+    await _leaveRef.child('${date.year}/${_monthFormatter(date)}/${_dateFormatter(date)}/$uid/permission').set({
       'date': _dateFormatter(date),
       'status': 'Pending',
       'reason': reason,
-      'type': 'Permission',
       'duration': duration,
       'name': name,
       'dep': department,
     });
     refreshHistory();
-    sendLeaveNotification('Permission Request', 'New permission has been applied by $name', name);
+    // sendLeaveNotification('Permission Request', 'New permission has been applied by $name', name);
   }
 
   Future<void> applyLeave({
@@ -74,17 +73,16 @@ class LeaveApplyViewModel {
     required String department,
     required Function refreshHistory,
   }) async {
-    await _leaveRef.child('$uid/leaveApplied/${date.year}/${_monthFormatter(date)}/${_dateFormatter(date)}').set({
+    await _leaveRef.child('${date.year}/${_monthFormatter(date)}/${_dateFormatter(date)}/$uid/${type.toLowerCase()}').set({
       'date': _dateFormatter(date),
       'status': 'Pending',
       'reason': reason,
-      'type': type,
       'mode': mode,
       'name': name,
       'dep': department,
     });
     refreshHistory();
-    sendLeaveNotification('$type Leave Request', 'New $type leave has been applied by $name', name);
+    // sendLeaveNotification('$type Leave Request', 'New $type leave has been applied by $name', name);
   }
 
   String _dateFormatter(DateTime date) => DateFormat('yyyy-MM-dd').format(date);

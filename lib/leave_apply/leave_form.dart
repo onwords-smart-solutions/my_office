@@ -161,7 +161,7 @@ class _LeaveFormState extends State<LeaveForm> {
                 ),
               ),
             ),
-            "Half Day": Padding(
+            'Half Day': Padding(
               padding: const EdgeInsets.all(10.0),
               child: Text(
                 'Half Day',

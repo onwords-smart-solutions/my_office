@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -72,7 +74,7 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen> {
                     return (loading && history.isEmpty)
                         ? Center(
                       child: Lottie.asset(
-                        "assets/animations/new_loading.json",
+                        'assets/animations/new_loading.json',
                       ),
                     )
                         : LeaveHistory(history: history);
@@ -86,43 +88,49 @@ class _LeaveApplyScreenState extends State<LeaveApplyScreen> {
     );
   }
 
+
   Future<void> _getLeaveHistory() async {
     _history.value.clear();
     _loading.value = true;
     final context = this.context;
     final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final ref = FirebaseDatabase.instance.ref('leaveDetails');
+    final ref = FirebaseDatabase.instance.ref().child('leave_details');
     await ref
-        .child('${userProvider.user!.uid}/leaveApplied')
         .once()
         .then((leave) {
       if (leave.snapshot.exists) {
         for (var year in leave.snapshot.children) {
           for (var month in year.children) {
             for (var day in month.children) {
-              final info = day.value as Map<Object?, Object?>;
-              final dateFromFb = info['date'].toString().split('-');
-              final reason = info['reason'].toString();
-              final status = info['status'].toString();
-              final updatedBy = info['updated_by'] == null
-                  ? ''
-                  : info['updated_by'].toString();
-              final date = DateTime(
-                int.parse(dateFromFb[0]),
-                int.parse(dateFromFb[1]),
-                int.parse(dateFromFb[2]),
-                0,
-                0,
-              );
-              _history.value.add(
-                LeaveHistoryModel(
-                  date: date,
-                  reason: reason,
-                  status: status,
-                  updatedBy: updatedBy,
-                ),
-              );
-              _history.notifyListeners();
+              if (userProvider.user!.uid.isNotEmpty) {
+                for (var leaveType in day.children) {
+                  for (var leaveDetail in leaveType.children) {
+                    final info = leaveDetail.value as Map<Object?, Object?>;
+                    final dateFromFb = info['date'].toString().split('-');
+                    final reason = info['reason'].toString();
+                    final status = info['status'].toString();
+                    final updatedBy = info['updated_by'] == null
+                        ? ''
+                        : info['updated_by'].toString();
+                    final date = DateTime(
+                      int.parse(dateFromFb[0]),
+                      int.parse(dateFromFb[1]),
+                      int.parse(dateFromFb[2]),
+                      0,
+                      0,
+                    );
+                    _history.value.add(
+                      LeaveHistoryModel(
+                        date: date,
+                        reason: reason,
+                        status: status,
+                        updatedBy: updatedBy,
+                      ),
+                    );
+                    _history.notifyListeners();
+                  }
+                }
+              }
             }
           }
         }

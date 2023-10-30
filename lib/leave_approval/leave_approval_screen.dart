@@ -47,49 +47,57 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
     final user = Provider.of<UserProvider>(context, listen: false);
 
     return StreamBuilder(
-      stream: ref.child('leaveDetails').onValue,
+      stream: ref.child('leave_details').onValue,
       builder: (ctx, snapshot) {
         if (snapshot.hasData) {
           List<StaffLeaveModel> staffLeaves = [];
-          //Looping in all users
-          for (var uid in snapshot.data!.snapshot.children) {
-            //Looping inside each year
-            for (var year in uid.child('leaveApplied').children) {
-              //Looping inside each month
-              for (var month in year.children) {
-                //Looping inside each leave applied
-                for (var leaveRequest in month.children) {
-                  String name = 'GHOST';
-                  String status = 'Pending';
-                  String department = 'Not provided';
-                  final leaveData = leaveRequest.value as Map<Object?, Object?>;
-                  try {
-                    name = leaveData['name'].toString();
-                    status = leaveData['status'].toString();
-                    department = leaveData['dep'].toString() == 'null'
-                        ? 'Not provided'
-                        : leaveData['dep'].toString();
-                  } catch (e) {
-                    log('Error while fetching leave details $e');
+          //Looping inside each year
+          for (var year in snapshot.data!.snapshot.children) {
+            //Looping inside each month
+            for (var month in year.children) {
+                //Looping inside the date
+              for(var date in month.children){
+                //Looping inside all users
+              for(var uid in date.children) {
+                //Looping inside the leave type
+                for(var leaveType in uid.children) {
+                  log('Leave type is is ${leaveType.value}');
+
+                  for (var leaveRequest in leaveType.children) {
+                    String name = 'GHOST';
+                    String status = 'Pending';
+                    String department = 'Not provided';
+                    final leaveData = leaveRequest.value as Map<Object?,
+                        Object?>;
+                    try {
+                      name = leaveData['name'].toString();
+                      status = leaveData['status'].toString();
+                      department = leaveData['dep'].toString() == 'null'
+                          ? 'Not provided'
+                          : leaveData['dep'].toString();
+                    } catch (e) {
+                      log('Error while fetching leave details $e');
+                    }
+
+                    final data = StaffLeaveModel(
+                      name: name,
+                      uid: uid.key.toString(),
+                      date: leaveRequest.key.toString(),
+                      status: status,
+                      month: month.key.toString(),
+                      year: year.key.toString(),
+                      reason: leaveData['reason'].toString(),
+                      type: leaveData['type'].toString(),
+                      department: department,
+                    );
+
+                    staffLeaves.add(data);
                   }
-
-                  final data = StaffLeaveModel(
-                    name: name,
-                    uid: uid.key.toString(),
-                    date: leaveRequest.key.toString(),
-                    status: status,
-                    month: month.key.toString(),
-                    year: year.key.toString(),
-                    reason: leaveData['reason'].toString(),
-                    type: leaveData['type'].toString(),
-                    department: department,
-                  );
-
-                  staffLeaves.add(data);
+                }
+              }
                 }
               }
             }
-          }
 
           final index = staffLeaves.indexWhere(
                 (element) => element.status.toLowerCase().contains('pending'),

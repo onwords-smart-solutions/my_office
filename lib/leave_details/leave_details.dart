@@ -90,17 +90,20 @@ class _LeaveDetailsState extends State<LeaveDetails> {
       allStaffs = allNames;
     }
     var size = MediaQuery.of(context).size;
-    return  isLoading
-        ? Center(child: Lottie.asset('assets/animations/leave_loading.json'),)
-        :
-      Column(
-      children: [
-        SizedBox(height: size.height * 0.01),
-        Text(
-          'Total staffs: ${allStaffs.length}',
-          style: TextStyle(fontSize: 18, fontFamily: ConstantFonts.sfProBold),
-        ),
-        Row(
+    return isLoading
+        ? Center(
+            child: Lottie.asset('assets/animations/leave_loading.json'),
+          )
+        : Column(
+            children: [
+              SizedBox(height: size.height * 0.01),
+              Text(
+                'Total staffs: ${allStaffs.length}',
+                style: TextStyle(
+                    fontSize: 18, fontFamily: ConstantFonts.sfProBold,
+                ),
+              ),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   PopupMenuButton(
@@ -115,9 +118,9 @@ class _LeaveDetailsState extends State<LeaveDetails> {
                         return PopupMenuItem(
                           child: Text(
                             dropDown[i],
-                            style: TextStyle(
-                               
-                                fontSize: 16),
+                            style: const TextStyle(
+                              fontSize: 16,
+                            ),
                           ),
                           onTap: () {
                             setState(() {
@@ -129,7 +132,7 @@ class _LeaveDetailsState extends State<LeaveDetails> {
                     ),
                     icon: Icon(
                       Icons.sort,
-                      color: department == "APP"
+                      color: department == 'APP'
                           ? const Color(0xff6527BE)
                           : department == 'RND'
                               ? const Color(0xff0EA293)
@@ -145,74 +148,75 @@ class _LeaveDetailsState extends State<LeaveDetails> {
                   Text(
                     department,
                     style: TextStyle(
-                        fontFamily: ConstantFonts.sfProRegular,
-                        fontWeight: FontWeight.w600,
-                        color: department == "APP"
-                            ? const Color(0xff6527BE)
-                            : department == 'RND'
-                                ? const Color(0xff0EA293)
-                                : department == 'MEDIA'
-                                    ? const Color(0xffDB005B)
-                                    : department == 'WEB'
-                                        ? const Color(0xff9A208C)
-                                        : department == 'PR'
-                                            ? const Color(0xffF24C3D)
-                                            : Colors.black,
-                        fontSize: 17),
+                      fontFamily: ConstantFonts.sfProRegular,
+                      fontWeight: FontWeight.w600,
+                      color: department == 'APP'
+                          ? const Color(0xff6527BE)
+                          : department == 'RND'
+                              ? const Color(0xff0EA293)
+                              : department == 'MEDIA'
+                                  ? const Color(0xffDB005B)
+                                  : department == 'WEB'
+                                      ? const Color(0xff9A208C)
+                                      : department == 'PR'
+                                          ? const Color(0xffF24C3D)
+                                          : Colors.black,
+                      fontSize: 17,
+                    ),
                   ),
                 ],
               ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: allStaffs.length,
-            itemBuilder: (ctx, i) {
-              return Container(
-                margin: const EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: ListTile(
-                  leading: const Icon(
-                    CupertinoIcons.person_alt_circle_fill,
-                    color: Colors.purple,
-                  ),
-                  title: Text(
-                    allStaffs[i].name,
-                    style: TextStyle( ),
-                  ),
-                  trailing: Text(
-                    allStaffs[i].department,
-                    style: TextStyle(
-                      fontFamily: ConstantFonts.sfProBold,
-                      fontSize: 14,
-                      color: allStaffs[i].department == 'APP'
-                          ? const Color(0xff6527BE)
-                          : allStaffs[i].department == 'RND'
-                              ? const Color(0xff0EA293)
-                              : allStaffs[i].department == 'MEDIA'
-                                  ? const Color(0xffDB005B)
-                                  : allStaffs[i].department == 'WEB'
-                                      ? const Color(0xff9A208C)
-                                      : const Color(0xffF24C3D),
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (ctx) => AllLeaveDetails(
-                          staffUid: allStaffs[i].uid,
-                          staffName: allStaffs[i].name,
+              Expanded(
+                child: ListView.builder(
+                  itemCount: allStaffs.length,
+                  itemBuilder: (ctx, i) {
+                    return Container(
+                      margin: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: ListTile(
+                        leading: const Icon(
+                          CupertinoIcons.person_alt_circle_fill,
+                          color: Colors.purple,
                         ),
+                        title: Text(
+                          allStaffs[i].name,
+                          style: const TextStyle(),
+                        ),
+                        trailing: Text(
+                          allStaffs[i].department,
+                          style: TextStyle(
+                            fontFamily: ConstantFonts.sfProBold,
+                            fontSize: 14,
+                            color: allStaffs[i].department == 'APP'
+                                ? const Color(0xff6527BE)
+                                : allStaffs[i].department == 'RND'
+                                    ? const Color(0xff0EA293)
+                                    : allStaffs[i].department == 'MEDIA'
+                                        ? const Color(0xffDB005B)
+                                        : allStaffs[i].department == 'WEB'
+                                            ? const Color(0xff9A208C)
+                                            : const Color(0xffF24C3D),
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (ctx) => AllLeaveDetails(
+                                staffUid: allStaffs[i].uid,
+                                staffName: allStaffs[i].name,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     );
                   },
                 ),
-              );
-            },
-          ),
-        )
-      ],
-    );
+              ),
+            ],
+          );
   }
 }

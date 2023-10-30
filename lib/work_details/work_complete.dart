@@ -53,89 +53,89 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                 return (loading && workReports.isEmpty)
                     ? Center(child: Lottie.asset("assets/animations/new_loading.json"))
                     : Column(
+                  children: [
+                    if (!loading)
+                      Align(
+                        alignment: AlignmentDirectional.centerEnd,
+                        child: TextButton.icon(
+                            onPressed: datePicker,
+                            icon: const Icon(Icons.calendar_month_rounded),
+                            label: ValueListenableBuilder(
+                                valueListenable: _selectedDate,
+                                builder: (ctx, date, child) {
+                                  return Text(DateFormat('yyyy-MM-dd').format(date));
+                                })),
+                      ),
+                    if (workReports.isEmpty)
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          if (!loading)
-                            Align(
-                              alignment: AlignmentDirectional.centerEnd,
-                              child: TextButton.icon(
-                                  onPressed: datePicker,
-                                  icon: const Icon(Icons.calendar_month_rounded),
-                                  label: ValueListenableBuilder(
-                                      valueListenable: _selectedDate,
-                                      builder: (ctx, date, child) {
-                                        return Text(DateFormat('yyyy-MM-dd').format(date));
-                                      })),
+                          Lottie.asset('assets/animations/no_data.json', height: 300.0),
+                          Text(
+                            'No work done submitted yet!!',
+                            style: TextStyle(
+                              color: ConstantColor.blackColor,
+                              fontSize: 20,
                             ),
-                          if (workReports.isEmpty)
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Lottie.asset('assets/animations/no_data.json', height: 300.0),
-                                Text(
-                                  'No work done submitted yet!!',
-                                  style: TextStyle(
-                                    color: ConstantColor.blackColor,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ],
-                            )
-                          else
-                            Expanded(
-                              child: Material(
-                                color: Colors.transparent,
-                                child: ListView(
-                                  children: List.generate(
-                                    workReports.length,
-                                    (index) => Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
-                                      child: ListTile(
-                                        onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                                            builder: (_) => IndividualWorkDone(
-                                                  workDetails: workReports[index],
-                                                ))),
-                                        tileColor: Colors.white,
-                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
-                                        leading: Container(
-                                          width: 40.0,
-                                          height: 40.0,
-                                          decoration: const BoxDecoration(shape: BoxShape.circle),
-                                          clipBehavior: Clip.hardEdge,
-                                          child: workReports[index].url.isEmpty
-                                              ? const Image(image: AssetImage('assets/profile_icon.jpg'))
-                                              : CachedNetworkImage(
-                                                  imageUrl: workReports[index].url,
-                                                  fit: BoxFit.cover,
-                                                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                                      CircularProgressIndicator(
-                                                          color: ConstantColor.backgroundColor,
-                                                          value: downloadProgress.progress),
-                                                  errorWidget: (context, url, error) => const Icon(
-                                                    Icons.error,
-                                                    color: Colors.red,
-                                                  ),
-                                                ),
-                                        ),
-                                        title: Text(
-                                          workReports[index].name,
-                                          style: TextStyle(fontFamily: ConstantFonts.sfProBold),
-                                        ),
-                                        subtitle: Text(
-                                          workReports[index].department,
-                                          style: TextStyle(fontSize: 13.0),
-                                        ),
-                                        trailing: Icon(
-                                          Icons.arrow_forward_ios_rounded,
-                                          color: Colors.grey.withOpacity(.5),
-                                        ),
+                          ),
+                        ],
+                      )
+                    else
+                      Expanded(
+                        child: Material(
+                          color: Colors.transparent,
+                          child: ListView(
+                            children: List.generate(
+                              workReports.length,
+                                  (index) => Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
+                                child: ListTile(
+                                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (_) => IndividualWorkDone(
+                                        workDetails: workReports[index],
+                                      ))),
+                                  tileColor: Colors.white,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+                                  leading: Container(
+                                    width: 40.0,
+                                    height: 40.0,
+                                    decoration: const BoxDecoration(shape: BoxShape.circle),
+                                    clipBehavior: Clip.hardEdge,
+                                    child: workReports[index].url.isEmpty
+                                        ? const Image(image: AssetImage('assets/profile_icon.jpg'))
+                                        : CachedNetworkImage(
+                                      imageUrl: workReports[index].url,
+                                      fit: BoxFit.cover,
+                                      progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                          CircularProgressIndicator(
+                                              color: ConstantColor.backgroundColor,
+                                              value: downloadProgress.progress),
+                                      errorWidget: (context, url, error) => const Icon(
+                                        Icons.error,
+                                        color: Colors.red,
                                       ),
                                     ),
                                   ),
+                                  title: Text(
+                                    workReports[index].name,
+                                    style: TextStyle(fontFamily: ConstantFonts.sfProBold),
+                                  ),
+                                  subtitle: Text(
+                                    workReports[index].department,
+                                    style: TextStyle(fontSize: 13.0),
+                                  ),
+                                  trailing: Icon(
+                                    Icons.arrow_forward_ios_rounded,
+                                    color: Colors.grey.withOpacity(.5),
+                                  ),
                                 ),
                               ),
-                            )
-                        ],
-                      );
+                            ),
+                          ),
+                        ),
+                      )
+                  ],
+                );
               });
         });
   }
@@ -156,12 +156,13 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
   Future<void> getWorkDetails() async {
     _isLoading.value = true;
     _workReport.value.clear();
-    await staff.once().then((value) {
+    await staff.once().then((value) async {
       if (value.snapshot.exists) {
         for (var staff in value.snapshot.children) {
           List<WorkReport> staffWorkDone = [];
 
           final staffInfo = staff.value as Map<Object?, Object?>;
+          final uid = staff.key;
           final name = staffInfo['name'].toString();
           final dept = staffInfo['department'].toString();
           final email = staffInfo['email'].toString();
@@ -170,16 +171,17 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
           final formattedMonth = DateFormat('MM').format(_selectedDate.value);
           final formattedDay = DateFormat('dd').format(_selectedDate.value);
           final fullDateFormat = '${_selectedDate.value.year}-$formattedMonth-$formattedDay';
-          if (staff.child('workManager/timeSheet/${_selectedDate.value.year}/$formattedMonth/$fullDateFormat').exists) {
-            for (var work in staff
-                .child('workManager/timeSheet/${_selectedDate.value.year}/$formattedMonth/$fullDateFormat')
-                .children) {
+
+        await FirebaseDatabase.instance.ref('workmanager/${_selectedDate.value.year}/$formattedMonth/$fullDateFormat/$uid').once().then((value) {
+          if(value.snapshot.exists) {
+            for (var work in value.snapshot.children) {
               final workInfo = work.value as Map<Object?, Object?>;
               final from = workInfo['from'].toString();
               final to = workInfo['to'].toString();
               final duration = workInfo['time_in_hours'].toString();
               final workDone = workInfo['workDone'].toString();
               final percentage = workInfo['workPercentage'].toString();
+
               staffWorkDone.add(
                 WorkReport(
                   from: from,
@@ -190,6 +192,9 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                 ),
               );
             }
+          }
+          });
+
             _workReport.value.add(
               WorkDoneModel(
                 name: name,
@@ -200,7 +205,6 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
               ),
             );
             _workReport.notifyListeners();
-          }
         }
       }
     });

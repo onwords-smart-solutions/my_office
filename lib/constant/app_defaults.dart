@@ -78,7 +78,9 @@ class AppDefaults {
       title: MenuTitle.refreshment,
       image: 'assets/refreshment.png',
     ),
-    // StaffAccessModel(title: MenuTitle.leavePortal, image: 'assets/leave_apply.png'),
+    StaffAccessModel(
+        title: MenuTitle.leavePortal, image: 'assets/leave_apply.png',
+    ),
     StaffAccessModel(
       title: MenuTitle.suggestion,
       image: 'assets/suggestions.png',

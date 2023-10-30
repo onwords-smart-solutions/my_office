@@ -34,8 +34,8 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   String _recognizedWords = '';
   bool isCalled = false;
 
-  final staff = FirebaseDatabase.instance.ref().child("staff");
-  final fingerPrint = FirebaseDatabase.instance.ref().child("fingerPrint");
+  final workmanager = FirebaseDatabase.instance.ref().child('workmanager');
+  final fingerPrint = FirebaseDatabase.instance.ref().child('fingerPrint');
   final TextEditingController _workController = TextEditingController();
   final TextEditingController _percentController = TextEditingController();
   final formKey = GlobalKey<FormState>();
@@ -95,9 +95,9 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
     endTimeList.clear();
     workPercentageList.clear();
     workDoneList.clear();
-    staff
+    workmanager
         .child(
-          "${widget.userId}/workManager/timeSheet/$formattedYear/$formattedMonth/$formattedDate",
+          '$formattedYear/$formattedMonth/$formattedDate/${widget.userId}',
         )
         .once()
         .then((value) {
@@ -126,15 +126,15 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   var wrkDone;
 
   createNewWork() {
-    staff
+    workmanager
         .child(
-      "${widget.userId}/workManager/timeSheet/$formattedYear/$formattedMonth/$formattedDate/${timeOfStart.toString().trim()} to ${timeOfEnd.toString().trim()}",
+      '$formattedYear/$formattedMonth/$formattedDate/${widget.userId}/${timeOfStart.toString().trim()} to ${timeOfEnd.toString().trim()}',
     )
         .set({
-      "from": timeOfStart.toString().trim(),
-      "to": timeOfEnd.toString().trim(),
-      "workDone": _workController.text.toString().trim(),
-      "workPercentage": "${_percentController.text.toString().trim()}%",
+      'from': timeOfStart.toString().trim(),
+      'to': timeOfEnd.toString().trim(),
+      'workDone': _workController.text.toString().trim(),
+      'workPercentage': '${_percentController.text.toString().trim()}%',
       'name': widget.staffName.toString().trim(),
       'time_in_hours': totalWorkingTime.toString(),
     }).then((value) {
@@ -175,7 +175,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       setState(() {
         timeOfStart = formattedTime;
         timeOfStartView = DateFormat.jm()
-            .format(DateFormat("hh:mm:ss").parse("$formattedTime:00"));
+            .format(DateFormat('hh:mm:ss').parse('$formattedTime:00'));
       });
     }
   }
@@ -205,7 +205,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       setState(() {
         timeOfEnd = formattedTime;
         timeOfEndView = DateFormat.jm()
-            .format(DateFormat("hh:mm:ss").parse("$formattedTime:00"));
+            .format(DateFormat('hh:mm:ss').parse('$formattedTime:00'));
       });
     } else {
       // print("Time is not selected");
@@ -562,7 +562,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                               String startTime = st.toString(); // or if '24:00'
                               String endTime = et.toString(); // or if '12:00
 
-                              var format = DateFormat("HH:mm");
+                              var format = DateFormat('HH:mm');
                               var start = format.parse(startTime);
                               var end = format.parse(endTime);
 
@@ -597,7 +597,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                                 timeOfEndView = '';
                                 showSnackBar(
                                   message:
-                                      "Split the work, coz it exceeds more than 6 hours..",
+                                      'Split the work, coz it exceeds more than 6 hours..',
                                   color: Colors.red.shade500,
                                 );
                               } else {
@@ -747,10 +747,10 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                         height,
                         percent = double.parse(
                               workPercentageList[index]
-                                  .replaceAll(RegExp(r'.$'), ""),
+                                  .replaceAll(RegExp(r'.$'), ''),
                             ) /
                             100,
-                        "${workPercentageList[index]}",
+                        '${workPercentageList[index]}',
                       ),
                     ),
                   ],

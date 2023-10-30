@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/util/screen_template.dart';
+import 'package:provider/provider.dart';
 import '../Constant/fonts/constant_font.dart';
+import '../provider/user_provider.dart';
 import 'leave_model.dart';
 
 class AllLeaveDetails extends StatefulWidget {
@@ -51,39 +53,45 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
   void getLeaveStatus() async {
     leaves.clear();
     staffNames.clear();
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
     final currentMonthFormat = '${DateTime.now().year}-${month[currentMonth]}';
     var ref = FirebaseDatabase.instance.ref();
-    await ref.child('leaveDetails').once().then((leave) {
-      for (var uid in leave.snapshot.children) {
-        for (var leaveApplied in uid.children) {
-          for (var year in leaveApplied.children) {
-            for (var month in year.children) {
-              for (var date in month.children) {
-                final dividedFormat = date.key!.substring(0, 7);
-                if (dividedFormat.contains(currentMonthFormat)) {
-                  final data = date.value as Map<Object?, Object?>;
-                  var staffLeaves = date.value as Map<Object?, Object?>;
-                  var leaveData = LeaveModel(
-                    uid: uid.key.toString(),
-                    date: staffLeaves['date'].toString(),
-                    dep: staffLeaves['dep'].toString(),
-                    name: staffLeaves['name'].toString(),
-                    reason: staffLeaves['reason'].toString(),
-                    status: staffLeaves['status'].toString(),
-                    type: staffLeaves['type'].toString(),
-                    updatedBy: staffLeaves['updated_by'].toString(),
-                    isApproved: staffLeaves['isapproved'].toString(),
-                    duration: double.parse(staffLeaves['duration']?.toString() ?? '0'),
-                    mode: staffLeaves['mode'].toString(),
-                  );
-                  try {
-                    if (widget.staffUid == uid.key.toString() &&
-                        staffLeaves['date'] != null) {
-                      leaves.add(leaveData);
-                    }
-                  } catch (e) {
-                    if (kDebugMode) {
-                      print(e);
+    await ref.child('leave_details').once().then((leave) {
+      for (var year in leave.snapshot.children) {
+        for (var month in year.children) {
+          for (var date in month.children) {
+            final dividedFormat = date.key!.substring(0, 7);
+            if (dividedFormat.contains(currentMonthFormat)) {
+              for (var uid in date.children) {
+                if (uid.key == widget.staffUid) {
+                  log('Uid is ${uid.key}');
+                  for (var leaveType in uid.children) {
+                    log('Leave type is ${leaveType.key}');
+                    var staffLeaves = leaveType.value as Map<Object?, Object?>;
+                    log('All data is ${staffLeaves.values}');
+                    var leaveData = LeaveModel(
+                      uid: uid.key.toString(),
+                      date: staffLeaves['date'].toString(),
+                      dep: staffLeaves['dep'].toString(),
+                      name: staffLeaves['name'].toString(),
+                      reason: staffLeaves['reason'].toString(),
+                      status: staffLeaves['status'].toString(),
+                      type: leaveType.key.toString(),
+                      updatedBy: staffLeaves['updated_by'].toString(),
+                      isApproved: staffLeaves['isapproved'].toString(),
+                      duration:
+                      double.parse(staffLeaves['duration']?.toString() ?? '0'),
+                      mode: staffLeaves['mode'].toString(),
+                    );
+                    try {
+                      if (widget.staffUid == month.key.toString() &&
+                          staffLeaves['date'] != null) {
+                        leaves.add(leaveData);
+                      }
+                    } catch (e) {
+                      if (kDebugMode) {
+                        print(e);
+                      }
                     }
                   }
                 }
@@ -273,15 +281,17 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                                         color: Colors.green,
                                       ),
                                     ),
-                                    if(staffNames[i].mode != null && staffNames[i].type != 'Permission')
+                                    if (staffNames[i].mode != null &&
+                                        staffNames[i].type != 'Permission')
                                       Text(
-                                      'Mode - ${staffNames[i].mode}',
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.green,
+                                        'Mode - ${staffNames[i].mode}',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.green,
+                                        ),
                                       ),
-                                    ),
-                                    if(staffNames[i].duration != null && staffNames[i].type == 'Permission')
+                                    if (staffNames[i].duration != null &&
+                                        staffNames[i].type == 'Permission')
                                       Text(
                                         'Duration - ${staffNames[i].duration} hr',
                                         style: const TextStyle(
@@ -328,20 +338,24 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                                             color: CupertinoColors.activeOrange,
                                           ),
                                         ),
-                                        if(staffNames[i].mode != null && staffNames[i].type != 'Permission')
+                                        if (staffNames[i].mode != null &&
+                                            staffNames[i].type != 'Permission')
                                           Text(
                                             'Mode - ${staffNames[i].mode}',
                                             style: const TextStyle(
                                               fontSize: 16,
-                                              color: CupertinoColors.activeOrange,
+                                              color:
+                                                  CupertinoColors.activeOrange,
                                             ),
                                           ),
-                                        if(staffNames[i].duration != null && staffNames[i].type == 'Permission')
+                                        if (staffNames[i].duration != null &&
+                                            staffNames[i].type == 'Permission')
                                           Text(
                                             'Duration - ${staffNames[i].duration} hr',
                                             style: const TextStyle(
                                               fontSize: 16,
-                                              color: CupertinoColors.activeOrange,
+                                              color:
+                                                  CupertinoColors.activeOrange,
                                             ),
                                           ),
                                         SizedBox(height: size.height * 0.01),
@@ -382,15 +396,20 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                                                 color: Colors.red,
                                               ),
                                             ),
-                                            if(staffNames[i].mode != null && staffNames[i].type != 'Permission')
-                                            Text(
-                                              'Mode - ${staffNames[i].mode}',
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.red,
+                                            if (staffNames[i].mode != null &&
+                                                staffNames[i].type !=
+                                                    'Permission')
+                                              Text(
+                                                'Mode - ${staffNames[i].mode}',
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.red,
+                                                ),
                                               ),
-                                            ),
-                                            if(staffNames[i].duration != null && staffNames[i].type == 'Permission')
+                                            if (staffNames[i].duration !=
+                                                    null &&
+                                                staffNames[i].type ==
+                                                    'Permission')
                                               Text(
                                                 'Duration - ${staffNames[i].duration} hr',
                                                 style: const TextStyle(
