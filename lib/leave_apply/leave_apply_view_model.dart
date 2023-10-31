@@ -60,7 +60,7 @@ class LeaveApplyViewModel {
       'dep': department,
     });
     refreshHistory();
-    // sendLeaveNotification('Permission Request', 'New permission has been applied by $name', name);
+    sendLeaveNotification('Permission Request', 'New permission has been applied by $name', name);
   }
 
   Future<void> applyLeave({
@@ -82,7 +82,7 @@ class LeaveApplyViewModel {
       'dep': department,
     });
     refreshHistory();
-    // sendLeaveNotification('$type Leave Request', 'New $type leave has been applied by $name', name);
+    sendLeaveNotification('$type Leave Request', 'New $type leave has been applied by $name', name);
   }
 
   String _dateFormatter(DateTime date) => DateFormat('yyyy-MM-dd').format(date);

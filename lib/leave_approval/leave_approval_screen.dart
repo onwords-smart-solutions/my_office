@@ -59,11 +59,8 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
               for(var date in month.children){
                 //Looping inside all users
               for(var uid in date.children) {
-                //Looping inside the leave type
-                for(var leaveType in uid.children) {
-                  log('Leave type is is ${leaveType.value}');
 
-                  for (var leaveRequest in leaveType.children) {
+                  for (var leaveRequest in uid.children) {
                     String name = 'GHOST';
                     String status = 'Pending';
                     String department = 'Not provided';
@@ -82,18 +79,18 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
                     final data = StaffLeaveModel(
                       name: name,
                       uid: uid.key.toString(),
-                      date: leaveRequest.key.toString(),
+                      date: leaveData['date'].toString(),
                       status: status,
                       month: month.key.toString(),
                       year: year.key.toString(),
                       reason: leaveData['reason'].toString(),
-                      type: leaveData['type'].toString(),
+                      type: leaveRequest.key.toString(),
                       department: department,
                     );
 
                     staffLeaves.add(data);
                   }
-                }
+
               }
                 }
               }
@@ -527,7 +524,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
         //Loading section
         return Center(
           child: Lottie.asset(
-            "assets/animations/new_loading.json",
+            'assets/animations/new_loading.json',
           ),
         );
       },
@@ -538,15 +535,30 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
   Future<int> checkLeaveStatus(String date) async {
     final splittedDate=date.split('-');
     int statusCount = 0;
-    await ref.child('leaveDetails').once().then((value) async {
+    await ref.child('leave_details/${splittedDate[0]}/${splittedDate[1]}/$date').once().then((value) async {
       for (var staff in value.snapshot.children) {
-        if (staff
-            .child('leaveApplied/${splittedDate[0]}/${splittedDate[1]}/$date/status')
-            .value
-            .toString() ==
-            'Approved') {
-          statusCount += 1;
+        try{
+         if (staff.child('general/status').value.toString() == 'Approved'){
+           statusCount += 1;
+          }
+        }catch (e){
+          log('General error from $e');
         }
+        try{
+          if (staff.child('sick/status').value.toString() == 'Approved'){
+            statusCount += 1;
+          }
+        }catch (e){
+          log('Sick error from $e');
+        }
+        try{
+          if (staff.child('permission/status').value.toString() == 'Approved'){
+            statusCount += 1;
+          }
+        }catch (e){
+          log('Permission error from $e');
+        }
+
       }
     });
     log('Leave Count for $date is $statusCount');
@@ -561,7 +573,7 @@ class _LeaveApprovalScreenState extends State<LeaveApprovalScreen> {
     final user = Provider.of<UserProvider>(context, listen: false);
     await ref
         .child(
-      'leaveDetails/${leaveRequest.uid}/leaveApplied/${leaveRequest.year}/${leaveRequest.month}/${leaveRequest.date}',
+      'leave_details/${leaveRequest.year}/${leaveRequest.month}/${leaveRequest.date}/${leaveRequest.uid}/${leaveRequest.type}',
     )
         .update({
       'updated_by': user.user!.name,

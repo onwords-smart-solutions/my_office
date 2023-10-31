@@ -64,11 +64,9 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
             if (dividedFormat.contains(currentMonthFormat)) {
               for (var uid in date.children) {
                 if (uid.key == widget.staffUid) {
-                  log('Uid is ${uid.key}');
                   for (var leaveType in uid.children) {
-                    log('Leave type is ${leaveType.key}');
                     var staffLeaves = leaveType.value as Map<Object?, Object?>;
-                    log('All data is ${staffLeaves.values}');
+
                     var leaveData = LeaveModel(
                       uid: uid.key.toString(),
                       date: staffLeaves['date'].toString(),
@@ -84,7 +82,7 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                       mode: staffLeaves['mode'].toString(),
                     );
                     try {
-                      if (widget.staffUid == month.key.toString() &&
+                      if (widget.staffUid == uid.key.toString() &&
                           staffLeaves['date'] != null) {
                         leaves.add(leaveData);
                       }
@@ -282,7 +280,7 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                                       ),
                                     ),
                                     if (staffNames[i].mode != null &&
-                                        staffNames[i].type != 'Permission')
+                                        staffNames[i].type != 'permission')
                                       Text(
                                         'Mode - ${staffNames[i].mode}',
                                         style: const TextStyle(
@@ -291,7 +289,7 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                                         ),
                                       ),
                                     if (staffNames[i].duration != null &&
-                                        staffNames[i].type == 'Permission')
+                                        staffNames[i].type == 'permission')
                                       Text(
                                         'Duration - ${staffNames[i].duration} hr',
                                         style: const TextStyle(
@@ -339,7 +337,7 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                                           ),
                                         ),
                                         if (staffNames[i].mode != null &&
-                                            staffNames[i].type != 'Permission')
+                                            staffNames[i].type != 'permission')
                                           Text(
                                             'Mode - ${staffNames[i].mode}',
                                             style: const TextStyle(
@@ -349,7 +347,7 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                                             ),
                                           ),
                                         if (staffNames[i].duration != null &&
-                                            staffNames[i].type == 'Permission')
+                                            staffNames[i].type == 'permission')
                                           Text(
                                             'Duration - ${staffNames[i].duration} hr',
                                             style: const TextStyle(
@@ -398,7 +396,7 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                                             ),
                                             if (staffNames[i].mode != null &&
                                                 staffNames[i].type !=
-                                                    'Permission')
+                                                    'permission')
                                               Text(
                                                 'Mode - ${staffNames[i].mode}',
                                                 style: const TextStyle(
@@ -409,7 +407,7 @@ class _AllLeaveDetailsState extends State<AllLeaveDetails> {
                                             if (staffNames[i].duration !=
                                                     null &&
                                                 staffNames[i].type ==
-                                                    'Permission')
+                                                    'permission')
                                               Text(
                                                 'Duration - ${staffNames[i].duration} hr',
                                                 style: const TextStyle(
