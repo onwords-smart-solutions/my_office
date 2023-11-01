@@ -131,21 +131,21 @@ class InvAndQtnPdf {
                       ),
                     ),
                     Text(
-                      "Date :  ${Utils.formatDate(documentDate)}",
+                      'Date :  ${Utils.formatDate(documentDate)}',
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     SizedBox(height: 3),
-                    customerDetails.docType == "QUOTATION"
+                    customerDetails.docType == 'QUOTATION'
                         ? Text(
                             "#EST${customerDetails.docCategory}-${Utils.formatDummyDate(DateTime.now())}${documentLen.toString()}",
                             style: const TextStyle(
                               fontSize: 10,
                             ),
                           )
-                        : customerDetails.docType == "INVOICE"
+                        : customerDetails.docType == 'INVOICE'
                             ? Text(
                                 "#INV_${customerDetails.docCategory}-${Utils.formatDummyDate(DateTime.now())}${documentLen.toString()}",
                                 style: const TextStyle(fontSize: 10),
@@ -345,7 +345,7 @@ class InvAndQtnPdf {
               SizedBox(height: 0.5 * PdfPageFormat.mm),
               Container(height: 1, width: 180, color: PdfColors.grey400),
               SizedBox(height: 2 * PdfPageFormat.mm),
-              customerDetails.docType == "PROFORMA_INVOICE"
+              customerDetails.docType == 'PROFORMA_INVOICE'
                   ? Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -390,7 +390,7 @@ class InvAndQtnPdf {
                         ),
                       ],
                     )
-                  : customerDetails.docType == "INVOICE"
+                  : customerDetails.docType == 'INVOICE'
                       ? buildPaidImg(paidImg)
                       : SizedBox(),
             ],
@@ -411,7 +411,7 @@ class InvAndQtnPdf {
           SizedBox(height: 3 * PdfPageFormat.mm),
           Row(
             children: [
-              customerDetails.docType == "INVOICE"
+              customerDetails.docType == 'INVOICE'
                   ? SizedBox.shrink()
                   : createText('Scan To Pay', '', true, 10, 0),
               SizedBox(width: 1 * PdfPageFormat.mm),
@@ -425,10 +425,10 @@ class InvAndQtnPdf {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(height: 0.5 * PdfPageFormat.cm),
-          customerDetails.docType == "QUOTATION"
+          customerDetails.docType == 'QUOTATION'
               ? ((needGst == false))
                   ? Text(
-                      "*All Amount mentioned are exclusive of GST ",
+                      '*All Amount mentioned are exclusive of GST ',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 12.0,
@@ -438,7 +438,7 @@ class InvAndQtnPdf {
               : Text(''),
           Divider(),
           SizedBox(height: 2 * PdfPageFormat.mm),
-          buildBodyText("In Sync with the Smarter World", true),
+          buildBodyText('In Sync with the Smarter World', true),
           SizedBox(height: 1 * PdfPageFormat.mm),
           // buildSimpleText(title: 'Paypal', value: invoice.supplier.paymentInfo),
         ],
@@ -456,7 +456,7 @@ class InvAndQtnPdf {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      buildBodyText("Terms and Conditions", true),
+                      buildBodyText('Terms and Conditions', true),
                       SizedBox(height: 3),
                       buildBodyText(
                         "It is recommended by the Company to use INVERTER (UPS) of 1KVA for our control modules and theSame shall be in Client's  Scope.",
@@ -464,25 +464,25 @@ class InvAndQtnPdf {
                       ),
                       SizedBox(height: 3),
                       buildBodyText(
-                        "The following facilities and services are to be provided by the client.",
+                        'The following facilities and services are to be provided by the client.',
                         true,
                       ),
                       buildBodyText(
-                        "1. Site Preparation including fabricator,carpentry, welder, civil and Masonry work.\n"
-                        "2. Provision for suitable Wiring, Electricity Supply with suitable plugs, socket etc.\n"
+                        '1. Site Preparation including fabricator,carpentry, welder, civil and Masonry work.\n'
+                        '2. Provision for suitable Wiring, Electricity Supply with suitable plugs, socket etc.\n'
                         "3. Cable identification and Termination of the cables laid by Client's Contractor on the Distribution Board etc. Dedicated Earth Connection required.\n"
-                        "4. Wire cost and material cost, other than motor and control box which comes within the package.",
+                        '4. Wire cost and material cost, other than motor and control box which comes within the package.',
                         false,
                       ),
                       SizedBox(height: 5),
                       Center(
                         child: buildBodyText(
-                          "*** Any additional work on behalf of client  will be quoted extra separately ***",
+                          '*** Any additional work on behalf of client  will be quoted extra separately ***',
                           true,
                         ),
                       ),
                       SizedBox(height: 5),
-                      buildBodyText("Warranty:", true),
+                      buildBodyText('Warranty:', true),
                       buildBodyText(
                         'Service and replacement warranty will be provided for the products up to 1 year from the date of installation.',
                         false,
@@ -493,9 +493,9 @@ class InvAndQtnPdf {
                         true,
                       ),
                       buildBodyText(
-                        "1. Defects caused at the time of installation; \n"
-                        "2. Defects caused by manufacture; \n"
-                        "3. Defects caused by application / programming; \n",
+                        '1. Defects caused at the time of installation; \n'
+                        '2. Defects caused by manufacture; \n'
+                        '3. Defects caused by application / programming; \n',
                         false,
                       ),
                       SizedBox(height: 3),
@@ -504,40 +504,40 @@ class InvAndQtnPdf {
                         true,
                       ),
                       buildBodyText(
-                        "1. Damage or defect caused by transportation, accident, misuse, lack of maintenance, improper usage or negligence on the part of Client; \n"
-                        "2. Wilful damage or negligence, normal wear and tear;\n"
-                        "Abuse or misuse of equipment/product;\n"
-                        "3. Damage or defect caused by  earthquake  or other similar natural disasters;\n"
-                        "4. Post installation, service due to gate modification will be charged from minimum 5k to maximum according, to the distance we cover; \n"
+                        '1. Damage or defect caused by transportation, accident, misuse, lack of maintenance, improper usage or negligence on the part of Client; \n'
+                        '2. Wilful damage or negligence, normal wear and tear;\n'
+                        'Abuse or misuse of equipment/product;\n'
+                        '3. Damage or defect caused by  earthquake  or other similar natural disasters;\n'
+                        '4. Post installation, service due to gate modification will be charged from minimum 5k to maximum according, to the distance we cover; \n'
                         "5. Repairs carried out by personnel other than Company's authorised service personnel's;\n"
-                        "6. Defects or damages due to any other external means or causes are not covered under warranty.",
+                        '6. Defects or damages due to any other external means or causes are not covered under warranty.',
                         false,
                       ),
                       SizedBox(height: 3),
-                      buildBodyText("Payment:", true),
+                      buildBodyText('Payment:', true),
                       buildBodyText(
-                        "50% of amount should be paid as advance, balance 40% of amount should be paid upon product delivery, and remaining 10% of amount after installation. Incase of Refund, 30% of the total value will be deducted.",
+                        '75% of amount should be paid as advance, and balance 25% of amount should be paid upon product delivery. Incase of Refund, 30% of the total value will be deducted.',
                         false,
                       ),
                       SizedBox(height: 3),
-                      buildBodyText("Delivery Period:", true),
+                      buildBodyText('Delivery Period:', true),
                       buildBodyText(
-                        "1-2 weeks after receipt of commercially & technically clear order with advance of 50%.",
+                        '1-2 weeks after receipt of commercially & technically clear order with advance of 75%.',
                         false,
                       ),
                       SizedBox(height: 3),
-                      buildBodyText("Cancellation of Order: ", true),
+                      buildBodyText('Cancellation of Order: ', true),
                       buildBodyText(
-                        "If the Order placed is cancelled by Client then the cancellation charges of 30% of the Order value shall be charged as  a Termination fee.",
+                        'If the Order placed is cancelled by Client then the cancellation charges of 30% of the Order value shall be charged as  a Termination fee.',
                         false,
                       ),
                       SizedBox(height: 3),
-                      buildBodyText("Scope of Work: ", true),
+                      buildBodyText('Scope of Work: ', true),
                       buildBodyText(
-                        "1. Instruction and Supervision of conduit work at the initial level and there after completion of conduit work and wiring  work  final inspection will be done.\n"
-                        "2. Once the contractor finishes the Electrical work and civil work, we will start Installation of GateAutomation Modules.\n"
-                        "3. Programming of all the above mentioned components.\n"
-                        "4. Delivery to the client and mobile application integration if needed.",
+                        '1. Instruction and Supervision of conduit work at the initial level and there after completion of conduit work and wiring  work  final inspection will be done.\n'
+                        '2. Once the contractor finishes the Electrical work and civil work, we will start Installation of GateAutomation Modules.\n'
+                        '3. Programming of all the above mentioned components.\n'
+                        '4. Delivery to the client and mobile application integration if needed.',
                         false,
                       ),
                       //Tabular column for employee and customer acknowledgement
@@ -692,7 +692,7 @@ class InvAndQtnPdf {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          buildBodyText("Terms and Conditions", true),
+                          buildBodyText('Terms and Conditions', true),
                           SizedBox(height: 5),
                           buildBodyText(
                             "It is recommended by the Company to use INVERTER (UPS) of 1KVA for our control modules and theSame shall be in Client's  Scope.",
@@ -700,25 +700,25 @@ class InvAndQtnPdf {
                           ),
                           SizedBox(height: 5),
                           buildBodyText(
-                            "The following facilities and services are to be provided by the client.",
+                            'The following facilities and services are to be provided by the client.',
                             true,
                           ),
                           buildBodyText(
-                            "1. Site Preparation including fabricator,carpentry, welder, civil and Masonry work.\n"
-                            "2. Provision for suitable Wiring, Electricity Supply with suitable plugs, socket etc.\n"
+                            '1. Site Preparation including fabricator,carpentry, welder, civil and Masonry work.\n'
+                            '2. Provision for suitable Wiring, Electricity Supply with suitable plugs, socket etc.\n'
                             "3. Cable identification and Termination of the cables laid by Client's Contractor on the Distribution Board etc. Dedicated Earth Connection required.\n"
-                            "4. Wire cost and material cost, other than motor and control box which comes within the package.",
+                            '4. Wire cost and material cost, other than motor and control box which comes within the package.',
                             false,
                           ),
                           SizedBox(height: 5),
                           Center(
                             child: buildBodyText(
-                              "*** Any additional work on behalf of client  will be quoted extra separately ***",
+                              '*** Any additional work on behalf of client  will be quoted extra separately ***',
                               true,
                             ),
                           ),
                           SizedBox(height: 5),
-                          buildBodyText("Warranty:", true),
+                          buildBodyText('Warranty:', true),
                           buildBodyText(
                             'Service and replacement warranty will be provided for the products up to 1 year from the date of installation.',
                             false,
@@ -729,40 +729,40 @@ class InvAndQtnPdf {
                             true,
                           ),
                           buildBodyText(
-                            "1. Damage or defect caused by transportation, accident, misuse, lack of maintenance, improper usage or negligence on the part of Client; \n"
-                            "2. Wilful damage or negligence, normal wear and tear;\n"
-                            "Abuse or misuse of equipment/product;\n"
-                            "3. Damage or defect caused by  earthquake  or other similar natural disasters;\n"
-                            "4. Post installation, service due to gate modification will be charged from minimum 5k to maximum according, to the distance we cover; \n"
+                            '1. Damage or defect caused by transportation, accident, misuse, lack of maintenance, improper usage or negligence on the part of Client; \n'
+                            '2. Wilful damage or negligence, normal wear and tear;\n'
+                            'Abuse or misuse of equipment/product;\n'
+                            '3. Damage or defect caused by  earthquake  or other similar natural disasters;\n'
+                            '4. Post installation, service due to gate modification will be charged from minimum 5k to maximum according, to the distance we cover; \n'
                             "5. Repairs carried out by personnel other than Company's authorised service personnel's;\n"
-                            "6. Defects or damages due to any other external means or causes are not covered under warranty.",
+                            '6. Defects or damages due to any other external means or causes are not covered under warranty.',
                             false,
                           ),
                           SizedBox(height: 5),
-                          buildBodyText("Payment:", true),
+                          buildBodyText('Payment:', true),
                           buildBodyText(
-                            "50% of amount should be paid as advance, balance 40% of amount should be paid upon product delivery, and remaining 10% of amount after installation. Incase of Refund, 30% of the total value will be deducted.",
+                            '75% of amount should be paid as advance, and balance 25% of amount should be paid upon product delivery. Incase of Refund, 30% of the total value will be deducted.',
                             false,
                           ),
                           SizedBox(height: 5),
-                          buildBodyText("Delivery Period:", true),
+                          buildBodyText('Delivery Period:', true),
                           buildBodyText(
-                            "1-2 weeks after receipt of commercially & technically clear order with advance of 50%.",
+                            '1-2 weeks after receipt of commercially & technically clear order with advance of 75%.',
                             false,
                           ),
                           SizedBox(height: 5),
-                          buildBodyText("Cancellation of Order: ", true),
+                          buildBodyText('Cancellation of Order: ', true),
                           buildBodyText(
-                            "If the Order placed is cancelled by Client then the cancellation charges of 30% of the Order value shall be charged as  a Termination fee.",
+                            'If the Order placed is cancelled by Client then the cancellation charges of 30% of the Order value shall be charged as  a Termination fee.',
                             false,
                           ),
                           SizedBox(height: 5),
-                          buildBodyText("Scope of Work: ", true),
+                          buildBodyText('Scope of Work: ', true),
                           buildBodyText(
-                            "1. Instruction and Supervision of conduit work at the initial level and there after completion of conduit work and wiring  work  final inspection will be done.\n"
-                            "2. Once the contractor finishes the Electrical work and civil work, we will start Installation of GateAutomation Modules.\n"
-                            "3. Programming of all the above mentioned components.\n"
-                            "4. Delivery to the client and mobile application integration if needed.",
+                            '1. Instruction and Supervision of conduit work at the initial level and there after completion of conduit work and wiring  work  final inspection will be done.\n'
+                            '2. Once the contractor finishes the Electrical work and civil work, we will start Installation of GateAutomation Modules.\n'
+                            '3. Programming of all the above mentioned components.\n'
+                            '4. Delivery to the client and mobile application integration if needed.',
                             false,
                           ),
                           //Tabular column for employee and customer acknowledgement
