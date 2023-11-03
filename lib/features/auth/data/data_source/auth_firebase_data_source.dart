@@ -11,6 +11,7 @@ abstract class AuthFbDataSource{
 
   Future<Either<ErrorResponse, UserModel>> getUserInfo(String userId);
 
+  Future<void> onClearData();
 
   Future<Either<ErrorResponse, bool>> resetPassword({required String email});
 

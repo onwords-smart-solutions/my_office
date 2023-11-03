@@ -43,9 +43,9 @@ class AuthRepoImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<ErrorResponse, bool>> signOut() {
-    // TODO: implement signOut
-    throw UnimplementedError();
+  Future<Either<ErrorResponse, bool>> signOut() async {
+   await _authFbDataSource.onClearData();
+   return await _authFbDataSource.signOut();
   }
 
   @override
