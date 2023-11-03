@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../login/login_screen.dart';
+import '../features/auth/presentation/view/login_screen.dart';
 import '../provider/user_provider.dart';
 
 class NoUser extends StatelessWidget {

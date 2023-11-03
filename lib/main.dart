@@ -8,8 +8,8 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/Constant/colors/constant_colors.dart';
 import 'package:my_office/PR/visit/visit_form_screen.dart';
+import 'package:my_office/features/auth/presentation/provider/auth_provider.dart';
 import 'package:my_office/home/user_home_screen.dart';
-import 'package:my_office/login/login_screen.dart';
 import 'package:my_office/models/staff_model.dart';
 import 'package:my_office/phone_number_screen.dart';
 import 'package:my_office/provider/user_provider.dart';
@@ -20,8 +20,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'PR/invoice_generator/models/providers.dart';
 import 'PR/invoice_generator/quotation_template/provider/providers.dart';
 import 'PR/invoice_generator/screens/client_detials.dart';
+import 'features/auth/presentation/view/login_screen.dart';
 import 'introduction/intro_screen.dart';
 import 'models/visit_model.dart';
+import 'package:my_office/core/utilities/injection_container.dart' as di;
 
 /// version: 1.1.3+16 Updated On (14/03/2023)
 
@@ -30,6 +32,7 @@ final navigationKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await di.init();
   //Hive database Setup
   await Hive.initFlutter();
   if (!Hive.isAdapterRegistered(StaffModelAdapter().typeId)) {
@@ -71,6 +74,9 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider<AuthProvider>(
+          create: (_) => di.sl<AuthProvider>(),
+        ),
         ChangeNotifierProvider(create: (context) => _userProvider),
         ChangeNotifierProvider(create: (context) => InvoiceProvider()),
         ChangeNotifierProvider(create: (context) => Invoice1Provider()),

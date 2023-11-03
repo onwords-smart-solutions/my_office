@@ -1,22 +1,19 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:my_office/database/hive_operations.dart';
+import 'package:my_office/features/auth/presentation/provider/auth_provider.dart';
+import 'package:my_office/home/user_home_screen.dart';
 import 'package:my_office/login/qr_code_scan.dart';
-import 'package:my_office/models/staff_model.dart';
+import 'package:my_office/util/custom_snackbar.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../Constant/colors/constant_colors.dart';
-import '../Constant/fonts/constant_font.dart';
-import '../home/user_home_screen.dart';
-import '../main.dart';
-import '../provider/user_provider.dart';
-import '../util/custom_snackbar.dart';
-import 'forget_password_screen.dart';
+import '../../../../Constant/colors/constant_colors.dart';
+import '../../../../Constant/fonts/constant_font.dart';
+import '../../../../test_screen.dart';
+import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -68,7 +65,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextSpan(
                       text: 'Hi There!!\n',
                       style: TextStyle(
-                       
                         color: ConstantColor.blackColor,
                         fontSize: height * 0.035,
                       ),
@@ -76,7 +72,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextSpan(
                       text: 'Welcome To Team Onwords😎',
                       style: TextStyle(
-                       
                         color: ConstantColor.blackColor,
                         fontSize: height * 0.020,
                       ),
@@ -118,17 +113,23 @@ class _LoginScreenState extends State<LoginScreen> {
                         autofocus: false,
                         keyboardType: TextInputType.emailAddress,
                         style: TextStyle(
-                            fontSize: height * 0.02, color: Colors.black,  ),
+                          fontSize: height * 0.02,
+                          color: Colors.black,
+                        ),
                         decoration: InputDecoration(
                           prefixIcon: const Icon(CupertinoIcons.mail_solid),
                           border: InputBorder.none,
                           hintText: 'Email',
                           hintStyle: TextStyle(
-                              fontSize: height * 0.02, color: Colors.grey,  ),
+                            fontSize: height * 0.02,
+                            color: Colors.grey,
+                          ),
                           filled: true,
                           fillColor: ConstantColor.background1Color,
                           focusedBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(color: ConstantColor.blackColor),
+                            borderSide: const BorderSide(
+                              color: ConstantColor.blackColor,
+                            ),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           enabledBorder: UnderlineInputBorder(
@@ -163,18 +164,28 @@ class _LoginScreenState extends State<LoginScreen> {
                         keyboardType: TextInputType.visiblePassword,
                         obscureText: !_showPassword,
                         style: TextStyle(
-                            fontSize: height * 0.02, color: Colors.black,  ),
+                          fontSize: height * 0.02,
+                          color: Colors.black,
+                        ),
                         decoration: InputDecoration(
                           prefixIcon: const Icon(CupertinoIcons.padlock_solid),
                           border: InputBorder.none,
                           hintText: 'Password',
                           filled: true,
                           hintStyle: TextStyle(
-                              fontSize: height * 0.02, color: Colors.grey,  ),
+                            fontSize: height * 0.02,
+                            color: Colors.grey,
+                          ),
                           fillColor: ConstantColor.background1Color,
-                          contentPadding: const EdgeInsets.only(left: 14.0, bottom: 6.0, top: 8.0),
+                          contentPadding: const EdgeInsets.only(
+                            left: 14.0,
+                            bottom: 6.0,
+                            top: 8.0,
+                          ),
                           focusedBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(color: ConstantColor.blackColor),
+                            borderSide: const BorderSide(
+                              color: ConstantColor.blackColor,
+                            ),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           enabledBorder: UnderlineInputBorder(
@@ -187,7 +198,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           suffixIcon: IconButton(
                             icon: Icon(
-                              _showPassword ? Icons.visibility_off : Icons.visibility,
+                              _showPassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
                               color: Colors.black.withOpacity(0.5),
                             ),
                             onPressed: () {
@@ -248,10 +261,16 @@ class _LoginScreenState extends State<LoginScreen> {
     return Container(
       height: 35,
       width: 20,
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: ConstantColor.backgroundColor),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: ConstantColor.backgroundColor,
+      ),
       child: GestureDetector(
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const QrCodeScan()));
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const QrCodeScan()),
+          );
         },
         child: const Center(
           child: Text(
@@ -292,7 +311,6 @@ class _LoginScreenState extends State<LoginScreen> {
               : Text(
                   'Log in',
                   style: TextStyle(
-                   
                     color: ConstantColor.background1Color,
                     fontSize: height * 0.033,
                   ),
@@ -306,29 +324,34 @@ class _LoginScreenState extends State<LoginScreen> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => screen));
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => screen),
+          );
         });
       },
       child: RichText(
         textAlign: TextAlign.center,
-        text: TextSpan(children: [
-          TextSpan(
-            text: 'Not a member  ',
-            style: TextStyle(
-              fontFamily: ConstantFonts.sfProRegular,
-              color: ConstantColor.blackColor,
-              fontSize: height * 0.015,
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text: 'Not a member  ',
+              style: TextStyle(
+                fontFamily: ConstantFonts.sfProRegular,
+                color: ConstantColor.blackColor,
+                fontSize: height * 0.015,
+              ),
             ),
-          ),
-          TextSpan(
-            text: 'Create an account ?',
-            style: TextStyle(
-              fontFamily: ConstantFonts.sfProRegular,
-              color: ConstantColor.pinkColor,
-              fontSize: height * 0.015,
+            TextSpan(
+              text: 'Create an account ?',
+              style: TextStyle(
+                fontFamily: ConstantFonts.sfProRegular,
+                color: ConstantColor.pinkColor,
+                fontSize: height * 0.015,
+              ),
             ),
-          ),
-        ]),
+          ],
+        ),
       ),
     );
   }
@@ -341,12 +364,14 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           GestureDetector(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => screen));
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => screen),
+              );
             },
             child: Text(
               'Forgot password?',
               style: TextStyle(
-               
                 color: ConstantColor.pinkColor,
                 fontSize: height * 0.02,
               ),
@@ -360,74 +385,32 @@ class _LoginScreenState extends State<LoginScreen> {
   //FUNCTIONS
   Future<void> submitForm() async {
     final valid = _formKey.currentState!.validate();
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     if (valid) {
       if (!mounted) return;
       setState(() {
         _isLoading = true;
       });
       _formKey.currentState!.save();
-      await signIn();
-    }
-  }
-
-  Future<void> signIn() async {
-    try {
-      await _auth
-          .signInWithEmailAndPassword(
+      final response = await authProvider.onLogin(
         email: _email,
         password: _password,
-      )
-          .then((value) {
-        getStaffDetails(userCredential: value);
-      });
-    } on FirebaseAuthException catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _isLoading = false;
-      });
-      if (e.code.contains('Invalid-email')) {
-        CustomSnackBar.showErrorSnackbar(message: 'Provide a valid email', context: context);
-      } else if (e.code.contains('user-not-found')) {
-        CustomSnackBar.showErrorSnackbar(message: 'No user associates with this email', context: context);
-      } else if (e.code.contains('wrong-password')) {
-        CustomSnackBar.showErrorSnackbar(message: 'Invalid password', context: context);
-      } else {
-        CustomSnackBar.showErrorSnackbar(message: 'Something went wrong. try again!', context: context);
-      }
-    }
-  }
+      );
+      if (response != null) {
+        setState(() {
+          _isLoading = false;
+        });
 
-  Future<void> getStaffDetails({required UserCredential userCredential}) async {
-    final navigator = Navigator.of(context);
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    final staffLocation = FirebaseDatabase.instance.ref().child("staff");
-    await staffLocation.child(userCredential.user!.uid).once().then((details) async {
-      if (details.snapshot.exists) {
-        Map<Object?, Object?> data = details.snapshot.value as Map<Object?, Object?>;
-        final staffInfo = StaffModel(
-          dob: data['dob'] == null ? 0 : int.parse(data['dob'].toString()),
-          phoneNumber: data['mobile'] == null ? 0 : int.parse(data['mobile'].toString()),
-          name: data['name'].toString(),
-          uid: userCredential.user!.uid,
-          email: data['email'].toString(),
-          department: data['department'].toString(),
-          profilePic: data['profileImage'].toString(),
-          uniqueId: '',
+        CustomSnackBar.showErrorSnackbar(
+          context: context,
+          message: 'Provide valid email and password!!',
         );
-        await userProvider.addUser(staffInfo);
-        // Moving to home-screen
-        navigator.pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const AuthenticationScreen()),
+      } else {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const TestScreen()),
           (route) => false,
         );
-      } else {
-        CustomSnackBar.showErrorSnackbar(message: 'Something went wrong. Try again', context: context);
-        try {
-          FirebaseAuth.instance.signOut();
-        } catch (e) {
-          print('user not logged in $e');
-        }
       }
-    });
+    }
   }
 }

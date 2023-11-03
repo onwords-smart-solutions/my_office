@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:my_office/login/login_screen.dart';
 import '../Constant/colors/constant_colors.dart';
 import '../Constant/fonts/constant_font.dart';
+import '../features/auth/presentation/view/login_screen.dart';
 class SingInScreen extends StatefulWidget {
   const SingInScreen({Key? key}) : super(key: key);
 

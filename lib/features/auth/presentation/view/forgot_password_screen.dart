@@ -1,11 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_office/login/login_screen.dart';
-
-import '../Constant/colors/constant_colors.dart';
-import '../Constant/fonts/constant_font.dart';
-import '../util/main_template.dart';
+import 'package:provider/provider.dart';
+import '../../../../Constant/colors/constant_colors.dart';
+import '../../../../Constant/fonts/constant_font.dart';
+import '../../../../util/custom_snackbar.dart';
+import '../provider/auth_provider.dart';
+import 'login_screen.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
   const ForgetPasswordScreen({Key? key}) : super(key: key);
@@ -23,14 +24,12 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-    return  Scaffold(
+    return Scaffold(
       backgroundColor: ConstantColor.background1Color,
       body: Form(
         key: formKey,
         child: Stack(
-
           children: [
-
             ///Center Image...
             Positioned(
               top: height * 0.5,
@@ -48,28 +47,28 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
               left: width * 0.05,
               // right: width*0.0,
               child: RichText(
-                text: TextSpan(children: [
-                  TextSpan(
-                    text: 'Forgot\nPassword?\n',
-                    style: TextStyle(
-                      fontFamily: ConstantFonts.sfProRegular,
-                      color: ConstantColor.blackColor,
-                      fontSize: height * 0.035,
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Forgot\nPassword?\n',
+                      style: TextStyle(
+                        fontFamily: ConstantFonts.sfProRegular,
+                        color: ConstantColor.blackColor,
+                        fontSize: height * 0.035,
+                      ),
                     ),
-                  ),
-                  TextSpan(
-                    text: 'Please enter your Mail id below',
-                    style: TextStyle(
-                      fontFamily: ConstantFonts.sfProRegular,
-                      color: ConstantColor.blackColor,
-                      fontSize: height * 0.020,
+                    TextSpan(
+                      text: 'Please enter your Mail id below',
+                      style: TextStyle(
+                        fontFamily: ConstantFonts.sfProRegular,
+                        color: ConstantColor.blackColor,
+                        fontSize: height * 0.020,
+                      ),
                     ),
-                  ),
-                ]),
+                  ],
+                ),
               ),
             ),
-
-
 
             /// TextFields And Submit Button...
             Positioned(
@@ -79,12 +78,13 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
               bottom: 0,
               child: Column(
                 children: [
-
                   Container(
                     decoration: BoxDecoration(
                       // color: Colors.black,
-                      border: Border.all(color: Colors.black,),
-                      borderRadius: BorderRadius.circular(20)
+                      border: Border.all(
+                        color: Colors.black,
+                      ),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                     child: textFiledWidget(
                       height,
@@ -96,10 +96,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: height*0.05,
-                  )
-
-
+                    height: height * 0.05,
+                  ),
                 ],
               ),
             ),
@@ -109,7 +107,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
               top: height * 0.8,
               left: width * 0.05,
               right: width * 0.05,
-              child: buttonWidget(height,const LoginScreen(),'Submit'),
+              child: buttonWidget(height, const LoginScreen(), 'Submit'),
             ),
           ],
         ),
@@ -117,27 +115,37 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     );
   }
 
-
-
-
-  Widget buttonWidget(double height,Widget screen,String name) {
+  Widget buttonWidget(double height, Widget screen, String name) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         setState(() {
-          if(emailEditingController.text.isNotEmpty && emailEditingController.text.contains("@")) {
-            if(formKey.currentState!.validate()){
-              resetPassword();
+          if (emailEditingController.text.isNotEmpty &&
+              emailEditingController.text.contains("@")) {
+            if (formKey.currentState!.validate()) {
+              authProvider.resetPassword(
+                email: emailEditingController.text,
+              );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => screen),
+                );
+                CustomSnackBar.showSuccessSnackbar(
+                    message: 'Password reset mail has been sent to your mail id',
+                    context: context,
+                );
             }
-            Navigator.push(context, MaterialPageRoute(builder: (context)=> screen));
-          }else{
-            showErrorSnackBar(message: 'enter a valid e-mail',color: Colors.red);
+          } else {
+            CustomSnackBar.showErrorSnackbar(
+              context: context,
+              message: 'Please enter a valid mail id!!',
+            );
           }
-
         });
       },
       child: Container(
-        height: height*0.07,
-        decoration:  BoxDecoration(
+        height: height * 0.07,
+        decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           gradient: const LinearGradient(
             colors: [
@@ -160,26 +168,26 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     );
   }
 
-
-
   Widget textFiledWidget(
-      double height,
-      TextInputType textInputType,
-      TextInputAction textInputAction,
-      String hintName,
-      TextEditingController textEditingController,
-      Icon icon) {
+    double height,
+    TextInputType textInputType,
+    TextInputAction textInputAction,
+    String hintName,
+    TextEditingController textEditingController,
+    Icon icon,
+  ) {
     return Padding(
-      padding:  EdgeInsets.symmetric(vertical: height*0.01),
+      padding: EdgeInsets.symmetric(vertical: height * 0.01),
       child: TextFormField(
         controller: textEditingController,
         textInputAction: textInputAction,
         autofocus: false,
         keyboardType: textInputType,
         style: TextStyle(
-            fontSize: height * 0.02,
-            color: Colors.black,
-            fontFamily: ConstantFonts.sfProRegular),
+          fontSize: height * 0.02,
+          color: Colors.black,
+          fontFamily: ConstantFonts.sfProRegular,
+        ),
         decoration: InputDecoration(
           prefixIcon: icon,
           border: InputBorder.none,
@@ -187,12 +195,11 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
           filled: true,
           fillColor: ConstantColor.background1Color,
           contentPadding:
-          const EdgeInsets.only(left: 14.0, bottom: 6.0, top: 8.0),
+              const EdgeInsets.only(left: 14.0, bottom: 6.0, top: 8.0),
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: ConstantColor.background1Color),
             borderRadius: BorderRadius.circular(20.0),
           ),
-
           enabledBorder: UnderlineInputBorder(
             borderSide: const BorderSide(color: Colors.transparent),
             borderRadius: BorderRadius.circular(10.0),
@@ -201,51 +208,4 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
       ),
     );
   }
-
-
-  resetPassword() async {
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => const Center(child: CircularProgressIndicator(),)
-    );
-    try{
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: emailEditingController.text.trim());
-      showErrorSnackBar(message: 'Password reset Mail has been sent',color: Colors.green);
-      Navigator.of(context).popUntil((route) => route.isFirst);
-    }
-    on FirebaseAuthException catch(e)
-    {
-      showErrorSnackBar(message: '${e.message}',color: Colors.red);
-      Navigator.pop(context);
-    }
-
-  }
-
-
-  void showErrorSnackBar({required String message,required Color color}) {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: const Duration(seconds: 3),
-        backgroundColor: color,
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(10.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        elevation: 0.0,
-        content: Text(
-          message,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontFamily: 'Poppins',
-              fontSize: 12.0),
-        ),
-      ),
-    );
-  }
 }
-
-

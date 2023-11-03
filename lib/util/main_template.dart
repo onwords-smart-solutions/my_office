@@ -6,7 +6,7 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Account/account_screen.dart';
-import '../login/login_screen.dart';
+import '../features/auth/presentation/view/login_screen.dart';
 import '../provider/user_provider.dart';
 
 class MainTemplate extends StatelessWidget {
