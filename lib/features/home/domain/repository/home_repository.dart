@@ -1,9 +1,9 @@
 import 'package:either_dart/either.dart';
 
 import '../../../../core/utilities/response/error_response.dart';
-import '../../../../models/custom_punching_model.dart';
-import '../../../../models/staff_access_model.dart';
-import '../../../../models/staff_model.dart';
+import '../../../user/domain/entity/user_entity.dart';
+import '../../presentation/view_model/custom_punch_model.dart';
+import '../../presentation/view_model/staff_access_model.dart';
 
 abstract class HomeRepository{
   Future<Either<ErrorResponse,List<String>>> getManagementList();
@@ -15,7 +15,7 @@ abstract class HomeRepository{
   Future<Either<ErrorResponse, List<String>>> getInstallationMemberList();
 
   Future<Either<ErrorResponse, List<StaffAccessModel>>> getStaffAccess({
-    required StaffModel staff,
+    required UserEntity staff,
   });
 
   Future<Either<ErrorResponse, CustomPunchModel?>> getPunchingTime(
@@ -24,9 +24,13 @@ abstract class HomeRepository{
       String department,
       );
 
-  Future<Either<ErrorResponse, List<StaffModel>>> getAllBirthday();
+  Future<Either<ErrorResponse, List<UserEntity>>> getAllBirthday();
 
-  Future<Either<ErrorResponse, List<StaffModel>>> getStaffDetails();
+  Future<Either<ErrorResponse, List<UserEntity>>> getStaffDetails();
 
   int getRandomNumber();
+
+  Future<Either<ErrorResponse, bool>> birthdaySubmitForm(context);
+
+  Future<Either<ErrorResponse, bool>> phoneNumberSubmitForm(context);
 }

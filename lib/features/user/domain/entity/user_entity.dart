@@ -3,9 +3,10 @@ class UserEntity {
   final String dep;
   final String email;
   final String name;
-  final int dob;
-  final int mobile;
-  final String url;
+  int dob;
+  int mobile;
+  String url;
+  String uniqueId;
 
   UserEntity({
     required this.uid,
@@ -15,5 +16,17 @@ class UserEntity {
     required this.dob,
     required this.mobile,
     required this.url,
+    required this.uniqueId,
   });
+
+  factory UserEntity.emptyUser() => UserEntity(
+    uid: '',
+    dep: '',
+    email: '',
+    name: '',
+    dob: 0,
+    mobile: 0,
+    url: '',
+    uniqueId: '',
+  );
 }

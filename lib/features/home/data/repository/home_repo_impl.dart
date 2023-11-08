@@ -1,10 +1,10 @@
 import 'package:either_dart/either.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';
-import 'package:my_office/features/home/data/data_sources/home_fb_data_source.dart';
 import 'package:my_office/features/home/domain/repository/home_repository.dart';
-import 'package:my_office/models/custom_punching_model.dart';
-import 'package:my_office/models/staff_access_model.dart';
-import 'package:my_office/models/staff_model.dart';
+import '../../../user/domain/entity/user_entity.dart';
+import '../../presentation/view_model/custom_punch_model.dart';
+import '../../presentation/view_model/staff_access_model.dart';
+import '../data_source/home_fb_data_source.dart';
 
 class HomeRepoImpl implements HomeRepository {
   final HomeFbDataSource _homeFbDataSource;
@@ -12,7 +12,7 @@ class HomeRepoImpl implements HomeRepository {
   HomeRepoImpl(this._homeFbDataSource);
 
   @override
-  Future<Either<ErrorResponse, List<StaffModel>>> getAllBirthday() async {
+  Future<Either<ErrorResponse, List<UserEntity>>> getAllBirthday() async {
     return await _homeFbDataSource.getAllBirthday();
   }
 
@@ -48,13 +48,13 @@ class HomeRepoImpl implements HomeRepository {
 
   @override
   Future<Either<ErrorResponse, List<StaffAccessModel>>> getStaffAccess({
-    required StaffModel staff,
+    required UserEntity staff,
   }) async {
     return await _homeFbDataSource.getStaffAccess(staff: staff);
   }
 
   @override
-  Future<Either<ErrorResponse, List<StaffModel>>> getStaffDetails()async {
+  Future<Either<ErrorResponse, List<UserEntity>>> getStaffDetails()async {
     return await _homeFbDataSource.getStaffDetails();
   }
 
@@ -62,4 +62,15 @@ class HomeRepoImpl implements HomeRepository {
   Future<Either<ErrorResponse, List<String>>> getTLList() async{
     return await _homeFbDataSource.getTLList();
   }
+
+  @override
+  Future<Either<ErrorResponse, bool>> birthdaySubmitForm(context) async {
+    return await _homeFbDataSource.birthdaySubmitForm(context);
+  }
+
+  @override
+  Future<Either<ErrorResponse, bool>> phoneNumberSubmitForm(context) async{
+    return await _homeFbDataSource.phoneNumberSubmitForm(context);
+  }
+
 }

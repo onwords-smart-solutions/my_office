@@ -1,9 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:my_office/provider/user_provider.dart';
-import 'package:my_office/util/custom_snackbar.dart';
 import 'package:provider/provider.dart';
+import 'features/home/presentation/provider/home_provider.dart';
 import 'main.dart';
 
 final ValueNotifier<bool> _loading = ValueNotifier(false);
@@ -20,6 +19,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
     return Scaffold(
       body: SafeArea(
         child: ListView(
@@ -98,7 +98,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                   ),
                 ) :
                   FilledButton(
-                    onPressed: _submitForm,
+                    onPressed: () => homeProvider.phoneNumberSubmitForm(context),
                     child: const Text(
                       'Continue',
                       style: TextStyle(
@@ -113,31 +113,5 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
         ),
       ),
     );
-  }
-
-  //Saving mobile number to Db
-  Future<void> _submitForm() async {
-    _loading.value = true;
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    if (phoneController.text.isEmpty || phoneController.text.length < 10) {
-      CustomSnackBar.showErrorSnackbar(
-        message: 'Please enter a valid contact number',
-        context: context,
-      );
-      _loading.value = false;
-    } else {
-      await FirebaseDatabase.instance
-          .ref('staff/${userProvider.user!.uid}')
-          .update({
-        'mobile': phoneController.text,
-      });
-      await userProvider.updatePhoneNumber(int.parse(phoneController.text));
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (_) => const AuthenticationScreen(),
-        ),
-            (route) => false,
-      );
-    }
   }
 }

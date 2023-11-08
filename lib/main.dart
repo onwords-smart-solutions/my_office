@@ -1,28 +1,23 @@
 import 'dart:developer';
 import 'package:after_layout/after_layout.dart';
+import 'package:either_dart/either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hive_flutter/adapters.dart';
 import 'package:lottie/lottie.dart';
-import 'package:my_office/Constant/colors/constant_colors.dart';
-import 'package:my_office/PR/visit/visit_form_screen.dart';
+import 'package:my_office/features/attendance/presentation/provider/attendance_provider.dart';
 import 'package:my_office/features/auth/presentation/provider/auth_provider.dart';
-import 'package:my_office/home/user_home_screen.dart';
-import 'package:my_office/models/staff_model.dart';
+import 'package:my_office/features/employee_of_the_week/presentation/provider/employee_of_the_week_provider.dart';
+import 'package:my_office/features/home/presentation/provider/home_provider.dart';
+import 'package:my_office/features/pr_dashboard/presentation/provider/pr_dash_provider.dart';
 import 'package:my_office/phone_number_screen.dart';
-import 'package:my_office/provider/user_provider.dart';
 import 'package:my_office/birthday_picker_screen.dart';
-import 'package:my_office/services/notification_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'PR/invoice_generator/models/providers.dart';
-import 'PR/invoice_generator/quotation_template/provider/providers.dart';
-import 'PR/invoice_generator/screens/client_detials.dart';
+import 'features/auth/presentation/view/intro_screen.dart';
 import 'features/auth/presentation/view/login_screen.dart';
-import 'introduction/intro_screen.dart';
-import 'models/visit_model.dart';
+import 'features/home/presentation/view/home_screen.dart';
 import 'package:my_office/core/utilities/injection_container.dart' as di;
 
 /// version: 1.1.3+16 Updated On (14/03/2023)
@@ -33,21 +28,34 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await di.init();
-  //Hive database Setup
-  await Hive.initFlutter();
-  if (!Hive.isAdapterRegistered(StaffModelAdapter().typeId)) {
-    Hive.registerAdapter(StaffModelAdapter());
-  }
-  if (!Hive.isAdapterRegistered(VisitModelAdapter().typeId)) {
-    Hive.registerAdapter(VisitModelAdapter());
-  }
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitDown,
     DeviceOrientation.portraitUp,
   ]).then(
     (value) => runApp(
-      const MyApp(),
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider<AuthProvider>(
+            create: (_) => di.sl<AuthProvider>(),
+          ),
+          ChangeNotifierProvider<HomeProvider>(
+            create: (_) => di.sl<HomeProvider>(),
+          ),
+          ChangeNotifierProvider<AttendanceProvider>(
+            create: (_) => di.sl<AttendanceProvider>(),
+          ),
+          ChangeNotifierProvider<EmployeeProvider>(
+            create: (_) => di.sl<EmployeeProvider>(),
+          ),
+          ChangeNotifierProvider<PrDashProvider>(
+            create: (_) => di.sl<PrDashProvider>(),
+          ),
+          // ChangeNotifierProvider(create: (context) => InvoiceProvider()),
+          // ChangeNotifierProvider(create: (context) => Invoice1Provider()),
+        ],
+        child: const MyApp(),
+      ),
     ),
   );
 }
@@ -60,49 +68,51 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final UserProvider _userProvider = UserProvider();
-  final NotificationService _notificationService = NotificationService();
+  // final NotificationService _notificationService = NotificationService();
+
+  Future<void> _initUserData() async {
+    final context = this.context;
+    if (FirebaseAuth.instance.currentUser != null) {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final response = await authProvider
+          .getStaffInfo(FirebaseAuth.instance.currentUser!.uid);
+      if (response.isRight) {
+        authProvider.user = response.right;
+      }
+    }
+  }
 
   @override
   void initState() {
-    _notificationService.initializePlatformNotifications();
-    _getUserInfo();
+    // _notificationService.initializePlatformNotifications();
+    // _getUserInfo(widget.userId);
+    _initUserData();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<AuthProvider>(
-          create: (_) => di.sl<AuthProvider>(),
-        ),
-        ChangeNotifierProvider(create: (context) => _userProvider),
-        ChangeNotifierProvider(create: (context) => InvoiceProvider()),
-        ChangeNotifierProvider(create: (context) => Invoice1Provider()),
-      ],
-      child: MaterialApp(
-        navigatorKey: navigationKey,
-        title: 'My Office',
-        theme: ThemeData(
-          useMaterial3: true,
-          primarySwatch: Colors.amber,
-          scaffoldBackgroundColor: const Color(0xffEEEEEE),
-          fontFamily: 'sfPro',
-        ),
-        home: const InitialScreen(),
-        // home: const Sample(),
-        routes: {
-          '/visitResume': (_) => const VisitFromScreen(),
-          '/invoiceGenerator': (_) => const ClientDetails(),
-        },
+    return MaterialApp(
+      navigatorKey: navigationKey,
+      title: 'My Office',
+      theme: ThemeData(
+        useMaterial3: true,
+        primarySwatch: Colors.amber,
+        scaffoldBackgroundColor: const Color(0xffEEEEEE),
+        fontFamily: 'Roboto',
       ),
+      home: const InitialScreen(),
+      // home: const Sample(),
+      // routes: {
+      //   '/visitResume': (_) => const VisitFromScreen(),
+      //   '/invoiceGenerator': (_) => const ClientDetails(),
+      // },
     );
   }
 
-  Future<void> _getUserInfo() async {
-    await _userProvider.initiateUser();
-  }
+// Future<void> _getUserInfo(String userId) async {
+//   Provider.of<UserProvider>(context, listen: false).initiateUser(userId);
+// }
 }
 
 class InitialScreen extends StatefulWidget {
@@ -112,17 +122,24 @@ class InitialScreen extends StatefulWidget {
   InitialScreenState createState() => InitialScreenState();
 }
 
-class InitialScreenState extends State<InitialScreen> with AfterLayoutMixin<InitialScreen> {
+class InitialScreenState extends State<InitialScreen>
+    with AfterLayoutMixin<InitialScreen> {
   Future checkFirstSeen() async {
     final navigation = Navigator.of(context);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool seen = (prefs.getBool('seen') ?? false);
 
     if (seen) {
-      navigation.pushReplacement(MaterialPageRoute(builder: (context) => const AuthenticationScreen()));
+      navigation.pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const AuthenticationScreen(),
+        ),
+      );
     } else {
       await prefs.setBool('seen', true);
-      navigation.pushReplacement(MaterialPageRoute(builder: (context) => const IntroductionScreen()));
+      navigation.pushReplacement(
+        MaterialPageRoute(builder: (context) => const IntroductionScreen()),
+      );
     }
   }
 
@@ -132,7 +149,7 @@ class InitialScreenState extends State<InitialScreen> with AfterLayoutMixin<Init
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: ConstantColor.blackColor,
+      backgroundColor: Colors.black,
       body: Center(
         child: Text('Loading...'),
       ),
@@ -150,14 +167,14 @@ class AuthenticationScreen extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Consumer<UserProvider>(
+            return Consumer<AuthProvider>(
               builder: (ctx, userProvider, child) {
                 return userProvider.user != null
                     ? userProvider.user!.dob == 0
                         ? BirthdayPickerScreen()
-                : userProvider.user!.phoneNumber == 0
-                ? const PhoneNumberScreen()
-                        : child!
+                        : userProvider.user!.mobile == 0
+                            ? const PhoneNumberScreen()
+                            : child!
                     : const Loading();
               },
               child: const UserHomeScreen(),
@@ -194,8 +211,11 @@ class Loading extends StatelessWidget {
                 await FirebaseAuth.instance.signOut();
                 final pref = await SharedPreferences.getInstance();
                 await pref.clear();
-                Provider.of<UserProvider>(context, listen: false).clearUser();
-                navigator.pushAndRemoveUntil(MaterialPageRoute(builder: (_) => const LoginScreen()), (route) => false);
+                Provider.of<AuthProvider>(context, listen: false).onClearData();
+                navigator.pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (_) => const LoginScreen()),
+                  (route) => false,
+                );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.deepPurple,

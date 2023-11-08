@@ -1,18 +1,13 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/features/auth/presentation/provider/auth_provider.dart';
-import 'package:my_office/home/user_home_screen.dart';
-import 'package:my_office/login/qr_code_scan.dart';
-import 'package:my_office/util/custom_snackbar.dart';
+import 'package:my_office/features/home/presentation/view/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../../Constant/colors/constant_colors.dart';
-import '../../../../Constant/fonts/constant_font.dart';
-import '../../../../test_screen.dart';
+import '../../../../core/utilities/constants/app_color.dart';
+import '../../../../core/utilities/custom_widgets/custom_snack_bar.dart';
 import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -38,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: ConstantColor.background1Color,
+      backgroundColor: AppColor.backGroundColor,
       body: Form(
         key: _formKey,
         child: Stack(
@@ -65,14 +60,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextSpan(
                       text: 'Hi There!!\n',
                       style: TextStyle(
-                        color: ConstantColor.blackColor,
+                        color: Colors.black,
                         fontSize: height * 0.035,
                       ),
                     ),
                     TextSpan(
                       text: 'Welcome To Team Onwords😎',
                       style: TextStyle(
-                        color: ConstantColor.blackColor,
+                        color: Colors.black,
                         fontSize: height * 0.020,
                       ),
                     ),
@@ -115,6 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(
                           fontSize: height * 0.02,
                           color: Colors.black,
+                          fontWeight: FontWeight.w500,
                         ),
                         decoration: InputDecoration(
                           prefixIcon: const Icon(CupertinoIcons.mail_solid),
@@ -123,12 +119,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           hintStyle: TextStyle(
                             fontSize: height * 0.02,
                             color: Colors.grey,
+                            fontWeight: FontWeight.w500,
                           ),
                           filled: true,
-                          fillColor: ConstantColor.background1Color,
+                          fillColor: AppColor.backGroundColor,
                           focusedBorder: UnderlineInputBorder(
                             borderSide: const BorderSide(
-                              color: ConstantColor.blackColor,
+                              color: Colors.black,
                             ),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
@@ -166,6 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(
                           fontSize: height * 0.02,
                           color: Colors.black,
+                          fontWeight: FontWeight.w500,
                         ),
                         decoration: InputDecoration(
                           prefixIcon: const Icon(CupertinoIcons.padlock_solid),
@@ -175,8 +173,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           hintStyle: TextStyle(
                             fontSize: height * 0.02,
                             color: Colors.grey,
+                            fontWeight: FontWeight.w500,
                           ),
-                          fillColor: ConstantColor.background1Color,
+                          fillColor: AppColor.backGroundColor,
                           contentPadding: const EdgeInsets.only(
                             left: 14.0,
                             bottom: 6.0,
@@ -184,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           focusedBorder: UnderlineInputBorder(
                             borderSide: const BorderSide(
-                              color: ConstantColor.blackColor,
+                              color: Colors.black,
                             ),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
@@ -236,51 +235,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: buildGestureDetector(height),
             ),
 
-            //SCAN QR CODE...
-            // Positioned(
-            //   top: height * 0.85,
-            //   left: width * 0.35,
-            //   right: width * 0.35,
-            //   child: scanQrCode(),
-            // ),
-
-            /// Create Account...
-            // Positioned(
-            //   top: height * 0.9,
-            //   left: width * 0.05,
-            //   right: width * 0.05,
-            //   child: createAccountWidget(height, const SingInScreen()),
-            // ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget scanQrCode() {
-    return Container(
-      height: 35,
-      width: 20,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: ConstantColor.backgroundColor,
-      ),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const QrCodeScan()),
-          );
-        },
-        child: const Center(
-          child: Text(
-            'Scan Qr',
-            style: TextStyle(
-              fontSize: 16,
-              color: ConstantColor.background1Color,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
         ),
       ),
     );
@@ -311,7 +266,7 @@ class _LoginScreenState extends State<LoginScreen> {
               : Text(
                   'Log in',
                   style: TextStyle(
-                    color: ConstantColor.background1Color,
+                    color: AppColor.backGroundColor,
                     fontSize: height * 0.033,
                   ),
                 ),
@@ -337,16 +292,16 @@ class _LoginScreenState extends State<LoginScreen> {
             TextSpan(
               text: 'Not a member  ',
               style: TextStyle(
-                fontFamily: ConstantFonts.sfProRegular,
-                color: ConstantColor.blackColor,
+                color: Colors.black,
+                fontWeight: FontWeight.w500,
                 fontSize: height * 0.015,
               ),
             ),
             TextSpan(
               text: 'Create an account ?',
               style: TextStyle(
-                fontFamily: ConstantFonts.sfProRegular,
-                color: ConstantColor.pinkColor,
+                fontWeight: FontWeight.w500,
+                color: AppColor.primaryColor,
                 fontSize: height * 0.015,
               ),
             ),
@@ -372,7 +327,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Text(
               'Forgot password?',
               style: TextStyle(
-                color: ConstantColor.pinkColor,
+                color: AppColor.primaryColor,
                 fontSize: height * 0.02,
               ),
             ),
@@ -400,14 +355,15 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() {
           _isLoading = false;
         });
-
+        if (!mounted) return;
         CustomSnackBar.showErrorSnackbar(
           context: context,
           message: 'Provide valid email and password!!',
         );
       } else {
+        if(!mounted)return;
         Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const TestScreen()),
+          MaterialPageRoute(builder: (_) => const UserHomeScreen()),
           (route) => false,
         );
       }

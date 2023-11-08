@@ -1,38 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_office/Account/account_screen.dart';
-import 'package:my_office/PR/employee_of_the_week.dart';
-import 'package:my_office/PR/invoice_generator/screens/client_detials.dart';
-import 'package:my_office/PR/products/scan_qr.dart';
-import 'package:my_office/installation_entry/installation_entry.dart';
-import 'package:my_office/leave_details/leave_details.dart';
-import 'package:my_office/models/staff_access_model.dart';
-import 'package:my_office/models/staff_model.dart';
+import 'package:my_office/features/attendance/presentation/view/attendance_screen.dart';
 
-import '../../../PR/invoice_generator/quotation_template/view/home_screen.dart';
-import '../../../PR/pr_dashboard.dart';
-import '../../../PR/pr_workdone/pr_work_details.dart';
-import '../../../PR/pr_workdone/pr_work_entry.dart';
-import '../../../PR/products/new_product.dart';
-import '../../../PR/products/point_calculations.dart';
-import '../../../PR/reminder_screen.dart';
-import '../../../PR/visit/visit_form_screen.dart';
-import '../../../PR/visit_check.dart';
-import '../../../finance/finance_analysis.dart';
-import '../../../food_count/food_count_screen.dart';
-import '../../../leads/create_leads.dart';
-import '../../../leads/search_leads.dart';
-import '../../../leave_apply/leave_apply_screen.dart';
-import '../../../leave_approval/leave_approval_screen.dart';
-import '../../../proxy_attendance/attendance_screen.dart';
-import '../../../refreshment/refreshment_screen.dart';
-import '../../../rnd_form/installation_details.dart';
-import '../../../staff_details/staff_details.dart';
-import '../../../suggestions/suggestions.dart';
-import '../../../suggestions/view_suggestions.dart';
-import '../../../tl_check_screen/check_entry.dart';
-import '../../../work_details/work_complete.dart';
-import '../../../work_entry/work_entry.dart';
+import '../../../features/create_lead/presentation/view/create_lead_screen.dart';
+import '../../../features/employee_of_the_week/presentation/view/employee_of_the_week.dart';
+import '../../../features/home/presentation/view/account_details_screen.dart';
+import '../../../features/home/presentation/view_model/staff_access_model.dart';
+import '../../../features/pr_dashboard/presentation/view/pr_dash_screen.dart';
+import '../../../features/user/domain/entity/user_entity.dart';
 
 const serverKey =
     'AAAAhAGZ-Jw:APA91bFk_GTSGX1LAj-ZxOW7DQn8Q69sYLStSB8lukQDlxBMmugrkQCsgIvuFm0fU5vBbVB5SATjaoO0mrCdsJm03ZEEZtaRdH-lQ9ZmX5RpYuyLytWyHVH7oDu-6LaShqrVE5vYHCqK';
@@ -71,99 +46,99 @@ class MenuTitle {
 
 class AppDefaults {
   static List<StaffAccessModel> allAccess = [
-    StaffAccessModel(
-      title: MenuTitle.workEntry,
-      image: 'assets/work_entry.png',
-    ),
-    StaffAccessModel(
-      title: MenuTitle.refreshment,
-      image: 'assets/refreshment.png',
-    ),
-    // StaffAccessModel(title: MenuTitle.leavePortal, image: 'assets/leave_apply.png'),
-    StaffAccessModel(
-      title: MenuTitle.suggestion,
-      image: 'assets/suggestions.png',
-    ),
-    StaffAccessModel(
-      title: MenuTitle.workDetail,
-      image: 'assets/work_details.png',
-    ),
-    StaffAccessModel(
-      title: MenuTitle.foodCount,
-      image: 'assets/food_count.png',
-    ),
-    StaffAccessModel(
-      title: MenuTitle.leaveApproval,
-      image: 'assets/leave_approval.png',
-    ),
-    StaffAccessModel(
-      title: MenuTitle.searchLead,
-      image: 'assets/search_leads.png',
-    ),
-    StaffAccessModel(title: MenuTitle.prVisit, image: 'assets/visit.png'),
-    StaffAccessModel(
-      title: MenuTitle.prVisitCheck,
-      image: 'assets/visit_check.png',
-    ),
-    StaffAccessModel(
-      title: MenuTitle.createInvoice,
-      image: 'assets/invoice.png',
-    ),
-    StaffAccessModel(title: MenuTitle.finance, image: 'assets/finance.png'),
-    StaffAccessModel(
-      title: MenuTitle.viewSuggestions,
-      image: 'assets/view_suggestions.png',
-    ),
-    StaffAccessModel(
-      title: MenuTitle.prWorkDone,
-      image: 'assets/pr_points.png',
-    ),
+//     StaffAccessModel(
+//       title: MenuTitle.workEntry,
+//       image: 'assets/work_entry.png',
+//     ),
+//     StaffAccessModel(
+//       title: MenuTitle.refreshment,
+//       image: 'assets/refreshment.png',
+//     ),
+//     // StaffAccessModel(title: MenuTitle.leavePortal, image: 'assets/leave_apply.png'),
+//     StaffAccessModel(
+//       title: MenuTitle.suggestion,
+//       image: 'assets/suggestions.png',
+//     ),
+//     StaffAccessModel(
+//       title: MenuTitle.workDetail,
+//       image: 'assets/work_details.png',
+//     ),
+//     StaffAccessModel(
+//       title: MenuTitle.foodCount,
+//       image: 'assets/food_count.png',
+//     ),
+//     StaffAccessModel(
+//       title: MenuTitle.leaveApproval,
+//       image: 'assets/leave_approval.png',
+//     ),
+//     StaffAccessModel(
+//       title: MenuTitle.searchLead,
+//       image: 'assets/search_leads.png',
+//     ),
+//     StaffAccessModel(title: MenuTitle.prVisit, image: 'assets/visit.png'),
+//     StaffAccessModel(
+//       title: MenuTitle.prVisitCheck,
+//       image: 'assets/visit_check.png',
+//     ),
+//     StaffAccessModel(
+//       title: MenuTitle.createInvoice,
+//       image: 'assets/invoice.png',
+//     ),
+//     StaffAccessModel(title: MenuTitle.finance, image: 'assets/finance.png'),
+//     StaffAccessModel(
+//       title: MenuTitle.viewSuggestions,
+//       image: 'assets/view_suggestions.png',
+//     ),
+//     StaffAccessModel(
+//       title: MenuTitle.prWorkDone,
+//       image: 'assets/pr_points.png',
+//     ),
     StaffAccessModel(
       title: MenuTitle.attendance,
       image: 'assets/virtual_attendance.png',
     ),
-    StaffAccessModel(
-      title: MenuTitle.createProduct,
-      image: 'assets/new_products.png',
-    ),
-    StaffAccessModel(
-      title: MenuTitle.salesPoint,
-      image: 'assets/points_calculation.png',
-    ),
-    StaffAccessModel(
-      title: MenuTitle.prWorkDetails,
-      image: 'assets/pr_work_details.png',
-    ),
-    StaffAccessModel(
-      title: MenuTitle.scanQR,
-      image: 'assets/qr_scanner_points.png',
-    ),
-    StaffAccessModel(title: MenuTitle.prReminder, image: 'assets/reminder.png'),
-    StaffAccessModel(
-      title: MenuTitle.leaveDetails,
-      image: 'assets/leave_details.png',
-    ),
+//     StaffAccessModel(
+//       title: MenuTitle.createProduct,
+//       image: 'assets/new_products.png',
+//     ),
+//     StaffAccessModel(
+//       title: MenuTitle.salesPoint,
+//       image: 'assets/points_calculation.png',
+//     ),
+//     StaffAccessModel(
+//       title: MenuTitle.prWorkDetails,
+//       image: 'assets/pr_work_details.png',
+//     ),
+//     StaffAccessModel(
+//       title: MenuTitle.scanQR,
+//       image: 'assets/qr_scanner_points.png',
+//     ),
+//     StaffAccessModel(title: MenuTitle.prReminder, image: 'assets/reminder.png'),
+//     StaffAccessModel(
+//       title: MenuTitle.leaveDetails,
+//       image: 'assets/leave_details.png',
+//     ),
     StaffAccessModel(
       title: MenuTitle.createLead,
       image: 'assets/create_leads.png',
     ),
-    StaffAccessModel(
-      title: MenuTitle.quotationTemplate,
-      image: 'assets/quotation_template.png',
-    ),
-    StaffAccessModel(
-      title: MenuTitle.staffDetail,
-      image: 'assets/staff_details.png',
-    ),
-    StaffAccessModel(
-      title: MenuTitle.installationPDF,
-      image: 'assets/installation_image.png',
-    ),
-    StaffAccessModel(
-      title: MenuTitle.proxyAttendance,
-      image: 'assets/proxy_attendance.png',
-    ),
-    // StaffAccessModel(title: MenuTitle.installationEntry, image: 'assets/installation_entry.png'),
+//     StaffAccessModel(
+//       title: MenuTitle.quotationTemplate,
+//       image: 'assets/quotation_template.png',
+//     ),
+//     StaffAccessModel(
+//       title: MenuTitle.staffDetail,
+//       image: 'assets/staff_details.png',
+//     ),
+//     StaffAccessModel(
+//       title: MenuTitle.installationPDF,
+//       image: 'assets/installation_image.png',
+//     ),
+//     StaffAccessModel(
+//       title: MenuTitle.proxyAttendance,
+//       image: 'assets/proxy_attendance.png',
+//     ),
+//     // StaffAccessModel(title: MenuTitle.installationEntry, image: 'assets/installation_entry.png'),
     StaffAccessModel(
       title: MenuTitle.prDashboard,
       image: 'assets/pr_dashboard.png',
@@ -173,116 +148,116 @@ class AppDefaults {
       image: 'assets/best_employee.png',
     ),
   ];
-
-  static Widget getPage(String title, StaffModel staffInfo) {
+//
+  static Widget getPage(String title, UserEntity staffInfo) {
     Widget page = const AccountScreen();
     switch (title) {
-      case MenuTitle.workEntry:
-        page = WorkEntryScreen(
-          userId: staffInfo.uid,
-          staffName: staffInfo.name,
-        );
-        break;
-      case MenuTitle.workDetail:
-        page = WorkCompleteViewScreen(
-          userDetails: staffInfo,
-        );
-        break;
-      case MenuTitle.refreshment:
-        page = RefreshmentScreen(
-          uid: staffInfo.uid,
-          name: staffInfo.name,
-        );
-        break;
-      case MenuTitle.foodCount:
-        page = const FoodCountScreen();
-        break;
-      case MenuTitle.leavePortal:
-        page = const LeaveApplyScreen();
-        break;
-
-      case MenuTitle.leaveApproval:
-        page = const LeaveApprovalScreen();
-        break;
-      case MenuTitle.searchLead:
-        page = SearchLeadsScreen(staffInfo: staffInfo);
-        break;
-      case MenuTitle.prVisit:
-        page = const VisitFromScreen();
-        break;
-      case MenuTitle.prVisitCheck:
-        page = const VisitCheckScreen();
-        break;
-      case MenuTitle.createInvoice:
-        page = const ClientDetails();
-        break;
-      case MenuTitle.finance:
-        page = const FinanceScreen();
-        break;
-      case MenuTitle.suggestion:
-        page = SuggestionScreen(
-          uid: staffInfo.uid,
-          name: staffInfo.name,
-        );
-        break;
-
-      case MenuTitle.viewSuggestions:
-        page = const ViewSuggestions();
-        break;
-
-      case MenuTitle.prWorkDone:
-        page = PrWorkDone(
-          userId: staffInfo.uid,
-          staffName: staffInfo.name,
-        );
-        break;
+//       case MenuTitle.workEntry:
+//         page = WorkEntryScreen(
+//           userId: staffInfo.uid,
+//           staffName: staffInfo.name,
+//         );
+//         break;
+//       case MenuTitle.workDetail:
+//         page = WorkCompleteViewScreen(
+//           userDetails: staffInfo,
+//         );
+//         break;
+//       case MenuTitle.refreshment:
+//         page = RefreshmentScreen(
+//           uid: staffInfo.uid,
+//           name: staffInfo.name,
+//         );
+//         break;
+//       case MenuTitle.foodCount:
+//         page = const FoodCountScreen();
+//         break;
+//       case MenuTitle.leavePortal:
+//         page = const LeaveApplyScreen();
+//         break;
+//
+//       case MenuTitle.leaveApproval:
+//         page = const LeaveApprovalScreen();
+//         break;
+//       case MenuTitle.searchLead:
+//         page = SearchLeadsScreen(staffInfo: staffInfo);
+//         break;
+//       case MenuTitle.prVisit:
+//         page = const VisitFromScreen();
+//         break;
+//       case MenuTitle.prVisitCheck:
+//         page = const VisitCheckScreen();
+//         break;
+//       case MenuTitle.createInvoice:
+//         page = const ClientDetails();
+//         break;
+//       case MenuTitle.finance:
+//         page = const FinanceScreen();
+//         break;
+//       case MenuTitle.suggestion:
+//         page = SuggestionScreen(
+//           uid: staffInfo.uid,
+//           name: staffInfo.name,
+//         );
+//         break;
+//
+//       case MenuTitle.viewSuggestions:
+//         page = const ViewSuggestions();
+//         break;
+//
+//       case MenuTitle.prWorkDone:
+//         page = PrWorkDone(
+//           userId: staffInfo.uid,
+//           staffName: staffInfo.name,
+//         );
+//         break;
       case MenuTitle.attendance:
-        page = CheckEntryScreen(
+        page = AttendanceScreen(
           userId: staffInfo.uid,
           staffName: staffInfo.name,
         );
         break;
-      case MenuTitle.createProduct:
-        page = const CreateNewProduct();
-        break;
-      case MenuTitle.salesPoint:
-        page = const PointCalculationsScreen();
-        break;
-      case MenuTitle.prWorkDetails:
-        page = const PrWorkDetails();
-        break;
-      case MenuTitle.scanQR:
-        page = const ScanQRScreen();
-        break;
-      case MenuTitle.prReminder:
-        page = ReminderScreen(
-          staffInfo: staffInfo,
-        );
-        break;
-      case MenuTitle.leaveDetails:
-        page = const LeaveDetails();
-        break;
+//       case MenuTitle.createProduct:
+//         page = const CreateNewProduct();
+//         break;
+//       case MenuTitle.salesPoint:
+//         page = const PointCalculationsScreen();
+//         break;
+//       case MenuTitle.prWorkDetails:
+//         page = const PrWorkDetails();
+//         break;
+//       case MenuTitle.scanQR:
+//         page = const ScanQRScreen();
+//         break;
+//       case MenuTitle.prReminder:
+//         page = ReminderScreen(
+//           staffInfo: staffInfo,
+//         );
+//         break;
+//       case MenuTitle.leaveDetails:
+//         page = const LeaveDetails();
+//         break;
       case MenuTitle.createLead:
         page = CreateLeads(staffName: staffInfo.name);
         break;
-      case MenuTitle.quotationTemplate:
-        page = const Client1Details();
-        break;
-      case MenuTitle.staffDetail:
-        page = const StaffDetails();
-        break;
-      case MenuTitle.installationPDF:
-        page = const InstallationDetails();
-        break;
-      case MenuTitle.proxyAttendance:
-        page = ProxyAttendance(
-          uid: staffInfo.uid,
-          name: staffInfo.name,
-        );
-        break;
-      case MenuTitle.installationEntry:
-        page = const InstallationEntry();
-        break;
+//       case MenuTitle.quotationTemplate:
+//         page = const Client1Details();
+//         break;
+//       case MenuTitle.staffDetail:
+//         page = const StaffDetails();
+//         break;
+//       case MenuTitle.installationPDF:
+//         page = const InstallationDetails();
+//         break;
+//       case MenuTitle.proxyAttendance:
+//         page = ProxyAttendance(
+//           uid: staffInfo.uid,
+//           name: staffInfo.name,
+//         );
+//         break;
+//       case MenuTitle.installationEntry:
+//         page = const InstallationEntry();
+//         break;
       case MenuTitle.prDashboard:
         page = const PrDashboard();
         break;

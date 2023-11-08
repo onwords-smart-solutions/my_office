@@ -1,6 +1,7 @@
 import 'package:either_dart/either.dart';
 
 import '../../../../core/utilities/response/error_response.dart';
+import '../../../user/data/model/user_model.dart';
 import '../../../user/domain/entity/user_entity.dart';
 
 abstract class AuthRepository {
@@ -19,4 +20,10 @@ abstract class AuthRepository {
   Future<List<String>> getFcmTokens({required String userId});
 
   Future<void> removeFcmToken({required String userId});
+
+  Future<Either<ErrorResponse, void>> updatePhoneNumber();
+
+  Future<Either<ErrorResponse, void>> updateBirthday();
+
+  Future<Either<ErrorResponse, UserModel>> getUserInfo(String userId);
 }

@@ -1,7 +1,7 @@
 import 'package:either_dart/either.dart';
-import 'package:my_office/features/auth/data/models/user_model.dart';
 
 import '../../../../core/utilities/response/error_response.dart';
+import '../../../user/data/model/user_model.dart';
 import '../../../user/domain/entity/user_entity.dart';
 
 abstract class AuthFbDataSource{
@@ -24,4 +24,8 @@ abstract class AuthFbDataSource{
   Future<List<String>> getFcmTokens({required String userId});
 
   Future<void> removeFcmToken({required String userId});
+
+  Future<Either<ErrorResponse, void>> updatePhoneNumber();
+
+  Future<Either<ErrorResponse, void>> updateBirthday();
 }

@@ -2,6 +2,7 @@ import 'package:either_dart/either.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';
 import 'package:my_office/features/auth/data/data_source/auth_firebase_data_source.dart';
 import 'package:my_office/features/auth/domain/repository/auth_repository.dart';
+import 'package:my_office/features/user/data/model/user_model.dart';
 import 'package:my_office/features/user/domain/entity/user_entity.dart';
 
 class AuthRepoImpl implements AuthRepository {
@@ -52,5 +53,22 @@ class AuthRepoImpl implements AuthRepository {
   Future<void> storeFcmToken({required String userId}) {
     // TODO: implement storeFcmToken
     throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<ErrorResponse, void>> updateBirthday() {
+    // TODO: implement updateBirthday
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<ErrorResponse, void>> updatePhoneNumber() {
+    // TODO: implement updatePhoneNumber
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<ErrorResponse, UserModel>> getUserInfo(String userId) async{
+    return await _authFbDataSource.getUserInfo(userId);
   }
 }

@@ -1,11 +1,8 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
-import 'package:my_office/main.dart';
-import 'package:my_office/provider/user_provider.dart';
-import 'package:my_office/util/custom_snackbar.dart';
+import 'package:my_office/features/home/presentation/provider/home_provider.dart';
 import 'package:provider/provider.dart';
 
 class BirthdayPickerScreen extends StatelessWidget {
@@ -16,6 +13,7 @@ class BirthdayPickerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -102,7 +100,7 @@ class BirthdayPickerScreen extends StatelessWidget {
                                   ),
                                 )
                               : FilledButton(
-                                  onPressed: () => _submitForm(context),
+                                  onPressed: () => homeProvider.birthdaySubmitForm(context),
                                   style: FilledButton.styleFrom(
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12.0),
@@ -185,29 +183,4 @@ class BirthdayPickerScreen extends StatelessWidget {
 
   String _dateFormat(DateTime date) => DateFormat('dd-MM-yyyy').format(date);
 
-  // Functions
-  Future<void> _submitForm(BuildContext context) async {
-    _loading.value = true;
-    final userProvider = Provider.of<UserProvider>(context, listen: false);
-    if (_birthday.value == null) {
-      CustomSnackBar.showErrorSnackbar(
-        message: 'Please choose your date of birth',
-        context: context,
-      );
-      _loading.value = false;
-    } else {
-      await FirebaseDatabase.instance
-          .ref('staff/${userProvider.user!.uid}')
-          .update({
-        'dob': _birthday.value!.millisecondsSinceEpoch,
-      });
-      await userProvider.updateDOB(_birthday.value!);
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(
-          builder: (_) => const AuthenticationScreen(),
-        ),
-        (route) => false,
-      );
-    }
-  }
 }

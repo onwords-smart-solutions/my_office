@@ -1,4 +1,8 @@
+import 'dart:math';
+
+import 'package:either_dart/either.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:my_office/core/utilities/response/error_response.dart';
 import 'package:my_office/features/auth/domain/use_case/get_fcm_tokens_case.dart';
 import 'package:my_office/features/auth/domain/use_case/login_case.dart';
 import 'package:my_office/features/auth/domain/use_case/remove_fcm_tokens_case.dart';
@@ -6,8 +10,8 @@ import 'package:my_office/features/auth/domain/use_case/reset_password_case.dart
 import 'package:my_office/features/auth/domain/use_case/sign_out_case.dart';
 import 'package:my_office/features/auth/domain/use_case/store_fcm_tokens_case.dart';
 import 'package:my_office/features/user/domain/entity/user_entity.dart';
-
 import '../../domain/use_case/get_device_info_case.dart';
+import '../../domain/use_case/get_staff_info_use_case.dart';
 
 class AuthProvider extends ChangeNotifier {
   final LoginCase _loginCase;
@@ -17,6 +21,7 @@ class AuthProvider extends ChangeNotifier {
   final StoreFcmCase _storeFcmCase;
   final RemoveFcmCase _removeFcmCase;
   final GetDeviceInfoCase _getDeviceInfoCase;
+  final GetStaffInfoCase _getUserInfoCase;
 
   AuthProvider(
     this._loginCase,
@@ -26,6 +31,7 @@ class AuthProvider extends ChangeNotifier {
     this._storeFcmCase,
     this._removeFcmCase,
     this._getDeviceInfoCase,
+    this._getUserInfoCase,
   );
 
   UserEntity? _userEntity;
@@ -52,7 +58,7 @@ class AuthProvider extends ChangeNotifier {
   }) async {
     final response = await _resetPasswordCase.execute(email: email);
     if (response.isLeft) return response.left.error;
-    if(response.isRight) response.right;
+    if (response.isRight) {}
     return null;
   }
 
@@ -77,5 +83,27 @@ class AuthProvider extends ChangeNotifier {
     await _removeFcmCase.execute(userId: userId);
     await _signOutCase.execute();
     _deviceId = '';
+  }
+
+  Future<Either<ErrorResponse, UserEntity>> getStaffInfo(
+    String userId,
+  ) async => await _getUserInfoCase.execute(userId);
+
+
+  void onClearData() {
+    user = null;
+    notifyListeners();
+  }
+
+  String generateRandomString(int length) {
+    const charset =
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    final random = Random();
+    final buffer = StringBuffer();
+
+    for (var i = 0; i < length; i++) {
+      buffer.write(charset[random.nextInt(charset.length)]);
+    }
+    return buffer.toString();
   }
 }

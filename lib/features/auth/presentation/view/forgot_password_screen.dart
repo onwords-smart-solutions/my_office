@@ -1,10 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_office/core/utilities/constants/app_color.dart';
 import 'package:provider/provider.dart';
-import '../../../../Constant/colors/constant_colors.dart';
-import '../../../../Constant/fonts/constant_font.dart';
-import '../../../../util/custom_snackbar.dart';
+import '../../../../core/utilities/custom_widgets/custom_snack_bar.dart';
 import '../provider/auth_provider.dart';
 import 'login_screen.dart';
 
@@ -25,7 +22,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: ConstantColor.background1Color,
+      backgroundColor: AppColor.backGroundColor,
       body: Form(
         key: formKey,
         child: Stack(
@@ -52,16 +49,16 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                     TextSpan(
                       text: 'Forgot\nPassword?\n',
                       style: TextStyle(
-                        fontFamily: ConstantFonts.sfProRegular,
-                        color: ConstantColor.blackColor,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
                         fontSize: height * 0.035,
                       ),
                     ),
                     TextSpan(
                       text: 'Please enter your Mail id below',
                       style: TextStyle(
-                        fontFamily: ConstantFonts.sfProRegular,
-                        color: ConstantColor.blackColor,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.black,
                         fontSize: height * 0.020,
                       ),
                     ),
@@ -158,8 +155,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
           child: Text(
             name,
             style: TextStyle(
-              fontFamily: ConstantFonts.sfProRegular,
-              color: ConstantColor.background1Color,
+              fontWeight: FontWeight.w500,
+              color: AppColor.backGroundColor,
               fontSize: height * 0.030,
             ),
           ),
@@ -186,18 +183,18 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
         style: TextStyle(
           fontSize: height * 0.02,
           color: Colors.black,
-          fontFamily: ConstantFonts.sfProRegular,
+          fontWeight: FontWeight.w500,
         ),
         decoration: InputDecoration(
           prefixIcon: icon,
           border: InputBorder.none,
           hintText: hintName,
           filled: true,
-          fillColor: ConstantColor.background1Color,
+          fillColor: AppColor.backGroundColor,
           contentPadding:
               const EdgeInsets.only(left: 14.0, bottom: 6.0, top: 8.0),
           focusedBorder: OutlineInputBorder(
-            borderSide: const BorderSide(color: ConstantColor.background1Color),
+            borderSide: BorderSide(color: AppColor.backGroundColor),
             borderRadius: BorderRadius.circular(20.0),
           ),
           enabledBorder: UnderlineInputBorder(

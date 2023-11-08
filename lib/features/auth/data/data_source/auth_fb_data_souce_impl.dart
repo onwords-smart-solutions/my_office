@@ -1,11 +1,13 @@
-import 'package:either_dart/src/either.dart';
+
+import 'package:either_dart/either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';
 import 'package:my_office/features/auth/data/data_source/auth_firebase_data_source.dart';
-import 'package:my_office/features/auth/data/models/user_model.dart';
 import 'package:my_office/features/user/domain/entity/user_entity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../user/data/model/user_model.dart';
 
 class AuthFbDataSourceImpl implements AuthFbDataSource {
   final FirebaseDatabase _firebaseDatabase;
@@ -125,5 +127,17 @@ class AuthFbDataSourceImpl implements AuthFbDataSource {
         ),
       );
     }
+  }
+
+  @override
+  Future<Either<ErrorResponse, void>> updateBirthday() {
+    // TODO: implement updateBirthday
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Either<ErrorResponse, void>> updatePhoneNumber() {
+    // TODO: implement updatePhoneNumber
+    throw UnimplementedError();
   }
 }
