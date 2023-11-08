@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_office/features/attendance/presentation/view/attendance_screen.dart';
 
 import '../../../features/create_lead/presentation/view/create_lead_screen.dart';
+import '../../../features/create_product/presentation/view/create_product_screen.dart';
 import '../../../features/employee_of_the_week/presentation/view/employee_of_the_week.dart';
 import '../../../features/home/presentation/view/account_details_screen.dart';
 import '../../../features/home/presentation/view_model/staff_access_model.dart';
@@ -97,10 +98,10 @@ class AppDefaults {
       title: MenuTitle.attendance,
       image: 'assets/virtual_attendance.png',
     ),
-//     StaffAccessModel(
-//       title: MenuTitle.createProduct,
-//       image: 'assets/new_products.png',
-//     ),
+    StaffAccessModel(
+      title: MenuTitle.createProduct,
+      image: 'assets/new_products.png',
+    ),
 //     StaffAccessModel(
 //       title: MenuTitle.salesPoint,
 //       image: 'assets/points_calculation.png',
@@ -217,9 +218,9 @@ class AppDefaults {
           staffName: staffInfo.name,
         );
         break;
-//       case MenuTitle.createProduct:
-//         page = const CreateNewProduct();
-//         break;
+      case MenuTitle.createProduct:
+        page = const CreateNewProduct();
+        break;
 //       case MenuTitle.salesPoint:
 //         page = const PointCalculationsScreen();
 //         break;

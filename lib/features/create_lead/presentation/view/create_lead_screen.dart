@@ -1,15 +1,11 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:my_office/core/utilities/constants/app_color.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_snack_bar.dart';
-import 'package:my_office/features/create_lead/data/repository/create_lead_repo_impl.dart';
 import 'package:my_office/features/create_lead/domain/entity/create_lead_entity.dart';
-import 'package:my_office/features/create_lead/domain/repository/create_lead_repository.dart';
+import 'package:my_office/features/create_lead/presentation/provider/create_lead_provider.dart';
+import 'package:provider/provider.dart';
 import '../../../../core/utilities/constants/app_main_template.dart';
-import '../../domain/use_case/create_lead_use_case.dart';
-import '../view_model/create_lead_view_model.dart';
 
 class CreateLeads extends StatefulWidget {
   final String staffName;
@@ -28,15 +24,6 @@ class _CreateLeadsState extends State<CreateLeads> {
   TextEditingController inquiredFor = TextEditingController();
   TextEditingController dataFetchedBy = TextEditingController();
 
-  late CreateLeadViewModel createLeadViewModel;
-
-  @override
-  void initState() {
-    super.initState();
-    createLeadViewModel = CreateLeadViewModel(
-      CreateLeadCase(createLeadRepository: CreateLeadRepoImpl()),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -298,17 +285,11 @@ class _CreateLeadsState extends State<CreateLeads> {
       );
     } else {
       createLeadsInDb();
-      name.clear();
-      phoneNumber.clear();
-      emailId.clear();
-      city.clear();
-      inquiredFor.clear();
-      dataFetchedBy.clear();
     }
   }
 
   void createLeadsInDb() async {
-    final createLead = CreateLeadEntity(
+    final createNewLead = CreateLeadEntity(
       name: name.text.trim(),
       phoneNumber: phoneNumber.text.trim(),
       createdBy: widget.staffName,
@@ -317,13 +298,25 @@ class _CreateLeadsState extends State<CreateLeads> {
       inquiredFor: inquiredFor.text.trim(),
       dataFetchedBy: dataFetchedBy.text.trim(),
     );
-    createLeadViewModel.onSuccess = (message) {
-      CustomSnackBar.showSuccessSnackbar(message: message, context: context);
-    };
-
-    createLeadViewModel.onError = (exception) {
-      CustomSnackBar.showErrorSnackbar(message: exception, context: context);
-    };
-    await createLeadViewModel.createLead(createLead);
+    final response = await Provider.of<CreateLeadProvider>(context, listen: false).createLead(createNewLead);
+    if(response.isRight){
+      if(!mounted) return;
+      CustomSnackBar.showSuccessSnackbar(
+        message: 'A new lead has been created successfully!!',
+        context: context,
+      );
+      name.clear();
+      phoneNumber.clear();
+      emailId.clear();
+      city.clear();
+      inquiredFor.clear();
+      dataFetchedBy.clear();
+    }else{
+      if (!mounted) return;
+      CustomSnackBar.showErrorSnackbar(
+        message: 'Error while creating new lead!!',
+        context: context,
+      );
+    }
   }
 }

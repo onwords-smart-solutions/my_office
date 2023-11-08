@@ -8,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/features/attendance/presentation/provider/attendance_provider.dart';
 import 'package:my_office/features/auth/presentation/provider/auth_provider.dart';
+import 'package:my_office/features/create_lead/presentation/provider/create_lead_provider.dart';
+import 'package:my_office/features/create_product/presentation/provider/create_product_provider.dart';
 import 'package:my_office/features/employee_of_the_week/presentation/provider/employee_of_the_week_provider.dart';
 import 'package:my_office/features/home/presentation/provider/home_provider.dart';
 import 'package:my_office/features/pr_dashboard/presentation/provider/pr_dash_provider.dart';
@@ -50,6 +52,12 @@ Future<void> main() async {
           ),
           ChangeNotifierProvider<PrDashProvider>(
             create: (_) => di.sl<PrDashProvider>(),
+          ),
+          ChangeNotifierProvider<CreateLeadProvider>(
+            create: (_) => di.sl<CreateLeadProvider>(),
+          ),
+          ChangeNotifierProvider<CreateProductProvider>(
+            create: (_) => di.sl<CreateProductProvider>(),
           ),
           // ChangeNotifierProvider(create: (context) => InvoiceProvider()),
           // ChangeNotifierProvider(create: (context) => Invoice1Provider()),

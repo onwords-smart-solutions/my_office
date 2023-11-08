@@ -1,3 +1,6 @@
+import 'package:either_dart/either.dart';
+import 'package:my_office/core/utilities/response/error_response.dart';
+
 import '../entity/create_lead_entity.dart';
 import '../repository/create_lead_repository.dart';
 
@@ -6,7 +9,7 @@ class CreateLeadCase{
 
   CreateLeadCase({required this.createLeadRepository});
 
-  Future <void> execute (CreateLeadEntity createLeadEntity)async {
+  Future <Either<ErrorResponse, bool>> execute (CreateLeadEntity createLeadEntity)async {
     if (createLeadEntity.name.isEmpty) {
       throw Exception('Enter the customer name');
     } else if (createLeadEntity.phoneNumber.isEmpty) {
@@ -20,6 +23,6 @@ class CreateLeadCase{
     }else if (createLeadEntity.dataFetchedBy.isEmpty) {
       throw Exception('Enter a data fetched details');
     }
-    await createLeadRepository.createCustomerLead(createLeadEntity);
+   return await createLeadRepository.createCustomerLead(createLeadEntity);
   }
 }

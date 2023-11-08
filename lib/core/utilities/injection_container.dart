@@ -20,9 +20,16 @@ import 'package:my_office/features/auth/domain/use_case/reset_password_case.dart
 import 'package:my_office/features/auth/domain/use_case/sign_out_case.dart';
 import 'package:my_office/features/auth/domain/use_case/store_fcm_tokens_case.dart';
 import 'package:my_office/features/auth/presentation/provider/auth_provider.dart';
+import 'package:my_office/features/create_lead/data/data_source/create_lead_fb_data_source.dart';
+import 'package:my_office/features/create_lead/data/data_source/create_lead_fb_data_source_impl.dart';
 import 'package:my_office/features/create_lead/data/repository/create_lead_repo_impl.dart';
 import 'package:my_office/features/create_lead/domain/repository/create_lead_repository.dart';
 import 'package:my_office/features/create_lead/domain/use_case/create_lead_use_case.dart';
+import 'package:my_office/features/create_lead/presentation/provider/create_lead_provider.dart';
+import 'package:my_office/features/create_product/data/repository/create_product_repo_impl.dart';
+import 'package:my_office/features/create_product/domain/repository/create_product_repository.dart';
+import 'package:my_office/features/create_product/domain/use_case/create_product_use_case.dart';
+import 'package:my_office/features/create_product/presentation/provider/create_product_provider.dart';
 import 'package:my_office/features/employee_of_the_week/data/data_source/employee_fb_data_source.dart';
 import 'package:my_office/features/employee_of_the_week/domain/repository/employee_repository.dart';
 import 'package:my_office/features/employee_of_the_week/domain/use_case/all_staff_names_use_case.dart';
@@ -115,6 +122,20 @@ Future<void> init() async {
   sl.registerFactory<PrDashProvider>(
         () => PrDashProvider(
       sl.call(),
+      sl.call(),
+    ),
+  );
+
+  ///CREATE NEW LEAD
+  sl.registerFactory<CreateLeadProvider>(
+        () => CreateLeadProvider(
+      sl.call(),
+    ),
+  );
+
+  ///CREATE PRODUCT PROVIDER
+  sl.registerFactory<CreateProductProvider>(
+        () => CreateProductProvider(
       sl.call(),
     ),
   );
@@ -260,6 +281,11 @@ Future<void> init() async {
         () => CreateLeadCase(createLeadRepository: sl.call()),
   );
 
+  ///CREATE PRODUCT
+  sl.registerLazySingleton<CreateProductCase>(
+        () => CreateProductCase(createProductRepository: sl.call()),
+  );
+
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ REPOSITORIES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
   ///AUTH
@@ -289,7 +315,12 @@ Future<void> init() async {
 
   ///CREATE LEAD SCREEN
   sl.registerLazySingleton<CreateLeadRepository>(
-        () => CreateLeadRepoImpl(),
+        () => CreateLeadRepoImpl(sl.call()),
+  );
+
+  ///CREATE PRODUCT SCREEN
+  sl.registerLazySingleton<CreateProductRepository>(
+        () => CreateProductRepoImpl(),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DATA SOURCE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
@@ -317,6 +348,11 @@ Future<void> init() async {
   ///PR DASHBOARD DETAILS SCREEN
   sl.registerLazySingleton<PrDashFbDataSource>(
         () => PrDashFbDataSourceImpl(sl.call()),
+  );
+
+  ///CREATE LEAD SCREEN
+  sl.registerLazySingleton<CreateLeadFbDataSource>(
+        () => CreateLeadFbDataSourceImpl(),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ EXTERNAL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
