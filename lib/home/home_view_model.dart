@@ -91,7 +91,8 @@ class HomeViewModel {
     for (var menuItems in AppDefaults.allAccess) {
       //adding for management access
       if (managementList.contains(staff.name)) {
-        if (menuItems.title == MenuTitle.createLead) {
+        if (menuItems.title == MenuTitle.createLead ||
+            menuItems.title == MenuTitle.prDashboard) {
           if (staff.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2') {
             allAccess.add(menuItems);
           }
