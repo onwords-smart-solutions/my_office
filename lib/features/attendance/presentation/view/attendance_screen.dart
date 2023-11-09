@@ -1,6 +1,4 @@
 import 'dart:developer';
-
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -8,14 +6,10 @@ import 'package:lottie/lottie.dart';
 import 'package:my_office/core/utilities/constants/app_color.dart';
 import 'package:my_office/features/attendance/presentation/provider/attendance_provider.dart';
 import 'package:my_office/features/attendance/presentation/view/attendance_punch_screen.dart';
-import 'package:pdf/pdf.dart';
-import 'package:pdf/widgets.dart' as pw;
-import 'package:printing/printing.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/utilities/constants/app_main_template.dart';
 import '../../../home/presentation/view_model/custom_punch_model.dart';
-import '../view_model/staff_attendance_model.dart';
 
 class AttendanceScreen extends StatefulWidget {
   final String userId;

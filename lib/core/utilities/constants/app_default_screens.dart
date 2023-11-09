@@ -5,9 +5,12 @@ import 'package:my_office/features/attendance/presentation/view/attendance_scree
 import '../../../features/create_lead/presentation/view/create_lead_screen.dart';
 import '../../../features/create_product/presentation/view/create_product_screen.dart';
 import '../../../features/employee_of_the_week/presentation/view/employee_of_the_week.dart';
+import '../../../features/finance/presentation/view/finance_screen.dart';
+import '../../../features/food_count/presentation/view/food_count_screen.dart';
 import '../../../features/home/presentation/view/account_details_screen.dart';
 import '../../../features/home/presentation/view_model/staff_access_model.dart';
 import '../../../features/pr_dashboard/presentation/view/pr_dash_screen.dart';
+import '../../../features/proxy_attendance/presentation/view/proxy_attendance_screen.dart';
 import '../../../features/user/domain/entity/user_entity.dart';
 
 const serverKey =
@@ -64,10 +67,10 @@ class AppDefaults {
 //       title: MenuTitle.workDetail,
 //       image: 'assets/work_details.png',
 //     ),
-//     StaffAccessModel(
-//       title: MenuTitle.foodCount,
-//       image: 'assets/food_count.png',
-//     ),
+    StaffAccessModel(
+      title: MenuTitle.foodCount,
+      image: 'assets/food_count.png',
+    ),
 //     StaffAccessModel(
 //       title: MenuTitle.leaveApproval,
 //       image: 'assets/leave_approval.png',
@@ -85,7 +88,10 @@ class AppDefaults {
 //       title: MenuTitle.createInvoice,
 //       image: 'assets/invoice.png',
 //     ),
-//     StaffAccessModel(title: MenuTitle.finance, image: 'assets/finance.png'),
+    StaffAccessModel(
+      title: MenuTitle.finance,
+      image: 'assets/finance.png',
+    ),
 //     StaffAccessModel(
 //       title: MenuTitle.viewSuggestions,
 //       image: 'assets/view_suggestions.png',
@@ -135,10 +141,10 @@ class AppDefaults {
 //       title: MenuTitle.installationPDF,
 //       image: 'assets/installation_image.png',
 //     ),
-//     StaffAccessModel(
-//       title: MenuTitle.proxyAttendance,
-//       image: 'assets/proxy_attendance.png',
-//     ),
+    StaffAccessModel(
+      title: MenuTitle.proxyAttendance,
+      image: 'assets/proxy_attendance.png',
+    ),
 //     // StaffAccessModel(title: MenuTitle.installationEntry, image: 'assets/installation_entry.png'),
     StaffAccessModel(
       title: MenuTitle.prDashboard,
@@ -149,6 +155,7 @@ class AppDefaults {
       image: 'assets/best_employee.png',
     ),
   ];
+
 //
   static Widget getPage(String title, UserEntity staffInfo) {
     Widget page = const AccountScreen();
@@ -170,9 +177,9 @@ class AppDefaults {
 //           name: staffInfo.name,
 //         );
 //         break;
-//       case MenuTitle.foodCount:
-//         page = const FoodCountScreen();
-//         break;
+      case MenuTitle.foodCount:
+        page = const FoodCountScreen();
+        break;
 //       case MenuTitle.leavePortal:
 //         page = const LeaveApplyScreen();
 //         break;
@@ -192,9 +199,9 @@ class AppDefaults {
 //       case MenuTitle.createInvoice:
 //         page = const ClientDetails();
 //         break;
-//       case MenuTitle.finance:
-//         page = const FinanceScreen();
-//         break;
+      case MenuTitle.finance:
+        page = const FinanceScreen();
+        break;
 //       case MenuTitle.suggestion:
 //         page = SuggestionScreen(
 //           uid: staffInfo.uid,
@@ -250,12 +257,12 @@ class AppDefaults {
 //       case MenuTitle.installationPDF:
 //         page = const InstallationDetails();
 //         break;
-//       case MenuTitle.proxyAttendance:
-//         page = ProxyAttendance(
-//           uid: staffInfo.uid,
-//           name: staffInfo.name,
-//         );
-//         break;
+      case MenuTitle.proxyAttendance:
+        page = ProxyAttendance(
+          uid: staffInfo.uid,
+          name: staffInfo.name,
+        );
+        break;
 //       case MenuTitle.installationEntry:
 //         page = const InstallationEntry();
 //         break;

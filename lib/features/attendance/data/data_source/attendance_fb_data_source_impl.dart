@@ -5,23 +5,24 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';
-import 'package:my_office/features/attendance/presentation/view_model/staff_attendance_model.dart';
 import 'package:my_office/features/home/presentation/view_model/custom_punch_model.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import '../../presentation/view/attendance_punch_screen.dart';
+import '../model/staff_attendance_model.dart';
 import 'attendance_fb_data_source.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 class AttendanceFbDataSourceImpl implements AttendanceFbDataSource {
+
   @override
   Future<CustomPunchModel?> checkTime(
     String staffId,
     String dep,
     String name,
   ) async {
-    try{
-      final ValueNotifier<DateTime> selectedDate = ValueNotifier(DateTime.now());
+      final ValueNotifier<DateTime> selectedDate =
+          ValueNotifier(DateTime.now());
       CustomPunchModel? punchDetail;
       bool isProxy = false;
       DateTime? checkInTime;
@@ -34,6 +35,7 @@ class AttendanceFbDataSourceImpl implements AttendanceFbDataSource {
       String yearFormat = DateFormat('yyyy').format(selectedDate.value);
       String monthFormat = DateFormat('MM').format(selectedDate.value);
       String dateFormat = DateFormat('dd').format(selectedDate.value);
+      try {
       await FirebaseDatabase.instance
           .ref('attendance/$yearFormat/$monthFormat/$dateFormat/$staffId')
           .once()
@@ -58,12 +60,12 @@ class AttendanceFbDataSourceImpl implements AttendanceFbDataSource {
             );
             try {
               final proxyInByName =
-              attendanceData['proxy_in'] as Map<Object?, Object?>;
+                  attendanceData['proxy_in'] as Map<Object?, Object?>;
               proxyInBy = proxyInByName['proxy_by'].toString();
               final proxyInByReason =
-              attendanceData['proxy_in'] as Map<Object?, Object?>;
+                  attendanceData['proxy_in'] as Map<Object?, Object?>;
               proxyInReason = proxyInByReason['reason'].toString();
-              isProxy=true;
+              isProxy = true;
             } catch (e) {
               log('Check in exception is $e');
             }
@@ -84,12 +86,12 @@ class AttendanceFbDataSourceImpl implements AttendanceFbDataSource {
             );
             try {
               final proxyOutByName =
-              attendanceData['proxy_out'] as Map<Object?, Object?>;
+                  attendanceData['proxy_out'] as Map<Object?, Object?>;
               proxyOutBy = proxyOutByName['proxy_by'].toString();
               final proxyOutByReason =
-              attendanceData['proxy_out'] as Map<Object?, Object?>;
+                  attendanceData['proxy_out'] as Map<Object?, Object?>;
               proxyOutReason = proxyOutByReason['reason'].toString();
-              isProxy=true;
+              isProxy = true;
             } catch (e) {
               log('Check out exception is $e');
             }
@@ -107,40 +109,41 @@ class AttendanceFbDataSourceImpl implements AttendanceFbDataSource {
             checkOutReason: proxyOutReason,
             isProxy: isProxy,
           );
-
         }
       });
       return punchDetail;
-    }catch(e){
-         ErrorResponse(
-        metaInfo: 'Catch triggered while getting attendance list $e',
-        error: 'Unable to fetch attendance details',
-      );
+    } catch (e) {
+          ErrorResponse(
+            metaInfo: 'Catch triggered while getting attendance list $e',
+            error: 'Unable to fetch attendance details',
+          );
+
     }
   }
 
   @override
-  Future<void> getPunchingTime() async {
+  Future<Either<ErrorResponse, bool>> getPunchingTime() async {
     final ValueNotifier<List<CustomPunchModel>> punchingDetails =
-    ValueNotifier([]);
+        ValueNotifier([]);
     final ValueNotifier<List<CustomPunchModel>> sortedList = ValueNotifier([]);
     final ValueNotifier<bool> isLoading = ValueNotifier(true);
-    try{
+    try {
       isLoading.value = true;
       sortedList.value.clear();
       punchingDetails.value.clear();
-      sortedList.notifyListeners();
-      punchingDetails.notifyListeners();
       final allStaffs = await getStaffDetails();
 
       //getting staff entry times
       for (var staff in allStaffs.right) {
-        final data = await checkTime(staff.uid,  staff.department,staff.name,);
+        final data = await checkTime(
+          staff.uid,
+          staff.department,
+          staff.name,
+        );
         if (data != null) {
           punchingDetails.value.add(data);
           sortedList.value.add(data);
-        }
-        else {
+        } else {
           punchingDetails.value.add(
             CustomPunchModel(
               name: staff.name,
@@ -158,21 +161,23 @@ class AttendanceFbDataSourceImpl implements AttendanceFbDataSource {
             ),
           );
         }
-        sortedList.notifyListeners();
-        punchingDetails.notifyListeners();
       }
       isLoading.value = false;
-    }catch(e){
+      return const Right(true);
+    } catch (e) {
+      return Left(
         ErrorResponse(
           metaInfo: 'Catch triggered while getting attendance list $e',
           error: 'Unable to fetch attendance details',
+        ),
       );
     }
   }
 
   @override
-  Future<Either<ErrorResponse, List<StaffAttendanceModel>>> getStaffDetails() async {
-    try{
+  Future<Either<ErrorResponse, List<StaffAttendanceModel>>>
+      getStaffDetails() async {
+    try {
       List<StaffAttendanceModel> staffs = [];
       await FirebaseDatabase.instance.ref('staff').once().then((staff) async {
         for (var data in staff.snapshot.children) {
@@ -188,7 +193,7 @@ class AttendanceFbDataSourceImpl implements AttendanceFbDataSource {
         }
       });
       return Right(staffs);
-    }catch(e){
+    } catch (e) {
       return Left(
         ErrorResponse(
           metaInfo: 'Catch triggered while getting staff details $e',
@@ -201,7 +206,7 @@ class AttendanceFbDataSourceImpl implements AttendanceFbDataSource {
   @override
   Future<void> printScreen() async {
     final ValueNotifier<List<CustomPunchModel>> sortedList = ValueNotifier([]);
-    try{
+    try {
       final doc = pw.Document();
       DateTime endTime = DateTime.now();
 
@@ -226,47 +231,47 @@ class AttendanceFbDataSourceImpl implements AttendanceFbDataSource {
                 topContainerColor = PdfColors.blueGrey600;
                 status = 'Absent today';
               } else if (sortedList.value[index].checkInTime!
-                  .difference(
-                DateTime(
-                  sortedList.value[index].checkInTime!.year,
-                  sortedList.value[index].checkInTime!.month,
-                  sortedList.value[index].checkInTime!.day,
-                  09,
-                  00,
-                ),
-              )
-                  .inMinutes >
-                  10 &&
+                          .difference(
+                            DateTime(
+                              sortedList.value[index].checkInTime!.year,
+                              sortedList.value[index].checkInTime!.month,
+                              sortedList.value[index].checkInTime!.day,
+                              09,
+                              00,
+                            ),
+                          )
+                          .inMinutes >
+                      10 &&
                   sortedList.value[index].checkInTime!
-                      .difference(
-                    DateTime(
-                      sortedList.value[index].checkInTime!.year,
-                      sortedList.value[index].checkInTime!.month,
-                      sortedList.value[index].checkInTime!.day,
-                      09,
-                      20,
-                    ),
-                  )
-                      .inMinutes <=
+                          .difference(
+                            DateTime(
+                              sortedList.value[index].checkInTime!.year,
+                              sortedList.value[index].checkInTime!.month,
+                              sortedList.value[index].checkInTime!.day,
+                              09,
+                              20,
+                            ),
+                          )
+                          .inMinutes <=
                       0) {
                 topContainerColor = PdfColors.deepOrange400;
                 status =
-                'Late by ${sortedList.value[index].checkInTime!.difference(DateTime(sortedList.value[index].checkInTime!.year, sortedList.value[index].checkInTime!.month, sortedList.value[index].checkInTime!.day, 09, 00)).inMinutes - 10} mins';
+                    'Late by ${sortedList.value[index].checkInTime!.difference(DateTime(sortedList.value[index].checkInTime!.year, sortedList.value[index].checkInTime!.month, sortedList.value[index].checkInTime!.day, 09, 00)).inMinutes - 10} mins';
               } else if (sortedList.value[index].checkInTime!
-                  .difference(
-                DateTime(
-                  sortedList.value[index].checkInTime!.year,
-                  sortedList.value[index].checkInTime!.month,
-                  sortedList.value[index].checkInTime!.day,
-                  09,
-                  00,
-                ),
-              )
-                  .inMinutes >
+                      .difference(
+                        DateTime(
+                          sortedList.value[index].checkInTime!.year,
+                          sortedList.value[index].checkInTime!.month,
+                          sortedList.value[index].checkInTime!.day,
+                          09,
+                          00,
+                        ),
+                      )
+                      .inMinutes >
                   20) {
                 topContainerColor = PdfColors.red400;
                 status =
-                'Late by ${sortedList.value[index].checkInTime!.difference(DateTime(sortedList.value[index].checkInTime!.year, sortedList.value[index].checkInTime!.month, sortedList.value[index].checkInTime!.day, 09, 00)).inMinutes - 10} mins';
+                    'Late by ${sortedList.value[index].checkInTime!.difference(DateTime(sortedList.value[index].checkInTime!.year, sortedList.value[index].checkInTime!.month, sortedList.value[index].checkInTime!.day, 09, 00)).inMinutes - 10} mins';
               }
 
               return pw.Container(
@@ -354,8 +359,6 @@ class AttendanceFbDataSourceImpl implements AttendanceFbDataSource {
       await Printing.layoutPdf(
         onLayout: (PdfPageFormat format) async => doc.save(),
       );
-    }catch(e){
-
-    }
+    } catch (e) {}
   }
 }

@@ -1,6 +1,4 @@
-
-import 'package:my_office/features/attendance/presentation/view_model/staff_attendance_model.dart';
-
+import '../../data/model/employee_model.dart';
 import '../repository/employee_repository.dart';
 
 class AllStaffNamesCase{
@@ -8,7 +6,7 @@ class AllStaffNamesCase{
 
   AllStaffNamesCase({required this.employeeRepository});
 
-  Future <List<StaffAttendanceModel>>execute() async {
+  Future <List<EmployeeModel>>execute() async {
    return await employeeRepository.allStaffNames();
   }
 }

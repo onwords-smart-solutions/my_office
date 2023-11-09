@@ -35,6 +35,15 @@ import 'package:my_office/features/employee_of_the_week/domain/repository/employ
 import 'package:my_office/features/employee_of_the_week/domain/use_case/all_staff_names_use_case.dart';
 import 'package:my_office/features/employee_of_the_week/domain/use_case/update_pr_name_reason_use_case.dart';
 import 'package:my_office/features/employee_of_the_week/presentation/provider/employee_of_the_week_provider.dart';
+import 'package:my_office/features/finance/data/data_source/finance_fb_data_source.dart';
+import 'package:my_office/features/finance/data/data_source/finance_fb_data_source_impl.dart';
+import 'package:my_office/features/finance/domain/repository/finance_repository.dart';
+import 'package:my_office/features/finance/domain/use_case/finance_use_case.dart';
+import 'package:my_office/features/finance/presentation/provider/finance_provider.dart';
+import 'package:my_office/features/food_count/data/data_source/food_count_data_source_impl.dart';
+import 'package:my_office/features/food_count/data/repository/food_count_repo_impl.dart';
+import 'package:my_office/features/food_count/domain/repository/food_count_repository.dart';
+import 'package:my_office/features/food_count/domain/use_case/food_count_use_case.dart';
 import 'package:my_office/features/home/data/repository/home_repo_impl.dart';
 import 'package:my_office/features/home/domain/use_case/get_all_birthday_use_case.dart';
 import 'package:my_office/features/home/domain/use_case/get_installation_members_list_use_case.dart';
@@ -52,11 +61,20 @@ import 'package:my_office/features/pr_dashboard/domain/repository/pr_dash_reposi
 import 'package:my_office/features/pr_dashboard/domain/use_case/pr_dashboard_details_use_case.dart';
 import 'package:my_office/features/pr_dashboard/domain/use_case/update_pr_dashboard_use_case.dart';
 import 'package:my_office/features/pr_dashboard/presentation/provider/pr_dash_provider.dart';
+import 'package:my_office/features/proxy_attendance/data/data_source/proxy_attendance_fb_data_source.dart';
+import 'package:my_office/features/proxy_attendance/data/data_source/proxy_attendance_fb_data_source_impl.dart';
+import 'package:my_office/features/proxy_attendance/data/repository/proxy_attendance_repo_impl.dart';
+import 'package:my_office/features/proxy_attendance/domain/repository/proxy_attendance_repository.dart';
+import 'package:my_office/features/proxy_attendance/domain/use_case/proxy_staff_names_use_case.dart';
+import 'package:my_office/features/proxy_attendance/domain/use_case/save_check_in_use_case.dart';
+import 'package:my_office/features/proxy_attendance/domain/use_case/save_check_out_use_case.dart';
+import 'package:my_office/features/proxy_attendance/presentation/provider/proxy_attendance_provider.dart';
 import '../../features/attendance/domain/use_case/check_time_use_case.dart';
-import '../../features/attendance/domain/use_case/get_punching_time_use_case.dart';
 import '../../features/auth/domain/use_case/get_staff_info_use_case.dart';
 import '../../features/employee_of_the_week/data/data_source/employee_fb_data_source_impl.dart';
 import '../../features/employee_of_the_week/data/repository/employee_repo_impl.dart';
+import '../../features/food_count/data/data_source/food_count_fb_data_source.dart';
+import '../../features/food_count/presentation/provider/food_count_provider.dart';
 import '../../features/home/data/data_source/home_fb_data_source.dart';
 import '../../features/home/data/data_source/home_fb_data_source_impl.dart';
 import '../../features/home/domain/repository/home_repository.dart';
@@ -85,7 +103,7 @@ Future<void> init() async {
 
   ///HOME PROVIDER
   sl.registerFactory<HomeProvider>(
-        () => HomeProvider(
+    () => HomeProvider(
       sl.call(),
       sl.call(),
       sl.call(),
@@ -102,17 +120,17 @@ Future<void> init() async {
 
   ///ATTENDANCE PROVIDER
   sl.registerFactory<AttendanceProvider>(
-          () => AttendanceProvider(
-        sl.call(),
-        sl.call(),
-        sl.call(),
-        sl.call(),
-      ),
+    () => AttendanceProvider(
+      sl.call(),
+      sl.call(),
+      sl.call(),
+      sl.call(),
+    ),
   );
 
   ///EMPLOYEE OF THE WEEK PROVIDER
   sl.registerFactory<EmployeeProvider>(
-        () => EmployeeProvider(
+    () => EmployeeProvider(
       sl.call(),
       sl.call(),
     ),
@@ -120,7 +138,7 @@ Future<void> init() async {
 
   ///PR DASHBOARD PROVIDER
   sl.registerFactory<PrDashProvider>(
-        () => PrDashProvider(
+    () => PrDashProvider(
       sl.call(),
       sl.call(),
     ),
@@ -128,14 +146,37 @@ Future<void> init() async {
 
   ///CREATE NEW LEAD
   sl.registerFactory<CreateLeadProvider>(
-        () => CreateLeadProvider(
+    () => CreateLeadProvider(
       sl.call(),
     ),
   );
 
   ///CREATE PRODUCT PROVIDER
   sl.registerFactory<CreateProductProvider>(
-        () => CreateProductProvider(
+    () => CreateProductProvider(
+      sl.call(),
+    ),
+  );
+
+  ///FOOD COUNT PROVIDER
+  sl.registerFactory<FoodCountProvider>(
+    () => FoodCountProvider(
+      sl.call(),
+    ),
+  );
+
+  ///FINANCE PROVIDER
+  sl.registerFactory<FinanceProvider>(
+    () => FinanceProvider(
+      sl.call(),
+    ),
+  );
+
+  ///PROXY ATTENDANCE PROVIDER
+  sl.registerFactory<ProxyAttendanceProvider>(
+    () => ProxyAttendanceProvider(
+      sl.call(),
+      sl.call(),
       sl.call(),
     ),
   );
@@ -178,112 +219,132 @@ Future<void> init() async {
 
   ///GET ALL BIRTHDAYS
   sl.registerLazySingleton<GetAllBirthdayCase>(
-        () => GetAllBirthdayCase(homeRepository: sl.call()),
+    () => GetAllBirthdayCase(homeRepository: sl.call()),
   );
 
   ///GET INSTALLATION NAMES
   sl.registerLazySingleton<GetInstallationMembersListCase>(
-        () => GetInstallationMembersListCase(homeRepository: sl.call()),
+    () => GetInstallationMembersListCase(homeRepository: sl.call()),
   );
 
   ///GET MANAGEMENT NAMES
   sl.registerLazySingleton<GetManagementListCase>(
-        () => GetManagementListCase(homeRepository: sl.call()),
+    () => GetManagementListCase(homeRepository: sl.call()),
   );
 
   ///GET PUNCHING TIME
   sl.registerLazySingleton<GetPunchingTimeCase>(
-        () => GetPunchingTimeCase(homeRepository: sl.call()),
+    () => GetPunchingTimeCase(homeRepository: sl.call()),
   );
 
   ///GET RANDOM NUMBER
   sl.registerLazySingleton<GetRandomNumberCase>(
-        () => GetRandomNumberCase(homeRepository: sl.call()),
+    () => GetRandomNumberCase(homeRepository: sl.call()),
   );
 
   ///GET RND TL NAMES
   sl.registerLazySingleton<GetRndTlListCase>(
-        () => GetRndTlListCase(homeRepository: sl.call()),
+    () => GetRndTlListCase(homeRepository: sl.call()),
   );
 
   ///GET STAFF ACCESS
   sl.registerLazySingleton<GetStaffAccessCase>(
-        () => GetStaffAccessCase(homeRepository: sl.call()),
+    () => GetStaffAccessCase(homeRepository: sl.call()),
   );
 
   ///GET STAFF DETAILS
   sl.registerLazySingleton<GetStaffDetailsCase>(
-        () => GetStaffDetailsCase(homeRepository: sl.call()),
+    () => GetStaffDetailsCase(homeRepository: sl.call()),
   );
 
   ///GET TL NAMES
   sl.registerLazySingleton<GetTlListCase>(
-        () => GetTlListCase(homeRepository: sl.call()),
+    () => GetTlListCase(homeRepository: sl.call()),
   );
 
   ///BIRTHDAY SUBMIT FORM
   sl.registerLazySingleton<BirthdaySubmitFormCase>(
-        () => BirthdaySubmitFormCase(homeRepository: sl.call()),
+    () => BirthdaySubmitFormCase(homeRepository: sl.call()),
   );
 
   ///PHONE NUMBER SUBMIT FORM
   sl.registerLazySingleton<PhoneNumberSubmitFormCase>(
-      () => PhoneNumberSubmitFormCase(homeRepository: sl.call()),
+    () => PhoneNumberSubmitFormCase(homeRepository: sl.call()),
   );
 
   ///GET EMPLOYEE INFO
   sl.registerLazySingleton<GetStaffInfoCase>(
-        () => GetStaffInfoCase(authRepository: sl.call()),
+    () => GetStaffInfoCase(authRepository: sl.call()),
   );
 
   ///CHECK ATTENDANCE TIME
   sl.registerLazySingleton<CheckTimeCase>(
-        () => CheckTimeCase(attendanceRepository: sl.call()),
-  );
-
-  ///GET ATTENDANCE PUNCHING TIME
-  sl.registerLazySingleton<GetPunchTimeCase>(
-        () => GetPunchTimeCase(attendanceRepository: sl.call()),
+    () => CheckTimeCase(attendanceRepository: sl.call()),
   );
 
   ///GET STAFF DETAILS
   sl.registerLazySingleton<GetAllStaffDetailsCase>(
-        () => GetAllStaffDetailsCase(attendanceRepository: sl.call()),
+    () => GetAllStaffDetailsCase(attendanceRepository: sl.call()),
   );
 
   ///PRINT SCREEN
   sl.registerLazySingleton<PrintScreenCase>(
-        () => PrintScreenCase(attendanceRepository: sl.call()),
+    () => PrintScreenCase(attendanceRepository: sl.call()),
   );
 
   ///ALL STAFF NAMES
   sl.registerLazySingleton<AllStaffNamesCase>(
-        () => AllStaffNamesCase(employeeRepository: sl.call()),
+    () => AllStaffNamesCase(employeeRepository: sl.call()),
   );
 
   ///UPDATE PR NAME REASON
   sl.registerLazySingleton<UpdatePrNameReasonCase>(
-        () => UpdatePrNameReasonCase(employeeRepository: sl.call()),
+    () => UpdatePrNameReasonCase(employeeRepository: sl.call()),
   );
 
   ///PR DASHBOARD DETAILS
   sl.registerLazySingleton<PrDashboardUseCase>(
-        () => PrDashboardUseCase(prDashRepository: sl.call()),
+    () => PrDashboardUseCase(prDashRepository: sl.call()),
   );
 
   ///UPDATE PR DASHBOARD DETAILS
   sl.registerLazySingleton<UpdatePrDashboardCase>(
-        () => UpdatePrDashboardCase(prDashRepository: sl.call()),
+    () => UpdatePrDashboardCase(prDashRepository: sl.call()),
   );
 
   ///CREATE LEAD
   sl.registerLazySingleton<CreateLeadCase>(
-        () => CreateLeadCase(createLeadRepository: sl.call()),
+    () => CreateLeadCase(createLeadRepository: sl.call()),
   );
 
   ///CREATE PRODUCT
   sl.registerLazySingleton<CreateProductCase>(
-        () => CreateProductCase(createProductRepository: sl.call()),
+    () => CreateProductCase(createProductRepository: sl.call()),
+  );
+
+  ///FOOD COUNT
+  sl.registerLazySingleton<GetAllFoodCountCase>(
+    () => GetAllFoodCountCase(foodCountRepository: sl.call()),
+  );
+
+  ///FINANCIAL ANALYZING
+  sl.registerLazySingleton<FinanceCase>(
+    () => FinanceCase(financeRepository: sl.call()),
+  );
+
+  ///PROXY ATTENDANCE ALL STAFFS
+  sl.registerLazySingleton<ProxyStaffNamesCase>(
+        () => ProxyStaffNamesCase(proxyAttendanceRepository: sl.call()),
+  );
+
+  ///SAVE PROXY CHECK IN
+  sl.registerLazySingleton<SaveCheckInCase>(
+        () => SaveCheckInCase(proxyAttendanceRepository: sl.call()),
+  );
+
+  ///SAVE PROXY CHECK OUT
+  sl.registerLazySingleton<SaveCheckOutCase>(
+        () => SaveCheckOutCase(proxyAttendanceRepository: sl.call()),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ REPOSITORIES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
@@ -295,64 +356,94 @@ Future<void> init() async {
 
   ///HOME SCREEN
   sl.registerLazySingleton<HomeRepository>(
-      () => HomeRepoImpl(sl.call()),
+    () => HomeRepoImpl(sl.call()),
   );
 
   ///ATTENDANCE SCREEN
   sl.registerLazySingleton<AttendanceRepository>(
-        () => AttendanceRepoImpl(sl.call()),
+    () => AttendanceRepoImpl(sl.call()),
   );
 
   ///EMPLOYEE OF THE WEEK SCREEN
   sl.registerLazySingleton<EmployeeRepository>(
-        () => EmployeeRepoImpl(sl.call()),
+    () => EmployeeRepoImpl(sl.call()),
   );
 
   ///PR DASHBOARD DETAILS SCREEN
   sl.registerLazySingleton<PrDashRepository>(
-        () => PrDashRepoImpl(sl.call()),
+    () => PrDashRepoImpl(sl.call()),
   );
 
   ///CREATE LEAD SCREEN
   sl.registerLazySingleton<CreateLeadRepository>(
-        () => CreateLeadRepoImpl(sl.call()),
+    () => CreateLeadRepoImpl(sl.call()),
   );
 
   ///CREATE PRODUCT SCREEN
   sl.registerLazySingleton<CreateProductRepository>(
-        () => CreateProductRepoImpl(),
+    () => CreateProductRepoImpl(),
+  );
+
+  ///FOOD COUNT SCREEN
+  sl.registerLazySingleton<FoodCountRepository>(
+    () => FoodCountRepoImpl(sl.call()),
+  );
+
+  ///FINANCE SCREEN
+  sl.registerLazySingleton<FinanceRepository>(
+    () => FinanceRepository(sl.call()),
+  );
+
+  ///PROXY ATTENDANCE SCREEN
+  sl.registerLazySingleton<ProxyAttendanceRepository>(
+        () => ProxyAttendanceRepoImpl(sl.call()),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DATA SOURCE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
   ///AUTH
   sl.registerLazySingleton<AuthFbDataSource>(
-      () => AuthFbDataSourceImpl(sl.call(), sl.call()),
+    () => AuthFbDataSourceImpl(sl.call(), sl.call()),
   );
 
   ///HOME SCREEN
   sl.registerLazySingleton<HomeFbDataSource>(
-        () => HomeFbDataSourceImpl(),
+    () => HomeFbDataSourceImpl(),
   );
 
   ///ATTENDANCE SCREEN
   sl.registerLazySingleton<AttendanceFbDataSource>(
-        () => AttendanceFbDataSourceImpl(),
+    () => AttendanceFbDataSourceImpl(),
   );
 
   ///EMPLOYEE OF THE WEEK SCREEN
   sl.registerLazySingleton<EmployeeFbDataSource>(
-        () => EmployeeFbDataSourceImpl(),
+    () => EmployeeFbDataSourceImpl(),
   );
 
   ///PR DASHBOARD DETAILS SCREEN
   sl.registerLazySingleton<PrDashFbDataSource>(
-        () => PrDashFbDataSourceImpl(sl.call()),
+    () => PrDashFbDataSourceImpl(sl.call()),
   );
 
   ///CREATE LEAD SCREEN
   sl.registerLazySingleton<CreateLeadFbDataSource>(
-        () => CreateLeadFbDataSourceImpl(),
+    () => CreateLeadFbDataSourceImpl(),
+  );
+
+  ///FOOD COUNT SCREEN
+  sl.registerLazySingleton<FoodCountFbDataSource>(
+    () => FoodCountFbDataSourceImpl(sl.call()),
+  );
+
+  ///FINANCE SCREEN
+  sl.registerLazySingleton<FinanceFbDataSource>(
+    () => FinanceFbDataSourceImpl(),
+  );
+
+  ///PROXY ATTENDANCE SCREEN
+  sl.registerLazySingleton<ProxyAttendanceFbDataSource>(
+        () => ProxyAttendanceFbDataSourceImpl(),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ EXTERNAL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
@@ -361,4 +452,6 @@ Future<void> init() async {
 
   sl.registerLazySingleton<FirebaseAuth>(() => fbAuth);
   sl.registerLazySingleton<FirebaseDatabase>(() => fbDb);
+  sl.registerLazySingleton<DatabaseReference>(
+      () => FirebaseDatabase.instance.ref());
 }

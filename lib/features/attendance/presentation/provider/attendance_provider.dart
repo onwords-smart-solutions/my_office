@@ -7,7 +7,7 @@ import 'package:my_office/features/attendance/domain/use_case/print_screen_use_c
 
 import '../../../../core/utilities/response/error_response.dart';
 import '../../../home/presentation/view_model/custom_punch_model.dart';
-import '../view_model/staff_attendance_model.dart';
+import '../../data/model/staff_attendance_model.dart';
 
 class AttendanceProvider extends ChangeNotifier {
   final CheckTimeCase _checkTimeCase;
@@ -28,8 +28,19 @@ class AttendanceProvider extends ChangeNotifier {
       String name,
       ) async => await _checkTimeCase.execute(staffId, dep, name);
 
-  Future<void> getPunchingTime() async =>
-      await _getPunchTimeCase.execute();
+  Future<Either<ErrorResponse,bool>> getPunchingTime() async {
+    try{
+      return await _getPunchTimeCase.execute();
+    }catch(e){
+      return Left(
+        ErrorResponse(
+          metaInfo: 'Catch triggered while fetching punching time',
+          error: 'Error caught while getting punching details $e',
+        ),
+      );
+    }
+  }
+
 
   Future<Either<ErrorResponse, List<StaffAttendanceModel>>> getStaffDetails() async =>
       await _getAllStaffDetailsCase.execute();

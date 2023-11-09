@@ -592,7 +592,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           );
         }
         _endTime.value = now;
-      } else if (now.minute != _endTime.value.minute &&
+      }
+      else if (now.minute != _endTime.value.minute &&
           _entryDetail.value!.checkOutTime == null) {
         _endTime.value = now;
         _endTime.notifyListeners();
@@ -603,7 +604,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         );
         if (punchTime.isRight) {
           final data = punchTime.right;
-          if (data?.checkInTime != null) {
+          if (data!.checkInTime != null) {
             _entryDetail.value = data;
             _entryDetail.notifyListeners();
           }

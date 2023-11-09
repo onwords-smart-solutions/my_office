@@ -4,20 +4,20 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_snack_bar.dart';
 import 'package:my_office/features/employee_of_the_week/data/data_source/employee_fb_data_source.dart';
-import '../../../attendance/presentation/view_model/staff_attendance_model.dart';
+import '../model/employee_model.dart';
 
 class EmployeeFbDataSourceImpl implements EmployeeFbDataSource {
 
   @override
-  Future<List<StaffAttendanceModel>> allStaffNames() async {
-    List<StaffAttendanceModel> allStaffs = [];
+  Future<List<EmployeeModel>> allStaffNames() async {
+    List<EmployeeModel> allStaffs = [];
 
     var ref = FirebaseDatabase.instance.ref();
     var snapshot = await ref.child('staff').once();
 
     for (var uid in snapshot.snapshot.children) {
       var names = uid.value as Map<Object?, Object?>;
-      final staffNames = StaffAttendanceModel(
+      final staffNames = EmployeeModel(
         uid: uid.key.toString(),
         department: names['department'].toString(),
         name: names['name'].toString(),
@@ -37,7 +37,7 @@ class EmployeeFbDataSourceImpl implements EmployeeFbDataSource {
   Future<void> updatePrNameReason(context) async {
     TextEditingController employeeName = TextEditingController();
     TextEditingController reason = TextEditingController();
-    List<StaffAttendanceModel> allStaffs = [];
+    List<EmployeeModel> allStaffs = [];
     late String prNameToUid = '';
 
     var selectedEmployee =

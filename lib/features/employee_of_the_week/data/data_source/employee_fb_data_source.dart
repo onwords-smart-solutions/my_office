@@ -1,8 +1,8 @@
 
-import 'package:my_office/features/attendance/presentation/view_model/staff_attendance_model.dart';
+import '../model/employee_model.dart';
 
 abstract class EmployeeFbDataSource{
-  Future <List<StaffAttendanceModel>> allStaffNames();
+  Future <List<EmployeeModel>> allStaffNames();
 
   Future <void> updatePrNameReason(context);
 }

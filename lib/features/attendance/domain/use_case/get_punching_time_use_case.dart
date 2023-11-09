@@ -3,11 +3,12 @@ import 'package:my_office/features/attendance/domain/repository/attendance_repos
 
 import '../../../../core/utilities/response/error_response.dart';
 
-class GetPunchTimeCase{
+class GetPunchTimeCase {
   final AttendanceRepository attendanceRepository;
 
   GetPunchTimeCase({required this.attendanceRepository});
 
-  Future<void> execute() async =>
-      await attendanceRepository.getPunchingTime();
+  Future<Either<ErrorResponse, bool>> execute() async {
+    return await attendanceRepository.getPunchingTime();
+  }
 }

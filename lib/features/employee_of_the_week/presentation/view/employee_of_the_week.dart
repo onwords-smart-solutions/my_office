@@ -6,7 +6,7 @@ import 'package:my_office/features/employee_of_the_week/presentation/provider/em
 import 'package:provider/provider.dart';
 import '../../../../core/utilities/constants/app_color.dart';
 import '../../../../core/utilities/constants/app_main_template.dart';
-import '../../../attendance/presentation/view_model/staff_attendance_model.dart';
+import '../../data/model/employee_model.dart';
 
 class BestEmployee extends StatefulWidget {
   const BestEmployee({super.key});
@@ -18,8 +18,8 @@ class BestEmployee extends StatefulWidget {
 class _BestEmployeeState extends State<BestEmployee> {
   TextEditingController employeeName = TextEditingController();
   TextEditingController reason = TextEditingController();
-  StaffAttendanceModel? selectedStaff;
-  late Future<List<StaffAttendanceModel>> _staffFuture;
+  EmployeeModel? selectedStaff;
+  late Future<List<EmployeeModel>> _staffFuture;
 
   @override
   void initState() {
@@ -37,7 +37,7 @@ class _BestEmployeeState extends State<BestEmployee> {
 
   Widget buildBestEmployeeDetail() {
 
-    return FutureBuilder<List<StaffAttendanceModel>>(
+    return FutureBuilder<List<EmployeeModel>>(
       future: _staffFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -51,7 +51,7 @@ class _BestEmployeeState extends State<BestEmployee> {
         } else if (snapshot.hasData) {
           final staffNames = snapshot.data!
               .map(
-                (staff) => DropdownMenuEntry<StaffAttendanceModel>(
+                (staff) => DropdownMenuEntry<EmployeeModel>(
                   value: staff,
                   label: staff.name,
                   style: ButtonStyle(
@@ -84,7 +84,7 @@ class _BestEmployeeState extends State<BestEmployee> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                DropdownMenu<StaffAttendanceModel>(
+                DropdownMenu<EmployeeModel>(
                   width: MediaQuery.sizeOf(context).width * 0.9,
                   inputDecorationTheme: InputDecorationTheme(
                     border: OutlineInputBorder(
@@ -141,7 +141,7 @@ class _BestEmployeeState extends State<BestEmployee> {
                     ),
                   ),
                   dropdownMenuEntries: staffNames,
-                  onSelected: (StaffAttendanceModel? name) {
+                  onSelected: (EmployeeModel? name) {
                     FocusScope.of(context).unfocus();
                     setState(() {
                       selectedStaff = name;

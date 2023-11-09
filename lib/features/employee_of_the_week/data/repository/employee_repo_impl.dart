@@ -1,6 +1,7 @@
-import 'package:my_office/features/attendance/presentation/view_model/staff_attendance_model.dart';
 import 'package:my_office/features/employee_of_the_week/data/data_source/employee_fb_data_source.dart';
 import 'package:my_office/features/employee_of_the_week/domain/repository/employee_repository.dart';
+
+import '../model/employee_model.dart';
 
 class EmployeeRepoImpl implements EmployeeRepository{
   final EmployeeFbDataSource _employeeFbDataSource;
@@ -8,7 +9,7 @@ class EmployeeRepoImpl implements EmployeeRepository{
   EmployeeRepoImpl(this._employeeFbDataSource);
 
   @override
-  Future <List<StaffAttendanceModel>> allStaffNames() async {
+  Future <List<EmployeeModel>> allStaffNames() async {
     return _employeeFbDataSource.allStaffNames();
   }
 

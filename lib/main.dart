@@ -11,8 +11,11 @@ import 'package:my_office/features/auth/presentation/provider/auth_provider.dart
 import 'package:my_office/features/create_lead/presentation/provider/create_lead_provider.dart';
 import 'package:my_office/features/create_product/presentation/provider/create_product_provider.dart';
 import 'package:my_office/features/employee_of_the_week/presentation/provider/employee_of_the_week_provider.dart';
+import 'package:my_office/features/finance/presentation/provider/finance_provider.dart';
+import 'package:my_office/features/food_count/presentation/provider/food_count_provider.dart';
 import 'package:my_office/features/home/presentation/provider/home_provider.dart';
 import 'package:my_office/features/pr_dashboard/presentation/provider/pr_dash_provider.dart';
+import 'package:my_office/features/proxy_attendance/presentation/provider/proxy_attendance_provider.dart';
 import 'package:my_office/phone_number_screen.dart';
 import 'package:my_office/birthday_picker_screen.dart';
 import 'package:provider/provider.dart';
@@ -58,6 +61,15 @@ Future<void> main() async {
           ),
           ChangeNotifierProvider<CreateProductProvider>(
             create: (_) => di.sl<CreateProductProvider>(),
+          ),
+          ChangeNotifierProvider<FoodCountProvider>(
+            create: (_) => di.sl<FoodCountProvider>(),
+          ),
+          ChangeNotifierProvider<FinanceProvider>(
+            create: (_) => di.sl<FinanceProvider>(),
+          ),
+          ChangeNotifierProvider<ProxyAttendanceProvider>(
+            create: (_) => di.sl<ProxyAttendanceProvider>(),
           ),
           // ChangeNotifierProvider(create: (context) => InvoiceProvider()),
           // ChangeNotifierProvider(create: (context) => Invoice1Provider()),
