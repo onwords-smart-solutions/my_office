@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_office/features/attendance/presentation/view/attendance_screen.dart';
-
 import '../../../features/create_lead/presentation/view/create_lead_screen.dart';
 import '../../../features/create_product/presentation/view/create_product_screen.dart';
 import '../../../features/employee_of_the_week/presentation/view/employee_of_the_week.dart';
@@ -9,7 +8,9 @@ import '../../../features/finance/presentation/view/finance_screen.dart';
 import '../../../features/food_count/presentation/view/food_count_screen.dart';
 import '../../../features/home/presentation/view/account_details_screen.dart';
 import '../../../features/home/presentation/view_model/staff_access_model.dart';
+import '../../../features/leave_approval/presentation/view/leave_approval_screen.dart';
 import '../../../features/pr_dashboard/presentation/view/pr_dash_screen.dart';
+import '../../../features/pr_reminder/presentation/view/pr_reminder_screen.dart';
 import '../../../features/proxy_attendance/presentation/view/proxy_attendance_screen.dart';
 import '../../../features/user/domain/entity/user_entity.dart';
 
@@ -71,10 +72,10 @@ class AppDefaults {
       title: MenuTitle.foodCount,
       image: 'assets/food_count.png',
     ),
-//     StaffAccessModel(
-//       title: MenuTitle.leaveApproval,
-//       image: 'assets/leave_approval.png',
-//     ),
+    StaffAccessModel(
+      title: MenuTitle.leaveApproval,
+      image: 'assets/leave_approval.png',
+    ),
 //     StaffAccessModel(
 //       title: MenuTitle.searchLead,
 //       image: 'assets/search_leads.png',
@@ -120,7 +121,10 @@ class AppDefaults {
 //       title: MenuTitle.scanQR,
 //       image: 'assets/qr_scanner_points.png',
 //     ),
-//     StaffAccessModel(title: MenuTitle.prReminder, image: 'assets/reminder.png'),
+    StaffAccessModel(
+      title: MenuTitle.prReminder,
+      image: 'assets/reminder.png',
+    ),
 //     StaffAccessModel(
 //       title: MenuTitle.leaveDetails,
 //       image: 'assets/leave_details.png',
@@ -183,10 +187,9 @@ class AppDefaults {
 //       case MenuTitle.leavePortal:
 //         page = const LeaveApplyScreen();
 //         break;
-//
-//       case MenuTitle.leaveApproval:
-//         page = const LeaveApprovalScreen();
-//         break;
+      case MenuTitle.leaveApproval:
+        page = const LeaveApprovalScreen();
+        break;
 //       case MenuTitle.searchLead:
 //         page = SearchLeadsScreen(staffInfo: staffInfo);
 //         break;
@@ -237,11 +240,11 @@ class AppDefaults {
 //       case MenuTitle.scanQR:
 //         page = const ScanQRScreen();
 //         break;
-//       case MenuTitle.prReminder:
-//         page = ReminderScreen(
-//           staffInfo: staffInfo,
-//         );
-//         break;
+      case MenuTitle.prReminder:
+        page = ReminderScreen(
+          staffInfo: staffInfo,
+        );
+        break;
 //       case MenuTitle.leaveDetails:
 //         page = const LeaveDetails();
 //         break;

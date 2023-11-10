@@ -1,7 +1,8 @@
 
-import 'package:firebase_database/firebase_database.dart';
+import 'package:my_office/features/food_count/data/model/food_count_model.dart';
 
 abstract class FoodCountFbDataSource {
-  Future<DataSnapshot> getStaff();
-  Future<DataSnapshot> getRefreshments();
+  Future<Map<String, FoodCountModel>> getAllFoodCounts();
+
+  Future<List<dynamic>> getFoodCountByStaffName(String staffName);
 }

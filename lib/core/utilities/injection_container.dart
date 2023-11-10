@@ -43,7 +43,8 @@ import 'package:my_office/features/finance/presentation/provider/finance_provide
 import 'package:my_office/features/food_count/data/data_source/food_count_data_source_impl.dart';
 import 'package:my_office/features/food_count/data/repository/food_count_repo_impl.dart';
 import 'package:my_office/features/food_count/domain/repository/food_count_repository.dart';
-import 'package:my_office/features/food_count/domain/use_case/food_count_use_case.dart';
+import 'package:my_office/features/food_count/domain/use_case/all_food_count_use_case.dart';
+import 'package:my_office/features/food_count/domain/use_case/food_count_staff_names_use_case.dart';
 import 'package:my_office/features/home/data/repository/home_repo_impl.dart';
 import 'package:my_office/features/home/domain/use_case/get_all_birthday_use_case.dart';
 import 'package:my_office/features/home/domain/use_case/get_installation_members_list_use_case.dart';
@@ -56,11 +57,23 @@ import 'package:my_office/features/home/domain/use_case/get_staff_details_use_ca
 import 'package:my_office/features/home/domain/use_case/get_tl_list_use_case.dart';
 import 'package:my_office/features/home/domain/use_case/birthday_submit_form_use_case.dart';
 import 'package:my_office/features/home/domain/use_case/phone_number_submit_form_use_case.dart';
+import 'package:my_office/features/leave_approval/data/data_source/leave_approval_fb_data_source.dart';
+import 'package:my_office/features/leave_approval/data/data_source/leave_approval_fb_data_source_impl.dart';
+import 'package:my_office/features/leave_approval/data/repository/leave_approval_repo_impl.dart';
+import 'package:my_office/features/leave_approval/domain/repository/leave_approval_repository.dart';
+import 'package:my_office/features/leave_approval/domain/use_case/change_leave_request_use_case.dart';
+import 'package:my_office/features/leave_approval/domain/use_case/check_leave_status_use_case.dart';
 import 'package:my_office/features/pr_dashboard/data/data_source/pr_dash_fb_data_source.dart';
 import 'package:my_office/features/pr_dashboard/domain/repository/pr_dash_repository.dart';
 import 'package:my_office/features/pr_dashboard/domain/use_case/pr_dashboard_details_use_case.dart';
 import 'package:my_office/features/pr_dashboard/domain/use_case/update_pr_dashboard_use_case.dart';
 import 'package:my_office/features/pr_dashboard/presentation/provider/pr_dash_provider.dart';
+import 'package:my_office/features/pr_reminder/data/data_source/pr_reminder_data_source_impl.dart';
+import 'package:my_office/features/pr_reminder/data/data_source/pr_reminder_fb_data_source.dart';
+import 'package:my_office/features/pr_reminder/data/repository/pr_reminder_repo_impl.dart';
+import 'package:my_office/features/pr_reminder/domain/repository/pr_reminder_repository.dart';
+import 'package:my_office/features/pr_reminder/domain/use_case/pr_reminder_staff_names_use_case.dart';
+import 'package:my_office/features/pr_reminder/presentation/provider/pr_reminder_provider.dart';
 import 'package:my_office/features/proxy_attendance/data/data_source/proxy_attendance_fb_data_source.dart';
 import 'package:my_office/features/proxy_attendance/data/data_source/proxy_attendance_fb_data_source_impl.dart';
 import 'package:my_office/features/proxy_attendance/data/repository/proxy_attendance_repo_impl.dart';
@@ -81,10 +94,12 @@ import '../../features/home/domain/repository/home_repository.dart';
 import '../../features/home/presentation/provider/home_provider.dart';
 import '../../features/pr_dashboard/data/data_source/pr_dash_fb_data_source_impl.dart';
 import '../../features/pr_dashboard/data/repository/pr_dash_repo_impl.dart';
+import '../../features/pr_reminder/domain/use_case/get_pr_reminders_use_case.dart';
 
 final sl = GetIt.instance;
 
 Future<void> init() async {
+
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ PROVIDERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
   ///AUTH PROVIDER
@@ -162,6 +177,7 @@ Future<void> init() async {
   sl.registerFactory<FoodCountProvider>(
     () => FoodCountProvider(
       sl.call(),
+      sl.call(),
     ),
   );
 
@@ -176,6 +192,14 @@ Future<void> init() async {
   sl.registerFactory<ProxyAttendanceProvider>(
     () => ProxyAttendanceProvider(
       sl.call(),
+      sl.call(),
+      sl.call(),
+    ),
+  );
+
+  ///PR REMINDER PROVIDER
+  sl.registerFactory<PrReminderProvider>(
+        () => PrReminderProvider(
       sl.call(),
       sl.call(),
     ),
@@ -323,8 +347,13 @@ Future<void> init() async {
   );
 
   ///FOOD COUNT
-  sl.registerLazySingleton<GetAllFoodCountCase>(
-    () => GetAllFoodCountCase(foodCountRepository: sl.call()),
+  sl.registerLazySingleton<AllFoodCountCase>(
+    () => AllFoodCountCase(foodCountRepository: sl.call()),
+  );
+
+  ///FOOD COUNT STAFF NAMES
+  sl.registerLazySingleton<AllFoodCountStaffNamesCase>(
+        () => AllFoodCountStaffNamesCase(foodCountRepository: sl.call()),
   );
 
   ///FINANCIAL ANALYZING
@@ -345,6 +374,26 @@ Future<void> init() async {
   ///SAVE PROXY CHECK OUT
   sl.registerLazySingleton<SaveCheckOutCase>(
         () => SaveCheckOutCase(proxyAttendanceRepository: sl.call()),
+  );
+
+  ///PR REMINDER STAFF NAMES
+  sl.registerLazySingleton<PrReminderStaffNamesCase>(
+        () => PrReminderStaffNamesCase(prReminderRepository: sl.call()),
+  );
+
+  ///ALL PR REMINDERS
+  sl.registerLazySingleton<GetPrRemindersCase>(
+        () => GetPrRemindersCase(prReminderRepository: sl.call()),
+  );
+
+  ///CHECK LEAVE APPROVAL STATUS
+  sl.registerLazySingleton<CheckLeaveStatusCase>(
+        () => CheckLeaveStatusCase(leaveApprovalRepository: sl.call()),
+  );
+
+  ///CHANGE LEAVE REQUEST STATUS
+  sl.registerLazySingleton<ChangeLeaveRequestCase>(
+        () => ChangeLeaveRequestCase(leaveApprovalRepository: sl.call()),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ REPOSITORIES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
@@ -399,6 +448,16 @@ Future<void> init() async {
         () => ProxyAttendanceRepoImpl(sl.call()),
   );
 
+  ///PR REMINDER SCREEN
+  sl.registerLazySingleton<PrReminderRepository>(
+        () => PrReminderRepoImpl(sl.call()),
+  );
+
+  ///LEAVE APPROVAL SCREEN
+  sl.registerLazySingleton<LeaveApprovalRepository>(
+        () => LeaveApprovalRepoImpl(sl.call()),
+  );
+
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DATA SOURCE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
   ///AUTH
@@ -433,7 +492,7 @@ Future<void> init() async {
 
   ///FOOD COUNT SCREEN
   sl.registerLazySingleton<FoodCountFbDataSource>(
-    () => FoodCountFbDataSourceImpl(sl.call()),
+    () => FoodCountFbDataSourceImpl(),
   );
 
   ///FINANCE SCREEN
@@ -444,6 +503,16 @@ Future<void> init() async {
   ///PROXY ATTENDANCE SCREEN
   sl.registerLazySingleton<ProxyAttendanceFbDataSource>(
         () => ProxyAttendanceFbDataSourceImpl(),
+  );
+
+  ///PR REMINDER SCREEN
+  sl.registerLazySingleton<PrReminderFbDataSource>(
+        () => PrReminderFbDataSourceImpl(),
+  );
+
+  ///LEAVE APPROVAL SCREEN
+  sl.registerLazySingleton<LeaveApprovalFbDataSource>(
+        () => LeaveApprovalFbDataSourceImpl(),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ EXTERNAL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //

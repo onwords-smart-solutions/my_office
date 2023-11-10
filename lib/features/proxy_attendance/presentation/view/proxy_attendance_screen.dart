@@ -127,7 +127,8 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                   style: ButtonStyle(
                     shape: MaterialStateProperty.resolveWith((states) {
                       OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10));
+                          borderRadius: BorderRadius.circular(10),
+                      );
                       return null;
                     }),
                     textStyle: MaterialStateProperty.resolveWith(

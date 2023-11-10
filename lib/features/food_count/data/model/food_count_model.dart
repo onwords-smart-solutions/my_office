@@ -1,16 +1,15 @@
-
-class FoodCountEntity {
+class FoodCountModel {
   final String name;
   final String department;
   final String email;
   final String url;
-  final List<DateTime> foodDates;
+  final List<dynamic> foodDates;
 
-  FoodCountEntity({
+  FoodCountModel({
     required this.name,
-    required this.department,
-    required this.email,
     required this.url,
+    required this.email,
+    required this.department,
     required this.foodDates,
   });
 }

@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'package:after_layout/after_layout.dart';
-import 'package:either_dart/either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +13,9 @@ import 'package:my_office/features/employee_of_the_week/presentation/provider/em
 import 'package:my_office/features/finance/presentation/provider/finance_provider.dart';
 import 'package:my_office/features/food_count/presentation/provider/food_count_provider.dart';
 import 'package:my_office/features/home/presentation/provider/home_provider.dart';
+import 'package:my_office/features/leave_approval/domain/entity/leave_approval_user_entity.dart';
 import 'package:my_office/features/pr_dashboard/presentation/provider/pr_dash_provider.dart';
+import 'package:my_office/features/pr_reminder/presentation/provider/pr_reminder_provider.dart';
 import 'package:my_office/features/proxy_attendance/presentation/provider/proxy_attendance_provider.dart';
 import 'package:my_office/phone_number_screen.dart';
 import 'package:my_office/birthday_picker_screen.dart';
@@ -70,6 +71,9 @@ Future<void> main() async {
           ),
           ChangeNotifierProvider<ProxyAttendanceProvider>(
             create: (_) => di.sl<ProxyAttendanceProvider>(),
+          ),
+          ChangeNotifierProvider<PrReminderProvider>(
+            create: (_) => di.sl<PrReminderProvider>(),
           ),
           // ChangeNotifierProvider(create: (context) => InvoiceProvider()),
           // ChangeNotifierProvider(create: (context) => Invoice1Provider()),

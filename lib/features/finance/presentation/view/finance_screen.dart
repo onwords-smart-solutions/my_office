@@ -3,13 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/features/finance/presentation/view/expense_details.dart';
 import 'package:my_office/features/finance/presentation/view/income_details.dart';
+import 'package:my_office/features/proxy_attendance/presentation/provider/proxy_attendance_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/utilities/constants/app_screen_template.dart';
-import '../../../home/presentation/view/home_screen.dart';
 import '../provider/finance_provider.dart';
-// ... other imports ...
 
 class FinanceScreen extends StatefulWidget {
   const FinanceScreen({Key? key}) : super(key: key);
@@ -24,11 +23,6 @@ class _FinanceScreenState extends State<FinanceScreen> {
   String? selectedYear;
   int totalSalary = 0;
 
-  DateTime now = DateTime.now();
-  var formatterDate = DateFormat('yyyy-MM-dd');
-  var formatterMonth = DateFormat('MM');
-  var formatterYear = DateFormat('yyyy');
-
   @override
   void initState() {
     super.initState();
@@ -39,7 +33,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
     selectedDate = formatterDate.format(now);
     selectedMonth = formatterMonth.format(now);
     selectedYear = formatterYear.format(now);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       Provider.of<FinanceProvider>(context, listen: false)
           .loadFinances(selectedYear!, selectedMonth!);
     });
@@ -130,21 +124,25 @@ class _FinanceScreenState extends State<FinanceScreen> {
                         ),
                       ],
                     ),
-                    FilledButton.tonal(
-                      onPressed: () => provider.selectDate(context),
-                      child: SizedBox(
-                        height: height * 0.05,
-                        width: width * 0.17,
-                        child: Center(
-                          child: Text(
-                            '$selectedYear/$selectedMonth',
-                            style: const TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
+                    Consumer<FinanceProvider>(
+                      builder: (context, provider, child){
+                        return  FilledButton.tonal(
+                          onPressed: () => provider.selectDate(context),
+                          child: SizedBox(
+                            height: height * 0.05,
+                            width: width * 0.17,
+                            child: Center(
+                              child: Text(
+                                '${provider.selectedYear}/${provider.selectedMonth}',
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
+                        );
+                      },
                     ),
                   ],
                 ),
