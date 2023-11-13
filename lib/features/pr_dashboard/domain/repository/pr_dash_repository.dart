@@ -1,7 +1,6 @@
-import '../entity/pr_dash_entity.dart';
 
 abstract class PrDashRepository{
-  Future<PrDashboardData> prDashboardDetails();
+  Future<Map<String, dynamic>> fetchPrDashData();
 
-  Future<void> updatePrDashboard(context);
+  Future<void> updatePrDashData(String totalPrGetTarget, String totalPrTarget);
 }

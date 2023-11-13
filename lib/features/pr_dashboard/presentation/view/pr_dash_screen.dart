@@ -1,12 +1,15 @@
-import 'dart:developer';
 
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_office/features/pr_dashboard/presentation/provider/pr_dash_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:my_office/core/utilities/custom_widgets/custom_snack_bar.dart';
+import 'package:my_office/features/pr_dashboard/data/data_source/pr_dash_fb_data_source_impl.dart';
+import 'package:my_office/features/pr_dashboard/data/repository/pr_dash_repo_impl.dart';
+import 'package:my_office/features/pr_dashboard/domain/repository/pr_dash_repository.dart';
+import 'package:my_office/features/pr_dashboard/domain/use_case/pr_dashboard_details_use_case.dart';
+import 'package:my_office/features/pr_dashboard/domain/use_case/update_pr_dashboard_use_case.dart';
 import '../../../../core/utilities/constants/app_color.dart';
 import '../../../../core/utilities/constants/app_main_template.dart';
+import '../../data/data_source/pr_dash_fb_data_source.dart';
 
 class PrDashboard extends StatefulWidget {
   const PrDashboard({super.key});
@@ -19,10 +22,40 @@ class _PrDashboardState extends State<PrDashboard> {
   TextEditingController totalPrGetTarget = TextEditingController();
   TextEditingController totalPrTarget = TextEditingController();
 
+  late final PrDashFbDataSource _prDashFbDataSource = PrDashFbDataSourceImpl();
+  late PrDashRepository prDashRepository = PrDashRepoImpl(_prDashFbDataSource);
+  late PrDashboardCase prDashboardCase = PrDashboardCase(prDashRepository: prDashRepository);
+  late UpdatePrDashboardCase updatePrDashboardCase = UpdatePrDashboardCase(prDashRepository: prDashRepository);
+
   @override
   void initState() {
-    Provider.of<PrDashProvider>(context, listen: false).fetchPrDashboardDetails();
+    prDashboardDetails();
     super.initState();
+  }
+
+  void prDashboardDetails() async {
+    Map<String, dynamic> data = await prDashboardCase.execute();
+    if (data.isNotEmpty) {
+      totalPrGetTarget.text = data['totalprgettarget'].toString();
+      totalPrTarget.text = data['totalprtarget'].toString();
+    }
+  }
+
+  Future<void> updatePrDashboard() async {
+    try {
+      await updatePrDashboardCase.execute(totalPrGetTarget.text, totalPrTarget.text);
+      if(!mounted) return;
+      CustomSnackBar.showSuccessSnackbar(
+          message: 'PR dashboard has been updated!',
+          context: context,
+      );
+      Navigator.pop(context);
+    } on Exception catch (e) {
+      CustomSnackBar.showErrorSnackbar(
+        message: 'Error caught while updating PR dashboard $e!',
+        context: context,
+      );
+    }
   }
 
   @override
@@ -147,7 +180,7 @@ class _PrDashboardState extends State<PrDashboard> {
             ),
             const SizedBox(height: 40),
             ElevatedButton(
-              onPressed: (){},
+              onPressed: updatePrDashboard,
               child: const Text(
                 'Update',
                 style: TextStyle(

@@ -44,7 +44,6 @@ import 'package:my_office/features/food_count/data/data_source/food_count_data_s
 import 'package:my_office/features/food_count/data/repository/food_count_repo_impl.dart';
 import 'package:my_office/features/food_count/domain/repository/food_count_repository.dart';
 import 'package:my_office/features/food_count/domain/use_case/all_food_count_use_case.dart';
-import 'package:my_office/features/food_count/domain/use_case/food_count_staff_names_use_case.dart';
 import 'package:my_office/features/home/data/repository/home_repo_impl.dart';
 import 'package:my_office/features/home/domain/use_case/get_all_birthday_use_case.dart';
 import 'package:my_office/features/home/domain/use_case/get_installation_members_list_use_case.dart';
@@ -67,7 +66,6 @@ import 'package:my_office/features/pr_dashboard/data/data_source/pr_dash_fb_data
 import 'package:my_office/features/pr_dashboard/domain/repository/pr_dash_repository.dart';
 import 'package:my_office/features/pr_dashboard/domain/use_case/pr_dashboard_details_use_case.dart';
 import 'package:my_office/features/pr_dashboard/domain/use_case/update_pr_dashboard_use_case.dart';
-import 'package:my_office/features/pr_dashboard/presentation/provider/pr_dash_provider.dart';
 import 'package:my_office/features/pr_reminder/data/data_source/pr_reminder_data_source_impl.dart';
 import 'package:my_office/features/pr_reminder/data/data_source/pr_reminder_fb_data_source.dart';
 import 'package:my_office/features/pr_reminder/data/repository/pr_reminder_repo_impl.dart';
@@ -104,7 +102,6 @@ import '../../features/auth/domain/use_case/get_staff_info_use_case.dart';
 import '../../features/employee_of_the_week/data/data_source/employee_fb_data_source_impl.dart';
 import '../../features/employee_of_the_week/data/repository/employee_repo_impl.dart';
 import '../../features/food_count/data/data_source/food_count_fb_data_source.dart';
-import '../../features/food_count/presentation/provider/food_count_provider.dart';
 import '../../features/home/data/data_source/home_fb_data_source.dart';
 import '../../features/home/data/data_source/home_fb_data_source_impl.dart';
 import '../../features/home/domain/repository/home_repository.dart';
@@ -168,14 +165,6 @@ Future<void> init() async {
     ),
   );
 
-  ///PR DASHBOARD PROVIDER
-  sl.registerFactory<PrDashProvider>(
-    () => PrDashProvider(
-      sl.call(),
-      sl.call(),
-    ),
-  );
-
   ///CREATE NEW LEAD
   sl.registerFactory<CreateLeadProvider>(
     () => CreateLeadProvider(
@@ -186,14 +175,6 @@ Future<void> init() async {
   ///CREATE PRODUCT PROVIDER
   sl.registerFactory<CreateProductProvider>(
     () => CreateProductProvider(
-      sl.call(),
-    ),
-  );
-
-  ///FOOD COUNT PROVIDER
-  sl.registerFactory<FoodCountProvider>(
-    () => FoodCountProvider(
-      sl.call(),
       sl.call(),
     ),
   );
@@ -352,8 +333,8 @@ Future<void> init() async {
   );
 
   ///PR DASHBOARD DETAILS
-  sl.registerLazySingleton<PrDashboardUseCase>(
-    () => PrDashboardUseCase(prDashRepository: sl.call()),
+  sl.registerLazySingleton<PrDashboardCase>(
+    () => PrDashboardCase(prDashRepository: sl.call()),
   );
 
   ///UPDATE PR DASHBOARD DETAILS
@@ -371,14 +352,9 @@ Future<void> init() async {
     () => CreateProductCase(createProductRepository: sl.call()),
   );
 
-  ///FOOD COUNT
+  ///FOOD COUNT DETAILS
   sl.registerLazySingleton<AllFoodCountCase>(
     () => AllFoodCountCase(foodCountRepository: sl.call()),
-  );
-
-  ///FOOD COUNT STAFF NAMES
-  sl.registerLazySingleton<AllFoodCountStaffNamesCase>(
-        () => AllFoodCountStaffNamesCase(foodCountRepository: sl.call()),
   );
 
   ///FINANCIAL ANALYZING
@@ -542,7 +518,7 @@ Future<void> init() async {
 
   ///PR DASHBOARD DETAILS SCREEN
   sl.registerLazySingleton<PrDashFbDataSource>(
-    () => PrDashFbDataSourceImpl(sl.call()),
+    () => PrDashFbDataSourceImpl(),
   );
 
   ///CREATE LEAD SCREEN

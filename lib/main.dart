@@ -11,10 +11,7 @@ import 'package:my_office/features/create_lead/presentation/provider/create_lead
 import 'package:my_office/features/create_product/presentation/provider/create_product_provider.dart';
 import 'package:my_office/features/employee_of_the_week/presentation/provider/employee_of_the_week_provider.dart';
 import 'package:my_office/features/finance/presentation/provider/finance_provider.dart';
-import 'package:my_office/features/food_count/presentation/provider/food_count_provider.dart';
 import 'package:my_office/features/home/presentation/provider/home_provider.dart';
-import 'package:my_office/features/leave_approval/domain/entity/leave_approval_user_entity.dart';
-import 'package:my_office/features/pr_dashboard/presentation/provider/pr_dash_provider.dart';
 import 'package:my_office/features/pr_reminder/presentation/provider/pr_reminder_provider.dart';
 import 'package:my_office/features/proxy_attendance/presentation/provider/proxy_attendance_provider.dart';
 import 'package:my_office/features/staff_details/presentation/provider/staff_detail_provider.dart';
@@ -55,17 +52,11 @@ Future<void> main() async {
           ChangeNotifierProvider<EmployeeProvider>(
             create: (_) => di.sl<EmployeeProvider>(),
           ),
-          ChangeNotifierProvider<PrDashProvider>(
-            create: (_) => di.sl<PrDashProvider>(),
-          ),
           ChangeNotifierProvider<CreateLeadProvider>(
             create: (_) => di.sl<CreateLeadProvider>(),
           ),
           ChangeNotifierProvider<CreateProductProvider>(
             create: (_) => di.sl<CreateProductProvider>(),
-          ),
-          ChangeNotifierProvider<FoodCountProvider>(
-            create: (_) => di.sl<FoodCountProvider>(),
           ),
           ChangeNotifierProvider<FinanceProvider>(
             create: (_) => di.sl<FinanceProvider>(),

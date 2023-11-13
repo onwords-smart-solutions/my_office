@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_office/features/food_count/data/data_source/food_count_fb_data_source.dart';
 import 'package:my_office/features/food_count/data/model/food_count_model.dart';
@@ -6,9 +8,9 @@ class FoodCountFbDataSourceImpl implements FoodCountFbDataSource {
   final ref = FirebaseDatabase.instance.ref();
 
   @override
-  Future<Map<String, FoodCountModel>> getAllFoodCounts() async {
+  Future<List<FoodCountModel>> getAllFoodCounts() async {
     final staffs = await ref.child('staff').once();
-    final Map<String, FoodCountModel> allFoodCounts = {};
+    List<FoodCountModel> allFoodCountList = [];
 
     for (var staff in staffs.snapshot.children) {
       final staffInfo = staff.value as Map<Object?, Object?>;
@@ -19,17 +21,18 @@ class FoodCountFbDataSourceImpl implements FoodCountFbDataSource {
 
       final foodDetails = await getFoodCountByStaffName(name);
       if (foodDetails.isNotEmpty) {
-        allFoodCounts[name] = FoodCountModel(
-          name: name,
-          department: dept,
-          url: url,
-          email: email,
-          foodDates: foodDetails,
+        allFoodCountList.add(
+          FoodCountModel(
+            name: name,
+            department: dept,
+            url: url,
+            email: email,
+            foodDates: foodDetails,
+          ),
         );
       }
     }
-
-    return allFoodCounts;
+    return allFoodCountList;
   }
 
   @override
@@ -44,12 +47,14 @@ class FoodCountFbDataSourceImpl implements FoodCountFbDataSource {
         final dividedFormat = detail.key!.substring(0, 7);
         if (dividedFormat == currentMonthFormat) {
           final data = detail.value as Map<Object?, Object?>;
-          final lunchData = data['Lunch'] as Map<Object?, Object?>;
-          final lunchList = lunchData['lunch_list'] as Map<Object?, Object?>;
-
-          for (var staff in lunchList.values) {
-            if (staff.toString() == staffName) {
-              staffLunchData.add(detail.key!);
+          log('Data si ${data.values}');
+          if (data['Lunch'] != null) {
+            final lunchData = data['Lunch'] as Map<Object?, Object?>;
+            final lunchList = lunchData['lunch_list'] as Map<Object?, Object?>;
+            for (var staff in lunchList.values) {
+              if (staff.toString() == staffName) {
+                staffLunchData.add(detail.key);
+              }
             }
           }
         }

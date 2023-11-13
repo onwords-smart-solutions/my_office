@@ -5,8 +5,11 @@ class UpdatePrDashboardCase{
 
   UpdatePrDashboardCase({required this.prDashRepository});
 
-  Future<void> execute(context) async {
-    return prDashRepository.updatePrDashboard(context);
+  Future<void> execute(String totalPrGetTarget, String totalPrTarget) async {
+    if (totalPrGetTarget.isEmpty || totalPrTarget.isEmpty) {
+      throw Exception('Enter all PR data');
+    }
+    return await prDashRepository.updatePrDashData(totalPrGetTarget, totalPrTarget);
   }
 
 }

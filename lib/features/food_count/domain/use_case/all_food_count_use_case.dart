@@ -6,7 +6,7 @@ class AllFoodCountCase{
 
   AllFoodCountCase({required this.foodCountRepository});
 
-  Future<Map<String, FoodCountModel>> execute() async{
+  Future<List<FoodCountModel>> execute() async{
     return foodCountRepository.getAllFoodCounts();
   }
 
