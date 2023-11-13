@@ -50,7 +50,7 @@ class _CreateLeadsState extends State<CreateLeads> {
             },
             border: TableBorder.all(
               borderRadius: BorderRadius.circular(10),
-              color: AppColor.backGroundColor,
+              color: AppColor.primaryColor,
               width: 1.5,
             ),
             children: [

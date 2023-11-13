@@ -19,50 +19,6 @@ class _PrDashboardState extends State<PrDashboard> {
   TextEditingController totalPrGetTarget = TextEditingController();
   TextEditingController totalPrTarget = TextEditingController();
 
-  //Update PR Dashboard data
-  Future<void> updatePrDashboard() async {
-    if(totalPrGetTarget.text.isEmpty || totalPrTarget.text.isEmpty){
-      final snackBar = SnackBar(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        behavior: SnackBarBehavior.floating,
-        content: const Text(
-          'Enter all PR data',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        backgroundColor: Colors.red,
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
-    else{
-      final ref = FirebaseDatabase.instance.ref();
-      await ref.child('PRDashboard/prtarget').update({
-        'totalprgettarget': totalPrGetTarget.text,
-        'totalprtarget': totalPrTarget.text,
-      });
-      final snackBar = SnackBar(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        behavior: SnackBarBehavior.floating,
-        content: const Text(
-          'PR data has been updated!!',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        backgroundColor: Colors.green,
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      Navigator.pop(context);
-    }
-  }
-
   @override
   void initState() {
     Provider.of<PrDashProvider>(context, listen: false).fetchPrDashboardDetails();
@@ -191,7 +147,7 @@ class _PrDashboardState extends State<PrDashboard> {
             ),
             const SizedBox(height: 40),
             ElevatedButton(
-              onPressed: updatePrDashboard,
+              onPressed: (){},
               child: const Text(
                 'Update',
                 style: TextStyle(

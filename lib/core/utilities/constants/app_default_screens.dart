@@ -12,7 +12,10 @@ import '../../../features/leave_approval/presentation/view/leave_approval_screen
 import '../../../features/pr_dashboard/presentation/view/pr_dash_screen.dart';
 import '../../../features/pr_reminder/presentation/view/pr_reminder_screen.dart';
 import '../../../features/proxy_attendance/presentation/view/proxy_attendance_screen.dart';
+import '../../../features/staff_details/presentation/view/staff_detail_screen.dart';
+import '../../../features/suggestions/presentation/view/suggestion_screen.dart';
 import '../../../features/user/domain/entity/user_entity.dart';
+import '../../../features/view_suggestions/presentation/view/view_suggestion_screen.dart';
 
 const serverKey =
     'AAAAhAGZ-Jw:APA91bFk_GTSGX1LAj-ZxOW7DQn8Q69sYLStSB8lukQDlxBMmugrkQCsgIvuFm0fU5vBbVB5SATjaoO0mrCdsJm03ZEEZtaRdH-lQ9ZmX5RpYuyLytWyHVH7oDu-6LaShqrVE5vYHCqK';
@@ -60,10 +63,10 @@ class AppDefaults {
 //       image: 'assets/refreshment.png',
 //     ),
 //     // StaffAccessModel(title: MenuTitle.leavePortal, image: 'assets/leave_apply.png'),
-//     StaffAccessModel(
-//       title: MenuTitle.suggestion,
-//       image: 'assets/suggestions.png',
-//     ),
+    StaffAccessModel(
+      title: MenuTitle.suggestion,
+      image: 'assets/suggestions.png',
+    ),
 //     StaffAccessModel(
 //       title: MenuTitle.workDetail,
 //       image: 'assets/work_details.png',
@@ -93,10 +96,10 @@ class AppDefaults {
       title: MenuTitle.finance,
       image: 'assets/finance.png',
     ),
-//     StaffAccessModel(
-//       title: MenuTitle.viewSuggestions,
-//       image: 'assets/view_suggestions.png',
-//     ),
+    StaffAccessModel(
+      title: MenuTitle.viewSuggestions,
+      image: 'assets/view_suggestions.png',
+    ),
 //     StaffAccessModel(
 //       title: MenuTitle.prWorkDone,
 //       image: 'assets/pr_points.png',
@@ -137,10 +140,10 @@ class AppDefaults {
 //       title: MenuTitle.quotationTemplate,
 //       image: 'assets/quotation_template.png',
 //     ),
-//     StaffAccessModel(
-//       title: MenuTitle.staffDetail,
-//       image: 'assets/staff_details.png',
-//     ),
+    StaffAccessModel(
+      title: MenuTitle.staffDetail,
+      image: 'assets/staff_details.png',
+    ),
 //     StaffAccessModel(
 //       title: MenuTitle.installationPDF,
 //       image: 'assets/installation_image.png',
@@ -205,17 +208,15 @@ class AppDefaults {
       case MenuTitle.finance:
         page = const FinanceScreen();
         break;
-//       case MenuTitle.suggestion:
-//         page = SuggestionScreen(
-//           uid: staffInfo.uid,
-//           name: staffInfo.name,
-//         );
-//         break;
-//
-//       case MenuTitle.viewSuggestions:
-//         page = const ViewSuggestions();
-//         break;
-//
+      case MenuTitle.suggestion:
+        page = SuggestionScreen(
+          uid: staffInfo.uid,
+          name: staffInfo.name,
+        );
+        break;
+      case MenuTitle.viewSuggestions:
+        page = const ViewSuggestions();
+        break;
 //       case MenuTitle.prWorkDone:
 //         page = PrWorkDone(
 //           userId: staffInfo.uid,
@@ -254,9 +255,9 @@ class AppDefaults {
 //       case MenuTitle.quotationTemplate:
 //         page = const Client1Details();
 //         break;
-//       case MenuTitle.staffDetail:
-//         page = const StaffDetails();
-//         break;
+      case MenuTitle.staffDetail:
+        page = const StaffDetails();
+        break;
 //       case MenuTitle.installationPDF:
 //         page = const InstallationDetails();
 //         break;

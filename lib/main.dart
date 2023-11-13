@@ -17,6 +17,7 @@ import 'package:my_office/features/leave_approval/domain/entity/leave_approval_u
 import 'package:my_office/features/pr_dashboard/presentation/provider/pr_dash_provider.dart';
 import 'package:my_office/features/pr_reminder/presentation/provider/pr_reminder_provider.dart';
 import 'package:my_office/features/proxy_attendance/presentation/provider/proxy_attendance_provider.dart';
+import 'package:my_office/features/staff_details/presentation/provider/staff_detail_provider.dart';
 import 'package:my_office/phone_number_screen.dart';
 import 'package:my_office/birthday_picker_screen.dart';
 import 'package:provider/provider.dart';
@@ -74,6 +75,9 @@ Future<void> main() async {
           ),
           ChangeNotifierProvider<PrReminderProvider>(
             create: (_) => di.sl<PrReminderProvider>(),
+          ),
+          ChangeNotifierProvider<StaffDetailProvider>(
+            create: (_) => di.sl<StaffDetailProvider>(),
           ),
           // ChangeNotifierProvider(create: (context) => InvoiceProvider()),
           // ChangeNotifierProvider(create: (context) => Invoice1Provider()),

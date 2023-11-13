@@ -82,6 +82,23 @@ import 'package:my_office/features/proxy_attendance/domain/use_case/proxy_staff_
 import 'package:my_office/features/proxy_attendance/domain/use_case/save_check_in_use_case.dart';
 import 'package:my_office/features/proxy_attendance/domain/use_case/save_check_out_use_case.dart';
 import 'package:my_office/features/proxy_attendance/presentation/provider/proxy_attendance_provider.dart';
+import 'package:my_office/features/staff_details/data/data_source/staff_detail_fb_data_source.dart';
+import 'package:my_office/features/staff_details/data/data_source/staff_detail_fb_data_source_impl.dart';
+import 'package:my_office/features/staff_details/data/repository/staff_detail_repo_impl.dart';
+import 'package:my_office/features/staff_details/domain/repository/staff_detail_repository.dart';
+import 'package:my_office/features/staff_details/domain/use_case/remove_staff_detail_use_case.dart';
+import 'package:my_office/features/staff_details/domain/use_case/staff_detail_use_case.dart';
+import 'package:my_office/features/staff_details/presentation/provider/staff_detail_provider.dart';
+import 'package:my_office/features/suggestions/data/data_source/suggestion_fb_data_source.dart';
+import 'package:my_office/features/suggestions/data/data_source/suggestion_fb_data_source_impl.dart';
+import 'package:my_office/features/suggestions/data/repository/suggestion_repo_impl.dart';
+import 'package:my_office/features/suggestions/domain/repository/suggestion_repository.dart';
+import 'package:my_office/features/suggestions/domain/use_case/add_suggestion_use_case.dart';
+import 'package:my_office/features/view_suggestions/data/data_source/view_suggestion_fb_data_source.dart';
+import 'package:my_office/features/view_suggestions/data/data_source/view_suggestion_fb_data_source_impl.dart';
+import 'package:my_office/features/view_suggestions/data/repository/view_suggestion_repo_impl.dart';
+import 'package:my_office/features/view_suggestions/domain/repository/view_suggestion_repository.dart';
+import 'package:my_office/features/view_suggestions/domain/use_case/view_suggestion_use_case.dart';
 import '../../features/attendance/domain/use_case/check_time_use_case.dart';
 import '../../features/auth/domain/use_case/get_staff_info_use_case.dart';
 import '../../features/employee_of_the_week/data/data_source/employee_fb_data_source_impl.dart';
@@ -200,6 +217,14 @@ Future<void> init() async {
   ///PR REMINDER PROVIDER
   sl.registerFactory<PrReminderProvider>(
         () => PrReminderProvider(
+      sl.call(),
+      sl.call(),
+    ),
+  );
+
+  ///STAFF DETAIL PROVIDER
+  sl.registerFactory<StaffDetailProvider>(
+        () => StaffDetailProvider(
       sl.call(),
       sl.call(),
     ),
@@ -396,6 +421,26 @@ Future<void> init() async {
         () => ChangeLeaveRequestCase(leaveApprovalRepository: sl.call()),
   );
 
+  ///ALL STAFF NAMES
+  sl.registerLazySingleton<StaffDetailCase>(
+        () => StaffDetailCase(staffDetailRepository: sl.call()),
+  );
+
+  ///REMOVE STAFF DETAILS
+  sl.registerLazySingleton<RemoveStaffDetailCase>(
+        () => RemoveStaffDetailCase(staffDetailRepository: sl.call()),
+  );
+
+  ///ADD SUGGESTION SCREEN
+  sl.registerLazySingleton<AddSuggestionCase>(
+        () => AddSuggestionCase(suggestionRepository: sl.call()),
+  );
+
+  ///VIEW SUGGESTION
+  sl.registerLazySingleton<ViewSuggestionsCase>(
+        () => ViewSuggestionsCase(viewSuggestionsRepository: sl.call()),
+  );
+
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ REPOSITORIES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
   ///AUTH
@@ -458,6 +503,21 @@ Future<void> init() async {
         () => LeaveApprovalRepoImpl(sl.call()),
   );
 
+  ///STAFF DETAILS SCREEN
+  sl.registerLazySingleton<StaffDetailRepository>(
+        () => StaffDetailRepoImpl(staffDetailFbDataSource: sl.call()),
+  );
+
+  ///ADD SUGGESTION SCREEN
+  sl.registerLazySingleton<SuggestionRepository>(
+        () => SuggestionRepoImpl(sl.call()),
+  );
+
+  ///VIEW SUGGESTION SCREEN
+  sl.registerLazySingleton<ViewSuggestionsRepository>(
+        () => ViewSuggestionsRepoImpl(sl.call()),
+  );
+
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DATA SOURCE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
   ///AUTH
@@ -513,6 +573,21 @@ Future<void> init() async {
   ///LEAVE APPROVAL SCREEN
   sl.registerLazySingleton<LeaveApprovalFbDataSource>(
         () => LeaveApprovalFbDataSourceImpl(),
+  );
+
+  ///ADD SUGGESTION SCREEN
+  sl.registerLazySingleton<SuggestionFbDataSource>(
+        () => SuggestionFbDataSourceImpl(),
+  );
+
+  ///STAFF DETAIL SCREEN
+  sl.registerLazySingleton<StaffDetailFbDataSource>(
+        () => StaffDetailFbDataSourceImpl(),
+  );
+
+  ///VIEW SUGGESTION SCREEN
+  sl.registerLazySingleton<ViewSuggestionsFbDataSource>(
+        () => ViewSuggestionsFbDataSourceImpl(),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ EXTERNAL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //

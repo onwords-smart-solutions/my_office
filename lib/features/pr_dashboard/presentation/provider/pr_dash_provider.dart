@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:my_office/core/utilities/response/error_response.dart';
 import 'package:my_office/features/pr_dashboard/data/data_source/pr_dash_fb_data_source.dart';
 import 'package:my_office/features/pr_dashboard/domain/use_case/pr_dashboard_details_use_case.dart';
 import 'package:my_office/features/pr_dashboard/domain/use_case/update_pr_dashboard_use_case.dart';
@@ -19,7 +20,10 @@ class PrDashProvider extends ChangeNotifier{
       _prDashboardData = await prDashboardUseCase.fetchPrDashboardData();
       notifyListeners();
     } catch (e) {
-      // Handle the error, possibly logging it or notifying the user
+      ErrorResponse(
+        error: 'Error caught while getting PR dashboard data',
+        metaInfo: 'Catch triggered while fetching PR dashboard data',
+      );
     }
   }
 }
