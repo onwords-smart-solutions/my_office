@@ -16,6 +16,7 @@ import '../../../features/staff_details/presentation/view/staff_detail_screen.da
 import '../../../features/suggestions/presentation/view/suggestion_screen.dart';
 import '../../../features/user/domain/entity/user_entity.dart';
 import '../../../features/view_suggestions/presentation/view/view_suggestion_screen.dart';
+import '../../../features/work_details/presentation/view/work_detail_screen.dart';
 import '../../../features/work_entry/presentation/view/work_entry_screen.dart';
 
 const serverKey =
@@ -68,10 +69,10 @@ class AppDefaults {
       title: MenuTitle.suggestion,
       image: 'assets/suggestions.png',
     ),
-//     StaffAccessModel(
-//       title: MenuTitle.workDetail,
-//       image: 'assets/work_details.png',
-//     ),
+    StaffAccessModel(
+      title: MenuTitle.workDetail,
+      image: 'assets/work_details.png',
+    ),
     StaffAccessModel(
       title: MenuTitle.foodCount,
       image: 'assets/food_count.png',
@@ -174,11 +175,11 @@ class AppDefaults {
           staffName: staffInfo.name,
         );
         break;
-//       case MenuTitle.workDetail:
-//         page = WorkCompleteViewScreen(
-//           userDetails: staffInfo,
-//         );
-//         break;
+      case MenuTitle.workDetail:
+        page = WorkCompleteViewScreen(
+          userDetails: staffInfo,
+        );
+        break;
 //       case MenuTitle.refreshment:
 //         page = RefreshmentScreen(
 //           uid: staffInfo.uid,

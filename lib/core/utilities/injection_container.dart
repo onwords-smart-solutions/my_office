@@ -97,6 +97,10 @@ import 'package:my_office/features/view_suggestions/data/data_source/view_sugges
 import 'package:my_office/features/view_suggestions/data/repository/view_suggestion_repo_impl.dart';
 import 'package:my_office/features/view_suggestions/domain/repository/view_suggestion_repository.dart';
 import 'package:my_office/features/view_suggestions/domain/use_case/view_suggestion_use_case.dart';
+import 'package:my_office/features/work_details/data/data_source/work_detail_fb_data_source.dart';
+import 'package:my_office/features/work_details/data/data_source/work_entry_fb_data_source_impl.dart';
+import 'package:my_office/features/work_details/data/repository/work_detail_repo_impl.dart';
+import 'package:my_office/features/work_details/domain/repository/work_detail_repository.dart';
 import 'package:my_office/features/work_entry/data/data_source/work_entry_fb_data_source.dart';
 import 'package:my_office/features/work_entry/data/data_source/work_entry_fb_data_source_impl.dart';
 import 'package:my_office/features/work_entry/data/repository/work_entry_repo_impl.dart';
@@ -117,7 +121,6 @@ import '../../features/pr_reminder/domain/use_case/get_pr_reminders_use_case.dar
 final sl = GetIt.instance;
 
 Future<void> init() async {
-
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ PROVIDERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
   ///AUTH PROVIDER
@@ -200,7 +203,7 @@ Future<void> init() async {
 
   ///PR REMINDER PROVIDER
   sl.registerFactory<PrReminderProvider>(
-        () => PrReminderProvider(
+    () => PrReminderProvider(
       sl.call(),
       sl.call(),
     ),
@@ -208,7 +211,7 @@ Future<void> init() async {
 
   ///STAFF DETAIL PROVIDER
   sl.registerFactory<StaffDetailProvider>(
-        () => StaffDetailProvider(
+    () => StaffDetailProvider(
       sl.call(),
       sl.call(),
     ),
@@ -367,57 +370,57 @@ Future<void> init() async {
 
   ///PROXY ATTENDANCE ALL STAFFS
   sl.registerLazySingleton<ProxyStaffNamesCase>(
-        () => ProxyStaffNamesCase(proxyAttendanceRepository: sl.call()),
+    () => ProxyStaffNamesCase(proxyAttendanceRepository: sl.call()),
   );
 
   ///SAVE PROXY CHECK IN
   sl.registerLazySingleton<SaveCheckInCase>(
-        () => SaveCheckInCase(proxyAttendanceRepository: sl.call()),
+    () => SaveCheckInCase(proxyAttendanceRepository: sl.call()),
   );
 
   ///SAVE PROXY CHECK OUT
   sl.registerLazySingleton<SaveCheckOutCase>(
-        () => SaveCheckOutCase(proxyAttendanceRepository: sl.call()),
+    () => SaveCheckOutCase(proxyAttendanceRepository: sl.call()),
   );
 
   ///PR REMINDER STAFF NAMES
   sl.registerLazySingleton<PrReminderStaffNamesCase>(
-        () => PrReminderStaffNamesCase(prReminderRepository: sl.call()),
+    () => PrReminderStaffNamesCase(prReminderRepository: sl.call()),
   );
 
   ///ALL PR REMINDERS
   sl.registerLazySingleton<GetPrRemindersCase>(
-        () => GetPrRemindersCase(prReminderRepository: sl.call()),
+    () => GetPrRemindersCase(prReminderRepository: sl.call()),
   );
 
   ///CHECK LEAVE APPROVAL STATUS
   sl.registerLazySingleton<CheckLeaveStatusCase>(
-        () => CheckLeaveStatusCase(leaveApprovalRepository: sl.call()),
+    () => CheckLeaveStatusCase(leaveApprovalRepository: sl.call()),
   );
 
   ///CHANGE LEAVE REQUEST STATUS
   sl.registerLazySingleton<ChangeLeaveRequestCase>(
-        () => ChangeLeaveRequestCase(leaveApprovalRepository: sl.call()),
+    () => ChangeLeaveRequestCase(leaveApprovalRepository: sl.call()),
   );
 
   ///ALL STAFF NAMES
   sl.registerLazySingleton<StaffDetailCase>(
-        () => StaffDetailCase(staffDetailRepository: sl.call()),
+    () => StaffDetailCase(staffDetailRepository: sl.call()),
   );
 
   ///REMOVE STAFF DETAILS
   sl.registerLazySingleton<RemoveStaffDetailCase>(
-        () => RemoveStaffDetailCase(staffDetailRepository: sl.call()),
+    () => RemoveStaffDetailCase(staffDetailRepository: sl.call()),
   );
 
   ///ADD SUGGESTION SCREEN
   sl.registerLazySingleton<AddSuggestionCase>(
-        () => AddSuggestionCase(suggestionRepository: sl.call()),
+    () => AddSuggestionCase(suggestionRepository: sl.call()),
   );
 
   ///VIEW SUGGESTION
   sl.registerLazySingleton<ViewSuggestionsCase>(
-        () => ViewSuggestionsCase(viewSuggestionsRepository: sl.call()),
+    () => ViewSuggestionsCase(viewSuggestionsRepository: sl.call()),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ REPOSITORIES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
@@ -469,37 +472,42 @@ Future<void> init() async {
 
   ///PROXY ATTENDANCE SCREEN
   sl.registerLazySingleton<ProxyAttendanceRepository>(
-        () => ProxyAttendanceRepoImpl(sl.call()),
+    () => ProxyAttendanceRepoImpl(sl.call()),
   );
 
   ///PR REMINDER SCREEN
   sl.registerLazySingleton<PrReminderRepository>(
-        () => PrReminderRepoImpl(sl.call()),
+    () => PrReminderRepoImpl(sl.call()),
   );
 
   ///LEAVE APPROVAL SCREEN
   sl.registerLazySingleton<LeaveApprovalRepository>(
-        () => LeaveApprovalRepoImpl(sl.call()),
+    () => LeaveApprovalRepoImpl(sl.call()),
   );
 
   ///STAFF DETAILS SCREEN
   sl.registerLazySingleton<StaffDetailRepository>(
-        () => StaffDetailRepoImpl(staffDetailFbDataSource: sl.call()),
+    () => StaffDetailRepoImpl(staffDetailFbDataSource: sl.call()),
   );
 
   ///ADD SUGGESTION SCREEN
   sl.registerLazySingleton<SuggestionRepository>(
-        () => SuggestionRepoImpl(sl.call()),
+    () => SuggestionRepoImpl(sl.call()),
   );
 
   ///VIEW SUGGESTION SCREEN
   sl.registerLazySingleton<ViewSuggestionsRepository>(
-        () => ViewSuggestionsRepoImpl(sl.call()),
+    () => ViewSuggestionsRepoImpl(sl.call()),
   );
 
   ///WORK ENTRY SCREEN
   sl.registerLazySingleton<WorkEntryRepository>(
-        () => WorkEntryRepoImpl(workEntryFbDataSource: sl.call()),
+    () => WorkEntryRepoImpl(workEntryFbDataSource: sl.call()),
+  );
+
+  ///WORK DETAILS SCREEN
+  sl.registerLazySingleton<WorkDetailRepository>(
+    () => WorkDetailRepoImpl(workDetailFbDataSource: sl.call()),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DATA SOURCE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
@@ -546,37 +554,42 @@ Future<void> init() async {
 
   ///PROXY ATTENDANCE SCREEN
   sl.registerLazySingleton<ProxyAttendanceFbDataSource>(
-        () => ProxyAttendanceFbDataSourceImpl(),
+    () => ProxyAttendanceFbDataSourceImpl(),
   );
 
   ///PR REMINDER SCREEN
   sl.registerLazySingleton<PrReminderFbDataSource>(
-        () => PrReminderFbDataSourceImpl(),
+    () => PrReminderFbDataSourceImpl(),
   );
 
   ///LEAVE APPROVAL SCREEN
   sl.registerLazySingleton<LeaveApprovalFbDataSource>(
-        () => LeaveApprovalFbDataSourceImpl(),
+    () => LeaveApprovalFbDataSourceImpl(),
   );
 
   ///ADD SUGGESTION SCREEN
   sl.registerLazySingleton<SuggestionFbDataSource>(
-        () => SuggestionFbDataSourceImpl(),
+    () => SuggestionFbDataSourceImpl(),
   );
 
   ///STAFF DETAIL SCREEN
   sl.registerLazySingleton<StaffDetailFbDataSource>(
-        () => StaffDetailFbDataSourceImpl(),
+    () => StaffDetailFbDataSourceImpl(),
   );
 
   ///VIEW SUGGESTION SCREEN
   sl.registerLazySingleton<ViewSuggestionsFbDataSource>(
-        () => ViewSuggestionsFbDataSourceImpl(),
+    () => ViewSuggestionsFbDataSourceImpl(),
   );
 
   ///WORK ENTRY SCREEN
   sl.registerLazySingleton<WorkEntryFbDataSource>(
-        () => WorkEntryFbDataSourceImpl(),
+    () => WorkEntryFbDataSourceImpl(),
+  );
+
+  ///WORK DETAILS SCREEN
+  sl.registerLazySingleton<WorkDetailFbDataSource>(
+    () => WorkDetailFbDataSourceImpl(),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ EXTERNAL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
@@ -586,5 +599,6 @@ Future<void> init() async {
   sl.registerLazySingleton<FirebaseAuth>(() => fbAuth);
   sl.registerLazySingleton<FirebaseDatabase>(() => fbDb);
   sl.registerLazySingleton<DatabaseReference>(
-      () => FirebaseDatabase.instance.ref());
+    () => FirebaseDatabase.instance.ref(),
+  );
 }
