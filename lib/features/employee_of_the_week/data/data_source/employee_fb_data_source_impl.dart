@@ -14,6 +14,16 @@ class EmployeeFbDataSourceImpl implements EmployeeFbDataSource {
     var ref = FirebaseDatabase.instance.ref();
     var snapshot = await ref.child('staff').once();
 
+    allStaffs.add(
+      EmployeeModel(
+        uid: '',
+        department: '',
+        name: 'None',
+        profileImage: '',
+        emailId: '',
+      ),
+    );
+
     for (var uid in snapshot.snapshot.children) {
       var names = uid.value as Map<Object?, Object?>;
       final staffNames = EmployeeModel(

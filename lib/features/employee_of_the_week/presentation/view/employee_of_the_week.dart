@@ -1,6 +1,7 @@
 import 'package:either_dart/either.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_snack_bar.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';
@@ -28,6 +29,7 @@ class _BestEmployeeState extends State<BestEmployee> {
   EmployeeModel? selectedStaff;
   late String prNameToUid = '';
   late Future<List<EmployeeModel>> _staffFuture;
+  bool showReasonField = true;
 
   late final EmployeeFbDataSource _employeeFbDataSource =
       EmployeeFbDataSourceImpl();
@@ -38,17 +40,24 @@ class _BestEmployeeState extends State<BestEmployee> {
 
   Future<void> updatePrNameReason() async {
     final provider = Provider.of<EmployeeProvider>(context, listen: false);
-    var selectedEmployee = provider.staff.firstWhere((element) => element.name == employeeName.text);
-    prNameToUid = selectedEmployee.uid;
+    var selectedEmployee = provider.staff.firstWhere((element) => element.name == selectedStaff!.name);
 
-    if (prNameToUid.isEmpty || reason.text.isEmpty) {
-      CustomSnackBar.showErrorSnackbar(
-        message: 'Enter all employee data!',
+    if (selectedEmployee.uid.isEmpty ||selectedEmployee.uid == 'None') {
+      updatePrNameReasonCase.execute('', '');
+      CustomSnackBar.showSuccessSnackbar(
+        message: 'Employee details has been set to None!',
         context: context,
       );
-    } else {
+      Navigator.pop(context);
+    }else if(reason.text.isEmpty){
+      CustomSnackBar.showErrorSnackbar(
+        message: 'Enter all employee details!',
+        context: context,
+      );
+    }
+    else {
       try{
-        updatePrNameReasonCase.execute(prNameToUid, reason.text);
+        updatePrNameReasonCase.execute(selectedEmployee.uid, reason.text);
       }catch(e){
         ErrorResponse(
           error: 'Error caught while updating Best employee details',
@@ -80,6 +89,7 @@ class _BestEmployeeState extends State<BestEmployee> {
   }
 
   Widget buildBestEmployeeDetail() {
+    final provider = Provider.of<EmployeeProvider>(context, listen: false);
     return FutureBuilder<List<EmployeeModel>>(
       future: _staffFuture,
       builder: (context, snapshot) {
@@ -94,21 +104,10 @@ class _BestEmployeeState extends State<BestEmployee> {
         } else if (snapshot.hasData) {
           final staffNames = snapshot.data!
               .map(
-                (staff) => DropdownMenuEntry<EmployeeModel>(
+                (staff) => DropdownMenuItem<EmployeeModel>(
                   value: staff,
-                  label: staff.name,
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.resolveWith((states) {
-                      OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10));
-                      return null;
-                    }),
-                    textStyle: MaterialStateProperty.resolveWith(
-                      (states) => const TextStyle(
-                        fontSize: 17,
-                      ),
-                    ),
-                  ),
+                  child: Text(staff.name),
+                  // Additional styling if needed
                 ),
               )
               .toList();
@@ -128,71 +127,60 @@ class _BestEmployeeState extends State<BestEmployee> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                DropdownMenu<EmployeeModel>(
-                  width: MediaQuery.sizeOf(context).width * 0.9,
-                  inputDecorationTheme: InputDecorationTheme(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: const BorderSide(
-                        color: CupertinoColors.systemGrey,
-                        width: 2,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: DropdownButtonFormField<EmployeeModel>(
+                    hint: const Text(
+                      'Staff Names',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey,
                       ),
                     ),
-                    labelStyle: const TextStyle(
-                      fontWeight: FontWeight.w500,
-                    ),
-                    contentPadding: const EdgeInsets.all(15),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: const BorderSide(
-                        color: CupertinoColors.systemGrey,
-                        width: 2,
+                    value: selectedStaff,
+                    items: staffNames,
+                    onChanged: (EmployeeModel? newValue) {
+                      setState(() {
+                        selectedStaff = newValue;
+                        showReasonField = newValue?.name != 'None';
+                      });
+                    },
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(
+                          color: CupertinoColors.systemGrey,
+                          width: 2,
+                        ),
                       ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: const BorderSide(
-                        color: CupertinoColors.systemPurple,
-                        width: 2,
+                      labelStyle: const TextStyle(
+                        fontWeight: FontWeight.w500,
                       ),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: const BorderSide(color: Colors.red),
-                    ),
-                    errorStyle: const TextStyle(),
-                  ),
-                  menuHeight: MediaQuery.sizeOf(context).height * 0.4,
-                  menuStyle: MenuStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith(
-                      (states) => Colors.purple.shade50,
-                    ),
-                    padding: MaterialStateProperty.resolveWith(
-                      (states) => const EdgeInsets.symmetric(horizontal: 10),
-                    ),
-                    elevation:
-                        MaterialStateProperty.resolveWith((states) => 10),
-                  ),
-                  textStyle: const TextStyle(),
-                  enableFilter: true,
-                  hintText: 'Staff name',
-                  controller: employeeName,
-                  label: Text(
-                    'Staff name',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      color: Colors.grey.shade500,
+                      contentPadding: const EdgeInsets.all(15),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(
+                          color: CupertinoColors.systemGrey,
+                          width: 2,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(
+                          color: CupertinoColors.systemPurple,
+                          width: 2,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: const BorderSide(color: Colors.red),
+                      ),
+                      errorStyle: const TextStyle(),
                     ),
                   ),
-                  dropdownMenuEntries: staffNames,
-                  onSelected: (EmployeeModel? name) {
-                    FocusScope.of(context).unfocus();
-                    setState(() {
-                      selectedStaff = name;
-                    });
-                  },
                 ),
                 const SizedBox(height: 20),
+                if(showReasonField)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: TextField(

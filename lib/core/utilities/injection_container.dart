@@ -97,6 +97,10 @@ import 'package:my_office/features/view_suggestions/data/data_source/view_sugges
 import 'package:my_office/features/view_suggestions/data/repository/view_suggestion_repo_impl.dart';
 import 'package:my_office/features/view_suggestions/domain/repository/view_suggestion_repository.dart';
 import 'package:my_office/features/view_suggestions/domain/use_case/view_suggestion_use_case.dart';
+import 'package:my_office/features/work_entry/data/data_source/work_entry_fb_data_source.dart';
+import 'package:my_office/features/work_entry/data/data_source/work_entry_fb_data_source_impl.dart';
+import 'package:my_office/features/work_entry/data/repository/work_entry_repo_impl.dart';
+import 'package:my_office/features/work_entry/domain/repository/work_entry_repository.dart';
 import '../../features/attendance/domain/use_case/check_time_use_case.dart';
 import '../../features/auth/domain/use_case/get_staff_info_use_case.dart';
 import '../../features/employee_of_the_week/data/data_source/employee_fb_data_source_impl.dart';
@@ -493,6 +497,11 @@ Future<void> init() async {
         () => ViewSuggestionsRepoImpl(sl.call()),
   );
 
+  ///WORK ENTRY SCREEN
+  sl.registerLazySingleton<WorkEntryRepository>(
+        () => WorkEntryRepoImpl(workEntryFbDataSource: sl.call()),
+  );
+
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DATA SOURCE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
   ///AUTH
@@ -563,6 +572,11 @@ Future<void> init() async {
   ///VIEW SUGGESTION SCREEN
   sl.registerLazySingleton<ViewSuggestionsFbDataSource>(
         () => ViewSuggestionsFbDataSourceImpl(),
+  );
+
+  ///WORK ENTRY SCREEN
+  sl.registerLazySingleton<WorkEntryFbDataSource>(
+        () => WorkEntryFbDataSourceImpl(),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ EXTERNAL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //

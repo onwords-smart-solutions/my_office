@@ -16,6 +16,7 @@ import '../../../features/staff_details/presentation/view/staff_detail_screen.da
 import '../../../features/suggestions/presentation/view/suggestion_screen.dart';
 import '../../../features/user/domain/entity/user_entity.dart';
 import '../../../features/view_suggestions/presentation/view/view_suggestion_screen.dart';
+import '../../../features/work_entry/presentation/view/work_entry_screen.dart';
 
 const serverKey =
     'AAAAhAGZ-Jw:APA91bFk_GTSGX1LAj-ZxOW7DQn8Q69sYLStSB8lukQDlxBMmugrkQCsgIvuFm0fU5vBbVB5SATjaoO0mrCdsJm03ZEEZtaRdH-lQ9ZmX5RpYuyLytWyHVH7oDu-6LaShqrVE5vYHCqK';
@@ -54,10 +55,10 @@ class MenuTitle {
 
 class AppDefaults {
   static List<StaffAccessModel> allAccess = [
-//     StaffAccessModel(
-//       title: MenuTitle.workEntry,
-//       image: 'assets/work_entry.png',
-//     ),
+    StaffAccessModel(
+      title: MenuTitle.workEntry,
+      image: 'assets/work_entry.png',
+    ),
 //     StaffAccessModel(
 //       title: MenuTitle.refreshment,
 //       image: 'assets/refreshment.png',
@@ -167,12 +168,12 @@ class AppDefaults {
   static Widget getPage(String title, UserEntity staffInfo) {
     Widget page = const AccountScreen();
     switch (title) {
-//       case MenuTitle.workEntry:
-//         page = WorkEntryScreen(
-//           userId: staffInfo.uid,
-//           staffName: staffInfo.name,
-//         );
-//         break;
+      case MenuTitle.workEntry:
+        page = WorkEntryScreen(
+          userId: staffInfo.uid,
+          staffName: staffInfo.name,
+        );
+        break;
 //       case MenuTitle.workDetail:
 //         page = WorkCompleteViewScreen(
 //           userDetails: staffInfo,
