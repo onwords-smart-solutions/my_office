@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_office/util/custom_snackbar.dart';
 
 import '../Constant/colors/constant_colors.dart';
 import '../models/staff_entry_model.dart';
@@ -18,12 +21,24 @@ class _BestEmployeeState extends State<BestEmployee> {
   TextEditingController reason = TextEditingController();
   List<StaffAttendanceModel> allStaffs = [];
   bool isLoading = true;
+  bool showReasonField = true;
   StaffAttendanceModel? selectedStaff;
   late String prNameToUid = '';
 
   //Getting staff names form db
   void allStaffNames() {
     allStaffs.clear();
+
+    allStaffs.add(
+      StaffAttendanceModel(
+        uid: '',
+        department: '',
+        name: 'None',
+        profileImage: '',
+        emailId: '',
+      ),
+    );
+
     var ref = FirebaseDatabase.instance.ref();
     ref.child('staff').once().then((values) {
       for (var uid in values.snapshot.children) {
@@ -35,7 +50,7 @@ class _BestEmployeeState extends State<BestEmployee> {
           profileImage: names['profileImage'].toString(),
           emailId: names['email'].toString(),
         );
-        if (staffNames.name != "Nikhil Deepak") {
+        if (staffNames.name != 'Nikhil Deepak') {
           allStaffs.add(staffNames);
         }
       }
@@ -48,47 +63,40 @@ class _BestEmployeeState extends State<BestEmployee> {
 
   //Update PR employee of the week
   Future<void> updatePrNameReason() async {
-    var selectedEmployee =
-        allStaffs.firstWhere((element) => element.name == employeeName.text);
-    prNameToUid = selectedEmployee.uid;
+    var employee = allStaffs.firstWhere(
+      (element) => element.name == selectedStaff!.name,
+    );
 
-    if (prNameToUid.isEmpty || reason.text.isEmpty) {
-      final snackBar = SnackBar(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        behavior: SnackBarBehavior.floating,
-        content: const Text(
-          'Enter all employee data!!',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        backgroundColor: Colors.red,
-      );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    } else {
+    log('Staff names are ${employee.uid}');
+
+    if (employee.uid.isEmpty || employee.uid == 'None') {
+        final ref = FirebaseDatabase.instance.ref();
+        await ref.child('PRDashboard/employee_of_week').update({
+          'person': '',
+          'reason': '',
+        });
+        if (!mounted) return;
+        CustomSnackBar.showSuccessSnackbar(
+          message: 'Employee data has been set to None',
+          context: context,
+        );
+        Navigator.pop(context);
+      } else if (reason.text.isEmpty) {
+        CustomSnackBar.showErrorSnackbar(
+          message: 'Enter all employee details!',
+          context: context,
+        );
+      } else {
       final ref = FirebaseDatabase.instance.ref();
       await ref.child('PRDashboard/employee_of_week').update({
-        'person': prNameToUid,
-        'reason': reason.text,
+        'person': employee.uid,
+        'reason':  reason.text,
       });
-      final snackBar = SnackBar(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        behavior: SnackBarBehavior.floating,
-        content: const Text(
-          'Best employee data has been updated!!',
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        backgroundColor: Colors.green,
+      if(!mounted) return;
+      CustomSnackBar.showSuccessSnackbar(
+        message: 'Employee details has been updated',
+        context: context,
       );
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       Navigator.pop(context);
     }
   }
@@ -108,24 +116,14 @@ class _BestEmployeeState extends State<BestEmployee> {
   }
 
   Widget buildBestEmployeeDetail() {
-    final List<DropdownMenuEntry<StaffAttendanceModel>> staffNames =
-        <DropdownMenuEntry<StaffAttendanceModel>>[];
+    List<DropdownMenuItem<StaffAttendanceModel>> staffNames =
+        <DropdownMenuItem<StaffAttendanceModel>>[];
     for (final StaffAttendanceModel names in allStaffs) {
       staffNames.add(
-        DropdownMenuEntry<StaffAttendanceModel>(
+        DropdownMenuItem<StaffAttendanceModel>(
           value: names,
-          label: names.name,
-          style: ButtonStyle(
-            shape: MaterialStateProperty.resolveWith((states) {
-              OutlineInputBorder(borderRadius: BorderRadius.circular(10));
-              return null;
-            }),
-            textStyle: MaterialStateProperty.resolveWith(
-              (states) => const TextStyle(
-                fontSize: 17,
-              ),
-            ),
-          ),
+          child: Text(names.name),
+          // Additional styling if needed
         ),
       );
     }
@@ -145,80 +143,36 @@ class _BestEmployeeState extends State<BestEmployee> {
             ),
           ),
           const SizedBox(height: 20),
-          DropdownMenu<StaffAttendanceModel>(
-            width: MediaQuery.sizeOf(context).width * 0.9,
-            inputDecorationTheme: InputDecorationTheme(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-                borderSide: const BorderSide(
-                    color: CupertinoColors.systemGrey, width: 2,
-                ),
-              ),
-              labelStyle: const TextStyle(
-                fontWeight: FontWeight.w500,
-              ),
-              contentPadding: const EdgeInsets.all(15),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-                borderSide: const BorderSide(
-                    color: CupertinoColors.systemGrey, width: 2,
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-                borderSide: const BorderSide(
-                  color: CupertinoColors.systemPurple,
-                  width: 2,
-                ),
-              ),
-              errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-                borderSide: const BorderSide(color: Colors.red),
-              ),
-              errorStyle: const TextStyle(),
-            ),
-            menuHeight: MediaQuery.sizeOf(context).height * 0.4,
-            menuStyle: MenuStyle(
-              backgroundColor: MaterialStateProperty.resolveWith(
-                (states) => Colors.purple.shade50,
-              ),
-              padding: MaterialStateProperty.resolveWith(
-                (states) => const EdgeInsets.symmetric(horizontal: 10),
-              ),
-              elevation: MaterialStateProperty.resolveWith((states) => 10),
-            ),
-            textStyle: const TextStyle(),
-            enableFilter: true,
-            hintText: 'Staff name',
-            controller: employeeName,
-            label: Text(
-              'Staff name',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                color: Colors.grey.shade500,
-              ),
-            ),
-            dropdownMenuEntries: staffNames,
-            onSelected: (StaffAttendanceModel? name) {
-              FocusScope.of(context).unfocus();
-              setState(() {
-                selectedStaff = name;
-              });
-            },
-          ),
-          const SizedBox(height: 20),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: TextField(
-              style: const TextStyle(),
-              textCapitalization: TextCapitalization.sentences,
-              textInputAction: TextInputAction.done,
-              controller: reason,
-              maxLines: 2,
+            child: DropdownButtonFormField<StaffAttendanceModel>(
+              hint: const Text(
+                'Staff Names',
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey,
+                ),
+              ),
+              value: selectedStaff,
+              items: staffNames,
+              onChanged: (StaffAttendanceModel? newValue) {
+                setState(() {
+                  selectedStaff = newValue;
+                  showReasonField = newValue?.name != 'None';
+                });
+              },
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
+                  borderSide: const BorderSide(
+                    color: CupertinoColors.systemGrey,
+                    width: 2,
+                  ),
                 ),
+                labelStyle: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                ),
+                contentPadding: const EdgeInsets.all(15),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
                   borderSide: const BorderSide(
@@ -233,13 +187,49 @@ class _BestEmployeeState extends State<BestEmployee> {
                     width: 2,
                   ),
                 ),
-                hintText: 'Reason',
-                hintStyle: TextStyle(
-                  color: Colors.grey.withOpacity(0.8),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: const BorderSide(color: Colors.red),
                 ),
+                errorStyle: const TextStyle(),
               ),
             ),
           ),
+          const SizedBox(height: 20),
+          if (showReasonField)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: TextField(
+                style: const TextStyle(),
+                textCapitalization: TextCapitalization.sentences,
+                textInputAction: TextInputAction.done,
+                controller: reason,
+                maxLines: 2,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: const BorderSide(
+                      color: CupertinoColors.systemGrey,
+                      width: 2,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: const BorderSide(
+                      color: CupertinoColors.systemPurple,
+                      width: 2,
+                    ),
+                  ),
+                  hintText: 'Reason',
+                  hintStyle: TextStyle(
+                    color: Colors.grey.withOpacity(0.8),
+                  ),
+                ),
+              ),
+            ),
           const SizedBox(height: 40),
           ElevatedButton(
             onPressed: updatePrNameReason,
