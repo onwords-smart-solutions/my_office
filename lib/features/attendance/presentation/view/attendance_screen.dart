@@ -41,7 +41,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   final ValueNotifier<List<CustomPunchModel>> _sortedList = ValueNotifier([]);
   final ValueNotifier<DateTime> _selectedDate = ValueNotifier(DateTime.now());
   final ValueNotifier<String> _sortOption = ValueNotifier('All');
-  final ValueNotifier<bool> _isLoading = ValueNotifier(true);
+  final ValueNotifier<bool> _isLoading = ValueNotifier(false);
 
   @override
   void initState() {

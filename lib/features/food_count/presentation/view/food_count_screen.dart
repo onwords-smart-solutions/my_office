@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/utilities/constants/app_main_template.dart';
 import '../../data/model/food_count_model.dart';
 import '../../domain/use_case/all_food_count_use_case.dart';
+import 'individual_count_detail_screen.dart';
 
 class FoodCountScreen extends StatefulWidget {
   const FoodCountScreen({Key? key}) : super(key: key);
@@ -113,6 +114,20 @@ class _FoodCountScreenState extends State<FoodCountScreen> {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
+                      onTap:  () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => CountDetailScreen(
+                              allFoodCountList: foodList
+                                  .firstWhere(
+                                    (element) =>
+                                element.name ==
+                                    foodList[i].name,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                       leading: Container(
                         width: 40.0,
                         height: 40.0,

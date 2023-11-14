@@ -161,7 +161,6 @@ Future<void> init() async {
   sl.registerFactory<EmployeeProvider>(
     () => EmployeeProvider(
       sl.call(),
-      sl.call(),
     ),
   );
 

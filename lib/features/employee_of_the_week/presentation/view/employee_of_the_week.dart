@@ -2,6 +2,13 @@ import 'package:either_dart/either.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:my_office/core/utilities/custom_widgets/custom_snack_bar.dart';
+import 'package:my_office/core/utilities/response/error_response.dart';
+import 'package:my_office/features/employee_of_the_week/data/data_source/employee_fb_data_source.dart';
+import 'package:my_office/features/employee_of_the_week/data/data_source/employee_fb_data_source_impl.dart';
+import 'package:my_office/features/employee_of_the_week/data/repository/employee_repo_impl.dart';
+import 'package:my_office/features/employee_of_the_week/domain/repository/employee_repository.dart';
+import 'package:my_office/features/employee_of_the_week/domain/use_case/update_pr_name_reason_use_case.dart';
 import 'package:my_office/features/employee_of_the_week/presentation/provider/employee_of_the_week_provider.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utilities/constants/app_color.dart';
@@ -19,11 +26,48 @@ class _BestEmployeeState extends State<BestEmployee> {
   TextEditingController employeeName = TextEditingController();
   TextEditingController reason = TextEditingController();
   EmployeeModel? selectedStaff;
+  late String prNameToUid = '';
   late Future<List<EmployeeModel>> _staffFuture;
+
+  late final EmployeeFbDataSource _employeeFbDataSource =
+      EmployeeFbDataSourceImpl();
+  late EmployeeRepository employeeRepository =
+      EmployeeRepoImpl(_employeeFbDataSource);
+  late UpdatePrNameReasonCase updatePrNameReasonCase =
+      UpdatePrNameReasonCase(employeeRepository: employeeRepository);
+
+  Future<void> updatePrNameReason() async {
+    final provider = Provider.of<EmployeeProvider>(context, listen: false);
+    var selectedEmployee = provider.staff.firstWhere((element) => element.name == employeeName.text);
+    prNameToUid = selectedEmployee.uid;
+
+    if (prNameToUid.isEmpty || reason.text.isEmpty) {
+      CustomSnackBar.showErrorSnackbar(
+        message: 'Enter all employee data!',
+        context: context,
+      );
+    } else {
+      try{
+        updatePrNameReasonCase.execute(prNameToUid, reason.text);
+      }catch(e){
+        ErrorResponse(
+          error: 'Error caught while updating Best employee details',
+          metaInfo: 'Catch triggered while updating Best employee details',
+        );
+      }
+      if (!mounted) return;
+      CustomSnackBar.showSuccessSnackbar(
+        message: 'Best employee data has been updated!',
+        context: context,
+      );
+      Navigator.pop(context);
+    }
+  }
 
   @override
   void initState() {
-    _staffFuture =  Provider.of<EmployeeProvider>(context, listen: false).fetchAllStaff();
+    _staffFuture =
+        Provider.of<EmployeeProvider>(context, listen: false).fetchAllStaff();
     super.initState();
   }
 
@@ -36,12 +80,11 @@ class _BestEmployeeState extends State<BestEmployee> {
   }
 
   Widget buildBestEmployeeDetail() {
-
     return FutureBuilder<List<EmployeeModel>>(
       future: _staffFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return  Center(
+          return Center(
             child: Lottie.asset(
               'assets/animations/new_loading.json',
             ),
@@ -56,11 +99,12 @@ class _BestEmployeeState extends State<BestEmployee> {
                   label: staff.name,
                   style: ButtonStyle(
                     shape: MaterialStateProperty.resolveWith((states) {
-                      OutlineInputBorder(borderRadius: BorderRadius.circular(10));
+                      OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10));
                       return null;
                     }),
                     textStyle: MaterialStateProperty.resolveWith(
-                          (states) => const TextStyle(
+                      (states) => const TextStyle(
                         fontSize: 17,
                       ),
                     ),
@@ -184,9 +228,7 @@ class _BestEmployeeState extends State<BestEmployee> {
                 ),
                 const SizedBox(height: 40),
                 ElevatedButton(
-                  onPressed: () =>
-                      Provider.of<EmployeeProvider>(context, listen: false)
-                          .updatePrNameReason(context),
+                  onPressed: updatePrNameReason,
                   child: const Text(
                     'Update',
                     style: TextStyle(

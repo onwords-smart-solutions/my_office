@@ -14,7 +14,7 @@ class EmployeeRepoImpl implements EmployeeRepository{
   }
 
   @override
-  Future<void> updatePrNameReason(context) async {
-    return await _employeeFbDataSource.updatePrNameReason(context);
+  Future<void> updateEmployeeOfWeek(String employeeUid, String reason)async{
+    return await _employeeFbDataSource.updateEmployeeOfWeek(employeeUid, reason);
   }
 }

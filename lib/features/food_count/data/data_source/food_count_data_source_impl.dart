@@ -47,7 +47,6 @@ class FoodCountFbDataSourceImpl implements FoodCountFbDataSource {
         final dividedFormat = detail.key!.substring(0, 7);
         if (dividedFormat == currentMonthFormat) {
           final data = detail.value as Map<Object?, Object?>;
-          log('Data si ${data.values}');
           if (data['Lunch'] != null) {
             final lunchData = data['Lunch'] as Map<Object?, Object?>;
             final lunchList = lunchData['lunch_list'] as Map<Object?, Object?>;

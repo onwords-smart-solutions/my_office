@@ -5,5 +5,7 @@ class UpdatePrNameReasonCase{
 
   UpdatePrNameReasonCase({required this.employeeRepository});
 
-  Future <void> execute(context) async => await employeeRepository.updatePrNameReason(context);
+  Future<void> execute(String employeeUid, String reason) async {
+    return await employeeRepository.updateEmployeeOfWeek(employeeUid, reason);
+  }
 }
