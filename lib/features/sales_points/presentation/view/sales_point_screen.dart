@@ -153,6 +153,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                   items: productList
                                       .map<DropdownMenuItem<String>>(
                                           (DropDownValueModel value) {
+                                            print('Name is ${value.name}');
                                     return DropdownMenuItem<String>(
                                       value: value.name,
                                       child: Text(value.name),

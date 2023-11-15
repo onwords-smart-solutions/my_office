@@ -80,6 +80,10 @@ import 'package:my_office/features/proxy_attendance/domain/use_case/proxy_staff_
 import 'package:my_office/features/proxy_attendance/domain/use_case/save_check_in_use_case.dart';
 import 'package:my_office/features/proxy_attendance/domain/use_case/save_check_out_use_case.dart';
 import 'package:my_office/features/proxy_attendance/presentation/provider/proxy_attendance_provider.dart';
+import 'package:my_office/features/refreshment/data/data_source/refreshment_fb_data_source.dart';
+import 'package:my_office/features/refreshment/data/data_source/refreshment_fb_data_source_impl.dart';
+import 'package:my_office/features/refreshment/data/repository/refreshment_repo_impl.dart';
+import 'package:my_office/features/refreshment/domain/repository/refreshment_repository.dart';
 import 'package:my_office/features/sales_points/data/data_source/sales_point_fb_data_source.dart';
 import 'package:my_office/features/sales_points/data/data_source/sales_point_fb_data_source_impl.dart';
 import 'package:my_office/features/sales_points/data/repository/sales_point_repo_impl.dart';
@@ -531,6 +535,11 @@ Future<void> init() async {
         () => SalesPointRepoImpl(sl.call()),
   );
 
+  ///REFRESHMENT SCREEN
+  sl.registerLazySingleton<RefreshmentRepository>(
+        () => RefreshmentRepoImpl(sl.call()),
+  );
+
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DATA SOURCE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
   ///AUTH
@@ -616,6 +625,11 @@ Future<void> init() async {
   ///SALES POINT SCREEN
   sl.registerLazySingleton<SalesPointFbDataSource>(
         () => SalesPointFbDataSourceImpl(),
+  );
+
+  ///REFRESHMENT SCREEN
+  sl.registerLazySingleton<RefreshmentFbDataSource>(
+        () => RefreshmentFbDataSourceImpl(),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ EXTERNAL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //

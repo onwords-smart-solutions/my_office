@@ -13,6 +13,7 @@ import '../../../features/leave_approval/presentation/view/leave_approval_screen
 import '../../../features/pr_dashboard/presentation/view/pr_dash_screen.dart';
 import '../../../features/pr_reminder/presentation/view/pr_reminder_screen.dart';
 import '../../../features/proxy_attendance/presentation/view/proxy_attendance_screen.dart';
+import '../../../features/refreshment/presentation/view/refreshment_screen.dart';
 import '../../../features/sales_points/presentation/view/sales_point_screen.dart';
 import '../../../features/scan_qr/presentation/view/scan_qr_screen.dart';
 import '../../../features/staff_details/presentation/view/staff_detail_screen.dart';
@@ -63,10 +64,10 @@ class AppDefaults {
       title: MenuTitle.workEntry,
       image: 'assets/work_entry.png',
     ),
-//     StaffAccessModel(
-//       title: MenuTitle.refreshment,
-//       image: 'assets/refreshment.png',
-//     ),
+    StaffAccessModel(
+      title: MenuTitle.refreshment,
+      image: 'assets/refreshment.png',
+    ),
 //     // StaffAccessModel(title: MenuTitle.leavePortal, image: 'assets/leave_apply.png'),
     StaffAccessModel(
       title: MenuTitle.suggestion,
@@ -182,12 +183,12 @@ class AppDefaults {
           userDetails: staffInfo,
         );
         break;
-//       case MenuTitle.refreshment:
-//         page = RefreshmentScreen(
-//           uid: staffInfo.uid,
-//           name: staffInfo.name,
-//         );
-//         break;
+      case MenuTitle.refreshment:
+        page = RefreshmentScreen(
+          uid: staffInfo.uid,
+          name: staffInfo.name,
+        );
+        break;
       case MenuTitle.foodCount:
         page = const FoodCountScreen();
         break;
