@@ -13,8 +13,8 @@ import '../../../../core/utilities/response/error_response.dart';
 import '../../../user/domain/entity/user_entity.dart';
 import '../../domain/use_case/birthday_submit_form_use_case.dart';
 import '../../domain/use_case/phone_number_submit_form_use_case.dart';
-import '../view_model/custom_punch_model.dart';
-import '../view_model/staff_access_model.dart';
+import '../../data/model/custom_punch_model.dart';
+import '../../data/model/staff_access_model.dart';
 
 class HomeProvider extends ChangeNotifier {
   final GetAllBirthdayCase _getAllBirthdayCase;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../home/presentation/view_model/custom_punch_model.dart';
+import '../../../home/data/model/custom_punch_model.dart';
 
 class AttendancePunchItem extends StatelessWidget {
   final CustomPunchModel punchDetail;

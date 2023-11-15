@@ -51,19 +51,19 @@ class WorkDetailFbDataSourceImpl implements WorkDetailFbDataSource {
             );
           }
         }
-
-        workDetails.add(
-          WorkDoneModel(
-            name: name,
-            department: dept,
-            url: url,
-            email: email,
-            reports: staffWorkDone,
-          ),
-        );
+        if(name != 'Nikhil Deepak'){
+          workDetails.add(
+            WorkDoneModel(
+              name: name,
+              department: dept,
+              url: url,
+              email: email,
+              reports: staffWorkDone,
+            ),
+          );
+        }
       }
     }
-    log('Work details are ${workDetails}');
     return workDetails;
   }
 }

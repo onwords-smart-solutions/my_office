@@ -35,9 +35,7 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
 
   @override
   void initState() {
-    DateTime selectedDate = DateTime.now();
-    workDetailRepository.getWorkDetails(selectedDate);
-    _fetchWorkDetails;
+    _fetchWorkDetails();
     super.initState();
   }
 

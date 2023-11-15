@@ -5,7 +5,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';
-import 'package:my_office/features/home/presentation/view_model/custom_punch_model.dart';
+import 'package:my_office/features/home/data/model/custom_punch_model.dart';
 import 'package:pdf/pdf.dart';
 import 'package:printing/printing.dart';
 import '../../presentation/view/attendance_punch_screen.dart';

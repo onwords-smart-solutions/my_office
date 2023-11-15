@@ -2,7 +2,7 @@ import 'package:either_dart/either.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';
 import 'package:my_office/features/attendance/data/data_source/attendance_fb_data_source.dart';
 import 'package:my_office/features/attendance/domain/repository/attendance_repository.dart';
-import 'package:my_office/features/home/presentation/view_model/custom_punch_model.dart';
+import 'package:my_office/features/home/data/model/custom_punch_model.dart';
 
 import '../model/staff_attendance_model.dart';
 

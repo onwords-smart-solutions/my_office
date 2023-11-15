@@ -2,8 +2,8 @@ import 'package:either_dart/either.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';
 import 'package:my_office/features/home/domain/repository/home_repository.dart';
 import '../../../user/domain/entity/user_entity.dart';
-import '../../presentation/view_model/custom_punch_model.dart';
-import '../../presentation/view_model/staff_access_model.dart';
+import '../model/custom_punch_model.dart';
+import '../model/staff_access_model.dart';
 import '../data_source/home_fb_data_source.dart';
 
 class HomeRepoImpl implements HomeRepository {

@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../user/domain/entity/user_entity.dart';
-import '../view_model/custom_punch_model.dart';
+import '../../data/model/custom_punch_model.dart';
 
 class InfoItem extends StatefulWidget {
   final UserEntity staff;

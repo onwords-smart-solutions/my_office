@@ -1,8 +1,8 @@
 import 'package:either_dart/either.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';
 import '../../../user/domain/entity/user_entity.dart';
-import '../../presentation/view_model/custom_punch_model.dart';
-import '../../presentation/view_model/staff_access_model.dart';
+import '../model/custom_punch_model.dart';
+import '../model/staff_access_model.dart';
 
 abstract class HomeFbDataSource {
   Future<Either<ErrorResponse,List<String>>> getManagementList();
@@ -32,4 +32,6 @@ abstract class HomeFbDataSource {
   Future<Either<ErrorResponse, bool>> birthdaySubmitForm(context);
 
   Future<Either<ErrorResponse, bool>> phoneNumberSubmitForm(context);
+
+  // Future<CustomPunchModel> getPunchingTime();
 }

@@ -11,12 +11,31 @@ import '../../../../core/utilities/custom_widgets/custom_snack_bar.dart';
 import '../../../../main.dart';
 import '../../../auth/presentation/provider/auth_provider.dart';
 import '../../../user/domain/entity/user_entity.dart';
-import '../../presentation/view_model/custom_punch_model.dart';
-import '../../presentation/view_model/staff_access_model.dart';
+import '../model/custom_punch_model.dart';
+import '../model/staff_access_model.dart';
 import 'home_fb_data_source.dart';
 
 class HomeFbDataSourceImpl implements HomeFbDataSource {
   final ref = FirebaseDatabase.instance.ref();
+
+  // @override
+  // Future<CustomPunchModel> getPunchingTime() async{
+    // final data = await checkTime(
+    //   UserEntity.uid,
+    //   userProvider.user!.name,
+    //   userProvider.user!.department,
+    // );
+    // if (data != null) {
+    //   return data;
+    // } else {
+    //   return CustomPunchModel(
+    //     staffId: userProvider.user!.uid,
+    //     name: userProvider.user!.name,
+    //     department: userProvider.user!.department,
+    //     checkInTime: null,
+    //   );
+    // }
+  // }
 
   @override
   Future<Either<ErrorResponse, CustomPunchModel>> getPunchingTime(

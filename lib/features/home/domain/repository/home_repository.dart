@@ -2,8 +2,8 @@ import 'package:either_dart/either.dart';
 
 import '../../../../core/utilities/response/error_response.dart';
 import '../../../user/domain/entity/user_entity.dart';
-import '../../presentation/view_model/custom_punch_model.dart';
-import '../../presentation/view_model/staff_access_model.dart';
+import '../../data/model/custom_punch_model.dart';
+import '../../data/model/staff_access_model.dart';
 
 abstract class HomeRepository{
   Future<Either<ErrorResponse,List<String>>> getManagementList();

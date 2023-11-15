@@ -27,8 +27,8 @@ import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../../auth/presentation/provider/auth_provider.dart';
 import '../../../user/domain/entity/user_entity.dart';
-import '../view_model/custom_punch_model.dart';
-import '../view_model/staff_access_model.dart';
+import '../../data/model/custom_punch_model.dart';
+import '../../data/model/staff_access_model.dart';
 import 'home_info_item.dart';
 import 'home_menu_item.dart';
 

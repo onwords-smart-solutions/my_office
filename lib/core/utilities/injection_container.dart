@@ -80,6 +80,12 @@ import 'package:my_office/features/proxy_attendance/domain/use_case/proxy_staff_
 import 'package:my_office/features/proxy_attendance/domain/use_case/save_check_in_use_case.dart';
 import 'package:my_office/features/proxy_attendance/domain/use_case/save_check_out_use_case.dart';
 import 'package:my_office/features/proxy_attendance/presentation/provider/proxy_attendance_provider.dart';
+import 'package:my_office/features/sales_points/data/data_source/sales_point_fb_data_source.dart';
+import 'package:my_office/features/sales_points/data/data_source/sales_point_fb_data_source_impl.dart';
+import 'package:my_office/features/sales_points/data/repository/sales_point_repo_impl.dart';
+import 'package:my_office/features/sales_points/domain/repository/sales_point_repository.dart';
+import 'package:my_office/features/sales_points/domain/use_case/get_product_details_use_case.dart';
+import 'package:my_office/features/sales_points/domain/use_case/get_products_use_case.dart';
 import 'package:my_office/features/staff_details/data/data_source/staff_detail_fb_data_source.dart';
 import 'package:my_office/features/staff_details/data/data_source/staff_detail_fb_data_source_impl.dart';
 import 'package:my_office/features/staff_details/data/repository/staff_detail_repo_impl.dart';
@@ -423,6 +429,16 @@ Future<void> init() async {
     () => ViewSuggestionsCase(viewSuggestionsRepository: sl.call()),
   );
 
+  ///GET PRODUCTS
+  sl.registerLazySingleton<GetProductsCase>(
+        () => GetProductsCase(sl.call()),
+  );
+
+  ///GET PRODUCT DETAILS
+  sl.registerLazySingleton<GetProductDetailsCase>(
+        () => GetProductDetailsCase(sl.call()),
+  );
+
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ REPOSITORIES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
   ///AUTH
@@ -510,6 +526,11 @@ Future<void> init() async {
     () => WorkDetailRepoImpl(workDetailFbDataSource: sl.call()),
   );
 
+  ///SALES POINT SCREEN
+  sl.registerLazySingleton<SalesPointRepository>(
+        () => SalesPointRepoImpl(sl.call()),
+  );
+
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DATA SOURCE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
   ///AUTH
@@ -590,6 +611,11 @@ Future<void> init() async {
   ///WORK DETAILS SCREEN
   sl.registerLazySingleton<WorkDetailFbDataSource>(
     () => WorkDetailFbDataSourceImpl(),
+  );
+
+  ///SALES POINT SCREEN
+  sl.registerLazySingleton<SalesPointFbDataSource>(
+        () => SalesPointFbDataSourceImpl(),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ EXTERNAL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //

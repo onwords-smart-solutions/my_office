@@ -6,7 +6,7 @@ import 'package:my_office/features/attendance/domain/use_case/get_staff_details_
 import 'package:my_office/features/attendance/domain/use_case/print_screen_use_case.dart';
 
 import '../../../../core/utilities/response/error_response.dart';
-import '../../../home/presentation/view_model/custom_punch_model.dart';
+import '../../../home/data/model/custom_punch_model.dart';
 import '../../data/model/staff_attendance_model.dart';
 
 class AttendanceProvider extends ChangeNotifier {

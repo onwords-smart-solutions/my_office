@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_office/features/user/domain/entity/user_entity.dart';
 
 import '../../../features/home/presentation/view/home_menu_item.dart';
-import '../../../features/home/presentation/view_model/staff_access_model.dart';
+import '../../../features/home/data/model/staff_access_model.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
   final List<StaffAccessModel> allAccess;

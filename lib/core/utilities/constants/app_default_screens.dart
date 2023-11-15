@@ -7,11 +7,14 @@ import '../../../features/employee_of_the_week/presentation/view/employee_of_the
 import '../../../features/finance/presentation/view/finance_screen.dart';
 import '../../../features/food_count/presentation/view/food_count_screen.dart';
 import '../../../features/home/presentation/view/account_details_screen.dart';
-import '../../../features/home/presentation/view_model/staff_access_model.dart';
+import '../../../features/home/data/model/staff_access_model.dart';
+import '../../../features/installation_pdf/presentation/view/installation_details.dart';
 import '../../../features/leave_approval/presentation/view/leave_approval_screen.dart';
 import '../../../features/pr_dashboard/presentation/view/pr_dash_screen.dart';
 import '../../../features/pr_reminder/presentation/view/pr_reminder_screen.dart';
 import '../../../features/proxy_attendance/presentation/view/proxy_attendance_screen.dart';
+import '../../../features/sales_points/presentation/view/sales_point_screen.dart';
+import '../../../features/scan_qr/presentation/view/scan_qr_screen.dart';
 import '../../../features/staff_details/presentation/view/staff_detail_screen.dart';
 import '../../../features/suggestions/presentation/view/suggestion_screen.dart';
 import '../../../features/user/domain/entity/user_entity.dart';
@@ -114,18 +117,18 @@ class AppDefaults {
       title: MenuTitle.createProduct,
       image: 'assets/new_products.png',
     ),
-//     StaffAccessModel(
-//       title: MenuTitle.salesPoint,
-//       image: 'assets/points_calculation.png',
-//     ),
+    StaffAccessModel(
+      title: MenuTitle.salesPoint,
+      image: 'assets/points_calculation.png',
+    ),
 //     StaffAccessModel(
 //       title: MenuTitle.prWorkDetails,
 //       image: 'assets/pr_work_details.png',
 //     ),
-//     StaffAccessModel(
-//       title: MenuTitle.scanQR,
-//       image: 'assets/qr_scanner_points.png',
-//     ),
+    StaffAccessModel(
+      title: MenuTitle.scanQR,
+      image: 'assets/qr_scanner_points.png',
+    ),
     StaffAccessModel(
       title: MenuTitle.prReminder,
       image: 'assets/reminder.png',
@@ -146,10 +149,10 @@ class AppDefaults {
       title: MenuTitle.staffDetail,
       image: 'assets/staff_details.png',
     ),
-//     StaffAccessModel(
-//       title: MenuTitle.installationPDF,
-//       image: 'assets/installation_image.png',
-//     ),
+    StaffAccessModel(
+      title: MenuTitle.installationPDF,
+      image: 'assets/installation_image.png',
+    ),
     StaffAccessModel(
       title: MenuTitle.proxyAttendance,
       image: 'assets/proxy_attendance.png',
@@ -165,7 +168,6 @@ class AppDefaults {
     ),
   ];
 
-//
   static Widget getPage(String title, UserEntity staffInfo) {
     Widget page = const AccountScreen();
     switch (title) {
@@ -234,15 +236,15 @@ class AppDefaults {
       case MenuTitle.createProduct:
         page = const CreateNewProduct();
         break;
-//       case MenuTitle.salesPoint:
-//         page = const PointCalculationsScreen();
-//         break;
+      case MenuTitle.salesPoint:
+        page = const PointCalculationsScreen();
+        break;
 //       case MenuTitle.prWorkDetails:
 //         page = const PrWorkDetails();
 //         break;
-//       case MenuTitle.scanQR:
-//         page = const ScanQRScreen();
-//         break;
+      case MenuTitle.scanQR:
+        page = const ScanQRScreen();
+        break;
       case MenuTitle.prReminder:
         page = ReminderScreen(
           staffInfo: staffInfo,
@@ -260,9 +262,9 @@ class AppDefaults {
       case MenuTitle.staffDetail:
         page = const StaffDetails();
         break;
-//       case MenuTitle.installationPDF:
-//         page = const InstallationDetails();
-//         break;
+      case MenuTitle.installationPDF:
+        page = const InstallationDetails();
+        break;
       case MenuTitle.proxyAttendance:
         page = ProxyAttendance(
           uid: staffInfo.uid,

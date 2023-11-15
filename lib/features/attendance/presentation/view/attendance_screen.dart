@@ -9,7 +9,7 @@ import 'package:my_office/features/attendance/presentation/view/attendance_punch
 import 'package:provider/provider.dart';
 
 import '../../../../core/utilities/constants/app_main_template.dart';
-import '../../../home/presentation/view_model/custom_punch_model.dart';
+import '../../../home/data/model/custom_punch_model.dart';
 
 class AttendanceScreen extends StatefulWidget {
   final String userId;
