@@ -2,8 +2,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'features/home/presentation/provider/home_provider.dart';
-import 'main.dart';
+import '../provider/home_provider.dart';
+import '../../../../main.dart';
 
 final ValueNotifier<bool> _loading = ValueNotifier(false);
 

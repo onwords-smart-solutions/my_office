@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
-
 import 'package:confetti/confetti.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +9,7 @@ import 'package:my_office/features/sales_points/domain/repository/sales_point_re
 import 'package:my_office/features/sales_points/domain/use_case/get_product_details_use_case.dart';
 import 'package:my_office/features/sales_points/domain/use_case/get_products_use_case.dart';
 import '../../data/data_source/sales_point_fb_data_source.dart';
-import '../../data/model/sales_point_drop_down_model.dart';
+import 'package:dropdown_textfield/dropdown_textfield.dart';
 
 class PointCalculationsScreen extends StatefulWidget {
   const PointCalculationsScreen({Key? key}) : super(key: key);
@@ -24,7 +22,9 @@ class PointCalculationsScreen extends StatefulWidget {
 class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
   TextEditingController quantityController = TextEditingController();
   TextEditingController percentageController = TextEditingController();
-  String? selectedProductName;
+  final SingleValueDropDownController itemNameController =
+      SingleValueDropDownController();
+  String? selectedVal;
 
   List<DropDownValueModel> productList = [];
   List minPriceList = [];
@@ -32,6 +32,10 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
 
   List<TableList> listOfProductDetails = [];
   dynamic setProductName;
+
+  String? maxPrice;
+  String? minPrice;
+  String? obcPrice;
 
   int? maxTotal = 0;
   int? minTotal = 0;
@@ -53,22 +57,33 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
       GetProductDetailsCase(salesPointRepository);
 
   Future<void> getProducts() async {
-    var products = await getProductsCase.execute();
-    setState(() {
-      productList = products;
-      if(productList.isNotEmpty){
-        selectedProductName = productList.first.name;
-        getProductDetails(selectedProductName!);
-      }
-    });
-    print('Product list is ${productList}');
+    try {
+      final products = await getProductsCase.execute();
+      setState(() {
+        productList = products
+            .asMap()
+            .entries
+            .map(
+              (e) => DropDownValueModel(name: e.value.name, value: e.key + 1),
+            )
+            .toList();
+      });
+    } catch (e) {
+      // Handle the error
+    }
   }
 
   Future<void> getProductDetails(String productName) async {
-    var productDetails = await getProductDetailsCase.execute(productName);
-    setState(() {
-      setProductName = productDetails;
-    });
+    try {
+      final productDetails = await getProductDetailsCase.execute(selectedVal!);
+      setState(() {
+        maxPrice = productDetails.maxPrice;
+        minPrice = productDetails.minPrice;
+        obcPrice = productDetails.obcPrice;
+      });
+    } catch (e) {
+      Exception('Error caught while selecting products $e');
+    }
   }
 
   @override
@@ -134,35 +149,53 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: SizedBox(
-                            width: width,
+                            width: width * 1,
                             height: height * 0.08,
                             child: Center(
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.horizontal,
-                                child: DropdownButton<String>(
-                                  borderRadius: BorderRadius.circular(20),
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 18.0),
+                                child: DropDownTextField(
+                                  textStyle: const TextStyle(
+                                    fontSize: 17,
                                   ),
-                                  menuMaxHeight: 400,
-                                  hint: const Text('Select product'),
-                                  value: selectedProductName,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      selectedProductName = newValue;
-                                        getProductDetails(newValue!);
-                                    });
-                                    print('New value is $newValue');
+                                  listTextStyle: const TextStyle(
+                                    fontSize: 17,
+                                  ),
+                                  controller: itemNameController,
+                                  clearOption: true,
+                                  enableSearch: true,
+                                  dropDownIconProperty: IconProperty(
+                                    icon: Icons.arrow_drop_down_circle,
+                                    color: Colors.black,
+                                  ),
+                                  clearIconProperty: IconProperty(
+                                    color: Colors.black,
+                                    icon: Icons.clear,
+                                  ),
+                                  dropdownColor: const Color(0xffDDE6E8),
+                                  // searchDecoration:InputDecoration(hintText: "Select Product"),
+                                  textFieldDecoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: '     Select Product',
+                                    hintStyle: TextStyle(
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                  validator: (value) {
+                                    if (value == null) {
+                                      return "Required Product Name";
+                                    } else {
+                                      return null;
+                                    }
                                   },
-                                  items: productList
-                                      .map<DropdownMenuItem<String>>(
-                                          (DropDownValueModel value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value.name,
-                                      child: Text(value.name),
-                                    );
-                                  }).toList(),
-
+                                  dropDownItemCount: 7,
+                                  dropDownList: productList,
+                                  onChanged: (val) {
+                                    selectedVal =
+                                        itemNameController.dropDownValue?.name;
+                                    getProductDetails(selectedVal!);
+                                    // print(selectedVal);
+                                  },
                                 ),
                               ),
                             ),
@@ -210,12 +243,9 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                           ///ADD BUTTON
                           GestureDetector(
                             onTap: () {
-                              print('Selected product is $selectedProductName');
-                              print('Quantity is ${quantityController.text}');
-
-                              if (selectedProductName == null) {
+                              if (itemNameController.dropDownValue == null) {
                                 CustomSnackBar.showErrorSnackbar(
-                                  message: 'Select one product!',
+                                  message: 'Choose one product!',
                                   context: context,
                                 );
                               } else if (quantityController.text.isEmpty) {
@@ -227,18 +257,20 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                 setState(() {
                                   minPriceList.add(
                                     int.parse(quantityController.text) *
-                                        int.parse(setProductName['min_price'].toString()),
+                                        int.parse(
+                                          minPrice.toString(),
+                                        ),
                                   );
-
                                   obcPriceList.add(
                                     int.parse(quantityController.text) *
-                                        int.parse(setProductName['obc'].toString()),
+                                        int.parse(
+                                          obcPrice.toString(),
+                                        ),
                                   );
-
                                   final index = listOfProductDetails.indexWhere(
                                     (element) =>
                                         element.productName ==
-                                        selectedProductName,
+                                        itemNameController.dropDownValue!.name,
                                   );
                                   if (index > -1) {
                                     listOfProductDetails[index]
@@ -251,18 +283,19 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                             ) *
                                             int.parse(quantityController.text);
                                   } else {
-                                    if(selectedProductName != null){
-                                      final product = TableList(
-                                        productName: selectedProductName!,
-                                        productQuantity:
-                                        int.parse(quantityController.text),
-                                        productPrice: setProductName['max_price'].toString(),
-                                        subTotalList:
-                                        int.parse(quantityController.text) *
-                                            int.parse(setProductName['max_price'].toString()),
-                                      );
-                                      listOfProductDetails.add(product);
-                                    }
+                                    final product = TableList(
+                                      productName: itemNameController
+                                          .dropDownValue!.name,
+                                      productQuantity:
+                                          int.parse(quantityController.text),
+                                      productPrice: maxPrice.toString(),
+                                      subTotalList:
+                                          int.parse(quantityController.text) *
+                                              int.parse(
+                                                maxPrice.toString(),
+                                              ),
+                                    );
+                                    listOfProductDetails.add(product);
                                   }
                                   var sum = 0.0;
                                   for (var i = 0;
@@ -300,7 +333,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                   maximumDiscount =
                                       double.parse(percentage.toString())
                                           .toInt();
-                                  selectedProductName = '';
+                                  itemNameController.clearDropDown();
                                   quantityController.clear();
                                   showTable = true;
                                 });

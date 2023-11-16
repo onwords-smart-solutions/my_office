@@ -13,8 +13,8 @@ import 'package:my_office/features/home/presentation/provider/home_provider.dart
 import 'package:my_office/features/pr_reminder/presentation/provider/pr_reminder_provider.dart';
 import 'package:my_office/features/proxy_attendance/presentation/provider/proxy_attendance_provider.dart';
 import 'package:my_office/features/staff_details/presentation/provider/staff_detail_provider.dart';
-import 'package:my_office/phone_number_screen.dart';
-import 'package:my_office/birthday_picker_screen.dart';
+import 'package:my_office/features/home/presentation/view/phone_number_screen.dart';
+import 'package:my_office/features/home/presentation/view/birthday_picker_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'features/auth/presentation/view/intro_screen.dart';
