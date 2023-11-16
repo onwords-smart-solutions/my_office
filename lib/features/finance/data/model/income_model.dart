@@ -1,4 +1,4 @@
-class IncomeEntity {
+class IncomeModel {
   final int amount;
   final String customerName;
   final String enteredBy;
@@ -10,7 +10,7 @@ class IncomeEntity {
   final String paymentMethod;
   final String productName;
 
-  IncomeEntity({
+  IncomeModel({
     required this.productName,
     required this.enteredTime,
     required this.enteredDate,

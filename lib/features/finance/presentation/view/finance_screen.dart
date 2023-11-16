@@ -1,14 +1,19 @@
+import 'dart:developer';
+
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:lottie/lottie.dart';
-import 'package:my_office/features/finance/presentation/view/expense_details.dart';
-import 'package:my_office/features/finance/presentation/view/income_details.dart';
-import 'package:my_office/features/proxy_attendance/presentation/provider/proxy_attendance_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
-
+import 'package:lottie/lottie.dart';
+import 'package:my_office/features/finance/data/data_source/finance_fb_data_source.dart';
+import 'package:my_office/features/finance/data/data_source/finance_fb_data_source_impl.dart';
+import 'package:my_office/features/finance/data/repository/finance_repo_impl.dart';
 import '../../../../core/utilities/constants/app_screen_template.dart';
-import '../provider/finance_provider.dart';
+import '../../data/model/expense_model.dart';
+import '../../data/model/income_model.dart';
+import '../../domain/repository/finance_repository.dart';
+import 'expense_details.dart';
+import 'income_details.dart';
 
 class FinanceScreen extends StatefulWidget {
   const FinanceScreen({Key? key}) : super(key: key);
@@ -18,53 +23,106 @@ class FinanceScreen extends StatefulWidget {
 }
 
 class _FinanceScreenState extends State<FinanceScreen> {
+  List<IncomeModel> allIncome = [];
+  List<ExpenseModel> allExpense = [];
+
+  late FinanceFbDataSource financeFbDataSource = FinanceFbDataSourceImpl();
+  late FinanceRepository financeRepository = FinanceRepoImpl(financeFbDataSource);
+
+  bool isLoading = true;
+  int totalIncome = 0;
+  int totalExpense = 0;
+  int totalSalary = 0;
+
+  DateTime now = DateTime.now();
+  var formatterDate = DateFormat('yyyy-MM-dd');
+  var formatterMonth = DateFormat('MM');
+  var formatterYear = DateFormat('yyyy');
   String? selectedDate;
   String? selectedMonth;
   String? selectedYear;
-  int totalSalary = 0;
+
+  datePicker() async {
+    totalSalary = 0;
+    selectedDate = formatterDate.format(now);
+    selectedMonth = formatterDate.format(now);
+    selectedYear = formatterDate.format(now);
+
+    final newDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2015),
+      lastDate: DateTime(2050),
+    );
+    print(newDate);
+    if (newDate == null) return;
+    setState(() {
+      selectedDate = formatterDate.format(newDate);
+      selectedMonth = newDate.toString().substring(5, 7);
+      selectedYear = newDate.toString().substring(0, 4);
+      if (selectedDate != null) {
+        checkIncomeDetails1();
+        checkExpenseDetails1();
+      }
+    });
+  }
+
+  void checkIncomeDetails1() async {
+    allIncome.clear();
+    var incomeList = await financeRepository.getIncomeDetails(selectedYear!, selectedMonth!);
+    setState(() {
+      allIncome = incomeList;
+      totalIncome = incomeList.fold(0, (sum, item) => sum + item.amount);
+      isLoading = false;
+    });
+  }
+
+  void checkExpenseDetails1() async {
+    allExpense.clear();
+    var expenseList = await financeRepository.getExpenseDetails(selectedYear!, selectedMonth!);
+    setState(() {
+      allExpense = expenseList;
+      totalExpense = expenseList.fold(0, (sum, item) => sum + item.amount);
+      isLoading = false;
+    });
+    getTotalSalary();
+  }
 
   @override
   void initState() {
-    super.initState();
-    DateTime now = DateTime.now();
-    var formatterDate = DateFormat('yyyy-MM-dd');
-    var formatterMonth = DateFormat('MM');
-    var formatterYear = DateFormat('yyyy');
     selectedDate = formatterDate.format(now);
     selectedMonth = formatterMonth.format(now);
     selectedYear = formatterYear.format(now);
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<FinanceProvider>(context, listen: false)
-          .loadFinances(selectedYear!, selectedMonth!);
-    });
+    checkExpenseDetails1();
+    checkIncomeDetails1();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final financeProvider = Provider.of<FinanceProvider>(context);
-
     return ScreenTemplate(
-      bodyTemplate: buildFinanceScreen(financeProvider),
+      bodyTemplate: buildFinanceScreen(),
       title: 'Financial Analyzing',
     );
   }
 
-  Widget buildFinanceScreen(financeProvider) {
+  Widget buildFinanceScreen() {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
-
-    return Consumer<FinanceProvider>(
-      builder: (context, provider, child) {
-        int profitWithSalary = provider.totalIncome - provider.totalExpense;
-        int profitWithOutSalary =
-            provider.totalIncome - (provider.totalExpense - getTotalSalary());
-
-        if (provider.isLoading) {
-          return Center(
-            child: Lottie.asset("assets/animations/new_loading.json"),
-          );
-        } else {
-          return Padding(
+    int profitWithSalary = 0;
+    int profitWithOutSalary = 0;
+    if (!isLoading) {
+      profitWithSalary = totalIncome - totalExpense;
+      profitWithOutSalary = totalIncome - (totalExpense - totalSalary);
+      // getTotalSalary();
+    }
+    return isLoading
+        ? Center(
+            child: Lottie.asset(
+              "assets/animations/new_loading.json",
+            ),
+          )
+        : Padding(
             padding: const EdgeInsets.all(20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -115,7 +173,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
                                           .contains('-')
                                       ? Colors.red
                                       : Colors.green,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w500,
                                   fontSize: 15,
                                 ),
                               ),
@@ -124,50 +182,45 @@ class _FinanceScreenState extends State<FinanceScreen> {
                         ),
                       ],
                     ),
-                    Consumer<FinanceProvider>(
-                      builder: (context, provider, child){
-                        return  FilledButton.tonal(
-                          onPressed: () => provider.selectDate(context),
-                          child: SizedBox(
-                            height: height * 0.05,
-                            width: width * 0.17,
-                            child: Center(
-                              child: Text(
-                                '${provider.selectedYear}/${provider.selectedMonth}',
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
+                    FilledButton.tonal(
+                      onPressed: () {
+                        datePicker();
+                      },
+                      child: SizedBox(
+                        height: height * 0.05,
+                        width: width * 0.17,
+                        child: Center(
+                          child: Text(
+                            '$selectedYear/$selectedMonth',
+                            style: const TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
-                        );
-                      },
+                        ),
+                      ),
                     ),
                   ],
                 ),
                 buildButton(
-                  name: 'Income - ${provider.totalIncome}',
+                  name: 'Income - $totalIncome',
                   image: Image.asset(
                     'assets/income.png',
                     scale: 3,
                   ),
-                  page: IncomeScreen(allIncome: provider.allIncome),
+                  page: IncomeScreen(allIncome: allIncome),
                 ),
                 buildButton(
-                  name: 'Expense - ${provider.totalExpense}',
+                  name: 'Expense - $totalExpense',
                   image: Image.asset(
                     'assets/expense.png',
                     scale: 3,
                   ),
-                  page: ExpenseScreen(allExpense: provider.allExpenses),
+                  page: ExpenseScreen(allExpense: allExpense),
                 ),
               ],
             ),
           );
-        }
-      },
-    );
   }
 
   Widget buildButton({
@@ -201,11 +254,12 @@ class _FinanceScreenState extends State<FinanceScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Center(child: image),
-            Text(
+            AutoSizeText(
               name,
               style: const TextStyle(
                 color: Colors.black,
               ),
+              minFontSize: 20,
             ),
           ],
         ),
@@ -214,15 +268,13 @@ class _FinanceScreenState extends State<FinanceScreen> {
   }
 
   int getTotalSalary() {
-    final provider =
-        Provider.of<FinanceProvider>(context, listen: false).allExpenses;
     // int totalSalary = 0;
-    for (var x in provider) {
+    for (var x in allExpense) {
       if (x.service.toLowerCase() == 'salary') {
         totalSalary += x.amount;
       }
     }
-    print(totalSalary);
+    print('Total salary is $totalSalary');
     return totalSalary;
   }
 }

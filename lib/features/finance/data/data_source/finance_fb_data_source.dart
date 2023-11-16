@@ -1,7 +1,14 @@
-import 'package:my_office/features/finance/domain/entity/expense_entity.dart';
-import 'package:my_office/features/finance/domain/entity/income_entity.dart';
+import '../model/expense_model.dart';
+import '../model/income_model.dart';
 
-abstract class FinanceFbDataSource{
-  Future<List<IncomeEntity>> getIncomes(String year, String month);
-  Future<List<ExpenseEntity>> getExpenses(String year, String month);
+abstract class FinanceFbDataSource {
+  Future<List<IncomeModel>> getIncomeData(
+    String selectedYear,
+    String selectedMonth,
+  );
+
+  Future<List<ExpenseModel>> getExpenseData(
+    String selectedYear,
+    String selectedMonth,
+  );
 }

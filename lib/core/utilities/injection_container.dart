@@ -35,8 +35,6 @@ import 'package:my_office/features/employee_of_the_week/presentation/provider/em
 import 'package:my_office/features/finance/data/data_source/finance_fb_data_source.dart';
 import 'package:my_office/features/finance/data/data_source/finance_fb_data_source_impl.dart';
 import 'package:my_office/features/finance/domain/repository/finance_repository.dart';
-import 'package:my_office/features/finance/domain/use_case/finance_use_case.dart';
-import 'package:my_office/features/finance/presentation/provider/finance_provider.dart';
 import 'package:my_office/features/food_count/data/data_source/food_count_data_source_impl.dart';
 import 'package:my_office/features/food_count/data/repository/food_count_repo_impl.dart';
 import 'package:my_office/features/food_count/domain/repository/food_count_repository.dart';
@@ -177,13 +175,6 @@ Future<void> init() async {
   ///CREATE PRODUCT PROVIDER
   sl.registerFactory<CreateProductProvider>(
     () => CreateProductProvider(
-      sl.call(),
-    ),
-  );
-
-  ///FINANCE PROVIDER
-  sl.registerFactory<FinanceProvider>(
-    () => FinanceProvider(
       sl.call(),
     ),
   );
@@ -344,11 +335,6 @@ Future<void> init() async {
     () => AllFoodCountCase(foodCountRepository: sl.call()),
   );
 
-  ///FINANCIAL ANALYZING
-  sl.registerLazySingleton<FinanceCase>(
-    () => FinanceCase(financeRepository: sl.call()),
-  );
-
   ///PROXY ATTENDANCE ALL STAFFS
   sl.registerLazySingleton<ProxyStaffNamesCase>(
     () => ProxyStaffNamesCase(proxyAttendanceRepository: sl.call()),
@@ -454,11 +440,6 @@ Future<void> init() async {
   ///FOOD COUNT SCREEN
   sl.registerLazySingleton<FoodCountRepository>(
     () => FoodCountRepoImpl(sl.call()),
-  );
-
-  ///FINANCE SCREEN
-  sl.registerLazySingleton<FinanceRepository>(
-    () => FinanceRepository(sl.call()),
   );
 
   ///PROXY ATTENDANCE SCREEN

@@ -1,18 +1,14 @@
-import 'package:my_office/features/finance/data/data_source/finance_fb_data_source.dart';
-import 'package:my_office/features/finance/domain/entity/expense_entity.dart';
+import '../../data/model/expense_model.dart';
+import '../../data/model/income_model.dart';
 
-import '../entity/income_entity.dart';
+abstract class FinanceRepository {
+  Future<List<IncomeModel>> getIncomeDetails(
+    String selectedYear,
+    String selectedMonth,
+  );
 
- class FinanceRepository {
-   final FinanceFbDataSource _financeFbDataSource;
-
-   FinanceRepository(this._financeFbDataSource);
-
-   Future<List<IncomeEntity>> fetchIncomes(String year, String month) {
-     return _financeFbDataSource.getIncomes(year, month);
-   }
-
-   Future<List<ExpenseEntity>> fetchExpenses(String year, String month) {
-     return _financeFbDataSource.getExpenses(year, month);
-   }
+  Future<List<ExpenseModel>> getExpenseDetails(
+    String selectedYear,
+    String selectedMonth,
+  );
 }

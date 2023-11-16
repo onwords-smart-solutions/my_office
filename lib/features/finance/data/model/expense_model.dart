@@ -1,4 +1,4 @@
-class ExpenseEntity {
+class ExpenseModel {
   final int amount;
   final String enteredBy;
   final String enteredDate;
@@ -9,7 +9,7 @@ class ExpenseEntity {
   final String purchasedTime;
   final String service;
 
-  ExpenseEntity({
+  ExpenseModel({
     required this.amount,
     required this.enteredBy,
     required this.enteredDate,

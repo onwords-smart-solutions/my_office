@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:my_office/core/utilities/constants/app_color.dart';
-import 'package:my_office/features/finance/domain/entity/expense_entity.dart';
+import 'package:my_office/features/finance/data/model/expense_model.dart';
 import 'package:my_office/features/finance/presentation/view/specific_expense_detail.dart';
 
 import '../../../../core/utilities/constants/app_screen_template.dart';
 
 class ExpenseScreen extends StatefulWidget {
-  final List<ExpenseEntity> allExpense;
+  final List<ExpenseModel> allExpense;
 
   const ExpenseScreen({Key? key, required this.allExpense}) : super(key: key);
 

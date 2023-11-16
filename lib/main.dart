@@ -9,7 +9,6 @@ import 'package:my_office/features/auth/presentation/provider/auth_provider.dart
 import 'package:my_office/features/create_lead/presentation/provider/create_lead_provider.dart';
 import 'package:my_office/features/create_product/presentation/provider/create_product_provider.dart';
 import 'package:my_office/features/employee_of_the_week/presentation/provider/employee_of_the_week_provider.dart';
-import 'package:my_office/features/finance/presentation/provider/finance_provider.dart';
 import 'package:my_office/features/home/presentation/provider/home_provider.dart';
 import 'package:my_office/features/pr_reminder/presentation/provider/pr_reminder_provider.dart';
 import 'package:my_office/features/proxy_attendance/presentation/provider/proxy_attendance_provider.dart';
@@ -53,9 +52,6 @@ Future<void> main() async {
           ),
           ChangeNotifierProvider<CreateProductProvider>(
             create: (_) => di.sl<CreateProductProvider>(),
-          ),
-          ChangeNotifierProvider<FinanceProvider>(
-            create: (_) => di.sl<FinanceProvider>(),
           ),
           ChangeNotifierProvider<ProxyAttendanceProvider>(
             create: (_) => di.sl<ProxyAttendanceProvider>(),

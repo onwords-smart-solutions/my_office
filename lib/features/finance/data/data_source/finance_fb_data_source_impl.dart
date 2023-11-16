@@ -1,73 +1,88 @@
+
 import 'dart:developer';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_office/features/finance/data/data_source/finance_fb_data_source.dart';
-import 'package:my_office/features/finance/domain/entity/expense_entity.dart';
-import 'package:my_office/features/finance/domain/entity/income_entity.dart';
+
+import '../model/expense_model.dart';
+import '../model/income_model.dart';
 
 class FinanceFbDataSourceImpl implements FinanceFbDataSource {
-  final ref = FirebaseDatabase.instance.ref();
+  final ref = FirebaseDatabase.instance.ref('FinancialAnalyzing');
 
-  @override
-  Future<List<ExpenseEntity>> getExpenses(String year, String month) async {
-    List<ExpenseEntity> expenses = [];
-    DatabaseEvent event = await ref
-        .child(
-          'FinancialAnalyzing/Expense/$year/$month',
-        )
-        .once();
-    if (event.snapshot.exists) {
-      Map<dynamic, dynamic> data = event.snapshot.value as Map<dynamic, dynamic>;
-      data.forEach((key, value) {
-        final expenseData = value as Map<dynamic, dynamic>;
-        final expense = ExpenseEntity(
-          amount: int.parse(expenseData['Amount'].toString()),
-          enteredBy: expenseData['EnteredBy'].toString(),
-          enteredDate: expenseData['EnteredDate'].toString(),
-          enteredTime: expenseData['EnteredTime'].toString(),
-          productName: expenseData['ProductName'].toString(),
-          purchasedDate: expenseData['PurchasedDate'].toString(),
-          purchasedFor: expenseData['PurchasedFor'].toString(),
-          purchasedTime: expenseData['PurchasedTime'].toString(),
-          service: expenseData['Service'].toString(),
-        );
-        expenses.add(expense);
-      });
-    }
-    log('Expense data are $expenses');
-    return expenses;
+  int parseAmount(String amountStr) {
+    String numericStr = amountStr.replaceAll(RegExp(r'[^0-9]'), '');
+    return int.parse(numericStr);
   }
 
   @override
-  Future<List<IncomeEntity>> getIncomes(String year, String month) async {
-    List<IncomeEntity> incomes = [];
-    DatabaseEvent event = await ref
-        .child(
-          'FinancialAnalyzing/Income/$year/$month',
-        )
-        .once();
+  Future <List<ExpenseModel>> getExpenseData(String selectedYear, String selectedMonth) async {
+    DatabaseEvent event = await ref.child('Expense').once();
+    List<ExpenseModel> expenseList = [];
+    int total = 0;
 
-    if (event.snapshot.exists) {
-      Map<dynamic, dynamic> data =
-          event.snapshot.value as Map<dynamic, dynamic>;
-      data.forEach((key, value) {
-        final incomeData = value as Map<dynamic, dynamic>;
-        final income = IncomeEntity(
-          amount: int.parse(incomeData['Amount'].toString()),
-          customerName: incomeData['CustomerName'].toString(),
-          enteredBy: incomeData['EnteredBy'].toString(),
-          enteredDate: incomeData['EnteredDate'].toString(),
-          enteredTime: incomeData['EnteredTime'].toString(),
-          invoiceNumber: incomeData['InvoiceNumber'].toString(),
-          paidDate: incomeData['PaidDate'].toString(),
-          paidTime: incomeData['PaidTime'].toString(),
-          paymentMethod: incomeData['PaymentMethod'].toString(),
-          productName: incomeData['ProductName'].toString(),
-        );
-        incomes.add(income);
-      });
+    for (var check in event.snapshot.children) {
+      if (selectedYear == check.key) {
+        for (var monthData in check.children) {
+          if (selectedMonth == monthData.key) {
+            for (var dateData in monthData.children) {
+              final data = dateData.value as Map<Object?, Object?>;
+              final expenseDetails = ExpenseModel(
+                amount: parseAmount(data['Amount'].toString()),
+                enteredBy: data['EnteredBy'].toString(),
+                enteredDate: data['EnteredDate'].toString(),
+                enteredTime: data['EnteredTime'].toString(),
+                productName: data['ProductName'].toString(),
+                purchasedDate: data['PurchasedDate'].toString(),
+                purchasedFor: data['PurchasedFor'].toString(),
+                purchasedTime: data['PurchasedTime'].toString(),
+                service: data['Service'].toString(),
+              );
+              expenseList.add(expenseDetails);
+              total += parseAmount(data['Amount'].toString());
+            }
+          }
+        }
+      }
     }
-    log('Income data are $incomes');
-    return incomes;
+    expenseList.sort((a, b) => b.enteredDate.compareTo(a.enteredDate));
+    return expenseList;
   }
+
+  @override
+  Future<List<IncomeModel>> getIncomeData(String selectedYear, String selectedMonth) async {
+
+    DatabaseEvent event = await ref.child('Income').once();
+    List<IncomeModel> incomeList = [];
+    int total = 0;
+
+    for (var check in event.snapshot.children) {
+      if (selectedYear == check.key) {
+        for (var monthData in check.children) {
+          if (selectedMonth == monthData.key) {
+            for (var dateData in monthData.children) {
+              final data = dateData.value as Map<Object?, Object?>;
+              final incomeDetails = IncomeModel(
+                amount: parseAmount(data['Amount'].toString()),
+                customerName: data['CustomerName'].toString(),
+                enteredBy: data['EnteredBy'].toString(),
+                enteredDate: data['EnteredDate'].toString(),
+                enteredTime: data['EnteredTime'].toString(),
+                invoiceNumber: data['InvoiceNumber'].toString(),
+                paidDate: data['PaidDate'].toString(),
+                paidTime: data['PaidTime'].toString(),
+                paymentMethod: data['PaymentMethod'].toString(),
+                productName: data['ProductName'].toString(),
+              );
+              incomeList.add(incomeDetails);
+              total += parseAmount(data['Amount'].toString());
+            }
+          }
+        }
+      }
+    }
+    incomeList.sort((a, b) => b.enteredDate.compareTo(a.enteredDate));
+    return incomeList;
+  }
+
 }

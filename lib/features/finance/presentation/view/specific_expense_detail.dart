@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:my_office/features/finance/domain/entity/expense_entity.dart';
 import '../../../../core/utilities/constants/app_color.dart';
 import '../../../../core/utilities/constants/app_screen_template.dart';
+import '../../data/model/expense_model.dart';
 
 class ExpenseDetails extends StatefulWidget {
-  final ExpenseEntity expenseDetails;
+  final ExpenseModel expenseDetails;
 
   const ExpenseDetails({Key? key, required this.expenseDetails})
       : super(key: key);

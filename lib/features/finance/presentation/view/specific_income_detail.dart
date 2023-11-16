@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:my_office/features/finance/domain/entity/income_entity.dart';
+import 'package:my_office/features/finance/data/model/income_model.dart';
 import '../../../../core/utilities/constants/app_color.dart';
 import '../../../../core/utilities/constants/app_screen_template.dart';
 
 class IncomeDetails extends StatefulWidget {
-  final IncomeEntity incomeDetails;
+  final IncomeModel incomeDetails;
 
   const IncomeDetails({Key? key, required this.incomeDetails})
       : super(key: key);
