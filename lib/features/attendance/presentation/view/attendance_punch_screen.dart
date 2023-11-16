@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_office/features/attendance/data/model/punch_model.dart';
 
-import '../../../home/data/model/custom_punch_model.dart';
 
 class AttendancePunchItem extends StatelessWidget {
-  final CustomPunchModel punchDetail;
+  final AttendancePunchModel punchDetail;
 
   const AttendancePunchItem({Key? key, required this.punchDetail}) : super(key: key);
 

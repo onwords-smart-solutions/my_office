@@ -5,7 +5,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
-import 'package:my_office/features/attendance/presentation/provider/attendance_provider.dart';
 import 'package:my_office/features/auth/presentation/provider/auth_provider.dart';
 import 'package:my_office/features/create_lead/presentation/provider/create_lead_provider.dart';
 import 'package:my_office/features/create_product/presentation/provider/create_product_provider.dart';
@@ -45,9 +44,6 @@ Future<void> main() async {
           ),
           ChangeNotifierProvider<HomeProvider>(
             create: (_) => di.sl<HomeProvider>(),
-          ),
-          ChangeNotifierProvider<AttendanceProvider>(
-            create: (_) => di.sl<AttendanceProvider>(),
           ),
           ChangeNotifierProvider<EmployeeProvider>(
             create: (_) => di.sl<EmployeeProvider>(),

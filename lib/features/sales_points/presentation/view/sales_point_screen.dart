@@ -56,6 +56,10 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
     var products = await getProductsCase.execute();
     setState(() {
       productList = products;
+      if(productList.isNotEmpty){
+        selectedProductName = productList.first.name;
+        getProductDetails(selectedProductName!);
+      }
     });
     print('Product list is ${productList}');
   }
@@ -153,7 +157,6 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                   items: productList
                                       .map<DropdownMenuItem<String>>(
                                           (DropDownValueModel value) {
-                                            print('Name is ${value.name}');
                                     return DropdownMenuItem<String>(
                                       value: value.name,
                                       child: Text(value.name),

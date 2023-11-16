@@ -5,9 +5,6 @@ import 'package:my_office/features/attendance/data/data_source/attendance_fb_dat
 import 'package:my_office/features/attendance/data/data_source/attendance_fb_data_source_impl.dart';
 import 'package:my_office/features/attendance/data/repository/attendance_repo_impl.dart';
 import 'package:my_office/features/attendance/domain/repository/attendance_repository.dart';
-import 'package:my_office/features/attendance/domain/use_case/get_staff_details_use_case.dart';
-import 'package:my_office/features/attendance/domain/use_case/print_screen_use_case.dart';
-import 'package:my_office/features/attendance/presentation/provider/attendance_provider.dart';
 import 'package:my_office/features/auth/data/data_source/auth_fb_data_souce_impl.dart';
 import 'package:my_office/features/auth/data/data_source/auth_firebase_data_source.dart';
 import 'package:my_office/features/auth/data/repository/auth_repo_impl.dart';
@@ -115,7 +112,6 @@ import 'package:my_office/features/work_entry/data/data_source/work_entry_fb_dat
 import 'package:my_office/features/work_entry/data/data_source/work_entry_fb_data_source_impl.dart';
 import 'package:my_office/features/work_entry/data/repository/work_entry_repo_impl.dart';
 import 'package:my_office/features/work_entry/domain/repository/work_entry_repository.dart';
-import '../../features/attendance/domain/use_case/check_time_use_case.dart';
 import '../../features/auth/domain/use_case/get_staff_info_use_case.dart';
 import '../../features/employee_of_the_week/data/data_source/employee_fb_data_source_impl.dart';
 import '../../features/employee_of_the_week/data/repository/employee_repo_impl.dart';
@@ -157,16 +153,6 @@ Future<void> init() async {
       sl.call(),
       sl.call(),
       sl.call(),
-      sl.call(),
-      sl.call(),
-      sl.call(),
-      sl.call(),
-    ),
-  );
-
-  ///ATTENDANCE PROVIDER
-  sl.registerFactory<AttendanceProvider>(
-    () => AttendanceProvider(
       sl.call(),
       sl.call(),
       sl.call(),
@@ -321,21 +307,6 @@ Future<void> init() async {
   ///GET EMPLOYEE INFO
   sl.registerLazySingleton<GetStaffInfoCase>(
     () => GetStaffInfoCase(authRepository: sl.call()),
-  );
-
-  ///CHECK ATTENDANCE TIME
-  sl.registerLazySingleton<CheckTimeCase>(
-    () => CheckTimeCase(attendanceRepository: sl.call()),
-  );
-
-  ///GET STAFF DETAILS
-  sl.registerLazySingleton<GetAllStaffDetailsCase>(
-    () => GetAllStaffDetailsCase(attendanceRepository: sl.call()),
-  );
-
-  ///PRINT SCREEN
-  sl.registerLazySingleton<PrintScreenCase>(
-    () => PrintScreenCase(attendanceRepository: sl.call()),
   );
 
   ///ALL STAFF NAMES

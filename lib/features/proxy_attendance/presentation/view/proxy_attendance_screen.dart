@@ -190,8 +190,6 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                     ),
                     errorStyle: const TextStyle(),
                   ),
-
-                  requestFocusOnTap: true,
                   menuHeight: height * 0.4,
                   menuStyle: MenuStyle(
                     backgroundColor: MaterialStateProperty.resolveWith(
