@@ -309,18 +309,18 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   return ValueListenableBuilder(
                     valueListenable: _entryDetail,
                     builder: (ctx, staffEntry, child) {
-                      return ValueListenableBuilder(
-                        valueListenable: _endTime,
-                        builder: (ctx, endTime, child) {
-                          return InfoItem(
-                            staff: userProvider.user!,
-                            todayBirthdayList: birthdayList,
-                            quoteIndex: _motivationIndex,
-                            staffEntryDetail: staffEntry,
-                            endTime: endTime,
-                          );
-                        },
-                      );
+                        return ValueListenableBuilder(
+                          valueListenable: _endTime,
+                          builder: (ctx, endTime, child) {
+                            return InfoItem(
+                              staff: userProvider.user!,
+                              todayBirthdayList: birthdayList,
+                              quoteIndex: _motivationIndex,
+                              staffEntryDetail: staffEntry,
+                              endTime: endTime,
+                            );
+                          },
+                        );
                     },
                   );
                 },
@@ -421,7 +421,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     final userProvider = Provider.of<AuthProvider>(context, listen: false);
     final response =
         await homeProvider.getStaffAccess(staff: userProvider.user!);
-    log("Data is ${response.right}");
     if (response.isRight) {
       _staffAccess.value = response.right;
     } else {
@@ -545,21 +544,14 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         context: context,
       );
     }
-    if (!mounted) return;
-    final entry = await homeProvider.getPunchingTime(
+    final data = await homeProvider.getPunchingTime(
       userProvider.user!.uid,
       userProvider.user!.name,
       userProvider.user!.dep,
     );
-    if (entry.isRight) {
-      _entryDetail.value = entry.right;
-    } else {
-      if (!mounted) return;
-      CustomSnackBar.showErrorSnackbar(
-        message: entry.left.error,
-        context: context,
-      );
-    }
+    if (!mounted) return;
+    _entryDetail.value = data;
+    _entryDetail.notifyListeners();
 
     Timer.periodic(const Duration(seconds: 3), (timer) async {
       final now = DateTime.now();
@@ -576,38 +568,28 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             context: context,
           );
         }
-        if (!mounted) return;
-        final entryDetails = await homeProvider.getPunchingTime(
+        final data = await homeProvider.getPunchingTime(
           userProvider.user!.uid,
           userProvider.user!.name,
           userProvider.user!.dep,
         );
-        if (entryDetails.isRight) {
-          _entryDetail.value = entryDetails.right;
-        } else {
-          if (!mounted) return;
-          CustomSnackBar.showErrorSnackbar(
-            message: entryDetails.left.error,
-            context: context,
-          );
-        }
+        if (!mounted) return;
+        _entryDetail.value = data;
+        _entryDetail.notifyListeners();
+
         _endTime.value = now;
-      }
-      else if (now.minute != _endTime.value.minute &&
+      } else if (now.minute != _endTime.value.minute &&
           _entryDetail.value!.checkOutTime == null) {
         _endTime.value = now;
         _endTime.notifyListeners();
-        final punchTime = await homeProvider.getPunchingTime(
+        final data = await homeProvider.getPunchingTime(
           userProvider.user!.uid,
           userProvider.user!.name,
           userProvider.user!.dep,
         );
-        if (punchTime.isRight) {
-          final data = punchTime.right;
-          if (data!.checkInTime != null) {
-            _entryDetail.value = data;
-            _entryDetail.notifyListeners();
-          }
+        if (data != null && data.checkInTime != null) {
+          _entryDetail.value = data;
+          _entryDetail.notifyListeners();
         }
       }
     });

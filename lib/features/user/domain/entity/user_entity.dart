@@ -18,15 +18,4 @@ class UserEntity {
     required this.url,
     required this.uniqueId,
   });
-
-  factory UserEntity.emptyUser() => UserEntity(
-    uid: '',
-    dep: '',
-    email: '',
-    name: '',
-    dob: 0,
-    mobile: 0,
-    url: '',
-    uniqueId: '',
-  );
 }

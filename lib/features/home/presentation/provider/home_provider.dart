@@ -60,7 +60,7 @@ class HomeProvider extends ChangeNotifier {
   }) async =>
       await _getStaffAccessCase.execute(staff: staff);
 
-  Future<Either<ErrorResponse, CustomPunchModel?>> getPunchingTime(
+  Future<CustomPunchModel?> getPunchingTime(
       String staffId,
       String name,
       String department,) async =>

@@ -16,6 +16,7 @@ import '../../../features/proxy_attendance/presentation/view/proxy_attendance_sc
 import '../../../features/refreshment/presentation/view/refreshment_screen.dart';
 import '../../../features/sales_points/presentation/view/sales_point_screen.dart';
 import '../../../features/scan_qr/presentation/view/scan_qr_screen.dart';
+import '../../../features/search_leads/presentation/view/customer_leads_screen.dart';
 import '../../../features/staff_details/presentation/view/staff_detail_screen.dart';
 import '../../../features/suggestions/presentation/view/suggestion_screen.dart';
 import '../../../features/user/domain/entity/user_entity.dart';
@@ -85,10 +86,10 @@ class AppDefaults {
       title: MenuTitle.leaveApproval,
       image: 'assets/leave_approval.png',
     ),
-//     StaffAccessModel(
-//       title: MenuTitle.searchLead,
-//       image: 'assets/search_leads.png',
-//     ),
+    StaffAccessModel(
+      title: MenuTitle.searchLead,
+      image: 'assets/search_leads.png',
+    ),
 //     StaffAccessModel(title: MenuTitle.prVisit, image: 'assets/visit.png'),
 //     StaffAccessModel(
 //       title: MenuTitle.prVisitCheck,
@@ -198,9 +199,9 @@ class AppDefaults {
       case MenuTitle.leaveApproval:
         page = const LeaveApprovalScreen();
         break;
-//       case MenuTitle.searchLead:
-//         page = SearchLeadsScreen(staffInfo: staffInfo);
-//         break;
+      case MenuTitle.searchLead:
+        page = SearchLeadsScreen(staffInfo: staffInfo);
+        break;
 //       case MenuTitle.prVisit:
 //         page = const VisitFromScreen();
 //         break;

@@ -9,10 +9,10 @@ class GetPunchingTimeCase {
 
   GetPunchingTimeCase({required this.homeRepository});
 
-  Future<Either<ErrorResponse, CustomPunchModel?>> execute(
+  Future<CustomPunchModel?> execute(
     String staffId,
     String name,
     String department,
   ) async =>
-      await homeRepository.getPunchingTime(staffId, name, department);
+      await homeRepository.checkTime(staffId, name, department);
 }

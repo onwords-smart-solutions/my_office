@@ -1,10 +1,9 @@
 import 'dart:async';
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_office/features/home/presentation/provider/home_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../user/domain/entity/user_entity.dart';
@@ -62,48 +61,10 @@ class _InfoItemState extends State<InfoItem> {
     });
   }
 
-  Future<void> getPrDetails() async {
-    final ref = FirebaseDatabase.instance.ref();
-
-    ref.child('PRDashboard/employee_of_week').once().then((value) async {
-      if (value.snapshot.exists) {
-        final data = value.snapshot.value as Map<Object?, Object?>;
-
-        final uid = data['person'].toString();
-        reason = data['reason'].toString();
-
-        if(uid != 'null' && uid.isNotEmpty){
-          await ref.child('staff/$uid').once().then((value) {
-            final staffDetails = value.snapshot.value as Map<Object?, Object?>;
-            try {
-              employeeOfTheWeek = UserEntity(
-                uid: uid,
-                name: staffDetails['name'].toString(),
-                dep: staffDetails['department'].toString(),
-                email: staffDetails['email'].toString(),
-                url: staffDetails['profileImage'].toString(),
-                dob: staffDetails['dob'] == null
-                    ? 0
-                    : int.parse(staffDetails['dob'].toString()),
-                mobile: staffDetails['mobile'] == null
-                    ? 0
-                    : int.parse(staffDetails['mobile'].toString()),
-                uniqueId: '',
-              );
-            } catch (e) {
-              log('Error from $e');
-            }
-            setState(() {});
-          });
-        }
-      }
-    });
-  }
-
   @override
   void initState() {
     startAutoScroll();
-    getPrDetails();
+    Provider.of<HomeProvider>(context, listen: false).getStaffDetails();
     super.initState();
   }
 

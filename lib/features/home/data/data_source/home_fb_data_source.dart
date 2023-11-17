@@ -1,4 +1,4 @@
-import 'package:either_dart/either.dart';
+  import 'package:either_dart/either.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';
 import '../../../user/domain/entity/user_entity.dart';
 import '../model/custom_punch_model.dart';
@@ -17,11 +17,7 @@ abstract class HomeFbDataSource {
     required UserEntity staff,
   });
 
-  Future<Either<ErrorResponse, CustomPunchModel?>> getPunchingTime(
-    String staffId,
-    String name,
-    String department,
-  );
+  Future<Map<Object?, Object?>?> fetchAttendanceData(String staffId, DateTime date);
 
   Future<Either<ErrorResponse, List<UserEntity>>> getAllBirthday();
 
@@ -33,5 +29,4 @@ abstract class HomeFbDataSource {
 
   Future<Either<ErrorResponse, bool>> phoneNumberSubmitForm(context);
 
-  // Future<CustomPunchModel> getPunchingTime();
 }

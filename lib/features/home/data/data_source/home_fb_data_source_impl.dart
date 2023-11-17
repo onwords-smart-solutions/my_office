@@ -5,142 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';
 import 'package:provider/provider.dart';
-import 'dart:developer' as dev;
 import '../../../../core/utilities/constants/app_default_screens.dart';
 import '../../../../core/utilities/custom_widgets/custom_snack_bar.dart';
 import '../../../../main.dart';
 import '../../../auth/presentation/provider/auth_provider.dart';
 import '../../../user/domain/entity/user_entity.dart';
-import '../model/custom_punch_model.dart';
 import '../model/staff_access_model.dart';
 import 'home_fb_data_source.dart';
 
 class HomeFbDataSourceImpl implements HomeFbDataSource {
   final ref = FirebaseDatabase.instance.ref();
-
-  // @override
-  // Future<CustomPunchModel> getPunchingTime() async{
-    // final data = await checkTime(
-    //   UserEntity.uid,
-    //   userProvider.user!.name,
-    //   userProvider.user!.department,
-    // );
-    // if (data != null) {
-    //   return data;
-    // } else {
-    //   return CustomPunchModel(
-    //     staffId: userProvider.user!.uid,
-    //     name: userProvider.user!.name,
-    //     department: userProvider.user!.department,
-    //     checkInTime: null,
-    //   );
-    // }
-  // }
-
-  @override
-  Future<Either<ErrorResponse, CustomPunchModel>> getPunchingTime(
-    String staffId,
-    String name,
-    String department,
-  ) async {
-    try {
-      CustomPunchModel? punchDetail;
-      bool isProxy = false;
-      DateTime? checkInTime;
-      DateTime? checkOutTime;
-      String proxyInBy = '';
-      String proxyOutBy = '';
-      String proxyInReason = '';
-      String proxyOutReason = '';
-
-      String yearFormat = DateFormat('yyyy').format(DateTime.now());
-      String monthFormat = DateFormat('MM').format(DateTime.now());
-      String dateFormat = DateFormat('dd').format(DateTime.now());
-      await FirebaseDatabase.instance
-          .ref('attendance/$yearFormat/$monthFormat/$dateFormat/$staffId')
-          .once()
-          .then((value) async {
-        if (value.snapshot.exists) {
-          final attendanceData = value.snapshot.value as Map<Object?, Object?>;
-          final checkIn = attendanceData['check_in'];
-          final checkOut = attendanceData['check_out'];
-
-          //check in time data
-          if (checkIn != null) {
-            checkInTime = DateTime(
-              DateTime.now().year,
-              DateTime.now().month,
-              DateTime.now().day,
-              int.parse(
-                checkIn.toString().split(':')[0],
-              ),
-              int.parse(
-                checkIn.toString().split(':')[1],
-              ),
-            );
-            try {
-              final proxyInByName =
-                  attendanceData['proxy_in'] as Map<Object?, Object?>;
-              proxyInBy = proxyInByName['proxy_by'].toString();
-              final proxyInByReason =
-                  attendanceData['proxy_in'] as Map<Object?, Object?>;
-              proxyInReason = proxyInByReason['reason'].toString();
-              isProxy = true;
-            } catch (e) {
-              dev.log('Check in exception is $e');
-            }
-          }
-
-          //check out time data
-          if (checkOut != null) {
-            checkOutTime = DateTime(
-              DateTime.now().year,
-              DateTime.now().month,
-              DateTime.now().day,
-              int.parse(
-                checkOut.toString().split(':')[0],
-              ),
-              int.parse(
-                checkOut.toString().split(':')[1],
-              ),
-            );
-            try {
-              final proxyOutByName =
-                  attendanceData['proxy_out'] as Map<Object?, Object?>;
-              proxyOutBy = proxyOutByName['proxy_by'].toString();
-              final proxyOutByReason =
-                  attendanceData['proxy_out'] as Map<Object?, Object?>;
-              proxyOutReason = proxyOutByReason['reason'].toString();
-              isProxy = true;
-            } catch (e) {
-              dev.log('Check out exception is $e');
-            }
-          }
-
-          punchDetail = CustomPunchModel(
-            name: name,
-            staffId: staffId,
-            department: department,
-            checkInTime: checkInTime,
-            checkOutTime: checkOutTime,
-            checkInProxyBy: proxyInBy,
-            checkInReason: proxyInReason,
-            checkOutProxyBy: proxyOutBy,
-            checkOutReason: proxyOutReason,
-            isProxy: isProxy,
-          );
-        }
-      });
-      return Right(punchDetail!);
-    } catch (e) {
-      return Left(
-        ErrorResponse(
-          metaInfo: 'Catch triggered in getting checkTime $e',
-          error: 'Unable to fetch checkTime of employees',
-        ),
-      );
-    }
-  }
 
   @override
   Future<Either<ErrorResponse, List<UserEntity>>> getAllBirthday() async {
@@ -409,7 +283,7 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
   Future<Either<ErrorResponse, bool>> birthdaySubmitForm(context) async {
     final ValueNotifier<DateTime?> birthday = ValueNotifier(null);
     final ValueNotifier<bool> loading = ValueNotifier(false);
-    try{
+    try {
       loading.value = true;
       final userProvider = Provider.of<AuthProvider>(context, listen: false);
       if (birthday.value == null) {
@@ -429,11 +303,11 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
           MaterialPageRoute(
             builder: (_) => const AuthenticationScreen(),
           ),
-              (route) => false,
+          (route) => false,
         );
       }
       return const Right(true);
-    }catch(e){
+    } catch (e) {
       return Left(
         ErrorResponse(
           metaInfo: 'Catch triggered while getting birthday info $e',
@@ -444,12 +318,12 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
   }
 
   @override
-  Future<Either<ErrorResponse, bool>> phoneNumberSubmitForm(context) async{
+  Future<Either<ErrorResponse, bool>> phoneNumberSubmitForm(context) async {
     final ValueNotifier<bool> loading = ValueNotifier(false);
     TextEditingController phoneController = TextEditingController();
     loading.value = true;
     final userProvider = Provider.of<AuthProvider>(context, listen: false);
-    try{
+    try {
       if (phoneController.text.isEmpty || phoneController.text.length < 10) {
         CustomSnackBar.showErrorSnackbar(
           message: 'Please enter a valid contact number',
@@ -467,11 +341,11 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
           MaterialPageRoute(
             builder: (_) => const AuthenticationScreen(),
           ),
-              (route) => false,
+          (route) => false,
         );
       }
       return const Right(true);
-    }catch(e){
+    } catch (e) {
       return Left(
         ErrorResponse(
           metaInfo: 'Catch triggered while getting phoneNumber info $e',
@@ -479,5 +353,22 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
         ),
       );
     }
+  }
+
+  @override
+  Future<Map<Object?, Object?>?> fetchAttendanceData(
+      String staffId, DateTime date) async {
+    String yearFormat = DateFormat('yyyy').format(date);
+    String monthFormat = DateFormat('MM').format(date);
+    String dateFormat = DateFormat('dd').format(date);
+
+    final attendanceRef =
+        ref.child('attendance/$yearFormat/$monthFormat/$dateFormat/$staffId');
+    DatabaseEvent event = await attendanceRef.once();
+
+    if (event.snapshot.exists) {
+      return event.snapshot.value as Map<Object?, Object?>?;
+    }
+    return null;
   }
 }

@@ -18,11 +18,7 @@ abstract class HomeRepository{
     required UserEntity staff,
   });
 
-  Future<Either<ErrorResponse, CustomPunchModel?>> getPunchingTime(
-      String staffId,
-      String name,
-      String department,
-      );
+  Future<CustomPunchModel?> checkTime(String staffId, String name, String department);
 
   Future<Either<ErrorResponse, List<UserEntity>>> getAllBirthday();
 

@@ -85,6 +85,10 @@ import 'package:my_office/features/sales_points/data/repository/sales_point_repo
 import 'package:my_office/features/sales_points/domain/repository/sales_point_repository.dart';
 import 'package:my_office/features/sales_points/domain/use_case/get_product_details_use_case.dart';
 import 'package:my_office/features/sales_points/domain/use_case/get_products_use_case.dart';
+import 'package:my_office/features/search_leads/data/data_source/search_leads_fb_data_source.dart';
+import 'package:my_office/features/search_leads/data/data_source/search_leads_fb_data_source_impl.dart';
+import 'package:my_office/features/search_leads/data/repository/search_leads_repo_impl.dart';
+import 'package:my_office/features/search_leads/domain/repository/search_leads_repository.dart';
 import 'package:my_office/features/staff_details/data/data_source/staff_detail_fb_data_source.dart';
 import 'package:my_office/features/staff_details/data/data_source/staff_detail_fb_data_source_impl.dart';
 import 'package:my_office/features/staff_details/data/repository/staff_detail_repo_impl.dart';
@@ -492,6 +496,11 @@ Future<void> init() async {
         () => RefreshmentRepoImpl(sl.call()),
   );
 
+  ///CUSTOMER LEADS SCREEN
+  sl.registerLazySingleton<SearchLeadsRepository>(
+        () => SearchLeadsRepoImpl(sl.call()),
+  );
+
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DATA SOURCE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
   ///AUTH
@@ -582,6 +591,11 @@ Future<void> init() async {
   ///REFRESHMENT SCREEN
   sl.registerLazySingleton<RefreshmentFbDataSource>(
         () => RefreshmentFbDataSourceImpl(),
+  );
+
+  ///CUSTOMER LEADS SCREEN
+  sl.registerLazySingleton<SearchLeadsFbDataSource>(
+        () => SearchLeadsFbDataSourceImpl(),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ EXTERNAL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //

@@ -21,6 +21,7 @@ class AppButton extends StatelessWidget {
       style: FilledButton.styleFrom(
         backgroundColor: backgroundColor,
         textStyle: TextStyle(
+          fontWeight: FontWeight.w500,
           color: textColor,
         ),
       ),
