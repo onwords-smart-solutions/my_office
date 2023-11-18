@@ -551,7 +551,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     );
     if (!mounted) return;
     _entryDetail.value = data;
-    _entryDetail.notifyListeners();
 
     Timer.periodic(const Duration(seconds: 3), (timer) async {
       final now = DateTime.now();
@@ -575,7 +574,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         );
         if (!mounted) return;
         _entryDetail.value = data;
-        _entryDetail.notifyListeners();
 
         _endTime.value = now;
       } else if (now.minute != _endTime.value.minute &&

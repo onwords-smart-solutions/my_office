@@ -22,6 +22,8 @@ import 'features/auth/presentation/view/login_screen.dart';
 import 'features/home/presentation/view/home_screen.dart';
 import 'package:my_office/core/utilities/injection_container.dart' as di;
 
+import 'features/quotation_template/presentation/provider/invoice_provider.dart';
+
 /// version: 1.1.3+16 Updated On (14/03/2023)
 
 final navigationKey = GlobalKey<NavigatorState>();
@@ -63,7 +65,9 @@ Future<void> main() async {
             create: (_) => di.sl<StaffDetailProvider>(),
           ),
           // ChangeNotifierProvider(create: (context) => InvoiceProvider()),
-          // ChangeNotifierProvider(create: (context) => Invoice1Provider()),
+          ChangeNotifierProvider(
+            create: (context) => Invoice1Provider(),
+          ),
         ],
         child: const MyApp(),
       ),

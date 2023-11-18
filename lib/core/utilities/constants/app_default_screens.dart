@@ -13,6 +13,7 @@ import '../../../features/leave_approval/presentation/view/leave_approval_screen
 import '../../../features/pr_dashboard/presentation/view/pr_dash_screen.dart';
 import '../../../features/pr_reminder/presentation/view/pr_reminder_screen.dart';
 import '../../../features/proxy_attendance/presentation/view/proxy_attendance_screen.dart';
+import '../../../features/quotation_template/presentation/view/quotation_home_screen.dart';
 import '../../../features/refreshment/presentation/view/refreshment_screen.dart';
 import '../../../features/sales_points/presentation/view/sales_point_screen.dart';
 import '../../../features/scan_qr/presentation/view/scan_qr_screen.dart';
@@ -143,10 +144,10 @@ class AppDefaults {
       title: MenuTitle.createLead,
       image: 'assets/create_leads.png',
     ),
-//     StaffAccessModel(
-//       title: MenuTitle.quotationTemplate,
-//       image: 'assets/quotation_template.png',
-//     ),
+    StaffAccessModel(
+      title: MenuTitle.quotationTemplate,
+      image: 'assets/quotation_template.png',
+    ),
     StaffAccessModel(
       title: MenuTitle.staffDetail,
       image: 'assets/staff_details.png',
@@ -258,9 +259,9 @@ class AppDefaults {
       case MenuTitle.createLead:
         page = CreateLeads(staffName: staffInfo.name);
         break;
-//       case MenuTitle.quotationTemplate:
-//         page = const Client1Details();
-//         break;
+      case MenuTitle.quotationTemplate:
+        page = const Client1Details();
+        break;
       case MenuTitle.staffDetail:
         page = const StaffDetails();
         break;
