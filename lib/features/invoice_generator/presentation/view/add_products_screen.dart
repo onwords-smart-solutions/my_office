@@ -154,7 +154,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               const Spacer(),
               SizedBox(
                 height: 50,
-                width: 250,
+                width: 200,
                 child: Provider.of<InvoiceGeneratorProvider>(context)
                         .getProductDetails
                         .isNotEmpty
@@ -174,6 +174,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
               const Spacer(),
               FloatingActionButton(
                 backgroundColor: AppColor.primaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(100),
+                ),
                 child: const Center(
                   child: Icon(Icons.add, color: Colors.white),
                 ),

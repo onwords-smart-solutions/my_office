@@ -3,8 +3,6 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -14,7 +12,11 @@ import 'package:my_office/core/utilities/constants/app_color.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_app_button.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_text_field.dart';
 import 'package:my_office/features/auth/presentation/provider/auth_provider.dart';
+import 'package:my_office/features/invoice_generator/data/data_source/invoice_generator_fb_data_source.dart';
+import 'package:my_office/features/invoice_generator/data/data_source/invoice_generator_fb_data_source_impl.dart';
 import 'package:my_office/features/invoice_generator/data/model/invoice_generator_model.dart';
+import 'package:my_office/features/invoice_generator/data/repository/invoice_generator_repo_impl.dart';
+import 'package:my_office/features/invoice_generator/domain/repository/invoice_generator_repository.dart';
 import 'package:my_office/features/invoice_generator/utils/list_of_table_utils.dart';
 import 'package:my_office/features/user/domain/entity/user_entity.dart';
 import 'package:open_file/open_file.dart';
@@ -37,25 +39,26 @@ class InvoiceGeneratorPreviewScreen extends StatefulWidget {
   final int percentage;
   final bool gstNeed;
 
-  const InvoiceGeneratorPreviewScreen(
-      {Key? key,
-        required this.finalAmountWithoutGst,
-        required this.advanceAmount,
-        required this.gstNeed,
-        required this.percentage,
-        required this.discountAmount,
-        required this.prPoint,})
-      : super(key: key);
+  const InvoiceGeneratorPreviewScreen({
+    Key? key,
+    required this.finalAmountWithoutGst,
+    required this.advanceAmount,
+    required this.gstNeed,
+    required this.percentage,
+    required this.discountAmount,
+    required this.prPoint,
+  }) : super(key: key);
 
   @override
-  State<InvoiceGeneratorPreviewScreen> createState() => _InvoiceGeneratorPreviewScreenState();
+  State<InvoiceGeneratorPreviewScreen> createState() =>
+      _InvoiceGeneratorPreviewScreenState();
 }
 
-class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewScreen> {
+class _InvoiceGeneratorPreviewScreenState
+    extends State<InvoiceGeneratorPreviewScreen> {
   UserEntity? staffInfo;
 
   final formKey = GlobalKey<FormState>();
-  final databaseReference = FirebaseDatabase.instance.ref();
   final date = DateTime.now();
 
   TextEditingController fileNameController = TextEditingController();
@@ -70,18 +73,21 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
   int docLen = 0;
   int? lisTotal;
 
-  List listOfDocLength = [];
-  List alreadyGeneratedId = [];
-
-  // NumberFormat formatter = NumberFormat("0000");
+  List<String> listOfDocLength = [];
+  List<String> alreadyGeneratedId = [];
 
   final GlobalKey _globalKey = GlobalKey();
   Uint8List? convertedImage;
 
+  late InvoiceGeneratorFbDataSource invoiceGeneratorFbDataSource =
+      InvoiceGeneratorFbDataSourceImpl();
+  late InvoiceGeneratorRepository invoiceGeneratorRepository =
+      InvoiceGeneratorRepoImpl(invoiceGeneratorFbDataSource);
+
   Future<void> _convertImage() async {
     dev.log('called function _convertImage()');
     RenderRepaintBoundary boundary =
-    _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+        _globalKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
     ui.Image image = await boundary.toImage(pixelRatio: 10.0);
     ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     Uint8List pngBytes = byteData!.buffer.asUint8List();
@@ -92,86 +98,47 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
   }
 
   Future<void> getDocLength() async {
+    final docTypeProvider =
+        Provider.of<InvoiceGeneratorProvider>(context, listen: false);
     docLen = 0;
     listOfDocLength.clear();
-    databaseReference.child('QuotationAndInvoice').once().then((snap) async {
-      try {
-        for (var element in snap.snapshot.children) {
-          if (Provider.of<InvoiceGeneratorProvider>(context, listen: false)
-              .customerDetails
-              ?.docType ==
-              element.key) {
-            for (var element1 in element.children) {
-              for (var element2 in element1.children) {
-                if (element2.key == Utils.formatMonth(date)) {
-                  for (var element3 in element2.children) {
-                    listOfDocLength.add(element3.key);
-                    // dev.log('length ${listOfDocLength.length}');
-                  }
-                }
-              }
-            }
-          }
-        }
-      } catch (e) {
-        dev.log('$e');
-      }
-    });
+    String docType = docTypeProvider.customerDetails!.docType;
+    listOfDocLength =
+        await invoiceGeneratorRepository.getDocumentLengths(docType, date);
+    setState(() {});
   }
 
   Future<void> getId() async {
-    databaseReference
-        .child('QuotationAndInvoice/PROFORMA_INVOICE')
-        .once()
-        .then((snap) async {
-      List generatedId = [];
-      for (var val1 in snap.snapshot.children) {
-        for (var val2 in val1.children) {
-          for (var val3 in val2.children) {
-            final data = val3.value as Map<Object?, Object?>;
-            final id = data['id'].toString();
-            generatedId.add(id);
-          }
-        }
-      }
-      setState(() {
-        alreadyGeneratedId = generatedId;
-        dev.log('ID IS $alreadyGeneratedId');
-      });
-    });
+    alreadyGeneratedId = await invoiceGeneratorRepository.getGeneratedIds();
+    setState(() {});
   }
 
   String generateRandomString(int len) {
     var r = Random();
     const characters = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz';
     return List.generate(
-      len, (index) => characters[r.nextInt(characters.length)],).join();
+      len,
+      (index) => characters[r.nextInt(characters.length)],
+    ).join();
   }
 
   void getStaffDetail() async {
     final userProvider = Provider.of<AuthProvider>(context, listen: false);
-    final data = await userProvider.getStaffInfo(staffInfo!.uid);
+    var data = userProvider.user!;
     setState(() {
-      staffInfo = data.right;
+      staffInfo = data;
     });
-  }
+    }
 
   @override
   void initState() {
-    documentDateController.text = DateFormat('yyyy-MM-dd').format(date).toString();
+    documentDateController.text =
+        DateFormat('yyyy-MM-dd').format(date).toString();
     getStaffDetail();
     getId();
     getDocLength();
     super.initState();
   }
-
-  // @override
-  // void dispose() {
-  //   fileNameController.dispose();
-  //   estimateDateController.dispose();
-  //   documentDateController.dispose();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -195,18 +162,18 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
     String transactionNote = customerDetails.docCategory == 'GA'
         ? "Gate Automation"
         : customerDetails.docCategory == 'SH'
-        ? "Smart Home"
-        : customerDetails.docCategory == 'IT'
-        ? "APP or Web Development"
-        : customerDetails.docCategory == 'DL'
-        ? "Door Lock"
-        : customerDetails.docCategory == 'SS'
-        ? "Security System"
-        : customerDetails.docCategory == 'WTA'
-        ? "Water Tank Automation"
-        : customerDetails.docCategory == 'AG'
-        ? "Agriculture Automation"
-        : 'Onwords Smart Solutions';
+            ? "Smart Home"
+            : customerDetails.docCategory == 'IT'
+                ? "APP or Web Development"
+                : customerDetails.docCategory == 'DL'
+                    ? "Door Lock"
+                    : customerDetails.docCategory == 'SS'
+                        ? "Security System"
+                        : customerDetails.docCategory == 'WTA'
+                            ? "Water Tank Automation"
+                            : customerDetails.docCategory == 'AG'
+                                ? "Agriculture Automation"
+                                : 'Onwords Smart Solutions';
 
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
@@ -241,7 +208,7 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
               );
               if (pickDate != null) {
                 String formattedDate =
-                DateFormat('yyyy-MM-dd').format(pickDate);
+                    DateFormat('yyyy-MM-dd').format(pickDate);
                 setState(() {
                   documentDateController.text =
                       formattedDate; //set output date to TextField value.
@@ -261,10 +228,11 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
               key: _globalKey,
               child: QrImageView(
                 data:
-                'upi://pay?pa=onwordspay@ybl&pn=Onwords Smart Solutions&tr=&am=${grandTotal < 80000 ? grandTotal : ''}&cu=INR&mode=01&purpose=10&orgid=-&sign=-&tn=$transactionNote&note=${widget.prPoint}',
+                    'upi://pay?pa=onwordspay@ybl&pn=Onwords Smart Solutions&tr=&am=${grandTotal < 80000 ? grandTotal : ''}&cu=INR&mode=01&purpose=10&orgid=-&sign=-&tn=$transactionNote&note=${widget.prPoint}',
                 version: QrVersions.auto,
                 size: 200.0,
-              ),),
+              ),
+            ),
           ),
           Positioned(
             top: 0,
@@ -282,12 +250,14 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
                       Container(
                         margin: const EdgeInsets.only(top: 10),
                         padding: const EdgeInsets.symmetric(
-                          vertical: 08, horizontal: 03,),
+                          vertical: 08,
+                          horizontal: 03,
+                        ),
                         height: height * .2,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          border:
-                          Border.all(color: Colors.black26, width: 2),),
+                          border: Border.all(color: Colors.black26, width: 2),
+                        ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -301,10 +271,12 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
                               ),
                               child: Column(
                                 children: [
-                                  const Text('Customer Details',
+                                  const Text(
+                                    'Customer Details',
                                     style: TextStyle(
-
-                                      color: Colors.black,),),
+                                      color: Colors.black,
+                                    ),
+                                  ),
                                   createCustomerDetails(
                                     width,
                                     customerDetails,
@@ -359,30 +331,35 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
                               ),
                               child: Column(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text('      Document Details',
+                                  const Text(
+                                    '      Document Details',
                                     style: TextStyle(
-
-                                      color: Colors.black,),),
+                                      color: Colors.black,
+                                    ),
+                                  ),
                                   Text(
                                     ' Date of Document : ${documentDateController.text.isNotEmpty ? documentDateController.text : "Select Date"}',
                                     style: const TextStyle(
-
                                       color: Colors.black,
-                                      fontSize: 10,),),
+                                      fontSize: 10,
+                                    ),
+                                  ),
                                   Text(
                                     ' Doc-Type : #${customerDetails.docType}',
                                     style: const TextStyle(
-
                                       color: Colors.black,
-                                      fontSize: 10,),),
+                                      fontSize: 10,
+                                    ),
+                                  ),
                                   Text(
                                     ' Category : ${customerDetails.docCategory}',
                                     style: const TextStyle(
-
                                       color: Colors.black,
-                                      fontSize: 10,),),
+                                      fontSize: 10,
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -403,27 +380,43 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
                             /// TABLE HEAD
                             Container(
                               padding:
-                              const EdgeInsets.symmetric(horizontal: 12),
+                                  const EdgeInsets.symmetric(horizontal: 12),
                               margin: const EdgeInsets.only(bottom: 3),
                               height: height * .05,
                               width: width * 1,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
                                 color:
-                                CupertinoColors.systemGrey.withOpacity(0.4),
+                                    CupertinoColors.systemGrey.withOpacity(0.4),
                               ),
                               child: Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   tableHeading(
-                                    width, 'Items', width * .0005, true,),
+                                    width,
+                                    'Items',
+                                    width * .0005,
+                                    true,
+                                  ),
                                   tableHeading(
-                                    width, 'Qty', width * .0003, true,),
+                                    width,
+                                    'Qty',
+                                    width * .0003,
+                                    true,
+                                  ),
                                   tableHeading(
-                                    width, 'Unit Price', width * .0006, true,),
+                                    width,
+                                    'Unit Price',
+                                    width * .0006,
+                                    true,
+                                  ),
                                   tableHeading(
-                                    width, 'Total', width * .0005, false,),
+                                    width,
+                                    'Total',
+                                    width * .0005,
+                                    false,
+                                  ),
                                 ],
                               ),
                             ),
@@ -435,8 +428,8 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
                               width: width * 1,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
-                                color: CupertinoColors.systemGrey
-                                    .withOpacity(0.4),
+                                color:
+                                    CupertinoColors.systemGrey.withOpacity(0.4),
                               ),
                               child: ListView.builder(
                                 scrollDirection: Axis.vertical,
@@ -462,9 +455,12 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
 
                                       children: [
                                         createTableRow(data),
-                                      ],),
+                                      ],
+                                    ),
                                   );
-                                },),),
+                                },
+                              ),
+                            ),
                             const Divider(
                               color: Colors.black,
                               indent: 5,
@@ -477,37 +473,54 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                                 border:
-                                Border.all(color: Colors.black12, width: 2),
+                                    Border.all(color: Colors.black12, width: 2),
                               ),
                               child: Column(
                                 children: [
-                                  totalAmountDetails(width, height, 'Total  ',
-                                    Utils.formatPrice(total.toDouble()),),
+                                  totalAmountDetails(
+                                    width,
+                                    height,
+                                    'Total  ',
+                                    Utils.formatPrice(total.toDouble()),
+                                  ),
                                   totalAmountDetails(
                                     width,
                                     height,
                                     'Discount ${widget.percentage} %  ',
-                                    Utils.formatPrice(widget.discountAmount),),
+                                    Utils.formatPrice(widget.discountAmount),
+                                  ),
                                   totalAmountDetails(
                                     width,
                                     height,
                                     'Sub Total  ',
                                     Utils.formatPrice(
-                                      widget.finalAmountWithoutGst,),),
-                                  totalAmountDetails(width, height, 'CGST %  ',
-                                    Utils.formatPrice(gst),),
-                                  totalAmountDetails(width, height, 'SGST %  ',
-                                    Utils.formatPrice(gst),),
+                                      widget.finalAmountWithoutGst,
+                                    ),
+                                  ),
+                                  totalAmountDetails(
+                                    width,
+                                    height,
+                                    'CGST %  ',
+                                    Utils.formatPrice(gst),
+                                  ),
+                                  totalAmountDetails(
+                                    width,
+                                    height,
+                                    'SGST %  ',
+                                    Utils.formatPrice(gst),
+                                  ),
                                   totalAmountDetails(
                                     width,
                                     height,
                                     'Grand Total  ',
-                                    Utils.formatPrice(grandTotal),),
+                                    Utils.formatPrice(grandTotal),
+                                  ),
                                   totalAmountDetails(
                                     width,
                                     height,
                                     'Advanced  ',
-                                    Utils.formatPrice(widget.advanceAmount),),
+                                    Utils.formatPrice(widget.advanceAmount),
+                                  ),
                                   totalAmountDetails(
                                     width,
                                     height,
@@ -523,15 +536,18 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
 
                             /// PDF BUTTON
                             SizedBox(
-                              width: width * 1,
-                              height: height * .08,
+                              width: width * .5,
+                              height: height * .06,
                               child: AppButton(
-                                  child: const Text('Save'),
-                                      onPressed: () {
-                                getDocLength();
-                                _showDialog(context, customerDetails,
-                                  productDetails,);
-                              },
+                                child: const Text('Save'),
+                                onPressed: () {
+                                  getDocLength();
+                                  _showDialog(
+                                    context,
+                                    customerDetails,
+                                    productDetails,
+                                  );
+                                },
                               ),
                             ),
                             const SizedBox(
@@ -552,7 +568,11 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
   }
 
   Widget tableHeading(
-      double width, String title, double widthVal, bool isTrue,) {
+    double width,
+    String title,
+    double widthVal,
+    bool isTrue,
+  ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -561,17 +581,17 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
           child: Center(
             child: Text(
               title,
-              style: const TextStyle( ),
+              style: const TextStyle(),
             ),
           ),
         ),
         isTrue
             ? const VerticalDivider(
-          color: Colors.black,
-          endIndent: 23,
-          indent: 23,
-          thickness: 2,
-        )
+                color: Colors.black,
+                endIndent: 23,
+                indent: 23,
+                thickness: 2,
+              )
             : const SizedBox(),
       ],
     );
@@ -580,10 +600,9 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
   TableRow createTableRow(List<String> cells, {bool isHeader = false}) =>
       TableRow(
         children: cells.map(
-              (cell) {
+          (cell) {
             final style = TextStyle(
               fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
-
             );
             return Padding(
               padding: const EdgeInsets.all(8),
@@ -598,8 +617,13 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
         ).toList(),
       );
 
-  Widget createCustomerDetails(double width, InvoiceGeneratorModel customerDetails,
-      String key, String value, double val,) {
+  Widget createCustomerDetails(
+    double width,
+    InvoiceGeneratorModel customerDetails,
+    String key,
+    String value,
+    double val,
+  ) {
     return SizedBox(
       width: width * .6,
       height: val,
@@ -611,9 +635,9 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
             child: Text(
               key,
               style: const TextStyle(
-
                 color: Colors.black,
-                fontSize: 10,),
+                fontSize: 10,
+              ),
             ),
           ),
           const Text(':'),
@@ -624,7 +648,6 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
               child: Text(
                 value,
                 style: const TextStyle(
-
                   color: Colors.black,
                   fontSize: 10,
                 ),
@@ -632,15 +655,16 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
             ),
           ),
         ],
-      ),);
+      ),
+    );
   }
 
   Widget totalAmountDetails(
-      double width,
-      double height,
-      String key,
-      String value,
-      ) {
+    double width,
+    double height,
+    String key,
+    String value,
+  ) {
     return SizedBox(
       height: height * .03,
       child: Row(
@@ -652,9 +676,9 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
             child: Text(
               key,
               style: const TextStyle(
-
                 color: Colors.black,
-                fontSize: 12,),
+                fontSize: 12,
+              ),
             ),
           ),
           const Center(child: Text(':')),
@@ -665,7 +689,6 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
               value,
               textAlign: TextAlign.end,
               style: const TextStyle(
-
                 color: Colors.black,
                 fontSize: 10,
               ),
@@ -676,337 +699,333 @@ class _InvoiceGeneratorPreviewScreenState extends State<InvoiceGeneratorPreviewS
     );
   }
 
-  _showDialog(BuildContext context, InvoiceGeneratorModel clientModel,
-      List<ListOfTable> productDetailsModel,) {
+  _showDialog(
+    BuildContext context,
+    InvoiceGeneratorModel clientModel,
+    List<ListOfTable> productDetailsModel,
+  ) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return StatefulBuilder(builder: (context, setState) {
-          return WillPopScope(
-            onWillPop: () async {
-              return false;
-            },
-            child: Form(
-              key: formKey,
-              child: CupertinoAlertDialog(
-                title: Text(
-                  "Document Details\n",
-                  style: TextStyle(
-                    color: AppColor.primaryColor,
-                    fontSize: 16,),
-                ),
-                content: Material(
-                  color: Colors.transparent,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomTextField(
-                        controller: fileNameController,
-                        textInputType: TextInputType.name,
-                        textInputAction: TextInputAction.done,
-                        hintName: 'File Name',
-                        icon: const Icon(Icons.file_present),
-                        maxLength: 30,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'File Name Required';
-                          }
-                          return null;
-                        },
-                      ).textInputField(),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      clientModel.docType != 'QUOTATION'
-                          ? const Text(
-                        '  Date For Installation',
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return WillPopScope(
+              onWillPop: () async {
+                return false;
+              },
+              child: Form(
+                key: formKey,
+                child: CupertinoAlertDialog(
+                  title: Text(
+                    "Document Details\n",
+                    style: TextStyle(
+                      color: AppColor.primaryColor,
+                      fontSize: 16,
+                    ),
+                  ),
+                  content: Material(
+                    color: Colors.transparent,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomTextField(
+                          controller: fileNameController,
+                          textInputType: TextInputType.name,
+                          textInputAction: TextInputAction.done,
+                          hintName: 'File Name',
+                          icon: const Icon(Icons.file_present),
+                          maxLength: 30,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'File Name Required';
+                            }
+                            return null;
+                          },
+                        ).textInputField(),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        clientModel.docType != 'QUOTATION'
+                            ? const Text(
+                                '  Date For Installation',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.black,
+                                ),
+                              )
+                            : const SizedBox(),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        clientModel.docType != 'QUOTATION'
+                            ?  CustomTextField(
+                          controller: estimateDateController,
+                          textInputType: TextInputType.none,
+                          textInputAction: TextInputAction.done,
+                          hintName: 'Estimated Date',
+                          icon: const Icon(Icons.date_range),
+                          maxLength: 15,
+                          readOnly: true,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Date Required';
+                            }
+                            return null;
+                          },
+                          onTap: () async {
+                            DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              //DateTime.now() - not to allow to choose before today.
+                              lastDate: DateTime(2101),
+                            );
+
+                            if (pickedDate != null) {
+                              String formattedDate =
+                              DateFormat('yyyy-MM-dd')
+                                  .format(pickedDate);
+                              setState(() {
+                                estimateDateController.text =
+                                    formattedDate; //set output date to TextField value.
+                              });
+                            }
+                          },
+                        ).textInputField()
+                            : const SizedBox(),
+                      ], //
+                    ),
+                  ),
+                  actions: <Widget>[
+                    CupertinoDialogAction(
+                      child: const Text(
+                        "Cancel",
                         style: TextStyle(
-
-                          fontSize: 13,
-                          color: Colors.black,),
-                      )
-                          : const SizedBox(),
-                      const SizedBox(
-                        height: 10,
+                          color: Colors.black,
+                        ),
                       ),
-                      clientModel.docType != 'QUOTATION'
-                          ? TextFormField(
-                        controller: estimateDateController,
-                        textInputAction: TextInputAction.done,
-                        maxLength: 15,
-                        readOnly: true,
-                        style: const TextStyle(
-
+                      onPressed: () async {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    CupertinoDialogAction(
+                      child: const Text(
+                        "Save",
+                        style: TextStyle(
+                          color: Colors.black,
                         ),
-                        decoration: InputDecoration(
-                          counterText: '',
-                          hintText: 'Estimated Date',
-                          hintStyle: const TextStyle(
-
-                          ),
-                          labelStyle: const TextStyle(
-
-                          ),
-                          border: myInputBorder(),
-                          enabledBorder: myInputBorder(),
-                          focusedBorder: myFocusBorder(),
-                          disabledBorder: myDisabledBorder(),
-                        ),
-                        keyboardType: TextInputType.datetime,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Date Required';
-                          }
-                          return null;
-                        },
-                        onTap: () async {
-                          DateTime? pickedDate = await showDatePicker(
+                      ),
+                      onPressed: () async {
+                        if (formKey.currentState!.validate()) {
+                          showDialog(
                             context: context,
-                            initialDate: DateTime.now(),
-                            firstDate: DateTime(2000),
-                            //DateTime.now() - not to allow to choose before today.
-                            lastDate: DateTime(2101),
+                            barrierDismissible: true,
+                            builder: (context) {
+                              return Center(
+                                child: SizedBox(
+                                  child: Lottie.asset(
+                                    'assets/animations/loading.json',
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                          await _convertImage();
+                          setState(() {
+                            docLen = listOfDocLength.length + 1;
+                          });
+                          InvAndQtnPdf x = InvAndQtnPdf(
+                            total: double.parse(lisTotal.toString()),
+                            documentLen: docLen.toInt(),
+                            subTotal: widget.finalAmountWithoutGst.toDouble(),
+                            cgst: gst.toDouble(),
+                            sgst: gst.toDouble(),
+                            discount: widget.discountAmount.toDouble(),
+                            advance: widget.advanceAmount.toDouble(),
+                            grandTotal: grandTotal.toInt(),
+                            needGst: widget.gstNeed,
+                            amountToPay: finalTotal.toInt(),
+                            percentage: widget.percentage,
+                            documentDate:
+                                DateTime.parse(documentDateController.text),
                           );
 
-                          if (pickedDate != null) {
-                            String formattedDate =
-                            DateFormat('yyyy-MM-dd')
-                                .format(pickedDate);
-                            setState(() {
-                              estimateDateController.text =
-                                  formattedDate; //set output date to TextField value.
-                            });
-                          }
-                        },
-                      )
-                          : const SizedBox(),
-                    ], //
-                  ),
-                ),
-                actions: <Widget>[
-                  CupertinoDialogAction(
-                    child: const Text(
-                      "Cancel",
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                    onPressed: () async {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                  CupertinoDialogAction(
-                    child: const Text(
-                      "Save",
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                    onPressed: () async {
-                      if (formKey.currentState!.validate()) {
-                        showDialog(
-                          context: context,
-                          barrierDismissible: true,
-                          builder: (context) {
-                            return Center(
-                              child: SizedBox(
-                                child: Lottie.asset(
-                                  'assets/animations/loading.json',
-                                ),),);
-                          },);
-                        await _convertImage();
-                        setState(() {
-                          docLen = listOfDocLength.length + 1;
-                        });
-                        InvAndQtnPdf x = InvAndQtnPdf(
-                          total: double.parse(lisTotal.toString()),
-                          documentLen: docLen.toInt(),
-                          subTotal: widget.finalAmountWithoutGst.toDouble(),
-                          cgst: gst.toDouble(),
-                          sgst: gst.toDouble(),
-                          discount: widget.discountAmount.toDouble(),
-                          advance: widget.advanceAmount.toDouble(),
-                          grandTotal: grandTotal.toInt(),
-                          needGst: widget.gstNeed,
-                          amountToPay: finalTotal.toInt(),
-                          percentage: widget.percentage,
-                          documentDate:
-                          DateTime.parse(documentDateController.text),
-                        );
+                          DateTime currentPhoneDate = DateTime.now();
+                          Timestamp myTimeStamp =
+                              Timestamp.fromDate(currentPhoneDate);
 
-                        DateTime currentPhoneDate = DateTime.now();
-                        Timestamp myTimeStamp =
-                        Timestamp.fromDate(currentPhoneDate);
-                        final databaseReference =
-                        FirebaseDatabase.instance.ref();
-                        final firebaseStorage = FirebaseStorage.instance;
+                          final pdfFile = await x.generate(
+                            clientModel,
+                            productDetailsModel,
+                            convertedImage!,
+                          );
+                          final dir = await getExternalStorageDirectory();
+                          final file = File(
+                            "${dir!.path}/${fileNameController.text}.pdf",
+                          );
 
-                        final pdfFile = await x.generate(
-                          clientModel, productDetailsModel, convertedImage!,);
-                        final dir = await getExternalStorageDirectory();
-                        final file =
-                        File("${dir!.path}/${fileNameController.text}.pdf");
+                          file.writeAsBytesSync(
+                            pdfFile.readAsBytesSync(),
+                            flush: true,
+                          );
 
-                        file.writeAsBytesSync(pdfFile.readAsBytesSync(),
-                          flush: true,);
-
-                        OpenFile.open(file.path).then((value) async {
-                          ///...............FIREBASE..........////
-                          /// INVOICE OR PROFORMA_INVOICE
-                          if (clientModel.docType == "INVOICE" ||
-                              clientModel.docType == "PROFORMA_INVOICE") {
-                            String id = generateRandomString(5)
-                                .toUpperCase()
-                                .toString();
-                            if (alreadyGeneratedId
-                                .any((element) => element == id)) {
-                              dev.log('Already Id Created. Create New one');
-                              id = generateRandomString(5)
+                          OpenFile.open(file.path).then((value) async {
+                            ///...............FIREBASE..........////
+                            /// INVOICE OR PROFORMA_INVOICE
+                            if (clientModel.docType == "INVOICE" ||
+                                clientModel.docType == "PROFORMA_INVOICE") {
+                              String id = generateRandomString(5)
                                   .toUpperCase()
                                   .toString();
-                            } else{
-                              var snapshot = await firebaseStorage
-                                  .ref()
-                                  .child(
-                                '${clientModel.docType}/${clientModel.docType == "INVOICE" ? "INV" : "PRO_INV"}${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}',)
-                                  .putFile(pdfFile);
-                              var downloadUrl =
-                              await snapshot.ref.getDownloadURL();
+                              if (alreadyGeneratedId
+                                  .any((element) => element == id)) {
+                                dev.log('Already Id Created. Create New one');
+                                id = generateRandomString(5)
+                                    .toUpperCase()
+                                    .toString();
+                              } else {
+                                var path =
+                                    '${clientModel.docType}/${clientModel.docType == "INVOICE" ? "INV" : "PRO_INV"}${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}';
+                                var downloadUrl =
+                                    await invoiceGeneratorRepository
+                                        .uploadDocumentAndGetUrl(path, pdfFile);
 
-                              /// INSTALLATION-INVOICE......
-                              final installationPdfFile = await InstallationPdf(
-                                documentLen: docLen,
-                                estimateDate:
-                                DateTime.parse(estimateDateController.text),
-                              ).generate(clientModel, productDetailsModel);
+                                /// INSTALLATION-INVOICE......
+                                final installationPdfFile =
+                                    await InstallationPdf(
+                                  documentLen: docLen,
+                                  estimateDate: DateTime.parse(
+                                    estimateDateController.text,
+                                  ),
+                                ).generate(clientModel, productDetailsModel);
 
-                              var snapshotInstallation = await firebaseStorage
-                                  .ref()
-                                  .child(
-                                'INSTALLATION-INVOICE/INV${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}',)
-                                  .putFile(installationPdfFile);
-                              var downloadUrlInstallation =
-                              await snapshotInstallation.ref
-                                  .getDownloadURL();
+                                var downloadUrlInstallation =
+                                    await invoiceGeneratorRepository
+                                        .uploadInstallationInvoice(
+                                  installationPdfFile,
+                                  clientModel.docCategory,
+                                  date,
+                                  docLen,
+                                );
 
-                              var invoice = {
-                                'Customer_name': clientModel.name,
-                                'Status': 'Processing',
-                                'TimeStamp': myTimeStamp.seconds,
-                                'CreatedBy': staffInfo?.email,
-                                'mobile_number': clientModel.phone,
-                                'document_link': downloadUrl,
-                                'installation_document_link':
-                                downloadUrlInstallation,
-                              };
-                              var proformaInvoice = {
-                                'Customer_name': clientModel.name,
-                                'id': "#$id",
-                                'Status': 'Processing',
-                                'TimeStamp': myTimeStamp.seconds,
-                                'CreatedBy': staffInfo?.email,
-                                'mobile_number': clientModel.phone,
-                                'document_link': downloadUrl,
-                                'installation_document_link':
-                                downloadUrlInstallation,
-                              };
+                                var invoice = {
+                                  'Customer_name': clientModel.name,
+                                  'Status': 'Processing',
+                                  'TimeStamp': myTimeStamp.seconds,
+                                  'CreatedBy': staffInfo!.email,
+                                  'mobile_number': clientModel.phone,
+                                  'document_link': downloadUrl,
+                                  'installation_document_link':
+                                      downloadUrlInstallation,
+                                };
+                                var proformaInvoice = {
+                                  'Customer_name': clientModel.name,
+                                  'id': "#$id",
+                                  'Status': 'Processing',
+                                  'TimeStamp': myTimeStamp.seconds,
+                                  'CreatedBy': staffInfo!.email,
+                                  'mobile_number': clientModel.phone,
+                                  'document_link': downloadUrl,
+                                  'installation_document_link':
+                                      downloadUrlInstallation,
+                                };
 
-                              databaseReference
-                                  .child('QuotationAndInvoice')
-                                  .child(clientModel.docType == 'INVOICE'
-                                  ? 'INVOICE'
-                                  : 'PROFORMA_INVOICE',)
-                                  .child('${Utils.formatYear(date)}')
-                                  .child('${Utils.formatMonth(date)}')
-                                  .child(
-                                '${clientModel.docType == 'INVOICE' ? 'INV_' : 'PRO_INV_'}${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}',)
-                                  .set(clientModel.docType == 'INVOICE'
-                                  ? invoice
-                                  : proformaInvoice,);
+                                void saveDocument(
+                                  InvoiceGeneratorModel clientModel,
+                                  DateTime date,
+                                  int docLen,
+                                ) {
+                                  dynamic document =
+                                      clientModel.docType == 'INVOICE'
+                                          ? invoice
+                                          : proformaInvoice;
+                                  invoiceGeneratorRepository
+                                      .setDocument(
+                                    clientModel,
+                                    date,
+                                    document,
+                                    docLen,
+                                  )
+                                      .then((_) {
+                                    // Handle success
+                                  }).catchError((error) {
+                                    Exception(
+                                      'Caught error while uploading invoice/ proforma invoice in db! $error',
+                                    );
+                                  });
+                                }
+
+                                saveDocument(
+                                  clientModel,
+                                  date,
+                                  docLen,
+                                );
+                              }
                             }
-                          }
 
-                          /// QUOTATION
-                          else {
-                            var snapshot = await firebaseStorage
-                                .ref()
-                                .child(
-                              'QUOTATION/EST${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}',)
-                                .putFile(pdfFile);
-                            var downloadUrl =
-                            await snapshot.ref.getDownloadURL();
-                            var quotation = {
-                              'Customer_name': clientModel.name,
-                              'Status': 'Processing',
-                              'TimeStamp': myTimeStamp.seconds,
-                              'CreatedBy': staffInfo?.email,
-                              'mobile_number': clientModel.phone,
-                              'document_link': downloadUrl,
-                            };
-                            databaseReference
-                                .child('QuotationAndInvoice')
-                                .child('QUOTATION')
-                                .child('${Utils.formatYear(date)}')
-                                .child('${Utils.formatMonth(date)}')
-                                .child(
-                              'EST${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}',)
-                                .set(quotation);
-                          }
-                        }).then((value) {
-                          fileNameController.clear();
-                          listOfDocLength.clear();
-                          estimateDateController.clear();
-                          grandTotal = 0;
-                          gst = 0;
-                          Provider.of<InvoiceGeneratorProvider>(context, listen: false)
-                              .clearAllData();
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => const UserHomeScreen(),),
-                                (route) => false,);
-                          // Navigator.pushNamedAndRemoveUntil(context, '/InvoicePreviewScreen', (route) => false);
-                        });
-                      }
-                    },
-                  ),
-                ],
+                            /// QUOTATION
+                            else {
+                              var downloadUrl = await invoiceGeneratorRepository
+                                  .uploadQuotation(
+                                pdfFile,
+                                clientModel.docCategory,
+                                date,
+                                docLen,
+                              );
+
+                              var quotation = {
+                                'Customer_name': clientModel.name,
+                                'Status': 'Processing',
+                                'TimeStamp': myTimeStamp.seconds,
+                                'CreatedBy': staffInfo!.email,
+                                'mobile_number': clientModel.phone,
+                                'document_link': downloadUrl,
+                              };
+
+                              Future<void> createQuotation(
+                                DateTime date,
+                                InvoiceGeneratorModel clientModel,
+                                dynamic quotation,
+                              ) async {
+                                await invoiceGeneratorRepository.saveQuotation(
+                                  date,
+                                  clientModel,
+                                  quotation,
+                                  docLen,
+                                );
+                              }
+
+                              createQuotation(date, clientModel, quotation);
+                            }
+                          }).then((value) {
+                            fileNameController.clear();
+                            listOfDocLength.clear();
+                            estimateDateController.clear();
+                            grandTotal = 0;
+                            gst = 0;
+                            Provider.of<InvoiceGeneratorProvider>(
+                              context,
+                              listen: false,
+                            ).clearAllData();
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const UserHomeScreen(),
+                              ),
+                              (route) => false,
+                            );
+                            // Navigator.pushNamedAndRemoveUntil(context, '/InvoicePreviewScreen', (route) => false);
+                          });
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
-        },);
+            );
+          },
+        );
       },
     );
-  }
-
-  OutlineInputBorder myInputBorder() {
-    return OutlineInputBorder(
-      borderRadius: const BorderRadius.all(Radius.circular(20)),
-      borderSide: BorderSide(
-        color: Colors.black.withOpacity(0.3),
-        width: 2,
-      ),);
-  }
-
-  OutlineInputBorder myFocusBorder() {
-    return OutlineInputBorder(
-      borderRadius: const BorderRadius.all(
-        Radius.circular(20),
-      ),
-      borderSide: BorderSide(
-        color: Colors.black.withOpacity(0.3),
-        width: 2,
-      ),);
-  }
-
-  OutlineInputBorder myDisabledBorder() {
-    return OutlineInputBorder(
-      borderRadius: const BorderRadius.all(
-        Radius.circular(20),
-      ),
-      borderSide: BorderSide(
-        color: Colors.black.withOpacity(0.3),
-        width: 2,
-      ),);
   }
 }

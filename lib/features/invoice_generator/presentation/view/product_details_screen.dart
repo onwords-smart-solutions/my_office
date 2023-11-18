@@ -53,6 +53,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     try {
       final productDetails = await invoiceGeneratorRepository.getProductDetails(selectedItemName!);
       setState(() {
+        itemPriceController.text = productDetails.maxPrice;
         maxPriceStringVal = productDetails.maxPrice;
         minPriceStringVal = productDetails.minPrice;
         obcPriceStringVal = productDetails.obcPrice;
@@ -86,17 +87,6 @@ class _ProductDetailsState extends State<ProductDetails> {
     getProducts();
     super.initState();
   }
-
-  // @override
-  // void dispose() {
-  //   itemNameController.dispose();
-  //   itemQtyController.dispose();
-  //   itemPriceController.dispose();
-  //   productName.dispose();
-  //   productPrice.dispose();
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;

@@ -162,30 +162,32 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                                   ),
                                 ),
                                 const SizedBox(height: 15),
-                                CustomTextField(
-                                  controller: discountController,
-                                  textInputType: TextInputType.number,
-                                  textInputAction: TextInputAction.done,
-                                  hintName: 'Fill below $discountPercentage%',
-                                  icon: const Icon(
-                                    Icons.percent,
-                                    color: Colors.black,
-                                  ),
-                                  maxLength: 3,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Fill Percentage';
-                                    } else if (value.toString().contains('.')) {
-                                      return 'Enter Only Single Value';
-                                    } else if (int.parse(value) >
-                                        int.parse(
-                                          discountPercentage.toString(),
-                                        )) {
-                                      return 'Enter less then $discountPercentage %';
-                                    }
-                                    return null;
-                                  },
-                                ).textInputField(),
+                                Expanded(
+                                  child: CustomTextField(
+                                    controller: discountController,
+                                    textInputType: TextInputType.number,
+                                    textInputAction: TextInputAction.done,
+                                    hintName: 'Fill below $discountPercentage%',
+                                    icon: const Icon(
+                                      Icons.percent,
+                                      color: Colors.black,
+                                    ),
+                                    maxLength: 3,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Fill Percentage';
+                                      } else if (value.toString().contains('.')) {
+                                        return 'Enter Only Single Value';
+                                      } else if (int.parse(value) >
+                                          int.parse(
+                                            discountPercentage.toString(),
+                                          )) {
+                                        return 'Enter less then $discountPercentage %';
+                                      }
+                                      return null;
+                                    },
+                                  ).textInputField(),
+                                ),
                               ],
                             ),
                           ),

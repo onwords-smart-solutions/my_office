@@ -11,6 +11,7 @@ class CustomTextField {
   final bool? isOptional;
   final String? Function(String?)? validator;
   final VoidCallback? onTap;
+  final bool? readOnly;
 
   const CustomTextField({
     Key? key,
@@ -24,6 +25,7 @@ class CustomTextField {
     this.isEnable,
     this.isOptional,
     this.onTap,
+    this.readOnly,
   });
 
   Widget textInputField() {
