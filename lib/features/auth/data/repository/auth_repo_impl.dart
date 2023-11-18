@@ -11,18 +11,6 @@ class AuthRepoImpl implements AuthRepository {
   AuthRepoImpl(this._authFbDataSource);
 
   @override
-  Future<String> getDeviceInfo() {
-    // TODO: implement getDeviceInfo
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<String>> getFcmTokens({required String userId}) {
-    // TODO: implement getFcmTokens
-    throw UnimplementedError();
-  }
-
-  @override
   Future<Either<ErrorResponse, UserEntity>> login({
     required String email,
     required String password,
@@ -31,28 +19,10 @@ class AuthRepoImpl implements AuthRepository {
   }
 
   @override
-  Future<void> removeFcmToken({required String userId}) {
-    // TODO: implement removeFcmToken
-    throw UnimplementedError();
-  }
-
-  @override
   Future<Either<ErrorResponse, bool>> resetPassword({
     required String email,
   }) async {
     return await _authFbDataSource.resetPassword(email: email);
-  }
-
-  @override
-  Future<Either<ErrorResponse, bool>> signOut() async {
-   await _authFbDataSource.onClearData();
-   return await _authFbDataSource.signOut();
-  }
-
-  @override
-  Future<void> storeFcmToken({required String userId}) {
-    // TODO: implement storeFcmToken
-    throw UnimplementedError();
   }
 
   @override

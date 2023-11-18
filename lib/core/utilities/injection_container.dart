@@ -9,13 +9,8 @@ import 'package:my_office/features/auth/data/data_source/auth_fb_data_souce_impl
 import 'package:my_office/features/auth/data/data_source/auth_firebase_data_source.dart';
 import 'package:my_office/features/auth/data/repository/auth_repo_impl.dart';
 import 'package:my_office/features/auth/domain/repository/auth_repository.dart';
-import 'package:my_office/features/auth/domain/use_case/get_device_info_case.dart';
-import 'package:my_office/features/auth/domain/use_case/get_fcm_tokens_case.dart';
 import 'package:my_office/features/auth/domain/use_case/login_case.dart';
-import 'package:my_office/features/auth/domain/use_case/remove_fcm_tokens_case.dart';
 import 'package:my_office/features/auth/domain/use_case/reset_password_case.dart';
-import 'package:my_office/features/auth/domain/use_case/sign_out_case.dart';
-import 'package:my_office/features/auth/domain/use_case/store_fcm_tokens_case.dart';
 import 'package:my_office/features/auth/presentation/provider/auth_provider.dart';
 import 'package:my_office/features/create_lead/data/data_source/create_lead_fb_data_source.dart';
 import 'package:my_office/features/create_lead/data/data_source/create_lead_fb_data_source_impl.dart';
@@ -34,7 +29,6 @@ import 'package:my_office/features/employee_of_the_week/domain/use_case/update_p
 import 'package:my_office/features/employee_of_the_week/presentation/provider/employee_of_the_week_provider.dart';
 import 'package:my_office/features/finance/data/data_source/finance_fb_data_source.dart';
 import 'package:my_office/features/finance/data/data_source/finance_fb_data_source_impl.dart';
-import 'package:my_office/features/finance/domain/repository/finance_repository.dart';
 import 'package:my_office/features/food_count/data/data_source/food_count_data_source_impl.dart';
 import 'package:my_office/features/food_count/data/repository/food_count_repo_impl.dart';
 import 'package:my_office/features/food_count/domain/repository/food_count_repository.dart';
@@ -137,11 +131,6 @@ Future<void> init() async {
       sl.call(),
       sl.call(),
       sl.call(),
-      sl.call(),
-      sl.call(),
-      sl.call(),
-      sl.call(),
-      sl.call(),
     ),
   );
 
@@ -217,31 +206,6 @@ Future<void> init() async {
   ///RESET PASSWORD
   sl.registerLazySingleton<ResetPasswordCase>(
     () => ResetPasswordCase(authRepository: sl.call()),
-  );
-
-  ///GET DEVICE INFO
-  sl.registerLazySingleton<GetDeviceInfoCase>(
-    () => GetDeviceInfoCase(authRepository: sl.call()),
-  );
-
-  ///GET FCM TOKENS
-  sl.registerLazySingleton<GetFcmTokensCase>(
-    () => GetFcmTokensCase(authRepository: sl.call()),
-  );
-
-  ///REMOVE FCM TOKEN
-  sl.registerLazySingleton<RemoveFcmCase>(
-    () => RemoveFcmCase(authRepository: sl.call()),
-  );
-
-  ///SIGN OUT
-  sl.registerLazySingleton<SignOutCase>(
-    () => SignOutCase(authRepository: sl.call()),
-  );
-
-  ///STORE FCM TOKENS
-  sl.registerLazySingleton<StoreFcmCase>(
-    () => StoreFcmCase(authRepository: sl.call()),
   );
 
   ///GET ALL BIRTHDAYS

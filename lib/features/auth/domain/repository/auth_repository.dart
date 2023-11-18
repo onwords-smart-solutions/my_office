@@ -11,16 +11,6 @@ abstract class AuthRepository {
 
   Future<Either<ErrorResponse, bool>> resetPassword({required String email});
 
-  Future<Either<ErrorResponse, bool>> signOut();
-
-  Future<String> getDeviceInfo();
-
-  Future<void> storeFcmToken({required String userId});
-
-  Future<List<String>> getFcmTokens({required String userId});
-
-  Future<void> removeFcmToken({required String userId});
-
   Future<Either<ErrorResponse, void>> updatePhoneNumber();
 
   Future<Either<ErrorResponse, void>> updateBirthday();

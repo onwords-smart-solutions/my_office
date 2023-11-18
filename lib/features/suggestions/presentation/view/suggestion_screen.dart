@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_office/core/utilities/constants/app_color.dart';
@@ -6,7 +8,7 @@ import 'package:my_office/features/suggestions/data/data_source/suggestion_fb_da
 import 'package:my_office/features/suggestions/data/repository/suggestion_repo_impl.dart';
 import 'package:my_office/features/suggestions/domain/use_case/add_suggestion_use_case.dart';
 import '../../../../core/utilities/constants/app_main_template.dart';
-import '../../../../notification_service.dart';
+import '../../../notifications/presentation/notification_view_model.dart';
 
 class SuggestionScreen extends StatefulWidget {
   final String uid;
@@ -130,11 +132,12 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
           child: FilledButton(
             onPressed: () {
               addSuggestionToDatabase();
-              // sendNotification(
-              //   'Vhbt8jIAfiaV1HxuWERLqJh7dbj2',
-              //   'Suggestion',
-              //   'New suggestion has been arrived',
-              // );
+              sendNotification(
+                // 'Vhbt8jIAfiaV1HxuWERLqJh7dbj2',
+                '',
+                'Suggestion',
+                'New suggestion has been arrived',
+              );
             },
             child: const Text(
               "Submit",

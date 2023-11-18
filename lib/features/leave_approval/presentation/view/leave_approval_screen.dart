@@ -14,7 +14,7 @@ import 'package:my_office/features/leave_approval/domain/repository/leave_approv
 import 'package:my_office/features/leave_approval/domain/use_case/change_leave_request_use_case.dart';
 import 'package:my_office/features/leave_approval/domain/use_case/check_leave_status_use_case.dart';
 import '../../../../core/utilities/constants/app_main_template.dart';
-import '../../../../notification_service.dart';
+import '../../../notifications/presentation/notification_view_model.dart';
 
 class LeaveApprovalScreen extends StatefulWidget {
   const LeaveApprovalScreen({super.key});

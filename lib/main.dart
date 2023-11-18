@@ -23,6 +23,8 @@ import 'features/home/presentation/view/home_screen.dart';
 import 'package:my_office/core/utilities/injection_container.dart' as di;
 
 import 'features/invoice_generator/presentation/provider/invoice_generator_provider.dart';
+import 'features/invoice_generator/presentation/view/client_details_screen.dart';
+import 'features/notifications/presentation/notification_view_model.dart';
 import 'features/quotation_template/presentation/provider/invoice_provider.dart';
 
 /// version: 1.1.3+16 Updated On (14/03/2023)
@@ -86,7 +88,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // final NotificationService _notificationService = NotificationService();
+  final NotificationService _notificationService = NotificationService();
 
   Future<void> _initUserData() async {
     final context = this.context;
@@ -102,8 +104,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
-    // _notificationService.initializePlatformNotifications();
-    // _getUserInfo(widget.userId);
+    _notificationService.initializePlatformNotifications();
+    // _getUserInfo();
     _initUserData();
     super.initState();
   }
@@ -120,17 +122,17 @@ class _MyAppState extends State<MyApp> {
         fontFamily: 'Roboto',
       ),
       home: const InitialScreen(),
-      // home: const Sample(),
-      // routes: {
-      //   '/visitResume': (_) => const VisitFromScreen(),
-      //   '/invoiceGenerator': (_) => const ClientDetails(),
-      // },
+      routes: {
+        //   '/visitResume': (_) => const VisitFromScreen(),
+        '/invoiceGenerator': (_) => const ClientDetails(),
+      },
     );
   }
 
-// Future<void> _getUserInfo(String userId) async {
-//   Provider.of<UserProvider>(context, listen: false).initiateUser(userId);
-// }
+  // Future<void> _getUserInfo(String userId) async {
+  //   Provider.of<AuthProvider>(context, listen: false).getStaffInfo(userId);
+  // }
+
 }
 
 class InitialScreen extends StatefulWidget {

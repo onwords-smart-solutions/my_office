@@ -1,15 +1,11 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/core/utilities/constants/app_color.dart';
-import 'package:my_office/features/suggestions/data/repository/suggestion_repo_impl.dart';
-import 'package:my_office/features/suggestions/domain/repository/suggestion_repository.dart';
 import 'package:my_office/features/view_suggestions/data/data_source/view_suggestion_fb_data_source.dart';
 import 'package:my_office/features/view_suggestions/data/data_source/view_suggestion_fb_data_source_impl.dart';
 import 'package:my_office/features/view_suggestions/data/repository/view_suggestion_repo_impl.dart';
 import 'package:my_office/features/view_suggestions/domain/repository/view_suggestion_repository.dart';
-import 'package:my_office/features/view_suggestions/domain/use_case/view_suggestion_use_case.dart';
 
 import '../../../../core/utilities/constants/app_main_template.dart';
 import 'individual_view_suggestion_screen.dart';
@@ -35,6 +31,7 @@ class _ViewSuggestionsState extends State<ViewSuggestions> {
 
   void _finalViewSuggestion() async {
     allSuggestion = await viewSuggestionsRepository.getSuggestions();
+    if(!mounted) return;
     setState(() {
       isLoading = false;
     });

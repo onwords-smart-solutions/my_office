@@ -84,10 +84,10 @@ class AppDefaults {
       title: MenuTitle.foodCount,
       image: 'assets/food_count.png',
     ),
-    StaffAccessModel(
-      title: MenuTitle.leaveApproval,
-      image: 'assets/leave_approval.png',
-    ),
+    // StaffAccessModel(
+    //   title: MenuTitle.leaveApproval,
+    //   image: 'assets/leave_approval.png',
+    // ),
     StaffAccessModel(
       title: MenuTitle.searchLead,
       image: 'assets/search_leads.png',
@@ -198,9 +198,9 @@ class AppDefaults {
 //       case MenuTitle.leavePortal:
 //         page = const LeaveApplyScreen();
 //         break;
-      case MenuTitle.leaveApproval:
-        page = const LeaveApprovalScreen();
-        break;
+//       case MenuTitle.leaveApproval:
+//         page = const LeaveApprovalScreen();
+//         break;
       case MenuTitle.searchLead:
         page = SearchLeadsScreen(staffInfo: staffInfo);
         break;

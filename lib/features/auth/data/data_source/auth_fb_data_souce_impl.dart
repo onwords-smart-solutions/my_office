@@ -16,24 +16,6 @@ class AuthFbDataSourceImpl implements AuthFbDataSource {
   AuthFbDataSourceImpl(this._firebaseDatabase, this._firebaseAuth);
 
   @override
-  Future<String> getDeviceInfo() {
-    // TODO: implement getDeviceInfo
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<String>> getFcmTokens({required String userId}) {
-    // TODO: implement getFcmTokens
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> onClearData() async {
-    final pref = await SharedPreferences.getInstance();
-    pref.clear();
-  }
-
-  @override
   Future<Either<ErrorResponse, UserEntity>> login({
     required String email,
     required String password,
@@ -55,12 +37,6 @@ class AuthFbDataSourceImpl implements AuthFbDataSource {
   }
 
   @override
-  Future<void> removeFcmToken({required String userId}) {
-    // TODO: implement removeFcmToken
-    throw UnimplementedError();
-  }
-
-  @override
   Future<Either<ErrorResponse, bool>> resetPassword({
     required String email,
   }) async {
@@ -77,27 +53,6 @@ class AuthFbDataSourceImpl implements AuthFbDataSource {
         ),
       );
     }
-  }
-
-  @override
-  Future<Either<ErrorResponse, bool>> signOut() async {
-    try{
-      await _firebaseAuth.signOut();
-      return const Right(true);
-    }catch(e){
-      return Left(
-        ErrorResponse(
-          error: 'Error occurred while signing out',
-          metaInfo: "Catch triggered while signing out user",
-        ),
-      );
-    }
-  }
-
-  @override
-  Future<void> storeFcmToken({required String userId}) {
-    // TODO: implement storeFcmToken
-    throw UnimplementedError();
   }
 
   @override
