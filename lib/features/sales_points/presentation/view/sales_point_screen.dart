@@ -69,7 +69,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
             .toList();
       });
     } catch (e) {
-      // Handle the error
+      Exception('Error caught while fetching product details! $e');
     }
   }
 

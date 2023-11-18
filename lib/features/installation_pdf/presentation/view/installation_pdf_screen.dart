@@ -4,7 +4,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
 import '../../../../core/utilities/custom_widgets/custom_main_pdf.dart';
-import '../../../../core/utilities/custom_widgets/custom_utils.dart';
+import '../../../../core/utilities/custom_widgets/custom_pdf_utils.dart';
 import 'installation_details.dart';
 
 class InstallationDetailsScreen {

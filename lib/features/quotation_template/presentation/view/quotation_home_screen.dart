@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_office/core/utilities/constants/app_color.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_app_button.dart';
+import 'package:my_office/core/utilities/custom_widgets/custom_text_field.dart';
 import 'package:my_office/features/quotation_template/presentation/view/quotation_preview_screen.dart';
 import 'package:provider/provider.dart';
 import '../../model/client_model.dart';
@@ -85,7 +86,7 @@ class _Client1DetailsState extends State<Client1Details> {
                         SizedBox(
                           height: size.height * 0.02,
                         ),
-                        TextFieldWidget(
+                        CustomTextField(
                           controller: clientName,
                           textInputType: TextInputType.name,
                           textInputAction: TextInputAction.next,
@@ -98,11 +99,11 @@ class _Client1DetailsState extends State<Client1Details> {
                             }
                             return null;
                           },
-                        ).textInputFiled(),
+                        ).textInputField(),
                         SizedBox(
                           height: size.height * 0.02,
                         ),
-                        TextFieldWidget(
+                        CustomTextField(
                           controller: clientStreet,
                           textInputType: TextInputType.name,
                           textInputAction: TextInputAction.next,
@@ -115,11 +116,11 @@ class _Client1DetailsState extends State<Client1Details> {
                             }
                             return null;
                           },
-                        ).textInputFiled(),
+                        ).textInputField(),
                         SizedBox(
                           height: size.height * 0.02,
                         ),
-                        TextFieldWidget(
+                        CustomTextField(
                           controller: clientAddress,
                           textInputType: TextInputType.name,
                           textInputAction: TextInputAction.next,
@@ -132,11 +133,11 @@ class _Client1DetailsState extends State<Client1Details> {
                             }
                             return null;
                           },
-                        ).textInputFiled(),
+                        ).textInputField(),
                         SizedBox(
                           height: size.height * 0.02,
                         ),
-                        TextFieldWidget(
+                        CustomTextField(
                           controller: clientPhone,
                           textInputType: TextInputType.number,
                           textInputAction: TextInputAction.done,
@@ -151,18 +152,18 @@ class _Client1DetailsState extends State<Client1Details> {
                             }
                             return null;
                           },
-                        ).textInputFiled(),
+                        ).textInputField(),
                         SizedBox(
                           height: size.height * 0.02,
                         ),
-                        TextFieldWidget(
+                        CustomTextField(
                           controller: clientGst,
                           textInputType: TextInputType.name,
                           textInputAction: TextInputAction.done,
                           hintName: 'GST (optional)',
                           icon: const Icon(Icons.comment_bank),
                           maxLength: 20,
-                        ).textInputFiled(),
+                        ).textInputField(),
                         SizedBox(
                           height: size.height * 0.02,
                         ),
@@ -291,96 +292,3 @@ class _Client1DetailsState extends State<Client1Details> {
   }
 }
 
-class TextFieldWidget {
-  final TextEditingController controller;
-  final TextInputType textInputType;
-  final TextInputAction textInputAction;
-  final String hintName;
-  final Icon icon;
-  final int maxLength;
-  final bool? isEnable;
-  final bool? isOptional;
-  final String? Function(String?)? validator;
-  final VoidCallback? onTap;
-
-  const TextFieldWidget({
-    Key? key,
-    required this.controller,
-    required this.textInputType,
-    required this.textInputAction,
-    required this.hintName,
-    required this.icon,
-    required this.maxLength,
-    this.validator,
-    this.isEnable,
-    this.isOptional,
-    this.onTap,
-  });
-
-  Widget textInputFiled() {
-    return TextFormField(
-      textCapitalization: TextCapitalization.sentences,
-      controller: controller,
-      textInputAction: textInputAction,
-      keyboardType: textInputType,
-      maxLength: maxLength,
-      enabled: isEnable,
-      style: const TextStyle(
-        color: Colors.black,
-      ),
-      decoration: InputDecoration(
-        counterText: '',
-        prefixIcon: icon,
-        hintText: hintName,
-        labelText: hintName,
-        labelStyle: const TextStyle(
-          color: Colors.black,
-        ),
-        hintStyle: TextStyle(
-          color: Colors.black.withOpacity(0.6),
-        ),
-        errorStyle: const TextStyle(),
-        border: myInputBorder(),
-        enabledBorder: myInputBorder(),
-        focusedBorder: myFocusBorder(),
-        disabledBorder: myDisabledBorder(),
-      ),
-      validator: validator,
-      onTap: onTap,
-    );
-  }
-
-  OutlineInputBorder myInputBorder() {
-    return OutlineInputBorder(
-      borderRadius: const BorderRadius.all(Radius.circular(20)),
-      borderSide: BorderSide(
-        color: Colors.black.withOpacity(0.3),
-        width: 2,
-      ),
-    );
-  }
-
-  OutlineInputBorder myFocusBorder() {
-    return OutlineInputBorder(
-      borderRadius: const BorderRadius.all(
-        Radius.circular(20),
-      ),
-      borderSide: BorderSide(
-        color: Colors.black.withOpacity(0.3),
-        width: 2,
-      ),
-    );
-  }
-
-  OutlineInputBorder myDisabledBorder() {
-    return OutlineInputBorder(
-      borderRadius: const BorderRadius.all(
-        Radius.circular(20),
-      ),
-      borderSide: BorderSide(
-        color: Colors.black.withOpacity(0.3),
-        width: 2,
-      ),
-    );
-  }
-}

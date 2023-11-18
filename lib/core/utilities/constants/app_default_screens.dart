@@ -9,6 +9,7 @@ import '../../../features/food_count/presentation/view/food_count_screen.dart';
 import '../../../features/home/presentation/view/account_details_screen.dart';
 import '../../../features/home/data/model/staff_access_model.dart';
 import '../../../features/installation_pdf/presentation/view/installation_details.dart';
+import '../../../features/invoice_generator/presentation/view/client_details_screen.dart';
 import '../../../features/leave_approval/presentation/view/leave_approval_screen.dart';
 import '../../../features/pr_dashboard/presentation/view/pr_dash_screen.dart';
 import '../../../features/pr_reminder/presentation/view/pr_reminder_screen.dart';
@@ -96,10 +97,10 @@ class AppDefaults {
 //       title: MenuTitle.prVisitCheck,
 //       image: 'assets/visit_check.png',
 //     ),
-//     StaffAccessModel(
-//       title: MenuTitle.createInvoice,
-//       image: 'assets/invoice.png',
-//     ),
+    StaffAccessModel(
+      title: MenuTitle.createInvoice,
+      image: 'assets/invoice.png',
+    ),
     StaffAccessModel(
       title: MenuTitle.finance,
       image: 'assets/finance.png',
@@ -209,9 +210,9 @@ class AppDefaults {
 //       case MenuTitle.prVisitCheck:
 //         page = const VisitCheckScreen();
 //         break;
-//       case MenuTitle.createInvoice:
-//         page = const ClientDetails();
-//         break;
+      case MenuTitle.createInvoice:
+        page = const ClientDetails();
+        break;
       case MenuTitle.finance:
         page = const FinanceScreen();
         break;

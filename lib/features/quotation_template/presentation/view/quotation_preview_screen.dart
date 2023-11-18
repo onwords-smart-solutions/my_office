@@ -5,15 +5,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_app_button.dart';
-import 'package:my_office/features/quotation_template/presentation/view/pdf_screen/invoice_quotation_pdf_screen.dart';
-import 'package:my_office/features/quotation_template/presentation/view/quotation_home_screen.dart';
+import 'package:my_office/core/utilities/custom_widgets/custom_text_field.dart';
+import 'package:my_office/features/quotation_template/presentation/view_model/quotation_template_pdf.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:ui' as ui;
 import '../../../../core/utilities/constants/app_color.dart';
-import '../../../../core/utilities/custom_widgets/custom_utils.dart';
+import '../../../../core/utilities/custom_widgets/custom_pdf_utils.dart';
 import '../../model/client_model.dart';
 import '../../utils/list_of_table_utils.dart';
 import '../../utils/product_utils.dart';
@@ -598,7 +598,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        TextFieldWidget(
+                        CustomTextField(
                           controller: fileNameController,
                           textInputType: TextInputType.name,
                           textInputAction: TextInputAction.done,
@@ -611,7 +611,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                             }
                             return null;
                           },
-                        ).textInputFiled(),
+                        ).textInputField(),
                         const SizedBox(
                           height: 5,
                         ),
@@ -659,7 +659,6 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                             documentDate: DateTime.now(),
                           );
 
-                          DateTime currentPhoneDate = DateTime.now();
                           // Timestamp myTimeStamp =
                           // Timestamp.fromDate(currentPhoneDate);
 
@@ -678,16 +677,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                             flush: true,
                           );
 
-                          OpenFile.open(file.path).then((value) async {
-                            // fileNameController.clear();
-                            // Provider.of<InvoiceProvider>(context,listen: false).clearAllData();
-                            // Navigator.pushAndRemoveUntil(
-                            //     context,
-                            //     MaterialPageRoute(
-                            //         builder: (_) => const ClientDetails()),
-                            //     (route) => false);
-                            // // Navigator.pushNamedAndRemoveUntil(context, '/invoiceGenerator', (route) => false);
-                          });
+                          OpenFile.open(file.path).then((value) async {});
                         }
                       },
                     ),

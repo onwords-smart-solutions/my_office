@@ -19,7 +19,10 @@ class AppButton extends StatelessWidget {
     return FilledButton.tonal(
       onPressed: onPressed,
       style: FilledButton.styleFrom(
-        backgroundColor: backgroundColor,
+        elevation: 5,
+        shadowColor: const Color(0xffF1EAFF),
+        backgroundColor: const Color(0xffE5D4FF),
+        foregroundColor: const Color(0xff5B0888),
         textStyle: TextStyle(
           fontWeight: FontWeight.w500,
           color: textColor,

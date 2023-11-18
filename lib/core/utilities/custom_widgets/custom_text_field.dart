@@ -12,8 +12,8 @@ class CustomTextField {
   final String? Function(String?)? validator;
   final VoidCallback? onTap;
 
-
-  const CustomTextField({Key? key,
+  const CustomTextField({
+    Key? key,
     required this.controller,
     required this.textInputType,
     required this.textInputAction,
@@ -26,7 +26,7 @@ class CustomTextField {
     this.onTap,
   });
 
-  Widget textInputFiled() {
+  Widget textInputField() {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 5),
       child: TextFormField(
@@ -36,22 +36,25 @@ class CustomTextField {
         keyboardType: textInputType,
         maxLength: maxLength,
         enabled: isEnable,
-        style: TextStyle(color: Colors.black,
+        style: const TextStyle(
+          color: Colors.black,
         ),
         decoration: InputDecoration(
           counterText: '',
           prefixIcon: icon,
           hintText: hintName,
           labelText: hintName,
-          labelStyle: TextStyle(color: Colors.black,
+          labelStyle: const TextStyle(
+            color: Colors.black,
           ),
-          hintStyle:
-          TextStyle(color: Colors.black.withOpacity(0.6),
+          hintStyle: TextStyle(
+            color: Colors.black.withOpacity(0.6),
           ),
           border: myInputBorder(),
           enabledBorder: myInputBorder(),
           focusedBorder: myFocusBorder(),
           disabledBorder: myDisabledBorder(),
+          errorBorder: myErrorBorder(),
         ),
         validator: validator,
         onTap: onTap,
@@ -61,33 +64,47 @@ class CustomTextField {
 
   OutlineInputBorder myInputBorder() {
     return OutlineInputBorder(
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
-        borderSide: BorderSide(
-          color: Colors.black.withOpacity(0.3),
-          width: 2,
-        )
+      borderRadius: const BorderRadius.all(Radius.circular(20)),
+      borderSide: BorderSide(
+        color: Colors.black.withOpacity(0.3),
+        width: 2,
+      ),
     );
   }
 
   OutlineInputBorder myFocusBorder() {
     return OutlineInputBorder(
-        borderRadius: const BorderRadius.all(Radius.circular(20),
-        ),
-        borderSide: BorderSide(
-          color: Colors.black.withOpacity(0.3),
-          width: 2,
-        )
+      borderRadius: const BorderRadius.all(
+        Radius.circular(20),
+      ),
+      borderSide: BorderSide(
+        color: Colors.black.withOpacity(0.3),
+        width: 2,
+      ),
     );
   }
 
   OutlineInputBorder myDisabledBorder() {
     return OutlineInputBorder(
-        borderRadius: const BorderRadius.all(Radius.circular(20),
-        ),
-        borderSide: BorderSide(
-          color: Colors.black.withOpacity(0.3),
-          width: 2,
-        )
+      borderRadius: const BorderRadius.all(
+        Radius.circular(20),
+      ),
+      borderSide: BorderSide(
+        color: Colors.black.withOpacity(0.3),
+        width: 2,
+      ),
+    );
+  }
+
+  OutlineInputBorder myErrorBorder(){
+    return OutlineInputBorder(
+      borderRadius: const BorderRadius.all(
+        Radius.circular(20),
+      ),
+      borderSide: BorderSide(
+        color: Colors.red.withOpacity(0.5),
+        width: 2,
+      ),
     );
   }
 }

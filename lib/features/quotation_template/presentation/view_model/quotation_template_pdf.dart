@@ -3,10 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/widgets.dart';
-import '../../../../../core/utilities/custom_widgets/custom_main_pdf.dart';
-import '../../../../../core/utilities/custom_widgets/custom_utils.dart';
-import '../../../model/client_model.dart';
-import '../../../utils/list_of_table_utils.dart';
+import '../../../../core/utilities/custom_widgets/custom_main_pdf.dart';
+import '../../../../core/utilities/custom_widgets/custom_pdf_utils.dart';
+import '../../model/client_model.dart';
+import '../../utils/list_of_table_utils.dart';
 
 class InvAndQtnPdf {
   late double total;

@@ -339,7 +339,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                     }
                                     return null;
                                   },
-                                ).textInputFiled(),
+                                ).textInputField(),
                                 addDataToListController,
                                 extraDevice,
                               );
@@ -524,7 +524,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                     }
                                     return null;
                                   },
-                                ).textInputFiled(),
+                                ).textInputField(),
                                 addDataToListController,
                                 teamMembersName,
                               );
@@ -744,7 +744,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                           hintName: 'Product Name',
                                           icon: const Icon(Icons.person_2),
                                           maxLength: 100,
-                                        ).textInputFiled(),
+                                        ).textInputField(),
                                         SizedBox(height: size.height * 0.01),
 
                                         CustomTextField(
@@ -754,7 +754,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                           hintName: 'Quantity',
                                           icon: const Icon(Icons.person_2),
                                           maxLength: 3,
-                                        ).textInputFiled(),
+                                        ).textInputField(),
                                         SizedBox(height: size.height * 0.01),
 
                                         ActionChip(
@@ -1006,7 +1006,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                     }
                                     return null;
                                   },
-                                ).textInputFiled(),
+                                ).textInputField(),
                                 addDataToListController,
                                 lightBoard8ChannelDetails,
                               );
@@ -1194,7 +1194,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                     }
                                     return null;
                                   },
-                                ).textInputFiled(),
+                                ).textInputField(),
                                 addDataToListController,
                                 lightBoard4ChannelDetails,
                               );
@@ -1351,7 +1351,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                       }
                       return null;
                     },
-                  ).textInputFiled(),
+                  ).textInputField(),
                 ),
                 SizedBox(
                   width: size.width * 0.02,
@@ -1372,7 +1372,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                       }
                       return null;
                     },
-                  ).textInputFiled(),
+                  ).textInputField(),
                 ),
               ],
             ),
@@ -1395,7 +1395,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputFiled(),
+            ).textInputField(),
 
             ////Gate and App
             textWithDropDown(
@@ -1720,7 +1720,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputFiled(),
+            ).textInputField(),
 
             ///Router Password
             CustomTextField(
@@ -1736,7 +1736,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputFiled(),
+            ).textInputField(),
 
             /// Wifi Name
             CustomTextField(
@@ -1752,7 +1752,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputFiled(),
+            ).textInputField(),
 
             ///Wif Password
             CustomTextField(
@@ -1768,7 +1768,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputFiled(),
+            ).textInputField(),
           ],
         ),
       ),
@@ -1809,7 +1809,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputFiled(),
+            ).textInputField(),
 
             ///Local IP
             CustomTextField(
@@ -1825,7 +1825,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputFiled(),
+            ).textInputField(),
 
             /// Static IP
             CustomTextField(
@@ -1841,7 +1841,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputFiled(),
+            ).textInputField(),
 
             /// Server port
             CustomTextField(
@@ -1857,7 +1857,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputFiled(),
+            ).textInputField(),
 
             textWithDropDown(
               'Port Forwarding',
@@ -1979,7 +1979,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   }
                   return null;
                 },
-              ).textInputFiled(),
+              ).textInputField(),
 
             ///Voice Config Password
             if (voiceConfig == 'Yes')
@@ -1996,7 +1996,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   }
                   return null;
                 },
-              ).textInputFiled(),
+              ).textInputField(),
 
             textWithDropDown(
               'B_S_N_L',
@@ -2067,7 +2067,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   }
                   return null;
                 },
-              ).textInputFiled(),
+              ).textInputField(),
 
             ///bSNL Password
             if (bSNL == 'Yes')
@@ -2084,7 +2084,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   }
                   return null;
                 },
-              ).textInputFiled(),
+              ).textInputField(),
           ],
         ),
       ),
@@ -2132,7 +2132,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         }
                         return null;
                       },
-                    ).textInputFiled(),
+                    ).textInputField(),
                   ),
                 ),
                 SizedBox(
@@ -2157,7 +2157,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         }
                         return null;
                       },
-                    ).textInputFiled(),
+                    ).textInputField(),
                   ),
                 ),
               ],
@@ -2183,7 +2183,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         }
                         return null;
                       },
-                    ).textInputFiled(),
+                    ).textInputField(),
                   ),
                 ),
                 SizedBox(
@@ -2208,7 +2208,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         }
                         return null;
                       },
-                    ).textInputFiled(),
+                    ).textInputField(),
                   ),
                 ),
               ],
@@ -2253,7 +2253,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputFiled(),
+            ).textInputField(),
 
             ///Client Id
             CustomTextField(
@@ -2269,7 +2269,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputFiled(),
+            ).textInputField(),
 
             ///Phone Number
             CustomTextField(
@@ -2287,7 +2287,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputFiled(),
+            ).textInputField(),
 
             /// Email
             CustomTextField(
@@ -2303,7 +2303,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               //   }
               //   return null;
               // },
-            ).textInputFiled(),
+            ).textInputField(),
 
             ///Address
             CustomTextField(
@@ -2319,7 +2319,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputFiled(),
+            ).textInputField(),
             SizedBox(height: size.height * 0.01),
 
             Container(
@@ -2629,7 +2629,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                       }
                       return null;
                     },
-                  ).textInputFiled(),
+                  ).textInputField(),
 
                   ///Password
                   CustomTextField(
@@ -2645,7 +2645,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                       }
                       return null;
                     },
-                  ).textInputFiled(),
+                  ).textInputField(),
                 ],
               )
             else
@@ -2666,7 +2666,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   }
                   return null;
                 },
-              ).textInputFiled(),
+              ).textInputField(),
           ],
         ),
       ),
