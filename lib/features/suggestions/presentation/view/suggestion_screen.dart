@@ -133,8 +133,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
             onPressed: () {
               addSuggestionToDatabase();
               sendNotification(
-                // 'Vhbt8jIAfiaV1HxuWERLqJh7dbj2',
-                '',
+                'Vhbt8jIAfiaV1HxuWERLqJh7dbj2',
                 'Suggestion',
                 'New suggestion has been arrived',
               );

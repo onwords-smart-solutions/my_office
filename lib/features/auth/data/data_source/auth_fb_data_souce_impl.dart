@@ -19,13 +19,14 @@ class AuthFbDataSourceImpl implements AuthFbDataSource {
   Future<Either<ErrorResponse, UserEntity>> login({
     required String email,
     required String password,
+    required String uniqueId,
   }) async {
     try {
       final credential = await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return await getUserInfo(credential.user!.uid);
+      return await getUserInfo(credential.user!.uid, uniqueId);
     } on FirebaseAuthException catch (e) {
       return Left(
         ErrorResponse(
@@ -56,12 +57,12 @@ class AuthFbDataSourceImpl implements AuthFbDataSource {
   }
 
   @override
-  Future<Either<ErrorResponse, UserModel>> getUserInfo(String userId) async {
+  Future<Either<ErrorResponse, UserModel>> getUserInfo(String userId,String uniqueId) async {
     try {
       UserModel? userModel;
       await _firebaseDatabase.ref('staff/$userId').once().then((value) {
         if (value.snapshot.exists) {
-          userModel = UserModel.fromRealtimeDb(value.snapshot);
+          userModel = UserModel.fromRealtimeDb(value.snapshot,uniqueId);
         }
       });
       if (userModel != null) {

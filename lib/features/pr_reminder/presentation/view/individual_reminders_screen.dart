@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_office/features/pr_reminder/data/model/pr_reminder_model.dart';
 import '../../../../core/utilities/constants/app_color.dart';
 import '../../../../core/utilities/constants/app_screen_template.dart';
+import '../../../search_leads/presentation/view/customer_leads_screen.dart';
 import '../../../user/domain/entity/user_entity.dart';
 
 class FullRemindersScreen extends StatefulWidget {
@@ -454,15 +455,15 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
             ),
           ),
           onPressed: () {
-            // Navigator.of(context).push(
-            //   MaterialPageRoute(
-            //     builder: (context) => SearchLeadsScreen(
-            //       staffInfo: widget.staffInfo,
-            //       query: widget.fullReminders.phoneNumber,
-            //       selectedStaff: widget.fullReminders.updatedBy,
-            //     ),
-            //   ),
-            // );
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => SearchLeadsScreen(
+                  staffInfo: widget.staffInfo,
+                  query: widget.fullReminders.phoneNumber,
+                  selectedStaff: widget.fullReminders.updatedBy,
+                ),
+              ),
+            );
           },
         ),
       ],

@@ -106,7 +106,6 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     _notificationService.initializePlatformNotifications();
     _initUserData();
-    _getUserInfo();
     super.initState();
   }
 
@@ -127,11 +126,6 @@ class _MyAppState extends State<MyApp> {
         '/invoiceGenerator': (_) => const ClientDetails(),
       },
     );
-  }
-
-  Future<void> _getUserInfo() async {
-    final userProvider = Provider.of<AuthProvider>(context, listen: false);
-    await userProvider.initiateUser();
   }
 }
 

@@ -65,23 +65,12 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> initiateUser() async {
     final staff = await getStaffInfo(user!.uid);
-    if (staff.right.uniqueId.isEmpty) {
-      final id = generateRandomString(20);
-      staff.right.uniqueId = id;
-    }
+
+    if(staff.isRight){
       user = staff.right;
-    notifyListeners();
-  }
-
-  String generateRandomString(int length) {
-    const charset =
-        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    final random = Random();
-    final buffer = StringBuffer();
-
-    for (var i = 0; i < length; i++) {
-      buffer.write(charset[random.nextInt(charset.length)]);
+      notifyListeners();
     }
-    return buffer.toString();
   }
+
+
 }

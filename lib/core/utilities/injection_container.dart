@@ -7,6 +7,7 @@ import 'package:my_office/features/attendance/data/repository/attendance_repo_im
 import 'package:my_office/features/attendance/domain/repository/attendance_repository.dart';
 import 'package:my_office/features/auth/data/data_source/auth_fb_data_souce_impl.dart';
 import 'package:my_office/features/auth/data/data_source/auth_firebase_data_source.dart';
+import 'package:my_office/features/auth/data/data_source/auth_local_data_source.dart';
 import 'package:my_office/features/auth/data/repository/auth_repo_impl.dart';
 import 'package:my_office/features/auth/domain/repository/auth_repository.dart';
 import 'package:my_office/features/auth/domain/use_case/login_case.dart';
@@ -108,6 +109,7 @@ import 'package:my_office/features/work_entry/data/data_source/work_entry_fb_dat
 import 'package:my_office/features/work_entry/data/data_source/work_entry_fb_data_source_impl.dart';
 import 'package:my_office/features/work_entry/data/repository/work_entry_repo_impl.dart';
 import 'package:my_office/features/work_entry/domain/repository/work_entry_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../features/auth/domain/use_case/get_staff_info_use_case.dart';
 import '../../features/employee_of_the_week/data/data_source/employee_fb_data_source_impl.dart';
 import '../../features/employee_of_the_week/data/repository/employee_repo_impl.dart';
@@ -372,7 +374,7 @@ Future<void> init() async {
 
   ///AUTH
   sl.registerLazySingleton<AuthRepository>(
-    () => AuthRepoImpl(sl.call()),
+    () => AuthRepoImpl(sl.call(), sl.call()),
   );
 
   ///HOME SCREEN
@@ -562,13 +564,20 @@ Future<void> init() async {
         () => SearchLeadsFbDataSourceImpl(),
   );
 
+  ///AUTH LOCAL DATA SOURCE
+  sl.registerLazySingleton<AuthLocalDataSourceImpl>(
+        () => AuthLocalDataSourceImpl(sl.call()),
+  );
+
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ EXTERNAL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
   final fbDb = FirebaseDatabase.instance;
   final fbAuth = FirebaseAuth.instance;
+  final sp = await SharedPreferences.getInstance();
 
   sl.registerLazySingleton<FirebaseAuth>(() => fbAuth);
   sl.registerLazySingleton<FirebaseDatabase>(() => fbDb);
   sl.registerLazySingleton<DatabaseReference>(
     () => FirebaseDatabase.instance.ref(),
   );
+  sl.registerLazySingleton<SharedPreferences>(() => sp);
 }

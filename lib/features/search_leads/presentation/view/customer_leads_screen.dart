@@ -221,10 +221,18 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
   // PR STAFF NAMES & CUSTOMER DETAILS FETCHING AND ASSIGNING
   void fetchInitialData() async {
     try {
-      var fetchedCustomers = await searchLeadsRepository.getCustomers();
+       allCustomer = await searchLeadsRepository.getCustomers();
+      getCustomerDetail(
+        createdBy: widget.selectedStaff != null
+            ? widget.selectedStaff!
+            : selectedStaff == ''
+            ? widget.staffInfo.name
+            : selectedStaff,
+        sortChoice: sortOption,
+        ascending: isAscending,
+      );
       var fetchedPRStaffNames = await searchLeadsRepository.getPRStaffNames();
       setState(() {
-        allCustomer = fetchedCustomers;
         staffs = fetchedPRStaffNames;
         isLoading = false;
       });

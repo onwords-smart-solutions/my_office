@@ -13,7 +13,7 @@ class UserModel extends UserEntity {
     required super.uniqueId,
   });
 
-  factory UserModel.fromRealtimeDb(DataSnapshot user) {
+  factory UserModel.fromRealtimeDb(DataSnapshot user,String uniqueId) {
     final userInfo = user.value as Map<Object?, Object?>;
     return UserModel(
       uid: user.key.toString(),
@@ -23,7 +23,7 @@ class UserModel extends UserEntity {
       dob: int.parse(userInfo['dob'].toString()),
       mobile: int.parse(userInfo['mobile'].toString()),
       url: userInfo['profileImage'].toString() == 'null' ? '' : userInfo['profileImage'].toString(),
-      uniqueId: '',
+      uniqueId: uniqueId,
     );
   }
 }

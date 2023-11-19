@@ -274,14 +274,14 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 body: _body(userProvider, size),
 
                 // Onyx button
-                floatingActionButtonAnimator:
-                    FloatingActionButtonAnimator.scaling,
-                floatingActionButton: FloatingActionButton(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100),
-                  ),
-                  backgroundColor: const Color(0xff793FDF),
-                  onPressed: () {
+                // floatingActionButtonAnimator:
+                //     FloatingActionButtonAnimator.scaling,
+                // floatingActionButton: FloatingActionButton(
+                //   shape: RoundedRectangleBorder(
+                //     borderRadius: BorderRadius.circular(100),
+                //   ),
+                //   backgroundColor: const Color(0xff793FDF),
+                //   onPressed: () {
                     // Navigator.of(context).push(
                     //   MaterialPageRoute(
                     //     builder: (_) => Onyx(
@@ -290,12 +290,12 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     //     ),
                     //   ),
                     // );
-                  },
-                  child: Image.asset(
-                    'assets/onyx_thala.png',
-                    scale: 1.7,
-                  ),
-                ),
+                  // },
+                  // child: Image.asset(
+                  //   'assets/onyx_thala.png',
+                  //   scale: 1.7,
+                  // ),
+                // ),
               );
       },
     );
@@ -556,7 +556,17 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       userProvider.user!.name,
       userProvider.user!.dep,
     );
-    _entryDetail.value = data;
+    if(data == null){
+      _entryDetail.value =  CustomPunchModel(
+        staffId: userProvider.user!.uid,
+        name: userProvider.user!.name,
+        department: userProvider.user!.dep,
+        checkInTime: null,
+      );
+    }else{
+      _entryDetail.value = data;
+    }
+
     Timer.periodic(const Duration(seconds: 3), (timer) async {
       final now = DateTime.now();
 

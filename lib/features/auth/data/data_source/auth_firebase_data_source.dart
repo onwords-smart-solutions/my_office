@@ -6,10 +6,10 @@ import '../../../user/domain/entity/user_entity.dart';
 
 abstract class AuthFbDataSource{
   Future<Either<ErrorResponse, UserEntity>> login(
-      {required String email, required String password,
+      {required String email, required String password,required String uniqueId
       });
 
-  Future<Either<ErrorResponse, UserModel>> getUserInfo(String userId);
+  Future<Either<ErrorResponse, UserModel>> getUserInfo(String userId, String uniqueId);
 
   Future<Either<ErrorResponse, bool>> resetPassword({required String email});
 

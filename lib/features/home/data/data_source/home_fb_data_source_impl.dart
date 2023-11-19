@@ -130,86 +130,82 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
       final installationList = await getInstallationMemberList();
 
       for (var menuItems in AppDefaults.allAccess) {
-        if (staff.dep.toLowerCase() == 'admin' ||
+        //adding for management access
+        if (managementList.right.contains(staff.name)) {
+          if (menuItems.title == MenuTitle.createLead ||
+              menuItems.title == MenuTitle.prDashboard) {
+            if (staff.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2') {
+              allAccess.add(menuItems);
+            }
+          } else if (menuItems.title != MenuTitle.viewSuggestions &&
+              menuItems.title != MenuTitle.staffDetail &&
+              menuItems.title != MenuTitle.employeeOfTheWeek &&
+              menuItems.title != MenuTitle.prDashboard) {
+            allAccess.add(menuItems);
+          }
+        }
+
+        //adding for tl access
+        else if (tlList.right.contains(staff.name) ||
+            rndTLList.right.contains(staff.name)) {
+          if (menuItems.title == MenuTitle.workEntry ||
+              menuItems.title == MenuTitle.workDetail ||
+              menuItems.title == MenuTitle.refreshment ||
+              menuItems.title == MenuTitle.leavePortal ||
+              menuItems.title == MenuTitle.searchLead ||
+              menuItems.title == MenuTitle.suggestion ||
+              menuItems.title == MenuTitle.attendance ||
+              menuItems.title == MenuTitle.createInvoice ||
+              menuItems.title == MenuTitle.leaveApproval ||
+              menuItems.title == MenuTitle.quotationTemplate ||
+              menuItems.title == MenuTitle.installationPDF ||
+              menuItems.title == MenuTitle.proxyAttendance ||
+              menuItems.title == MenuTitle.scanQR) {
+            allAccess.add(menuItems);
+          }
+        }
+        //adding for installation access
+        else if (installationList.right.contains(staff.name)) {
+          if (menuItems.title == MenuTitle.workEntry ||
+              menuItems.title == MenuTitle.refreshment ||
+              menuItems.title == MenuTitle.leavePortal ||
+              menuItems.title == MenuTitle.suggestion ||
+              menuItems.title == MenuTitle.createInvoice ||
+              menuItems.title == MenuTitle.quotationTemplate ||
+              menuItems.title == MenuTitle.installationPDF ||
+              menuItems.title == MenuTitle.installationEntry) {
+            allAccess.add(menuItems);
+          }
+        }
+
+        //adding for app and admin access
+        else if (staff.dep.toLowerCase() == 'admin' ||
             staff.dep.toLowerCase() == 'app') {
           allAccess.add(menuItems);
+        } else if (staff.dep.toLowerCase() == 'pr') {
+          if (menuItems.title == MenuTitle.workEntry ||
+              menuItems.title == MenuTitle.refreshment ||
+              menuItems.title == MenuTitle.leavePortal ||
+              menuItems.title == MenuTitle.searchLead ||
+              menuItems.title == MenuTitle.prVisit ||
+              menuItems.title == MenuTitle.suggestion ||
+              menuItems.title == MenuTitle.createInvoice ||
+              menuItems.title == MenuTitle.prWorkDone ||
+              menuItems.title == MenuTitle.salesPoint ||
+              menuItems.title == MenuTitle.scanQR ||
+              menuItems.title == MenuTitle.prReminder ||
+              menuItems.title == MenuTitle.quotationTemplate) {
+            allAccess.add(menuItems);
+          }
+        } else {
+          if (menuItems.title == MenuTitle.workEntry ||
+              menuItems.title == MenuTitle.refreshment ||
+              menuItems.title == MenuTitle.leavePortal ||
+              menuItems.title == MenuTitle.suggestion) {
+            allAccess.add(menuItems);
+          }
         }
       }
-      //   //adding for management access
-      //   if (managementList.right.contains(staff.name)) {
-      //     if (menuItems.title == MenuTitle.createLead) {
-      //       if (staff.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2') {
-      //         allAccess.add(menuItems);
-      //       }
-      //     } else if (menuItems.title != MenuTitle.viewSuggestions ||
-      //         menuItems.title != MenuTitle.staffDetail ||
-      //         menuItems.title != MenuTitle.employeeOfTheWeek ||
-      //         menuItems.title != MenuTitle.prDashboard) {
-      //       allAccess.add(menuItems);
-      //     }
-      //   }
-      //
-      //   //adding for tl access
-      //   else if (tlList.right.contains(staff.name) ||
-      //       rndTLList.right.contains(staff.name)) {
-      //     if (menuItems.title == MenuTitle.workEntry ||
-      //         menuItems.title == MenuTitle.workDetail ||
-      //         menuItems.title == MenuTitle.refreshment ||
-      //         menuItems.title == MenuTitle.leavePortal ||
-      //         menuItems.title == MenuTitle.searchLead ||
-      //         menuItems.title == MenuTitle.suggestion ||
-      //         menuItems.title == MenuTitle.attendance ||
-      //         menuItems.title == MenuTitle.createInvoice ||
-      //         menuItems.title == MenuTitle.leaveApproval ||
-      //         menuItems.title == MenuTitle.quotationTemplate ||
-      //         menuItems.title == MenuTitle.installationPDF ||
-      //         menuItems.title == MenuTitle.proxyAttendance ||
-      //         menuItems.title == MenuTitle.scanQR) {
-      //       allAccess.add(menuItems);
-      //     }
-      //   }
-      //   //adding for installation access
-      //   else if (installationList.right.contains(staff.name)) {
-      //     if (menuItems.title == MenuTitle.workEntry ||
-      //         menuItems.title == MenuTitle.refreshment ||
-      //         menuItems.title == MenuTitle.leavePortal ||
-      //         menuItems.title == MenuTitle.suggestion ||
-      //         menuItems.title == MenuTitle.createInvoice ||
-      //         menuItems.title == MenuTitle.quotationTemplate ||
-      //         menuItems.title == MenuTitle.installationPDF ||
-      //         menuItems.title == MenuTitle.installationEntry) {
-      //       allAccess.add(menuItems);
-      //     }
-      //   }
-      //
-      //   //adding for app and admin access
-      //   else if (staff.dep.toLowerCase() == 'admin' ||
-      //       staff.dep.toLowerCase() == 'app') {
-      //     allAccess.add(menuItems);
-      //   } else if (staff.dep.toLowerCase() == 'pr') {
-      //     if (menuItems.title == MenuTitle.workEntry ||
-      //         menuItems.title == MenuTitle.refreshment ||
-      //         menuItems.title == MenuTitle.leavePortal ||
-      //         menuItems.title == MenuTitle.searchLead ||
-      //         menuItems.title == MenuTitle.prVisit ||
-      //         menuItems.title == MenuTitle.suggestion ||
-      //         menuItems.title == MenuTitle.createInvoice ||
-      //         menuItems.title == MenuTitle.prWorkDone ||
-      //         menuItems.title == MenuTitle.salesPoint ||
-      //         menuItems.title == MenuTitle.scanQR ||
-      //         menuItems.title == MenuTitle.prReminder ||
-      //         menuItems.title == MenuTitle.quotationTemplate) {
-      //       allAccess.add(menuItems);
-      //     }
-      //   } else {
-      //     if (menuItems.title == MenuTitle.workEntry ||
-      //         menuItems.title == MenuTitle.refreshment ||
-      //         menuItems.title == MenuTitle.leavePortal ||
-      //         menuItems.title == MenuTitle.suggestion) {
-      //       allAccess.add(menuItems);
-      //     }
-      //   }
-      // }
 
       allAccess.sort((a, b) => a.title.compareTo(b.title));
       return Right(allAccess);

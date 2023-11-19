@@ -5,17 +5,24 @@ import 'package:my_office/features/auth/domain/repository/auth_repository.dart';
 import 'package:my_office/features/user/data/model/user_model.dart';
 import 'package:my_office/features/user/domain/entity/user_entity.dart';
 
+import '../data_source/auth_local_data_source.dart';
+
 class AuthRepoImpl implements AuthRepository {
   final AuthFbDataSource _authFbDataSource;
+  final AuthLocalDataSourceImpl _authLocalDataSourceImpl;
 
-  AuthRepoImpl(this._authFbDataSource);
+  AuthRepoImpl(this._authFbDataSource, this._authLocalDataSourceImpl);
 
   @override
   Future<Either<ErrorResponse, UserEntity>> login({
     required String email,
     required String password,
   }) async {
-    return await _authFbDataSource.login(email: email, password: password);
+    return await _authFbDataSource.login(
+      email: email,
+      password: password,
+      uniqueId: await _authLocalDataSourceImpl.getUniqueID(),
+    );
   }
 
   @override
@@ -38,7 +45,10 @@ class AuthRepoImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<ErrorResponse, UserModel>> getUserInfo(String userId) async{
-    return await _authFbDataSource.getUserInfo(userId);
+  Future<Either<ErrorResponse, UserModel>> getUserInfo(String userId) async {
+    return await _authFbDataSource.getUserInfo(
+      userId,
+      await _authLocalDataSourceImpl.getUniqueID(),
+    );
   }
 }

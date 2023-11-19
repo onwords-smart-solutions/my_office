@@ -3,7 +3,7 @@ import 'package:my_office/features/notifications/data/data_source/user_fb_data_s
 
 class UserFbDataSourceImpl implements UserFbDataSource {
   final DatabaseReference _userRef =
-      FirebaseDatabase.instance.ref().child('users');
+      FirebaseDatabase.instance.ref().child('fcm_tokens');
 
   @override
   Future<DatabaseEvent> getUserData(String userId) async {
