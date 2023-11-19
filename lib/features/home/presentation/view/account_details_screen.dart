@@ -1,9 +1,6 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -27,9 +24,6 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> {
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  final staff = FirebaseDatabase.instance.ref().child("staff");
-  final firebaseStorage = FirebaseStorage.instance;
   final picker = ImagePicker();
 
   Future pickerGalleryImage(String userId) async {
@@ -221,7 +215,8 @@ class _AccountScreenState extends State<AccountScreen> {
                   await FirebaseAuth.instance.signOut();
                   final pref = await SharedPreferences.getInstance();
                   await pref.clear();
-                  // Provider.of<UserProvider>(context, listen: false).clearUser();
+                  if(!mounted) return;
+                  Provider.of<AuthProvider>(context, listen: false).clearUser();
                   navigator.pushAndRemoveUntil(
                     MaterialPageRoute(builder: (_) => const LoginScreen()),
                     (route) => false,

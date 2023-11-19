@@ -88,7 +88,7 @@ class NotificationService {
   }
 
   // -- Notification related --
-  Future<void> storeFCM(BuildContext context) async {
+  Future<void> storeFCM({required BuildContext context}) async {
     final userProvider = Provider.of<AuthProvider>(context, listen: false);
     final fcmToken = await notificationRepository.getFcmToken();
     final deviceId =
@@ -104,7 +104,7 @@ class NotificationService {
     }
   }
 
-  Future<void> removeFCM(String userId, String uniqueId) async {
+  Future<void> removeFCM({required String userId, required  String uniqueId,}) async {
     await userRepository.removeUserFCM(userId, uniqueId);
   }
 

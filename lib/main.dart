@@ -105,8 +105,8 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     _notificationService.initializePlatformNotifications();
-    // _getUserInfo();
     _initUserData();
+    _getUserInfo();
     super.initState();
   }
 
@@ -129,11 +129,12 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  // Future<void> _getUserInfo(String userId) async {
-  //   Provider.of<AuthProvider>(context, listen: false).getStaffInfo(userId);
-  // }
-
+  Future<void> _getUserInfo() async {
+    final userProvider = Provider.of<AuthProvider>(context, listen: false);
+    await userProvider.initiateUser();
+  }
 }
+
 
 class InitialScreen extends StatefulWidget {
   const InitialScreen({super.key});
@@ -231,7 +232,7 @@ class Loading extends StatelessWidget {
                 await FirebaseAuth.instance.signOut();
                 final pref = await SharedPreferences.getInstance();
                 await pref.clear();
-                Provider.of<AuthProvider>(context, listen: false).onClearData();
+                Provider.of<AuthProvider>(context, listen: false).clearUser();
                 navigator.pushAndRemoveUntil(
                   MaterialPageRoute(builder: (_) => const LoginScreen()),
                   (route) => false,

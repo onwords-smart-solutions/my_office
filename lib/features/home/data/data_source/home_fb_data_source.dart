@@ -1,7 +1,6 @@
   import 'package:either_dart/either.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';
 import '../../../user/domain/entity/user_entity.dart';
-import '../model/custom_punch_model.dart';
 import '../model/staff_access_model.dart';
 
 abstract class HomeFbDataSource {
@@ -29,4 +28,7 @@ abstract class HomeFbDataSource {
 
   Future<Either<ErrorResponse, bool>> phoneNumberSubmitForm(context);
 
+  Future<Map<Object?, Object?>> getAppVersionInfo();
+
+  Future<String> getApkDownloadPath();
 }

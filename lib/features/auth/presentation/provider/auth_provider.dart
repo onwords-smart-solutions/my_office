@@ -1,11 +1,13 @@
 import 'dart:math';
 
 import 'package:either_dart/either.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';
 import 'package:my_office/features/auth/domain/use_case/login_case.dart';
 import 'package:my_office/features/auth/domain/use_case/reset_password_case.dart';
 import 'package:my_office/features/user/domain/entity/user_entity.dart';
+import '../../../notifications/presentation/notification_view_model.dart';
 import '../../domain/use_case/get_staff_info_use_case.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -49,11 +51,25 @@ class AuthProvider extends ChangeNotifier {
 
   Future<Either<ErrorResponse, UserEntity>> getStaffInfo(
     String userId,
-  ) async => await _getUserInfoCase.execute(userId);
+  ) async =>
+      await _getUserInfoCase.execute(userId);
 
-
-  void onClearData() {
+  Future<void> clearUser() async {
+    if (user != null) {
+      await NotificationService()
+          .removeFCM(userId: user!.uid, uniqueId: user!.uniqueId);
+    }
     user = null;
+    notifyListeners();
+  }
+
+  Future<void> initiateUser() async {
+    final staff = await getStaffInfo(user!.uid);
+    if (staff.right.uniqueId.isEmpty) {
+      final id = generateRandomString(20);
+      staff.right.uniqueId = id;
+    }
+      user = staff.right;
     notifyListeners();
   }
 

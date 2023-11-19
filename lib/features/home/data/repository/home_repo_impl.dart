@@ -146,4 +146,14 @@ class HomeRepoImpl implements HomeRepository {
 
     return punchDetail;
   }
+
+  @override
+  Future<Map<Object?, Object?>> checkAppVersion() async {
+    return _homeFbDataSource.getAppVersionInfo();
+  }
+
+  @override
+  Future<String> onClickInstallApk() async {
+    return _homeFbDataSource.getApkDownloadPath();
+  }
 }

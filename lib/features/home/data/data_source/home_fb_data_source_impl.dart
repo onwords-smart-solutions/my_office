@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:either_dart/either.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';
@@ -357,7 +358,8 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
 
   @override
   Future<Map<Object?, Object?>?> fetchAttendanceData(
-      String staffId, DateTime date) async {
+      String staffId, DateTime date,
+      ) async {
     String yearFormat = DateFormat('yyyy').format(date);
     String monthFormat = DateFormat('MM').format(date);
     String dateFormat = DateFormat('dd').format(date);
@@ -370,5 +372,20 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
       return event.snapshot.value as Map<Object?, Object?>?;
     }
     return null;
+  }
+
+  @override
+  Future<Map<Object?, Object?>> getAppVersionInfo() async {
+    final snapshot = await ref.child('myOffice').once();
+    if (snapshot.snapshot.exists) {
+      return snapshot.snapshot.value as Map<Object?, Object?>;
+    }
+    throw Exception("Data not found");
+  }
+
+  @override
+  Future<String> getApkDownloadPath() async {
+    final resultPath = FirebaseStorage.instance.ref('MY OFFICE APK/app-release.apk');
+    return resultPath.fullPath;
   }
 }

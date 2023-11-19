@@ -29,4 +29,7 @@ abstract class HomeRepository{
   Future<Either<ErrorResponse, bool>> birthdaySubmitForm(context);
 
   Future<Either<ErrorResponse, bool>> phoneNumberSubmitForm(context);
+
+  Future<Map<Object?, Object?>> checkAppVersion();
+  Future<String> onClickInstallApk();
 }

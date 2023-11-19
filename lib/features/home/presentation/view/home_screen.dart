@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,12 +12,17 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:install_plugin_v2/install_plugin_v2.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/core/utilities/constants/app_version.dart';
+import 'package:my_office/features/home/data/data_source/home_fb_data_source.dart';
+import 'package:my_office/features/home/data/data_source/home_fb_data_source_impl.dart';
+import 'package:my_office/features/home/data/repository/home_repo_impl.dart';
+import 'package:my_office/features/home/domain/repository/home_repository.dart';
 import 'package:my_office/features/home/presentation/provider/home_provider.dart';
 import 'package:my_office/features/home/presentation/view/account_details_screen.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:porcupine_flutter/porcupine_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/utilities/custom_widgets/custom_alerts.dart';
 import '../../../../core/utilities/custom_widgets/custom_search_delegate.dart';
 import '../../../../core/utilities/custom_widgets/custom_snack_bar.dart';
@@ -26,6 +30,7 @@ import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../../auth/presentation/provider/auth_provider.dart';
+import '../../../notifications/presentation/notification_view_model.dart';
 import '../../../user/domain/entity/user_entity.dart';
 import '../../data/model/custom_punch_model.dart';
 import '../../data/model/staff_access_model.dart';
@@ -50,9 +55,12 @@ class UserHomeScreen extends StatefulWidget {
 }
 
 class _UserHomeScreenState extends State<UserHomeScreen> {
-  // final NotificationService _notificationService = NotificationService();
+  final NotificationService _notificationService = NotificationService();
   int _motivationIndex = 0;
   late StreamSubscription subscription;
+
+  late final HomeFbDataSource _homeFbDataSource = HomeFbDataSourceImpl();
+  late HomeRepository homeRepository = HomeRepoImpl(_homeFbDataSource);
 
   //notifiers
   final ValueNotifier<List<StaffAccessModel>> _staffAccess = ValueNotifier([]);
@@ -192,9 +200,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     _checkAppVersion();
     _getStaffAccess();
     _getNetworkStatus();
-    // _notificationService.storeFCM(context: context);
-    // _notificationService.initFCMNotifications();
-    // _setNotification();
+    _notificationService.storeFCM(context: context);
+    _notificationService.initFCMNotifications();
+    _setNotification();
     _setupFCMListener(context);
     _initSpeech();
     // initPicovoice();
@@ -506,27 +514,26 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   }
 
   //SETTING NOTIFICATION FOR REFRESHMENT
-  // _setNotification() async {
-  //   final pref = await SharedPreferences.getInstance();
-  //   final isNotificationSet = pref.getString('NotificationSetTime') ?? '';
-  //   _notificationService.showDailyNotificationWithPayload(
-  //     setTime: isNotificationSet,
-  //   );
-  // }
+  _setNotification() async {
+    final pref = await SharedPreferences.getInstance();
+    final isNotificationSet = pref.getString('NotificationSetTime') ?? '';
+    _notificationService.showDailyNotificationWithPayload(
+      setTime: isNotificationSet,
+    );
+  }
 
   //CHECKING APP VERSION
   Future<void> _checkAppVersion() async {
-    final ref = FirebaseDatabase.instance.ref();
-    ref.child('myOffice').once().then((value) {
-      if (value.snapshot.exists) {
-        final data = value.snapshot.value as Map<Object?, Object?>;
-        final updatedVersion = data['versionNumber'];
-        final updates = data['updates'].toString();
-        if (AppVersion.androidAppDbVersion != updatedVersion) {
-          _showUpdateAppDialog(updates);
-        }
+    try {
+      final data = await homeRepository.checkAppVersion();
+      final updatedVersion = data['versionNumber'];
+      final updates = data['updates'].toString();
+      if (AppVersion.androidAppDbVersion != updatedVersion) {
+        _showUpdateAppDialog(updates);
       }
-    });
+    } catch (e) {
+      // Handle exception
+    }
   }
 
   //info details functions
@@ -550,7 +557,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       userProvider.user!.dep,
     );
     _entryDetail.value = data;
-    _entryDetail.notifyListeners();
     Timer.periodic(const Duration(seconds: 3), (timer) async {
       final now = DateTime.now();
 
@@ -704,23 +710,35 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   }
 
   Future<void> _onClickInstallApk() async {
-    final resultPath =
-        FirebaseStorage.instance.ref('MY OFFICE APK/app-release.apk');
-    final appDocDir = await getExternalStorageDirectory();
-    final String appDocPath = appDocDir!.path;
-    final File tempFile = File('$appDocPath/MY_OFFICE_UPDATED.apk');
     try {
+      // Getting the APK path from the repository
+      final apkPath = await homeRepository.onClickInstallApk();
+
+      // Setting up the local file path for the APK
+      final appDocDir = await getExternalStorageDirectory();
+      final String appDocPath = appDocDir!.path;
+      final File tempFile = File('$appDocPath/MY_OFFICE_UPDATED.apk');
+
+      // Reference to FirebaseStorage for downloading the APK
+      final resultPath = FirebaseStorage.instance.ref(apkPath);
+
+      // Listening to the download process
       resultPath.writeToFile(tempFile).snapshotEvents.listen((event) async {
         if (event.totalBytes != -1) {
           _totalMB.value = bytesToMB(event.totalBytes);
         }
         _downloadedMB.value = bytesToMB(event.bytesTransferred);
 
+        // Check if download is complete
         if (_totalMB.value == _downloadedMB.value) {
           await tempFile.create();
           await InstallPlugin.installApk(tempFile.path, 'com.onwords.office')
-              .then((result) {})
+              .then((result) {
+            // Handle successful installation
+          })
               .catchError((error) {
+            // Handle installation error
+            if (!mounted) return;
             Navigator.of(context).pop();
             CustomSnackBar.showErrorSnackbar(
               message: 'Unable to update my office. Try again',
@@ -730,14 +748,24 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         }
       });
     } on FirebaseException {
+      // Handle Firebase specific exceptions
       if (!mounted) return;
       Navigator.of(context).pop();
       CustomSnackBar.showErrorSnackbar(
         message: 'Unable to update my office. Try again',
         context: context,
       );
+    } catch (e) {
+      // Handle other exceptions
+      if (!mounted) return;
+      Navigator.of(context).pop();
+      CustomSnackBar.showErrorSnackbar(
+        message: 'An error occurred: ${e.toString()}',
+        context: context,
+      );
     }
   }
+
 
   @override
   void dispose() {
