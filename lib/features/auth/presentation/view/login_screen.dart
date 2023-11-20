@@ -1,13 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:my_office/features/auth/data/repository/auth_repo_impl.dart';
+import 'package:my_office/features/auth/domain/repository/auth_repository.dart';
 import 'package:my_office/features/auth/presentation/provider/auth_provider.dart';
 import 'package:my_office/features/home/presentation/view/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/utilities/constants/app_color.dart';
 import '../../../../core/utilities/custom_widgets/custom_snack_bar.dart';
+import '../../../../main.dart';
+import '../../data/data_source/auth_fb_data_souce_impl.dart';
+import '../../data/data_source/auth_fb_data_source.dart';
+import '../../data/data_source/auth_local_data_source.dart';
 import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -25,8 +32,6 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isLoading = false;
   String _email = '';
   String _password = '';
-
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -234,7 +239,6 @@ class _LoginScreenState extends State<LoginScreen> {
               right: width * 0.05,
               child: buildGestureDetector(height),
             ),
-
           ],
         ),
       ),
@@ -246,7 +250,7 @@ class _LoginScreenState extends State<LoginScreen> {
   ) {
     return InkWell(
       borderRadius: BorderRadius.circular(10),
-      onTap: submitForm,
+      onTap: _isLoading ? null : submitForm,
       child: Ink(
         height: height * 0.07,
         decoration: BoxDecoration(
@@ -270,42 +274,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     fontSize: height * 0.033,
                   ),
                 ),
-        ),
-      ),
-    );
-  }
-
-  Widget createAccountWidget(double height, Widget screen) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => screen),
-          );
-        });
-      },
-      child: RichText(
-        textAlign: TextAlign.center,
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: 'Not a member  ',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-                fontSize: height * 0.015,
-              ),
-            ),
-            TextSpan(
-              text: 'Create an account ?',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                color: AppColor.primaryColor,
-                fontSize: height * 0.015,
-              ),
-            ),
-          ],
         ),
       ),
     );
@@ -339,34 +307,127 @@ class _LoginScreenState extends State<LoginScreen> {
 
   //FUNCTIONS
   Future<void> submitForm() async {
-    final valid = _formKey.currentState!.validate();
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    if (valid) {
+    final isValid = _formKey.currentState!.validate();
+    if (!isValid) return;
+    _formKey.currentState!.save();
+    setState(() => _isLoading = true);
+
+    try {
+      await _signIn();
+    } catch (e) {
+      Exception('Error caught while saving form key! $e');
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  Future<void> _signIn() async {
+    late FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    late FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
+    late AuthFbDataSource authFbDataSource = AuthFbDataSourceImpl(
+      firebaseDatabase,
+      firebaseAuth,
+    );
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    late AuthLocalDataSourceImpl authLocalDataSourceImpl =
+        AuthLocalDataSourceImpl(
+      sharedPreferences,
+    );
+    late AuthRepository authRepository = AuthRepoImpl(
+      authFbDataSource,
+      authLocalDataSourceImpl,
+    );
+    try {
+      final userCredential =
+          await authRepository.signIn(email: _email, password: _password);
+      await _fetchAndProcessStaffDetails(userCredential.user!.uid);
+    } on FirebaseAuthException catch (e) {
+      // Handle Firebase specific errors
       if (!mounted) return;
       setState(() {
-        _isLoading = true;
+        _isLoading = false;
       });
-      _formKey.currentState!.save();
-      final response = await authProvider.onLogin(
-        email: _email,
-        password: _password,
-      );
-      if (response != null) {
-        setState(() {
-          _isLoading = false;
-        });
-        if (!mounted) return;
-        CustomSnackBar.showErrorSnackbar(
-          context: context,
-          message: 'Provide valid email and password!!',
-        );
+      if (e.code.contains('Invalid-email')) {
+        CustomSnackBar.showErrorSnackbar(message: 'Provide a valid email', context: context);
+      } else if (e.code.contains('user-not-found')) {
+        CustomSnackBar.showErrorSnackbar(message: 'No user associates with this email', context: context);
+      } else if (e.code.contains('wrong-password')) {
+        CustomSnackBar.showErrorSnackbar(message: 'Invalid password', context: context);
       } else {
-        if(!mounted)return;
-        Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (_) => const UserHomeScreen()),
-          (route) => false,
-        );
+        CustomSnackBar.showErrorSnackbar(message: 'Something went wrong. try again!', context: context);
       }
+    } catch (e) {
+      // Handle other errors
+    }
+  }
+
+  Future<void> _fetchAndProcessStaffDetails(String uid) async {
+    final navigator = Navigator.of(context);
+
+    late FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    late FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
+    late AuthFbDataSource authFbDataSource = AuthFbDataSourceImpl(
+      firebaseDatabase,
+      firebaseAuth,
+    );
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    late AuthLocalDataSourceImpl authLocalDataSourceImpl =
+        AuthLocalDataSourceImpl(
+      sharedPreferences,
+    );
+    late AuthRepository authRepository = AuthRepoImpl(
+      authFbDataSource,
+      authLocalDataSourceImpl,
+    );
+    final staff = await authRepository.getStaff(
+      uid,
+      await authLocalDataSourceImpl.getUniqueID(),
+    );
+    if (staff != null) {
+      // Process staff details, e.g., navigate to a new screen or update state
+      navigator.pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const AuthenticationScreen()),
+        (route) => false,
+      );
+      _initUserData();
+    } else {
+      // Handle case where staff details are not found
+      CustomSnackBar.showErrorSnackbar(
+          message: 'Something went wrong. Try again', context: context);
+      try {
+        FirebaseAuth.instance.signOut();
+      } catch (e) {
+        print('user not logged in $e');
+      }
+    }
+  }
+
+  Future<void> _initUserData() async {
+    late FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    late FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
+    late AuthFbDataSource authFbDataSource = AuthFbDataSourceImpl(
+      firebaseDatabase,
+      firebaseAuth,
+    );
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    late AuthLocalDataSourceImpl authLocalDataSourceImpl =
+        AuthLocalDataSourceImpl(
+      sharedPreferences,
+    );
+    late AuthRepository authRepository = AuthRepoImpl(
+      authFbDataSource,
+      authLocalDataSourceImpl,
+    );
+
+    final context = this.context;
+    if (FirebaseAuth.instance.currentUser != null) {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final response = await authRepository.getStaff(
+          FirebaseAuth.instance.currentUser!.uid,
+          await authLocalDataSourceImpl.getUniqueID());
+      authProvider.user = response;
     }
   }
 }

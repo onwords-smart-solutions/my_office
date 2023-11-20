@@ -23,7 +23,7 @@ class AuthLocalDataSourceImpl {
     await _sharedPreferences.setString(_id, id);
   }
 
-  Future<void> clearCache()async=>await _sharedPreferences.remove(_id);
+  Future<void> clearCache() async => await _sharedPreferences.remove(_id);
 
   String _generateRandomString(int length) {
     const charset =

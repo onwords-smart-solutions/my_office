@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:after_layout/after_layout.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
@@ -13,10 +14,15 @@ import 'package:my_office/features/home/presentation/provider/home_provider.dart
 import 'package:my_office/features/pr_reminder/presentation/provider/pr_reminder_provider.dart';
 import 'package:my_office/features/proxy_attendance/presentation/provider/proxy_attendance_provider.dart';
 import 'package:my_office/features/staff_details/presentation/provider/staff_detail_provider.dart';
-import 'package:my_office/features/home/presentation/view/phone_number_screen.dart';
-import 'package:my_office/features/home/presentation/view/birthday_picker_screen.dart';
+import 'package:my_office/features/auth/presentation/view/phone_number_screen.dart';
+import 'package:my_office/features/auth/presentation/view/birthday_picker_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'features/auth/data/data_source/auth_fb_data_souce_impl.dart';
+import 'features/auth/data/data_source/auth_fb_data_source.dart';
+import 'features/auth/data/data_source/auth_local_data_source.dart';
+import 'features/auth/data/repository/auth_repo_impl.dart';
+import 'features/auth/domain/repository/auth_repository.dart';
 import 'features/auth/presentation/view/intro_screen.dart';
 import 'features/auth/presentation/view/login_screen.dart';
 import 'features/home/presentation/view/home_screen.dart';
@@ -91,14 +97,27 @@ class _MyAppState extends State<MyApp> {
   final NotificationService _notificationService = NotificationService();
 
   Future<void> _initUserData() async {
+    late FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    late FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
+    late AuthFbDataSource authFbDataSource = AuthFbDataSourceImpl(
+      firebaseDatabase,
+      firebaseAuth,
+    );
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    late AuthLocalDataSourceImpl authLocalDataSourceImpl =
+    AuthLocalDataSourceImpl(
+      sharedPreferences,
+    );
+    late AuthRepository authRepository = AuthRepoImpl(
+      authFbDataSource,
+      authLocalDataSourceImpl,
+    );
+
     final context = this.context;
     if (FirebaseAuth.instance.currentUser != null) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      final response = await authProvider
-          .getStaffInfo(FirebaseAuth.instance.currentUser!.uid);
-      if (response.isRight) {
-        authProvider.user = response.right;
-      }
+      final response = await authRepository.getStaff(FirebaseAuth.instance.currentUser!.uid, await authLocalDataSourceImpl.getUniqueID());
+        authProvider.user = response;
     }
   }
 

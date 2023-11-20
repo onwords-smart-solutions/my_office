@@ -24,10 +24,6 @@ abstract class HomeFbDataSource {
 
   int getRandomNumber();
 
-  Future<Either<ErrorResponse, bool>> birthdaySubmitForm(context);
-
-  Future<Either<ErrorResponse, bool>> phoneNumberSubmitForm(context);
-
   Future<Map<Object?, Object?>> getAppVersionInfo();
 
   Future<String> getApkDownloadPath();

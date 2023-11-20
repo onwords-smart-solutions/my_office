@@ -1,24 +1,24 @@
-import 'dart:math';
 
-import 'package:either_dart/either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:my_office/core/utilities/response/error_response.dart';
-import 'package:my_office/features/auth/domain/use_case/login_case.dart';
 import 'package:my_office/features/auth/domain/use_case/reset_password_case.dart';
 import 'package:my_office/features/user/domain/entity/user_entity.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../notifications/presentation/notification_view_model.dart';
-import '../../domain/use_case/get_staff_info_use_case.dart';
+import '../../data/data_source/auth_fb_data_souce_impl.dart';
+import '../../data/data_source/auth_fb_data_source.dart';
+import '../../data/data_source/auth_local_data_source.dart';
+import '../../data/repository/auth_repo_impl.dart';
+import '../../domain/repository/auth_repository.dart';
 
 class AuthProvider extends ChangeNotifier {
-  final LoginCase _loginCase;
   final ResetPasswordCase _resetPasswordCase;
-  final GetStaffInfoCase _getUserInfoCase;
+  final AuthLocalDataSourceImpl _authLocalDataSourceImpl;
 
   AuthProvider(
-    this._loginCase,
     this._resetPasswordCase,
-    this._getUserInfoCase,
+      this._authLocalDataSourceImpl,
   );
 
   UserEntity? _userEntity;
@@ -34,7 +34,13 @@ class AuthProvider extends ChangeNotifier {
     required String email,
     required String password,
   }) async {
-    final response = await _loginCase.execute(email: email, password: password);
+    late FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    late  FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
+    late  AuthFbDataSource authFbDataSource = AuthFbDataSourceImpl(firebaseDatabase, firebaseAuth);
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    late AuthLocalDataSourceImpl authLocalDataSourceImpl = AuthLocalDataSourceImpl(sharedPreferences);
+    late AuthRepository authRepository = AuthRepoImpl(authFbDataSource, authLocalDataSourceImpl);
+    final response = await authRepository.login(email: email, password: password);
     if (response.isLeft) return response.left.error;
     if (response.isRight) user = response.right;
     return null;
@@ -49,28 +55,47 @@ class AuthProvider extends ChangeNotifier {
     return null;
   }
 
-  Future<Either<ErrorResponse, UserEntity>> getStaffInfo(
-    String userId,
-  ) async =>
-      await _getUserInfoCase.execute(userId);
-
   Future<void> clearUser() async {
     if (user != null) {
       await NotificationService()
           .removeFCM(userId: user!.uid, uniqueId: user!.uniqueId);
     }
+    await _authLocalDataSourceImpl.clearCache();
     user = null;
     notifyListeners();
   }
 
-  Future<void> initiateUser() async {
-    final staff = await getStaffInfo(user!.uid);
+  Future<void> updateDOB(DateTime dob) async {
 
-    if(staff.isRight){
-      user = staff.right;
+    late FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    late  FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
+    late  AuthFbDataSource authFbDataSource = AuthFbDataSourceImpl(firebaseDatabase, firebaseAuth);
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    late AuthLocalDataSourceImpl authLocalDataSourceImpl = AuthLocalDataSourceImpl(sharedPreferences);
+    late AuthRepository authRepository = AuthRepoImpl(authFbDataSource, authLocalDataSourceImpl);
+
+    if(user != null){
+      int dobTimestamp = dob.millisecondsSinceEpoch;
+      DateTime dobAsDateTime = DateTime.fromMillisecondsSinceEpoch(dobTimestamp); // Convert back to DateTime
+      await authRepository.updateUserDOB(user!.uid, dobAsDateTime);
+      user!.dob = dobTimestamp;
       notifyListeners();
     }
   }
 
+  Future<void> updateMobile(int phoneNumber) async{
+    late FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    late  FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
+    late  AuthFbDataSource authFbDataSource = AuthFbDataSourceImpl(firebaseDatabase, firebaseAuth);
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    late AuthLocalDataSourceImpl authLocalDataSourceImpl = AuthLocalDataSourceImpl(sharedPreferences);
+    late AuthRepository authRepository = AuthRepoImpl(authFbDataSource, authLocalDataSourceImpl);
 
+    if(user != null){
+      int mobile = phoneNumber;
+      await authRepository.updateStaffMobile(user!.uid, phoneNumber);
+      user!.mobile = mobile;
+      notifyListeners();
+    }
+  }
 }

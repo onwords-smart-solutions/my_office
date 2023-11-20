@@ -11,8 +11,6 @@ import 'package:my_office/features/home/domain/use_case/get_staff_details_use_ca
 import 'package:my_office/features/home/domain/use_case/get_tl_list_use_case.dart';
 import '../../../../core/utilities/response/error_response.dart';
 import '../../../user/domain/entity/user_entity.dart';
-import '../../domain/use_case/birthday_submit_form_use_case.dart';
-import '../../domain/use_case/phone_number_submit_form_use_case.dart';
 import '../../data/model/custom_punch_model.dart';
 import '../../data/model/staff_access_model.dart';
 
@@ -26,8 +24,6 @@ class HomeProvider extends ChangeNotifier {
   final GetStaffAccessCase _getStaffAccessCase;
   final GetStaffDetailsCase _getStaffDetailsCase;
   final GetTlListCase _getTlListCase;
-  final BirthdaySubmitFormCase _birthdaySubmitFormCase;
-  final PhoneNumberSubmitFormCase _phoneNumberSubmitFormCase;
 
   HomeProvider(this._getAllBirthdayCase,
       this._getTlListCase,
@@ -38,8 +34,6 @@ class HomeProvider extends ChangeNotifier {
       this._getPunchingTimeCase,
       this._getManagementListCase,
       this._getInstallationMembersListCase,
-      this._birthdaySubmitFormCase,
-      this._phoneNumberSubmitFormCase,
       );
 
   Future<Either<ErrorResponse, List<String>>> getManagementList() async =>
@@ -73,10 +67,4 @@ class HomeProvider extends ChangeNotifier {
       await _getStaffDetailsCase.execute();
 
   int getRandomNumber() => _getRandomNumberCase.execute();
-
-  Future<Either<ErrorResponse, bool>> birthdaySubmitForm(context) async =>
-    await _birthdaySubmitFormCase.execute(context);
-
-  Future<Either<ErrorResponse, bool>> phoneNumberSubmitForm(context) async =>
-      await _phoneNumberSubmitFormCase.execute(context);
 }

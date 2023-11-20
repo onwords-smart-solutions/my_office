@@ -6,11 +6,10 @@ import 'package:my_office/features/attendance/data/data_source/attendance_fb_dat
 import 'package:my_office/features/attendance/data/repository/attendance_repo_impl.dart';
 import 'package:my_office/features/attendance/domain/repository/attendance_repository.dart';
 import 'package:my_office/features/auth/data/data_source/auth_fb_data_souce_impl.dart';
-import 'package:my_office/features/auth/data/data_source/auth_firebase_data_source.dart';
+import 'package:my_office/features/auth/data/data_source/auth_fb_data_source.dart';
 import 'package:my_office/features/auth/data/data_source/auth_local_data_source.dart';
 import 'package:my_office/features/auth/data/repository/auth_repo_impl.dart';
 import 'package:my_office/features/auth/domain/repository/auth_repository.dart';
-import 'package:my_office/features/auth/domain/use_case/login_case.dart';
 import 'package:my_office/features/auth/domain/use_case/reset_password_case.dart';
 import 'package:my_office/features/auth/presentation/provider/auth_provider.dart';
 import 'package:my_office/features/create_lead/data/data_source/create_lead_fb_data_source.dart';
@@ -44,8 +43,6 @@ import 'package:my_office/features/home/domain/use_case/get_rnd_tl_list_use_case
 import 'package:my_office/features/home/domain/use_case/get_staff_access_use_case.dart';
 import 'package:my_office/features/home/domain/use_case/get_staff_details_use_case.dart';
 import 'package:my_office/features/home/domain/use_case/get_tl_list_use_case.dart';
-import 'package:my_office/features/home/domain/use_case/birthday_submit_form_use_case.dart';
-import 'package:my_office/features/home/domain/use_case/phone_number_submit_form_use_case.dart';
 import 'package:my_office/features/leave_approval/data/data_source/leave_approval_fb_data_source.dart';
 import 'package:my_office/features/leave_approval/data/data_source/leave_approval_fb_data_source_impl.dart';
 import 'package:my_office/features/leave_approval/data/repository/leave_approval_repo_impl.dart';
@@ -110,7 +107,6 @@ import 'package:my_office/features/work_entry/data/data_source/work_entry_fb_dat
 import 'package:my_office/features/work_entry/data/repository/work_entry_repo_impl.dart';
 import 'package:my_office/features/work_entry/domain/repository/work_entry_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../features/auth/domain/use_case/get_staff_info_use_case.dart';
 import '../../features/employee_of_the_week/data/data_source/employee_fb_data_source_impl.dart';
 import '../../features/employee_of_the_week/data/repository/employee_repo_impl.dart';
 import '../../features/food_count/data/data_source/food_count_fb_data_source.dart';
@@ -132,15 +128,12 @@ Future<void> init() async {
     () => AuthProvider(
       sl.call(),
       sl.call(),
-      sl.call(),
     ),
   );
 
   ///HOME PROVIDER
   sl.registerFactory<HomeProvider>(
     () => HomeProvider(
-      sl.call(),
-      sl.call(),
       sl.call(),
       sl.call(),
       sl.call(),
@@ -200,10 +193,6 @@ Future<void> init() async {
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ USE CASES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
-  ///LOGIN
-  sl.registerLazySingleton<LoginCase>(
-    () => LoginCase(authRepository: sl.call()),
-  );
 
   ///RESET PASSWORD
   sl.registerLazySingleton<ResetPasswordCase>(
@@ -253,21 +242,6 @@ Future<void> init() async {
   ///GET TL NAMES
   sl.registerLazySingleton<GetTlListCase>(
     () => GetTlListCase(homeRepository: sl.call()),
-  );
-
-  ///BIRTHDAY SUBMIT FORM
-  sl.registerLazySingleton<BirthdaySubmitFormCase>(
-    () => BirthdaySubmitFormCase(homeRepository: sl.call()),
-  );
-
-  ///PHONE NUMBER SUBMIT FORM
-  sl.registerLazySingleton<PhoneNumberSubmitFormCase>(
-    () => PhoneNumberSubmitFormCase(homeRepository: sl.call()),
-  );
-
-  ///GET EMPLOYEE INFO
-  sl.registerLazySingleton<GetStaffInfoCase>(
-    () => GetStaffInfoCase(authRepository: sl.call()),
   );
 
   ///ALL STAFF NAMES

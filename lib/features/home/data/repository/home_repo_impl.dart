@@ -56,16 +56,6 @@ class HomeRepoImpl implements HomeRepository {
   }
 
   @override
-  Future<Either<ErrorResponse, bool>> birthdaySubmitForm(context) async {
-    return await _homeFbDataSource.birthdaySubmitForm(context);
-  }
-
-  @override
-  Future<Either<ErrorResponse, bool>> phoneNumberSubmitForm(context) async {
-    return await _homeFbDataSource.phoneNumberSubmitForm(context);
-  }
-
-  @override
   Future<CustomPunchModel?> checkTime(
     String staffId,
     String name,

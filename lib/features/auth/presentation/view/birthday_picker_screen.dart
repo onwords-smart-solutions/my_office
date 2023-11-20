@@ -1,9 +1,21 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:my_office/features/auth/data/data_source/auth_fb_data_souce_impl.dart';
+import 'package:my_office/features/auth/data/data_source/auth_fb_data_source.dart';
+import 'package:my_office/features/auth/data/data_source/auth_local_data_source.dart';
+import 'package:my_office/features/auth/data/repository/auth_repo_impl.dart';
+import 'package:my_office/features/auth/domain/repository/auth_repository.dart';
 import 'package:my_office/features/home/presentation/provider/home_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../core/utilities/custom_widgets/custom_snack_bar.dart';
+import '../../../../main.dart';
+import '../provider/auth_provider.dart';
 
 class BirthdayPickerScreen extends StatelessWidget {
   final ValueNotifier<DateTime?> _birthday = ValueNotifier(null);
@@ -13,7 +25,6 @@ class BirthdayPickerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final homeProvider = Provider.of<HomeProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -100,7 +111,7 @@ class BirthdayPickerScreen extends StatelessWidget {
                                   ),
                                 )
                               : FilledButton(
-                                  onPressed: () => homeProvider.birthdaySubmitForm(context),
+                                  onPressed: () => _submitForm(context),
                                   style: FilledButton.styleFrom(
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12.0),
@@ -179,6 +190,35 @@ class BirthdayPickerScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _submitForm(BuildContext context) async {
+    late FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    late  FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
+    late  AuthFbDataSource authFbDataSource = AuthFbDataSourceImpl(firebaseDatabase, firebaseAuth);
+     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    late AuthLocalDataSourceImpl authLocalDataSourceImpl = AuthLocalDataSourceImpl(sharedPreferences);
+    late AuthRepository authRepository = AuthRepoImpl(authFbDataSource, authLocalDataSourceImpl);
+
+    _loading.value = true;
+    final userProvider = Provider.of<AuthProvider>(context, listen: false);
+
+    if (_birthday.value == null) {
+      CustomSnackBar.showErrorSnackbar(
+        message: 'Please choose your date of birth',
+        context: context,
+      );
+      _loading.value = false;
+    } else {
+       await authRepository.updateUserDOB(userProvider.user!.uid, _birthday.value!);
+       userProvider.updateDOB(_birthday.value!);
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => const AuthenticationScreen(),
+        ),
+            (route) => false,
+      );
+    }
   }
 
   String _dateFormat(DateTime date) => DateFormat('dd-MM-yyyy').format(date);

@@ -1,9 +1,8 @@
-
 import 'package:either_dart/either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';
-import 'package:my_office/features/auth/data/data_source/auth_firebase_data_source.dart';
+import 'package:my_office/features/auth/data/data_source/auth_fb_data_source.dart';
 import 'package:my_office/features/user/domain/entity/user_entity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -57,12 +56,13 @@ class AuthFbDataSourceImpl implements AuthFbDataSource {
   }
 
   @override
-  Future<Either<ErrorResponse, UserModel>> getUserInfo(String userId,String uniqueId) async {
+  Future<Either<ErrorResponse, UserModel>> getUserInfo(
+      String userId, String uniqueId) async {
     try {
       UserModel? userModel;
       await _firebaseDatabase.ref('staff/$userId').once().then((value) {
         if (value.snapshot.exists) {
-          userModel = UserModel.fromRealtimeDb(value.snapshot,uniqueId);
+          userModel = UserModel.fromRealtimeDb(value.snapshot, uniqueId);
         }
       });
       if (userModel != null) {
@@ -86,14 +86,39 @@ class AuthFbDataSourceImpl implements AuthFbDataSource {
   }
 
   @override
-  Future<Either<ErrorResponse, void>> updateBirthday() {
-    // TODO: implement updateBirthday
-    throw UnimplementedError();
+  Future<void> updateDateOfBirth(String userId, DateTime dob) async {
+    await _firebaseDatabase
+        .ref('staff/$userId')
+        .update({'dob': dob.millisecondsSinceEpoch});
   }
 
   @override
-  Future<Either<ErrorResponse, void>> updatePhoneNumber() {
-    // TODO: implement updatePhoneNumber
-    throw UnimplementedError();
+  Future<void> updateStaffMobile(String uid, int mobile) async {
+    await _firebaseDatabase.ref('staff/$uid').update({'mobile': mobile});
+  }
+
+  @override
+  Future<UserCredential> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) {
+    return _firebaseAuth.signInWithEmailAndPassword(
+        email: email, password: password);
+  }
+
+  @override
+  Future<void> signOut() {
+    return _firebaseAuth.signOut();
+  }
+
+  @override
+  Future<Map<Object?, Object?>?> getStaffDetails(String uid) async {
+    final DatabaseReference staffRef =
+        FirebaseDatabase.instance.ref().child("staff");
+    final snapshot = await staffRef.child(uid).once();
+    if (snapshot.snapshot.exists) {
+      return snapshot.snapshot.value as Map<Object?, Object?>?;
+    }
+    return null;
   }
 }

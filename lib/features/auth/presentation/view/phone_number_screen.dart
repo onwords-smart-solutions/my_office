@@ -1,9 +1,18 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:my_office/features/auth/presentation/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
-import '../provider/home_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/utilities/custom_widgets/custom_snack_bar.dart';
+import '../../../home/presentation/provider/home_provider.dart';
 import '../../../../main.dart';
+import '../../data/data_source/auth_fb_data_souce_impl.dart';
+import '../../data/data_source/auth_fb_data_source.dart';
+import '../../data/data_source/auth_local_data_source.dart';
+import '../../data/repository/auth_repo_impl.dart';
+import '../../domain/repository/auth_repository.dart';
 
 final ValueNotifier<bool> _loading = ValueNotifier(false);
 
@@ -98,7 +107,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                   ),
                 ) :
                   FilledButton(
-                    onPressed: () => homeProvider.phoneNumberSubmitForm(context),
+                    onPressed: _submitForm,
                     child: const Text(
                       'Continue',
                       style: TextStyle(
@@ -113,5 +122,37 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
         ),
       ),
     );
+  }
+
+
+  Future<void> _submitForm() async {
+    late FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    late  FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
+    late  AuthFbDataSource authFbDataSource = AuthFbDataSourceImpl(firebaseDatabase, firebaseAuth);
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    late AuthLocalDataSourceImpl authLocalDataSourceImpl = AuthLocalDataSourceImpl(sharedPreferences);
+    late AuthRepository authRepository = AuthRepoImpl(authFbDataSource, authLocalDataSourceImpl);
+
+    _loading.value = true;
+    final userProvider = Provider.of<AuthProvider>(context, listen: false);
+
+    if (phoneController.text.isEmpty || phoneController.text.length < 10) {
+      CustomSnackBar.showErrorSnackbar(
+        message: 'Please enter a valid contact number',
+        context: context,
+      );
+      _loading.value = false;
+    } else {
+      int mobile = int.parse(phoneController.text);
+     await authRepository.updateStaffMobile(userProvider.user!.uid, mobile);
+     userProvider.updateMobile(mobile);
+      if(!mounted)return;
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (_) => const AuthenticationScreen(),
+        ),
+            (route) => false,
+      );
+    }
   }
 }
