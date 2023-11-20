@@ -11,12 +11,12 @@ Clean Architecture is a way of organizing code in a software project that helps 
 
 ## Features
 
-* Work entry - Employee can write down their day-to-day work entries here.
-* Order refreshment - With this feature one can easily order a refreshment drink and get refreshed.
-* Search leads - This feature is for the PR team to get all customer details and also make a note of it.
-* Suggestions - Foremost advantage for an employee to suggest ideas and also to make them and organization grow eventually.
-* Invoice generator - Generate Quotations and Invoices within our app for Customers.
-* Attendance - Another advantage for an employee to mark their Presence or Entry whether inside the premises or not. 
+**Work entry** - Employee can write down their day-to-day work entries here.
+**Order refreshment** - With this feature one can easily order a refreshment drink and get refreshed.
+**Search leads** - This feature is for the PR team to get all customer details and also make a note of it.
+**Suggestions** - Foremost advantage for an employee to suggest ideas and also to make them and organization grow eventually.
+**Invoice generator** - Generate Quotations and Invoices within our app for Customers.
+**Attendance** - Another advantage for an employee to mark their Presence or Entry whether inside the premises or not. 
 
 ## Getting Started
 
@@ -33,8 +33,11 @@ Let's make this simple and get this tools available with you before you begin.
 
 - Clone the repository:
 
-~ git clone https://github.com/onwords-smart-solutions/my_office.git ~
-~ cd My-Office ~
+```
+ git clone https://github.com/onwords-smart-solutions/my_office.git 
+ cd My-Office 
+ 
+ ```
 
 - Navigate to project directory and with Pubspec.yaml file install the dependencies.
 
