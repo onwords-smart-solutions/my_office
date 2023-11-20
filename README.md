@@ -33,7 +33,7 @@ Let's make this simple and get this tools available with you before you begin.
 
 - Clone the repository:
 
-git clone[](https://github.com/onwords-smart-solutions/my_office.git)
+git clone https://github.com/onwords-smart-solutions/my_office.git
 
 - Navigate to project directory and with Pubspec.yaml file install the dependencies.
 
