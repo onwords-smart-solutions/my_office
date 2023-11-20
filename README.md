@@ -62,7 +62,7 @@ As, I have mentioned above this project is structured with Clean architecture pr
     * /features/refreshment : Module for ordering refreshment drinks and also to order foods on daily basis.
     * /features/sales_points : Module to know respective points for the product and quantity.
     * /features/scan_qr : Module to scan the Qr code and know their points for PR.
-    * /features/search_leads : Module for getting all customer details assigned to specific PR and make a note in it.
+    * /features/search_leads : Module for getting all customer details assigned to specific PR.
     * /features/staff_details : Module about entire staffs in the organization.
     * /features/suggestions : Module to lend a suggestion or idea to the management.
     * /features/user : Module with user details.
