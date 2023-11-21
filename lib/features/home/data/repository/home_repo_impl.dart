@@ -1,8 +1,12 @@
+import 'dart:developer';
+
 import 'package:either_dart/either.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';
 import 'package:my_office/features/home/domain/repository/home_repository.dart';
+import '../../../user/data/model/user_model.dart';
 import '../../../user/domain/entity/user_entity.dart';
 import '../model/custom_punch_model.dart';
+import '../model/employee_of_the_week_model.dart';
 import '../model/staff_access_model.dart';
 import '../data_source/home_fb_data_source.dart';
 import 'dart:developer' as dev;
@@ -145,5 +149,35 @@ class HomeRepoImpl implements HomeRepository {
   @override
   Future<String> onClickInstallApk() async {
     return _homeFbDataSource.getApkDownloadPath();
+  }
+
+
+  @override
+  Future<EmployeeOfWeekData> getEmployeeOfTheWeek() async {
+    try {
+      final employeeOfWeekData = await _homeFbDataSource.getEmployeeOfWeek();
+      final uid = employeeOfWeekData['person'].toString();
+      final reason = employeeOfWeekData['reason'].toString();
+
+      if (uid != 'null' && uid.isNotEmpty) {
+        final staffDetails = await _homeFbDataSource.getAllStaffDetails(uid);
+        final employee =  UserModel(
+          uid: uid,
+          name: staffDetails['name'].toString(),
+          dep: staffDetails['department'].toString(),
+          email: staffDetails['email'].toString(),
+          url: staffDetails['profileImage'].toString(),
+          dob: staffDetails['dob'] == null ? 0 : int.parse(staffDetails['dob'].toString()),
+          mobile: staffDetails['mobile'] == null ? 0 : int.parse(staffDetails['mobile'].toString()),
+          uniqueId: '',
+        );
+        return EmployeeOfWeekData(employee: employee, reason: reason);
+      } else {
+        throw Exception('No valid employee of the week');
+      }
+    } catch (e) {
+      log('Error: $e');
+      rethrow;
+    }
   }
 }

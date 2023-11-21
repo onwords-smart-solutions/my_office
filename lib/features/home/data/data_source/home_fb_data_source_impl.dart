@@ -2,14 +2,9 @@ import 'dart:math';
 import 'package:either_dart/either.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';
-import 'package:provider/provider.dart';
 import '../../../../core/utilities/constants/app_default_screens.dart';
-import '../../../../core/utilities/custom_widgets/custom_snack_bar.dart';
-import '../../../../main.dart';
-import '../../../auth/presentation/provider/auth_provider.dart';
 import '../../../user/domain/entity/user_entity.dart';
 import '../model/staff_access_model.dart';
 import 'home_fb_data_source.dart';
@@ -307,5 +302,20 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
   Future<String> getApkDownloadPath() async {
     final resultPath = FirebaseStorage.instance.ref('MY OFFICE APK/app-release.apk');
     return resultPath.fullPath;
+  }
+
+  @override
+  Future<Map<Object?, Object?>> getEmployeeOfWeek() async {
+    final snapshot = await ref.child('PRDashboard/employee_of_week').once();
+    if (snapshot.snapshot.exists) {
+      return snapshot.snapshot.value as Map<Object?, Object?>;
+    }
+    throw Exception('Employee of the week data not found');
+  }
+
+  @override
+  Future<Map<Object?, Object?>> getAllStaffDetails(String uid) async {
+    final snapshot = await ref.child('staff/$uid').once();
+    return snapshot.snapshot.value as Map<Object?, Object?>;
   }
 }

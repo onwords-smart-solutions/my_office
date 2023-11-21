@@ -9,7 +9,7 @@ class PrReminderFbDataSourceImpl implements PrReminderFbDataSource {
   Future<List<String>> getPRStaffNames() async {
     final ref = FirebaseDatabase.instance.ref().child('staff');
     DatabaseEvent event = await ref.once();
-    List<String> staffNames = [];
+    List<String> staffNames = ['All Reminders', 'My Reminders'];
 
     for (var data in event.snapshot.children) {
       var fbData = data.value as Map<Object?, Object?>;
@@ -31,7 +31,6 @@ class PrReminderFbDataSourceImpl implements PrReminderFbDataSource {
       final allData = customer.value as Map<Object?, Object?>;
       reminders.add(PrReminderModel.fromMap(allData));
     }
-    log('Staff reminders are $reminders');
     return reminders;
   }
 }

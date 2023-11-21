@@ -588,7 +588,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           userProvider.user!.dep,
         );
         _entryDetail.value = data;
-        _entryDetail.notifyListeners();
         _endTime.value = now;
       } else if (now.minute != _endTime.value.minute &&
           _entryDetail.value!.checkOutTime == null) {

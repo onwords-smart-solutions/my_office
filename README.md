@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Hi Team, Welcome to the My Office repository which is designed specifically designed for the In-house usage for employees with Clean architecture.
+Hi Team, Welcome to the My Office repository which is designed specifically for the In-house usage for employees.
 With this repository all the employees can maintain daily works,order a refreshment drink and much more.
 
 ## About Clean Architecture

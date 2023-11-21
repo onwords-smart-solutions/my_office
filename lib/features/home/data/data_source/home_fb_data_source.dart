@@ -1,14 +1,14 @@
-  import 'package:either_dart/either.dart';
+import 'package:either_dart/either.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';
 import '../../../user/domain/entity/user_entity.dart';
 import '../model/staff_access_model.dart';
 
 abstract class HomeFbDataSource {
-  Future<Either<ErrorResponse,List<String>>> getManagementList();
+  Future<Either<ErrorResponse, List<String>>> getManagementList();
 
-  Future<Either<ErrorResponse ,List<String>>> getTLList();
+  Future<Either<ErrorResponse, List<String>>> getTLList();
 
-  Future<Either<ErrorResponse, List<String>>>getRNDTLList();
+  Future<Either<ErrorResponse, List<String>>> getRNDTLList();
 
   Future<Either<ErrorResponse, List<String>>> getInstallationMemberList();
 
@@ -16,7 +16,8 @@ abstract class HomeFbDataSource {
     required UserEntity staff,
   });
 
-  Future<Map<Object?, Object?>?> fetchAttendanceData(String staffId, DateTime date);
+  Future<Map<Object?, Object?>?> fetchAttendanceData(
+      String staffId, DateTime date);
 
   Future<Either<ErrorResponse, List<UserEntity>>> getAllBirthday();
 
@@ -27,4 +28,8 @@ abstract class HomeFbDataSource {
   Future<Map<Object?, Object?>> getAppVersionInfo();
 
   Future<String> getApkDownloadPath();
+
+  Future<Map<Object?, Object?>> getEmployeeOfWeek();
+
+  Future<Map<Object?, Object?>> getAllStaffDetails(String uid);
 }

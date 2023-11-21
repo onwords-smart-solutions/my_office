@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:my_office/features/home/presentation/provider/home_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:my_office/features/home/data/data_source/home_fb_data_source.dart';
+import 'package:my_office/features/home/data/data_source/home_fb_data_source_impl.dart';
+import 'package:my_office/features/home/data/repository/home_repo_impl.dart';
+import 'package:my_office/features/home/domain/repository/home_repository.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../user/domain/entity/user_entity.dart';
@@ -61,10 +64,25 @@ class _InfoItemState extends State<InfoItem> {
     });
   }
 
+  Future<void> getPrDetails() async {
+    try {
+      late HomeFbDataSource homeFbDataSource = HomeFbDataSourceImpl();
+      late HomeRepository homeRepository = HomeRepoImpl(homeFbDataSource);
+      final data = await homeRepository.getEmployeeOfTheWeek();
+      setState(() {
+        employeeOfTheWeek = data.employee;
+        reason = data.reason;
+      });
+    } catch (e) {
+      // Handle error
+      log('Error: $e');
+    }
+  }
+
   @override
   void initState() {
     startAutoScroll();
-    Provider.of<HomeProvider>(context, listen: false).getStaffDetails();
+    getPrDetails();
     super.initState();
   }
 
@@ -81,24 +99,24 @@ class _InfoItemState extends State<InfoItem> {
 
     final image = widget.todayBirthdayList.isEmpty
         ? Positioned(
-      right: 0,
-      top: 10,
-      child: Image.asset(
-        // 'assets/cake.png',
-        'assets/info_pic.png',
-        width: size.width * .35,
-        fit: BoxFit.cover,
-      ),
-    )
+            right: 0,
+            top: 10,
+            child: Image.asset(
+              // 'assets/cake.png',
+              'assets/info_pic.png',
+              width: size.width * .35,
+              fit: BoxFit.cover,
+            ),
+          )
         : Positioned(
-      right: -5,
-      top: 0,
-      child: Image.asset(
-        'assets/cake.png',
-        width: size.width * .34,
-        fit: BoxFit.cover,
-      ),
-    );
+            right: -5,
+            top: 0,
+            child: Image.asset(
+              'assets/cake.png',
+              width: size.width * .34,
+              fit: BoxFit.cover,
+            ),
+          );
     return Stack(
       children: [
         Container(
@@ -222,8 +240,8 @@ class _InfoItemState extends State<InfoItem> {
                   fit: BoxFit.cover,
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
                       CircularProgressIndicator(
-                        value: downloadProgress.progress,
-                      ),
+                    value: downloadProgress.progress,
+                  ),
                   errorWidget: (context, url, error) => const Icon(
                     Icons.error,
                     color: Colors.red,
@@ -329,26 +347,24 @@ class _InfoItemState extends State<InfoItem> {
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
                         ),
-                        child: widget
-                            .todayBirthdayList[index].url.isEmpty
+                        child: widget.todayBirthdayList[index].url.isEmpty
                             ? const Image(
-                          image: AssetImage('assets/profile_icon.jpg'),
-                        )
+                                image: AssetImage('assets/profile_icon.jpg'),
+                              )
                             : CachedNetworkImage(
-                          imageUrl:
-                          widget.todayBirthdayList[index].url,
-                          fit: BoxFit.cover,
-                          progressIndicatorBuilder:
-                              (context, url, downloadProgress) =>
-                              CircularProgressIndicator(
-                                value: downloadProgress.progress,
+                                imageUrl: widget.todayBirthdayList[index].url,
+                                fit: BoxFit.cover,
+                                progressIndicatorBuilder:
+                                    (context, url, downloadProgress) =>
+                                        CircularProgressIndicator(
+                                  value: downloadProgress.progress,
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(
+                                  Icons.error,
+                                  color: Colors.red,
+                                ),
                               ),
-                          errorWidget: (context, url, error) =>
-                          const Icon(
-                            Icons.error,
-                            color: Colors.red,
-                          ),
-                        ),
                       ),
                       Expanded(
                         child: Text(
@@ -374,12 +390,12 @@ class _InfoItemState extends State<InfoItem> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(
                     widget.todayBirthdayList.length,
-                        (index) => Padding(
+                    (index) => Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 2.0),
                       child: CircleAvatar(
                         radius: 4,
                         backgroundColor:
-                        index == pageIndex ? Colors.white : Colors.white30,
+                            index == pageIndex ? Colors.white : Colors.white30,
                       ),
                     ),
                   ),
@@ -431,66 +447,66 @@ class _InfoItemState extends State<InfoItem> {
     if (widget.staffEntryDetail!.checkInTime == null) {
       color = Colors.grey;
     } else if (widget.staffEntryDetail!.checkInTime!
-        .difference(
-      DateTime(
-        widget.staffEntryDetail!.checkInTime!.year,
-        widget.staffEntryDetail!.checkInTime!.month,
-        widget.staffEntryDetail!.checkInTime!.day,
-        09,
-        00,
-      ),
-    )
-        .inMinutes >
-        0 &&
+                .difference(
+                  DateTime(
+                    widget.staffEntryDetail!.checkInTime!.year,
+                    widget.staffEntryDetail!.checkInTime!.month,
+                    widget.staffEntryDetail!.checkInTime!.day,
+                    09,
+                    00,
+                  ),
+                )
+                .inMinutes >
+            0 &&
         widget.staffEntryDetail!.checkInTime!
-            .difference(
-          DateTime(
-            widget.staffEntryDetail!.checkInTime!.year,
-            widget.staffEntryDetail!.checkInTime!.month,
-            widget.staffEntryDetail!.checkInTime!.day,
-            09,
-            10,
-          ),
-        )
-            .inMinutes <=
+                .difference(
+                  DateTime(
+                    widget.staffEntryDetail!.checkInTime!.year,
+                    widget.staffEntryDetail!.checkInTime!.month,
+                    widget.staffEntryDetail!.checkInTime!.day,
+                    09,
+                    10,
+                  ),
+                )
+                .inMinutes <=
             0) {
       color = Colors.amber.shade500;
     } else if (widget.staffEntryDetail!.checkInTime!
-        .difference(
-      DateTime(
-        widget.staffEntryDetail!.checkInTime!.year,
-        widget.staffEntryDetail!.checkInTime!.month,
-        widget.staffEntryDetail!.checkInTime!.day,
-        09,
-        00,
-      ),
-    )
-        .inMinutes >
-        10 &&
+                .difference(
+                  DateTime(
+                    widget.staffEntryDetail!.checkInTime!.year,
+                    widget.staffEntryDetail!.checkInTime!.month,
+                    widget.staffEntryDetail!.checkInTime!.day,
+                    09,
+                    00,
+                  ),
+                )
+                .inMinutes >
+            10 &&
         widget.staffEntryDetail!.checkInTime!
-            .difference(
-          DateTime(
-            widget.staffEntryDetail!.checkInTime!.year,
-            widget.staffEntryDetail!.checkInTime!.month,
-            widget.staffEntryDetail!.checkInTime!.day,
-            09,
-            20,
-          ),
-        )
-            .inMinutes <=
+                .difference(
+                  DateTime(
+                    widget.staffEntryDetail!.checkInTime!.year,
+                    widget.staffEntryDetail!.checkInTime!.month,
+                    widget.staffEntryDetail!.checkInTime!.day,
+                    09,
+                    20,
+                  ),
+                )
+                .inMinutes <=
             0) {
       color = Colors.orangeAccent.shade400;
     } else if (widget.staffEntryDetail!.checkInTime!
-        .difference(
-      DateTime(
-        widget.staffEntryDetail!.checkInTime!.year,
-        widget.staffEntryDetail!.checkInTime!.month,
-        widget.staffEntryDetail!.checkInTime!.day,
-        09,
-        00,
-      ),
-    )
-        .inMinutes >
+            .difference(
+              DateTime(
+                widget.staffEntryDetail!.checkInTime!.year,
+                widget.staffEntryDetail!.checkInTime!.month,
+                widget.staffEntryDetail!.checkInTime!.day,
+                09,
+                00,
+              ),
+            )
+            .inMinutes >
         20) {
       color = Colors.red.shade400;
     }

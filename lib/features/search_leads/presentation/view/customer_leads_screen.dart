@@ -236,6 +236,9 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
         staffs = fetchedPRStaffNames;
         isLoading = false;
       });
+      if(widget.query != null){
+        searchUser(widget.query!);
+      }
     } catch (e) {
       print('Error fetching data: $e');
     }

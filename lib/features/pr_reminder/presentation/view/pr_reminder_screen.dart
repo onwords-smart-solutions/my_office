@@ -23,7 +23,7 @@ class ReminderScreen extends StatefulWidget {
 
 class _ReminderScreenState extends State<ReminderScreen> {
   bool isLoading = true;
-  String names = 'All Reminders';
+  String names = 'My Reminders';
   final List<String> staffs = ['All Reminders', 'My Reminders'];
 
   DateTime now = DateTime.now();
@@ -71,13 +71,20 @@ class _ReminderScreenState extends State<ReminderScreen> {
     final reminderProvider = Provider.of<PrReminderProvider>(context);
     List<PrReminderModel> filteredReminders = names == 'All Reminders'
         ? reminderProvider.allReminders
-        : reminderProvider.allReminders.where((element) => element.updatedBy == names).toList();
+        : reminderProvider.allReminders
+            .where((element) => element.updatedBy == names)
+            .toList();
 
     if (names == 'All Reminders') {
       filteredReminders = reminderProvider.allReminders;
+    } else if (names == 'My Reminders') {
+      filteredReminders = reminderProvider.allReminders
+          .where((element) => element.updatedBy == widget.staffInfo.name)
+          .toList();
     } else {
-      filteredReminders =
-          reminderProvider.allReminders.where((element) => element.updatedBy == names).toList();
+      filteredReminders = reminderProvider.allReminders
+          .where((element) => element.updatedBy == names)
+          .toList();
     }
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
@@ -127,8 +134,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
                   ),
                 ),
               )
-            :
-        filteredReminders.isNotEmpty
+            : filteredReminders.isNotEmpty
                 ? Expanded(
                     child: SingleChildScrollView(
                       child: ListView.builder(
@@ -310,7 +316,6 @@ class _ReminderScreenState extends State<ReminderScreen> {
                 names = value;
               });
             },
-
             itemBuilder: (BuildContext ctx) {
               return staffNames.map((String name) {
                 return PopupMenuItem<String>(

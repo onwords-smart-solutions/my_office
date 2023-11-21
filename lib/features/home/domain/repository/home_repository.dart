@@ -1,8 +1,10 @@
 import 'package:either_dart/either.dart';
 
 import '../../../../core/utilities/response/error_response.dart';
+import '../../../user/data/model/user_model.dart';
 import '../../../user/domain/entity/user_entity.dart';
 import '../../data/model/custom_punch_model.dart';
+import '../../data/model/employee_of_the_week_model.dart';
 import '../../data/model/staff_access_model.dart';
 
 abstract class HomeRepository{
@@ -28,4 +30,6 @@ abstract class HomeRepository{
 
   Future<Map<Object?, Object?>> checkAppVersion();
   Future<String> onClickInstallApk();
+
+  Future<EmployeeOfWeekData> getEmployeeOfTheWeek();
 }
