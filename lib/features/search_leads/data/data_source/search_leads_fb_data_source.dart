@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:http/http.dart' as http;
+
 abstract class SearchLeadsFbDataSource {
   Future<List<Map<Object?, Object?>>> getCustomers();
 
@@ -20,5 +22,8 @@ abstract class SearchLeadsFbDataSource {
   Future<String> uploadAudioFile(String path, File audioFile);
 
   Future<void> updateNotes(String path, Map<String, dynamic> data);
+
+  Future<http.Response> postFeedback(Map<String, dynamic> body, String bearerToken, String customerWhatsAppNumber);
+
 }
 

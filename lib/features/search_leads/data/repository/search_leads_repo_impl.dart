@@ -196,4 +196,13 @@ class SearchLeadsRepoImpl implements SearchLeadsRepository {
     }
     await searchLeadsFbDataSource.updateNotes(notePath, noteData);
   }
+
+  @override
+  Future<void> sendFeedback(Map<String, dynamic> body, String bearerToken, String customerWhatsAppNumber) async {
+    final response = await searchLeadsFbDataSource.postFeedback(body, bearerToken, customerWhatsAppNumber);
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to send feedback. Status code: ${response.statusCode}');
+    }
+  }
 }

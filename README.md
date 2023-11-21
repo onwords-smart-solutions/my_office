@@ -82,8 +82,8 @@ As, I have mentioned above this project is structured with Clean architecture pr
 
 ### Version history and Releases
 
-* Android - 2.0.17+87.
-* iOS - 2.0.12+87. 
+* Android : 2.1.0+1 - Updated app with clean architecture.
+* iOS : 2.0.12+87. 
 
 
 

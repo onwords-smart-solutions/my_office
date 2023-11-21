@@ -22,4 +22,7 @@ abstract class SearchLeadsRepository {
     String? reminder,
     File? audioFile,
   });
+
+  Future<void> sendFeedback(Map<String, dynamic> body, String bearerToken, String customerWhatsAppNumber);
+
 }

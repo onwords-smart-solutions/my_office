@@ -1,6 +1,9 @@
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_office/core/utilities/custom_widgets/custom_app_button.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_snack_bar.dart';
 import 'package:timelines/timelines.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -10,6 +13,7 @@ import '../../data/repository/search_leads_repo_impl.dart';
 import '../../domain/repository/search_leads_repository.dart';
 import '../view_model/customer_note_item_details.dart';
 import 'add_customer_notes.dart';
+import 'package:http/http.dart' as http;
 
 const List<String> list = [
   'New leads',
@@ -348,6 +352,15 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           ],
         ),
 
+        //Feedback button
+        Align(
+          alignment: AlignmentDirectional.center,
+          child: AppButton(
+            onPressed: feedbackApiPost,
+            child: const Text('Feedback'),
+          ),
+        ),
+
         //Dropdown for changing lead in charge
         widget.currentStaffName == 'Anitha' ||
                 widget.currentStaffName == 'Devendiran' ||
@@ -458,6 +471,46 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     );
   }
 
+  Future<void> feedbackApiPost() async {
+    final customerWhatsAppNumber =
+        widget.customerInfo['phone_number'].toString();
+    final customerName = widget.customerInfo['name'].toString();
+    final teleCallerName = widget.currentStaffName;
+    String bearerToken =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI4YzE4ZjU4Yy0zNTgwLTQ0MTAtYjU4NS1lNjNhN2YzNzYwYTgiLCJ1bmlxdWVfbmFtZSI6ImNlb0BvbndvcmRzLmluIiwibmFtZWlkIjoiY2VvQG9ud29yZHMuaW4iLCJlbWFpbCI6ImNlb0BvbndvcmRzLmluIiwiYXV0aF90aW1lIjoiMTAvMjAvMjAyMyAxNjo0MzozMyIsImRiX25hbWUiOiIxMTYxOTEiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJBRE1JTklTVFJBVE9SIiwiZXhwIjoyNTM0MDIzMDA4MDAsImlzcyI6IkNsYXJlX0FJIiwiYXVkIjoiQ2xhcmVfQUkifQ.pVIcK8y9jgncGeD9VGdP6EW-YIbDazCFI86GMzfndsc';
+
+    Map<String, dynamic> body = {
+      "template_name": "telecall_feedback",
+      "broadcast_name": "Feedback Request",
+      "parameters": [
+        {
+          "name": "cust_name",
+          "value": customerName,
+        },
+        {
+          "name": "telecaller_name",
+          "value": teleCallerName,
+        }
+      ],
+    };
+
+    try {
+      await searchLeadsRepository.sendFeedback(
+        body,
+        bearerToken,
+        customerWhatsAppNumber,
+      );
+      if (!mounted) return;
+      CustomSnackBar.showSuccessSnackbar(
+        message:
+            'Feedback request has been sent to ${widget.customerInfo['name']}',
+        context: context,
+      );
+    } catch (e) {
+      log('Error occurred: $e');
+    }
+  }
+
   //adding notes
   void addNotes() {
     Navigator.push(
@@ -519,14 +572,14 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         context: context,
       );
     } else {
-     try{
-       await searchLeadsRepository.changeCustomerState(
-         widget.customerInfo['phone_number'].toString(),
-         dropDownValue,
-       );
-     }catch(e){
-       Exception('Error caught while changing customer lead state!! $e');
-     }
+      try {
+        await searchLeadsRepository.changeCustomerState(
+          widget.customerInfo['phone_number'].toString(),
+          dropDownValue,
+        );
+      } catch (e) {
+        Exception('Error caught while changing customer lead state!! $e');
+      }
     }
   }
 
@@ -539,7 +592,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     } else {
       try {
         await searchLeadsRepository.updateLead(
-            widget.customerInfo['phone_number'].toString(), leadName,);
+          widget.customerInfo['phone_number'].toString(),
+          leadName,
+        );
       } catch (e) {
         Exception('Error caught while changing lead names!! $e');
       }

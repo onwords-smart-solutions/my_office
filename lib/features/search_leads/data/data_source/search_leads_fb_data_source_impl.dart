@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:http/http.dart' as http;
 import 'package:my_office/features/search_leads/data/data_source/search_leads_fb_data_source.dart';
 
 class SearchLeadsFbDataSourceImpl implements SearchLeadsFbDataSource {
@@ -81,5 +83,17 @@ class SearchLeadsFbDataSourceImpl implements SearchLeadsFbDataSource {
   @override
   Future<void> updateNotes(String path, Map<String, dynamic> data) async {
     await ref.child(path).update(data);
+  }
+
+  @override
+  Future<http.Response> postFeedback(Map<String, dynamic> body, String bearerToken, String customerWhatsAppNumber) async {
+    var url = Uri.parse('https://live-server-116191.wati.io/api/v2/sendTemplateMessage?whatsappNumber=$customerWhatsAppNumber');
+    Map<String, String> headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $bearerToken',
+    };
+
+    final response = await http.post(url, headers: headers, body: json.encode(body));
+    return response;
   }
 }
