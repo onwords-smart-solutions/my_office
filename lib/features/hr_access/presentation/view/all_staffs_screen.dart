@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,13 +28,18 @@ class _AllStaffsState extends State<AllStaffs> {
   late AllStaffDetailsCase allStaffDetailsCase =
       AllStaffDetailsCase(hrAccessRepository: hrAccessRepository);
   List<HrAccessModel> employeeDetails = [];
-  bool isLoading = true;
+  bool isLoading = false;
 
   void getAllStaffDetails() async {
-    employeeDetails = await allStaffDetailsCase.getStaffDetails();
     setState(() {
+      isLoading = true;
+    });
+    var allDetails = await allStaffDetailsCase.getStaffDetails();
+    setState(() {
+      employeeDetails = allDetails;
       isLoading = false;
     });
+    log('Staffs are $employeeDetails');
   }
 
   @override
@@ -43,6 +50,7 @@ class _AllStaffsState extends State<AllStaffs> {
 
   @override
   Widget build(BuildContext context) {
+    log('Staffs are $employeeDetails');
     return Scaffold(
       backgroundColor: AppColor.backGroundColor,
       appBar: AppBar(
@@ -63,7 +71,7 @@ class _AllStaffsState extends State<AllStaffs> {
         ),
         centerTitle: true,
       ),
-      body: employeeDetails.isEmpty
+      body: isLoading
           ? Center(
               child: Lottie.asset('assets/animations/new_loading.json'),
             )

@@ -29,7 +29,7 @@ import '../../../../core/utilities/custom_widgets/custom_snack_bar.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
-import '../../../auth/presentation/provider/auth_provider.dart';
+import '../../../auth/presentation/provider/authentication_provider.dart';
 import '../../../notifications/presentation/notification_view_model.dart';
 import '../../../user/domain/entity/user_entity.dart';
 import '../../data/model/custom_punch_model.dart';
@@ -212,7 +212,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
-    return Consumer<AuthProvider>(
+    return Consumer<AuthenticationProvider>(
       builder: (ctx, userProvider, child) {
         return userProvider.user == null
             ? const Text('No user found!')
@@ -301,7 +301,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     );
   }
 
-  Widget _body(AuthProvider userProvider, Size size) {
+  Widget _body(AuthenticationProvider userProvider, Size size) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -352,7 +352,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                           'assets/animations/new_loading.json',
                           height: size.height * .6,
                         )
-                      : Consumer<AuthProvider>(
+                      : Consumer<AuthenticationProvider>(
                           builder: (ctx, userProvider, child) {
                             return GridView.builder(
                               itemCount: staffAccess.length,
@@ -384,7 +384,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     );
   }
 
-  Widget _search(Size size, AuthProvider userProvider) {
+  Widget _search(Size size, AuthenticationProvider userProvider) {
     return Container(
       padding: const EdgeInsets.all(20.0),
       color: Colors.white,
@@ -426,7 +426,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   _getStaffAccess() async {
     BuildContext context = this.context;
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    final userProvider = Provider.of<AuthProvider>(context, listen: false);
+    final userProvider = Provider.of<AuthenticationProvider>(context, listen: false);
     final response =
         await homeProvider.getStaffAccess(staff: userProvider.user!);
     if (response.isRight) {
@@ -540,7 +540,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   _getInfoItemDetails() async {
     final context = this.context;
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    final userProvider = Provider.of<AuthProvider>(context, listen: false);
+    final userProvider = Provider.of<AuthenticationProvider>(context, listen: false);
     final bday = await homeProvider.getAllBirthday();
     if (bday.isRight) {
       _bdayStaffs.value = bday.right;

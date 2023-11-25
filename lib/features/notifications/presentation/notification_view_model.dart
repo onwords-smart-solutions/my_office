@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:my_office/features/auth/presentation/provider/auth_provider.dart';
+import 'package:my_office/features/auth/presentation/provider/authentication_provider.dart';
 import 'package:my_office/features/notifications/data/data_source/notification_fb_data_source_impl.dart';
 import 'package:my_office/features/notifications/data/data_source/user_fb_data_source.dart';
 import 'package:my_office/features/notifications/data/data_source/user_fb_data_source_impl.dart';
@@ -89,7 +89,7 @@ class NotificationService {
 
   // -- Notification related --
   Future<void> storeFCM({required BuildContext context}) async {
-    final userProvider = Provider.of<AuthProvider>(context, listen: false);
+    final userProvider = Provider.of<AuthenticationProvider>(context, listen: false);
     final fcmToken = await notificationRepository.getFcmToken();
     final deviceId =
         await getDeviceId(); // Assuming getDeviceId() is defined elsewhere.

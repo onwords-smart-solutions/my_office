@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/utilities/constants/app_color.dart';
 import '../../../../core/utilities/custom_widgets/custom_app_button.dart';
@@ -140,7 +141,7 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                   ),
                 ),
               ),
-              SizedBox(height: size.height * 0.05),
+              const Gap(10),
               Row(
                 children: [
                   SizedBox(width: size.width * 0.06),
@@ -161,7 +162,7 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                   ),
                 ],
               ),
-              SizedBox(height: size.height * 0.01),
+              const Gap(5),
               Row(
                 children: [
                   SizedBox(width: size.width * 0.06),
@@ -182,7 +183,7 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                   ),
                 ],
               ),
-              SizedBox(height: size.height * 0.01),
+              const Gap(5),
               Row(
                 children: [
                   SizedBox(width: size.width * 0.06),
@@ -205,7 +206,7 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                   ),
                 ],
               ),
-              SizedBox(height: size.height * 0.01),
+              const Gap(5),
               Row(
                 children: [
                   SizedBox(width: size.width * 0.06),
@@ -228,7 +229,7 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                   ),
                 ],
               ),
-              SizedBox(height: size.height * 0.01),
+              const Gap(5),
               Row(
                 children: [
                   SizedBox(width: size.width * 0.06),
@@ -251,7 +252,7 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                   ),
                 ],
               ),
-              SizedBox(height: size.height * 0.01),
+              const Gap(5),
               Row(
                 children: [
                   SizedBox(width: size.width * 0.06),
@@ -284,7 +285,7 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                   ),
                 ],
               ),
-              SizedBox(height: size.height * 0.01),
+              const Gap(10),
               Row(
                 children: [
                   SizedBox(width: size.width * 0.06),
@@ -317,11 +318,11 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                   ),
                 ],
               ),
-              SizedBox(height: size.height * 0.02),
+              const Gap(20),
               AppButton(
                 onPressed: setTimingForStaffs,
                 child: const Text(
-                  'Validate time',
+                  'Update time',
                 ),
               ),
             ],

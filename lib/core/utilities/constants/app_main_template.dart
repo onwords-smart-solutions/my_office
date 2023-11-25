@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:my_office/features/auth/presentation/provider/auth_provider.dart';
+import 'package:my_office/features/auth/presentation/provider/authentication_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../features/auth/presentation/view/login_screen.dart';
@@ -28,7 +28,7 @@ class MainTemplate extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: Consumer<AuthProvider>(
+      body: Consumer<AuthenticationProvider>(
         builder: (ctx, userProvider, child) {
           return userProvider.user == null ? _loading(context) : templateBody;
         },

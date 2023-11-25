@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/features/auth/data/repository/auth_repo_impl.dart';
 import 'package:my_office/features/auth/domain/repository/auth_repository.dart';
-import 'package:my_office/features/auth/presentation/provider/auth_provider.dart';
+import 'package:my_office/features/auth/presentation/provider/authentication_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/utilities/constants/app_color.dart';
@@ -422,7 +422,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final context = this.context;
     if (FirebaseAuth.instance.currentUser != null) {
-      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
       final response = await authRepository.getStaff(
           FirebaseAuth.instance.currentUser!.uid,
           await authLocalDataSourceImpl.getUniqueID());

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_office/features/hr_access/data/data_source/hr_access_fb_data_source.dart';
 import 'package:my_office/features/hr_access/data/model/hr_access_staff_model.dart';
@@ -24,6 +26,7 @@ class HrAccessFbDataSourceImpl implements HrAccessFbDataSource{
           allDetails.add(staffs);
         }
       }
+      log('Data is $allDetails');
     });
     return allDetails;
   }

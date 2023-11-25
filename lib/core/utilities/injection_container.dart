@@ -11,7 +11,7 @@ import 'package:my_office/features/auth/data/data_source/auth_local_data_source.
 import 'package:my_office/features/auth/data/repository/auth_repo_impl.dart';
 import 'package:my_office/features/auth/domain/repository/auth_repository.dart';
 import 'package:my_office/features/auth/domain/use_case/reset_password_case.dart';
-import 'package:my_office/features/auth/presentation/provider/auth_provider.dart';
+import 'package:my_office/features/auth/presentation/provider/authentication_provider.dart';
 import 'package:my_office/features/create_lead/data/data_source/create_lead_fb_data_source.dart';
 import 'package:my_office/features/create_lead/data/data_source/create_lead_fb_data_source_impl.dart';
 import 'package:my_office/features/create_lead/data/repository/create_lead_repo_impl.dart';
@@ -130,8 +130,8 @@ Future<void> init() async {
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ PROVIDERS ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
   ///AUTH PROVIDER
-  sl.registerFactory<AuthProvider>(
-    () => AuthProvider(
+  sl.registerFactory<AuthenticationProvider>(
+    () => AuthenticationProvider(
       sl.call(),
       sl.call(),
     ),

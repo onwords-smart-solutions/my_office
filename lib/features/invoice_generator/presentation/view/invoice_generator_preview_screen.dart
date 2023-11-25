@@ -11,7 +11,7 @@ import 'package:lottie/lottie.dart';
 import 'package:my_office/core/utilities/constants/app_color.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_app_button.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_text_field.dart';
-import 'package:my_office/features/auth/presentation/provider/auth_provider.dart';
+import 'package:my_office/features/auth/presentation/provider/authentication_provider.dart';
 import 'package:my_office/features/invoice_generator/data/data_source/invoice_generator_fb_data_source.dart';
 import 'package:my_office/features/invoice_generator/data/data_source/invoice_generator_fb_data_source_impl.dart';
 import 'package:my_office/features/invoice_generator/data/model/invoice_generator_model.dart';
@@ -123,7 +123,7 @@ class _InvoiceGeneratorPreviewScreenState
   }
 
   void getStaffDetail() async {
-    final userProvider = Provider.of<AuthProvider>(context, listen: false);
+    final userProvider = Provider.of<AuthenticationProvider>(context, listen: false);
     var data = userProvider.user!;
     setState(() {
       staffInfo = data;

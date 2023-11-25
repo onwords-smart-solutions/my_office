@@ -14,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/utilities/custom_widgets/custom_snack_bar.dart';
 import '../../../../main.dart';
-import '../provider/auth_provider.dart';
+import '../provider/authentication_provider.dart';
 
 class BirthdayPickerScreen extends StatelessWidget {
   final ValueNotifier<DateTime?> _birthday = ValueNotifier(null);
@@ -200,7 +200,7 @@ class BirthdayPickerScreen extends StatelessWidget {
     late AuthRepository authRepository = AuthRepoImpl(authFbDataSource, authLocalDataSourceImpl);
 
     _loading.value = true;
-    final userProvider = Provider.of<AuthProvider>(context, listen: false);
+    final userProvider = Provider.of<AuthenticationProvider>(context, listen: false);
 
     if (_birthday.value == null) {
       CustomSnackBar.showErrorSnackbar(

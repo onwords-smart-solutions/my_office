@@ -9,6 +9,6 @@ class HrAccessRepoImpl implements HrAccessRepository{
 
   @override
   Future<List<HrAccessModel>> getStaffDetails() async{
-    return await hrAccessFbDataSource.staffDetails();
+    return hrAccessFbDataSource.staffDetails();
   }
 }

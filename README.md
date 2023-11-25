@@ -82,7 +82,7 @@ As, I have mentioned above this project is structured with Clean architecture pr
 
 ### Version history and Releases
 
-* Android : 2.1.2+2 - Fixed bug in Proxy attendance screen for time change.
+* Android : 2.1.3+3 - Fixed bug in Customer reminder date modification.
 * iOS : 2.0.12+87. 
 
 

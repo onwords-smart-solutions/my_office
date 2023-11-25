@@ -13,7 +13,7 @@ import '../../../../core/utilities/constants/app_color.dart';
 import '../../../../core/utilities/constants/app_version.dart';
 import '../../../../core/utilities/custom_widgets/custom_image_cropper.dart';
 import '../../../../core/utilities/custom_widgets/custom_sheets.dart';
-import '../../../auth/presentation/provider/auth_provider.dart';
+import '../../../auth/presentation/provider/authentication_provider.dart';
 import '../../../auth/presentation/view/login_screen.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -99,7 +99,7 @@ class _AccountScreenState extends State<AccountScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               // profile picture
-              Consumer<AuthProvider>(
+              Consumer<AuthenticationProvider>(
                 builder: (ctx, userProvider, child) {
                   return userProvider.user == null
                       ? Center(
@@ -216,7 +216,7 @@ class _AccountScreenState extends State<AccountScreen> {
                   final pref = await SharedPreferences.getInstance();
                   await pref.clear();
                   if(!mounted) return;
-                  Provider.of<AuthProvider>(context, listen: false).clearUser();
+                  Provider.of<AuthenticationProvider>(context, listen: false).clearUser();
                   navigator.pushAndRemoveUntil(
                     MaterialPageRoute(builder: (_) => const LoginScreen()),
                     (route) => false,

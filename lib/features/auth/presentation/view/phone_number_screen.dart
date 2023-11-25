@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:my_office/features/auth/presentation/provider/auth_provider.dart';
+import 'package:my_office/features/auth/presentation/provider/authentication_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/utilities/custom_widgets/custom_snack_bar.dart';
@@ -134,7 +134,7 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
     late AuthRepository authRepository = AuthRepoImpl(authFbDataSource, authLocalDataSourceImpl);
 
     _loading.value = true;
-    final userProvider = Provider.of<AuthProvider>(context, listen: false);
+    final userProvider = Provider.of<AuthenticationProvider>(context, listen: false);
 
     if (phoneController.text.isEmpty || phoneController.text.length < 10) {
       CustomSnackBar.showErrorSnackbar(

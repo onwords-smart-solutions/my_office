@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_office/core/utilities/constants/app_color.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utilities/custom_widgets/custom_snack_bar.dart';
-import '../provider/auth_provider.dart';
+import '../provider/authentication_provider.dart';
 import 'login_screen.dart';
 
 class ForgetPasswordScreen extends StatefulWidget {
@@ -113,7 +113,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
   }
 
   Widget buttonWidget(double height, Widget screen, String name) {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
     return GestureDetector(
       onTap: () {
         setState(() {

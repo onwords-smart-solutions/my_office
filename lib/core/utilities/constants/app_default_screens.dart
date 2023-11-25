@@ -171,10 +171,10 @@ class AppDefaults {
       title: MenuTitle.employeeOfTheWeek,
       image: 'assets/best_employee.png',
     ),
-    StaffAccessModel(
-        title: MenuTitle.hrAccess,
-        image: 'assets/all_staff_detail.png',
-    ),
+    // StaffAccessModel(
+    //     title: MenuTitle.hrAccess,
+    //     image: 'assets/all_staff_detail.png',
+    // ),
   ];
 
   static Widget getPage(String title, UserEntity staffInfo) {

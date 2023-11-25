@@ -51,18 +51,19 @@ class SearchLeadsRepoImpl implements SearchLeadsRepository {
     String? notes,
     String? reminder,
     File? audioFile,
+    String? reminderDate,
   }) async {
     DateTime now = DateTime.now();
     String timeStamp = DateFormat('yyyy-MM-dd_kk:mm:ss').format(now);
-    String dateStamp = DateFormat('yyyy-MM-dd').format(now);
+    String dateStamp = DateFormat('yyyy-MM-dd').format(DateTime.parse(reminderDate!));
 
     // Handling reminders and audio files
     if (reminder != null && reminder.isNotEmpty && audioFile != null) {
-      await _updateReminder(
-        customerInfo,
-        currentStaffName,
-        reminder,
-        dateStamp,
+      await updateReminder(
+        customerInfo: customerInfo,
+        currentStaffName: currentStaffName,
+        reminder: reminder,
+        dateStamp: dateStamp,
       );
       await _uploadAudioAndSaveNote(
         customerInfo,
@@ -85,11 +86,11 @@ class SearchLeadsRepoImpl implements SearchLeadsRepository {
     }
     // Handling only reminder
     else if (reminder != null && reminder.isNotEmpty) {
-      await _updateReminder(
-        customerInfo,
-        currentStaffName,
-        reminder,
-        dateStamp,
+      await updateReminder(
+        customerInfo: customerInfo,
+        currentStaffName: currentStaffName,
+        reminder: reminder,
+        dateStamp: dateStamp,
       );
       await _saveNoteOnly(
         customerInfo,
@@ -105,12 +106,12 @@ class SearchLeadsRepoImpl implements SearchLeadsRepository {
     }
   }
 
-  Future<void> _updateReminder(
-    Map<Object?, Object?> customerInfo,
-    String currentStaffName,
-    String reminder,
-    String dateStamp,
-  ) async {
+  Future<void> updateReminder({
+   required Map<Object?, Object?> customerInfo,
+   required String currentStaffName,
+    String? reminder,
+   required String dateStamp,
+  }) async {
     String reminderPath =
         'customer_reminders/$dateStamp/${customerInfo['phone_number']}';
     Map<String, dynamic> reminderData = {

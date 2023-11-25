@@ -6,7 +6,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
-import 'package:my_office/features/auth/presentation/provider/auth_provider.dart';
+import 'package:my_office/features/auth/presentation/provider/authentication_provider.dart';
 import 'package:my_office/features/create_lead/presentation/provider/create_lead_provider.dart';
 import 'package:my_office/features/create_product/presentation/provider/create_product_provider.dart';
 import 'package:my_office/features/employee_of_the_week/presentation/provider/employee_of_the_week_provider.dart';
@@ -50,8 +50,8 @@ Future<void> main() async {
     (value) => runApp(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider<AuthProvider>(
-            create: (_) => di.sl<AuthProvider>(),
+          ChangeNotifierProvider<AuthenticationProvider>(
+            create: (_) => di.sl<AuthenticationProvider>(),
           ),
           ChangeNotifierProvider<HomeProvider>(
             create: (_) => di.sl<HomeProvider>(),
@@ -119,7 +119,7 @@ class _MyAppState extends State<MyApp> {
 
     final context = this.context;
     if (FirebaseAuth.instance.currentUser != null) {
-      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
       final response = await authRepository.getStaff(FirebaseAuth.instance.currentUser!.uid, await authLocalDataSourceImpl.getUniqueID());
         authProvider.user = response;
     }
@@ -138,7 +138,6 @@ class _MyAppState extends State<MyApp> {
       navigatorKey: navigationKey,
       title: 'My Office',
       theme: ThemeData(
-        useMaterial3: true,
         primarySwatch: Colors.amber,
         scaffoldBackgroundColor: const Color(0xffEEEEEE),
         fontFamily: 'Roboto',
@@ -205,7 +204,7 @@ class AuthenticationScreen extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Consumer<AuthProvider>(
+            return Consumer<AuthenticationProvider>(
               builder: (ctx, userProvider, child) {
                 return userProvider.user != null
                     ? userProvider.user!.dob == 0
@@ -249,7 +248,7 @@ class Loading extends StatelessWidget {
                 await FirebaseAuth.instance.signOut();
                 final pref = await SharedPreferences.getInstance();
                 await pref.clear();
-                Provider.of<AuthProvider>(context, listen: false).clearUser();
+                Provider.of<AuthenticationProvider>(context, listen: false).clearUser();
                 navigator.pushAndRemoveUntil(
                   MaterialPageRoute(builder: (_) => const LoginScreen()),
                   (route) => false,

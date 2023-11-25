@@ -12,11 +12,11 @@ import '../../data/data_source/auth_local_data_source.dart';
 import '../../data/repository/auth_repo_impl.dart';
 import '../../domain/repository/auth_repository.dart';
 
-class AuthProvider extends ChangeNotifier {
+class AuthenticationProvider extends ChangeNotifier {
   final ResetPasswordCase _resetPasswordCase;
   final AuthLocalDataSourceImpl _authLocalDataSourceImpl;
 
-  AuthProvider(
+  AuthenticationProvider(
     this._resetPasswordCase,
       this._authLocalDataSourceImpl,
   );

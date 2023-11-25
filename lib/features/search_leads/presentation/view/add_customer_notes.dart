@@ -346,10 +346,12 @@ class _AddNotesState extends State<AddNotes> {
   Future<void> saveData() async {
     String notes = notesController.text.trim();
     String reminder = dateController.text.trim();
+  var reminderDate = DateFormat('yyyy-MM-dd').format(DateTime.parse(dateController.text));
 
     if (notes.isEmpty && (reminder.isEmpty || audioFile == null)) {
       _showErrorSnackBar(
-          'Please enter some notes, set a reminder, or add an audio file.',);
+        'Please enter some notes, set a reminder, or add an audio file.',
+      );
       return;
     }
 
@@ -360,13 +362,14 @@ class _AddNotesState extends State<AddNotes> {
         notes: notes.isNotEmpty ? notes : null,
         reminder: reminder.isNotEmpty ? reminder : null,
         audioFile: audioFile,
+        reminderDate: reminderDate.isNotEmpty ? reminderDate : null,
       );
       String message = _buildSuccessMessage(notes, reminder, audioFile);
       _showSuccessSnackBar(message);
       notesController.clear();
       dateController.clear();
     } catch (e) {
-      if(!mounted) return;
+      if (!mounted) return;
       _showErrorSnackBar('Error saving data: ${e.toString()}');
     }
   }

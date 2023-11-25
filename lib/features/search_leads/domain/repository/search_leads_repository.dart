@@ -21,6 +21,7 @@ abstract class SearchLeadsRepository {
     String? notes,
     String? reminder,
     File? audioFile,
+    String? reminderDate,
   });
 
   Future<void> sendFeedback(Map<String, dynamic> body, String bearerToken, String customerWhatsAppNumber);

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:crop_your_image/crop_your_image.dart';
 import 'package:provider/provider.dart';
 
-import '../../../features/auth/presentation/provider/auth_provider.dart';
+import '../../../features/auth/presentation/provider/authentication_provider.dart';
 
 class CustomImageCropper extends StatefulWidget {
   final File image;
@@ -187,7 +187,7 @@ class _CustomImageCropperState extends State<CustomImageCropper> {
   }
 
   Future<void> pickUploadImage(File image, String userId) async {
-    final userProvider = Provider.of<AuthProvider>(context, listen: false);
+    final userProvider = Provider.of<AuthenticationProvider>(context, listen: false);
     var profileImage =
         FirebaseStorage.instance.ref().child('PROFILE IMAGE/$userId/');
     await profileImage.putFile(File(image.path)).whenComplete(() async {

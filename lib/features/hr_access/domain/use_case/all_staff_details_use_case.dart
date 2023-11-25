@@ -7,6 +7,6 @@ class AllStaffDetailsCase{
   AllStaffDetailsCase({required this.hrAccessRepository});
 
   Future<List<HrAccessModel>> getStaffDetails() async {
-    return await hrAccessRepository.getStaffDetails();
+    return  hrAccessRepository.getStaffDetails();
   }
 }
