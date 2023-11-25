@@ -8,9 +8,9 @@ import '../../../features/finance/presentation/view/finance_screen.dart';
 import '../../../features/food_count/presentation/view/food_count_screen.dart';
 import '../../../features/home/presentation/view/account_details_screen.dart';
 import '../../../features/home/data/model/staff_access_model.dart';
+import '../../../features/hr_access/presentation/view/all_staffs_screen.dart';
 import '../../../features/installation_pdf/presentation/view/installation_details.dart';
 import '../../../features/invoice_generator/presentation/view/client_details_screen.dart';
-import '../../../features/leave_approval/presentation/view/leave_approval_screen.dart';
 import '../../../features/pr_dashboard/presentation/view/pr_dash_screen.dart';
 import '../../../features/pr_reminder/presentation/view/pr_reminder_screen.dart';
 import '../../../features/proxy_attendance/presentation/view/proxy_attendance_screen.dart';
@@ -59,6 +59,7 @@ class MenuTitle {
   static const String installationEntry = 'Installation Entry';
   static const String prDashboard = 'PR Dashboard';
   static const String employeeOfTheWeek = 'Best employee';
+  static const String hrAccess = 'HR Access';
 }
 
 class AppDefaults {
@@ -169,6 +170,10 @@ class AppDefaults {
     StaffAccessModel(
       title: MenuTitle.employeeOfTheWeek,
       image: 'assets/best_employee.png',
+    ),
+    StaffAccessModel(
+        title: MenuTitle.hrAccess,
+        image: 'assets/all_staff_detail.png',
     ),
   ];
 
@@ -283,6 +288,9 @@ class AppDefaults {
         break;
       case MenuTitle.employeeOfTheWeek:
         page = const BestEmployee();
+        break;
+      case MenuTitle.hrAccess:
+        page = const AllStaffs();
         break;
     }
     return page;

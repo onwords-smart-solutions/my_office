@@ -13,6 +13,7 @@ import 'package:my_office/features/employee_of_the_week/presentation/provider/em
 import 'package:my_office/features/home/presentation/provider/home_provider.dart';
 import 'package:my_office/features/pr_reminder/presentation/provider/pr_reminder_provider.dart';
 import 'package:my_office/features/proxy_attendance/presentation/provider/proxy_attendance_provider.dart';
+import 'package:my_office/features/search_leads/presentation/provider/feedback_button_provider.dart';
 import 'package:my_office/features/staff_details/presentation/provider/staff_detail_provider.dart';
 import 'package:my_office/features/auth/presentation/view/phone_number_screen.dart';
 import 'package:my_office/features/auth/presentation/view/birthday_picker_screen.dart';
@@ -78,6 +79,9 @@ Future<void> main() async {
           ),
           ChangeNotifierProvider(
             create: (context) => Invoice1Provider(),
+          ),
+          ChangeNotifierProvider<FeedbackButtonProvider>(
+            create: (_) => di.sl<FeedbackButtonProvider>(),
           ),
         ],
         child: const MyApp(),

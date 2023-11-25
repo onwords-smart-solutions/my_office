@@ -10,14 +10,16 @@ class SaveCheckOutCase {
   Future<Either<ErrorResponse, bool>> execute(
     String userId,
     DateTime date,
+      DateTime initialTime,
     String reason,
     String proxyBy,
   ) async {
     return await proxyAttendanceRepository.saveCheckOutProxy(
-      userId,
-      date,
-      reason,
-      proxyBy,
+      userId:userId,
+      date:date,
+      initialTime: initialTime,
+      reason: reason,
+      proxyBy: proxyBy,
     );
   }
 }

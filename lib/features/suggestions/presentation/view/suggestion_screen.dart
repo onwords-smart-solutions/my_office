@@ -130,14 +130,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
           width: 150,
           padding: const EdgeInsets.all(8.0),
           child: FilledButton(
-            onPressed: () {
-              addSuggestionToDatabase();
-              sendNotification(
-                'Vhbt8jIAfiaV1HxuWERLqJh7dbj2',
-                'Suggestion',
-                'New suggestion has been arrived',
-              );
-            },
+            onPressed: addSuggestionToDatabase,
             child: const Text(
               "Submit",
               style: TextStyle(
@@ -170,6 +163,11 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
       suggestionCase.execute(
         widget.uid,
         suggestionsController.text,
+      );
+      sendNotification(
+        'Vhbt8jIAfiaV1HxuWERLqJh7dbj2',
+        'Suggestion',
+        'New suggestion has been arrived',
       );
       suggestionsController.clear();
       CustomSnackBar.showSuccessSnackbar(

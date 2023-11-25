@@ -29,7 +29,6 @@ abstract class HomeRepository{
   int getRandomNumber();
 
   Future<Map<Object?, Object?>> checkAppVersion();
-  Future<String> onClickInstallApk();
 
   Future<EmployeeOfWeekData> getEmployeeOfTheWeek();
 }

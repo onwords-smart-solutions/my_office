@@ -204,6 +204,7 @@ class _CustomerItemState extends State<CustomerItem>
                     leadName: widget.customerInfo['LeadIncharge'].toString(),
                     prStaffNames: widget.prNames,
                     reminder: fullReminder,
+                    pageKey : widget.customerInfo['phone_number'].toString(),
                   ),
                 ),
               ),

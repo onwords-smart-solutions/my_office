@@ -6,7 +6,6 @@ import 'package:lottie/lottie.dart';
 import 'package:my_office/features/auth/data/repository/auth_repo_impl.dart';
 import 'package:my_office/features/auth/domain/repository/auth_repository.dart';
 import 'package:my_office/features/auth/presentation/provider/auth_provider.dart';
-import 'package:my_office/features/home/presentation/view/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/utilities/constants/app_color.dart';

@@ -41,17 +41,18 @@ class ProxyAttendanceFbDataSourceImpl implements ProxyAttendanceFbDataSource {
   }
 
   @override
-  Future<Either<ErrorResponse, bool>> checkInProxy(
-    String userId,
-    DateTime date,
-    String reason,
-    String proxyBy,
-  ) async {
+  Future<Either<ErrorResponse, bool>> checkInProxy({
+  required String userId,
+  required DateTime date,
+  required DateTime initialTime,
+  required String reason,
+  required String proxyBy,
+  }) async {
     try {
       String year = DateFormat('yyyy').format(date);
       String month = DateFormat('MM').format(date);
       String day = DateFormat('dd').format(date);
-      String time = DateFormat('HH:mm:ss').format(date);
+      String time = DateFormat('HH:mm:ss').format(initialTime);
 
       await ref.child('attendance/$year/$month/$day/$userId').update({
         'check_in': time,
@@ -72,17 +73,18 @@ class ProxyAttendanceFbDataSourceImpl implements ProxyAttendanceFbDataSource {
   }
 
   @override
-  Future<Either<ErrorResponse, bool>> checkOutProxy(
-    String userId,
-    DateTime date,
-    String reason,
-    String proxyBy,
-  ) async {
+  Future<Either<ErrorResponse, bool>> checkOutProxy({
+   required String userId,
+   required DateTime date,
+   required DateTime initialTime,
+   required String reason,
+   required String proxyBy,
+  }) async {
     try {
       String year = DateFormat('yyyy').format(date);
       String month = DateFormat('MM').format(date);
       String day = DateFormat('dd').format(date);
-      String time = DateFormat('HH:mm:ss').format(date);
+      String time = DateFormat('HH:mm:ss').format(initialTime);
 
       await ref.child('attendance/$year/$month/$day/$userId').update({
         'check_out': time,

@@ -82,7 +82,7 @@ As, I have mentioned above this project is structured with Clean architecture pr
 
 ### Version history and Releases
 
-* Android : 2.1.0+1 - Updated app with clean architecture.
+* Android : 2.1.2+2 - Fixed bug in Proxy attendance screen for time change.
 * iOS : 2.0.12+87. 
 
 

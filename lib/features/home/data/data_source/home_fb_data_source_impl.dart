@@ -299,12 +299,6 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
   }
 
   @override
-  Future<String> getApkDownloadPath() async {
-    final resultPath = FirebaseStorage.instance.ref('MY OFFICE APK/app-release.apk');
-    return resultPath.fullPath;
-  }
-
-  @override
   Future<Map<Object?, Object?>> getEmployeeOfWeek() async {
     final snapshot = await ref.child('PRDashboard/employee_of_week').once();
     if (snapshot.snapshot.exists) {

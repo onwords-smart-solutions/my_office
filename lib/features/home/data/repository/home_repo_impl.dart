@@ -147,12 +147,6 @@ class HomeRepoImpl implements HomeRepository {
   }
 
   @override
-  Future<String> onClickInstallApk() async {
-    return _homeFbDataSource.getApkDownloadPath();
-  }
-
-
-  @override
   Future<EmployeeOfWeekData> getEmployeeOfTheWeek() async {
     try {
       final employeeOfWeekData = await _homeFbDataSource.getEmployeeOfWeek();

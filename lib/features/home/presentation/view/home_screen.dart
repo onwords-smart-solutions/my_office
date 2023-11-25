@@ -718,36 +718,25 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     );
   }
 
+
   Future<void> _onClickInstallApk() async {
+    final resultPath =
+    FirebaseStorage.instance.ref('MY OFFICE APK/app-release.apk');
+    final appDocDir = await getExternalStorageDirectory();
+    final String appDocPath = appDocDir!.path;
+    final File tempFile = File('$appDocPath/MY_OFFICE_UPDATED.apk');
     try {
-      // Getting the APK path from the repository
-      final apkPath = await homeRepository.onClickInstallApk();
-
-      // Setting up the local file path for the APK
-      final appDocDir = await getExternalStorageDirectory();
-      final String appDocPath = appDocDir!.path;
-      final File tempFile = File('$appDocPath/MY_OFFICE_UPDATED.apk');
-
-      // Reference to FirebaseStorage for downloading the APK
-      final resultPath = FirebaseStorage.instance.ref(apkPath);
-
-      // Listening to the download process
       resultPath.writeToFile(tempFile).snapshotEvents.listen((event) async {
         if (event.totalBytes != -1) {
           _totalMB.value = bytesToMB(event.totalBytes);
         }
         _downloadedMB.value = bytesToMB(event.bytesTransferred);
 
-        // Check if download is complete
         if (_totalMB.value == _downloadedMB.value) {
           await tempFile.create();
           await InstallPlugin.installApk(tempFile.path, 'com.onwords.office')
-              .then((result) {
-            // Handle successful installation
-          })
+              .then((result) {})
               .catchError((error) {
-            // Handle installation error
-            if (!mounted) return;
             Navigator.of(context).pop();
             CustomSnackBar.showErrorSnackbar(
               message: 'Unable to update my office. Try again',
@@ -757,19 +746,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         }
       });
     } on FirebaseException {
-      // Handle Firebase specific exceptions
-      if (!mounted) return;
+      if(!mounted) return;
       Navigator.of(context).pop();
       CustomSnackBar.showErrorSnackbar(
         message: 'Unable to update my office. Try again',
-        context: context,
-      );
-    } catch (e) {
-      // Handle other exceptions
-      if (!mounted) return;
-      Navigator.of(context).pop();
-      CustomSnackBar.showErrorSnackbar(
-        message: 'An error occurred: ${e.toString()}',
         context: context,
       );
     }

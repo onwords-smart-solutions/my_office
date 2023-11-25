@@ -16,32 +16,36 @@ class ProxyAttendanceRepoImpl implements ProxyAttendanceRepository {
   }
 
   @override
-  Future<Either<ErrorResponse, bool>> saveCheckInProxy(
-    String userId,
-    DateTime date,
-    String reason,
-    String proxyBy,
-  ) async {
+  Future<Either<ErrorResponse, bool>> saveCheckInProxy({
+   required String userId,
+   required DateTime date,
+   required DateTime initialTime,
+   required String reason,
+   required String proxyBy,
+  }) async {
     return await proxyAttendanceFbDataSource.checkInProxy(
-      userId,
-      date,
-      reason,
-      proxyBy,
+     userId: userId,
+      date: date,
+      initialTime: initialTime,
+      reason: reason,
+     proxyBy:  proxyBy,
     );
   }
 
   @override
-  Future<Either<ErrorResponse, bool>> saveCheckOutProxy(
-    String userId,
-    DateTime date,
-    String reason,
-    String proxyBy,
-  ) async {
+  Future<Either<ErrorResponse, bool>> saveCheckOutProxy({
+    required String userId,
+    required DateTime date,
+    required DateTime initialTime,
+    required String reason,
+    required String proxyBy,
+  }) async {
     return await proxyAttendanceFbDataSource.checkOutProxy(
-      userId,
-      date,
-      reason,
-      proxyBy,
+      userId: userId,
+      date: date,
+      initialTime: initialTime,
+      reason: reason,
+      proxyBy: proxyBy,
     );
   }
 }

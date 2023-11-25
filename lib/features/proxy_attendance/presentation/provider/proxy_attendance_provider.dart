@@ -33,12 +33,26 @@ class ProxyAttendanceProvider extends ChangeNotifier {
   }
 
   //Saving check in proxy
-  Future<Either<ErrorResponse, bool>> updateCheckInProxy(String userId, DateTime date, String reason, String proxyBy ) async {
-    return await _saveCheckInCase.execute(userId, date, reason, proxyBy);
+  Future<Either<ErrorResponse, bool>> updateCheckInProxy({
+    required String userId,
+    required DateTime date,
+    required DateTime initialTime,
+    required String reason,
+    required String proxyBy,
+  }) async {
+    return await _saveCheckInCase.execute(
+        userId, date, initialTime, reason, proxyBy);
   }
 
   //Saving check out proxy
-  Future<Either<ErrorResponse, bool>> updateCheckOutProxy(String userId, DateTime date, String reason, String proxyBy) async {
-   return await _saveCheckOutCase.execute(userId, date, reason, proxyBy);
+  Future<Either<ErrorResponse, bool>> updateCheckOutProxy({
+   required String userId,
+   required DateTime date,
+   required DateTime initialTime,
+   required String reason,
+   required String proxyBy,
+  }) async {
+    return await _saveCheckOutCase.execute(
+        userId, date, initialTime, reason, proxyBy);
   }
 }

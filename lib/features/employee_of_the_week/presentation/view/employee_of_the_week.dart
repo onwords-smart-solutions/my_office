@@ -1,7 +1,5 @@
-import 'package:either_dart/either.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_snack_bar.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';

@@ -7,7 +7,6 @@ import 'package:my_office/features/food_count/data/data_source/food_count_data_s
 import 'package:my_office/features/food_count/data/data_source/food_count_fb_data_source.dart';
 import 'package:my_office/features/food_count/data/repository/food_count_repo_impl.dart';
 import 'package:my_office/features/food_count/domain/repository/food_count_repository.dart';
-import 'package:provider/provider.dart';
 import '../../../../core/utilities/constants/app_main_template.dart';
 import '../../data/model/food_count_model.dart';
 import '../../domain/use_case/all_food_count_use_case.dart';

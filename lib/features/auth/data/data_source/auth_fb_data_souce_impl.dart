@@ -4,7 +4,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';
 import 'package:my_office/features/auth/data/data_source/auth_fb_data_source.dart';
 import 'package:my_office/features/user/domain/entity/user_entity.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../user/data/model/user_model.dart';
 

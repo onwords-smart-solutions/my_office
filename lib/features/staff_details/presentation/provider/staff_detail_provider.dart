@@ -7,7 +7,7 @@ class StaffDetailProvider extends ChangeNotifier{
   final StaffDetailCase _staffDetailCase;
   final RemoveStaffDetailCase _removeStaffDetailCase;
   List<StaffDetailModel> allNames = [];
-  bool _isLoading = false;
+  bool _isLoading = true;
   bool get isLoading => _isLoading;
 
   StaffDetailProvider(this._staffDetailCase, this._removeStaffDetailCase);

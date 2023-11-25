@@ -5,15 +5,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_app_button.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_snack_bar.dart';
+import 'package:provider/provider.dart';
 import 'package:timelines/timelines.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../data/data_source/search_leads_fb_data_source.dart';
 import '../../data/data_source/search_leads_fb_data_source_impl.dart';
 import '../../data/repository/search_leads_repo_impl.dart';
 import '../../domain/repository/search_leads_repository.dart';
+import '../provider/feedback_button_provider.dart';
 import '../view_model/customer_note_item_details.dart';
 import 'add_customer_notes.dart';
-import 'package:http/http.dart' as http;
 
 const List<String> list = [
   'New leads',
@@ -42,6 +43,7 @@ class CustomerDetailScreen extends StatefulWidget {
   final List<String> prStaffNames;
   final String leadName;
   final String reminder;
+  final String pageKey;
 
   const CustomerDetailScreen({
     Key? key,
@@ -53,6 +55,7 @@ class CustomerDetailScreen extends StatefulWidget {
     required this.leadName,
     required this.prStaffNames,
     required this.reminder,
+    required this.pageKey,
   }) : super(key: key);
 
   @override
@@ -355,9 +358,19 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         //Feedback button
         Align(
           alignment: AlignmentDirectional.center,
-          child: AppButton(
-            onPressed: feedbackApiPost,
-            child: const Text('Feedback'),
+          child: Consumer<FeedbackButtonProvider>(
+            builder: (context, provider, child) {
+              return provider.buttonVisible.keys.contains(
+                widget.customerInfo['phone_number'].toString(),
+              )
+                  ? const SizedBox.shrink()
+                  : AppButton(
+                      onPressed: () {
+                        feedbackApiPost(context);
+                      },
+                      child: const Text('Feedback'),
+                    );
+            },
           ),
         ),
 
@@ -471,7 +484,10 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     );
   }
 
-  Future<void> feedbackApiPost() async {
+  Future<void> feedbackApiPost(BuildContext context) async {
+    var buttonVisibility =
+        Provider.of<FeedbackButtonProvider>(context, listen: false);
+
     final customerWhatsAppNumber =
         widget.customerInfo['phone_number'].toString();
     final customerName = widget.customerInfo['name'].toString();
@@ -506,6 +522,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
             'Feedback request has been sent to ${widget.customerInfo['name']}',
         context: context,
       );
+      buttonVisibility.buttonVisible = {
+        widget.customerInfo['phone_number'].toString(): true
+      };
     } catch (e) {
       log('Error occurred: $e');
     }

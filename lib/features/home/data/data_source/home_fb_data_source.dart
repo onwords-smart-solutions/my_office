@@ -27,8 +27,6 @@ abstract class HomeFbDataSource {
 
   Future<Map<Object?, Object?>> getAppVersionInfo();
 
-  Future<String> getApkDownloadPath();
-
   Future<Map<Object?, Object?>> getEmployeeOfWeek();
 
   Future<Map<Object?, Object?>> getAllStaffDetails(String uid);

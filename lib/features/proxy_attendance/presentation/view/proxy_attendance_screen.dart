@@ -81,6 +81,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
       setState(() {
         dateStamp = pickedDate;
       });
+      print('Selected date is $dateStamp');
     } else {
       print('Date is not selected');
     }
@@ -190,6 +191,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                     ),
                     errorStyle: const TextStyle(),
                   ),
+                  requestFocusOnTap: true,
                   menuHeight: height * 0.4,
                   menuStyle: MenuStyle(
                     backgroundColor: MaterialStateProperty.resolveWith(
@@ -397,10 +399,11 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
             //Proxy check_in
             if (_choiceChipsList[_selectedIndex!].label == 'Check-in') {
              await proxyProvider.updateCheckInProxy(
-               selectedStaff!.uid,
-               initialTime!,
-               _reasonController.text,
-               widget.name,
+               userId: selectedStaff!.uid,
+               initialTime: initialTime!,
+               date:dateStamp,
+               reason: _reasonController.text,
+               proxyBy: widget.name,
              );
              if(!mounted) return;
               CustomSnackBar.showSuccessSnackbar(
@@ -420,10 +423,11 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
               //Proxy check_out
               if (_choiceChipsList[_selectedIndex!].label == 'Check-out') {
                 await proxyProvider.updateCheckOutProxy(
-                  selectedStaff!.uid,
-                  initialTime!,
-                  _reasonController.text,
-                  widget.name,
+                 userId: selectedStaff!.uid,
+                  initialTime: initialTime!,
+                  date: dateStamp,
+                  reason :_reasonController.text,
+                  proxyBy: widget.name,
                 );
                 if (!mounted) return;
                 CustomSnackBar.showSuccessSnackbar(

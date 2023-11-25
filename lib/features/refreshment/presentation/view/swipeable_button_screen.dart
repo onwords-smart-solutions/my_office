@@ -158,7 +158,7 @@ class _SwipeableButtonState extends State<SwipeableButton> {
       bool isFoodBooked = false;
       await fetchDetails(date: format, mode: mode).then(
         (value) async {
-          if (foodDetails != null) {
+          if (foodDetails.isNotEmpty) {
             Map<Object?, Object?> foodList =
                 foodDetails['lunch_list'] as Map<Object?, Object?>;
             log('food list is $foodDetails');
@@ -202,7 +202,7 @@ class _SwipeableButtonState extends State<SwipeableButton> {
         int milkCount = 0;
         bool isTeaOrdered = false;
         bool isCoffeeOrdered = false;
-        if (refreshmentDetails != null) {
+        if (refreshmentDetails.isNotEmpty) {
           //Tea list
           try {
             teaList = refreshmentDetails['tea'] as Map<Object?, Object?>;

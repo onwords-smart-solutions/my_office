@@ -43,6 +43,11 @@ import 'package:my_office/features/home/domain/use_case/get_rnd_tl_list_use_case
 import 'package:my_office/features/home/domain/use_case/get_staff_access_use_case.dart';
 import 'package:my_office/features/home/domain/use_case/get_staff_details_use_case.dart';
 import 'package:my_office/features/home/domain/use_case/get_tl_list_use_case.dart';
+import 'package:my_office/features/hr_access/data/data_source/hr_access_fb_data_source.dart';
+import 'package:my_office/features/hr_access/data/data_source/hr_access_fb_data_source_impl.dart';
+import 'package:my_office/features/hr_access/data/repository/hr_access_repo_impl.dart';
+import 'package:my_office/features/hr_access/domain/repository/hr_access_repository.dart';
+import 'package:my_office/features/hr_access/domain/use_case/all_staff_details_use_case.dart';
 import 'package:my_office/features/leave_approval/data/data_source/leave_approval_fb_data_source.dart';
 import 'package:my_office/features/leave_approval/data/data_source/leave_approval_fb_data_source_impl.dart';
 import 'package:my_office/features/leave_approval/data/repository/leave_approval_repo_impl.dart';
@@ -81,6 +86,7 @@ import 'package:my_office/features/search_leads/data/data_source/search_leads_fb
 import 'package:my_office/features/search_leads/data/data_source/search_leads_fb_data_source_impl.dart';
 import 'package:my_office/features/search_leads/data/repository/search_leads_repo_impl.dart';
 import 'package:my_office/features/search_leads/domain/repository/search_leads_repository.dart';
+import 'package:my_office/features/search_leads/presentation/provider/feedback_button_provider.dart';
 import 'package:my_office/features/staff_details/data/data_source/staff_detail_fb_data_source.dart';
 import 'package:my_office/features/staff_details/data/data_source/staff_detail_fb_data_source_impl.dart';
 import 'package:my_office/features/staff_details/data/repository/staff_detail_repo_impl.dart';
@@ -190,6 +196,11 @@ Future<void> init() async {
       sl.call(),
       sl.call(),
     ),
+  );
+
+  ///FEEDBACK BUTTON PROVIDER
+  sl.registerFactory<FeedbackButtonProvider>(
+        () => FeedbackButtonProvider(),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ USE CASES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
@@ -344,6 +355,11 @@ Future<void> init() async {
         () => GetProductDetailsCase(sl.call()),
   );
 
+  ///HR ACCESS STAFFS
+  sl.registerLazySingleton<AllStaffDetailsCase>(
+        () => AllStaffDetailsCase(hrAccessRepository: sl.call()),
+  );
+
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ REPOSITORIES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
   ///AUTH
@@ -439,6 +455,11 @@ Future<void> init() async {
   ///CUSTOMER LEADS SCREEN
   sl.registerLazySingleton<SearchLeadsRepository>(
         () => SearchLeadsRepoImpl(sl.call()),
+  );
+
+  ///HR ACCESS REPOSITORY
+  sl.registerLazySingleton<HrAccessRepository>(
+        () => HrAccessRepoImpl(sl.call()),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DATA SOURCE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
@@ -541,6 +562,11 @@ Future<void> init() async {
   ///AUTH LOCAL DATA SOURCE
   sl.registerLazySingleton<AuthLocalDataSourceImpl>(
         () => AuthLocalDataSourceImpl(sl.call()),
+  );
+
+  ///HR ACCESS STAFFS SCREEN
+  sl.registerLazySingleton<HrAccessFbDataSource>(
+        () => HrAccessFbDataSourceImpl(),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ EXTERNAL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
