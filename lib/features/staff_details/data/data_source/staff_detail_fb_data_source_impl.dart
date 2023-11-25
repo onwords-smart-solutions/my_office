@@ -26,7 +26,7 @@ class StaffDetailFbDataSourceImpl implements StaffDetailFbDataSource {
   @override
   Future<List<StaffDetailModel>> staffNames() async {
     final List<StaffDetailModel> allNames = [];
-    ref.child('staff').once().then((values) {
+   await ref.child('staff').once().then((values) {
       for (var uid in values.snapshot.children) {
         var names = uid.value as Map<Object?, Object?>;
         final staffNames = StaffDetailModel(

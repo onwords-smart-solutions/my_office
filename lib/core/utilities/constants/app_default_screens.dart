@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_office/features/attendance/presentation/view/attendance_screen.dart';
+import 'package:my_office/features/pay_slip/presentation/view/pay_slip_screen.dart';
 import '../../../features/create_lead/presentation/view/create_lead_screen.dart';
 import '../../../features/create_product/presentation/view/create_product_screen.dart';
 import '../../../features/employee_of_the_week/presentation/view/employee_of_the_week.dart';
@@ -56,10 +57,10 @@ class MenuTitle {
   static const String staffDetail = 'Staff Detail';
   static const String installationPDF = 'Installation PDF';
   static const String proxyAttendance = 'Proxy Attendance';
-  static const String installationEntry = 'Installation Entry';
   static const String prDashboard = 'PR Dashboard';
   static const String employeeOfTheWeek = 'Best employee';
   static const String hrAccess = 'HR Access';
+  static const String paySlip = 'Pay Slip';
 }
 
 class AppDefaults {
@@ -162,7 +163,6 @@ class AppDefaults {
       title: MenuTitle.proxyAttendance,
       image: 'assets/proxy_attendance.png',
     ),
-//     // StaffAccessModel(title: MenuTitle.installationEntry, image: 'assets/installation_entry.png'),
     StaffAccessModel(
       title: MenuTitle.prDashboard,
       image: 'assets/pr_dashboard.png',
@@ -171,10 +171,14 @@ class AppDefaults {
       title: MenuTitle.employeeOfTheWeek,
       image: 'assets/best_employee.png',
     ),
-    // StaffAccessModel(
-    //     title: MenuTitle.hrAccess,
-    //     image: 'assets/all_staff_detail.png',
-    // ),
+    StaffAccessModel(
+        title: MenuTitle.hrAccess,
+        image: 'assets/all_staff_detail.png',
+    ),
+    StaffAccessModel(
+      title: MenuTitle.paySlip,
+      image: 'assets/pay_slip.png',
+    ),
   ];
 
   static Widget getPage(String title, UserEntity staffInfo) {
@@ -280,9 +284,6 @@ class AppDefaults {
           name: staffInfo.name,
         );
         break;
-//       case MenuTitle.installationEntry:
-//         page = const InstallationEntry();
-//         break;
       case MenuTitle.prDashboard:
         page = const PrDashboard();
         break;
@@ -291,6 +292,9 @@ class AppDefaults {
         break;
       case MenuTitle.hrAccess:
         page = const AllStaffs();
+        break;
+      case MenuTitle.paySlip:
+        page = const PaySlip();
         break;
     }
     return page;

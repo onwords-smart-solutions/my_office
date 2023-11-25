@@ -167,8 +167,7 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
               menuItems.title == MenuTitle.suggestion ||
               menuItems.title == MenuTitle.createInvoice ||
               menuItems.title == MenuTitle.quotationTemplate ||
-              menuItems.title == MenuTitle.installationPDF ||
-              menuItems.title == MenuTitle.installationEntry) {
+              menuItems.title == MenuTitle.installationPDF ) {
             allAccess.add(menuItems);
           }
         }

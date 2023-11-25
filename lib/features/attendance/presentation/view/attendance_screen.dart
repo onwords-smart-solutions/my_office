@@ -9,7 +9,7 @@ import 'package:my_office/features/attendance/data/data_source/attendance_fb_dat
 import 'package:my_office/features/attendance/data/model/punch_model.dart';
 import 'package:my_office/features/attendance/data/repository/attendance_repo_impl.dart';
 import 'package:my_office/features/attendance/domain/repository/attendance_repository.dart';
-import 'package:my_office/features/attendance/presentation/view/attendance_punch_screen.dart';
+import 'package:my_office/features/attendance/presentation/view_model/attendance_punch_screen.dart';
 import 'package:pdf/pdf.dart';
 import '../../../../core/utilities/constants/app_main_template.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -37,6 +37,14 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     'Late Entry',
     "ID Tap",
     'Proxy',
+    'Admin',
+    'App',
+    'Web',
+    'Media',
+    'RND',
+    'Installation',
+    'HR',
+    'PR',
   ];
 
   late final AttendanceFbDataSource _attendanceFbDataSource =
@@ -68,7 +76,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         _selectedDate.value,
       );
       _punchingDetails.value = [
-       ... _punchingDetails.value,
+        ..._punchingDetails.value,
         if (data != null)
           data
         else
@@ -81,7 +89,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       ];
 
       _sortedList.value = [
-        ... _sortedList.value,
+        ..._sortedList.value,
         if (data != null)
           data
         else
@@ -259,6 +267,63 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                         _sortedList.value = _punchingDetails
                                             .value
                                             .where((element) => element.isProxy)
+                                            .toList();
+                                      }
+                                      else if (_dropDown[i] == 'App') {
+                                        _sortedList.value = _punchingDetails
+                                            .value
+                                            .where((element) =>
+                                                element.department.contains('APP'),
+                                        )
+                                            .toList();
+                                      } else if (_dropDown[i] == 'Web') {
+                                        _sortedList.value = _punchingDetails
+                                            .value
+                                            .where((element) =>
+                                            element.department.contains('WEB'),
+                                        )
+                                            .toList();
+                                      }else if (_dropDown[i] == 'PR') {
+                                        _sortedList.value = _punchingDetails
+                                            .value
+                                            .where((element) =>
+                                            element.department.contains('PR'),
+                                        )
+                                            .toList();
+                                      }else if (_dropDown[i] == 'Media') {
+                                        _sortedList.value = _punchingDetails
+                                            .value
+                                            .where((element) =>
+                                            element.department.contains('MEDIA'),
+                                        )
+                                            .toList();
+                                      }else if (_dropDown[i] == 'Admin') {
+                                        _sortedList.value = _punchingDetails
+                                            .value
+                                            .where((element) =>
+                                            element.department.contains('ADMIN'),
+                                        )
+                                            .toList();
+                                      }else if (_dropDown[i] == 'RND') {
+                                        _sortedList.value = _punchingDetails
+                                            .value
+                                            .where((element) =>
+                                            element.department.contains('RND'),
+                                        )
+                                            .toList();
+                                      }else if (_dropDown[i] == 'Installation') {
+                                        _sortedList.value = _punchingDetails
+                                            .value
+                                            .where((element) =>
+                                            element.department.contains('Installation'),
+                                        )
+                                            .toList();
+                                      }else if (_dropDown[i] == 'HR') {
+                                        _sortedList.value = _punchingDetails
+                                            .value
+                                            .where((element) =>
+                                            element.department.contains('HR'),
+                                        )
                                             .toList();
                                       }
                                     },

@@ -10,7 +10,7 @@ class HrAccessFbDataSourceImpl implements HrAccessFbDataSource{
   @override
   Future<List<HrAccessModel>> staffDetails() async{
     final List<HrAccessModel> allDetails = [];
-    ref.child('staff').once().then((value) {
+    await ref.child('staff').once().then((value) {
       for(var uid in value.snapshot.children){
         var individualStaffDetails = uid.value as Map<Object?, Object?>;
         final staffs = HrAccessModel(

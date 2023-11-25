@@ -35,7 +35,6 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
     });
   }
 
-
   Future<void> _startTimePicker(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
@@ -75,6 +74,8 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
       context: context,
     );
   }
+
+
 
  @override
   void didChangeDependencies() {
