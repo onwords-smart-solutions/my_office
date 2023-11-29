@@ -16,6 +16,8 @@ class AttendanceRepoImpl implements AttendanceRepository {
     String department,
     String name,
     DateTime date,
+      String punchIn,
+      String punchOut,
   ) async {
     DatabaseEvent event = await _attendanceFbDataSource.getAttendanceData(staffId, date);
 
@@ -63,6 +65,8 @@ class AttendanceRepoImpl implements AttendanceRepository {
       checkInReason: proxyInReason,
       checkOutProxyBy: proxyOutBy,
       checkOutReason: proxyOutReason,
+      punchIn: punchIn,
+      punchOut: punchOut,
     );
   }
 
@@ -87,6 +91,8 @@ class AttendanceRepoImpl implements AttendanceRepository {
         uid: staff.key.toString(),
         department: data['department'].toString(),
         name: data['name'].toString(),
+        punchIn: data['punch_in'].toString(),
+        punchOut: data['punch_out'].toString(),
       );
       staffList.add(staffMember);
     }

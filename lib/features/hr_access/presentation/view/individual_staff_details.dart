@@ -1,6 +1,6 @@
 import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -8,12 +8,22 @@ import 'package:intl/intl.dart';
 import '../../../../core/utilities/constants/app_color.dart';
 import '../../../../core/utilities/custom_widgets/custom_app_button.dart';
 import '../../../../core/utilities/custom_widgets/custom_snack_bar.dart';
+import '../../data/data_source/hr_access_fb_data_source.dart';
+import '../../data/data_source/hr_access_fb_data_source_impl.dart';
 import '../../data/model/hr_access_staff_model.dart';
+import '../../data/repository/hr_access_repo_impl.dart';
+import '../../domain/repository/hr_access_repository.dart';
+import '../../domain/use_case/update_timing_for_employees_use_case.dart';
 
 class IndividualStaffDetail extends StatefulWidget {
   final HrAccessModel allDetail;
+  final List<HrAccessModel> allStaffData;
 
-  const IndividualStaffDetail({super.key, required this.allDetail});
+  const IndividualStaffDetail({
+    super.key,
+    required this.allDetail,
+    required this.allStaffData,
+  });
 
   @override
   State<IndividualStaffDetail> createState() => _IndividualStaffDetailState();
@@ -24,18 +34,26 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
   TextEditingController punchOut = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   DateTime? initialTime;
+  late HrAccessFbDataSource hrAccessFbDataSource = HrAccessFbDataSourceImpl();
+  late HrAccessRepository hrAccessRepository =
+      HrAccessRepoImpl(hrAccessFbDataSource);
+  late UpdateTimingForEmployeesCase updateTimingForEmployeesCase =
+      UpdateTimingForEmployeesCase(hrAccessRepository: hrAccessRepository);
 
-  TimeOfDay startTime = const TimeOfDay(hour: 9, minute: 00);
-  TimeOfDay endTime = const TimeOfDay(hour: 18, minute: 00);
-
-  void regularTime(){
+  void hrSetTimingForEmployees() {
     setState(() {
-      punchIn.text = startTime.format(context);
-      punchOut.text = endTime.format(context);
+      punchIn.text = widget.allDetail.punchIn;
+      punchOut.text = widget.allDetail.punchOut;
     });
+    log('Punch in time : ${widget.allDetail.punchIn}');
+    log('Punch out time : ${widget.allDetail.punchOut}');
   }
 
   Future<void> _startTimePicker(BuildContext context) async {
+    TimeOfDay startTime = TimeOfDay(
+      hour: int.parse(widget.allDetail.punchIn.split(':').first),
+      minute: int.parse(widget.allDetail.punchIn.split(':').last),
+    );
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: startTime,
@@ -44,12 +62,25 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
     if (picked != null && picked != startTime) {
       setState(() {
         startTime = picked;
-        punchIn.text = startTime.format(context);
+        DateTime dateTime = DateTime(
+          DateTime.now().year,
+          DateTime.now().month,
+          DateTime.now().day,
+          picked.hour,
+          picked.minute,
+        );
+        String formattedTime = DateFormat.Hm().format(dateTime);
+        punchIn.text = formattedTime;
       });
     }
   }
 
   Future<void> _endTimePicker(BuildContext context) async {
+    TimeOfDay endTime = TimeOfDay(
+      hour: int.parse(widget.allDetail.punchOut.split(':').first),
+      minute: int.parse(widget.allDetail.punchOut.split(':').last),
+    );
+
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: endTime,
@@ -57,30 +88,41 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
 
     if (picked != null && picked != endTime) {
       setState(() {
-        endTime = picked;
-        punchOut.text = endTime.format(context);
+        endTime = picked;DateTime dateTime = DateTime(
+          DateTime.now().year,
+          DateTime.now().month,
+          DateTime.now().day,
+          picked.hour,
+          picked.minute,
+        );
+        String formattedTime = DateFormat.Hm().format(dateTime);
+        punchOut.text = formattedTime;
       });
     }
   }
-  
-  void setTimingForStaffs(){
-    final ref = FirebaseDatabase.instance.ref();
-   ref.child('staff/${widget.allDetail.uid}').update({
-     'punch_in': punchIn.text,
-     'punch_out': punchOut.text,
-   });
+
+  Future<void> setTimingForStaffs() async {
+    await updateTimingForEmployeesCase.execute(
+      uid: widget.allDetail.uid,
+      punchIn: punchIn.text,
+      punchOut: punchOut.text,
+    );
+    final data = widget.allStaffData
+        .firstWhere((element) => element.uid == widget.allDetail.uid);
+    data.punchIn = punchIn.text;
+    data.punchOut = punchOut.text;
+    if (!mounted) return;
     CustomSnackBar.showSuccessSnackbar(
-      message: 'Timing has been updated for ${widget.allDetail.name}',
+      message:
+          'Timing for ${widget.allDetail.name} Punch in : ${punchIn.text} & Punch out : ${punchOut.text}',
       context: context,
     );
   }
 
-
-
- @override
-  void didChangeDependencies() {
-    regularTime();
-    super.didChangeDependencies();
+  @override
+  void initState() {
+    hrSetTimingForEmployees();
+    super.initState();
   }
 
   @override
@@ -142,7 +184,7 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                   ),
                 ),
               ),
-              const Gap(10),
+              const Gap(60),
               Row(
                 children: [
                   SizedBox(width: size.width * 0.06),
@@ -158,12 +200,13 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                     widget.allDetail.name,
                     style: const TextStyle(
                       fontSize: 17,
-                      color: Colors.purple,
+                      color: Color(0xff7D7C7C),
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
               ),
-              const Gap(5),
+              const Gap(10),
               Row(
                 children: [
                   SizedBox(width: size.width * 0.06),
@@ -179,12 +222,13 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                     widget.allDetail.department,
                     style: const TextStyle(
                       fontSize: 17,
-                      color: Colors.purple,
+                      color: Color(0xff7D7C7C),
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
               ),
-              const Gap(5),
+              const Gap(10),
               Row(
                 children: [
                   SizedBox(width: size.width * 0.06),
@@ -201,13 +245,14 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                       widget.allDetail.email,
                       style: const TextStyle(
                         fontSize: 17,
-                        color: Colors.purple,
+                        color: Color(0xff7D7C7C),
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
                 ],
               ),
-              const Gap(5),
+              const Gap(10),
               Row(
                 children: [
                   SizedBox(width: size.width * 0.06),
@@ -224,13 +269,14 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                       widget.allDetail.mobile.toString(),
                       style: const TextStyle(
                         fontSize: 17,
-                        color: Colors.purple,
+                        color: Color(0xff7D7C7C),
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
                 ],
               ),
-              const Gap(5),
+              const Gap(10),
               Row(
                 children: [
                   SizedBox(width: size.width * 0.06),
@@ -247,13 +293,14 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                       d24,
                       style: const TextStyle(
                         fontSize: 17,
-                        color: Colors.purple,
+                        color: Color(0xff7D7C7C),
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
                 ],
               ),
-              const Gap(5),
+              const Gap(10),
               Row(
                 children: [
                   SizedBox(width: size.width * 0.06),
@@ -266,12 +313,12 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                   ),
                   SizedBox(width: size.width * 0.12),
                   SizedBox(
-                    height: size.height * 0.07,
-                    width: size.width * 0.3,
+                    height: size.height * 0.04,
+                    width: size.width * 0.15,
                     child: TextFormField(
                       controller: punchIn,
                       readOnly: true,
-                      onTap: ()=>_startTimePicker(context),
+                      onTap: () => _startTimePicker(context),
                       decoration: InputDecoration(
                         labelStyle: const TextStyle(
                           color: Colors.black,
@@ -286,7 +333,7 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                   ),
                 ],
               ),
-              const Gap(10),
+              const Gap(14),
               Row(
                 children: [
                   SizedBox(width: size.width * 0.06),
@@ -299,8 +346,8 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                   ),
                   SizedBox(width: size.width * 0.10),
                   SizedBox(
-                    height: size.height * 0.07,
-                    width: size.width * 0.3,
+                    height: size.height * 0.04,
+                    width: size.width * 0.15,
                     child: TextField(
                       controller: punchOut,
                       readOnly: true,
@@ -319,11 +366,15 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                   ),
                 ],
               ),
-              const Gap(20),
-              AppButton(
-                onPressed: setTimingForStaffs,
-                child: const Text(
-                  'Update time',
+              const Gap(60),
+              SizedBox(
+                height: MediaQuery.sizeOf(context).height * 0.06,
+                width: MediaQuery.sizeOf(context).width * 0.6,
+                child: AppButton(
+                  onPressed: setTimingForStaffs,
+                  child: const Text(
+                    'Update time',
+                  ),
                 ),
               ),
             ],
@@ -333,9 +384,8 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
     );
   }
 
-  OutlineInputBorder myInputBorder() {
-    return OutlineInputBorder(
-      borderRadius: const BorderRadius.all(Radius.circular(12)),
+  UnderlineInputBorder myInputBorder() {
+    return UnderlineInputBorder(
       borderSide: BorderSide(
         color: Colors.black.withOpacity(0.3),
         width: 2,
@@ -343,11 +393,8 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
     );
   }
 
-  OutlineInputBorder myFocusBorder() {
-    return OutlineInputBorder(
-      borderRadius: const BorderRadius.all(
-        Radius.circular(12),
-      ),
+  UnderlineInputBorder myFocusBorder() {
+    return UnderlineInputBorder(
       borderSide: BorderSide(
         color: Colors.black.withOpacity(0.3),
         width: 2,
@@ -355,11 +402,8 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
     );
   }
 
-  OutlineInputBorder myDisabledBorder() {
-    return OutlineInputBorder(
-      borderRadius: const BorderRadius.all(
-        Radius.circular(12),
-      ),
+  UnderlineInputBorder myDisabledBorder() {
+    return UnderlineInputBorder(
       borderSide: BorderSide(
         color: Colors.black.withOpacity(0.3),
         width: 2,
@@ -367,11 +411,8 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
     );
   }
 
-  OutlineInputBorder myErrorBorder(){
-    return OutlineInputBorder(
-      borderRadius: const BorderRadius.all(
-        Radius.circular(12),
-      ),
+  UnderlineInputBorder myErrorBorder() {
+    return UnderlineInputBorder(
       borderSide: BorderSide(
         color: Colors.red.withOpacity(0.5),
         width: 2,

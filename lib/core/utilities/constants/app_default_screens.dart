@@ -172,8 +172,8 @@ class AppDefaults {
       image: 'assets/best_employee.png',
     ),
     StaffAccessModel(
-        title: MenuTitle.hrAccess,
-        image: 'assets/all_staff_detail.png',
+      title: MenuTitle.hrAccess,
+      image: 'assets/all_staff_detail.png',
     ),
     StaffAccessModel(
       title: MenuTitle.paySlip,
@@ -294,7 +294,7 @@ class AppDefaults {
         page = const AllStaffs();
         break;
       case MenuTitle.paySlip:
-        page = const PaySlip();
+        page = PaySlip(user: staffInfo);
         break;
     }
     return page;

@@ -9,6 +9,8 @@ class AttendancePunchModel {
   final String checkOutProxyBy;
   final String checkInReason;
   final String checkOutReason;
+  final String punchIn;
+  final String punchOut;
 
   AttendancePunchModel({
     required this.name,
@@ -21,6 +23,8 @@ class AttendancePunchModel {
     this.checkOutProxyBy = '',
     this.checkInReason = '',
     this.checkOutReason = '',
+    required this.punchIn,
+    required this.punchOut,
   });
 
   @override

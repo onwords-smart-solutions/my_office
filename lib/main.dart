@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/features/auth/presentation/provider/authentication_provider.dart';
 import 'package:my_office/features/create_lead/presentation/provider/create_lead_provider.dart';
@@ -41,6 +42,7 @@ final navigationKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
   await di.init();
 
   SystemChrome.setPreferredOrientations([

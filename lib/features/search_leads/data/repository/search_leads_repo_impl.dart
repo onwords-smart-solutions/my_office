@@ -55,8 +55,11 @@ class SearchLeadsRepoImpl implements SearchLeadsRepository {
   }) async {
     DateTime now = DateTime.now();
     String timeStamp = DateFormat('yyyy-MM-dd_kk:mm:ss').format(now);
-    String dateStamp = DateFormat('yyyy-MM-dd').format(DateTime.parse(reminderDate!));
+    String dateStamp = '';
+    if(reminderDate != null){
+       dateStamp = DateFormat('yyyy-MM-dd').format(DateTime.parse(reminderDate));
 
+    }
     // Handling reminders and audio files
     if (reminder != null && reminder.isNotEmpty && audioFile != null) {
       await updateReminder(

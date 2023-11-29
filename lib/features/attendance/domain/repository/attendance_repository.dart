@@ -5,5 +5,5 @@ abstract class AttendanceRepository {
   Future<List<StaffAttendanceModel>> getStaffDetails();
 
   Future<AttendancePunchModel?> checkTime(
-      String staffId, String department, String name, DateTime date);
+      String staffId, String department, String name, DateTime date, String punchIn, String punchOut,);
 }

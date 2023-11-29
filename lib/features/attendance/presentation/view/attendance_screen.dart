@@ -60,6 +60,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   final ValueNotifier<DateTime> _selectedDate = ValueNotifier(DateTime.now());
   final ValueNotifier<String> _sortOption = ValueNotifier('All');
   final ValueNotifier<bool> _isLoading = ValueNotifier(false);
+  DateTime? punchInTime;
 
   Future<void> getPunchingTime() async {
     _isLoading.value = true;
@@ -74,6 +75,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         staff.department,
         staff.name,
         _selectedDate.value,
+        staff.punchIn,
+        staff.punchOut,
       );
       _punchingDetails.value = [
         ..._punchingDetails.value,
@@ -85,6 +88,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             staffId: staff.uid,
             department: staff.department,
             checkInTime: null,
+            punchIn: staff.punchIn,
+            punchOut: staff.punchOut,
           ),
       ];
 
@@ -98,6 +103,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             staffId: staff.uid,
             department: staff.department,
             checkInTime: null,
+            punchIn: staff.punchIn,
+            punchOut: staff.punchOut,
           ),
       ];
     }
@@ -228,32 +235,57 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                             )
                                             .toList();
                                       } else if (_dropDown[i] == 'Late Entry') {
-                                        _sortedList.value =
-                                            _punchingDetails.value
-                                                .where(
-                                                  (element) =>
-                                                      (element.checkInTime !=
-                                                          null) &&
-                                                      (element.checkInTime!
-                                                              .difference(
-                                                                DateTime(
-                                                                  element
-                                                                      .checkInTime!
-                                                                      .year,
-                                                                  element
-                                                                      .checkInTime!
-                                                                      .month,
-                                                                  element
-                                                                      .checkInTime!
-                                                                      .day,
-                                                                  09,
-                                                                  00,
-                                                                ),
-                                                              )
-                                                              .inMinutes >
-                                                          10),
-                                                )
-                                                .toList();
+                                        _sortedList.value.clear();
+                                        for (final lateStaffs
+                                            in _punchingDetails.value) {
+                                          List<String> punchInComponents =
+                                              lateStaffs.punchIn.split(':');
+                                          int punchInHour =
+                                              int.parse(punchInComponents[0]);
+                                          int punchInMinute =
+                                              int.parse(punchInComponents[1]);
+
+                                          // Formatting hours and minutes with leading zeros
+                                          String formattedHour = punchInHour
+                                              .toString()
+                                              .padLeft(2, '0');
+                                          String formattedMinute = punchInMinute
+                                              .toString()
+                                              .padLeft(2, '0');
+
+                                          // Creating a DateTime object from the formatted values
+                                         final punchInTime = DateTime(
+                                            DateTime.now().year,
+                                            DateTime.now().month,
+                                            DateTime.now().day,
+                                            int.parse(formattedHour),
+                                            int.parse(formattedMinute),
+                                          );
+                                          print('Punch in time : $punchInTime');
+                                          print('Late staffs check in : ${lateStaffs.checkInTime}');
+                                          if (lateStaffs.checkInTime != null &&
+                                              lateStaffs.checkInTime!
+                                                      .difference(punchInTime)
+                                                      .inMinutes >
+                                                  10) {
+                                            _sortedList.value.add(lateStaffs);
+                                          }
+                                        }
+                                        _sortedList.notifyListeners();
+                                        // _sortedList.value =
+                                        //     _punchingDetails.value
+                                        //         .where(
+                                        //           (element) =>
+                                        //               (element.checkInTime !=
+                                        //                   null) &&
+                                        //               (element.checkInTime!
+                                        //                       .difference(
+                                        //                   element.punchIn
+                                        //                       )
+                                        //                       .inMinutes >
+                                        //                   10),
+                                        //         )
+                                        //         .toList();
                                       } else if (_dropDown[i] == 'ID Tap') {
                                         _sortedList.value = _punchingDetails
                                             .value
@@ -268,63 +300,79 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                             .value
                                             .where((element) => element.isProxy)
                                             .toList();
-                                      }
-                                      else if (_dropDown[i] == 'App') {
-                                        _sortedList.value = _punchingDetails
-                                            .value
-                                            .where((element) =>
-                                                element.department.contains('APP'),
-                                        )
-                                            .toList();
+                                      } else if (_dropDown[i] == 'App') {
+                                        _sortedList.value =
+                                            _punchingDetails.value
+                                                .where(
+                                                  (element) => element
+                                                      .department
+                                                      .contains('APP'),
+                                                )
+                                                .toList();
                                       } else if (_dropDown[i] == 'Web') {
-                                        _sortedList.value = _punchingDetails
-                                            .value
-                                            .where((element) =>
-                                            element.department.contains('WEB'),
-                                        )
-                                            .toList();
-                                      }else if (_dropDown[i] == 'PR') {
-                                        _sortedList.value = _punchingDetails
-                                            .value
-                                            .where((element) =>
-                                            element.department.contains('PR'),
-                                        )
-                                            .toList();
-                                      }else if (_dropDown[i] == 'Media') {
-                                        _sortedList.value = _punchingDetails
-                                            .value
-                                            .where((element) =>
-                                            element.department.contains('MEDIA'),
-                                        )
-                                            .toList();
-                                      }else if (_dropDown[i] == 'Admin') {
-                                        _sortedList.value = _punchingDetails
-                                            .value
-                                            .where((element) =>
-                                            element.department.contains('ADMIN'),
-                                        )
-                                            .toList();
-                                      }else if (_dropDown[i] == 'RND') {
-                                        _sortedList.value = _punchingDetails
-                                            .value
-                                            .where((element) =>
-                                            element.department.contains('RND'),
-                                        )
-                                            .toList();
-                                      }else if (_dropDown[i] == 'Installation') {
-                                        _sortedList.value = _punchingDetails
-                                            .value
-                                            .where((element) =>
-                                            element.department.contains('Installation'),
-                                        )
-                                            .toList();
-                                      }else if (_dropDown[i] == 'HR') {
-                                        _sortedList.value = _punchingDetails
-                                            .value
-                                            .where((element) =>
-                                            element.department.contains('HR'),
-                                        )
-                                            .toList();
+                                        _sortedList.value =
+                                            _punchingDetails.value
+                                                .where(
+                                                  (element) => element
+                                                      .department
+                                                      .contains('WEB'),
+                                                )
+                                                .toList();
+                                      } else if (_dropDown[i] == 'PR') {
+                                        _sortedList.value =
+                                            _punchingDetails.value
+                                                .where(
+                                                  (element) => element
+                                                      .department
+                                                      .contains('PR'),
+                                                )
+                                                .toList();
+                                      } else if (_dropDown[i] == 'Media') {
+                                        _sortedList.value =
+                                            _punchingDetails.value
+                                                .where(
+                                                  (element) => element
+                                                      .department
+                                                      .contains('MEDIA'),
+                                                )
+                                                .toList();
+                                      } else if (_dropDown[i] == 'Admin') {
+                                        _sortedList.value =
+                                            _punchingDetails.value
+                                                .where(
+                                                  (element) => element
+                                                      .department
+                                                      .contains('ADMIN'),
+                                                )
+                                                .toList();
+                                      } else if (_dropDown[i] == 'RND') {
+                                        _sortedList.value =
+                                            _punchingDetails.value
+                                                .where(
+                                                  (element) => element
+                                                      .department
+                                                      .contains('RND'),
+                                                )
+                                                .toList();
+                                      } else if (_dropDown[i] ==
+                                          'Installation') {
+                                        _sortedList.value =
+                                            _punchingDetails.value
+                                                .where(
+                                                  (element) => element
+                                                      .department
+                                                      .contains('INSTALLATION'),
+                                                )
+                                                .toList();
+                                      } else if (_dropDown[i] == 'HR') {
+                                        _sortedList.value =
+                                            _punchingDetails.value
+                                                .where(
+                                                  (element) => element
+                                                      .department
+                                                      .contains('HR'),
+                                                )
+                                                .toList();
                                       }
                                     },
                                   );

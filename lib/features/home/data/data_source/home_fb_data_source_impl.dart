@@ -155,7 +155,8 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
               menuItems.title == MenuTitle.quotationTemplate ||
               menuItems.title == MenuTitle.installationPDF ||
               menuItems.title == MenuTitle.proxyAttendance ||
-              menuItems.title == MenuTitle.scanQR) {
+              menuItems.title == MenuTitle.scanQR ||
+              menuItems.title == MenuTitle.paySlip) {
             allAccess.add(menuItems);
           }
         }
@@ -167,7 +168,8 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
               menuItems.title == MenuTitle.suggestion ||
               menuItems.title == MenuTitle.createInvoice ||
               menuItems.title == MenuTitle.quotationTemplate ||
-              menuItems.title == MenuTitle.installationPDF ) {
+              menuItems.title == MenuTitle.installationPDF ||
+              menuItems.title == MenuTitle.paySlip) {
             allAccess.add(menuItems);
           }
         }
@@ -188,14 +190,16 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
               menuItems.title == MenuTitle.salesPoint ||
               menuItems.title == MenuTitle.scanQR ||
               menuItems.title == MenuTitle.prReminder ||
-              menuItems.title == MenuTitle.quotationTemplate) {
+              menuItems.title == MenuTitle.quotationTemplate ||
+              menuItems.title == MenuTitle.paySlip) {
             allAccess.add(menuItems);
           }
         } else {
           if (menuItems.title == MenuTitle.workEntry ||
               menuItems.title == MenuTitle.refreshment ||
               menuItems.title == MenuTitle.leavePortal ||
-              menuItems.title == MenuTitle.suggestion) {
+              menuItems.title == MenuTitle.suggestion ||
+              menuItems.title == MenuTitle.paySlip) {
             allAccess.add(menuItems);
           }
         }
@@ -272,8 +276,9 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
 
   @override
   Future<Map<Object?, Object?>?> fetchAttendanceData(
-      String staffId, DateTime date,
-      ) async {
+    String staffId,
+    DateTime date,
+  ) async {
     String yearFormat = DateFormat('yyyy').format(date);
     String monthFormat = DateFormat('MM').format(date);
     String dateFormat = DateFormat('dd').format(date);

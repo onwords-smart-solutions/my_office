@@ -1,12 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/features/attendance/data/model/punch_model.dart';
 
-
 class AttendancePunchItem extends StatelessWidget {
   final AttendancePunchModel punchDetail;
 
-  const AttendancePunchItem({Key? key, required this.punchDetail}) : super(key: key);
+  const AttendancePunchItem({Key? key, required this.punchDetail})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +16,25 @@ class AttendancePunchItem extends StatelessWidget {
     IconData icon = Icons.badge_rounded;
     String status = 'Present on Time';
     DateTime endTime = DateTime.now();
+
+    List<String> punchInComponents = punchDetail.punchIn.split(':');
+    int punchInHour = int.parse(punchInComponents[0]);
+    int punchInMinute = int.parse(punchInComponents[1]);
+
+    String formattedHour = punchInHour.toString().padLeft(2, '0');
+    String formattedMinute = punchInMinute.toString().padLeft(2, '0');
+
+    DateTime punchInTime = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+      int.parse(formattedHour),
+      int.parse(formattedMinute),
+    );
+
+    log('Need to check in hour $formattedHour minute $formattedMinute');
+
+    log('Actual check in time ${punchDetail.checkInTime}');
 
     if (punchDetail.isProxy) {
       icon = Icons.phone_android_rounded;
@@ -32,76 +53,8 @@ class AttendancePunchItem extends StatelessWidget {
         punchDetail.checkInTime!.year,
         punchDetail.checkInTime!.month,
         punchDetail.checkInTime!.day,
-        09,
-        00,
-      ),
-    )
-        .inMinutes >
-        0 &&
-        punchDetail.checkInTime!
-            .difference(
-          DateTime(
-            punchDetail.checkInTime!.year,
-            punchDetail.checkInTime!.month,
-            punchDetail.checkInTime!.day,
-            09,
-            10,
-          ),
-        )
-            .inMinutes <=
-            0) {
-      topContainerColor = Colors.amber.shade500;
-      status = 'Late by ${punchDetail.checkInTime!.difference(
-        DateTime(
-          punchDetail.checkInTime!.year,
-          punchDetail.checkInTime!.month,
-          punchDetail.checkInTime!.day,
-          09,
-          00,
-        ),
-      ).inMinutes} mins';
-    } else if (punchDetail.checkInTime!
-        .difference(
-      DateTime(
-        punchDetail.checkInTime!.year,
-        punchDetail.checkInTime!.month,
-        punchDetail.checkInTime!.day,
-        09,
-        00,
-      ),
-    )
-        .inMinutes >
-        10 &&
-        punchDetail.checkInTime!
-            .difference(
-          DateTime(
-            punchDetail.checkInTime!.year,
-            punchDetail.checkInTime!.month,
-            punchDetail.checkInTime!.day,
-            09,
-            20,
-          ),
-        )
-            .inMinutes <=
-            0) {
-      topContainerColor = Colors.orangeAccent.shade400;
-      status = 'Late by ${punchDetail.checkInTime!.difference(
-        DateTime(
-          punchDetail.checkInTime!.year,
-          punchDetail.checkInTime!.month,
-          punchDetail.checkInTime!.day,
-          09,
-          00,
-        ),
-      ).inMinutes} mins';
-    } else if (punchDetail.checkInTime!
-        .difference(
-      DateTime(
-        punchDetail.checkInTime!.year,
-        punchDetail.checkInTime!.month,
-        punchDetail.checkInTime!.day,
-        09,
-        00,
+        int.parse(formattedHour),
+        int.parse(formattedMinute),
       ),
     )
         .inMinutes >
@@ -112,10 +65,80 @@ class AttendancePunchItem extends StatelessWidget {
           punchDetail.checkInTime!.year,
           punchDetail.checkInTime!.month,
           punchDetail.checkInTime!.day,
-          09,
-          00,
+          int.parse(formattedHour),
+          int.parse(formattedMinute),
         ),
       ).inMinutes} mins';
+    }
+    else if (punchDetail.checkInTime!
+        .difference(
+      DateTime(
+        punchDetail.checkInTime!.year,
+        punchDetail.checkInTime!.month,
+        punchDetail.checkInTime!.day,
+        int.parse(formattedHour),
+        int.parse(formattedMinute),
+      ),
+    )
+        .inMinutes >
+        10 &&
+        punchInTime
+            .difference(
+          DateTime(
+            punchInTime.year,
+            punchInTime.month,
+            punchInTime.day,
+            int.parse(formattedHour),
+            int.parse(formattedMinute),
+          ).add(const Duration(minutes: 20)),
+        )
+            .inMinutes <=
+            0) {
+      topContainerColor = Colors.orangeAccent.shade400;
+      status = 'Late by ${punchDetail.checkInTime!.difference(
+        DateTime(
+          punchDetail.checkInTime!.year,
+          punchDetail.checkInTime!.month,
+          punchDetail.checkInTime!.day,
+          int.parse(formattedHour),
+          int.parse(formattedMinute),
+        ),
+      ).inMinutes} mins';
+    }
+    else if ( punchDetail.checkInTime!
+                .difference(
+                  DateTime(
+                    punchDetail.checkInTime!.year,
+                    punchDetail.checkInTime!.month,
+                    punchDetail.checkInTime!.day,
+                    int.parse(formattedHour),
+                    int.parse(formattedMinute),
+                  ),
+                )
+                .inMinutes >
+            0 &&
+       punchInTime
+                .difference(
+                  DateTime(
+                    punchInTime.year,
+                    punchInTime.month,
+                    punchInTime.day,
+                    int.parse(formattedHour),
+                    int.parse(formattedMinute),
+                  ).add(const Duration(minutes: 10)),
+                )
+                .inMinutes <=
+            0) {
+      topContainerColor = Colors.amber.shade500;
+      status = 'Late by ${punchDetail.checkInTime!.difference(
+            DateTime(
+              punchDetail.checkInTime!.year,
+              punchDetail.checkInTime!.month,
+              punchDetail.checkInTime!.day,
+              int.parse(formattedHour),
+              int.parse(formattedMinute),
+            ),
+          ).inMinutes} mins';
     }
 
     return Container(
@@ -187,7 +210,9 @@ class AttendancePunchItem extends StatelessWidget {
                 ),
                 Text(
                   'Duration : ${duration(punchDetail.checkInTime!, endTime)}',
-                  style: const TextStyle(fontWeight: FontWeight.w700,),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ],
             ],

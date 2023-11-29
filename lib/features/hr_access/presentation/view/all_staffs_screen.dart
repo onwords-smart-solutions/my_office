@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +9,7 @@ import 'package:my_office/features/hr_access/data/repository/hr_access_repo_impl
 import 'package:my_office/features/hr_access/domain/repository/hr_access_repository.dart';
 import 'package:my_office/features/hr_access/domain/use_case/all_staff_details_use_case.dart';
 import 'package:my_office/features/hr_access/presentation/view/individual_staff_details.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../data/model/hr_access_staff_model.dart';
 
@@ -28,18 +27,33 @@ class _AllStaffsState extends State<AllStaffs> {
   late AllStaffDetailsCase allStaffDetailsCase =
       AllStaffDetailsCase(hrAccessRepository: hrAccessRepository);
   List<HrAccessModel> employeeDetails = [];
+  List<HrAccessModel> sortEmployees = [];
+  final List<String> dep = [
+    'ALL',
+    'APP',
+    'WEB',
+    'MEDIA',
+    'RND',
+    'INSTALLATION',
+    'PR',
+    'HR',
+  ];
   bool isLoading = false;
+  String department = 'ALL';
 
   void getAllStaffDetails() async {
+    sortEmployees.clear();
+    employeeDetails.clear();
     setState(() {
       isLoading = true;
     });
     var allDetails = await allStaffDetailsCase.getStaffDetails();
+    if (!mounted) return;
     setState(() {
       employeeDetails = allDetails;
+      sortEmployees = employeeDetails;
       isLoading = false;
     });
-    log('Staffs are $employeeDetails');
   }
 
   @override
@@ -50,7 +64,6 @@ class _AllStaffsState extends State<AllStaffs> {
 
   @override
   Widget build(BuildContext context) {
-    log('Staffs are $employeeDetails');
     return Scaffold(
       backgroundColor: AppColor.backGroundColor,
       appBar: AppBar(
@@ -78,26 +91,85 @@ class _AllStaffsState extends State<AllStaffs> {
           : Column(
               children: [
                 const SizedBox(height: 10),
-                Center(
-                  child: Text(
-                    'Total staffs : ${employeeDetails.length}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Align(
+                        alignment: AlignmentDirectional.topStart,
+                        child: Text(
+                          'Total staffs : ${sortEmployees.length}',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: PopupMenuButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          position: PopupMenuPosition.under,
+                          elevation: 10,
+                          itemBuilder: (ctx) => List.generate(
+                            dep.length,
+                            (i) {
+                              return PopupMenuItem(
+                                child: Text(
+                                  dep[i],
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    department = dep[i];
+                                    if (department == 'ALL') {
+                                      sortEmployees = employeeDetails;
+                                    } else {
+                                      sortEmployees = employeeDetails
+                                          .where((element) =>
+                                              element.department == department,
+                                      )
+                                          .toList();
+                                    }
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(CupertinoIcons.sort_down),
+                              Text(
+                                department,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 10),
                 Expanded(
                   child: ListView.builder(
-                    itemCount: employeeDetails.length,
+                    itemCount: sortEmployees.length,
                     itemBuilder: (context, index) {
                       return Card(
-                        color: const Color(0xffE0F4FF),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        elevation: 5,
+                        color: Colors.white,
                         child: ListTile(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
                           leading: Container(
                             width: 40.0,
                             height: 40.0,
@@ -105,7 +177,7 @@ class _AllStaffsState extends State<AllStaffs> {
                               shape: BoxShape.circle,
                             ),
                             clipBehavior: Clip.hardEdge,
-                            child: employeeDetails[index].profilePic!.isEmpty
+                            child: sortEmployees[index].profilePic!.isEmpty
                                 ? const Image(
                                     image: AssetImage(
                                       'assets/profile_icon.jpg',
@@ -113,7 +185,7 @@ class _AllStaffsState extends State<AllStaffs> {
                                   )
                                 : CachedNetworkImage(
                                     imageUrl:
-                                        employeeDetails[index].profilePic!,
+                                    sortEmployees[index].profilePic!,
                                     fit: BoxFit.cover,
                                     progressIndicatorBuilder: (
                                       context,
@@ -131,13 +203,14 @@ class _AllStaffsState extends State<AllStaffs> {
                                     ),
                                   ),
                           ),
-                          title: Text(employeeDetails[index].name),
-                          trailing: Text(employeeDetails[index].department),
+                          title: Text(sortEmployees[index].name),
+                          trailing: Text(sortEmployees[index].department),
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (_) => IndividualStaffDetail(
-                                  allDetail: employeeDetails[index],
+                                  allDetail: sortEmployees[index],
+                                  allStaffData: sortEmployees,
                                 ),
                               ),
                             );

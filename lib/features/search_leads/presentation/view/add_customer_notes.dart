@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:file_picker/file_picker.dart';
@@ -346,7 +347,7 @@ class _AddNotesState extends State<AddNotes> {
   Future<void> saveData() async {
     String notes = notesController.text.trim();
     String reminder = dateController.text.trim();
-  var reminderDate = DateFormat('yyyy-MM-dd').format(DateTime.parse(dateController.text));
+    String reminderDate = dateController.text.trim();
 
     if (notes.isEmpty && (reminder.isEmpty || audioFile == null)) {
       _showErrorSnackBar(
@@ -364,13 +365,14 @@ class _AddNotesState extends State<AddNotes> {
         audioFile: audioFile,
         reminderDate: reminderDate.isNotEmpty ? reminderDate : null,
       );
+
       String message = _buildSuccessMessage(notes, reminder, audioFile);
       _showSuccessSnackBar(message);
       notesController.clear();
       dateController.clear();
     } catch (e) {
       if (!mounted) return;
-      _showErrorSnackBar('Error saving data: ${e.toString()}');
+      _showErrorSnackBar('Error saving data: $e');
     }
   }
 
