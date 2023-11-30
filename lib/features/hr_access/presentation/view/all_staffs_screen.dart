@@ -9,7 +9,6 @@ import 'package:my_office/features/hr_access/data/repository/hr_access_repo_impl
 import 'package:my_office/features/hr_access/domain/repository/hr_access_repository.dart';
 import 'package:my_office/features/hr_access/domain/use_case/all_staff_details_use_case.dart';
 import 'package:my_office/features/hr_access/presentation/view/individual_staff_details.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../../data/model/hr_access_staff_model.dart';
 
@@ -37,6 +36,8 @@ class _AllStaffsState extends State<AllStaffs> {
     'INSTALLATION',
     'PR',
     'HR',
+    'MANAGEMENT',
+    'OFFICE ADMIN',
   ];
   bool isLoading = false;
   String department = 'ALL';

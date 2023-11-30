@@ -12,8 +12,6 @@ abstract class HomeRepository{
 
   Future<Either<ErrorResponse ,List<String>>> getTLList();
 
-  Future<Either<ErrorResponse, List<String>>>getRNDTLList();
-
   Future<Either<ErrorResponse, List<String>>> getInstallationMemberList();
 
   Future<Either<ErrorResponse, List<StaffAccessModel>>> getStaffAccess({

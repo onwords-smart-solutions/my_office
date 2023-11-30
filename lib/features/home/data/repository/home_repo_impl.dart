@@ -33,11 +33,6 @@ class HomeRepoImpl implements HomeRepository {
   }
 
   @override
-  Future<Either<ErrorResponse, List<String>>> getRNDTLList() async {
-    return await _homeFbDataSource.getRNDTLList();
-  }
-
-  @override
   int getRandomNumber() {
     return _homeFbDataSource.getRandomNumber();
   }

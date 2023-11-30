@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/core/utilities/constants/app_color.dart';
-import 'package:my_office/features/staff_details/data/model/staff_detail_model.dart';
 import 'package:my_office/features/staff_details/presentation/provider/staff_detail_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -30,6 +29,8 @@ class _StaffDetailsState extends State<StaffDetails> {
     'PR',
     'INSTALLATION',
     'HR',
+    'MANAGEMENT',
+    'OFFICE ADMIN',
   ];
 
   @override

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -37,7 +36,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     'Late Entry',
     "ID Tap",
     'Proxy',
-    'Admin',
+    'Management',
     'App',
     'Web',
     'Media',
@@ -45,6 +44,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     'Installation',
     'HR',
     'PR',
+    'Office Admin',
   ];
 
   late final AttendanceFbDataSource _attendanceFbDataSource =
@@ -261,8 +261,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                             int.parse(formattedHour),
                                             int.parse(formattedMinute),
                                           );
-                                          print('Punch in time : $punchInTime');
-                                          print('Late staffs check in : ${lateStaffs.checkInTime}');
                                           if (lateStaffs.checkInTime != null &&
                                               lateStaffs.checkInTime!
                                                       .difference(punchInTime)
@@ -272,20 +270,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                           }
                                         }
                                         _sortedList.notifyListeners();
-                                        // _sortedList.value =
-                                        //     _punchingDetails.value
-                                        //         .where(
-                                        //           (element) =>
-                                        //               (element.checkInTime !=
-                                        //                   null) &&
-                                        //               (element.checkInTime!
-                                        //                       .difference(
-                                        //                   element.punchIn
-                                        //                       )
-                                        //                       .inMinutes >
-                                        //                   10),
-                                        //         )
-                                        //         .toList();
                                       } else if (_dropDown[i] == 'ID Tap') {
                                         _sortedList.value = _punchingDetails
                                             .value
@@ -336,16 +320,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                                       .contains('MEDIA'),
                                                 )
                                                 .toList();
-                                      } else if (_dropDown[i] == 'Admin') {
-                                        _sortedList.value =
-                                            _punchingDetails.value
-                                                .where(
-                                                  (element) => element
-                                                      .department
-                                                      .contains('ADMIN'),
-                                                )
-                                                .toList();
-                                      } else if (_dropDown[i] == 'RND') {
+                                      }else if (_dropDown[i] == 'RND') {
                                         _sortedList.value =
                                             _punchingDetails.value
                                                 .where(
@@ -372,6 +347,26 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                                       .department
                                                       .contains('HR'),
                                                 )
+                                                .toList();
+                                      } else if (_dropDown[i] ==
+                                          'Management') {
+                                        _sortedList.value =
+                                            _punchingDetails.value
+                                                .where(
+                                                  (element) => element
+                                                  .department
+                                                  .contains('MANAGEMENT'),
+                                            )
+                                                .toList();
+                                      }else if (_dropDown[i] ==
+                                          'Office Admin') {
+                                        _sortedList.value =
+                                            _punchingDetails.value
+                                                .where(
+                                                  (element) => element
+                                                  .department
+                                                  .contains('OFFICE ADMIN'),
+                                            )
                                                 .toList();
                                       }
                                     },

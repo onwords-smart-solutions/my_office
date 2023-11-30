@@ -1,4 +1,4 @@
-import 'package:either_dart/src/either.dart';
+import 'package:either_dart/either.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';
 import 'package:my_office/features/proxy_attendance/data/data_source/proxy_attendance_fb_data_source.dart';
 import 'package:my_office/features/proxy_attendance/data/model/proxy_attendance_model.dart';

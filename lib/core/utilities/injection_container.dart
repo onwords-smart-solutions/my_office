@@ -39,7 +39,6 @@ import 'package:my_office/features/home/domain/use_case/get_installation_members
 import 'package:my_office/features/home/domain/use_case/get_management_list_use_case.dart';
 import 'package:my_office/features/home/domain/use_case/get_punching_time_use_case.dart';
 import 'package:my_office/features/home/domain/use_case/get_random_number_use_case.dart';
-import 'package:my_office/features/home/domain/use_case/get_rnd_tl_list_use_case.dart';
 import 'package:my_office/features/home/domain/use_case/get_staff_access_use_case.dart';
 import 'package:my_office/features/home/domain/use_case/get_staff_details_use_case.dart';
 import 'package:my_office/features/home/domain/use_case/get_tl_list_use_case.dart';
@@ -149,7 +148,6 @@ Future<void> init() async {
       sl.call(),
       sl.call(),
       sl.call(),
-      sl.call(),
     ),
   );
 
@@ -234,11 +232,6 @@ Future<void> init() async {
   ///GET RANDOM NUMBER
   sl.registerLazySingleton<GetRandomNumberCase>(
     () => GetRandomNumberCase(homeRepository: sl.call()),
-  );
-
-  ///GET RND TL NAMES
-  sl.registerLazySingleton<GetRndTlListCase>(
-    () => GetRndTlListCase(homeRepository: sl.call()),
   );
 
   ///GET STAFF ACCESS

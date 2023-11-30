@@ -16,10 +16,11 @@ class AttendanceRepoImpl implements AttendanceRepository {
     String department,
     String name,
     DateTime date,
-      String punchIn,
-      String punchOut,
+    String punchIn,
+    String punchOut,
   ) async {
-    DatabaseEvent event = await _attendanceFbDataSource.getAttendanceData(staffId, date);
+    DatabaseEvent event =
+        await _attendanceFbDataSource.getAttendanceData(staffId, date);
 
     if (!event.snapshot.exists) {
       return null;
@@ -73,7 +74,8 @@ class AttendanceRepoImpl implements AttendanceRepository {
   DateTime? _parseTime(String time, DateTime date) {
     try {
       List<String> parts = time.split(':');
-      return DateTime(date.year, date.month, date.day, int.parse(parts[0]), int.parse(parts[1]));
+      return DateTime(date.year, date.month, date.day, int.parse(parts[0]),
+          int.parse(parts[1]));
     } catch (e) {
       // Handle exception or log error
       return null;
@@ -94,9 +96,10 @@ class AttendanceRepoImpl implements AttendanceRepository {
         punchIn: data['punch_in'].toString(),
         punchOut: data['punch_out'].toString(),
       );
-      staffList.add(staffMember);
+      if (staffMember.name != 'Nikhil Deepak') {
+        staffList.add(staffMember);
+      }
     }
-
     return staffList;
   }
 }

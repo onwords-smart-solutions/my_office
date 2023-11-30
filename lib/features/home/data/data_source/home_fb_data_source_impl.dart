@@ -1,7 +1,7 @@
 import 'dart:math';
+import 'dart:developer' as dev;
 import 'package:either_dart/either.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';
 import '../../../../core/utilities/constants/app_default_screens.dart';
@@ -84,28 +84,6 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
   }
 
   @override
-  Future<Either<ErrorResponse, List<String>>> getRNDTLList() async {
-    List<String> names = [];
-    try {
-      await ref.child('special_access/rnd_tl').once().then((value) {
-        if (value.snapshot.exists) {
-          for (var rndTl in value.snapshot.children) {
-            names.add(rndTl.value.toString());
-          }
-        }
-      });
-      return Right(names);
-    } catch (e) {
-      return Left(
-        ErrorResponse(
-          metaInfo: 'Catch triggered in getting rndTlList $e',
-          error: 'Unable to fetch rnd TL list',
-        ),
-      );
-    }
-  }
-
-  @override
   int getRandomNumber() {
     Random random = Random();
     return random
@@ -118,10 +96,8 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
   }) async {
     try {
       List<StaffAccessModel> allAccess = [];
-
       final managementList = await getManagementList();
       final tlList = await getTLList();
-      final rndTLList = await getRNDTLList();
       final installationList = await getInstallationMemberList();
 
       for (var menuItems in AppDefaults.allAccess) {
@@ -139,10 +115,8 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
             allAccess.add(menuItems);
           }
         }
-
         //adding for tl access
-        else if (tlList.right.contains(staff.name) ||
-            rndTLList.right.contains(staff.name)) {
+        else if (tlList.right.contains(staff.name)) {
           if (menuItems.title == MenuTitle.workEntry ||
               menuItems.title == MenuTitle.workDetail ||
               menuItems.title == MenuTitle.refreshment ||
@@ -173,12 +147,13 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
             allAccess.add(menuItems);
           }
         }
-
         //adding for app and admin access
         else if (staff.dep.toLowerCase() == 'admin' ||
             staff.dep.toLowerCase() == 'app') {
           allAccess.add(menuItems);
-        } else if (staff.dep.toLowerCase() == 'pr') {
+        }
+        //adding for pr access
+        else if (staff.dep.toLowerCase() == 'pr') {
           if (menuItems.title == MenuTitle.workEntry ||
               menuItems.title == MenuTitle.refreshment ||
               menuItems.title == MenuTitle.leavePortal ||
@@ -194,7 +169,9 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
               menuItems.title == MenuTitle.paySlip) {
             allAccess.add(menuItems);
           }
-        } else {
+        }
+        //adding for everyone
+        else {
           if (menuItems.title == MenuTitle.workEntry ||
               menuItems.title == MenuTitle.refreshment ||
               menuItems.title == MenuTitle.leavePortal ||

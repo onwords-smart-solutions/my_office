@@ -5,7 +5,6 @@ import 'package:my_office/features/home/domain/use_case/get_installation_members
 import 'package:my_office/features/home/domain/use_case/get_management_list_use_case.dart';
 import 'package:my_office/features/home/domain/use_case/get_punching_time_use_case.dart';
 import 'package:my_office/features/home/domain/use_case/get_random_number_use_case.dart';
-import 'package:my_office/features/home/domain/use_case/get_rnd_tl_list_use_case.dart';
 import 'package:my_office/features/home/domain/use_case/get_staff_access_use_case.dart';
 import 'package:my_office/features/home/domain/use_case/get_staff_details_use_case.dart';
 import 'package:my_office/features/home/domain/use_case/get_tl_list_use_case.dart';
@@ -20,7 +19,6 @@ class HomeProvider extends ChangeNotifier {
   final GetManagementListCase _getManagementListCase;
   final GetPunchingTimeCase _getPunchingTimeCase;
   final GetRandomNumberCase _getRandomNumberCase;
-  final GetRndTlListCase _getRndTlListCase;
   final GetStaffAccessCase _getStaffAccessCase;
   final GetStaffDetailsCase _getStaffDetailsCase;
   final GetTlListCase _getTlListCase;
@@ -29,7 +27,6 @@ class HomeProvider extends ChangeNotifier {
       this._getTlListCase,
       this._getStaffDetailsCase,
       this._getStaffAccessCase,
-      this._getRndTlListCase,
       this._getRandomNumberCase,
       this._getPunchingTimeCase,
       this._getManagementListCase,
@@ -41,9 +38,6 @@ class HomeProvider extends ChangeNotifier {
 
   Future<Either<ErrorResponse, List<String>>> getTLList() async =>
       await _getTlListCase.execute();
-
-  Future<Either<ErrorResponse, List<String>>> getRNDTLList() async =>
-      await _getRndTlListCase.execute();
 
   Future<Either<ErrorResponse, List<String>>>
   getInstallationMemberList() async =>

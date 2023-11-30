@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/features/attendance/data/model/punch_model.dart';
@@ -31,10 +29,6 @@ class AttendancePunchItem extends StatelessWidget {
       int.parse(formattedHour),
       int.parse(formattedMinute),
     );
-
-    log('Need to check in hour $formattedHour minute $formattedMinute');
-
-    log('Actual check in time ${punchDetail.checkInTime}');
 
     if (punchDetail.isProxy) {
       icon = Icons.phone_android_rounded;

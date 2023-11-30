@@ -27,7 +27,9 @@ class ProxyAttendanceFbDataSourceImpl implements ProxyAttendanceFbDataSource {
           profileImage: names['profileImage'].toString(),
           emailId: names['email'].toString(),
         );
+        if(staffNames.name != 'Nikhil Deepak'){
           allStaffs.add(staffNames);
+        }
       }
       return Right(allStaffs);
     } catch (e) {
