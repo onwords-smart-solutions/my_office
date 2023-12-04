@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/core/utilities/constants/app_color.dart';
@@ -28,6 +31,7 @@ class _FoodCountScreenState extends State<FoodCountScreen> {
   late FoodCountRepository foodCountRepository =
       FoodCountRepoImpl(foodCountFbDataSource);
   late final AllFoodCountCase _allFoodCountCase;
+  var newMonth = DateFormat.MMMM().format(DateTime.now());
 
   final Map<String, String> month = {
     'January': '01',
@@ -45,11 +49,11 @@ class _FoodCountScreenState extends State<FoodCountScreen> {
   };
 
   Future<void> _loadData() async {
-    String currentMonth = DateFormat.MMMM().format(DateTime.now());
+    foodList.clear();
     setState(() {
       isLoading = true;
     });
-    foodList = await _allFoodCountCase.execute();
+    foodList = await _allFoodCountCase.execute(month[newMonth]!);
     setState(() {
       isLoading = false;
     });
@@ -87,13 +91,18 @@ class _FoodCountScreenState extends State<FoodCountScreen> {
     return foodList.isNotEmpty
         ? Column(
             children: [
-              Center(
-                child: Text(
-                  'Total - $total',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w500,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                    'Total - $total',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
+                  const Gap(70),
+                  buildDropDown(newMonth),
+                ],
               ),
               Expanded(
                 child: ListView.builder(
@@ -192,8 +201,8 @@ class _FoodCountScreenState extends State<FoodCountScreen> {
                 style: const TextStyle(fontSize: 15),
               ),
               onTap: () {
-                currentMonth = month.keys.toList()[index];
-                foodList;
+                newMonth = month.keys.toList()[index];
+                _loadData();
               },
             );
           },

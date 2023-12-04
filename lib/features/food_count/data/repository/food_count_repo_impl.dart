@@ -9,7 +9,7 @@ class FoodCountRepoImpl implements FoodCountRepository {
   FoodCountRepoImpl(this.foodCountFbDataSource);
 
   @override
-  Future<List<FoodCountModel>> getAllFoodCounts() async {
-    return foodCountFbDataSource.getAllFoodCounts();
+  Future<List<FoodCountModel>> getAllFoodCounts(String month) async {
+    return foodCountFbDataSource.getAllFoodCounts(month);
   }
 }

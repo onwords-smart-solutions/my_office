@@ -82,7 +82,7 @@ As, I have mentioned above this project is structured with Clean architecture pr
 
 ### Version history and Releases
 
-* Android : 2.1.5+5 - Update for Pay slip and Hr access module.
+* Android : 2.1.6+6 - Added month wise Food count details and removed excess Proxy attendance access for staffs.
 * iOS : 2.0.12+87. 
 
 

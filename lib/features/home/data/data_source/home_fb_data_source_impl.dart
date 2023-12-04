@@ -108,10 +108,16 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
             if (staff.uid == 'ZIuUpLfSIRgRN5EqP7feKA9SbbS2') {
               allAccess.add(menuItems);
             }
+          } else if (menuItems.title == MenuTitle.proxyAttendance) {
+            if (staff.uid == 'pztngdZPCPQrEvmI37b3gf3w33d2' ||
+                staff.uid == 'x7RbfotHBpfr7JZ88P9eABWtcQM2') {
+              allAccess.add(menuItems);
+            }
           } else if (menuItems.title != MenuTitle.viewSuggestions &&
               menuItems.title != MenuTitle.staffDetail &&
               menuItems.title != MenuTitle.employeeOfTheWeek &&
-              menuItems.title != MenuTitle.prDashboard) {
+              menuItems.title != MenuTitle.prDashboard &&
+              menuItems.title != MenuTitle.proxyAttendance) {
             allAccess.add(menuItems);
           }
         }
@@ -128,7 +134,6 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
               menuItems.title == MenuTitle.leaveApproval ||
               menuItems.title == MenuTitle.quotationTemplate ||
               menuItems.title == MenuTitle.installationPDF ||
-              menuItems.title == MenuTitle.proxyAttendance ||
               menuItems.title == MenuTitle.scanQR ||
               menuItems.title == MenuTitle.paySlip) {
             allAccess.add(menuItems);

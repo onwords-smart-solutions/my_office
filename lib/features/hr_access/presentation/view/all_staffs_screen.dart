@@ -37,7 +37,7 @@ class _AllStaffsState extends State<AllStaffs> {
     'PR',
     'HR',
     'MANAGEMENT',
-    'OFFICE ADMIN',
+    'OFFICE STAFF',
   ];
   bool isLoading = false;
   String department = 'ALL';

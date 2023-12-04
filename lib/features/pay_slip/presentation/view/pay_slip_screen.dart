@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/features/pay_slip/presentation/view/view_month_pdf_screen.dart';
 import 'package:my_office/features/user/domain/entity/user_entity.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PaySlip extends StatefulWidget {
   final UserEntity user;
@@ -19,6 +20,10 @@ class _PaySlipState extends State<PaySlip> {
   String currentYear = DateFormat.y().format(DateTime.now());
   bool isLoading = false;
   String downloadUrl = '';
+
+  double grandTotal = 1000.0;
+  String transactionNote = 'For me';
+  String uniqueId = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
   final List<String> year = [
     '2023',
@@ -141,7 +146,6 @@ class _PaySlipState extends State<PaySlip> {
                           child: Image(
                             image: AssetImage(
                               'assets/pay_slip_screen.png',
-
                             ),
                           ),
                         ),

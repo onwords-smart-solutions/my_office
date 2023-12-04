@@ -30,7 +30,7 @@ class _StaffDetailsState extends State<StaffDetails> {
     'INSTALLATION',
     'HR',
     'MANAGEMENT',
-    'OFFICE ADMIN',
+    'OFFICE STAFF',
   ];
 
   @override
@@ -209,7 +209,7 @@ class _StaffDetailsState extends State<StaffDetails> {
                                                   .removeStaffDetails(
                                                 allStaffs[i].uid,
                                               );
-                                              staffProvider.allNames;
+                                              staffProvider.getAllStaffNames();
                                               if (!mounted) return;
                                               Navigator.of(context).pop();
                                             },

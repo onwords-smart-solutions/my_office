@@ -4,6 +4,7 @@ class FoodCountModel {
   final String email;
   final String url;
   final List<dynamic> foodDates;
+  final String month;
 
   FoodCountModel({
     required this.name,
@@ -11,5 +12,6 @@ class FoodCountModel {
     required this.email,
     required this.department,
     required this.foodDates,
+    required this.month,
   });
 }

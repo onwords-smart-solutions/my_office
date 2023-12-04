@@ -220,7 +220,7 @@ class NotificationService {
         currentTime.month,
         currentTime.day,
         14,
-        00,
+        15,
       );
 
       final detail = await _notificationDetails();

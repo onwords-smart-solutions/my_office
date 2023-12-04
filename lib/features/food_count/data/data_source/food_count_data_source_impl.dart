@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:intl/intl.dart';
 import 'package:my_office/features/food_count/data/data_source/food_count_fb_data_source.dart';
 import 'package:my_office/features/food_count/data/model/food_count_model.dart';
 
@@ -8,7 +9,7 @@ class FoodCountFbDataSourceImpl implements FoodCountFbDataSource {
   final ref = FirebaseDatabase.instance.ref();
 
   @override
-  Future<List<FoodCountModel>> getAllFoodCounts() async {
+  Future<List<FoodCountModel>> getAllFoodCounts(String month) async {
     final staffs = await ref.child('staff').once();
     List<FoodCountModel> allFoodCountList = [];
 
@@ -19,7 +20,7 @@ class FoodCountFbDataSourceImpl implements FoodCountFbDataSource {
       final email = staffInfo['email'].toString();
       final url = staffInfo['profileImage']?.toString() ?? '';
 
-      final foodDetails = await getFoodCountByStaffName(name);
+      final foodDetails = await getFoodCountByStaffName(name,month);
       if (foodDetails.isNotEmpty) {
         allFoodCountList.add(
           FoodCountModel(
@@ -28,6 +29,7 @@ class FoodCountFbDataSourceImpl implements FoodCountFbDataSource {
             url: url,
             email: email,
             foodDates: foodDetails,
+            month: month,
           ),
         );
       }
@@ -36,10 +38,11 @@ class FoodCountFbDataSourceImpl implements FoodCountFbDataSource {
   }
 
   @override
-  Future<List<dynamic>> getFoodCountByStaffName(String staffName) async {
+  Future<List<dynamic>> getFoodCountByStaffName(String staffName, String month) async {
+    log('Month data is $month');
     List<dynamic> staffLunchData = [];
     final currentMonthFormat =
-        '${DateTime.now().year}-${DateTime.now().month.toString()}';
+        '${DateTime.now().year}-$month';
     final refreshmentsSnapshot = await ref.child('refreshments').once();
 
     if (refreshmentsSnapshot.snapshot.exists) {
