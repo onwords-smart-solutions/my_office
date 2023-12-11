@@ -8,4 +8,10 @@ abstract class HrAccessRepository {
     required String punchIn,
     required String punchOut,
   });
+
+  Future<HrAccessModel?> createAccount({
+    required String name,
+    required String email,
+    required String dep,
+  });
 }

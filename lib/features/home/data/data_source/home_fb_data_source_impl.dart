@@ -110,7 +110,8 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
             }
           } else if (menuItems.title == MenuTitle.proxyAttendance) {
             if (staff.uid == 'pztngdZPCPQrEvmI37b3gf3w33d2' ||
-                staff.uid == 'x7RbfotHBpfr7JZ88P9eABWtcQM2') {
+                staff.uid == 'x7RbfotHBpfr7JZ88P9eABWtcQM2' ||
+                staff.uid == '5cM1kyNARSS3yKiO8EB0o1E9eiA3') {
               allAccess.add(menuItems);
             }
           } else if (menuItems.title != MenuTitle.viewSuggestions &&
@@ -172,6 +173,20 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
               menuItems.title == MenuTitle.prReminder ||
               menuItems.title == MenuTitle.quotationTemplate ||
               menuItems.title == MenuTitle.paySlip) {
+            allAccess.add(menuItems);
+          }
+        }
+        //adding for office staff access
+        else if (staff.dep.toLowerCase() == 'office staff') {
+          if (menuItems.title == MenuTitle.workEntry ||
+              menuItems.title == MenuTitle.refreshment ||
+              menuItems.title == MenuTitle.leavePortal ||
+              menuItems.title == MenuTitle.suggestion ||
+              menuItems.title == MenuTitle.paySlip ||
+              menuItems.title == MenuTitle.foodCount ||
+              menuItems.title == MenuTitle.createInvoice ||
+              menuItems.title == MenuTitle.quotationTemplate ||
+              menuItems.title == MenuTitle.attendance) {
             allAccess.add(menuItems);
           }
         }

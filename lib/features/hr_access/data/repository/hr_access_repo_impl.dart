@@ -24,4 +24,17 @@ class HrAccessRepoImpl implements HrAccessRepository {
       punchOut: punchOut,
     );
   }
+
+  @override
+  Future<HrAccessModel?> createAccount({
+    required String name,
+    required String email,
+    required String dep,
+  }) async {
+    return await hrAccessFbDataSource.createAccount(
+      name: name,
+      email: email,
+      dep: dep,
+    );
+  }
 }

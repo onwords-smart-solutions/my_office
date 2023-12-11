@@ -47,6 +47,7 @@ import 'package:my_office/features/hr_access/data/data_source/hr_access_fb_data_
 import 'package:my_office/features/hr_access/data/repository/hr_access_repo_impl.dart';
 import 'package:my_office/features/hr_access/domain/repository/hr_access_repository.dart';
 import 'package:my_office/features/hr_access/domain/use_case/all_staff_details_use_case.dart';
+import 'package:my_office/features/hr_access/domain/use_case/create_account_use_case.dart';
 import 'package:my_office/features/hr_access/domain/use_case/update_timing_for_employees_use_case.dart';
 import 'package:my_office/features/leave_approval/data/data_source/leave_approval_fb_data_source.dart';
 import 'package:my_office/features/leave_approval/data/data_source/leave_approval_fb_data_source_impl.dart';
@@ -357,6 +358,11 @@ Future<void> init() async {
   ///UPDATE HR TIMING
   sl.registerLazySingleton<UpdateTimingForEmployeesCase>(
         () => UpdateTimingForEmployeesCase(hrAccessRepository: sl.call()),
+  );
+
+  ///CREATE STAFF ACCOUNT
+  sl.registerLazySingleton<CreateAccountCase>(
+        () => CreateAccountCase(hrAccessRepository: sl.call()),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ REPOSITORIES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //

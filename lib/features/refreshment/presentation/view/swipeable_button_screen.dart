@@ -193,6 +193,7 @@ class _SwipeableButtonState extends State<SwipeableButton> {
         },
       );
     } else {
+      String errorMessage = '';
       await fetchDetails(date: format, mode: mode).then((value) async {
         Map<Object?, Object?> teaList = {};
         Map<Object?, Object?> coffeeList = {};
@@ -202,6 +203,7 @@ class _SwipeableButtonState extends State<SwipeableButton> {
         int milkCount = 0;
         bool isTeaOrdered = false;
         bool isCoffeeOrdered = false;
+        bool isMilkOrdered = false;
         if (refreshmentDetails.isNotEmpty) {
           //Tea list
           try {
@@ -224,31 +226,49 @@ class _SwipeableButtonState extends State<SwipeableButton> {
 
           //Checking for already ordered Tea or not
           if (teaList.isNotEmpty) {
-            // isTeaOrdered = teaList.containsValue(widget.name);
+            isTeaOrdered = teaList.containsValue(widget.name);
             teaCount = refreshmentDetails['tea_count'];
+          }
+          if(isTeaOrdered && item == 'Tea'){
+            errorMessage ='You have already ordered your Tea';
+            status = false;
           }
 
           //Checking for already ordered Coffee or not
           if (coffeeList.isNotEmpty) {
-            // isCoffeeOrdered = coffeeList.containsValue(widget.name);
+            isCoffeeOrdered = coffeeList.containsValue(widget.name);
             coffeeCount = refreshmentDetails['coffee_count'];
+          }
+          if(isCoffeeOrdered && item == 'Coffee'){
+            errorMessage ='You have already ordered your Coffee';
+            status = false;
           }
 
           //Checking for already ordered milk or not
           if (milkList.isNotEmpty) {
-            // isCoffeeOrdered = coffeeList.containsValue(widget.name);
+            isMilkOrdered = milkList.containsValue(widget.name);
             milkCount = refreshmentDetails['milk_count'];
           }
-          await handleOrder(
-            item: item,
-            coffeeCount: coffeeCount,
-            teaCount: teaCount,
-            milkCount: milkCount,
-            date: format,
-            mode: mode,
-            context: context,
-            name: widget.name,
-          );
+          if(isMilkOrdered && item == 'Milk'){
+            errorMessage ='You have already ordered your Milk';
+            status = false;
+          }
+
+          if(status){
+            await handleOrder(
+              item: item,
+              coffeeCount: coffeeCount,
+              teaCount: teaCount,
+              milkCount: milkCount,
+              date: format,
+              mode: mode,
+              context: context,
+              name: widget.name,
+            );
+          }else{
+            CustomSnackBar.showErrorSnackbar(message: errorMessage, context: context);
+          }
+
         } else {
           await handleOrder(
             item: item,

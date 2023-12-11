@@ -10,6 +10,7 @@ import '../../../features/food_count/presentation/view/food_count_screen.dart';
 import '../../../features/home/presentation/view/account_details_screen.dart';
 import '../../../features/home/data/model/staff_access_model.dart';
 import '../../../features/hr_access/presentation/view/all_staffs_screen.dart';
+import '../../../features/hr_access/presentation/view/create_account_screen.dart';
 import '../../../features/installation_pdf/presentation/view/installation_details.dart';
 import '../../../features/invoice_generator/presentation/view/client_details_screen.dart';
 import '../../../features/pr_dashboard/presentation/view/pr_dash_screen.dart';
@@ -61,6 +62,7 @@ class MenuTitle {
   static const String employeeOfTheWeek = 'Best employee';
   static const String hrAccess = 'HR Access';
   static const String paySlip = 'Pay Slip';
+  static const String createAccount = 'Create Account';
 }
 
 class AppDefaults {
@@ -179,6 +181,10 @@ class AppDefaults {
       title: MenuTitle.paySlip,
       image: 'assets/pay_slip.png',
     ),
+    StaffAccessModel(
+        title: MenuTitle.createAccount,
+        image: 'assets/create_account.png',
+    ),
   ];
 
   static Widget getPage(String title, UserEntity staffInfo) {
@@ -295,6 +301,9 @@ class AppDefaults {
         break;
       case MenuTitle.paySlip:
         page = PaySlip(user: staffInfo);
+        break;
+      case MenuTitle.createAccount:
+        page = CreateAccount();
         break;
     }
     return page;

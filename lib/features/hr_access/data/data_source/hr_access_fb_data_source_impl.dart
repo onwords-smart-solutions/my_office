@@ -1,11 +1,13 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_office/features/hr_access/data/data_source/hr_access_fb_data_source.dart';
 import 'package:my_office/features/hr_access/data/model/hr_access_staff_model.dart';
 
 class HrAccessFbDataSourceImpl implements HrAccessFbDataSource {
   final ref = FirebaseDatabase.instance.ref();
+  final auth = FirebaseAuth.instance;
 
   @override
   Future<List<HrAccessModel>> staffDetails() async {
@@ -48,5 +50,43 @@ class HrAccessFbDataSourceImpl implements HrAccessFbDataSource {
       'punch_in': punchIn,
       'punch_out': punchOut,
     });
+  }
+
+  @override
+  Future<HrAccessModel?> createAccount({
+    required String name,
+    required String email,
+    required String dep,
+  }) async {
+    try {
+      final credential = await auth.createUserWithEmailAndPassword(
+        email: email,
+        password: 'onwords8182',
+      );
+      credential.user!.displayName;
+      await ref.child('staff/${credential.user!.uid}').set({
+        'department' : dep,
+        'email' : email,
+        'name' : name,
+        'punch_in': '09:00',
+        'punch_out': '18:00',
+      });
+      await ref.child('staff_details/${credential.user!.uid}').set({
+        'department': dep,
+        'email': email,
+        'name': name,
+      });
+      return HrAccessModel(
+        name: name,
+        email: email,
+        department: dep,
+        punchIn: '',
+        punchOut: '',
+        uid: credential.user!.uid,
+      );
+    } on FirebaseException catch (e) {
+      print('Firebase Error: ${e.message}');
+      return null;
+    }
   }
 }

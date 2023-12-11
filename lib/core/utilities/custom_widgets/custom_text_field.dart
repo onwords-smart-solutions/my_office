@@ -5,13 +5,14 @@ class CustomTextField {
   final TextInputType textInputType;
   final TextInputAction textInputAction;
   final String hintName;
-  final Icon icon;
+  final Icon? icon;
   final int maxLength;
   final bool? isEnable;
   final bool? isOptional;
   final String? Function(String?)? validator;
   final VoidCallback? onTap;
   final bool? readOnly;
+  final TextCapitalization? textCapitalizationWords;
 
   const CustomTextField({
     Key? key,
@@ -19,20 +20,21 @@ class CustomTextField {
     required this.textInputType,
     required this.textInputAction,
     required this.hintName,
-    required this.icon,
+    this.icon,
     required this.maxLength,
     this.validator,
     this.isEnable,
     this.isOptional,
     this.onTap,
     this.readOnly,
+    this.textCapitalizationWords,
   });
 
   Widget textInputField() {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 5),
+      margin: const EdgeInsets.symmetric(vertical: 8),
       child: TextFormField(
-        textCapitalization: TextCapitalization.sentences,
+        textCapitalization: textCapitalizationWords ?? TextCapitalization.sentences,
         controller: controller,
         textInputAction: textInputAction,
         keyboardType: textInputType,
@@ -66,7 +68,7 @@ class CustomTextField {
 
   OutlineInputBorder myInputBorder() {
     return OutlineInputBorder(
-      borderRadius: const BorderRadius.all(Radius.circular(20)),
+      borderRadius: const BorderRadius.all(Radius.circular(12)),
       borderSide: BorderSide(
         color: Colors.black.withOpacity(0.3),
         width: 2,
@@ -77,7 +79,7 @@ class CustomTextField {
   OutlineInputBorder myFocusBorder() {
     return OutlineInputBorder(
       borderRadius: const BorderRadius.all(
-        Radius.circular(20),
+        Radius.circular(12),
       ),
       borderSide: BorderSide(
         color: Colors.black.withOpacity(0.3),
@@ -89,7 +91,7 @@ class CustomTextField {
   OutlineInputBorder myDisabledBorder() {
     return OutlineInputBorder(
       borderRadius: const BorderRadius.all(
-        Radius.circular(20),
+        Radius.circular(12),
       ),
       borderSide: BorderSide(
         color: Colors.black.withOpacity(0.3),
@@ -101,7 +103,7 @@ class CustomTextField {
   OutlineInputBorder myErrorBorder(){
     return OutlineInputBorder(
       borderRadius: const BorderRadius.all(
-        Radius.circular(20),
+        Radius.circular(12),
       ),
       borderSide: BorderSide(
         color: Colors.red.withOpacity(0.5),

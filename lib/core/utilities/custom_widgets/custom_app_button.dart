@@ -20,6 +20,9 @@ class AppButton extends StatelessWidget {
       onPressed: onPressed,
       style: FilledButton.styleFrom(
         elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
         shadowColor: const Color(0xffF1EAFF),
         backgroundColor: const Color(0xffE5D4FF),
         foregroundColor: const Color(0xff5B0888),
