@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -64,7 +65,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
     _getInfoItemDetails();
     _motivationIndex = homeProvider.getRandomNumber();
-    _checkAppVersion();
+    // _checkAppVersion();
     _getStaffAccess();
     _getNetworkStatus();
     _notificationService.storeFCM(context: context);
@@ -158,18 +159,18 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   return ValueListenableBuilder(
                     valueListenable: _entryDetail,
                     builder: (ctx, staffEntry, child) {
-                        return ValueListenableBuilder(
-                          valueListenable: _endTime,
-                          builder: (ctx, endTime, child) {
-                            return InfoItem(
-                              staff: userProvider.user!,
-                              todayBirthdayList: birthdayList,
-                              quoteIndex: _motivationIndex,
-                              staffEntryDetail: staffEntry,
-                              endTime: endTime,
-                            );
-                          },
-                        );
+                      return ValueListenableBuilder(
+                        valueListenable: _endTime,
+                        builder: (ctx, endTime, child) {
+                          return InfoItem(
+                            staff: userProvider.user!,
+                            todayBirthdayList: birthdayList,
+                            quoteIndex: _motivationIndex,
+                            staffEntryDetail: staffEntry,
+                            endTime: endTime,
+                          );
+                        },
+                      );
                     },
                   );
                 },
@@ -267,7 +268,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   _getStaffAccess() async {
     BuildContext context = this.context;
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    final userProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+    final userProvider =
+        Provider.of<AuthenticationProvider>(context, listen: false);
     final response =
         await homeProvider.getStaffAccess(staff: userProvider.user!);
     if (response.isRight) {
@@ -341,6 +343,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
   void _setupFCMListener(BuildContext context) {
     FirebaseMessaging.onMessage.listen((message) {
+      log("notification ${message.notification!.title}");
       CustomAlerts.showAlertDialog(
         context: context,
         title: message.notification!.title.toString(),
@@ -381,7 +384,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   _getInfoItemDetails() async {
     final context = this.context;
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    final userProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+    final userProvider =
+        Provider.of<AuthenticationProvider>(context, listen: false);
     final bday = await homeProvider.getAllBirthday();
     if (bday.isRight) {
       _bdayStaffs.value = bday.right;
@@ -397,14 +401,14 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       userProvider.user!.name,
       userProvider.user!.dep,
     );
-    if(data == null){
-      _entryDetail.value =  CustomPunchModel(
+    if (data == null) {
+      _entryDetail.value = CustomPunchModel(
         staffId: userProvider.user!.uid,
         name: userProvider.user!.name,
         department: userProvider.user!.dep,
         checkInTime: null,
       );
-    }else{
+    } else {
       _entryDetail.value = data;
     }
 
@@ -559,10 +563,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     );
   }
 
-
   Future<void> _onClickInstallApk() async {
     final resultPath =
-    FirebaseStorage.instance.ref('MY OFFICE APK/app-release.apk');
+        FirebaseStorage.instance.ref('MY OFFICE APK/app-release.apk');
     final appDocDir = await getExternalStorageDirectory();
     final String appDocPath = appDocDir!.path;
     final File tempFile = File('$appDocPath/MY_OFFICE_UPDATED.apk');
@@ -587,7 +590,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         }
       });
     } on FirebaseException {
-      if(!mounted) return;
+      if (!mounted) return;
       Navigator.of(context).pop();
       CustomSnackBar.showErrorSnackbar(
         message: 'Unable to update my office. Try again',
@@ -595,7 +598,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       );
     }
   }
-
 
   @override
   void dispose() {

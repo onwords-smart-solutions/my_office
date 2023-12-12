@@ -6,9 +6,10 @@ import '../../../user/data/model/user_model.dart';
 import '../../../user/domain/entity/user_entity.dart';
 
 abstract class AuthRepository {
-  Future<Either<ErrorResponse, UserEntity>> login(
-      {required String email, required String password,
-      });
+  Future<Either<ErrorResponse, UserEntity>> login({
+    required String email,
+    required String password,
+  });
 
   Future<Either<ErrorResponse, bool>> resetPassword({required String email});
 
@@ -18,7 +19,10 @@ abstract class AuthRepository {
 
   Future<void> updateStaffMobile(String uid, int mobile);
 
-  Future<UserCredential> signIn({required String email, required String password});
+  Future<UserCredential> signIn(
+      {required String email, required String password});
+
   Future<void> signOut();
-  Future<UserEntity?> getStaff(String uid,String uniqueId);
+
+  Future<UserEntity?> getStaff(String uid, String uniqueId);
 }
