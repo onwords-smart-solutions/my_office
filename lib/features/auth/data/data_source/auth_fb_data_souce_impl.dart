@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:either_dart/either.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -26,6 +28,7 @@ class AuthFbDataSourceImpl implements AuthFbDataSource {
       );
       return await getUserInfo(credential.user!.uid, uniqueId);
     } on FirebaseAuthException catch (e) {
+      log("error in auth login $e");
       return Left(
         ErrorResponse(
           error: e.message.toString(),
@@ -113,11 +116,12 @@ class AuthFbDataSourceImpl implements AuthFbDataSource {
   @override
   Future<Map<Object?, Object?>?> getStaffDetails(String uid) async {
     final DatabaseReference staffRef =
-        FirebaseDatabase.instance.ref().child("staff");
-    final snapshot = await staffRef.child(uid).once();
-    if (snapshot.snapshot.exists) {
-      return snapshot.snapshot.value as Map<Object?, Object?>?;
-    }
-    return null;
+        FirebaseDatabase.instance.ref("staff/$uid");
+    return await staffRef.once().then((snapshot) {
+      if (snapshot.snapshot.exists) {
+        return snapshot.snapshot.value as Map<Object?, Object?>;
+      }
+      return null;
+    });
   }
 }

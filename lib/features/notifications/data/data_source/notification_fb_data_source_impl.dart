@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:my_office/features/notifications/data/data_source/notification_fb_data_source.dart';
 
@@ -33,8 +35,7 @@ class NotificationFbDataSourceImpl implements NotificationFbDataSource {
     bool announcement = false,
     bool badge = true,
     bool sound = true,
-  }) async {
-    await _firebaseMessaging.requestPermission(
+  }) async {await _firebaseMessaging.requestPermission(
       alert: alert,
       announcement: announcement,
       badge: badge,

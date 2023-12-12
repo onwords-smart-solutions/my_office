@@ -20,6 +20,7 @@ import 'package:my_office/features/search_leads/presentation/provider/feedback_b
 import 'package:my_office/features/staff_details/presentation/provider/staff_detail_provider.dart';
 import 'package:my_office/features/auth/presentation/view/phone_number_screen.dart';
 import 'package:my_office/features/auth/presentation/view/birthday_picker_screen.dart';
+import 'package:my_office/firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/config/theme.dart';
@@ -45,7 +46,9 @@ final navigationKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+
+  await Firebase.initializeApp(
+      name: "admin-console", options: DefaultFirebaseOptions.currentPlatform);
   await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
   await di.init();
 
@@ -120,9 +123,7 @@ class _MyAppState extends State<MyApp> {
     );
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     late AuthLocalDataSourceImpl authLocalDataSourceImpl =
-    AuthLocalDataSourceImpl(
-      sharedPreferences,
-    );
+        AuthLocalDataSourceImpl(sharedPreferences);
     late AuthRepository authRepository = AuthRepoImpl(
       authFbDataSource,
       authLocalDataSourceImpl,
@@ -130,9 +131,12 @@ class _MyAppState extends State<MyApp> {
 
     final context = this.context;
     if (FirebaseAuth.instance.currentUser != null) {
-      final authProvider = Provider.of<AuthenticationProvider>(context, listen: false);
-      final response = await authRepository.getStaff(FirebaseAuth.instance.currentUser!.uid, await authLocalDataSourceImpl.getUniqueID());
-        authProvider.user = response;
+      final authProvider =
+          Provider.of<AuthenticationProvider>(context, listen: false);
+      final response = await authRepository.getStaff(
+          FirebaseAuth.instance.currentUser!.uid,
+          await authLocalDataSourceImpl.getUniqueID());
+      authProvider.user = response;
     }
   }
 
@@ -164,7 +168,6 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
 
 class InitialScreen extends StatefulWidget {
   const InitialScreen({super.key});
@@ -270,7 +273,8 @@ class Loading extends StatelessWidget {
                 await FirebaseAuth.instance.signOut();
                 final pref = await SharedPreferences.getInstance();
                 await pref.clear();
-                Provider.of<AuthenticationProvider>(context, listen: false).clearUser();
+                Provider.of<AuthenticationProvider>(context, listen: false)
+                    .clearUser();
                 navigator.pushAndRemoveUntil(
                   MaterialPageRoute(builder: (_) => const LoginScreen()),
                   (route) => false,

@@ -18,4 +18,9 @@ class UserEntity {
     required this.url,
     required this.uniqueId,
   });
+
+  @override
+  String toString() {
+    return "Name : $name mobile $mobile";
+  }
 }

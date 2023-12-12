@@ -89,7 +89,8 @@ class NotificationService {
 
   // -- Notification related --
   Future<void> storeFCM({required BuildContext context}) async {
-    final userProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+    final userProvider =
+        Provider.of<AuthenticationProvider>(context, listen: false);
     final fcmToken = await notificationRepository.getFcmToken();
     final deviceId =
         await getDeviceId(); // Assuming getDeviceId() is defined elsewhere.
@@ -104,7 +105,10 @@ class NotificationService {
     }
   }
 
-  Future<void> removeFCM({required String userId, required  String uniqueId,}) async {
+  Future<void> removeFCM({
+    required String userId,
+    required String uniqueId,
+  }) async {
     await userRepository.removeUserFCM(userId, uniqueId);
   }
 
@@ -171,16 +175,26 @@ class NotificationService {
     tz.initializeTimeZones();
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@drawable/suitcase');
-    const InitializationSettings settings = InitializationSettings(
+    final DarwinInitializationSettings initializationSettingsIOS =
+        DarwinInitializationSettings(
+      requestSoundPermission: true,
+      requestBadgePermission: true,
+      requestAlertPermission: true,
+      onDidReceiveLocalNotification:
+          (int id, String? title, String? body, String? payload) async {},
+    );
+    InitializationSettings settings = InitializationSettings(
       android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
     );
-    _notifications
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()!
-        .requestNotificationsPermission();
-    await _notifications.initialize(
-      settings,
-    );
+    if (Platform.isAndroid) {
+      _notifications
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()!
+          .requestNotificationsPermission();
+    }
+
+    await _notifications.initialize(settings);
   }
 
   Future<NotificationDetails> _notificationDetails() async {

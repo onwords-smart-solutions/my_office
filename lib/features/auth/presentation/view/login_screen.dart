@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -273,7 +275,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Center(
           child: _isLoading
               ? Lottie.asset(
-                  "assets/animations/loading.json",
+                  "assets/animations/loading.json"
                 )
               : Text(
                   'Log in',
@@ -348,10 +350,12 @@ class _LoginScreenState extends State<LoginScreen> {
       authLocalDataSourceImpl,
     );
     try {
+      log("called");
       final userCredential =
           await authRepository.signIn(email: _email, password: _password);
       await _fetchAndProcessStaffDetails(userCredential.user!.uid);
     } on FirebaseAuthException catch (e) {
+      print("error $e");
       // Handle Firebase specific errors
       if (!mounted) return;
       setState(() {
@@ -435,6 +439,7 @@ class _LoginScreenState extends State<LoginScreen> {
       final response = await authRepository.getStaff(
           FirebaseAuth.instance.currentUser!.uid,
           await authLocalDataSourceImpl.getUniqueID());
+      log("Logged user is $response");
       authProvider.user = response;
     }
   }
