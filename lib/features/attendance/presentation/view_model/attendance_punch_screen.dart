@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:my_office/core/utilities/custom_widgets/custom_snack_bar.dart';
 import 'package:my_office/features/attendance/data/model/punch_model.dart';
 
 class AttendancePunchItem extends StatelessWidget {
@@ -30,110 +31,108 @@ class AttendancePunchItem extends StatelessWidget {
       int.parse(formattedMinute),
     );
 
-    if (punchDetail.isProxy) {
-      icon = Icons.phone_android_rounded;
-    }
+      if (punchDetail.isProxy) {
+        icon = Icons.phone_android_rounded;
+      }
 
-    if (punchDetail.checkOutTime != null) {
-      endTime = punchDetail.checkOutTime!;
-    }
+      if (punchDetail.checkOutTime != null) {
+        endTime = punchDetail.checkOutTime!;
+      }
 
-    if (punchDetail.checkInTime == null) {
-      topContainerColor = Colors.grey;
-      status = 'Absent today';
-    } else if (punchDetail.checkInTime!
-        .difference(
-      DateTime(
-        punchDetail.checkInTime!.year,
-        punchDetail.checkInTime!.month,
-        punchDetail.checkInTime!.day,
-        int.parse(formattedHour),
-        int.parse(formattedMinute),
-      ),
-    )
-        .inMinutes >
-        20) {
-      topContainerColor = Colors.red.shade400;
-      status = 'Late by ${punchDetail.checkInTime!.difference(
-        DateTime(
-          punchDetail.checkInTime!.year,
-          punchDetail.checkInTime!.month,
-          punchDetail.checkInTime!.day,
-          int.parse(formattedHour),
-          int.parse(formattedMinute),
-        ),
-      ).inMinutes} mins';
-    }
-    else if (punchDetail.checkInTime!
-        .difference(
-      DateTime(
-        punchDetail.checkInTime!.year,
-        punchDetail.checkInTime!.month,
-        punchDetail.checkInTime!.day,
-        int.parse(formattedHour),
-        int.parse(formattedMinute),
-      ),
-    )
-        .inMinutes >
-        10 &&
-        punchInTime
-            .difference(
-          DateTime(
-            punchInTime.year,
-            punchInTime.month,
-            punchInTime.day,
-            int.parse(formattedHour),
-            int.parse(formattedMinute),
-          ).add(const Duration(minutes: 20)),
-        )
-            .inMinutes <=
-            0) {
-      topContainerColor = Colors.orangeAccent.shade400;
-      status = 'Late by ${punchDetail.checkInTime!.difference(
-        DateTime(
-          punchDetail.checkInTime!.year,
-          punchDetail.checkInTime!.month,
-          punchDetail.checkInTime!.day,
-          int.parse(formattedHour),
-          int.parse(formattedMinute),
-        ),
-      ).inMinutes} mins';
-    }
-    else if ( punchDetail.checkInTime!
-                .difference(
-                  DateTime(
-                    punchDetail.checkInTime!.year,
-                    punchDetail.checkInTime!.month,
-                    punchDetail.checkInTime!.day,
-                    int.parse(formattedHour),
-                    int.parse(formattedMinute),
-                  ),
-                )
-                .inMinutes >
-            0 &&
-       punchInTime
-                .difference(
-                  DateTime(
-                    punchInTime.year,
-                    punchInTime.month,
-                    punchInTime.day,
-                    int.parse(formattedHour),
-                    int.parse(formattedMinute),
-                  ).add(const Duration(minutes: 10)),
-                )
-                .inMinutes <=
-            0) {
-      topContainerColor = Colors.amber.shade500;
-      status = 'Late by ${punchDetail.checkInTime!.difference(
-            DateTime(
-              punchDetail.checkInTime!.year,
-              punchDetail.checkInTime!.month,
-              punchDetail.checkInTime!.day,
-              int.parse(formattedHour),
-              int.parse(formattedMinute),
-            ),
-          ).inMinutes} mins';
-    }
+      if (punchDetail.checkInTime == null) {
+        topContainerColor = Colors.grey;
+        status = 'Absent today';
+      } else if (punchDetail.checkInTime!
+              .difference(
+                DateTime(
+                  punchDetail.checkInTime!.year,
+                  punchDetail.checkInTime!.month,
+                  punchDetail.checkInTime!.day,
+                  int.parse(formattedHour),
+                  int.parse(formattedMinute),
+                ),
+              )
+              .inMinutes >
+          20) {
+        topContainerColor = Colors.red.shade400;
+        status = 'Late by ${punchDetail.checkInTime!.difference(
+              DateTime(
+                punchDetail.checkInTime!.year,
+                punchDetail.checkInTime!.month,
+                punchDetail.checkInTime!.day,
+                int.parse(formattedHour),
+                int.parse(formattedMinute),
+              ),
+            ).inMinutes} mins';
+      } else if (punchDetail.checkInTime!
+                  .difference(
+                    DateTime(
+                      punchDetail.checkInTime!.year,
+                      punchDetail.checkInTime!.month,
+                      punchDetail.checkInTime!.day,
+                      int.parse(formattedHour),
+                      int.parse(formattedMinute),
+                    ),
+                  )
+                  .inMinutes >
+              10 &&
+          punchInTime
+                  .difference(
+                    DateTime(
+                      punchInTime.year,
+                      punchInTime.month,
+                      punchInTime.day,
+                      int.parse(formattedHour),
+                      int.parse(formattedMinute),
+                    ).add(const Duration(minutes: 20)),
+                  )
+                  .inMinutes <=
+              0) {
+        topContainerColor = Colors.orangeAccent.shade400;
+        status = 'Late by ${punchDetail.checkInTime!.difference(
+              DateTime(
+                punchDetail.checkInTime!.year,
+                punchDetail.checkInTime!.month,
+                punchDetail.checkInTime!.day,
+                int.parse(formattedHour),
+                int.parse(formattedMinute),
+              ),
+            ).inMinutes} mins';
+      } else if (punchDetail.checkInTime!
+                  .difference(
+                    DateTime(
+                      punchDetail.checkInTime!.year,
+                      punchDetail.checkInTime!.month,
+                      punchDetail.checkInTime!.day,
+                      int.parse(formattedHour),
+                      int.parse(formattedMinute),
+                    ),
+                  )
+                  .inMinutes >
+              0 &&
+          punchInTime
+                  .difference(
+                    DateTime(
+                      punchInTime.year,
+                      punchInTime.month,
+                      punchInTime.day,
+                      int.parse(formattedHour),
+                      int.parse(formattedMinute),
+                    ).add(const Duration(minutes: 10)),
+                  )
+                  .inMinutes <=
+              0) {
+        topContainerColor = Colors.amber.shade500;
+        status = 'Late by ${punchDetail.checkInTime!.difference(
+              DateTime(
+                punchDetail.checkInTime!.year,
+                punchDetail.checkInTime!.month,
+                punchDetail.checkInTime!.day,
+                int.parse(formattedHour),
+                int.parse(formattedMinute),
+              ),
+            ).inMinutes} mins';
+      }
 
     return Container(
       margin: const EdgeInsets.only(bottom: 15.0),

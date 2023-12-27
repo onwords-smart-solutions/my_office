@@ -60,6 +60,6 @@ class DefaultFirebaseOptions {
     databaseURL: 'https://adminconsole-updated-default-rtdb.firebaseio.com',
     storageBucket: 'adminconsole-updated.appspot.com',
     iosClientId: '966384650165-3skje7chakbbe1oqlp710f3olbftumb0.apps.googleusercontent.com',
-    iosBundleId: 'com.onwords.office',
+    iosBundleId: 'com.office.onwords',
   );
 }

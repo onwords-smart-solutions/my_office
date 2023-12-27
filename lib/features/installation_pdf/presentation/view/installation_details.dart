@@ -301,154 +301,156 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 borderRadius: BorderRadius.circular(20),
                 // border: Border.all(color: Colors.black12, width: .5),
               ),
-              child: Column(
-                children: [
-                  ///Add Team Members
-                  SizedBox(
-                    height: size.height * 0.01,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      const Text(
-                        'Add Other Device Name',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ///Add Team Members
+                    SizedBox(
+                      height: size.height * 0.01,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        const Text(
+                          'Add Other Device Name',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                          ),
                         ),
-                      ),
-                      CircleAvatar(
-                        backgroundColor: const Color(0xff5AC8FA),
-                        radius: 20,
-                        child: Center(
-                          child: IconButton(
-                            onPressed: () {
-                              addDataToList(
-                                context,
-                                'Other Device',
-                                CustomTextField(
-                                  controller: addDataToListController,
-                                  textInputType: TextInputType.text,
-                                  textInputAction: TextInputAction.done,
-                                  hintName: 'Device Name',
-                                  icon: const Icon(Icons.person_2),
-                                  maxLength: 50,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'This field is required';
-                                    }
-                                    return null;
-                                  },
-                                ).textInputField(),
-                                addDataToListController,
-                                extraDevice,
-                              );
-                            },
-                            icon: const Icon(
-                              Icons.add,
-                              size: 20,
+                        CircleAvatar(
+                          backgroundColor: const Color(0xff5AC8FA),
+                          radius: 20,
+                          child: Center(
+                            child: IconButton(
+                              onPressed: () {
+                                addDataToList(
+                                  context,
+                                  'Other Device',
+                                  CustomTextField(
+                                    controller: addDataToListController,
+                                    textInputType: TextInputType.text,
+                                    textInputAction: TextInputAction.done,
+                                    hintName: 'Device Name',
+                                    icon: const Icon(Icons.person_2),
+                                    maxLength: 50,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'This field is required';
+                                      }
+                                      return null;
+                                    },
+                                  ).textInputField(),
+                                  addDataToListController,
+                                  extraDevice,
+                                );
+                              },
+                              icon: const Icon(
+                                Icons.add,
+                                size: 20,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-
-                  const Divider(
-                    endIndent: 1,
-                    indent: 1,
-                    color: Colors.black,
-                  ),
-                  SizedBox(
-                    height: size.height * 0.2,
-                    child: extraDevice.isNotEmpty
-                        ? ListView.builder(
-                            itemCount: extraDevice.length,
-                            itemBuilder: (context, int index) {
-                              return Center(
-                                child: ListTile(
-                                  leading: Text(
-                                    "${index + 1} : ",
-                                    style: const TextStyle(
-                                      fontSize: 15,
+                      ],
+                    ),
+                
+                    const Divider(
+                      endIndent: 1,
+                      indent: 1,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      height: size.height * 0.2,
+                      child: extraDevice.isNotEmpty
+                          ? ListView.builder(
+                              itemCount: extraDevice.length,
+                              itemBuilder: (context, int index) {
+                                return Center(
+                                  child: ListTile(
+                                    leading: Text(
+                                      "${index + 1} : ",
+                                      style: const TextStyle(
+                                        fontSize: 15,
+                                      ),
                                     ),
-                                  ),
-                                  title: Text(
-                                    extraDevice[index].toString(),
-                                    style: const TextStyle(),
-                                  ),
-                                  trailing: IconButton(
-                                    icon: const Icon(
-                                      Icons.close,
-                                      size: 18,
+                                    title: Text(
+                                      extraDevice[index].toString(),
+                                      style: const TextStyle(),
                                     ),
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (_) => AlertDialog(
-                                          title: Text(
-                                            'Delete this name?\n${extraDevice[index]}',
-                                            style: const TextStyle(),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          content: SizedBox(
-                                            height: size.height * 0.05,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: [
-                                                ActionChip(
-                                                  onPressed: () {
-                                                    extraDevice.removeAt(index);
-                                                    Navigator.pop(context);
-                                                    setState(() {});
-                                                  },
-                                                  // backgroundColor:
-                                                  // Colors.red.shade400,
-                                                  label: const Text(
-                                                    'Yes',
-                                                    style: TextStyle(
-                                                      color: Colors.red,
-                                                      fontWeight:
-                                                          FontWeight.w500,
+                                    trailing: IconButton(
+                                      icon: const Icon(
+                                        Icons.close,
+                                        size: 18,
+                                      ),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (_) => AlertDialog(
+                                            title: Text(
+                                              'Delete this name?\n${extraDevice[index]}',
+                                              style: const TextStyle(),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            content: SizedBox(
+                                              height: size.height * 0.05,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.spaceAround,
+                                                children: [
+                                                  ActionChip(
+                                                    onPressed: () {
+                                                      extraDevice.removeAt(index);
+                                                      Navigator.pop(context);
+                                                      setState(() {});
+                                                    },
+                                                    // backgroundColor:
+                                                    // Colors.red.shade400,
+                                                    label: const Text(
+                                                      'Yes',
+                                                      style: TextStyle(
+                                                        color: Colors.red,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                                ActionChip(
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  // backgroundColor:
-                                                  // Colors.blue.shade400,
-                                                  label: const Text(
-                                                    'No',
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.w500,
+                                                  ActionChip(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    // backgroundColor:
+                                                    // Colors.blue.shade400,
+                                                    label: const Text(
+                                                      'No',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      );
-                                    },
+                                        );
+                                      },
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                          )
-                        : const Center(
-                            child: Text(
-                              'No Device Added',
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 17),
+                                );
+                              },
+                            )
+                          : const Center(
+                              child: Text(
+                                'No Device Added',
+                                style:
+                                    TextStyle(color: Colors.black, fontSize: 17),
+                              ),
                             ),
-                          ),
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -486,155 +488,157 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 borderRadius: BorderRadius.circular(20),
                 // border: Border.all(color: Colors.black12, width: .5),
               ),
-              child: Column(
-                children: [
-                  ///Add Team Members
-                  SizedBox(
-                    height: size.height * 0.01,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      const Text(
-                        'Add Team Members Name',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
+              child: SingleChildScrollView( 
+                child: Column(
+                  children: [
+                    ///Add Team Members
+                    SizedBox(
+                      height: size.height * 0.01,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        const Text(
+                          'Add Team Members Name',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                          ),
                         ),
-                      ),
-                      CircleAvatar(
-                        backgroundColor: const Color(0xff5AC8FA),
-                        radius: 20,
-                        child: Center(
-                          child: IconButton(
-                            onPressed: () {
-                              addDataToList(
-                                context,
-                                'Add Crew members',
-                                CustomTextField(
-                                  controller: addDataToListController,
-                                  textInputType: TextInputType.text,
-                                  textInputAction: TextInputAction.done,
-                                  hintName: 'Person Name',
-                                  icon: const Icon(Icons.person_2),
-                                  maxLength: 50,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'This field is required';
-                                    }
-                                    return null;
-                                  },
-                                ).textInputField(),
-                                addDataToListController,
-                                teamMembersName,
-                              );
-                            },
-                            icon: const Icon(
-                              Icons.add,
-                              size: 20,
+                        CircleAvatar(
+                          backgroundColor: const Color(0xff5AC8FA),
+                          radius: 20,
+                          child: Center(
+                            child: IconButton(
+                              onPressed: () {
+                                addDataToList(
+                                  context,
+                                  'Add Crew members',
+                                  CustomTextField(
+                                    controller: addDataToListController,
+                                    textInputType: TextInputType.text,
+                                    textInputAction: TextInputAction.done,
+                                    hintName: 'Person Name',
+                                    icon: const Icon(Icons.person_2),
+                                    maxLength: 50,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'This field is required';
+                                      }
+                                      return null;
+                                    },
+                                  ).textInputField(),
+                                  addDataToListController,
+                                  teamMembersName,
+                                );
+                              },
+                              icon: const Icon(
+                                Icons.add,
+                                size: 20,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-
-                  const Divider(
-                    endIndent: 1,
-                    indent: 1,
-                    color: Colors.black,
-                  ),
-                  SizedBox(
-                    height: size.height * 0.2,
-                    child: teamMembersName.isNotEmpty
-                        ? ListView.builder(
-                            itemCount: teamMembersName.length,
-                            itemBuilder: (context, int index) {
-                              return Center(
-                                child: ListTile(
-                                  leading: Text(
-                                    "${index + 1} : ",
-                                    style: const TextStyle(
-                                      fontSize: 15,
+                      ],
+                    ),
+                
+                    const Divider(
+                      endIndent: 1,
+                      indent: 1,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      height: size.height * 0.2,
+                      child: teamMembersName.isNotEmpty
+                          ? ListView.builder(
+                              itemCount: teamMembersName.length,
+                              itemBuilder: (context, int index) {
+                                return Center(
+                                  child: ListTile(
+                                    leading: Text(
+                                      "${index + 1} : ",
+                                      style: const TextStyle(
+                                        fontSize: 15,
+                                      ),
                                     ),
-                                  ),
-                                  title: Text(
-                                    teamMembersName[index].toString(),
-                                    style: const TextStyle(),
-                                  ),
-                                  trailing: IconButton(
-                                    icon: const Icon(
-                                      Icons.close,
-                                      size: 18,
+                                    title: Text(
+                                      teamMembersName[index].toString(),
+                                      style: const TextStyle(),
                                     ),
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (_) => AlertDialog(
-                                          title: Text(
-                                            'Delete this name?\n${teamMembersName[index]}',
-                                            style: const TextStyle(),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          content: SizedBox(
-                                            height: size.height * 0.1,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: [
-                                                ActionChip(
-                                                  onPressed: () {
-                                                    teamMembersName
-                                                        .removeAt(index);
-                                                    Navigator.pop(context);
-                                                    setState(() {});
-                                                  },
-                                                  // backgroundColor:
-                                                  // Colors.red.shade400,
-                                                  label: const Text(
-                                                    'Yes',
-                                                    style: TextStyle(
-                                                      color: Colors.red,
-                                                      fontWeight:
-                                                          FontWeight.w500,
+                                    trailing: IconButton(
+                                      icon: const Icon(
+                                        Icons.close,
+                                        size: 18,
+                                      ),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (_) => AlertDialog(
+                                            title: Text(
+                                              'Delete this name?\n${teamMembersName[index]}',
+                                              style: const TextStyle(),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            content: SizedBox(
+                                              height: size.height * 0.1,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.spaceAround,
+                                                children: [
+                                                  ActionChip(
+                                                    onPressed: () {
+                                                      teamMembersName
+                                                          .removeAt(index);
+                                                      Navigator.pop(context);
+                                                      setState(() {});
+                                                    },
+                                                    // backgroundColor:
+                                                    // Colors.red.shade400,
+                                                    label: const Text(
+                                                      'Yes',
+                                                      style: TextStyle(
+                                                        color: Colors.red,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                                ActionChip(
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  // backgroundColor:
-                                                  // Colors.blue.shade400,
-                                                  label: const Text(
-                                                    'No',
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.w500,
+                                                  ActionChip(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    // backgroundColor:
+                                                    // Colors.blue.shade400,
+                                                    label: const Text(
+                                                      'No',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      );
-                                    },
+                                        );
+                                      },
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                          )
-                        : const Center(
-                            child: Text(
-                              'No Members Added',
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 17),
+                                );
+                              },
+                            )
+                          : const Center(
+                              child: Text(
+                                'No Members Added',
+                                style:
+                                    TextStyle(color: Colors.black, fontSize: 17),
+                              ),
                             ),
-                          ),
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

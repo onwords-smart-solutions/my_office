@@ -112,118 +112,120 @@ class _BestEmployeeState extends State<BestEmployee> {
 
           return SafeArea(
             minimum: const EdgeInsets.only(top: 40),
-            child: Column(
-              children: [
-                Center(
-                  child: Text(
-                    'Employee of the week details'.toUpperCase(),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w700,
-                      color: Colors.deepPurple,
-                      fontSize: 17,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Center(
+                    child: Text(
+                      'Employee of the week details'.toUpperCase(),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: Colors.deepPurple,
+                        fontSize: 17,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: DropdownButtonFormField<EmployeeModel>(
-                    hint: const Text(
-                      'Staff Names',
+                  const SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: DropdownButtonFormField<EmployeeModel>(
+                      hint: const Text(
+                        'Staff Names',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      value: selectedStaff,
+                      items: staffNames,
+                      onChanged: (EmployeeModel? newValue) {
+                        setState(() {
+                          selectedStaff = newValue;
+                          showReasonField = newValue?.name != 'None';
+                        });
+                      },
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: const BorderSide(
+                            color: CupertinoColors.systemGrey,
+                            width: 2,
+                          ),
+                        ),
+                        labelStyle: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                        ),
+                        contentPadding: const EdgeInsets.all(15),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: const BorderSide(
+                            color: CupertinoColors.systemGrey,
+                            width: 2,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: const BorderSide(
+                            color: CupertinoColors.systemPurple,
+                            width: 2,
+                          ),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: const BorderSide(color: Colors.red),
+                        ),
+                        errorStyle: const TextStyle(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  if(showReasonField)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: TextField(
+                      style: const TextStyle(),
+                      textCapitalization: TextCapitalization.sentences,
+                      textInputAction: TextInputAction.done,
+                      controller: reason,
+                      maxLines: 2,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: const BorderSide(
+                            color: CupertinoColors.systemGrey,
+                            width: 2,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: const BorderSide(
+                            color: CupertinoColors.systemPurple,
+                            width: 2,
+                          ),
+                        ),
+                        hintText: 'Reason',
+                        hintStyle: TextStyle(
+                          color: Colors.grey.withOpacity(0.8),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  ElevatedButton(
+                    onPressed: updatePrNameReason,
+                    child: const Text(
+                      'Update',
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    value: selectedStaff,
-                    items: staffNames,
-                    onChanged: (EmployeeModel? newValue) {
-                      setState(() {
-                        selectedStaff = newValue;
-                        showReasonField = newValue?.name != 'None';
-                      });
-                    },
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: const BorderSide(
-                          color: CupertinoColors.systemGrey,
-                          width: 2,
-                        ),
-                      ),
-                      labelStyle: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                      ),
-                      contentPadding: const EdgeInsets.all(15),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: const BorderSide(
-                          color: CupertinoColors.systemGrey,
-                          width: 2,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: const BorderSide(
-                          color: CupertinoColors.systemPurple,
-                          width: 2,
-                        ),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: const BorderSide(color: Colors.red),
-                      ),
-                      errorStyle: const TextStyle(),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                if(showReasonField)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: TextField(
-                    style: const TextStyle(),
-                    textCapitalization: TextCapitalization.sentences,
-                    textInputAction: TextInputAction.done,
-                    controller: reason,
-                    maxLines: 2,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: const BorderSide(
-                          color: CupertinoColors.systemGrey,
-                          width: 2,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: const BorderSide(
-                          color: CupertinoColors.systemPurple,
-                          width: 2,
-                        ),
-                      ),
-                      hintText: 'Reason',
-                      hintStyle: TextStyle(
-                        color: Colors.grey.withOpacity(0.8),
+                        fontSize: 17,
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 40),
-                ElevatedButton(
-                  onPressed: updatePrNameReason,
-                  child: const Text(
-                    'Update',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 17,
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         } else {

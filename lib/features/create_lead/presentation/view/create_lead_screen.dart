@@ -36,218 +36,220 @@ class _CreateLeadsState extends State<CreateLeads> {
 
   Widget buildCreateLeads() {
     var size = MediaQuery.sizeOf(context);
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: size.height * 0.02,
-            vertical: size.width * 0.1,
-          ),
-          child: Table(
-            columnWidths: const {
-              0: FlexColumnWidth(2.1),
-              1: FlexColumnWidth(3),
-            },
-            border: TableBorder.all(
-              borderRadius: BorderRadius.circular(10),
-              color: AppColor.primaryColor,
-              width: 1.5,
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: size.height * 0.02,
+              vertical: size.width * 0.1,
             ),
-            children: [
-              TableRow(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Text(
-                      "Name",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: size.height * 0.02),
-                    child: TextField(
-                      controller: name,
-                      keyboardType: TextInputType.name,
-                      style: const TextStyle(),
-                      textCapitalization: TextCapitalization.words,
-                      textInputAction: TextInputAction.next,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                ],
+            child: Table(
+              columnWidths: const {
+                0: FlexColumnWidth(2.1),
+                1: FlexColumnWidth(3),
+              },
+              border: TableBorder.all(
+                borderRadius: BorderRadius.circular(10),
+                color: AppColor.primaryColor,
+                width: 1.5,
               ),
-              TableRow(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
+              children: [
+                TableRow(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        "Name",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: size.height * 0.02),
+                      child: TextField(
+                        controller: name,
+                        keyboardType: TextInputType.name,
+                        style: const TextStyle(),
+                        textCapitalization: TextCapitalization.words,
+                        textInputAction: TextInputAction.next,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Text(
-                      "Phone number",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                TableRow(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        "Phone number",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: size.height * 0.02),
-                    child: TextField(
-                      controller: phoneNumber,
-                      maxLength: 10,
-                      keyboardType: TextInputType.number,
-                      style: const TextStyle(),
-                      textInputAction: TextInputAction.next,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        counterText: '',
+                    Padding(
+                      padding: EdgeInsets.only(left: size.height * 0.02),
+                      child: TextField(
+                        controller: phoneNumber,
+                        maxLength: 10,
+                        keyboardType: TextInputType.number,
+                        style: const TextStyle(),
+                        textInputAction: TextInputAction.next,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          counterText: '',
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              TableRow(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
+                  ],
                 ),
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Text(
-                      "Email id",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                TableRow(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        "Email id",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: size.height * 0.02),
-                    child: TextField(
-                      controller: emailId,
-                      keyboardType: TextInputType.emailAddress,
-                      style: const TextStyle(),
-                      textInputAction: TextInputAction.next,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
+                    Padding(
+                      padding: EdgeInsets.only(left: size.height * 0.02),
+                      child: TextField(
+                        controller: emailId,
+                        keyboardType: TextInputType.emailAddress,
+                        style: const TextStyle(),
+                        textInputAction: TextInputAction.next,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              TableRow(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
+                  ],
                 ),
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Text(
-                      "City",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                TableRow(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        "City",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: size.height * 0.02),
-                    child: TextField(
-                      controller: city,
-                      keyboardType: TextInputType.text,
-                      style: const TextStyle(),
-                      textInputAction: TextInputAction.next,
-                      textCapitalization: TextCapitalization.words,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
+                    Padding(
+                      padding: EdgeInsets.only(left: size.height * 0.02),
+                      child: TextField(
+                        controller: city,
+                        keyboardType: TextInputType.text,
+                        style: const TextStyle(),
+                        textInputAction: TextInputAction.next,
+                        textCapitalization: TextCapitalization.words,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              TableRow(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
+                  ],
                 ),
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Text(
-                      "Inquired for",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                TableRow(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        "Inquired for",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: size.height * 0.02),
-                    child: TextField(
-                      controller: inquiredFor,
-                      keyboardType: TextInputType.text,
-                      style: const TextStyle(),
-                      textInputAction: TextInputAction.next,
-                      textCapitalization: TextCapitalization.words,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
+                    Padding(
+                      padding: EdgeInsets.only(left: size.height * 0.02),
+                      child: TextField(
+                        controller: inquiredFor,
+                        keyboardType: TextInputType.text,
+                        style: const TextStyle(),
+                        textInputAction: TextInputAction.next,
+                        textCapitalization: TextCapitalization.words,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              TableRow(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
+                  ],
                 ),
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(10),
-                    child: Text(
-                      "Data fetched by",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
+                TableRow(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        "Data fetched by",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: size.height * 0.02),
-                    child: TextField(
-                      controller: dataFetchedBy,
-                      keyboardType: TextInputType.text,
-                      style: const TextStyle(),
-                      textInputAction: TextInputAction.done,
-                      textCapitalization: TextCapitalization.words,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
+                    Padding(
+                      padding: EdgeInsets.only(left: size.height * 0.02),
+                      child: TextField(
+                        controller: dataFetchedBy,
+                        keyboardType: TextInputType.text,
+                        style: const TextStyle(),
+                        textInputAction: TextInputAction.done,
+                        textCapitalization: TextCapitalization.words,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-        CupertinoButton(
-          borderRadius: BorderRadius.circular(15),
-          minSize: 20,
-          color: CupertinoColors.systemPurple,
-          onPressed: submitForm,
-          child: const Text(
-            'Create lead',
-            style: TextStyle(),
+          CupertinoButton(
+            borderRadius: BorderRadius.circular(15),
+            minSize: 20,
+            color: CupertinoColors.systemPurple,
+            onPressed: submitForm,
+            child: const Text(
+              'Create lead',
+              style: TextStyle(),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

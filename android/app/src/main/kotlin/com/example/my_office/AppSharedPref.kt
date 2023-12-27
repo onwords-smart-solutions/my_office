@@ -1,4 +1,4 @@
-package com.onwords.office.helper
+package com.office.onwords.helper
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE

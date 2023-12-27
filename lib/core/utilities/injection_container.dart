@@ -49,12 +49,6 @@ import 'package:my_office/features/hr_access/domain/repository/hr_access_reposit
 import 'package:my_office/features/hr_access/domain/use_case/all_staff_details_use_case.dart';
 import 'package:my_office/features/hr_access/domain/use_case/create_account_use_case.dart';
 import 'package:my_office/features/hr_access/domain/use_case/update_timing_for_employees_use_case.dart';
-import 'package:my_office/features/leave_approval/data/data_source/leave_approval_fb_data_source.dart';
-import 'package:my_office/features/leave_approval/data/data_source/leave_approval_fb_data_source_impl.dart';
-import 'package:my_office/features/leave_approval/data/repository/leave_approval_repo_impl.dart';
-import 'package:my_office/features/leave_approval/domain/repository/leave_approval_repository.dart';
-import 'package:my_office/features/leave_approval/domain/use_case/change_leave_request_use_case.dart';
-import 'package:my_office/features/leave_approval/domain/use_case/check_leave_status_use_case.dart';
 import 'package:my_office/features/pr_dashboard/data/data_source/pr_dash_fb_data_source.dart';
 import 'package:my_office/features/pr_dashboard/domain/repository/pr_dash_repository.dart';
 import 'package:my_office/features/pr_dashboard/domain/use_case/pr_dashboard_details_use_case.dart';
@@ -310,16 +304,6 @@ Future<void> init() async {
     () => GetPrRemindersCase(prReminderRepository: sl.call()),
   );
 
-  ///CHECK LEAVE APPROVAL STATUS
-  sl.registerLazySingleton<CheckLeaveStatusCase>(
-    () => CheckLeaveStatusCase(leaveApprovalRepository: sl.call()),
-  );
-
-  ///CHANGE LEAVE REQUEST STATUS
-  sl.registerLazySingleton<ChangeLeaveRequestCase>(
-    () => ChangeLeaveRequestCase(leaveApprovalRepository: sl.call()),
-  );
-
   ///ALL STAFF NAMES
   sl.registerLazySingleton<StaffDetailCase>(
     () => StaffDetailCase(staffDetailRepository: sl.call()),
@@ -417,11 +401,6 @@ Future<void> init() async {
     () => PrReminderRepoImpl(sl.call()),
   );
 
-  ///LEAVE APPROVAL SCREEN
-  sl.registerLazySingleton<LeaveApprovalRepository>(
-    () => LeaveApprovalRepoImpl(sl.call()),
-  );
-
   ///STAFF DETAILS SCREEN
   sl.registerLazySingleton<StaffDetailRepository>(
     () => StaffDetailRepoImpl(staffDetailFbDataSource: sl.call()),
@@ -517,11 +496,6 @@ Future<void> init() async {
   ///PR REMINDER SCREEN
   sl.registerLazySingleton<PrReminderFbDataSource>(
     () => PrReminderFbDataSourceImpl(),
-  );
-
-  ///LEAVE APPROVAL SCREEN
-  sl.registerLazySingleton<LeaveApprovalFbDataSource>(
-    () => LeaveApprovalFbDataSourceImpl(),
   );
 
   ///ADD SUGGESTION SCREEN

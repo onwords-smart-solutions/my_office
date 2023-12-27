@@ -44,41 +44,43 @@ class _CreateAccountState extends State<CreateAccount> {
               child: SafeArea(
                 minimum: const EdgeInsets.only(
                     left: 10, right: 10, top: 30, bottom: 30),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.arrow_back_ios,
-                            size: 18,
-                            color: Colors.white,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(
+                              Icons.arrow_back_ios,
+                              size: 18,
+                              color: Colors.white,
+                            ),
+                            onPressed: () => Navigator.of(context).pop(),
                           ),
-                          onPressed: () => Navigator.of(context).pop(),
-                        ),
-                        const Text(
-                          'BACK',
+                          const Text(
+                            'BACK',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                              fontSize: 17,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Gap(10),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 30),
+                        child: Text(
+                          'Create new staff credentials',
                           style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 17,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 30,
                             color: Colors.white,
                           ),
-                        ),
-                      ],
-                    ),
-                    const Gap(10),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 30),
-                      child: Text(
-                        'Create new staff credentials',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 30,
-                          color: Colors.white,
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

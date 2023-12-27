@@ -1,6 +1,5 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
@@ -32,8 +31,6 @@ class _PaySlipState extends State<PaySlip> {
   ];
 
   final Map<String, String> paySlipData = {};
-
-  static const platform = MethodChannel('com.dynamicIcon');
 
   Future<void> getPaySlipsPdf(String year) async {
     setState(() {
@@ -153,53 +150,6 @@ class _PaySlipState extends State<PaySlip> {
               ),
 
               const Gap(20),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton.icon(
-                    onPressed: () async {
-                      await platform.invokeMethod('launcherfirst');
-                    },
-                    icon: const Icon(
-                      Icons.android,
-                      color: Colors.red,
-                    ),
-                    label: const Text(
-                      'One',
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  ),
-                  TextButton.icon(
-                    onPressed: () async {
-                      await platform.invokeMethod('launchersecond');
-                    },
-                    icon: const Icon(
-                      Icons.android,
-                      color: Colors.blue,
-                    ),
-                    label: const Text(
-                      'Two',
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                  ),
-                  TextButton.icon(
-                    onPressed: () async {
-                      await platform.invokeMethod('default');
-                    },
-                    icon: const Icon(
-                      Icons.restore,
-                      color: Colors.black,
-                    ),
-                    label: const Text(
-                      'Restore',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ],
-              ),
-
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [

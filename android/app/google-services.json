@@ -8,9 +8,81 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:566962550940:android:69c8bf653451834b9e5559",
+        "android_client_info": {
+          "package_name": "com.example.refreshment"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "566962550940-6nttdlogef48cg8344qtjqdpa9tksebc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCTeiCYTB_npcWKKxl-Oj0StQLTmaFOaE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "566962550940-6nttdlogef48cg8344qtjqdpa9tksebc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "566962550940-endjunsltc7nk2a0424qb37ag8efgal5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nikhil.nikhil"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:566962550940:android:0d1dbe1f448f016f9e5559",
+        "android_client_info": {
+          "package_name": "com.office.onwords"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "566962550940-6nttdlogef48cg8344qtjqdpa9tksebc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCTeiCYTB_npcWKKxl-Oj0StQLTmaFOaE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "566962550940-6nttdlogef48cg8344qtjqdpa9tksebc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "566962550940-endjunsltc7nk2a0424qb37ag8efgal5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nikhil.nikhil"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:566962550940:android:de7b887f5d7b96ab9e5559",
         "android_client_info": {
-          "package_name": "com.onwords.office"
+          "package_name": "com.office.onwords"
         }
       },
       "oauth_client": [

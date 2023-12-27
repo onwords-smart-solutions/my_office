@@ -241,61 +241,63 @@ class _StaffDetailsState extends State<StaffDetails> {
                                   },
                                 );
                               },
-                              child: Column(
-                                children: [
-                                  Text(
-                                    allStaffs[i].name,
-                                    style: TextStyle(
-                                      color: department == "APP"
-                                          ? const Color(0xff6527BE)
-                                          : department == 'RND'
-                                              ? const Color(0xff0EA293)
-                                              : department == 'MEDIA'
-                                                  ? const Color(0xffDB005B)
-                                                  : department == 'WEB'
-                                                      ? const Color(0xff9A208C)
-                                                      : department == 'PR'
-                                                          ? const Color(
-                                                              0xffF24C3D)
-                                                          : Colors.black,
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      allStaffs[i].name,
+                                      style: TextStyle(
+                                        color: department == "APP"
+                                            ? const Color(0xff6527BE)
+                                            : department == 'RND'
+                                                ? const Color(0xff0EA293)
+                                                : department == 'MEDIA'
+                                                    ? const Color(0xffDB005B)
+                                                    : department == 'WEB'
+                                                        ? const Color(0xff9A208C)
+                                                        : department == 'PR'
+                                                            ? const Color(
+                                                                0xffF24C3D)
+                                                            : Colors.black,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: size.height * 0.13,
-                                    width: size.width * 0.24,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: allStaffs[i].profileImage!.isEmpty
-                                          ? const Image(
-                                              image: AssetImage(
-                                                  'assets/profile_pic.png'),
-                                            )
-                                          : CachedNetworkImage(
-                                              imageUrl:
-                                                  allStaffs[i].profileImage!,
-                                              fit: BoxFit.cover,
-                                              progressIndicatorBuilder: (
-                                                context,
-                                                url,
-                                                downloadProgress,
-                                              ) =>
-                                                  CircularProgressIndicator(
-                                                color: AppColor.primaryColor,
-                                                strokeWidth: 2,
-                                                value:
-                                                    downloadProgress.progress,
-                                              ),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      const Image(
+                                    SizedBox(
+                                      height: size.height * 0.13,
+                                      width: size.width * 0.24,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(20),
+                                        child: allStaffs[i].profileImage!.isEmpty
+                                            ? const Image(
                                                 image: AssetImage(
-                                                  'assets/profile_pic.png',
+                                                    'assets/profile_pic.png'),
+                                              )
+                                            : CachedNetworkImage(
+                                                imageUrl:
+                                                    allStaffs[i].profileImage!,
+                                                fit: BoxFit.cover,
+                                                progressIndicatorBuilder: (
+                                                  context,
+                                                  url,
+                                                  downloadProgress,
+                                                ) =>
+                                                    CircularProgressIndicator(
+                                                  color: AppColor.primaryColor,
+                                                  strokeWidth: 2,
+                                                  value:
+                                                      downloadProgress.progress,
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        const Image(
+                                                  image: AssetImage(
+                                                    'assets/profile_pic.png',
+                                                  ),
                                                 ),
                                               ),
-                                            ),
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             );
                           },

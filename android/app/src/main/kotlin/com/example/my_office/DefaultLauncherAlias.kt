@@ -1,4 +1,4 @@
-package  com.onwords.office
+package  com.office.onwords
 
 class  DefaultLauncherAlias{
 

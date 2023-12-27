@@ -187,7 +187,7 @@ class NotificationService {
     AndroidNotificationDetails androidNotificationDetails =
         const AndroidNotificationDetails(
       'My Office', 'Refreshment',
-      groupKey: 'com.onwords.office',
+      groupKey: 'com.office.onwords',
       channelDescription: 'Notifications for refreshment reminder',
       importance: Importance.max,
       priority: Priority.high,

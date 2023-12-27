@@ -24,10 +24,12 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
 
   Widget buildExpenseDetailsScreen() {
     return Center(
-      child: Column(
-        children: [
-          buildExpenseTable(),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            buildExpenseTable(),
+          ],
+        ),
       ),
     );
   }

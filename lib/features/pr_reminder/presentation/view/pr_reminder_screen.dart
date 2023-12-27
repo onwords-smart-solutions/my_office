@@ -277,21 +277,23 @@ class _ReminderScreenState extends State<ReminderScreen> {
                   )
                 : Expanded(
                     child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Lottie.asset(
-                            'assets/animations/no_data.json',
-                            height: 300.0,
-                          ),
-                          const Text(
-                            'No reminders set😞',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Lottie.asset(
+                              'assets/animations/no_data.json',
+                              height: 300.0,
                             ),
-                          ),
-                        ],
+                            const Text(
+                              'No reminders set😞',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

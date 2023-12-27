@@ -142,7 +142,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.amber,
         scaffoldBackgroundColor: const Color(0xffEEEEEE),
-        fontFamily: 'Roboto',
+        fontFamily: 'SF Pro',
       ),
       home: const InitialScreen(),
       routes: {

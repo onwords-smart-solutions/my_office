@@ -24,10 +24,12 @@ class _IncomeDetailsState extends State<IncomeDetails> {
 
   Widget buildIncomeDetailsScreen() {
     return Center(
-      child: Column(
-        children: [
-          buildIncomeTable(),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            buildIncomeTable(),
+          ],
+        ),
       ),
     );
   }

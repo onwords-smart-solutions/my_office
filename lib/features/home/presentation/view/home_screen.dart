@@ -3,23 +3,21 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:install_plugin_v2/install_plugin_v2.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/core/utilities/constants/app_version.dart';
+import 'package:my_office/core/utilities/custom_widgets/custom_app_button.dart';
 import 'package:my_office/features/home/data/data_source/home_fb_data_source.dart';
 import 'package:my_office/features/home/data/data_source/home_fb_data_source_impl.dart';
 import 'package:my_office/features/home/data/repository/home_repo_impl.dart';
 import 'package:my_office/features/home/domain/repository/home_repository.dart';
 import 'package:my_office/features/home/presentation/provider/home_provider.dart';
 import 'package:my_office/features/home/presentation/view/account_details_screen.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/utilities/custom_widgets/custom_alerts.dart';
 import '../../../../core/utilities/custom_widgets/custom_search_delegate.dart';
 import '../../../../core/utilities/custom_widgets/custom_snack_bar.dart';
@@ -31,6 +29,12 @@ import '../../data/model/custom_punch_model.dart';
 import '../../data/model/staff_access_model.dart';
 import 'home_info_item.dart';
 import 'home_menu_item.dart';
+
+enum ScreenOrientation {
+  portraitOnly,
+  landscapeOnly,
+  rotating,
+}
 
 class UserHomeScreen extends StatefulWidget {
   const UserHomeScreen({
@@ -58,8 +62,36 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   final ValueNotifier<DateTime> _endTime = ValueNotifier(DateTime.now());
   final ValueNotifier<List<UserEntity>> _bdayStaffs = ValueNotifier([]);
 
+  void _setOrientation(ScreenOrientation orientation) {
+    List<DeviceOrientation> orientations;
+    switch (orientation) {
+      case ScreenOrientation.portraitOnly:
+        orientations = [
+          DeviceOrientation.portraitUp,
+          DeviceOrientation.portraitDown,
+        ];
+        break;
+      case ScreenOrientation.landscapeOnly:
+        orientations = [
+          DeviceOrientation.landscapeLeft,
+          DeviceOrientation.landscapeRight,
+        ];
+        break;
+      case ScreenOrientation.rotating:
+        orientations = [
+          DeviceOrientation.portraitUp,
+          DeviceOrientation.portraitDown,
+          DeviceOrientation.landscapeLeft,
+          DeviceOrientation.landscapeRight,
+        ];
+        break;
+    }
+    SystemChrome.setPreferredOrientations(orientations);
+  }
+
   @override
   void initState() {
+    // _setOrientation(ScreenOrientation.rotating);
     final context = this.context;
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
     _getInfoItemDetails();
@@ -158,18 +190,18 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   return ValueListenableBuilder(
                     valueListenable: _entryDetail,
                     builder: (ctx, staffEntry, child) {
-                        return ValueListenableBuilder(
-                          valueListenable: _endTime,
-                          builder: (ctx, endTime, child) {
-                            return InfoItem(
-                              staff: userProvider.user!,
-                              todayBirthdayList: birthdayList,
-                              quoteIndex: _motivationIndex,
-                              staffEntryDetail: staffEntry,
-                              endTime: endTime,
-                            );
-                          },
-                        );
+                      return ValueListenableBuilder(
+                        valueListenable: _endTime,
+                        builder: (ctx, endTime, child) {
+                          return InfoItem(
+                            staff: userProvider.user!,
+                            todayBirthdayList: birthdayList,
+                            quoteIndex: _motivationIndex,
+                            staffEntryDetail: staffEntry,
+                            endTime: endTime,
+                          );
+                        },
+                      );
                     },
                   );
                 },
@@ -267,7 +299,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   _getStaffAccess() async {
     BuildContext context = this.context;
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    final userProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+    final userProvider =
+        Provider.of<AuthenticationProvider>(context, listen: false);
     final response =
         await homeProvider.getStaffAccess(staff: userProvider.user!);
     if (response.isRight) {
@@ -369,11 +402,15 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       final data = await homeRepository.checkAppVersion();
       final updatedVersion = data['versionNumber'];
       final updates = data['updates'].toString();
+      final restrictApp = data['restrictApp'];
       if (AppVersion.androidAppDbVersion != updatedVersion) {
         _showUpdateAppDialog(updates);
       }
+      if (AppVersion.restrictAndroidApp == restrictApp) {
+        _showAppRestrictDialog();
+      }
     } catch (e) {
-      // Handle exception
+      Exception('Error caught while checking App version $e');
     }
   }
 
@@ -381,7 +418,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   _getInfoItemDetails() async {
     final context = this.context;
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
-    final userProvider = Provider.of<AuthenticationProvider>(context, listen: false);
+    final userProvider =
+        Provider.of<AuthenticationProvider>(context, listen: false);
     final bday = await homeProvider.getAllBirthday();
     if (bday.isRight) {
       _bdayStaffs.value = bday.right;
@@ -397,14 +435,14 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       userProvider.user!.name,
       userProvider.user!.dep,
     );
-    if(data == null){
-      _entryDetail.value =  CustomPunchModel(
+    if (data == null) {
+      _entryDetail.value = CustomPunchModel(
         staffId: userProvider.user!.uid,
         name: userProvider.user!.name,
         department: userProvider.user!.dep,
         checkInTime: null,
       );
-    }else{
+    } else {
       _entryDetail.value = data;
     }
 
@@ -447,155 +485,88 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     });
   }
 
+  //App restrict alert dialog
+  Future<void> _showAppRestrictDialog() async {
+    final user = Provider.of<AuthenticationProvider>(context, listen: false);
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return PopScope(
+          canPop: false,
+          child: AlertDialog(
+            title: const Text("App usage restricted"),
+            content: const Text(
+              "Kindly bare with this alert, App team is fixing the bug, Until then you are not able to access the app.",
+              style: TextStyle(fontSize: 16.0),
+            ),
+            actions: [
+              if(user.user!.dep == "APP")
+              AppButton(
+                child: const Text('Ignore', style: TextStyle(fontWeight: FontWeight.w500),),
+                  onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  //App update alert dialog
   Future<void> _showUpdateAppDialog(String message) async {
     final notes = message.split('/');
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        bool isUpdating = false;
-        return WillPopScope(
-          child: StatefulBuilder(
-            builder: (BuildContext context, setState) => ValueListenableBuilder(
-              valueListenable: _totalMB,
-              builder: (ctx, totalMb, child) {
-                return ValueListenableBuilder(
-                  valueListenable: _downloadedMB,
-                  builder: (ctx, downloadedMb, child) {
-                    return AlertDialog(
-                      title: isUpdating
-                          ? Text(
-                              totalMb <= 0.0
-                                  ? 'Downloading.. 0%'
-                                  : 'Downloading.. ${((downloadedMb / totalMb) * 100).round()} %',
-                              style: const TextStyle(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.deepPurple,
-                              ),
-                            )
-                          : const Text("New Update Available!!"),
-                      content: isUpdating
-                          ? Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Text(
-                                  'While prompted to update press Update',
-                                  style: TextStyle(fontSize: 15.0),
-                                ),
-                                const SizedBox(height: 20.0),
-                                LinearProgressIndicator(
-                                  minHeight: 5.0,
-                                  value: totalMb <= 0.0
-                                      ? 0.0
-                                      : (downloadedMb / totalMb),
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                                const SizedBox(height: 5.0),
-                                Align(
-                                  alignment: AlignmentDirectional.centerEnd,
-                                  child: Text(
-                                    totalMb <= 0.0
-                                        ? 'calculating'
-                                        : '${downloadedMb.round()} MB / ${totalMb.round()} MB',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 12.0,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )
-                          : message.isNotEmpty
-                              ? Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: List.generate(
-                                    notes.length,
-                                    (index) => Text(
-                                      notes[index],
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : const Text(
-                                  "You are currently using an outdated version. Update the app to use the latest features..",
-                                  style: TextStyle(fontSize: 16.0),
-                                ),
-                      actions: [
-                        isUpdating
-                            ? const SizedBox.shrink()
-                            : TextButton(
-                                onPressed: () async {
-                                  final permission = await Permission
-                                      .requestInstallPackages.isGranted;
-                                  if (permission) {
-                                    setState(() {
-                                      isUpdating = true;
-                                    });
-                                    _onClickInstallApk();
-                                  } else {
-                                    await Permission.requestInstallPackages
-                                        .request();
-                                  }
-                                },
-                                child: const Text("Update Now"),
-                              ),
-                      ],
+        return PopScope(
+          canPop: false,
+          child: AlertDialog(
+            title: const Text("New Update Available"),
+            content: message.isNotEmpty
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: List.generate(
+                      notes.length,
+                      (index) => Text(
+                        notes[index],
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  )
+                : const Text(
+                    "You are currently using an outdated version. Update the app to use the latest features..",
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+            actions: [
+              AppButton(
+                onPressed: () async {
+                  final url = Uri.parse(
+                    Platform.isIOS
+                        ? 'https://www.apple.com/in/app-store/'
+                        : "https://play.google.com/store/apps/details?id=com.office.onwords",
+                  );
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(
+                      url,
+                      mode: LaunchMode.externalNonBrowserApplication,
                     );
-                  },
-                );
-              },
-            ),
+                  } else {
+                    throw 'Could not launch $url';
+                  }
+                },
+                child: const Text("Update"),
+              ),
+            ],
           ),
-          onWillPop: () async {
-            return false;
-          },
         );
       },
     );
   }
-
-
-  Future<void> _onClickInstallApk() async {
-    final resultPath =
-    FirebaseStorage.instance.ref('MY OFFICE APK/app-release.apk');
-    final appDocDir = await getExternalStorageDirectory();
-    final String appDocPath = appDocDir!.path;
-    final File tempFile = File('$appDocPath/MY_OFFICE_UPDATED.apk');
-    try {
-      resultPath.writeToFile(tempFile).snapshotEvents.listen((event) async {
-        if (event.totalBytes != -1) {
-          _totalMB.value = bytesToMB(event.totalBytes);
-        }
-        _downloadedMB.value = bytesToMB(event.bytesTransferred);
-
-        if (_totalMB.value == _downloadedMB.value) {
-          await tempFile.create();
-          await InstallPlugin.installApk(tempFile.path, 'com.onwords.office')
-              .then((result) {})
-              .catchError((error) {
-            Navigator.of(context).pop();
-            CustomSnackBar.showErrorSnackbar(
-              message: 'Unable to update my office. Try again',
-              context: context,
-            );
-          });
-        }
-      });
-    } on FirebaseException {
-      if(!mounted) return;
-      Navigator.of(context).pop();
-      CustomSnackBar.showErrorSnackbar(
-        message: 'Unable to update my office. Try again',
-        context: context,
-      );
-    }
-  }
-
 
   @override
   void dispose() {
