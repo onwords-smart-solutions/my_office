@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:my_office/features/invoice_generator/utils/list_of_table_utils.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -153,6 +154,16 @@ class InvAndQtnPdf {
                                 "#PRO_INV_${customerDetails.docCategory}-${Utils.formatDummyDate(DateTime.now())}${documentLen.toString()}",
                                 style: const TextStyle(fontSize: 10),
                               ),
+                    SizedBox(height: 3),
+                    customerDetails.docType == 'QUOTATION' ?
+                    Text(
+                      'Valid till : ${formatDate(seventhDate)}',
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ) :
+                  SizedBox.shrink(),
                   ],
                 ),
               ),
@@ -160,6 +171,12 @@ class InvAndQtnPdf {
           ),
         ],
       );
+
+  final seventhDate = DateTime.now().add(const Duration(days: 7));
+
+  String formatDate(DateTime date) {
+    return DateFormat('yyyy-MM-dd').format(date);
+  }
 
   Widget builderQR(pw.MemoryImage img) {
     return Container(

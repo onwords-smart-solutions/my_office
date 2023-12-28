@@ -4,6 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:my_office/features/invoice_generator/data/data_source/invoice_generator_fb_data_source.dart';
 import 'package:my_office/features/invoice_generator/data/model/invoice_generator_products_model.dart';
 import 'package:my_office/features/invoice_generator/domain/repository/invoice_generator_repository.dart';
+import 'package:pdf/pdf.dart';
 
 import '../../../../core/utilities/custom_widgets/custom_pdf_utils.dart';
 import '../model/invoice_generator_model.dart';
@@ -86,13 +87,13 @@ class InvoiceGeneratorRepoImpl implements InvoiceGeneratorRepository {
   }
 
   @override
-  Future<String> uploadDocumentAndGetUrl(String path, File file) {
-    return invoiceGeneratorFbDataSource.uploadFileAndRetrieveUrl(path, file);
+  Future<String> uploadDocumentAndGetUrl({required String path, required File file}) {
+    return invoiceGeneratorFbDataSource.uploadFileAndRetrieveUrl(path: path, file: file);
   }
 
   @override
   Future<String> uploadInstallationInvoice(
-    File installationPdfFile,
+      File installationPdfFile,
     String docCategory,
     DateTime date,
     int docLen,

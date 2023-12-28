@@ -888,7 +888,10 @@ class _InvoiceGeneratorPreviewScreenState
                                     '${clientModel.docType}/${clientModel.docType == "INVOICE" ? "INV" : "PRO_INV"}${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}';
                                 var downloadUrl =
                                     await invoiceGeneratorRepository
-                                        .uploadDocumentAndGetUrl(path, pdfFile);
+                                        .uploadDocumentAndGetUrl(
+                                        path: path,
+                                        file: pdfFile,
+                                    );
 
                                 /// INSTALLATION-INVOICE......
                                 final installationPdfFile =

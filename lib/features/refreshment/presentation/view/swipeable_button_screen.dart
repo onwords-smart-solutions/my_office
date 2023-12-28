@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 import 'package:page_transition/page_transition.dart';
@@ -171,7 +170,7 @@ class _SwipeableButtonState extends State<SwipeableButton> {
             if (isFoodBooked) {
               status = false;
               CustomSnackBar.showErrorSnackbar(
-                message: 'You have already ordered your Food',
+                message: 'You have already ordered your food',
                 context: context,
               );
             } else {
@@ -229,19 +228,11 @@ class _SwipeableButtonState extends State<SwipeableButton> {
             isTeaOrdered = teaList.containsValue(widget.name);
             teaCount = refreshmentDetails['tea_count'];
           }
-          if(isTeaOrdered && item == 'Tea'){
-            errorMessage ='You have already ordered your Tea';
-            status = false;
-          }
 
           //Checking for already ordered Coffee or not
           if (coffeeList.isNotEmpty) {
             isCoffeeOrdered = coffeeList.containsValue(widget.name);
             coffeeCount = refreshmentDetails['coffee_count'];
-          }
-          if(isCoffeeOrdered && item == 'Coffee'){
-            errorMessage ='You have already ordered your Coffee';
-            status = false;
           }
 
           //Checking for already ordered milk or not
@@ -249,8 +240,10 @@ class _SwipeableButtonState extends State<SwipeableButton> {
             isMilkOrdered = milkList.containsValue(widget.name);
             milkCount = refreshmentDetails['milk_count'];
           }
-          if(isMilkOrdered && item == 'Milk'){
-            errorMessage ='You have already ordered your Milk';
+
+          //Only 1 refreshment per user tea/coffee/milk
+          if(isTeaOrdered || isCoffeeOrdered || isMilkOrdered){
+            errorMessage ='You have already ordered your refreshment';
             status = false;
           }
 

@@ -574,8 +574,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     _totalMB.dispose();
     _downloadedMB.dispose();
     _haveNetwork.dispose();
-    _endTime.dispose();
-    _entryDetail.dispose();
     _bdayStaffs.dispose();
     subscription.cancel();
     super.dispose();

@@ -82,8 +82,8 @@ As, I have mentioned above this project is structured with Clean architecture pr
 
 ### Version history and Releases
 
-* Android : 3.0.1+10 - New version for Google play store.
-* iOS : 2.0.12+87. 
+* Android : 3.0.2+11 - Updated Refreshment preferences and Modified Quotation pdf with Valid till date
+* iOS : 2.1.7. 
 
 
 

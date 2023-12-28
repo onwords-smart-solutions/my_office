@@ -26,8 +26,8 @@ class InvoiceGeneratorFbDataSourceImpl implements InvoiceGeneratorFbDataSource{
   }
 
   @override
-  Future<String> uploadFileAndRetrieveUrl(String path, File file) async {
-    var snapshot = await storageRef.child(path).putFile(file);
+  Future<String> uploadFileAndRetrieveUrl({required String path, required File file}) async {
+    var snapshot = await storageRef.child(path).putFile(file, SettableMetadata(contentType: 'application/pdf'));
     var downloadUrl = await snapshot.ref.getDownloadURL();
     return downloadUrl;
   }
@@ -36,7 +36,7 @@ class InvoiceGeneratorFbDataSourceImpl implements InvoiceGeneratorFbDataSource{
   Future<String> uploadInstallationInvoice(File installationPdfFile, String docCategory, DateTime date, int docLen) async {
     var snapshot = await storageRef
         .child('INSTALLATION-INVOICE/INV$docCategory-${Utils.formatDummyDate(date)}$docLen')
-        .putFile(installationPdfFile);
+        .putFile(installationPdfFile, SettableMetadata(contentType: 'application/pdf'));
     return await snapshot.ref.getDownloadURL();
   }
 
@@ -56,7 +56,7 @@ class InvoiceGeneratorFbDataSourceImpl implements InvoiceGeneratorFbDataSource{
   Future<String> uploadQuotationFile(File pdfFile, String docCategory, DateTime date, int docLen) async {
     var snapshot = await storageRef
         .child('QUOTATION/EST$docCategory-${Utils.formatDummyDate(date)}$docLen')
-        .putFile(pdfFile);
+        .putFile(pdfFile, SettableMetadata(contentType: 'application/pdf'));
     return await snapshot.ref.getDownloadURL();
   }
 
