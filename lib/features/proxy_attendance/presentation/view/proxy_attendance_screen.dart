@@ -355,7 +355,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
               padding: const EdgeInsets.all(8.0),
               child: ChoiceChip(
                 label: Text(_choiceChipsList[i].label),
-                labelStyle: const TextStyle(color: Colors.white),
+                labelStyle: const TextStyle(),
                 backgroundColor: _choiceChipsList[i].color,
                 selected: _selectedIndex == i,
                 selectedColor: Colors.purple,

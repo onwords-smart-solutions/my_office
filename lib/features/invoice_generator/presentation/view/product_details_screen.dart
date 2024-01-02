@@ -97,16 +97,13 @@ class _ProductDetailsState extends State<ProductDetails> {
           'Product Details',
           style: TextStyle(
             fontSize: 22,
-            color: Colors.white,
           ),
         ),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: AppColor.primaryColor,
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios_new,
-            color: Colors.white,
           ),
           onPressed: () {
             Navigator.pop(context);
@@ -169,7 +166,7 @@ class _ProductDetailsState extends State<ProductDetails> {
     return Container(
       margin: EdgeInsets.only(top: height * 0.25),
       child: AppButton(
-        child: const Text('Add Product'),
+        child: Text('Add Product', style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w500),),
         onPressed: () {
           if (formKey.currentState!.validate()) {
             // minPriceList.add(int.parse(itemQtyController.text) *
@@ -228,8 +225,9 @@ class _ProductDetailsState extends State<ProductDetails> {
             children: [
               Text(
                 isManualEntry ? '  Enter Product Name\n' : '  Select Product\n',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 17,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
               isManualEntry
@@ -239,9 +237,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                       textInputType: TextInputType.name,
                       textInputAction: TextInputAction.next,
                       hintName: 'Product Name',
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.currency_rupee_rounded,
-                        color: Colors.black,
+                        color: Theme.of(context).primaryColor,
                       ),
                       maxLength: 1000,
                       validator: (value) {
@@ -250,44 +248,45 @@ class _ProductDetailsState extends State<ProductDetails> {
                         }
                         return null;
                       },
-                    ).textInputField()
+                    ).textInputField(context)
                   : Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       height: height * .08,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(
-                          color: Colors.black.withOpacity(0.3),
-                          width: 2,
-                        ),
+                        color: Theme.of(context).primaryColor.withOpacity(.1),
                       ),
                       alignment: Alignment.bottomCenter,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(20),
                         child: DropDownTextField(
                           // initialValue: "name4",
+                          dropdownColor: Theme.of(context).scaffoldBackgroundColor,
                           controller: itemNameController,
-                          textStyle: const TextStyle(
+                          textStyle: TextStyle(
                             fontWeight: FontWeight.w500,
+                            color: Theme.of(context).primaryColor,
                           ),
                           clearOption: true,
                           enableSearch: true,
                           dropDownIconProperty: IconProperty(
                             icon: Icons.arrow_drop_down,
-                            color: Colors.black,
+                            color: Theme.of(context).primaryColor,
                           ),
                           clearIconProperty: IconProperty(
-                            color: Colors.black,
+                            color: Theme.of(context).primaryColor,
                             icon: Icons.clear,
                           ),
                           // dropdownColor: Colors.orange,
-                          searchDecoration: const InputDecoration(
+                          searchDecoration: InputDecoration(
                             hintText: "Select Product",
-                            hintStyle: TextStyle(),
+                            hintStyle: TextStyle(
+                              color: Theme.of(context).primaryColor.withOpacity(.5),
+                            ),
                           ),
-
-                          listTextStyle: const TextStyle(
+                          listTextStyle: TextStyle(
                             fontSize: 16,
+                            color: Theme.of(context).primaryColor,
                           ),
                           validator: (value) {
                             if (value == null) {
@@ -321,9 +320,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                   textInputType: TextInputType.number,
                   textInputAction: TextInputAction.next,
                   hintName: 'Product Price',
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.currency_rupee_rounded,
-                    color: Colors.black,
+                    color: Theme.of(context).primaryColor,
                   ),
                   maxLength: 20,
                   validator: (value) {
@@ -332,7 +331,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     }
                     return null;
                   },
-                ).textInputField(),
+                ).textInputField(context),
               ),
 
               ///QUANTITY FILED
@@ -343,7 +342,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   textInputType: TextInputType.number,
                   textInputAction: TextInputAction.done,
                   hintName: 'Quantity',
-                  icon: const Icon(Icons.numbers, color: Colors.black),
+                  icon: Icon(Icons.numbers, color: Theme.of(context).primaryColor,),
                   maxLength: 20,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -351,7 +350,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     }
                     return null;
                   },
-                ).textInputField(),
+                ).textInputField(context),
               ),
             ],
           ),

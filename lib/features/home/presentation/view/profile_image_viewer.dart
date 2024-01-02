@@ -14,18 +14,16 @@ class ProfileImageViewer extends StatelessWidget {
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
       extendBodyBehindAppBar: true,
-      backgroundColor: const Color(0xff252525),
       appBar: AppBar(
         backgroundColor: const Color(0xff252525).withOpacity(.8),
         title: Text(
           name,
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(),
         ),
         centerTitle: true,
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          color: Colors.white,
           splashRadius: 20.0,
         ),
       ),

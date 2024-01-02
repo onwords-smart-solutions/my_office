@@ -163,14 +163,12 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(
             Icons.arrow_back_ios_rounded,
-            color: Colors.white,
           ),
           splashRadius: 20.0,
         ),
         title: Text(
           widget.customerInfo['name'].toString(),
           style: const TextStyle(
-            color: Colors.white,
             fontSize: 18.0,
           ),
         ),
@@ -184,7 +182,6 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
             },
             icon: const Icon(
               CupertinoIcons.bag_fill_badge_plus,
-              color: Colors.white,
               size: 30,
             ),
           ),

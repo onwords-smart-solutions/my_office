@@ -101,7 +101,6 @@ class _PhoneNumberScreenState extends State<PhoneNumberScreen> {
                     width: 30.0,
                     height: 30.0,
                     child: CircularProgressIndicator(
-                      color: Colors.white,
                       strokeWidth: 2.0,
                     ),
                   ),

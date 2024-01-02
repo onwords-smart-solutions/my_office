@@ -83,7 +83,6 @@ class _NoteItemState extends State<NoteItem> {
         boxShadow: [
           BoxShadow(color: Colors.black.withOpacity(.3), blurRadius: 5.0),
         ],
-        color: Colors.white,
       ),
       child: Column(
         children: [

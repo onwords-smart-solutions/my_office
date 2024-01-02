@@ -22,6 +22,7 @@ import 'package:my_office/features/auth/presentation/view/phone_number_screen.da
 import 'package:my_office/features/auth/presentation/view/birthday_picker_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'core/config/theme.dart';
 import 'features/auth/data/data_source/auth_fb_data_souce_impl.dart';
 import 'features/auth/data/data_source/auth_fb_data_source.dart';
 import 'features/auth/data/data_source/auth_local_data_source.dart';
@@ -36,6 +37,7 @@ import 'features/invoice_generator/presentation/provider/invoice_generator_provi
 import 'features/invoice_generator/presentation/view/client_details_screen.dart';
 import 'features/notifications/presentation/notification_view_model.dart';
 import 'features/quotation_template/presentation/provider/invoice_provider.dart';
+import 'features/theme/presentation/provider/theme_provider.dart';
 
 /// version: 1.1.3+16 Updated On (14/03/2023)
 
@@ -93,6 +95,9 @@ Future<void> main() async {
           ChangeNotifierProvider<FeedbackButtonProvider>(
             create: (_) => di.sl<FeedbackButtonProvider>(),
           ),
+          ChangeNotifierProvider<ThemeProvider>(
+            create: (_) => di.sl<ThemeProvider>(),
+          ),
         ],
         child: const MyApp(),
       ),
@@ -144,19 +149,21 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: navigationKey,
-      title: 'My Office',
-      theme: ThemeData(
-        primarySwatch: Colors.amber,
-        scaffoldBackgroundColor: const Color(0xffEEEEEE),
-        fontFamily: 'SF Pro',
-      ),
-      home: const InitialScreen(),
-      routes: {
-        //   '/visitResume': (_) => const VisitFromScreen(),
-        '/invoiceGenerator': (_) => const ClientDetails(),
-      },
+    return Consumer<ThemeProvider>(
+      builder: (ctx, themeProvider, child){
+       return MaterialApp(
+          navigatorKey: navigationKey,
+          title: 'My Office',
+          darkTheme: AppTheme.darkTheme,
+          theme: AppTheme.lightTheme,
+          themeMode: themeProvider.themeMode,
+          home: const InitialScreen(),
+          routes: {
+            //   '/visitResume': (_) => const VisitFromScreen(),
+            '/invoiceGenerator': (_) => const ClientDetails(),
+          },
+        );
+      }
     );
   }
 }
@@ -246,7 +253,9 @@ class Loading extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Lottie.asset('assets/animations/new_loading.json'),
+          Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ?
+          Lottie.asset('assets/animations/loading_light_theme.json'):
+              Lottie.asset('assets/animations/loading_dark_theme.json'),
           ValueListenableBuilder(
             valueListenable: isShown,
             builder: (ctx, isVisible, child) {
@@ -266,7 +275,6 @@ class Loading extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.deepPurple,
-                foregroundColor: Colors.white,
               ),
               child: const Text('Reset session'),
             ),

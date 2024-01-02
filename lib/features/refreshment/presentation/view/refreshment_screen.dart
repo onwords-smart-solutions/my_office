@@ -74,11 +74,9 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
                     leading: IconButton.filled(
                       onPressed: () => Navigator.of(context).pop(),
                       style: IconButton.styleFrom(
-                        backgroundColor: Colors.white,
                         foregroundColor: Colors.deepPurple,
                       ),
                       icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                      color: Colors.white,
                     ),
                     elevation: 0,
                     pinned: true,
@@ -96,14 +94,12 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
                           );
                         },
                         style: IconButton.styleFrom(
-                          backgroundColor: Colors.white,
                           foregroundColor: Colors.deepPurple,
                         ),
                         icon: Image.asset(
                           'assets/count.png',
                           scale: 6.0,
                         ),
-                        color: Colors.white,
                       ),
                     ],
                   ),

@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:my_office/core/utilities/constants/app_color.dart';
 import 'package:my_office/features/attendance/data/data_source/attendance_fb_data_source.dart';
 import 'package:my_office/features/attendance/data/data_source/attendance_fb_data_source_impl.dart';
 import 'package:my_office/features/attendance/data/model/punch_model.dart';
@@ -10,6 +10,7 @@ import 'package:my_office/features/attendance/data/repository/attendance_repo_im
 import 'package:my_office/features/attendance/domain/repository/attendance_repository.dart';
 import 'package:my_office/features/attendance/presentation/view_model/attendance_punch_screen.dart';
 import 'package:pdf/pdf.dart';
+import '../../../../core/utilities/constants/app_color.dart';
 import '../../../../core/utilities/constants/app_main_template.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -126,7 +127,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: _punchingTimeBody(),
       ),
-      bgColor: AppColor.backGroundColor,
+      bgColor: Theme.of(context).scaffoldBackgroundColor,
     );
   }
 
@@ -137,26 +138,28 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           valueListenable: _isLoading,
           builder: (ctx, isLoading, child) {
             return isLoading
-                ? const Column(
+                ?  Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         'Fetching data',
                         style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 18.0,
                         ),
                       ),
-                      SizedBox(height: 5.0),
+                      const SizedBox(height: 5.0),
                       CircleAvatar(
                         child: SizedBox(
                           height: 20.0,
                           width: 20.0,
                           child: CircularProgressIndicator(
+                            color: Theme.of(context).scaffoldBackgroundColor,
                             strokeWidth: 2.0,
                           ),
                         ),
                       ),
+                      const Gap(7),
                     ],
                   )
                 : Column(
@@ -173,8 +176,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                             builder: (ctx, date, child) {
                               return TextButton.icon(
                                 onPressed: _showDatePicker,
-                                icon: const Icon(Icons.calendar_month_rounded),
-                                label: Text(formatDate(date)),
+                                icon: Icon(Icons.calendar_month_rounded, color: Theme.of(context).primaryColor,),
+                                label: Text(formatDate(date), style: TextStyle(color: Theme.of(context).primaryColor,),),
                               );
                             },
                           ),
@@ -200,6 +203,8 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 20.0),
                             child: PopupMenuButton(
+                              surfaceTintColor: Colors.transparent,
+                              color: Theme.of(context).scaffoldBackgroundColor.withOpacity(1),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -211,7 +216,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                   return PopupMenuItem(
                                     child: Text(
                                       _dropDown[i],
-                                      style: const TextStyle(fontSize: 16),
+                                      style: TextStyle(fontSize: 16, color: Theme.of(context).primaryColor,),
                                     ),
                                     onTap: () {
                                       _sortOption.value = _dropDown[i];
@@ -376,7 +381,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  const Icon(CupertinoIcons.sort_down),
+                                  Icon(CupertinoIcons.sort_down, color: Theme.of(context).primaryColor,),
                                   ValueListenableBuilder(
                                     valueListenable: _sortOption,
                                     builder: (ctx, sort, child) {
@@ -428,21 +433,21 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             padding: const EdgeInsets.all(10.0),
             style: TextStyle(
               fontWeight: FontWeight.w500,
-              color: AppColor.primaryColor,
+              color: Theme.of(context).primaryColor,
             ),
-            suffixIcon: const Icon(
+            suffixIcon: Icon(
               CupertinoIcons.xmark_circle_fill,
-              color: Colors.grey,
+              color: Theme.of(context).primaryColor,
             ),
             prefixIcon: Icon(
               Icons.search_rounded,
-              color: AppColor.primaryColor,
+              color: Theme.of(context).primaryColor,
             ),
           ),
         ),
         IconButton(
           onPressed: _printScreen,
-          icon: const Icon(Icons.print_rounded),
+          icon: Icon(Icons.print_rounded, color: Theme.of(context).primaryColor,),
         ),
       ],
     );
@@ -461,7 +466,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                 return (loading && punchingList.isEmpty)
                     ? Center(
                         child:
-                            Lottie.asset('assets/animations/new_loading.json'),
+                        Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ?
+                        Lottie.asset('assets/animations/loading_light_theme.json'):
+                        Lottie.asset('assets/animations/loading_dark_theme.json'),
                       )
                     : ValueListenableBuilder(
                         valueListenable: _sortedList,

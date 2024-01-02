@@ -106,7 +106,6 @@ class _AddNotesState extends State<AddNotes> {
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(
             Icons.arrow_back_ios_rounded,
-            color: Colors.white,
           ),
           splashRadius: 20.0,
         ),
@@ -114,7 +113,6 @@ class _AddNotesState extends State<AddNotes> {
         title: const Text(
           'Notes and Audio',
           style: TextStyle(
-            color: Colors.white,
             fontSize: 18,
             fontWeight: FontWeight.w500,
           ),

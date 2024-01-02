@@ -778,7 +778,6 @@ class _PointViewState extends State<PointView> {
             Text(
               'You have got',
               style: TextStyle(
-                color: Colors.white,
                 fontSize: height * 0.05,
               ),
             ),
@@ -792,7 +791,6 @@ class _PointViewState extends State<PointView> {
             Text(
               'points👍',
               style: TextStyle(
-                color: Colors.white,
                 fontSize: height * 0.05,
               ),
             ),

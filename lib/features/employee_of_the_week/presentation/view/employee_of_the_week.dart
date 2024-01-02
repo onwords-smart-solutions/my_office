@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:my_office/core/utilities/custom_widgets/custom_app_button.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_snack_bar.dart';
 import 'package:my_office/core/utilities/response/error_response.dart';
 import 'package:my_office/features/employee_of_the_week/data/data_source/employee_fb_data_source.dart';
@@ -10,7 +11,6 @@ import 'package:my_office/features/employee_of_the_week/domain/repository/employ
 import 'package:my_office/features/employee_of_the_week/domain/use_case/update_pr_name_reason_use_case.dart';
 import 'package:my_office/features/employee_of_the_week/presentation/provider/employee_of_the_week_provider.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/utilities/constants/app_color.dart';
 import '../../../../core/utilities/constants/app_main_template.dart';
 import '../../data/model/employee_model.dart';
 
@@ -38,25 +38,25 @@ class _BestEmployeeState extends State<BestEmployee> {
 
   Future<void> updatePrNameReason() async {
     final provider = Provider.of<EmployeeProvider>(context, listen: false);
-    var selectedEmployee = provider.staff.firstWhere((element) => element.name == selectedStaff!.name);
+    var selectedEmployee = provider.staff
+        .firstWhere((element) => element.name == selectedStaff!.name);
 
-    if (selectedEmployee.uid.isEmpty ||selectedEmployee.uid == 'None') {
+    if (selectedEmployee.uid.isEmpty || selectedEmployee.uid == 'None') {
       updatePrNameReasonCase.execute('', '');
       CustomSnackBar.showSuccessSnackbar(
         message: 'Employee details has been set to None!',
         context: context,
       );
       Navigator.pop(context);
-    }else if(reason.text.isEmpty){
+    } else if (reason.text.isEmpty) {
       CustomSnackBar.showErrorSnackbar(
         message: 'Enter all employee details!',
         context: context,
       );
-    }
-    else {
-      try{
+    } else {
+      try {
         updatePrNameReasonCase.execute(selectedEmployee.uid, reason.text);
-      }catch(e){
+      } catch (e) {
         ErrorResponse(
           error: 'Error caught while updating Best employee details',
           metaInfo: 'Catch triggered while updating Best employee details',
@@ -81,8 +81,9 @@ class _BestEmployeeState extends State<BestEmployee> {
   @override
   Widget build(BuildContext context) {
     return MainTemplate(
+      subtitle: 'Best Employee',
       templateBody: buildBestEmployeeDetail(),
-      bgColor: AppColor.backGroundColor,
+      bgColor: Theme.of(context).scaffoldBackgroundColor,
     );
   }
 
@@ -93,9 +94,9 @@ class _BestEmployeeState extends State<BestEmployee> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
-            child: Lottie.asset(
-              'assets/animations/new_loading.json',
-            ),
+            child:  Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ?
+            Lottie.asset('assets/animations/loading_light_theme.json'):
+            Lottie.asset('assets/animations/loading_dark_theme.json'),
           );
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
@@ -104,7 +105,7 @@ class _BestEmployeeState extends State<BestEmployee> {
               .map(
                 (staff) => DropdownMenuItem<EmployeeModel>(
                   value: staff,
-                  child: Text(staff.name),
+                  child: Text(staff.name, style: TextStyle(color: Theme.of(context).primaryColor),),
                   // Additional styling if needed
                 ),
               )
@@ -120,7 +121,6 @@ class _BestEmployeeState extends State<BestEmployee> {
                       'Employee of the week details'.toUpperCase(),
                       style: const TextStyle(
                         fontWeight: FontWeight.w700,
-                        color: Colors.deepPurple,
                         fontSize: 17,
                       ),
                     ),
@@ -152,21 +152,15 @@ class _BestEmployeeState extends State<BestEmployee> {
                             width: 2,
                           ),
                         ),
-                        labelStyle: const TextStyle(
+                        labelStyle: TextStyle(
                           fontWeight: FontWeight.w500,
+                          color: Theme.of(context).primaryColor,
                         ),
                         contentPadding: const EdgeInsets.all(15),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
                           borderSide: const BorderSide(
                             color: CupertinoColors.systemGrey,
-                            width: 2,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: const BorderSide(
-                            color: CupertinoColors.systemPurple,
                             width: 2,
                           ),
                         ),
@@ -179,48 +173,43 @@ class _BestEmployeeState extends State<BestEmployee> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  if(showReasonField)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: TextField(
-                      style: const TextStyle(),
-                      textCapitalization: TextCapitalization.sentences,
-                      textInputAction: TextInputAction.done,
-                      controller: reason,
-                      maxLines: 2,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
+                  if (showReasonField)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: TextField(
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
                         ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: const BorderSide(
-                            color: CupertinoColors.systemGrey,
-                            width: 2,
+                        textCapitalization: TextCapitalization.sentences,
+                        textInputAction: TextInputAction.done,
+                        controller: reason,
+                        maxLines: 2,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: const BorderSide(
-                            color: CupertinoColors.systemPurple,
-                            width: 2,
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: const BorderSide(
+                              color: CupertinoColors.systemGrey,
+                              width: 2,
+                            ),
                           ),
-                        ),
-                        hintText: 'Reason',
-                        hintStyle: TextStyle(
-                          color: Colors.grey.withOpacity(0.8),
+                          hintText: 'Reason',
+                          hintStyle: TextStyle(
+                            color: Colors.grey.withOpacity(0.8),
+                          ),
                         ),
                       ),
                     ),
-                  ),
                   const SizedBox(height: 40),
-                  ElevatedButton(
+                  AppButton(
                     onPressed: updatePrNameReason,
-                    child: const Text(
+                    child: Text(
                       'Update',
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
-                        fontSize: 17,
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                   ),

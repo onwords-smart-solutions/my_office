@@ -6,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/core/utilities/constants/app_version.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_app_button.dart';
@@ -115,8 +116,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             ? const Text('No user found!')
             : Scaffold(
                 appBar: AppBar(
-                  surfaceTintColor: Colors.white,
-                  backgroundColor: Colors.white,
                   leading: GestureDetector(
                     onTap: () {
                       HapticFeedback.mediumImpact();
@@ -153,11 +152,18 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
+                      Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ?
                       Image.asset(
-                        'assets/onwords.png',
+                        'assets/images/onwords_light.png',
+                        height: 14,
+                        fit: BoxFit.cover,
+                      ):
+                      Image.asset(
+                        'assets/images/onwords_dark.png',
                         height: 14,
                         fit: BoxFit.cover,
                       ),
+                      const Gap(2),
                       Text(
                         'Hello, ${userProvider.user!.name}',
                         style: const TextStyle(
@@ -206,14 +212,13 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   );
                 },
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
                 child: Text(
                   'Utilities',
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 20.0,
-                    color: Colors.black38.withOpacity(.7),
                   ),
                 ),
               ),
@@ -221,10 +226,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 valueListenable: _staffAccess,
                 builder: (ctx, staffAccess, child) {
                   return staffAccess.isEmpty
-                      ? Lottie.asset(
-                          'assets/animations/new_loading.json',
-                          height: size.height * .6,
-                        )
+                      ?  Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ?
+                  Lottie.asset('assets/animations/loading_light_theme.json'):
+                  Lottie.asset('assets/animations/loading_dark_theme.json')
                       : Consumer<AuthenticationProvider>(
                           builder: (ctx, userProvider, child) {
                             return GridView.builder(
@@ -260,7 +264,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   Widget _search(Size size, AuthenticationProvider userProvider) {
     return Container(
       padding: const EdgeInsets.all(20.0),
-      color: Colors.white,
       child: TextField(
         onTap: () {
           HapticFeedback.mediumImpact();
@@ -274,14 +277,14 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         },
         readOnly: true,
         decoration: InputDecoration(
-          suffixIcon: const Icon(CupertinoIcons.search, color: Colors.grey),
+          suffixIcon: Icon(CupertinoIcons.search,color: Theme.of(context).primaryColor,),
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
           filled: true,
-          fillColor: Theme.of(context).scaffoldBackgroundColor,
+          fillColor: Colors.grey.withOpacity(.3),
           hintText: 'Search',
           hintStyle:
-              const TextStyle(fontWeight: FontWeight.w500, color: Colors.grey),
+          TextStyle(fontWeight: FontWeight.w500, color: Theme.of(context).primaryColor),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15.0),
             borderSide: BorderSide.none,

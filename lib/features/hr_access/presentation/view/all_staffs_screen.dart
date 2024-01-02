@@ -169,7 +169,6 @@ class _AllStaffsState extends State<AllStaffs> {
                           borderRadius: BorderRadius.circular(5),
                         ),
                         elevation: 5,
-                        color: Colors.white,
                         child: ListTile(
                           leading: Container(
                             width: 40.0,

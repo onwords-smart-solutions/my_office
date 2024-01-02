@@ -255,13 +255,11 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                       children: [
                         Icon(
                           Icons.save,
-                          color: Colors.white,
                         ),
                         Text(
                           'Save',
                           style: TextStyle(
                             fontSize: 18,
-                            color: Colors.white,
                           ),
                         ),
                       ],
@@ -340,7 +338,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                       }
                                       return null;
                                     },
-                                  ).textInputField(),
+                                  ).textInputField(context),
                                   addDataToListController,
                                   extraDevice,
                                 );
@@ -445,7 +443,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                               child: Text(
                                 'No Device Added',
                                 style:
-                                    TextStyle(color: Colors.black, fontSize: 17),
+                                    TextStyle(fontSize: 17),
                               ),
                             ),
                     ),
@@ -527,7 +525,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                       }
                                       return null;
                                     },
-                                  ).textInputField(),
+                                  ).textInputField(context),
                                   addDataToListController,
                                   teamMembersName,
                                 );
@@ -633,7 +631,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                               child: Text(
                                 'No Members Added',
                                 style:
-                                    TextStyle(color: Colors.black, fontSize: 17),
+                                    TextStyle( fontSize: 17),
                               ),
                             ),
                     ),
@@ -748,7 +746,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                           hintName: 'Product Name',
                                           icon: const Icon(Icons.person_2),
                                           maxLength: 100,
-                                        ).textInputField(),
+                                        ).textInputField(context),
                                         SizedBox(height: size.height * 0.01),
 
                                         CustomTextField(
@@ -758,7 +756,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                           hintName: 'Quantity',
                                           icon: const Icon(Icons.person_2),
                                           maxLength: 3,
-                                        ).textInputField(),
+                                        ).textInputField(context),
                                         SizedBox(height: size.height * 0.01),
 
                                         ActionChip(
@@ -835,7 +833,6 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                       // padding: const EdgeInsets.all(20.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Colors.white70,
                       ),
                       child: SingleChildScrollView(
                         child: Column(
@@ -1010,7 +1007,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                     }
                                     return null;
                                   },
-                                ).textInputField(),
+                                ).textInputField(context),
                                 addDataToListController,
                                 lightBoard8ChannelDetails,
                               );
@@ -1198,7 +1195,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                     }
                                     return null;
                                   },
-                                ).textInputField(),
+                                ).textInputField(context),
                                 addDataToListController,
                                 lightBoard4ChannelDetails,
                               );
@@ -1355,7 +1352,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                       }
                       return null;
                     },
-                  ).textInputField(),
+                  ).textInputField(context),
                 ),
                 SizedBox(
                   width: size.width * 0.02,
@@ -1376,7 +1373,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                       }
                       return null;
                     },
-                  ).textInputField(),
+                  ).textInputField(context),
                 ),
               ],
             ),
@@ -1399,7 +1396,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputField(),
+            ).textInputField(context),
 
             ////Gate and App
             textWithDropDown(
@@ -1724,7 +1721,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputField(),
+            ).textInputField(context),
 
             ///Router Password
             CustomTextField(
@@ -1740,7 +1737,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputField(),
+            ).textInputField(context),
 
             /// Wifi Name
             CustomTextField(
@@ -1756,7 +1753,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputField(),
+            ).textInputField(context),
 
             ///Wif Password
             CustomTextField(
@@ -1772,7 +1769,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputField(),
+            ).textInputField(context),
           ],
         ),
       ),
@@ -1813,7 +1810,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputField(),
+            ).textInputField(context),
 
             ///Local IP
             CustomTextField(
@@ -1829,7 +1826,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputField(),
+            ).textInputField(context),
 
             /// Static IP
             CustomTextField(
@@ -1845,7 +1842,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputField(),
+            ).textInputField(context),
 
             /// Server port
             CustomTextField(
@@ -1861,7 +1858,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputField(),
+            ).textInputField(context),
 
             textWithDropDown(
               'Port Forwarding',
@@ -1983,7 +1980,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   }
                   return null;
                 },
-              ).textInputField(),
+              ).textInputField(context),
 
             ///Voice Config Password
             if (voiceConfig == 'Yes')
@@ -2000,7 +1997,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   }
                   return null;
                 },
-              ).textInputField(),
+              ).textInputField(context),
 
             textWithDropDown(
               'B_S_N_L',
@@ -2071,7 +2068,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   }
                   return null;
                 },
-              ).textInputField(),
+              ).textInputField(context),
 
             ///bSNL Password
             if (bSNL == 'Yes')
@@ -2088,7 +2085,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   }
                   return null;
                 },
-              ).textInputField(),
+              ).textInputField(context),
           ],
         ),
       ),
@@ -2136,7 +2133,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         }
                         return null;
                       },
-                    ).textInputField(),
+                    ).textInputField(context),
                   ),
                 ),
                 SizedBox(
@@ -2161,7 +2158,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         }
                         return null;
                       },
-                    ).textInputField(),
+                    ).textInputField(context),
                   ),
                 ),
               ],
@@ -2187,7 +2184,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         }
                         return null;
                       },
-                    ).textInputField(),
+                    ).textInputField(context),
                   ),
                 ),
                 SizedBox(
@@ -2212,7 +2209,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         }
                         return null;
                       },
-                    ).textInputField(),
+                    ).textInputField(context),
                   ),
                 ),
               ],
@@ -2257,7 +2254,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputField(),
+            ).textInputField(context),
 
             ///Client Id
             CustomTextField(
@@ -2273,7 +2270,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputField(),
+            ).textInputField(context),
 
             ///Phone Number
             CustomTextField(
@@ -2291,7 +2288,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputField(),
+            ).textInputField(context),
 
             /// Email
             CustomTextField(
@@ -2307,7 +2304,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               //   }
               //   return null;
               // },
-            ).textInputField(),
+            ).textInputField(context),
 
             ///Address
             CustomTextField(
@@ -2323,7 +2320,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 }
                 return null;
               },
-            ).textInputField(),
+            ).textInputField(context),
             SizedBox(height: size.height * 0.01),
 
             Container(
@@ -2336,7 +2333,6 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 textInputAction: TextInputAction.done,
                 maxLength: 15,
                 readOnly: true,
-                style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(
                   counterText: '',
                   hintText: 'Installation Date',
@@ -2633,7 +2629,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                       }
                       return null;
                     },
-                  ).textInputField(),
+                  ).textInputField(context),
 
                   ///Password
                   CustomTextField(
@@ -2649,7 +2645,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                       }
                       return null;
                     },
-                  ).textInputField(),
+                  ).textInputField(context),
                 ],
               )
             else
@@ -2670,7 +2666,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   }
                   return null;
                 },
-              ).textInputField(),
+              ).textInputField(context),
           ],
         ),
       ),

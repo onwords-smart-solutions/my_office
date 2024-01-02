@@ -239,7 +239,6 @@ class _CreateNewProductState extends State<CreateNewProduct> {
             textInputAction: textInputAction,
             keyboardType: textInputType,
             controller: controller,
-            style: const TextStyle(color: Colors.black),
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(8),
               border: InputBorder.none,

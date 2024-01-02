@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
-import '../../../../core/utilities/constants/app_color.dart';
 import '../../../../core/utilities/custom_widgets/custom_app_button.dart';
 import '../../../../core/utilities/custom_widgets/custom_text_field.dart';
 import '../../data/model/invoice_generator_model.dart';
@@ -54,16 +54,13 @@ class _ClientDetailsState extends State<ClientDetails> {
             'Client Details',
             style: TextStyle(
               fontSize: 22,
-              color: Colors.white,
             ),
           ),
           centerTitle: true,
           elevation: 0,
-          backgroundColor: AppColor.primaryColor,
           leading: IconButton(
             icon: const Icon(
               Icons.arrow_back_ios_new,
-              color: Colors.white,
             ),
             onPressed: () {
               Provider.of<InvoiceGeneratorProvider>(context, listen: false)
@@ -81,7 +78,7 @@ class _ClientDetailsState extends State<ClientDetails> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(top: 30),
+                    margin: const EdgeInsets.only(top: 20),
                     height: 560,
                     child: SingleChildScrollView(
                       child: Column(
@@ -95,7 +92,7 @@ class _ClientDetailsState extends State<ClientDetails> {
                             textInputType: TextInputType.name,
                             textInputAction: TextInputAction.next,
                             hintName: 'Client Name',
-                            icon: const Icon(Icons.person),
+                            icon: Icon(Icons.person, color: Theme.of(context).primaryColor,),
                             maxLength: 45,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -103,16 +100,13 @@ class _ClientDetailsState extends State<ClientDetails> {
                               }
                               return null;
                             },
-                          ).textInputField(),
-                          const SizedBox(
-                            height: 15,
-                          ),
+                          ).textInputField(context),
                           CustomTextField(
                             controller: clientStreet,
                             textInputType: TextInputType.name,
                             textInputAction: TextInputAction.next,
                             hintName: 'Client Location',
-                            icon: const Icon(Iconsax.location5),
+                            icon:  Icon(Iconsax.location5,color: Theme.of(context).primaryColor,),
                             maxLength: 50,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -120,16 +114,13 @@ class _ClientDetailsState extends State<ClientDetails> {
                               }
                               return null;
                             },
-                          ).textInputField(),
-                          const SizedBox(
-                            height: 15,
-                          ),
+                          ).textInputField(context),
                           CustomTextField(
                             controller: clientAddress,
                             textInputType: TextInputType.name,
                             textInputAction: TextInputAction.next,
                             hintName: 'Client Address',
-                            icon: const Icon(Icons.location_city),
+                            icon: Icon(Icons.location_city,color: Theme.of(context).primaryColor,),
                             maxLength: 100,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -137,16 +128,13 @@ class _ClientDetailsState extends State<ClientDetails> {
                               }
                               return null;
                             },
-                          ).textInputField(),
-                          const SizedBox(
-                            height: 15,
-                          ),
+                          ).textInputField(context),
                           CustomTextField(
                             controller: clientPhone,
                             textInputType: TextInputType.number,
                             textInputAction: TextInputAction.done,
                             hintName: 'Phone Number',
-                            icon: const Icon(Icons.call),
+                            icon: Icon(Icons.call,color: Theme.of(context).primaryColor,),
                             maxLength: 10,
                             validator: (value) {
                               if (value == null ||
@@ -156,33 +144,30 @@ class _ClientDetailsState extends State<ClientDetails> {
                               }
                               return null;
                             },
-                          ).textInputField(),
-                          const SizedBox(
-                            height: 15,
-                          ),
+                          ).textInputField(context),
                           CustomTextField(
                             controller: clientGst,
                             textInputType: TextInputType.name,
                             textInputAction: TextInputAction.done,
                             hintName: 'GST (optional)',
-                            icon: const Icon(Icons.comment_bank),
+                            icon: Icon(Icons.comment_bank,color: Theme.of(context).primaryColor,),
                             maxLength: 15,
-                          ).textInputField(),
-                          const SizedBox(
-                            height: 15,
-                          ),
+                          ).textInputField(context),
+                          const Gap(10),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               SizedBox(
                                 width: 160,
                                 child: DropdownButtonFormField<String>(
-                                  style: const TextStyle(
-                                    color: Colors.black,
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
                                   ),
-                                  hint: const Text(
+                                  hint: Text(
                                     "Doc-Type",
-                                    style: TextStyle(),
+                                    style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                    ),
                                   ),
                                   decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.all(5.0),
@@ -208,8 +193,9 @@ class _ClientDetailsState extends State<ClientDetails> {
                                       value: value,
                                       child: Text(
                                         value,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 10,
+                                          color: Theme.of(context).primaryColor,
                                         ),
                                       ),
                                     );
@@ -219,21 +205,20 @@ class _ClientDetailsState extends State<ClientDetails> {
                               SizedBox(
                                 width: 160,
                                 child: DropdownButtonFormField<String>(
-                                  style: const TextStyle(
-                                    color: CupertinoColors.label,
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
                                     fontSize: 16,
                                   ),
-                                  hint: const Text(
+                                  hint: Text(
                                     "Category",
-                                    style: TextStyle(),
+                                    style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                    ),
                                   ),
                                   decoration: InputDecoration(
                                     contentPadding: const EdgeInsets.all(5.0),
                                     border: myInputBorder(),
                                     enabledBorder: myInputBorder(),
-                                    fillColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    // hoverColor: Colors.black,
                                     focusedBorder: myFocusBorder(),
                                     // isDense: true,
                                   ),
@@ -254,8 +239,10 @@ class _ClientDetailsState extends State<ClientDetails> {
                                       value: value,
                                       child: Text(
                                         value,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w600,),
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                        color: Theme.of(context).primaryColor,
+                                        ),
                                       ),
                                     );
                                   }).toList(),
@@ -268,7 +255,7 @@ class _ClientDetailsState extends State<ClientDetails> {
                     ),
                   ),
                   AppButton(
-                      child: const Text('Next'),
+                      child: Text('Next', style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w500,),),
                       onPressed: () {
                         if (formKey.currentState!.validate()) {
                           Provider.of<InvoiceGeneratorProvider>(context,
@@ -307,7 +294,7 @@ class _ClientDetailsState extends State<ClientDetails> {
     return OutlineInputBorder(
       borderRadius: const BorderRadius.all(Radius.circular(15)),
       borderSide: BorderSide(
-        color: Colors.black.withOpacity(0.5),
+        color: Theme.of(context).primaryColor.withOpacity(0.3),
         width: 1.5,
       ),
     );
@@ -317,7 +304,7 @@ class _ClientDetailsState extends State<ClientDetails> {
     return OutlineInputBorder(
       borderRadius: const BorderRadius.all(Radius.circular(15)),
       borderSide: BorderSide(
-        color: Colors.black.withOpacity(0.5),
+        color: Theme.of(context).primaryColor.withOpacity(0.3),
         width: 1.5,
       ),
     );

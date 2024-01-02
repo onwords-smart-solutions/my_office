@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
@@ -9,12 +10,14 @@ import 'package:my_office/features/home/presentation/view/profile_image_viewer.d
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../core/config/theme.dart';
 import '../../../../core/utilities/constants/app_color.dart';
 import '../../../../core/utilities/constants/app_version.dart';
 import '../../../../core/utilities/custom_widgets/custom_image_cropper.dart';
 import '../../../../core/utilities/custom_widgets/custom_sheets.dart';
 import '../../../auth/presentation/provider/authentication_provider.dart';
 import '../../../auth/presentation/view/login_screen.dart';
+import '../../../theme/presentation/view/theme_selector.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({Key? key}) : super(key: key);
@@ -59,6 +62,7 @@ class _AccountScreenState extends State<AccountScreen> {
       context: context,
       size: size,
       title: 'Pick image for profile',
+      subTitle: 'Take from Camera / Choose from Gallery ',
       onTakePhoto: () => pickerCameraImage(userId),
       onChoosePhoto: () => pickerGalleryImage(userId),
     );
@@ -70,7 +74,6 @@ class _AccountScreenState extends State<AccountScreen> {
     // print(imageUrl);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () => Navigator.of(context).pop(),
@@ -84,14 +87,12 @@ class _AccountScreenState extends State<AccountScreen> {
           margin: const EdgeInsets.all(30.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20.0),
-            boxShadow: const [
+            boxShadow: [
               BoxShadow(
-                color: Colors.black26,
-                spreadRadius: 5.0,
-                blurRadius: 10.0,
+                color: Theme.of(context).primaryColor.withOpacity(.1),
+                spreadRadius: 1.0,
               ),
             ],
-            color: Colors.white,
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(20.0),
@@ -111,11 +112,18 @@ class _AccountScreenState extends State<AccountScreen> {
                         : Column(
                             children: [
                               const SizedBox(height: 20.0),
+                             Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ?
                               Image.asset(
-                                'assets/onwords.png',
+                                'assets/images/onwords_light.png',
+                                height: 20,
+                                fit: BoxFit.cover,
+                              ):
+                              Image.asset(
+                                'assets/images/onwords_dark.png',
                                 height: 20,
                                 fit: BoxFit.cover,
                               ),
+                              const Gap(10),
                               Stack(
                                 alignment: AlignmentDirectional.center,
                                 children: [
@@ -209,7 +217,7 @@ class _AccountScreenState extends State<AccountScreen> {
                           );
                   },
                 ),
-                const SizedBox(height: 20.0),
+                const ThemeSelector(),
                 IconButton.filled(
                   onPressed: () async {
                     final navigator = Navigator.of(context);
@@ -230,7 +238,6 @@ class _AccountScreenState extends State<AccountScreen> {
                   ),
                   icon: const Icon(Icons.exit_to_app_rounded),
                 ),
-                const SizedBox(height: 20.0),
                 Stack(
                   alignment: AlignmentDirectional.center,
                   children: [
@@ -239,7 +246,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       child: Text(
                         'Version : ${AppVersion.androidAppShowVersion}',
                         style:
-                            const TextStyle(color: Colors.grey, fontSize: 13.0),
+                            const TextStyle(fontSize: 13.0),
                       ),
                     ),
                     //bottom style

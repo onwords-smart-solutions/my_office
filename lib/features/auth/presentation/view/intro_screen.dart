@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'login_screen.dart';
 
 class IntroductionScreen extends StatelessWidget {
@@ -9,29 +10,30 @@ class IntroductionScreen extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          imageWidget(height),
-          textWidget(height, width),
-        ],
+      body: SafeArea(
+        child: Column(
+          children: [
+            imageWidget(height, context),
+            textWidget(height, width),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         elevation: 10,
         onPressed: () {
           Navigator.push(context, MaterialPageRoute(builder: (context)=> const LoginScreen()));
         },
-        child: buttonWidget(),
+        child: buttonWidget(context),
       ),
     );
   }
 
-  Widget imageWidget(double height) {
+  Widget imageWidget(double height, BuildContext context) {
     return SizedBox(
-      height: height * 0.45,
+      height: height * 0.4,
       width: double.infinity,
-      child: Image.asset(
-        'assets/intro_pic.jpg',
+      child: SvgPicture.asset(
+        'assets/images/intro_screen.svg',
       ),
     );
   }
@@ -42,41 +44,25 @@ class IntroductionScreen extends StatelessWidget {
           vertical: height * 0.05, horizontal: width * 0.05,),
       height: height * 0.25,
       width: double.infinity,
-      color: Colors.transparent,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          GradientText(
+          Text(
             'Manage your daily',
             style: TextStyle(
-              color: Colors.black,
               fontSize: height * 0.040,
             ),
-            gradient: const LinearGradient(
-              colors: [
-                Colors.black,
-                Colors.black,
-              ],
-            ),
           ),
-          GradientText(
+          Text(
             'works with our',
             style: TextStyle(
-              color: Colors.black,
               fontSize: height * 0.040,
-            ),
-            gradient: const LinearGradient(
-              colors: [
-                Colors.black,
-                Colors.black,
-              ],
             ),
           ),
           GradientText(
-            'Work Manager',
+            'Onwords Workspace',
             style: TextStyle(
-              color: Colors.black,
               fontSize: height * 0.040,
             ),
             gradient: const LinearGradient(
@@ -86,17 +72,10 @@ class IntroductionScreen extends StatelessWidget {
               ],
             ),
           ),
-          GradientText(
+         Text(
             'from here!!',
             style: TextStyle(
-              color: Colors.black,
               fontSize: height * 0.040,
-            ),
-            gradient: const LinearGradient(
-              colors: [
-                Colors.black,
-                Colors.black,
-              ],
             ),
           ),
         ],
@@ -104,7 +83,7 @@ class IntroductionScreen extends StatelessWidget {
     );
   }
 
-  Widget buttonWidget() {
+  Widget buttonWidget(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         gradient: const LinearGradient(
@@ -115,10 +94,10 @@ class IntroductionScreen extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(15),
       ),
-      child: const Center(
-        child: Icon(Icons.arrow_forward_ios, color: Colors.white),
+      child: Center(
+        child: Icon(Icons.arrow_forward_ios,color: Theme.of(context).primaryColor, ),
       ),
     );
   }

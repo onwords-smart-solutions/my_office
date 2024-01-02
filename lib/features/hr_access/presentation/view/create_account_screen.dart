@@ -39,7 +39,7 @@ class _CreateAccountState extends State<CreateAccount> {
               height: size.height * .25,
               width: size.width,
               decoration: BoxDecoration(
-                color: Colors.deepPurple.shade400,
+                color: Colors.deepPurple.shade300,
               ),
               child: SafeArea(
                 minimum: const EdgeInsets.only(
@@ -50,19 +50,21 @@ class _CreateAccountState extends State<CreateAccount> {
                       Row(
                         children: [
                           IconButton(
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.arrow_back_ios,
-                              size: 18,
-                              color: Colors.white,
+                              size: 20,
+                              color: Theme.of(context).primaryColor,
                             ),
                             onPressed: () => Navigator.of(context).pop(),
                           ),
-                          const Text(
-                            'BACK',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              fontSize: 17,
-                              color: Colors.white,
+                          GestureDetector(
+                            onTap: () => Navigator.of(context).pop(),
+                            child: const Text(
+                              'BACK',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 18,
+                              ),
                             ),
                           ),
                         ],
@@ -75,7 +77,6 @@ class _CreateAccountState extends State<CreateAccount> {
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: 30,
-                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -93,7 +94,7 @@ class _CreateAccountState extends State<CreateAccount> {
                 textInputAction: TextInputAction.next,
                 hintName: 'Staff name',
                 maxLength: 100,
-              ).textInputField(),
+              ).textInputField(context),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
@@ -104,7 +105,7 @@ class _CreateAccountState extends State<CreateAccount> {
                 textInputAction: TextInputAction.next,
                 hintName: 'Department',
                 maxLength: 100,
-              ).textInputField(),
+              ).textInputField(context),
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
@@ -115,7 +116,7 @@ class _CreateAccountState extends State<CreateAccount> {
                 textInputAction: TextInputAction.done,
                 hintName: 'Email id',
                 maxLength: 100,
-              ).textInputField(),
+              ).textInputField(context),
             ),
             const Gap(50),
             Padding(
@@ -125,11 +126,11 @@ class _CreateAccountState extends State<CreateAccount> {
                 width: size.width,
                 child: AppButton(
                   onPressed: submitForm,
-                  child: const Text(
+                  child: Text(
                     'Create Account',
                     style: TextStyle(
                         fontWeight: FontWeight.w500,
-                    fontSize: 17,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                 ),

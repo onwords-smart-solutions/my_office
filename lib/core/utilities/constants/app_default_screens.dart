@@ -303,7 +303,7 @@ class AppDefaults {
         page = PaySlip(user: staffInfo);
         break;
       case MenuTitle.createAccount:
-        page = CreateAccount();
+        page = const CreateAccount();
         break;
     }
     return page;

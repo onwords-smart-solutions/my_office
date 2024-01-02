@@ -75,7 +75,6 @@ class _SwipeableButtonState extends State<SwipeableButton> {
                       width: 30.0,
                       height: 30.0,
                       child: CircularProgressIndicator(
-                        color: Colors.white,
                         strokeWidth: 2.0,
                       ),
                     ),
@@ -105,8 +104,6 @@ class _SwipeableButtonState extends State<SwipeableButton> {
                   },
                   height: 65,
                   width: MediaQuery.of(context).size.width * .85,
-                  backgroundColor: Colors.white,
-                  foregroundColor: Colors.white,
                   backgroundShape: BorderRadius.circular(40),
                   text: widget.message,
                   textStyle:

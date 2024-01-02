@@ -54,7 +54,6 @@ class CustomSearchDelegate extends SearchDelegate {
         style: const TextStyle(
           fontWeight: FontWeight.w700,
           fontSize: 20.0,
-          color: Colors.grey,
         ),
       ),
     )

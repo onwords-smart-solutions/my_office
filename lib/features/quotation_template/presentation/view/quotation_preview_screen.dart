@@ -144,7 +144,6 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
             right: 0,
             bottom: 0,
             child: Container(
-              color: Colors.white,
             ),
           ),
           Positioned(
@@ -611,7 +610,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                             }
                             return null;
                           },
-                        ).textInputField(),
+                        ).textInputField(context),
                         const SizedBox(
                           height: 5,
                         ),

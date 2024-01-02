@@ -93,8 +93,6 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
 
     return Scaffold(
       appBar: AppBar(
-        surfaceTintColor: Colors.white,
-        backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(
@@ -168,7 +166,6 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
       width: double.infinity,
       padding: const EdgeInsets.only(bottom: 20.0),
       decoration: const BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.vertical(
           bottom: Radius.circular(20.0),
         ),

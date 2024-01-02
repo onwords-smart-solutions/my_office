@@ -306,7 +306,6 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
         ),
         borderRadius: BorderRadius.circular(10.0),
       ),
-      labelColor: Colors.white,
       unselectedLabelColor: Colors.black,
       automaticIndicatorColorAdjustment: true,
       labelStyle: const TextStyle(
@@ -381,7 +380,6 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: width * 0.025),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: _workController.text.isEmpty
@@ -500,7 +498,6 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                             height: height * 0.15,
                             width: width * 0.25,
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.5),
                               border: Border.all(
                                 color: _percentController.text.isEmpty
                                     ? Colors.black26
@@ -649,7 +646,6 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                           'Submit',
                           style: TextStyle(
                             fontSize: height * 0.025,
-                            color: Colors.white,
                           ),
                         ),
                       ),
@@ -757,7 +753,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
         : const Center(
             child: Text(
               'No Works Completed!!',
-              style: TextStyle(color: Colors.black, fontSize: 17),
+              style: TextStyle(fontSize: 17),
             ),
           );
   }
@@ -820,7 +816,6 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
           color: Colors.black,
         ),
         decoration: InputDecoration(
-          fillColor: Colors.white.withOpacity(0.5),
           border: InputBorder.none,
           hintText: hintName,
           prefixIcon: IconButton(
@@ -884,7 +879,6 @@ class ButtonWidget extends StatelessWidget {
         height: height * 0.15,
         width: width * 0.25,
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.5),
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: colorValue ? Colors.green : Colors.black26,
@@ -897,13 +891,9 @@ class ButtonWidget extends StatelessWidget {
             icon,
             Text(
               val,
-              style: const TextStyle(color: Colors.black),
             ),
             Text(
               title,
-              style: const TextStyle(
-                color: Colors.black,
-              ),
             ),
           ],
         ),

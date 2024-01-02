@@ -6,62 +6,56 @@ class CustomSheets {
     required BuildContext context,
     required Size size,
     required String title,
+    String? subTitle,
     required Function onTakePhoto,
     required Function onChoosePhoto,
     AnimationController? dialogController,
   }) {
     return showModalBottomSheet(
+      backgroundColor: Colors.transparent,
       transitionAnimationController: dialogController,
       context: context,
-      backgroundColor: Colors.transparent,
       useSafeArea: true,
       elevation: 0.0,
       isScrollControlled: true,
       builder: (ctx) {
         return Container(
-          width: size.width,
-          padding: const EdgeInsets.all(18.0),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+          margin: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.0),
+            color: Theme.of(context).colorScheme.secondary,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               // -- heading --
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16.0,
-                      color: Colors.black,
-                    ),
+              ListTile(
+                title: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16.0,
                   ),
-                  SizedBox(
-                    height: 35.0,
-                    width: 35.0,
-                    child: IconButton.filled(
-                      onPressed: () => Navigator.of(ctx).pop(),
-                      color: Colors.black,
-                      style: IconButton.styleFrom(
-                        backgroundColor: Colors.grey.withOpacity(.3),
-                        iconSize: 20.0,
-                      ),
-                      padding: EdgeInsets.zero,
-                      icon: const Icon(Icons.close_rounded),
-                    ),
-                  ),
-                ],
+                ),
+                subtitle: Text(
+                  subTitle!,
+                  style: const TextStyle(color: Colors.grey),
+                ),
+                trailing:  IconButton(
+                  onPressed: () => Navigator.of(ctx).pop(),
+                  style: IconButton.styleFrom(foregroundColor: Colors.grey),
+                  icon: const Icon(Icons.close_rounded),
+                ),
+              ),
+              Divider(
+                color: Colors.grey.withOpacity(.3),
+                height: 0.0,
+                thickness: .5,
               ),
               // -- options --
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 15.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
-                  color: Colors.grey.withOpacity(.3),
                 ),
                 child: Column(
                   children: [
@@ -78,11 +72,10 @@ class CustomSheets {
                           ),
                         ),
                         trailing:
-                            const Icon(Iconsax.camera, color: Colors.black),
+                        Icon(Iconsax.camera, color: Theme.of(context).primaryColor),
                         title: const Text('Take Photo'),
                       ),
                     ),
-                    Divider(color: Colors.grey.withOpacity(.5), height: 0.0),
                     Material(
                       color: Colors.transparent,
                       child: ListTile(
@@ -96,7 +89,7 @@ class CustomSheets {
                           ),
                         ),
                         trailing:
-                            const Icon(Iconsax.gallery, color: Colors.black),
+                        Icon(Iconsax.gallery, color: Theme.of(context).primaryColor),
                         title: const Text('Choose Photo'),
                       ),
                     ),

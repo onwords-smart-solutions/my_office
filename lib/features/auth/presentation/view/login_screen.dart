@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/features/auth/data/repository/auth_repo_impl.dart';
 import 'package:my_office/features/auth/domain/repository/auth_repository.dart';
@@ -37,7 +39,6 @@ class _LoginScreenState extends State<LoginScreen> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: AppColor.backGroundColor,
       body: Form(
         key: _formKey,
         child: Stack(
@@ -45,7 +46,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ///Top Circle...
             Positioned(
               top: height * 0.03,
-              // left: 0,
               right: width * -0.02,
               child: Image.asset(
                 'assets/top circle.png',
@@ -64,14 +64,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextSpan(
                       text: 'Hi There!!\n',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Theme.of(context).primaryColor,
                         fontSize: height * 0.035,
                       ),
                     ),
                     TextSpan(
                       text: 'Welcome To Team Onwords😎',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Theme.of(context).primaryColor,
                         fontSize: height * 0.020,
                       ),
                     ),
@@ -82,18 +82,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
             ///Woman Image...
             Positioned(
-              top: height * -0.013,
+              top: height * .14,
               left: width * 0.0,
               right: width * 0.0,
-              child: Image.asset(
-                'assets/young_woman_talking_online 1.png',
-                scale: 3.5,
+              child: SvgPicture.asset(
+                'assets/images/login_screen.svg',
+                height: height * .42,
               ),
             ),
 
             /// TextFields And Submit Button...
             Positioned(
-              top: height * 0.23,
+              top: height * 0.28,
               left: width * 0.05,
               right: width * 0.05,
               bottom: 0,
@@ -106,18 +106,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
                     /// Email field
                     Padding(
-                      padding: EdgeInsets.only(top: height * 0.03),
+                      padding: EdgeInsets.only(top: height * 0.07),
                       child: TextFormField(
                         textInputAction: TextInputAction.next,
                         autofocus: false,
                         keyboardType: TextInputType.emailAddress,
                         style: TextStyle(
                           fontSize: height * 0.02,
-                          color: Colors.black,
                           fontWeight: FontWeight.w500,
                         ),
                         decoration: InputDecoration(
-                          prefixIcon: const Icon(CupertinoIcons.mail_solid),
+                          prefixIcon: Icon(CupertinoIcons.mail_solid,color: Theme.of(context).primaryColor,),
                           border: InputBorder.none,
                           hintText: 'Email',
                           hintStyle: TextStyle(
@@ -125,20 +124,28 @@ class _LoginScreenState extends State<LoginScreen> {
                             color: Colors.grey,
                             fontWeight: FontWeight.w500,
                           ),
-                          filled: true,
-                          fillColor: AppColor.backGroundColor,
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Colors.black,
+                          contentPadding: const EdgeInsets.only(
+                            left: 14.0,
+                            bottom: 6.0,
+                            top: 8.0,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Theme.of(context).primaryColor,
+                              width: 1.5,
                             ),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.black),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:  BorderSide(color: Theme.of(context).primaryColor, width: 1.5),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
-                          errorBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.red),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.red,width: 1.5),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          focusedErrorBorder:  OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.red,width: 1.5),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                         ),
@@ -166,37 +173,39 @@ class _LoginScreenState extends State<LoginScreen> {
                         obscureText: !_showPassword,
                         style: TextStyle(
                           fontSize: height * 0.02,
-                          color: Colors.black,
                           fontWeight: FontWeight.w500,
                         ),
                         decoration: InputDecoration(
-                          prefixIcon: const Icon(CupertinoIcons.padlock_solid),
+                          prefixIcon: Icon(CupertinoIcons.padlock_solid, color: Theme.of(context).primaryColor,),
                           border: InputBorder.none,
                           hintText: 'Password',
-                          filled: true,
                           hintStyle: TextStyle(
                             fontSize: height * 0.02,
                             color: Colors.grey,
                             fontWeight: FontWeight.w500,
                           ),
-                          fillColor: AppColor.backGroundColor,
                           contentPadding: const EdgeInsets.only(
                             left: 14.0,
                             bottom: 6.0,
                             top: 8.0,
                           ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(
-                              color: Colors.black,
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Theme.of(context).primaryColor,
+                              width: 1.5,
                             ),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.black),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:  BorderSide(color: Theme.of(context).primaryColor, width: 1.5),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
-                          errorBorder: UnderlineInputBorder(
-                            borderSide: const BorderSide(color: Colors.red),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.red,width: 1.5),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          focusedErrorBorder:  OutlineInputBorder(
+                            borderSide: const BorderSide(color: Colors.red,width: 1.5),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           suffixIcon: IconButton(
@@ -204,7 +213,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               _showPassword
                                   ? Icons.visibility_off
                                   : Icons.visibility,
-                              color: Colors.black.withOpacity(0.5),
+                              color: Theme.of(context).primaryColor.withOpacity(0.3),
                             ),
                             onPressed: () {
                               setState(() {
@@ -233,7 +242,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
             /// Button...
             Positioned(
-              top: height * 0.75,
+              top: height * 0.85,
               left: width * 0.05,
               right: width * 0.05,
               child: buildGestureDetector(height),
@@ -269,8 +278,8 @@ class _LoginScreenState extends State<LoginScreen> {
               : Text(
                   'Log in',
                   style: TextStyle(
-                    color: AppColor.backGroundColor,
                     fontSize: height * 0.033,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
         ),

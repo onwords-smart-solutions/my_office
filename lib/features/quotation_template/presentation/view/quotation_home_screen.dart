@@ -100,7 +100,7 @@ class _Client1DetailsState extends State<Client1Details> {
                             }
                             return null;
                           },
-                        ).textInputField(),
+                        ).textInputField(context),
                         SizedBox(
                           height: size.height * 0.02,
                         ),
@@ -117,7 +117,7 @@ class _Client1DetailsState extends State<Client1Details> {
                             }
                             return null;
                           },
-                        ).textInputField(),
+                        ).textInputField(context),
                         SizedBox(
                           height: size.height * 0.02,
                         ),
@@ -134,7 +134,7 @@ class _Client1DetailsState extends State<Client1Details> {
                             }
                             return null;
                           },
-                        ).textInputField(),
+                        ).textInputField(context),
                         SizedBox(
                           height: size.height * 0.02,
                         ),
@@ -153,7 +153,7 @@ class _Client1DetailsState extends State<Client1Details> {
                             }
                             return null;
                           },
-                        ).textInputField(),
+                        ).textInputField(context),
                         SizedBox(
                           height: size.height * 0.02,
                         ),
@@ -164,7 +164,7 @@ class _Client1DetailsState extends State<Client1Details> {
                           hintName: 'GST (optional)',
                           icon: const Icon(Icons.comment_bank),
                           maxLength: 20,
-                        ).textInputField(),
+                        ).textInputField(context),
                         SizedBox(
                           height: size.height * 0.02,
                         ),

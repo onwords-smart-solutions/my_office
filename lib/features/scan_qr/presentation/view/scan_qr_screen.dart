@@ -41,7 +41,6 @@ class _ScanQRScreenState extends State<ScanQRScreen> {
           style: TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 22,
-            color: Colors.white,
           ),
         ),
         centerTitle: true,
@@ -52,7 +51,7 @@ class _ScanQRScreenState extends State<ScanQRScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios_new, ),
         ),
       ),
       backgroundColor: Colors.black,
@@ -101,7 +100,6 @@ class _ScanQRScreenState extends State<ScanQRScreen> {
                           'Scan a QR code',
                           style: TextStyle(
                             fontSize: 20,
-                            color: Colors.white,
                           ),
                         ),
                 ),
