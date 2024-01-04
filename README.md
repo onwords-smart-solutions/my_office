@@ -82,7 +82,7 @@ As, I have mentioned above this project is structured with Clean architecture pr
 
 ### Version history and Releases
 
-* Android : 3.0.2+11 - Updated Refreshment preferences and Modified Quotation pdf with Valid till date
+* Android : 3.0.4+13 - Refreshment choice, Create staff account and Installation pdf updates.
 * iOS : 2.1.7. 
 
 

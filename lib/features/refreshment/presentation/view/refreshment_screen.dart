@@ -20,6 +20,7 @@ class RefreshmentScreen extends StatefulWidget {
 class _RefreshmentScreenState extends State<RefreshmentScreen> {
   final DateTime _now = DateTime.now();
   late Timer _timer;
+  String selectedDrink = '';
 
   // notifiers
   final ValueNotifier<String> _currentBgImage = ValueNotifier('assets/tea.jpg');
@@ -204,30 +205,81 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
                                     fontSize: 25.0,
                                   ),
                                 ),
-                                SizedBox(height: size.height * .06),
+                                SizedBox(height: size.height * .01),
                                 if (isMng || isEvg) ...[
-                                  SwipeableButton(
-                                    message: 'Slide to have a Tea',
-                                    type: 'Tea',
-                                    name: widget.name,
-                                  ),
-                                  const SizedBox(height: 30.0),
-                                  SwipeableButton(
-                                    message: 'Slide to have a Coffee',
-                                    type: 'Coffee',
-                                    name: widget.name,
-                                  ),
-                                  const SizedBox(height: 30.0),
+                                RadioListTile(
+                                  title: const Text('Tea'),
+                                  value: 'Tea',
+                                  groupValue: selectedDrink,
+                                  activeColor: Colors.brown,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedDrink = value!;
+                                    });
+                                  },
+                                ),
+                                RadioListTile(
+                                  title: const Text('Coffee'),
+                                  value: 'Coffee',
+                                  groupValue: selectedDrink,
+                                  activeColor: Colors.brown.shade900,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedDrink = value!;
+                                    });
+                                  },
+                                ),
+                                RadioListTile(
+                                  title: const Text('Milk'),
+                                  value: 'Milk',
+                                  groupValue: selectedDrink,
+                                  activeColor: Colors.blueGrey,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedDrink = value!;
+                                    });
+                                  },
+                                ),
+                                  if (selectedDrink == 'Tea')
+                                    SwipeableButton(
+                                      message: 'Slide to have a Tea',
+                                      type: 'Tea',
+                                      name: widget.name,
+                                    ),
+                                  if (selectedDrink == 'Coffee')
+                                    SwipeableButton(
+                                      message: 'Slide to have a Coffee',
+                                      type: 'Coffee',
+                                      name: widget.name,
+                                    ),
+                                if (selectedDrink == 'Milk')
                                   SwipeableButton(
                                     message: 'Slide to have a Milk',
                                     type: 'Milk',
                                     name: widget.name,
                                   ),
                                 ],
+                                //   SwipeableButton(
+                                //     message: 'Slide to have a Tea',
+                                //     type: 'Tea',
+                                //     name: widget.name,
+                                //   ),
+                                //   const SizedBox(height: 30.0),
+                                //   SwipeableButton(
+                                //     message: 'Slide to have a Coffee',
+                                //     type: 'Coffee',
+                                //     name: widget.name,
+                                //   ),
+                                //   const SizedBox(height: 30.0),
+                                //   SwipeableButton(
+                                //     message: 'Slide to have a Milk',
+                                //     type: 'Milk',
+                                //     name: widget.name,
+                                //   ),
                                 const SizedBox(height: 30.0),
                                 if (isMng)
                                   SwipeableButton(
-                                    message: 'Slide to order Food',
+                                    message: 'Slide to order a Food',
                                     type: 'Food',
                                     name: widget.name,
                                   ),

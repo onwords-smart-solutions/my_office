@@ -128,7 +128,7 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    var date = DateTime.fromMillisecondsSinceEpoch(widget.allDetail.dob!);
+    var date =widget.allDetail.dob;
     var d24 = DateFormat('dd/MM/yyyy').format(date);
 
     return Scaffold(

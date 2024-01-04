@@ -4,8 +4,8 @@ class HrAccessModel {
   final String email;
   final String department;
   String? profilePic;
-  int? dob;
-  int? mobile;
+  final DateTime dob;
+  final int mobile;
   String punchIn;
   String punchOut;
 
@@ -15,8 +15,8 @@ class HrAccessModel {
     required this.email,
     required this.department,
     this.profilePic,
-    this.dob,
-    this.mobile,
+    required this.dob,
+    required this.mobile,
     required this.punchIn,
     required this.punchOut,
   });

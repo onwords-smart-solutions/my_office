@@ -20,10 +20,26 @@ class _InstallationDetailsState extends State<InstallationDetails> {
   final formKey = GlobalKey<FormState>();
 
   List<AjaxListModel> ajaxDeviceDetails = [];
+  DateTime dateStamp = DateTime.now();
+  void dateTime() async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2023),
+      lastDate: DateTime(2100),
+    );
+    if (pickedDate != null) {
+      setState(() {
+        dateStamp = pickedDate;
+      });
+      print('Selected date is $dateStamp');
+    } else {
+      print('Date is not selected');
+    }
+  }
 
   TextEditingController customerIdController = TextEditingController();
   TextEditingController customerNameController = TextEditingController();
-  TextEditingController dateController = TextEditingController();
   TextEditingController dateOfInstallationController = TextEditingController();
   TextEditingController phoneNumController = TextEditingController();
   TextEditingController addressController = TextEditingController();
@@ -59,9 +75,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
   List<String> teamMembersName = [];
   List<String> extraDevice = [];
   List<String> lightBoard8ChannelDetails = [];
+  List<String> heavyAndFanBoardDetails = [];
   List<String> lightBoard4ChannelDetails = [];
-  List<String> heavyBoard2Channel = [];
-  List<String> fanBoard = [];
 
   String selectedGAType = '';
   String needApp = '';
@@ -159,7 +174,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         id: customerIdController.text,
                         number: int.parse(phoneNumController.text),
                         address: addressController.text,
-                        // entryDate: DateTime.parse(dateController.text),
+                        entryDate: dateStamp,
                         installationDate:
                             DateTime.parse(dateOfInstallationController.text),
                         needApp: needApp.toString(),
@@ -201,10 +216,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         bSNLPass: bSNLPassController.text,
                         channel8List: lightBoard8ChannelDetails.toList(),
                         channel4List: lightBoard4ChannelDetails.toList(),
-                        heavyR1: heavyLoadR1Controller.text,
-                        heavyR2: heavyLoadR2Controller.text,
-                        fanR1: fanR1Controller.text,
-                        fanR2: fanR2Controller.text,
+                            heavyAndFanBoardDetails: heavyAndFanBoardDetails.toList(),
                         ajaxProductList: ajaxDeviceDetails,
                         needAjax: needAjax,
                         needGate: needGate,
@@ -354,7 +366,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         ),
                       ],
                     ),
-                
+
                     const Divider(
                       endIndent: 1,
                       indent: 1,
@@ -488,7 +500,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 borderRadius: BorderRadius.circular(20),
                 // border: Border.all(color: Colors.black12, width: .5),
               ),
-              child: SingleChildScrollView( 
+              child: SingleChildScrollView(
                 child: Column(
                   children: [
                     ///Add Team Members
@@ -541,7 +553,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         ),
                       ],
                     ),
-                
+
                     const Divider(
                       endIndent: 1,
                       indent: 1,
@@ -2115,107 +2127,163 @@ class _InstallationDetailsState extends State<InstallationDetails> {
             color: Colors.black,
           ),
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                /// Heavy R1
-                Expanded(
-                  child: textWithDropDown(
-                    'Heavy R1 Board',
-                    CustomTextField(
-                      controller: heavyLoadR1Controller,
-                      textInputType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      hintName: 'Heavy Board R1',
-                      icon: const Icon(Icons.router),
-                      maxLength: 30,
-                      validator: (value) {
-                        if (value == null ||
-                            value.isEmpty && needSmartHome == 'Yes') {
-                          return 'This field is required';
-                        }
-                        return null;
-                      },
-                    ).textInputField(),
+           //heavy and fan board list
+            Container(
+              height: size.height * 0.4,
+              decoration: BoxDecoration(
+                // color: Colors.blueGrey.withAlpha(50),
+                borderRadius: BorderRadius.circular(20),
+                // border: Border.all(color: Colors.black12, width: .5),
+              ),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: size.height * 0.01,
                   ),
-                ),
-                SizedBox(
-                  width: size.height * 0.01,
-                ),
-
-                /// Heavy R2
-                Expanded(
-                  child: textWithDropDown(
-                    'Heavy Board R2',
-                    CustomTextField(
-                      controller: heavyLoadR2Controller,
-                      textInputType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      hintName: 'Heavy Board R2',
-                      icon: const Icon(Icons.router),
-                      maxLength: 30,
-                      validator: (value) {
-                        if (value == null ||
-                            value.isEmpty && needSmartHome == 'Yes') {
-                          return 'This field is required';
-                        }
-                        return null;
-                      },
-                    ).textInputField(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      const Text(
+                        'Add Heavy and Fan board Details',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                        ),
+                      ),
+                      CircleAvatar(
+                        backgroundColor: const Color(0xff5AC8FA),
+                        radius: 20,
+                        child: Center(
+                          child: IconButton(
+                            onPressed: () {
+                              addDataToList(
+                                context,
+                                'Heavy and Fan board',
+                                CustomTextField(
+                                  controller: addDataToListController,
+                                  textInputType: TextInputType.text,
+                                  textInputAction: TextInputAction.done,
+                                  hintName: 'Type here',
+                                  icon: const Icon(Icons.person_2),
+                                  maxLength: 50,
+                                  validator: (value) {
+                                    if (value == null ||
+                                        value.isEmpty &&
+                                            needSmartHome == 'Yes') {
+                                      return 'This field is required';
+                                    }
+                                    return null;
+                                  },
+                                ).textInputField(),
+                                addDataToListController,
+                                heavyAndFanBoardDetails,
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.add,
+                              size: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                /// Fan R1
-                Expanded(
-                  child: textWithDropDown(
-                    'Fan S1',
-                    CustomTextField(
-                      controller: fanR1Controller,
-                      textInputType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      hintName: 'Fan S1',
-                      icon: const Icon(Icons.router),
-                      maxLength: 30,
-                      validator: (value) {
-                        if (value == null ||
-                            value.isEmpty && needSmartHome == 'Yes') {
-                          return 'This field is required';
-                        }
-                        return null;
-                      },
-                    ).textInputField(),
+                  const Divider(
+                    endIndent: 1,
+                    indent: 1,
+                    color: Colors.black,
                   ),
-                ),
-                SizedBox(
-                  width: size.height * 0.01,
-                ),
-
-                /// Fan R2
-                Expanded(
-                  child: textWithDropDown(
-                    'Fan S2',
-                    CustomTextField(
-                      controller: fanR2Controller,
-                      textInputType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      hintName: 'Fan S2',
-                      icon: const Icon(Icons.router),
-                      maxLength: 30,
-                      validator: (value) {
-                        if (value == null ||
-                            value.isEmpty && needSmartHome == 'Yes') {
-                          return 'This field is required';
-                        }
-                        return null;
+                  SizedBox(
+                    height: size.height * 0.2,
+                    child: heavyAndFanBoardDetails.isNotEmpty
+                        ? ListView.builder(
+                      itemCount: heavyAndFanBoardDetails.length,
+                      itemBuilder: (context, int index) {
+                        return Center(
+                          child: ListTile(
+                            leading: Text(
+                              "R${index + 1} : ",
+                              style: const TextStyle(
+                                fontSize: 15,
+                              ),
+                            ),
+                            title: Text(
+                              heavyAndFanBoardDetails[index].toString(),
+                              style: const TextStyle(),
+                            ),
+                            trailing: IconButton(
+                              icon: const Icon(
+                                Icons.close,
+                                size: 18,
+                              ),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => AlertDialog(
+                                    title: Text(
+                                      'Delete this name?\n${heavyAndFanBoardDetails[index]}',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    content: SizedBox(
+                                      height: size.height * 0.07,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                        children: [
+                                          ActionChip(
+                                            onPressed: () {
+                                              heavyAndFanBoardDetails
+                                                  .removeAt(index);
+                                              Navigator.pop(context);
+                                              setState(() {});
+                                            },
+                                            label: const Text(
+                                              'Yes',
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontWeight:
+                                                FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                          ActionChip(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            // backgroundColor:
+                                            // Colors.blue.shade400,
+                                            label: const Text(
+                                              'No',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                                fontWeight:
+                                                FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        );
                       },
-                    ).textInputField(),
+                    )
+                        : const Center(
+                      child: Text(
+                        'List is Empty',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 17,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
@@ -2243,7 +2311,43 @@ class _InstallationDetailsState extends State<InstallationDetails> {
             color: Colors.black,
           ),
           children: [
-            /// Customer Name.....................
+
+            const Text(
+              'Pdf date',
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 17,
+            ),
+            ),
+
+            ///Pdf Header date
+            ListTile(
+              tileColor: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: const BorderSide(color: Colors.black26, width: 2),
+              ),
+              autofocus: false,
+              onTap: dateTime,
+              trailing: IconButton(
+                onPressed: dateTime,
+                icon: Icon(
+                  Icons.date_range,
+                  color: Theme
+                      .of(context)
+                      .colorScheme
+                      .primary,
+                ),
+              ),
+              title: Text(
+                DateFormat('yyyy-MM-dd').format(dateStamp),
+                style: const TextStyle(
+                  color: Colors.black,
+                ),
+              ),
+            ),
+
+            /// Customer Name
             CustomTextField(
               controller: customerNameController,
               textInputType: TextInputType.text,

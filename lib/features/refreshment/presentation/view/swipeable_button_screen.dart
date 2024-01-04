@@ -227,25 +227,46 @@ class _SwipeableButtonState extends State<SwipeableButton> {
           if (teaList.isNotEmpty) {
             isTeaOrdered = teaList.containsValue(widget.name);
             teaCount = refreshmentDetails['tea_count'];
+            if (!isTeaOrdered) {
+              isTeaOrdered = true;
+              teaCount++;
+            } else {
+              errorMessage = 'You have already ordered tea';
+              status = false;
+            }
           }
 
           //Checking for already ordered Coffee or not
           if (coffeeList.isNotEmpty) {
             isCoffeeOrdered = coffeeList.containsValue(widget.name);
             coffeeCount = refreshmentDetails['coffee_count'];
+            if (!isCoffeeOrdered) {
+              isCoffeeOrdered = true;
+              coffeeCount++;
+            } else {
+              errorMessage = 'You have already ordered coffee';
+              status = false;
+            }
           }
 
           //Checking for already ordered milk or not
           if (milkList.isNotEmpty) {
             isMilkOrdered = milkList.containsValue(widget.name);
             milkCount = refreshmentDetails['milk_count'];
+            if (!isMilkOrdered ) {
+              isMilkOrdered = true;
+              milkCount++;
+            } else {
+              errorMessage = 'You have already ordered milk';
+              status = false;
+            }
           }
 
           //Only 1 refreshment per user tea/coffee/milk
-          if(isTeaOrdered || isCoffeeOrdered || isMilkOrdered){
-            errorMessage ='You have already ordered your refreshment';
-            status = false;
-          }
+          // if(isTeaOrdered  || isCoffeeOrdered || isMilkOrdered){
+          //   errorMessage ='You have already ordered your refreshment';
+          //   status = false;
+          // }
 
           if(status){
             await handleOrder(

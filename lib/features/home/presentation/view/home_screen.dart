@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -468,19 +469,24 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         );
         _entryDetail.value = data;
         _endTime.value = now;
-      } else if (now.minute != _endTime.value.minute &&
+      } else if (_entryDetail.value != null &&
+          now.minute != _endTime.value.minute &&
           _entryDetail.value!.checkOutTime == null) {
         _endTime.value = now;
         _endTime.notifyListeners();
-        final data = await homeProvider.getPunchingTime(
-          userProvider.user!.uid,
-          userProvider.user!.name,
-          userProvider.user!.dep,
-        );
-        if (data != null && data.checkInTime != null) {
-          _entryDetail.value = data;
-          _entryDetail.notifyListeners();
-        }
+       try{
+         final data = await homeProvider.getPunchingTime(
+           userProvider.user!.uid,
+           userProvider.user!.name,
+           userProvider.user!.dep,
+         );
+         if (data != null && data.checkInTime != null) {
+           _entryDetail.value = data;
+           _entryDetail.notifyListeners();
+         }
+       }catch(e){
+         log('Error is $e');
+       }
       }
     });
   }

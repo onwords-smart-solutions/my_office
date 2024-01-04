@@ -30,11 +30,15 @@ class HrAccessRepoImpl implements HrAccessRepository {
     required String name,
     required String email,
     required String dep,
+    required int phone,
+    required DateTime dob,
   }) async {
     return await hrAccessFbDataSource.createAccount(
       name: name,
       email: email,
       dep: dep,
+      phone: phone,
+      dob: dob,
     );
   }
 }

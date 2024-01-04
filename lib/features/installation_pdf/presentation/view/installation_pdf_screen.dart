@@ -13,7 +13,7 @@ class InstallationDetailsScreen {
   late int number;
   late String address;
 
-  // late DateTime entryDate;
+  late DateTime entryDate;
   late DateTime installationDate;
   late String gateType;
   late String needApp;
@@ -33,10 +33,7 @@ class InstallationDetailsScreen {
   late List<String> channel8List;
   late List<String> channel4List;
   late List ajaxProductList;
-  late String heavyR1;
-  late String heavyR2;
-  late String fanR1;
-  late String fanR2;
+ late List heavyAndFanBoardDetails;
   late String ajaxUId;
 
   late String routerID;
@@ -62,7 +59,7 @@ class InstallationDetailsScreen {
     required this.id,
     required this.number,
     required this.address,
-    // required this.entryDate,
+    required this.entryDate,
     required this.installationDate,
     required this.needApp,
     required this.needAjax,
@@ -97,10 +94,7 @@ class InstallationDetailsScreen {
     required this.bSNLPass,
     required this.channel8List,
     required this.channel4List,
-    required this.heavyR1,
-    required this.heavyR2,
-    required this.fanR1,
-    required this.fanR2,
+    required this.heavyAndFanBoardDetails,
     required this.ajaxUId,
     required this.ajaxProductList,
     required this.motorBrand,
@@ -124,9 +118,7 @@ class InstallationDetailsScreen {
           SizedBox(height: 1 * PdfPageFormat.mm),
           if(needSmartHome == 'Yes') channel4List.isEmpty ? SizedBox() : light4ChannelOutputs(),
           SizedBox(height: 1 * PdfPageFormat.mm),
-          if(needSmartHome == 'Yes' && fanR1.isNotEmpty)fanBoard(),
-          SizedBox(height: 1 * PdfPageFormat.mm),
-          if(needSmartHome == 'Yes' && heavyR1.isNotEmpty)heavyBoard(),
+          if(needSmartHome == 'Yes') heavyAndFanBoardDetails.isEmpty ? SizedBox() : heavyAndFanBoard(),
           if(needAjax == "Yes") productTable(productDetailsModel),
           if(needGate == "Yes") gateChannelOutputs(),
           SizedBox(height: 1 * PdfPageFormat.mm),
@@ -143,7 +135,17 @@ class InstallationDetailsScreen {
   Widget buildLogo(
       MemoryImage img,
       ) =>
-      Column(children: [
+      Column(
+        children: [
+          pw.Center(
+            child:   Text(
+              needSmartHome == 'Yes'
+                  ? 'Smart Home Installation Details'
+                  : needSmartHome == 'No' && needGate == "Yes" && needAjax == "No" ? 'Gate Installation Details'
+                  : needSmartHome == 'No' && needGate == "No" && needAjax == "Yes" ? 'Ajax Installation Details' : "Installation Details",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+          ),
         Row(
           // crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -154,23 +156,18 @@ class InstallationDetailsScreen {
               width: 100, //150,
               child: pw.Image(img),
             ),
+
             Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    needSmartHome == 'Yes'
-                        ? 'Smart Home Installation Details'
-                        : needSmartHome == 'No' && needGate == "Yes" && needAjax == "No" ? 'Gate Installation Details'
-                        : needSmartHome == 'No' && needGate == "No" && needAjax == "Yes" ? 'Ajax Installation Details' : "Installation Details",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                  createText('Customer Id', id, true, 10, 65, 30),
-                  SizedBox(height: 1),
-                  createText('Date', Utils.formatDate(DateTime.now()), true, 10,
-                      65, 30,),
-                  SizedBox(height: 1),
-                ],),
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                createText('Customer Id', id, true, 10, 65, 30),
+                SizedBox(height: 1),
+                createText('Date', Utils.formatDate(entryDate), true, 10,
+                  65, 30,),
+                SizedBox(height: 1),
+              ],
+            ),
           ],
         ),
         Divider(
@@ -298,38 +295,26 @@ class InstallationDetailsScreen {
     ),
   ],);
 
-  Widget heavyBoard() => Column(children: [
+  Widget heavyAndFanBoard() => Column(children: [
     Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       height: 30,
       width: double.infinity,
       decoration: BoxDecoration(
           color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
-      child: Center(child: buildBodyText('Heavy Board', true)),
+      child: Center(child: buildBodyText('Heavy and Fan Board', true)),
     ),
-    Column(children: [
-      createText('R1', heavyR1, false, 10, 0, 8),
-      SizedBox(height: 3),
-      createText('R2', heavyR2, false, 10, 0, 8),
-      SizedBox(height: 3),
-    ],),
-  ],);
-
-  Widget fanBoard() => Column(children: [
-    Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      height: 30,
-      width: double.infinity,
-      decoration: BoxDecoration(
-          color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
-      child: Center(child: buildBodyText('Fan Board', true)),
+    SizedBox(
+      height: 80,
+      child: GridView(
+        crossAxisCount: 2,
+        children: List.generate(
+          heavyAndFanBoardDetails.length,
+              (index) => createText(
+            "R${index + 1}", heavyAndFanBoardDetails[index], false, 13, 0, 8,),
+        ),
+      ),
     ),
-    Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      createText('S1', fanR1, false, 10, 0, 8),
-      SizedBox(height: 3),
-      createText('S2', fanR2, false, 10, 0, 8),
-      SizedBox(height: 3),
-    ],),
   ],);
 
   Widget routerAndServerDetails() => Column(children: [

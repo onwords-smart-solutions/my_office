@@ -558,7 +558,7 @@ class InvAndQtnPdf {
                         false,
                       ),
                       //Tabular column for employee and customer acknowledgement
-                      SizedBox(height: 15),
+                      SizedBox(height: 10),
                       Table(
                         border: TableBorder.all(color: PdfColors.black),
                         defaultColumnWidth: const FixedColumnWidth(100.0),
@@ -783,7 +783,7 @@ class InvAndQtnPdf {
                             false,
                           ),
                           //Tabular column for employee and customer acknowledgement
-                          SizedBox(height: 15),
+                          SizedBox(height: 10),
                           Table(
                             border: TableBorder.all(color: PdfColors.black),
                             defaultColumnWidth: const FixedColumnWidth(100.0),
