@@ -13,7 +13,7 @@ class InstallationDetailsScreen {
   late int number;
   late String address;
 
-  // late DateTime entryDate;
+  late DateTime entryDate;
   late DateTime installationDate;
   late String gateType;
   late String needApp;
@@ -33,10 +33,7 @@ class InstallationDetailsScreen {
   late List<String> channel8List;
   late List<String> channel4List;
   late List ajaxProductList;
-  late String heavyR1;
-  late String heavyR2;
-  late String fanR1;
-  late String fanR2;
+  late List heavyAndFanBoardDetails;
   late String ajaxUId;
 
   late String routerID;
@@ -62,7 +59,7 @@ class InstallationDetailsScreen {
     required this.id,
     required this.number,
     required this.address,
-    // required this.entryDate,
+    required this.entryDate,
     required this.installationDate,
     required this.needApp,
     required this.needAjax,
@@ -97,10 +94,7 @@ class InstallationDetailsScreen {
     required this.bSNLPass,
     required this.channel8List,
     required this.channel4List,
-    required this.heavyR1,
-    required this.heavyR2,
-    required this.fanR1,
-    required this.fanR2,
+    required this.heavyAndFanBoardDetails,
     required this.ajaxUId,
     required this.ajaxProductList,
     required this.motorBrand,
@@ -110,7 +104,7 @@ class InstallationDetailsScreen {
     final pdf = Document();
 
     var assetImage = pw.MemoryImage(
-        (await rootBundle.load('assets/logo1.png')).buffer.asUint8List(),);
+      (await rootBundle.load('assets/logo1.png')).buffer.asUint8List(),);
 
     pdf.addPage(
       MultiPage(
@@ -124,9 +118,7 @@ class InstallationDetailsScreen {
           SizedBox(height: 1 * PdfPageFormat.mm),
           if(needSmartHome == 'Yes') channel4List.isEmpty ? SizedBox() : light4ChannelOutputs(),
           SizedBox(height: 1 * PdfPageFormat.mm),
-          if(needSmartHome == 'Yes' && fanR1.isNotEmpty)fanBoard(),
-          SizedBox(height: 1 * PdfPageFormat.mm),
-          if(needSmartHome == 'Yes' && heavyR1.isNotEmpty)heavyBoard(),
+          if(needSmartHome == 'Yes') heavyAndFanBoardDetails.isEmpty ? SizedBox() : heavyAndFanBoard(),
           if(needAjax == "Yes") productTable(productDetailsModel),
           if(needGate == "Yes") gateChannelOutputs(),
           SizedBox(height: 1 * PdfPageFormat.mm),
@@ -143,42 +135,47 @@ class InstallationDetailsScreen {
   Widget buildLogo(
       MemoryImage img,
       ) =>
-      Column(children: [
-        Row(
-          // crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              // margin: const EdgeInsets.only(top: 30),
-              height: 100, //150,
-              width: 100, //150,
-              child: pw.Image(img),
+      Column(
+        children: [
+          pw.Center(
+            child:   Text(
+              needSmartHome == 'Yes'
+                  ? 'Smart Home Installation Details'
+                  : needSmartHome == 'No' && needGate == "Yes" && needAjax == "No" ? 'Gate Installation Details'
+                  : needSmartHome == 'No' && needGate == "No" && needAjax == "Yes" ? 'Ajax Installation Details' : "Installation Details",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-            Column(
-                mainAxisAlignment: MainAxisAlignment.end,
+          ),
+          Row(
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                // margin: const EdgeInsets.only(top: 30),
+                height: 100, //150,
+                width: 100, //150,
+                child: pw.Image(img),
+              ),
+
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(
-                    needSmartHome == 'Yes'
-                        ? 'Smart Home Installation Details'
-                        : needSmartHome == 'No' && needGate == "Yes" && needAjax == "No" ? 'Gate Installation Details'
-                        : needSmartHome == 'No' && needGate == "No" && needAjax == "Yes" ? 'Ajax Installation Details' : "Installation Details",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
                   createText('Customer Id', id, true, 10, 65, 30),
                   SizedBox(height: 1),
-                  createText('Date', Utils.formatDate(DateTime.now()), true, 10,
-                      65, 30,),
+                  createText('Date', Utils.formatDate(entryDate), true, 10,
+                    65, 30,),
                   SizedBox(height: 1),
-                ],),
-          ],
-        ),
-        Divider(
-          color: PdfColors.black,
-          height: 5,
-        ),
-        SizedBox(height: 3 * PdfPageFormat.mm),
-      ],);
+                ],
+              ),
+            ],
+          ),
+          Divider(
+            color: PdfColors.black,
+            height: 5,
+          ),
+          SizedBox(height: 3 * PdfPageFormat.mm),
+        ],);
 
   Widget customerDetails() => Column(children: [
     Container(
@@ -186,7 +183,7 @@ class InstallationDetailsScreen {
       height: 30,
       width: double.infinity,
       decoration: BoxDecoration(
-          color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
+        color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
       child: Center(
         child: buildBodyText('Customer Details', true),
       ),
@@ -200,7 +197,7 @@ class InstallationDetailsScreen {
     createText('Email', email, false, 10, 0, 30),
     SizedBox(height: 3),
     createText('Installation Date',
-        Utils.formatDate(installationDate).toString(), false, 10, 0, 30,),
+      Utils.formatDate(installationDate).toString(), false, 10, 0, 30,),
     SizedBox(height: 3),
     if(needAjax == 'Yes')createText('Ajax User ID', ajaxUId, false, 10, 0, 30),
     SizedBox(height: 3),
@@ -212,7 +209,7 @@ class InstallationDetailsScreen {
       height: 30,
       width: double.infinity,
       decoration: BoxDecoration(
-          color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
+        color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
       child: Center(
         child: buildBodyText('Gate Details', true),
       ),
@@ -229,7 +226,7 @@ class InstallationDetailsScreen {
           createText('Brand name', motorBrand, false, 10, 0, 30),
           SizedBox(height: 3),
           createText(
-              'Extra Remote', extraRemote.toString(), false, 10, 0, 30,),
+            'Extra Remote', extraRemote.toString(), false, 10, 0, 30,),
           SizedBox(height: 3),
           createText('App Control', needApp, false, 10, 0, 30),
           needSmartHome == 'No' && needApp == 'Yes'
@@ -261,7 +258,7 @@ class InstallationDetailsScreen {
       height: 30,
       width: double.infinity,
       decoration: BoxDecoration(
-          color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
+        color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
       child: Center(child: buildBodyText('Light 8 Channel', true)),
     ),
     SizedBox(
@@ -271,7 +268,7 @@ class InstallationDetailsScreen {
         children: List.generate(
           channel8List.length,
               (index) => createText(
-              "R${index + 1}", channel8List[index], false, 13, 0, 8,),
+            "R${index + 1}", channel8List[index], false, 13, 0, 8,),
         ),
       ),
     ),
@@ -282,7 +279,7 @@ class InstallationDetailsScreen {
       height: 30,
       width: double.infinity,
       decoration: BoxDecoration(
-          color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
+        color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
       child: Center(child: buildBodyText('Light 4 Channel', true)),
     ),
     SizedBox(
@@ -292,44 +289,32 @@ class InstallationDetailsScreen {
         children: List.generate(
           channel4List.length,
               (index) => createText(
-              "R${index + 1}", channel4List[index], false, 13, 0, 8,),
+            "R${index + 1}", channel4List[index], false, 13, 0, 8,),
         ),
       ),
     ),
   ],);
 
-  Widget heavyBoard() => Column(children: [
+  Widget heavyAndFanBoard() => Column(children: [
     Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       height: 30,
       width: double.infinity,
       decoration: BoxDecoration(
-          color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
-      child: Center(child: buildBodyText('Heavy Board', true)),
+        color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
+      child: Center(child: buildBodyText('Heavy and Fan Board', true)),
     ),
-    Column(children: [
-      createText('R1', heavyR1, false, 10, 0, 8),
-      SizedBox(height: 3),
-      createText('R2', heavyR2, false, 10, 0, 8),
-      SizedBox(height: 3),
-    ],),
-  ],);
-
-  Widget fanBoard() => Column(children: [
-    Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      height: 30,
-      width: double.infinity,
-      decoration: BoxDecoration(
-          color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
-      child: Center(child: buildBodyText('Fan Board', true)),
+    SizedBox(
+      height: 80,
+      child: GridView(
+        crossAxisCount: 2,
+        children: List.generate(
+          heavyAndFanBoardDetails.length,
+              (index) => createText(
+            "R${index + 1}", heavyAndFanBoardDetails[index], false, 13, 0, 8,),
+        ),
+      ),
     ),
-    Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      createText('S1', fanR1, false, 10, 0, 8),
-      SizedBox(height: 3),
-      createText('S2', fanR2, false, 10, 0, 8),
-      SizedBox(height: 3),
-    ],),
   ],);
 
   Widget routerAndServerDetails() => Column(children: [
@@ -338,7 +323,7 @@ class InstallationDetailsScreen {
       height: 30,
       width: double.infinity,
       decoration: BoxDecoration(
-          color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
+        color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
       child:
       Center(child: buildBodyText('Router and Server Details', true)),
     ),
@@ -354,7 +339,7 @@ class InstallationDetailsScreen {
           createText('Wifi Name', wifiName, false, 10, 0, 30),
           SizedBox(height: 3),
           createText(
-              'Wifi Password', wifiPassword.toString(), false, 10, 0, 30,),
+            'Wifi Password', wifiPassword.toString(), false, 10, 0, 30,),
           SizedBox(height: 3),
           createText('User Id', userID, false, 10, 0, 30),
           SizedBox(height: 3),
@@ -367,31 +352,31 @@ class InstallationDetailsScreen {
           SizedBox(height: 3),
           if (bSNL == 'Yes')
             createText(
-                'Password', bSNLPass.toString(), false, 10, 0, 30,),
+              'Password', bSNLPass.toString(), false, 10, 0, 30,),
         ],),
         Column(children: [
           createText('Server', server, false, 10, 0, 30),
           SizedBox(height: 3),
           createText(
-              'Port forwarding', portForwarding, false, 10, 0, 30,),
+            'Port forwarding', portForwarding, false, 10, 0, 30,),
           SizedBox(height: 3),
           createText('Local IP', localIp.toString(), false, 10, 0, 30),
           SizedBox(height: 3),
           createText('Static IP', staticIp.toString(), false, 10, 0, 30),
           SizedBox(height: 3),
           createText(
-              'Server Port', serverPort.toString(), false, 10, 0, 30,),
+            'Server Port', serverPort.toString(), false, 10, 0, 30,),
           SizedBox(height: 3),
           createText(
-              'Voice Config', voiceConfig.toString(), false, 10, 0, 30,),
+            'Voice Config', voiceConfig.toString(), false, 10, 0, 30,),
           SizedBox(height: 3),
           if (bSNL == 'Yes')
             createText(
-                'User ID', voiceUID.toString(), false, 10, 0, 30,),
+              'User ID', voiceUID.toString(), false, 10, 0, 30,),
           SizedBox(height: 3),
           if (bSNL == 'Yes')
             createText('Password', voicePass.toString(), false,
-                10, 0, 30,),
+              10, 0, 30,),
         ],),
       ],
     ),
@@ -403,18 +388,18 @@ class InstallationDetailsScreen {
       height: 30,
       width: double.infinity,
       decoration: BoxDecoration(
-          color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
+        color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
       child: Center(child: buildBodyText('Crew Members', true)),
     ),
     SizedBox(height: 3),
     ListView.builder(
-        itemCount: nameList.length,
-        itemBuilder: (context, int index) {
-          return Column(children: [
-            createText("${index + 1}", nameList[index], false, 13, 0, 5),
-            SizedBox(height: 2 * PdfPageFormat.mm),
-          ],);
-        },),
+      itemCount: nameList.length,
+      itemBuilder: (context, int index) {
+        return Column(children: [
+          createText("${index + 1}", nameList[index], false, 13, 0, 5),
+          SizedBox(height: 2 * PdfPageFormat.mm),
+        ],);
+      },),
   ],);
 
   Widget deviceNameList() => Column(children: [
@@ -423,18 +408,18 @@ class InstallationDetailsScreen {
       height: 30,
       width: double.infinity,
       decoration: BoxDecoration(
-          color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
+        color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
       child: Center(child: buildBodyText('Extra Devices', true)),
     ),
     SizedBox(height: 3),
     ListView.builder(
-        itemCount: deviceList.length,
-        itemBuilder: (context, int index) {
-          return Column(children: [
-            createText("${index + 1}", deviceList[index], false, 13, 0, 5),
-            SizedBox(height: 2 * PdfPageFormat.mm),
-          ],);
-        },),
+      itemCount: deviceList.length,
+      itemBuilder: (context, int index) {
+        return Column(children: [
+          createText("${index + 1}", deviceList[index], false, 13, 0, 5),
+          SizedBox(height: 2 * PdfPageFormat.mm),
+        ],);
+      },),
   ],);
 
 
@@ -449,30 +434,30 @@ class InstallationDetailsScreen {
       ];
     }).toList();
     return  TableHelper.fromTextArray(
-        headers: headers,
-        data: data,
-        cellStyle: const TextStyle(fontSize: 9),
-        border: const TableBorder(
-        ),
-        headerStyle: TextStyle(
-            fontWeight: FontWeight.bold, fontSize: 10, color: PdfColors.white,),
-        headerDecoration: const BoxDecoration(color: PdfColors.red700),
-        cellHeight: 25,
-        columnWidths: {
-          0: const FixedColumnWidth(230.0), // fixed to 100 width
-          1: const FlexColumnWidth(50.0),
-          2: const FixedColumnWidth(80.0), //fixed to 100 width
-          3: const FixedColumnWidth(80.0), //fixed to 100 width
-        },
-        cellAlignments: {
-          0: Alignment.centerLeft,
-          1: Alignment.centerRight,
-          2: Alignment.centerRight,
-          3: Alignment.centerRight,
-          4: Alignment.centerRight,
-          5: Alignment.centerRight,
-        },
-        oddRowDecoration: const BoxDecoration(color: PdfColors.red50),);
+      headers: headers,
+      data: data,
+      cellStyle: const TextStyle(fontSize: 9),
+      border: const TableBorder(
+      ),
+      headerStyle: TextStyle(
+        fontWeight: FontWeight.bold, fontSize: 10, color: PdfColors.white,),
+      headerDecoration: const BoxDecoration(color: PdfColors.red700),
+      cellHeight: 25,
+      columnWidths: {
+        0: const FixedColumnWidth(230.0), // fixed to 100 width
+        1: const FlexColumnWidth(50.0),
+        2: const FixedColumnWidth(80.0), //fixed to 100 width
+        3: const FixedColumnWidth(80.0), //fixed to 100 width
+      },
+      cellAlignments: {
+        0: Alignment.centerLeft,
+        1: Alignment.centerRight,
+        2: Alignment.centerRight,
+        3: Alignment.centerRight,
+        4: Alignment.centerRight,
+        5: Alignment.centerRight,
+      },
+      oddRowDecoration: const BoxDecoration(color: PdfColors.red50),);
   }
 
   Widget buildFooter() => Column(
@@ -486,21 +471,21 @@ class InstallationDetailsScreen {
   );
 
   pw.Text buildBodyText(String text, bool isHead) => Text(text,
-      style: TextStyle(
-        fontSize: 16,
-        fontWeight: isHead ? FontWeight.bold : FontWeight.normal,
-      ),);
+    style: TextStyle(
+      fontSize: 16,
+      fontWeight: isHead ? FontWeight.bold : FontWeight.normal,
+    ),);
 
   Widget createText(String title, String subTitle, bool isHead, double size,
       double valueWidth, double keyWidth,) =>
       Row(children: [
         Container(
           // color: PdfColors.blue,
-            width: keyWidth * PdfPageFormat.mm,
-            child: Text(
-              title,
-              style: TextStyle(fontSize: size, fontWeight: FontWeight.bold),
-            ),),
+          width: keyWidth * PdfPageFormat.mm,
+          child: Text(
+            title,
+            style: TextStyle(fontSize: size, fontWeight: FontWeight.bold),
+          ),),
         Text(':  '),
         Container(
           // color: PdfColors.red,

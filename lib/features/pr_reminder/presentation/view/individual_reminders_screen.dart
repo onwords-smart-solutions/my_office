@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:my_office/core/utilities/constants/app_main_template.dart';
+import 'package:my_office/core/utilities/custom_widgets/custom_app_button.dart';
 import 'package:my_office/features/pr_reminder/data/model/pr_reminder_model.dart';
 import '../../../../core/utilities/constants/app_color.dart';
-import '../../../../core/utilities/constants/app_screen_template.dart';
 import '../../../search_leads/presentation/view/customer_leads_screen.dart';
 import '../../../user/domain/entity/user_entity.dart';
 
@@ -25,9 +27,10 @@ class FullRemindersScreen extends StatefulWidget {
 class _FullRemindersScreenState extends State<FullRemindersScreen> {
   @override
   Widget build(BuildContext context) {
-    return ScreenTemplate(
-      bodyTemplate: buildReminderScreen(),
-      title: 'Total Reminders',
+    return MainTemplate(
+      templateBody: buildReminderScreen(),
+      subtitle: widget.fullReminders.customerName,
+      bgColor: AppColor.backGroundColor,
     );
   }
 
@@ -36,7 +39,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
       child: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: Table(
               columnWidths: const {
                 0: FlexColumnWidth(2),
@@ -44,8 +47,8 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
               },
               border: TableBorder.all(
                 borderRadius: BorderRadius.circular(12),
-                color: AppColor.primaryColor,
-                width: 1.5,
+                color: Theme.of(context).primaryColor.withOpacity(.3),
+                width: 2,
               ),
               children: [
                 TableRow(
@@ -54,13 +57,13 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                     // color: Colors.grey.shade300,
                   ),
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
                       child: Text(
                         "Customer name",
                         style: TextStyle(
-                          fontSize: 14,
                           fontWeight: FontWeight.w500,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -69,8 +72,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       child: SelectableText(
                         widget.fullReminders.customerName,
                         style: TextStyle(
-                          color: AppColor.primaryColor,
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -79,16 +81,15 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                 TableRow(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    // color: Colors.grey.shade300,
                   ),
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8),
+                     Padding(
+                      padding: const EdgeInsets.all(8),
                       child: Text(
                         "City",
                         style: TextStyle(
-                          fontSize: 14,
                           fontWeight: FontWeight.w500,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -97,8 +98,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       child: SelectableText(
                         widget.fullReminders.city,
                         style: TextStyle(
-                          color: AppColor.primaryColor,
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -107,15 +107,14 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                 TableRow(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    // color: Colors.grey.shade300,
                   ),
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
                       child: Text(
                         "Created by",
                         style: TextStyle(
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -125,8 +124,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       child: SelectableText(
                         widget.fullReminders.createdBy,
                         style: TextStyle(
-                          color: AppColor.primaryColor,
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -135,15 +133,14 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                 TableRow(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    // color: Colors.grey.shade300,
                   ),
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8),
+                     Padding(
+                      padding: const EdgeInsets.all(8),
                       child: Text(
                         "Created date",
                         style: TextStyle(
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -153,8 +150,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       child: SelectableText(
                         widget.fullReminders.createdDate,
                         style: TextStyle(
-                          color: AppColor.primaryColor,
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -163,15 +159,14 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                 TableRow(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    // color: Colors.grey.shade300,
                   ),
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
                       child: Text(
                         "Created time",
                         style: TextStyle(
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -181,8 +176,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       child: SelectableText(
                         widget.fullReminders.createdTime,
                         style: TextStyle(
-                          color: AppColor.primaryColor,
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -191,15 +185,14 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                 TableRow(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    // color: Colors.grey.shade300,
                   ),
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
                       child: Text(
                         "Customer id",
                         style: TextStyle(
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -209,8 +202,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       child: SelectableText(
                         widget.fullReminders.customerId,
                         style: TextStyle(
-                          color: AppColor.primaryColor,
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -219,15 +211,14 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                 TableRow(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    // color: Colors.grey.shade300,
                   ),
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
                       child: Text(
                         "Data fetched by",
                         style: TextStyle(
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -237,8 +228,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       child: SelectableText(
                         widget.fullReminders.dataFetchedBy,
                         style: TextStyle(
-                          color: AppColor.primaryColor,
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -247,15 +237,14 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                 TableRow(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    // color: Colors.grey.shade300,
                   ),
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
                       child: Text(
                         "Email id",
                         style: TextStyle(
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -265,8 +254,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       child: SelectableText(
                         widget.fullReminders.emailId,
                         style: TextStyle(
-                          color: AppColor.primaryColor,
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -275,15 +263,14 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                 TableRow(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    // color: Colors.grey.shade300,
                   ),
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
                       child: Text(
                         "Enquired for",
                         style: TextStyle(
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -293,8 +280,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       child: SelectableText(
                         widget.fullReminders.enquiredFor,
                         style: TextStyle(
-                          color: AppColor.primaryColor,
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -303,15 +289,14 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                 TableRow(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    // color: Colors.grey.shade300,
                   ),
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8),
+                     Padding(
+                      padding: const EdgeInsets.all(8),
                       child: Text(
                         "Lead incharge",
                         style: TextStyle(
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -321,8 +306,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       child: SelectableText(
                         widget.fullReminders.leadInCharge,
                         style: TextStyle(
-                          color: AppColor.primaryColor,
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -331,15 +315,14 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                 TableRow(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    // color: Colors.grey.shade300,
                   ),
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
                       child: Text(
                         "Phone number",
                         style: TextStyle(
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -349,8 +332,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       child: SelectableText(
                         widget.fullReminders.phoneNumber,
                         style: TextStyle(
-                          color: AppColor.primaryColor,
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -359,15 +341,14 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                 TableRow(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    // color: Colors.grey.shade300,
                   ),
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
                       child: Text(
                         "Rating",
                         style: TextStyle(
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -377,8 +358,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       child: SelectableText(
                         widget.fullReminders.rating,
                         style: TextStyle(
-                          color: AppColor.primaryColor,
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -387,15 +367,14 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                 TableRow(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    // color: Colors.grey.shade300,
                   ),
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
                       child: Text(
                         "State",
                         style: TextStyle(
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -405,8 +384,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       child: SelectableText(
                         widget.fullReminders.state,
                         style: TextStyle(
-                          color: AppColor.primaryColor,
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -415,15 +393,14 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                 TableRow(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    // color: Colors.grey.shade300,
                   ),
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
                       child: Text(
                         "Updated by",
                         style: TextStyle(
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -433,8 +410,7 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
                       child: SelectableText(
                         widget.fullReminders.updatedBy,
                         style: TextStyle(
-                          color: AppColor.primaryColor,
-                          fontSize: 14,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -443,29 +419,27 @@ class _FullRemindersScreenState extends State<FullRemindersScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 30),
-          CupertinoButton(
-            color: CupertinoColors.activeOrange,
-            pressedOpacity: 0.5,
-            borderRadius: BorderRadius.circular(20),
-            child: const Text(
-              'Get leads',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 17,
-              ),
-            ),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => SearchLeadsScreen(
-                    staffInfo: widget.staffInfo,
-                    query: widget.fullReminders.phoneNumber,
-                    selectedStaff: widget.fullReminders.updatedBy,
+          const Gap(50),
+          AppButton(
+              onPressed: (){
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => SearchLeadsScreen(
+                      staffInfo: widget.staffInfo,
+                      query: widget.fullReminders.phoneNumber,
+                      selectedStaff: widget.fullReminders.updatedBy,
+                    ),
                   ),
+                );
+              },
+              child: Text(
+                'Get leads',
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(context).primaryColor,
+                  fontSize: 17,
                 ),
-              );
-            },
+              ),
           ),
         ],
       ),

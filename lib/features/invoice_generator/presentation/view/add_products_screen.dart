@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_office/core/utilities/constants/app_color.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_app_button.dart';
 import 'package:my_office/features/invoice_generator/presentation/provider/invoice_generator_provider.dart';
 import 'package:my_office/features/invoice_generator/presentation/view/product_details_screen.dart';

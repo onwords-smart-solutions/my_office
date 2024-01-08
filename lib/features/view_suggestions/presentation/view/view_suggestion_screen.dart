@@ -40,7 +40,7 @@ class _ViewSuggestionsState extends State<ViewSuggestions> {
   @override
   Widget build(BuildContext context) {
     return MainTemplate(
-      subtitle: 'Check for Suggestions!!',
+      subtitle: 'View Suggestions',
       templateBody: viewSuggestionsPage(),
       bgColor: AppColor.backGroundColor,
     );
@@ -49,23 +49,18 @@ class _ViewSuggestionsState extends State<ViewSuggestions> {
   Widget viewSuggestionsPage() {
     return allSuggestion.isEmpty
         ? Center(
-      child: Lottie.asset('assets/animations/new_loading.json'),
+      child:  Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ?
+      Lottie.asset('assets/animations/loading_light_theme.json'):
+      Lottie.asset('assets/animations/loading_dark_theme.json'),
     )
         : ListView.builder(
       itemCount: allSuggestion.length,
       itemBuilder: (context, index) {
         return Container(
-          margin: const EdgeInsets.all(5),
+          margin: const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
           decoration: BoxDecoration(
-            color: AppColor.backGroundColor,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                offset: const Offset(0.0, 2.0),
-                blurRadius: 8,
-              ),
-            ],
             borderRadius: BorderRadius.circular(15),
+            color: Theme.of(context).primaryColor.withOpacity(.1),
           ),
           child: ListTile(
             onTap: () {
@@ -77,16 +72,22 @@ class _ViewSuggestionsState extends State<ViewSuggestions> {
                 ),
               );
             },
-            leading: const CircleAvatar(
+            leading: CircleAvatar(
+              backgroundColor: Theme.of(context).primaryColor.withOpacity(.2),
               radius: 20,
-              child: Icon(CupertinoIcons.bookmark_solid),
+              child: const Icon(
+                size: 18,
+                CupertinoIcons.bookmark_solid,
+                color: Colors.purpleAccent,
+              ),
             ),
             title: Text(
               allSuggestion[index]['message'].toString().length >= 30
                   ? '${allSuggestion[index]['message'].toString().substring(0, 30)} ...'
                   : allSuggestion[index]['message'].toString(),
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 15,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           ),

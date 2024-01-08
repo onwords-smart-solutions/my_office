@@ -17,10 +17,10 @@ class ThemeSelector extends StatelessWidget {
             Icons.wb_sunny_rounded,
             color: Theme.of(context).primaryColor,
           ),
-          title: const Text('Change theme'),
+          title: Text('Change theme', style: TextStyle(color: Theme.of(context).primaryColor,),),
           trailing: Text(
             themeProvider.theme,
-            style: const TextStyle(fontSize: 14.0, color: Colors.grey),
+            style: TextStyle(fontSize: 14.0, color: Theme.of(context).primaryColor.withOpacity(.5),),
           ),
         );
       },
@@ -58,24 +58,24 @@ class ThemeSelector extends StatelessWidget {
               children: [
                 //heading
                 ListTile(
-                  title: const Text(
+                  title: Text(
                     'Choose Theme',
-                    style: TextStyle(fontSize: 16.0),
+                    style: TextStyle(fontSize: 16.0,color: Theme.of(context).primaryColor,),
                   ),
-                  subtitle: const Text(
+                  subtitle: Text(
                     'Update your theme for app',
-                    style: TextStyle(color: Colors.grey),
+                    style: TextStyle(color: Theme.of(context).primaryColor.withOpacity(.4),),
                   ),
                   trailing: IconButton(
                     onPressed: () => Navigator.of(ctx).pop(),
                     style: IconButton.styleFrom(foregroundColor: Colors.grey),
-                    icon: const Icon(Icons.close_rounded),
+                    icon: Icon(Icons.close_rounded,color: Theme.of(context).primaryColor,),
                   ),
                 ),
                 Divider(
-                  color: Colors.grey.withOpacity(.3),
+                  color: Theme.of(context).primaryColor.withOpacity(.4),
                   height: 0.0,
-                  thickness: .5,
+                  thickness: .7,
                 ),
                 //body
                 Flexible(
@@ -98,12 +98,12 @@ class ThemeSelector extends StatelessWidget {
                           ),
                         )
                             : null,
-                        title: Text(themes[index]),
+                        title: Text(themes[index], style: TextStyle(color: Theme.of(context).primaryColor,),),
                         subtitle: Text(
                           description[index],
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12.0,
-                            color: Colors.grey,
+                            color: Theme.of(context).primaryColor.withOpacity(.4),
                           ),
                         ),
                       ),

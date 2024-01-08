@@ -71,7 +71,7 @@ class _FoodCountScreenState extends State<FoodCountScreen> {
   @override
   Widget build(BuildContext context) {
     return MainTemplate(
-      subtitle: 'Food count detail',
+      subtitle: 'Food count details',
       templateBody: buildBody(),
       bgColor: AppColor.backGroundColor,
     );
@@ -85,7 +85,10 @@ class _FoodCountScreenState extends State<FoodCountScreen> {
 
     if (isLoading) {
       return Center(
-        child: Lottie.asset('assets/animations/new_loading.json'),
+        child:
+        Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ?
+        Lottie.asset('assets/animations/loading_light_theme.json'):
+        Lottie.asset('assets/animations/loading_dark_theme.json'),
       );
     }
     return foodList.isNotEmpty
@@ -96,8 +99,10 @@ class _FoodCountScreenState extends State<FoodCountScreen> {
                 children: [
                   Text(
                     'Total - $total',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w500,
+                    style:  TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 17,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                   const Gap(70),
@@ -112,14 +117,16 @@ class _FoodCountScreenState extends State<FoodCountScreen> {
                     return ListTile(
                       title: Text(
                         foodItem.name,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.w500,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                       trailing: Text(
                         'Count : ${foodItem.foodDates.length}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.w500,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                       onTap:  () {
@@ -174,11 +181,13 @@ class _FoodCountScreenState extends State<FoodCountScreen> {
               ),
             ],
           )
-        : const Center(
+        : Center(
             child: Text(
-              'No food count details available!',
+              'No food details available!!',
               style: TextStyle(
                 fontWeight: FontWeight.w500,
+                fontSize: 20,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           );
@@ -188,8 +197,10 @@ class _FoodCountScreenState extends State<FoodCountScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: PopupMenuButton(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+        ),
         position: PopupMenuPosition.under,
         elevation: 10.0,
         itemBuilder: (ctx) => List.generate(
@@ -198,7 +209,10 @@ class _FoodCountScreenState extends State<FoodCountScreen> {
             return PopupMenuItem(
               child: Text(
                 month.keys.toList()[index],
-                style: const TextStyle(fontSize: 15),
+                style: TextStyle(
+                    fontSize: 15,
+                  color: Theme.of(context).primaryColor,
+                ),
               ),
               onTap: () {
                 newMonth = month.keys.toList()[index];
@@ -210,13 +224,14 @@ class _FoodCountScreenState extends State<FoodCountScreen> {
         icon: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.calendar_month_rounded, color: Colors.deepPurple),
+            Icon(Icons.calendar_month_rounded,  color: Theme.of(context).primaryColor,),
+            const Gap(5),
             Text(
               currentMonth,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 16.0,
-                color: Colors.deepPurple,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           ],

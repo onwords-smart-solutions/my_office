@@ -32,24 +32,27 @@ class CustomSheets {
               ListTile(
                 title: Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16.0,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
                 subtitle: Text(
                   subTitle!,
-                  style: const TextStyle(color: Colors.grey),
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor.withOpacity(.4),
+                  ),
                 ),
                 trailing:  IconButton(
                   onPressed: () => Navigator.of(ctx).pop(),
                   style: IconButton.styleFrom(foregroundColor: Colors.grey),
-                  icon: const Icon(Icons.close_rounded),
+                  icon: Icon(Icons.close_rounded,color: Theme.of(context).primaryColor,),
                 ),
               ),
               Divider(
-                color: Colors.grey.withOpacity(.3),
+                color: Theme.of(context).primaryColor.withOpacity(.4),
                 height: 0.0,
-                thickness: .5,
+                thickness: .7,
               ),
               // -- options --
               Container(
@@ -73,7 +76,7 @@ class CustomSheets {
                         ),
                         trailing:
                         Icon(Iconsax.camera, color: Theme.of(context).primaryColor),
-                        title: const Text('Take Photo'),
+                        title: Text('Take Photo',style: TextStyle(color: Theme.of(context).primaryColor,),),
                       ),
                     ),
                     Material(
@@ -90,7 +93,7 @@ class CustomSheets {
                         ),
                         trailing:
                         Icon(Iconsax.gallery, color: Theme.of(context).primaryColor),
-                        title: const Text('Choose Photo'),
+                        title: Text('Choose Photo', style: TextStyle(color: Theme.of(context).primaryColor,),),
                       ),
                     ),
                   ],

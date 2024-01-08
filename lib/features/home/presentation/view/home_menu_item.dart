@@ -14,7 +14,7 @@ class HomeMenuItem extends StatelessWidget {
   Widget build(BuildContext context) {
     // final size = MediaQuery.sizeOf(context);
     return InkWell(
-      splashColor: Colors.deepPurple.withOpacity(.3),
+      splashColor: Colors.deepPurple.withOpacity(.2),
       borderRadius: BorderRadius.circular(15.0),
       onTap: () {
         Navigator.of(context).push(
@@ -31,9 +31,10 @@ class HomeMenuItem extends StatelessWidget {
           Expanded(child: Image.asset(image)),
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.w500,
               fontSize: 14.0,
+              color: Theme.of(context).primaryColor,
             ),
             textAlign: TextAlign.center,
           ),

@@ -30,9 +30,9 @@ class _SwipeableButtonState extends State<SwipeableButton> {
   Map<String, dynamic> refreshmentDetails = {};
   Map<String, dynamic> foodDetails = {};
   late RefreshmentFbDataSource refreshmentFbDataSource =
-      RefreshmentFbDataSourceImpl();
+  RefreshmentFbDataSourceImpl();
   late RefreshmentRepository refreshmentRepository =
-      RefreshmentRepoImpl(refreshmentFbDataSource);
+  RefreshmentRepoImpl(refreshmentFbDataSource);
 
   @override
   Widget build(BuildContext context) {
@@ -68,48 +68,51 @@ class _SwipeableButtonState extends State<SwipeableButton> {
           duration: const Duration(seconds: 1),
           switchInCurve: Curves.easeInOut,
           child: isOrdering
-              ? const Center(
-                  child: CircleAvatar(
-                    backgroundColor: Colors.deepPurple,
-                    child: SizedBox(
-                      width: 30.0,
-                      height: 30.0,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2.0,
-                      ),
+              ? Center(
+            child: CircleAvatar(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              child: SizedBox(
+                width: 30.0,
+                height: 30.0,
+                child: CircularProgressIndicator(
+                  color: Theme.of(context).primaryColor,
+                  strokeWidth: 2.0,
+                ),
+              ),
+            ),
+          )
+              : ConfirmationSlider(
+            onConfirmation: () async {
+              HapticFeedback.mediumImpact();
+              isOrder.value = true;
+              final status = await orderRefreshment(
+                item: widget.type,
+                context: context,
+              );
+              if(!mounted) return;
+              if (status) {
+                await Navigator.push(
+                  context,
+                  PageTransition(
+                    type: PageTransitionType.fade,
+                    child: CompleteScreen(
+                      message: '${widget.type} ordered successfully',
                     ),
                   ),
-                )
-              : ConfirmationSlider(
-                  onConfirmation: () async {
-                    HapticFeedback.mediumImpact();
-                    isOrder.value = true;
-                    final status = await orderRefreshment(
-                      item: widget.type,
-                      context: context,
-                    );
-                    if(!mounted) return;
-                    if (status) {
-                      await Navigator.push(
-                        context,
-                        PageTransition(
-                          type: PageTransitionType.fade,
-                          child: CompleteScreen(
-                            message: '${widget.type} ordered successfully',
-                          ),
-                        ),
-                      );
-                    }
-                    isOrder.value = false;
-                  },
-                  height: 65,
-                  width: MediaQuery.of(context).size.width * .85,
-                  backgroundShape: BorderRadius.circular(40),
-                  text: widget.message,
-                  textStyle:
-                      const TextStyle(fontSize: 15.0, color: Colors.grey),
-                  sliderButtonContent: image,
-                ),
+                );
+              }
+              isOrder.value = false;
+            },
+            height: 65,
+            width: MediaQuery.of(context).size.width * .85,
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ? Colors.grey.shade800 : Colors.grey.shade200,
+            foregroundColor: Colors.transparent,
+            backgroundShape: BorderRadius.circular(40),
+            text: widget.message,
+            textStyle:
+            TextStyle(fontSize: 17.0, color: Theme.of(context).primaryColor, fontWeight: FontWeight.w500),
+            sliderButtonContent: image,
+          ),
         );
       },
     );
@@ -153,10 +156,10 @@ class _SwipeableButtonState extends State<SwipeableButton> {
       int foodCount = 0;
       bool isFoodBooked = false;
       await fetchDetails(date: format, mode: mode).then(
-        (value) async {
+            (value) async {
           if (foodDetails.isNotEmpty) {
             Map<Object?, Object?> foodList =
-                foodDetails['lunch_list'] as Map<Object?, Object?>;
+            foodDetails['lunch_list'] as Map<Object?, Object?>;
             log('food list is $foodDetails');
             //Checking whether already booked food or not
             if (foodList.isNotEmpty) {
@@ -224,25 +227,46 @@ class _SwipeableButtonState extends State<SwipeableButton> {
           if (teaList.isNotEmpty) {
             isTeaOrdered = teaList.containsValue(widget.name);
             teaCount = refreshmentDetails['tea_count'];
+            if (!isTeaOrdered) {
+              isTeaOrdered = true;
+              teaCount++;
+            } else {
+              errorMessage = 'You have already ordered tea';
+              status = false;
+            }
           }
 
           //Checking for already ordered Coffee or not
           if (coffeeList.isNotEmpty) {
             isCoffeeOrdered = coffeeList.containsValue(widget.name);
             coffeeCount = refreshmentDetails['coffee_count'];
+            if (!isCoffeeOrdered) {
+              isCoffeeOrdered = true;
+              coffeeCount++;
+            } else {
+              errorMessage = 'You have already ordered coffee';
+              status = false;
+            }
           }
 
           //Checking for already ordered milk or not
           if (milkList.isNotEmpty) {
             isMilkOrdered = milkList.containsValue(widget.name);
             milkCount = refreshmentDetails['milk_count'];
+            if (!isMilkOrdered ) {
+              isMilkOrdered = true;
+              milkCount++;
+            } else {
+              errorMessage = 'You have already ordered milk';
+              status = false;
+            }
           }
 
           //Only 1 refreshment per user tea/coffee/milk
-          if(isTeaOrdered || isCoffeeOrdered || isMilkOrdered){
-            errorMessage ='You have already ordered your refreshment';
-            status = false;
-          }
+          // if(isTeaOrdered  || isCoffeeOrdered || isMilkOrdered){
+          //   errorMessage ='You have already ordered your refreshment';
+          //   status = false;
+          // }
 
           if(status){
             await handleOrder(
@@ -323,7 +347,7 @@ class _SwipeableButtonState extends State<SwipeableButton> {
   }) async {
     try {
       bool success =
-          await refreshmentRepository.bookLunch(name: name, date: date);
+      await refreshmentRepository.bookLunch(name: name, date: date);
       log('Name is ${widget.name}');
       if (success) {
         if (!mounted) return;
@@ -379,7 +403,7 @@ class CompleteScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Future.delayed(
       const Duration(seconds: 2),
-      () => Navigator.of(context).pop(),
+          () => Navigator.of(context).pop(),
     );
     return Scaffold(
       body: Column(
@@ -388,9 +412,9 @@ class CompleteScreen extends StatelessWidget {
           Lottie.asset('assets/animations/done.json'),
           Text(
             message,
-            style: const TextStyle(
-              fontSize: 16.0,
-              color: Colors.black,
+            style: TextStyle(
+              fontSize: 18.0,
+              color: Theme.of(context).primaryColor,
               fontWeight: FontWeight.w500,
             ),
           ),

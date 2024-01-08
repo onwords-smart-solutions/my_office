@@ -58,7 +58,9 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
             builder: (ctx, bool loading, child) {
               if (loading && workReports.isEmpty) {
                 return Center(
-                  child: Lottie.asset('assets/animations/new_loading.json'),
+                  child:  Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ?
+                  Lottie.asset('assets/animations/loading_light_theme.json'):
+                  Lottie.asset('assets/animations/loading_dark_theme.json'),
                 ); // Placeholder for Lottie animation
               } else {
                 return Column(
@@ -81,11 +83,17 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
       alignment: AlignmentDirectional.centerEnd,
       child: TextButton.icon(
         onPressed: datePicker,
-        icon: const Icon(Icons.calendar_month_rounded),
+        icon: Icon(Icons.calendar_month_rounded, color: Theme.of(context).primaryColor,),
         label: ValueListenableBuilder(
           valueListenable: _selectedDate,
           builder: (ctx, DateTime date, child) {
-            return Text(DateFormat('yyyy-MM-dd').format(date));
+            return Text(
+                DateFormat('yyyy-MM-dd').format(date),
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              color: Theme.of(context).primaryColor,
+            ),
+            );
           },
         ),
       ),
@@ -93,13 +101,17 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
   }
 
   Widget noDataWidget() {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             'No work done submitted yet!!',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+            style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+              color: Theme.of(context).primaryColor,
+            ),
           ),
         ],
       ),
@@ -135,8 +147,21 @@ class _WorkCompleteViewScreenState extends State<WorkCompleteViewScreen> {
                       ),
                     ),
             ),
-            title: Text(item.name),
-            subtitle: Text(item.department),
+            title: Text(
+                item.name,
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              color: Theme.of(context).primaryColor,
+              fontSize: 16,
+            ),
+            ),
+            subtitle: Text(
+                item.department,
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (_) => IndividualWorkDone(

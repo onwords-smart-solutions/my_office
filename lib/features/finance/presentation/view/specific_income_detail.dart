@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:my_office/core/utilities/constants/app_main_template.dart';
 import 'package:my_office/features/finance/data/model/income_model.dart';
 import '../../../../core/utilities/constants/app_color.dart';
-import '../../../../core/utilities/constants/app_screen_template.dart';
 
 class IncomeDetails extends StatefulWidget {
   final IncomeModel incomeDetails;
@@ -16,20 +17,20 @@ class IncomeDetails extends StatefulWidget {
 class _IncomeDetailsState extends State<IncomeDetails> {
   @override
   Widget build(BuildContext context) {
-    return ScreenTemplate(
-      bodyTemplate: buildIncomeDetailsScreen(),
-      title: 'Income Details',
+    return MainTemplate(
+      templateBody: buildIncomeDetailsScreen(),
+      subtitle: 'Income Details',
+      bgColor: AppColor.backGroundColor,
     );
   }
 
   Widget buildIncomeDetailsScreen() {
-    return Center(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            buildIncomeTable(),
-          ],
-        ),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const Gap(50),
+          buildIncomeTable(),
+        ],
       ),
     );
   }
@@ -44,22 +45,21 @@ class _IncomeDetailsState extends State<IncomeDetails> {
         },
         border: TableBorder.all(
           borderRadius: BorderRadius.circular(10),
-          color: AppColor.primaryColor,
-          width: 1.5,
+          color: Theme.of(context).primaryColor.withOpacity(.3),
+          width: 2,
         ),
         children: [
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
             ),
             children: [
-              const Padding(
-                padding: EdgeInsets.all(10),
+              Padding(
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   "Amount",
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Theme.of(context).primaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -70,7 +70,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                 child: SelectableText(
                   widget.incomeDetails.amount.toString(),
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                    color: Theme.of(context).primaryColor,
                     fontSize: 16,
                   ),
                 ),
@@ -80,15 +80,14 @@ class _IncomeDetailsState extends State<IncomeDetails> {
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
             ),
             children: [
-              const Padding(
-                padding: EdgeInsets.all(10),
+               Padding(
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   "Customer Name",
                   style: TextStyle(
-                    color: Colors.black,
+                   color: Theme.of(context).primaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -99,7 +98,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                 child: SelectableText(
                   widget.incomeDetails.customerName.toString(),
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                   color: Theme.of(context).primaryColor,
                     fontSize: 16,
                   ),
                 ),
@@ -109,15 +108,14 @@ class _IncomeDetailsState extends State<IncomeDetails> {
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
             ),
             children: [
-              const Padding(
-                padding: EdgeInsets.all(10),
+               Padding(
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   "Entered By",
                   style: TextStyle(
-                    color: Colors.black,
+                   color: Theme.of(context).primaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -128,7 +126,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                 child: SelectableText(
                   widget.incomeDetails.enteredBy.toString(),
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                   color: Theme.of(context).primaryColor,
                     fontSize: 16,
                   ),
                 ),
@@ -138,15 +136,14 @@ class _IncomeDetailsState extends State<IncomeDetails> {
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
             ),
             children: [
-              const Padding(
-                padding: EdgeInsets.all(10),
+               Padding(
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   "Entered Date",
                   style: TextStyle(
-                    color: Colors.black,
+                   color: Theme.of(context).primaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -157,7 +154,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                 child: SelectableText(
                   widget.incomeDetails.enteredDate.toString(),
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                   color: Theme.of(context).primaryColor,
                     fontSize: 16,
                   ),
                 ),
@@ -167,15 +164,14 @@ class _IncomeDetailsState extends State<IncomeDetails> {
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
             ),
             children: [
-              const Padding(
-                padding: EdgeInsets.all(10),
+               Padding(
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   "Entered Time",
                   style: TextStyle(
-                    color: Colors.black,
+                   color: Theme.of(context).primaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -186,7 +182,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                 child: SelectableText(
                   widget.incomeDetails.enteredTime.toString(),
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                   color: Theme.of(context).primaryColor,
                     fontSize: 16,
                   ),
                 ),
@@ -196,15 +192,14 @@ class _IncomeDetailsState extends State<IncomeDetails> {
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
             ),
             children: [
-              const Padding(
-                padding: EdgeInsets.all(10),
+               Padding(
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   "Invoice Number",
                   style: TextStyle(
-                    color: Colors.black,
+                   color: Theme.of(context).primaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -215,7 +210,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                 child: SelectableText(
                   widget.incomeDetails.invoiceNumber.toString(),
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                   color: Theme.of(context).primaryColor,
                     fontSize: 16,
                   ),
                 ),
@@ -225,15 +220,14 @@ class _IncomeDetailsState extends State<IncomeDetails> {
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
             ),
             children: [
-              const Padding(
-                padding: EdgeInsets.all(10),
+               Padding(
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   "Paid Date",
                   style: TextStyle(
-                    color: Colors.black,
+                   color: Theme.of(context).primaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -244,7 +238,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                 child: SelectableText(
                   widget.incomeDetails.paidDate.toString(),
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                   color: Theme.of(context).primaryColor,
                     fontSize: 16,
                   ),
                 ),
@@ -254,15 +248,14 @@ class _IncomeDetailsState extends State<IncomeDetails> {
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
             ),
             children: [
-              const Padding(
-                padding: EdgeInsets.all(10),
+               Padding(
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   "Paid Time",
                   style: TextStyle(
-                    color: Colors.black,
+                   color: Theme.of(context).primaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -273,7 +266,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                 child: SelectableText(
                   widget.incomeDetails.paidTime.toString(),
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                   color: Theme.of(context).primaryColor,
                     fontSize: 16,
                   ),
                 ),
@@ -283,15 +276,14 @@ class _IncomeDetailsState extends State<IncomeDetails> {
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
             ),
             children: [
-              const Padding(
-                padding: EdgeInsets.all(10),
+               Padding(
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   "Payment Method",
                   style: TextStyle(
-                    color: Colors.black,
+                   color: Theme.of(context).primaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -302,7 +294,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                 child: SelectableText(
                   widget.incomeDetails.paymentMethod.toString(),
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                   color: Theme.of(context).primaryColor,
                     fontSize: 16,
                   ),
                 ),
@@ -312,15 +304,14 @@ class _IncomeDetailsState extends State<IncomeDetails> {
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
             ),
             children: [
-              const Padding(
-                padding: EdgeInsets.all(10),
+               Padding(
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   "Product Name",
                   style: TextStyle(
-                    color: Colors.black,
+                   color: Theme.of(context).primaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -331,7 +322,7 @@ class _IncomeDetailsState extends State<IncomeDetails> {
                 child: SelectableText(
                   widget.incomeDetails.productName.toString(),
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                   color: Theme.of(context).primaryColor,
                     fontSize: 16,
                   ),
                 ),

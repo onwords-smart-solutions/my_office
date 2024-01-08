@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:lottie/lottie.dart';
@@ -97,21 +96,25 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(
             Iconsax.close_square5,
+            size: 30,
             color: Colors.redAccent,
           ),
         ),
-        title: const Text(
+        title: Text(
           'Refreshment Count',
           style: TextStyle(
-            color: Color(0xff8355B7),
-            fontSize: 20.0,
-            fontWeight: FontWeight.w700,
+            color: Theme.of(context).primaryColor,
+            fontSize: 25.0,
+            fontWeight: FontWeight.w500,
           ),
         ),
         centerTitle: true,
       ),
       body: _isLoading
-          ? Center(child: Lottie.asset('assets/animations/new_loading.json'))
+          ? Center(
+        child: Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ?
+        Lottie.asset('assets/animations/loading_light_theme.json'):
+        Lottie.asset('assets/animations/loading_dark_theme.json'),)
           : Column(
               children: [
                 buildHeadSection(),
@@ -155,7 +158,7 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
             Text(
               '$key: $value',
               style:
-                  const TextStyle(fontWeight: FontWeight.w500, fontSize: 16.0),
+              TextStyle(color:Theme.of(context).primaryColor, fontWeight: FontWeight.w500, fontSize: 16.0),
             ),
           ],
         ),
@@ -174,9 +177,9 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
         children: [
           Text(
             _dayTime,
-            style: const TextStyle(
-              color: Color(0xff8355B7),
-              fontSize: 15.0,
+            style: TextStyle(
+              color: Theme.of(context).primaryColor,
+              fontSize: 17.0,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -208,22 +211,24 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
           const Text(
             'Tea',
             style: TextStyle(
-              color: Color(0xffDD9324),
+              color: Colors.orangeAccent,
               fontSize: 26.0,
+              fontWeight: FontWeight.w500,
             ),
           ),
           Container(
-            margin: const EdgeInsets.only(left: 25.0, right: 5.0),
+            // height: MediaQuery.of(context).size.height * .1,
+            margin: const EdgeInsets.only(left: 5.0, right: 5.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: listOfTea.isEmpty
-                      ? const Text(
-                          'No data',
+                      ? Text(
+                          'No tea data',
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
-                            color: Colors.grey,
+                            color: Theme.of(context).primaryColor.withOpacity(.6),
                             fontSize: 18.0,
                           ),
                         )
@@ -235,17 +240,16 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                           itemBuilder: (ctx, index) {
                             return Text(
                               listOfTea[index],
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 15,
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.w500,
                               ),
                             );
                           },
                         ),
                 ),
-                Image.asset(
-                  'assets/tea_design.png',
-                  scale: 4.0,
-                ),
+
               ],
             ),
           ),
@@ -271,23 +275,24 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
           const Text(
             'Coffee',
             style: TextStyle(
-              color: Color(0xff5B3618),
+              color: Colors.blueAccent,
+              fontWeight: FontWeight.w500,
               fontSize: 26.0,
             ),
           ),
           Container(
-            // height: MediaQuery.of(context).size.height * .18,
-            margin: const EdgeInsets.only(left: 25.0, right: 5.0),
+            // height: MediaQuery.of(context).size.height * .1,
+            margin: const EdgeInsets.only(left: 5.0, right: 5.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: listOfCoffee.isEmpty
-                      ? const Text(
-                          'No data',
+                      ? Text(
+                          'No coffee data',
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
-                            color: Colors.grey,
+                            color: Theme.of(context).primaryColor.withOpacity(.6),
                             fontSize: 18.0,
                           ),
                         )
@@ -299,17 +304,16 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                           itemBuilder: (ctx, index) {
                             return Text(
                               listOfCoffee[index],
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 15,
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.w500,
                               ),
                             );
                           },
                         ),
                 ),
-                Image.asset(
-                  'assets/coffee_design.png',
-                  scale: 4.0,
-                ),
+
               ],
             ),
           ),
@@ -332,25 +336,27 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Milk',
             style: TextStyle(
-              color: Colors.lightBlue.shade800,
+              color: Colors.deepOrangeAccent,
+              fontWeight: FontWeight.w500,
               fontSize: 26.0,
             ),
           ),
           Container(
-            margin: const EdgeInsets.only(left: 25.0, right: 5.0),
+            // height: MediaQuery.of(context).size.height * .1,
+            margin: const EdgeInsets.only(left: 5.0, right: 5.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: listOfMilk.isEmpty
-                      ? const Text(
-                          'No data',
+                      ? Text(
+                          'No milk data',
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
-                            color: Colors.grey,
+                            color: Theme.of(context).primaryColor.withOpacity(.6),
                             fontSize: 18.0,
                           ),
                         )
@@ -362,17 +368,16 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                           itemBuilder: (ctx, index) {
                             return Text(
                               listOfMilk[index],
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 15,
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.w500,
                               ),
                             );
                           },
                         ),
                 ),
-                Image.asset(
-                  'assets/tea_design.png',
-                  scale: 4.0,
-                ),
+
               ],
             ),
           ),
@@ -398,22 +403,24 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
           const Text(
             'Food',
             style: TextStyle(
-              color: Colors.redAccent,
+              color: Colors.red,
+              fontWeight: FontWeight.w500,
               fontSize: 26.0,
             ),
           ),
           Container(
-            margin: const EdgeInsets.only(left: 25.0, right: 5.0),
+            // height: MediaQuery.of(context).size.height * .1,
+            margin: const EdgeInsets.only(left: 5.0, right: 5.0),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: listOfFood.isEmpty
-                      ? const Text(
-                          'No data',
+                      ? Text(
+                          'No food data',
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
-                            color: Colors.grey,
+                            color: Theme.of(context).primaryColor.withOpacity(.6),
                             fontSize: 18.0,
                           ),
                         )
@@ -425,8 +432,10 @@ class _RefreshmentDetailsState extends State<RefreshmentDetails> {
                           itemBuilder: (ctx, index) {
                             return Text(
                               listOfFood[index],
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 15,
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.w500,
                               ),
                             );
                           },

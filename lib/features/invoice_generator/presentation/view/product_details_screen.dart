@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
 import 'package:flutter/material.dart';
-import 'package:my_office/core/utilities/constants/app_color.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_app_button.dart';
 import 'package:my_office/features/invoice_generator/data/data_source/invoice_generator_fb_data_source.dart';
 import 'package:my_office/features/invoice_generator/data/data_source/invoice_generator_fb_data_source_impl.dart';
@@ -277,11 +276,21 @@ class _ProductDetailsState extends State<ProductDetails> {
                             color: Theme.of(context).primaryColor,
                             icon: Icons.clear,
                           ),
-                          // dropdownColor: Colors.orange,
+                          textFieldDecoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: '   Select Product',
+                            hintStyle: TextStyle(
+                              fontSize: 17,
+                              color: Theme.of(context).primaryColor.withOpacity(.5),
+                            ),
+                          ),
                           searchDecoration: InputDecoration(
                             hintText: "Select Product",
                             hintStyle: TextStyle(
                               color: Theme.of(context).primaryColor.withOpacity(.5),
+                            ),
+                            labelStyle: TextStyle(
+                              color: Theme.of(context).primaryColor,
                             ),
                           ),
                           listTextStyle: TextStyle(
@@ -295,7 +304,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                               return null;
                             }
                           },
-                          dropDownItemCount: 6,
+                          dropDownItemCount: 7,
                           dropDownList: productList,
                           onChanged: (val) {
                             selectedItemName =

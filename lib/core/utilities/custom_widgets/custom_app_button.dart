@@ -25,7 +25,7 @@ class AppButton extends StatelessWidget {
         style: FilledButton.styleFrom(
           elevation: 2,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(15),
           ),
           backgroundColor: Colors.deepPurple.shade300,
           textStyle: TextStyle(

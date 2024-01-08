@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:my_office/core/utilities/constants/app_main_template.dart';
 import '../../../../core/utilities/constants/app_color.dart';
-import '../../../../core/utilities/constants/app_screen_template.dart';
 import '../../data/model/expense_model.dart';
 
 class ExpenseDetails extends StatefulWidget {
@@ -16,20 +17,20 @@ class ExpenseDetails extends StatefulWidget {
 class _ExpenseDetailsState extends State<ExpenseDetails> {
   @override
   Widget build(BuildContext context) {
-    return ScreenTemplate(
-      bodyTemplate: buildExpenseDetailsScreen(),
-      title: 'Expense Details',
+    return MainTemplate(
+      templateBody: buildExpenseDetailsScreen(),
+      subtitle: 'Expense Details',
+      bgColor: AppColor.backGroundColor,
     );
   }
 
   Widget buildExpenseDetailsScreen() {
-    return Center(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            buildExpenseTable(),
-          ],
-        ),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const Gap(50),
+          buildExpenseTable(),
+        ],
       ),
     );
   }
@@ -44,22 +45,21 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
         },
         border: TableBorder.all(
           borderRadius: BorderRadius.circular(10),
-          color: AppColor.primaryColor,
-          width: 1.5,
+          color: Theme.of(context).primaryColor.withOpacity(.3),
+          width: 2,
         ),
         children: [
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
             ),
             children: [
-              const Padding(
-                padding: EdgeInsets.all(10),
+               Padding(
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   "Amount",
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Theme.of(context).primaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -70,7 +70,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                 child: SelectableText(
                   widget.expenseDetails.amount.toString(),
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                    color: Theme.of(context).primaryColor,
                     fontSize: 16,
                   ),
                 ),
@@ -80,15 +80,14 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
             ),
             children: [
-              const Padding(
-                padding: EdgeInsets.all(10),
+               Padding(
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   "Entered By",
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Theme.of(context).primaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -99,7 +98,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                 child: SelectableText(
                   widget.expenseDetails.enteredBy.toString(),
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                     color: Theme.of(context).primaryColor,
                     fontSize: 16,
                   ),
                 ),
@@ -109,15 +108,14 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
             ),
             children: [
-              const Padding(
-                padding: EdgeInsets.all(10),
+               Padding(
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   "Entered Date",
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Theme.of(context).primaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -128,7 +126,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                 child: SelectableText(
                   widget.expenseDetails.enteredDate.toString(),
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                     color: Theme.of(context).primaryColor,
                     fontSize: 16,
                   ),
                 ),
@@ -138,15 +136,14 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
             ),
             children: [
-              const Padding(
-                padding: EdgeInsets.all(10),
+               Padding(
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   "Entered Time",
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Theme.of(context).primaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -157,7 +154,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                 child: SelectableText(
                   widget.expenseDetails.enteredTime.toString(),
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                     color: Theme.of(context).primaryColor,
                     fontSize: 16,
                   ),
                 ),
@@ -167,15 +164,14 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
             ),
             children: [
-              const Padding(
-                padding: EdgeInsets.all(10),
+               Padding(
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   "Product Name",
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Theme.of(context).primaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -186,7 +182,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                 child: SelectableText(
                   widget.expenseDetails.productName.toString(),
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                     color: Theme.of(context).primaryColor,
                     fontSize: 16,
                   ),
                 ),
@@ -196,15 +192,14 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
             ),
             children: [
-              const Padding(
-                padding: EdgeInsets.all(10),
+               Padding(
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   "Purchased Date",
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Theme.of(context).primaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -215,7 +210,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                 child: SelectableText(
                   widget.expenseDetails.purchasedDate.toString(),
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                     color: Theme.of(context).primaryColor,
                     fontSize: 16,
                   ),
                 ),
@@ -225,15 +220,14 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
             ),
             children: [
-              const Padding(
-                padding: EdgeInsets.all(10),
+              Padding(
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   "Purchased For",
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Theme.of(context).primaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -244,7 +238,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                 child: SelectableText(
                   widget.expenseDetails.purchasedFor.toString(),
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                     color: Theme.of(context).primaryColor,
                     fontSize: 16,
                   ),
                 ),
@@ -254,15 +248,14 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
             ),
             children: [
-              const Padding(
-                padding: EdgeInsets.all(10),
+              Padding(
+                padding: const EdgeInsets.all(10),
                 child: Text(
                   "Purchased Time",
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Theme.of(context).primaryColor,
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -273,7 +266,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                 child: SelectableText(
                   widget.expenseDetails.purchasedTime.toString(),
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                     color: Theme.of(context).primaryColor,
                     fontSize: 16,
                   ),
                 ),
@@ -283,7 +276,6 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
           TableRow(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: Colors.grey.shade300,
             ),
             children: [
               const Padding(
@@ -301,7 +293,7 @@ class _ExpenseDetailsState extends State<ExpenseDetails> {
                 child: SelectableText(
                   widget.expenseDetails.service.toString(),
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                     color: Theme.of(context).primaryColor,
                     fontSize: 16,
                   ),
                 ),

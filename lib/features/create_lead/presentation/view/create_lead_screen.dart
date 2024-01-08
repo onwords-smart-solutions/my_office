@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:my_office/core/utilities/constants/app_color.dart';
+import 'package:my_office/core/utilities/custom_widgets/custom_app_button.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_snack_bar.dart';
 import 'package:my_office/features/create_lead/domain/entity/create_lead_entity.dart';
 import 'package:my_office/features/create_lead/presentation/provider/create_lead_provider.dart';
@@ -28,7 +30,7 @@ class _CreateLeadsState extends State<CreateLeads> {
   @override
   Widget build(BuildContext context) {
     return MainTemplate(
-      subtitle: 'Create new leads from here',
+      subtitle: 'Create New lead',
       templateBody: buildCreateLeads(),
       bgColor: AppColor.backGroundColor,
     );
@@ -51,8 +53,8 @@ class _CreateLeadsState extends State<CreateLeads> {
               },
               border: TableBorder.all(
                 borderRadius: BorderRadius.circular(10),
-                color: AppColor.primaryColor,
-                width: 1.5,
+                color: Theme.of(context).primaryColor.withOpacity(.4),
+                width: 2,
               ),
               children: [
                 TableRow(
@@ -238,15 +240,16 @@ class _CreateLeadsState extends State<CreateLeads> {
               ],
             ),
           ),
-          CupertinoButton(
-            borderRadius: BorderRadius.circular(15),
-            minSize: 20,
-            color: CupertinoColors.systemPurple,
-            onPressed: submitForm,
-            child: const Text(
-              'Create lead',
-              style: TextStyle(),
-            ),
+          const Gap(40),
+          AppButton(
+              onPressed: submitForm,
+              child: Text(
+                'Create lead',
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
           ),
         ],
       ),

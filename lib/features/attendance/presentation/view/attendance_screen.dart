@@ -10,7 +10,6 @@ import 'package:my_office/features/attendance/data/repository/attendance_repo_im
 import 'package:my_office/features/attendance/domain/repository/attendance_repository.dart';
 import 'package:my_office/features/attendance/presentation/view_model/attendance_punch_screen.dart';
 import 'package:pdf/pdf.dart';
-import '../../../../core/utilities/constants/app_color.dart';
 import '../../../../core/utilities/constants/app_main_template.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -204,7 +203,6 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                 const EdgeInsets.symmetric(horizontal: 20.0),
                             child: PopupMenuButton(
                               surfaceTintColor: Colors.transparent,
-                              color: Theme.of(context).scaffoldBackgroundColor.withOpacity(1),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -387,7 +385,9 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                     builder: (ctx, sort, child) {
                                       return Text(
                                         sort,
-                                        style: const TextStyle(),
+                                        style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                        ),
                                       );
                                     },
                                   ),
@@ -412,6 +412,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
       children: [
         Flexible(
           child: CupertinoSearchTextField(
+            itemColor: Theme.of(context).primaryColor.withOpacity(.4),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15.0),
               color: Colors.grey.withOpacity(.3),
@@ -435,13 +436,11 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               fontWeight: FontWeight.w500,
               color: Theme.of(context).primaryColor,
             ),
-            suffixIcon: Icon(
+            suffixIcon: const Icon(
               CupertinoIcons.xmark_circle_fill,
-              color: Theme.of(context).primaryColor,
             ),
-            prefixIcon: Icon(
+            prefixIcon: const Icon(
               Icons.search_rounded,
-              color: Theme.of(context).primaryColor,
             ),
           ),
         ),

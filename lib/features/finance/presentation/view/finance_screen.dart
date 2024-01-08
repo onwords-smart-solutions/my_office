@@ -6,10 +6,11 @@ import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:my_office/core/utilities/constants/app_color.dart';
+import 'package:my_office/core/utilities/constants/app_main_template.dart';
 import 'package:my_office/features/finance/data/data_source/finance_fb_data_source.dart';
 import 'package:my_office/features/finance/data/data_source/finance_fb_data_source_impl.dart';
 import 'package:my_office/features/finance/data/repository/finance_repo_impl.dart';
-import '../../../../core/utilities/constants/app_screen_template.dart';
 import '../../data/model/expense_model.dart';
 import '../../data/model/income_model.dart';
 import '../../domain/repository/finance_repository.dart';
@@ -101,9 +102,10 @@ class _FinanceScreenState extends State<FinanceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenTemplate(
-      bodyTemplate: buildFinanceScreen(),
-      title: 'Financial Analyzing',
+    return MainTemplate(
+      templateBody: buildFinanceScreen(),
+      subtitle: 'Financial Analyzing',
+      bgColor: AppColor.backGroundColor,
     );
   }
 
@@ -119,9 +121,10 @@ class _FinanceScreenState extends State<FinanceScreen> {
     }
     return isLoading
         ? Center(
-            child: Lottie.asset(
-              "assets/animations/new_loading.json",
-            ),
+            child:
+        Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ?
+        Lottie.asset('assets/animations/loading_light_theme.json'):
+        Lottie.asset('assets/animations/loading_dark_theme.json'),
           )
         : Padding(
             padding: const EdgeInsets.all(20),
@@ -139,9 +142,9 @@ class _FinanceScreenState extends State<FinanceScreen> {
                           RichText(
                             text: TextSpan(
                               text: 'Profit with salary : ',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 16,
-                                color: Colors.black,
+                                color: Theme.of(context).primaryColor,
                               ),
                               children: <TextSpan>[
                                 TextSpan(
@@ -151,7 +154,7 @@ class _FinanceScreenState extends State<FinanceScreen> {
                                         profitWithSalary.toString().contains('-')
                                             ? Colors.red
                                             : Colors.green,
-                                    fontWeight: FontWeight.bold,
+                                    fontWeight: FontWeight.w500,
                                     fontSize: 15,
                                   ),
                                 ),
@@ -161,9 +164,9 @@ class _FinanceScreenState extends State<FinanceScreen> {
                           RichText(
                             text: TextSpan(
                               text: 'Profit without salary : ',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 16,
-                                color: Colors.black,
+                                color: Theme.of(context).primaryColor,
                               ),
                               children: <TextSpan>[
                                 TextSpan(
@@ -193,8 +196,9 @@ class _FinanceScreenState extends State<FinanceScreen> {
                           child: Center(
                             child: Text(
                               '$selectedYear/$selectedMonth',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 15,
+                                color: Theme.of(context).primaryColor,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
@@ -244,25 +248,19 @@ class _FinanceScreenState extends State<FinanceScreen> {
         width: width * 1,
         padding: const EdgeInsets.symmetric(vertical: 20.0),
         decoration: BoxDecoration(
-          color: const Color(0xffDAD6EE),
+          color: Theme.of(context).primaryColor.withOpacity(.1),
           borderRadius: BorderRadius.circular(20),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black26,
-              offset: Offset(3.0, 3.0),
-              blurRadius: 3,
-            ),
-          ],
         ),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Center(child: image),
+              const Gap(10),
               AutoSizeText(
                 name,
-                style: const TextStyle(
-                  color: Colors.black,
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
                 ),
                 minFontSize: 20,
               ),

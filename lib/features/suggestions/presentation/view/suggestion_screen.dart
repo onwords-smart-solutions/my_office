@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:my_office/core/utilities/constants/app_color.dart';
+import 'package:my_office/core/utilities/custom_widgets/custom_app_button.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_snack_bar.dart';
 import 'package:my_office/features/suggestions/data/data_source/suggestion_fb_data_source_impl.dart';
 import 'package:my_office/features/suggestions/data/repository/suggestion_repo_impl.dart';
@@ -69,7 +71,7 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
   @override
   Widget build(BuildContext context) {
     return MainTemplate(
-      subtitle: 'Throw some Suggestions!!',
+      subtitle: 'Suggestion',
       templateBody: suggestions(),
       bgColor: AppColor.backGroundColor,
     );
@@ -83,8 +85,9 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
           child: Column(
             children: [
               TextField(
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 17,
+                  color: Theme.of(context).primaryColor,
                 ),
                 textCapitalization: TextCapitalization.sentences,
                 textInputAction: TextInputAction.done,
@@ -96,49 +99,50 @@ class _SuggestionScreenState extends State<SuggestionScreen> {
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
-                    borderSide: const BorderSide(
-                      color: CupertinoColors.systemGrey,
+                    borderSide: BorderSide(
+                      color: Theme.of(context).primaryColor.withOpacity(.3),
                       width: 2,
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
-                    borderSide: const BorderSide(
-                      color: CupertinoColors.systemPurple,
+                    borderSide: BorderSide(
+                      color:  Theme.of(context).primaryColor.withOpacity(.5),
                       width: 2,
                     ),
                   ),
                   hintText: 'Fill up some useful suggestions!!',
                   hintStyle: TextStyle(
-                    color: Colors.grey.shade500,
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).primaryColor.withOpacity(.3),
                   ),
                 ),
               ),
-              const SizedBox(height: 5),
+              const Gap(15),
               Align(
                 alignment: Alignment.bottomLeft,
                 child: Text(
                   '  Character count: $characterCount',
-                  style: const TextStyle(),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).primaryColor,
+                  ),
                 ),
               ),
             ],
           ),
         ),
-        Container(
-          height: 60,
-          width: 150,
-          padding: const EdgeInsets.all(8.0),
-          child: FilledButton(
+        const Gap(30),
+        AppButton(
             onPressed: addSuggestionToDatabase,
-            child: const Text(
+            child: Text(
               "Submit",
               style: TextStyle(
-                fontSize: 17,
+                color: Theme.of(context).primaryColor,
                 fontWeight: FontWeight.w700,
               ),
             ),
-          ),
         ),
       ],
     );

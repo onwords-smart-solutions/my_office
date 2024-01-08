@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:my_office/core/utilities/constants/app_color.dart';
+import 'package:my_office/core/utilities/constants/app_main_template.dart';
 import 'package:my_office/features/finance/data/model/expense_model.dart';
 import 'package:my_office/features/finance/presentation/view/specific_expense_detail.dart';
-
-import '../../../../core/utilities/constants/app_screen_template.dart';
 
 class ExpenseScreen extends StatefulWidget {
   final List<ExpenseModel> allExpense;
@@ -19,9 +19,10 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenTemplate(
-      bodyTemplate: buildExpenseScreen(),
-      title: 'Expense',
+    return MainTemplate(
+      templateBody: buildExpenseScreen(),
+      subtitle: 'Expense',
+      bgColor: AppColor.backGroundColor,
     );
   }
 
@@ -30,11 +31,11 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Container(
-          margin: const EdgeInsets.symmetric(horizontal: 10),
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           width: 150,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            color: Colors.blue.withOpacity(0.3),
+            color: Theme.of(context).primaryColor.withOpacity(.3),
           ),
           child: TextButton(
             onPressed: () {
@@ -54,25 +55,26 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
               children: [
                 Text(
                   ascending ? 'Ascending' : 'Descending',
-                  style: const TextStyle(
-                    color: Colors.black,
+                  style:  TextStyle(
+                    color: Theme.of(context).primaryColor,
                     fontSize: 15,
                   ),
                 ),
-                const Icon(
+                 Icon(
                   Icons.arrow_downward,
-                  color: Colors.black,
+                  color: Theme.of(context).primaryColor,
                   size: 20,
                 ),
-                const Icon(
+                 Icon(
                   Icons.arrow_upward,
-                  color: Colors.black,
+                  color: Theme.of(context).primaryColor,
                   size: 20,
                 ),
               ],
             ),
           ),
         ),
+        const Gap(10),
         Expanded(
           child: ListView.builder(
             physics: const BouncingScrollPhysics(),
@@ -90,16 +92,17 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                 },
                 title: Text(
                   widget.allExpense[index].productName,
-                  style: const TextStyle(
-                    color: Colors.black,
+                  style:  TextStyle(
+                    color: Theme.of(context).primaryColor,
                     fontSize: 16,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 trailing: Text(
-                  '-   ${widget.allExpense[index].amount.toString()}',
+                  widget.allExpense[index].amount.toString(),
                   style: TextStyle(
-                    fontWeight: FontWeight.w700,
-                    color: AppColor.backGroundColor,
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).primaryColor,
                     fontSize: 16,
                   ),
                 ),

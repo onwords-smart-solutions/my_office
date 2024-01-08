@@ -128,25 +128,25 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    var date = DateTime.fromMillisecondsSinceEpoch(widget.allDetail.dob!);
+    var date = widget.allDetail.dob;
     var d24 = DateFormat('dd/MM/yyyy').format(date);
 
     return Scaffold(
-      backgroundColor: AppColor.backGroundColor,
       appBar: AppBar(
-        backgroundColor: AppColor.backGroundColor,
         leading: IconButton(
           icon: const Icon(
             CupertinoIcons.chevron_back,
+            size: 30,
           ),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
-        title: const Text(
-          'Staff detail',
-          style: TextStyle(
+        title:  Text(
+          widget.allDetail.name,
+          style: const TextStyle(
             fontWeight: FontWeight.w500,
+            fontSize: 25,
           ),
         ),
         centerTitle: true,
@@ -156,6 +156,7 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              const Gap(10),
               Center(
                 child: SizedBox(
                   height: size.height * 0.3,
@@ -171,7 +172,7 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                         downloadProgress,
                       ) =>
                           CircularProgressIndicator(
-                        color: AppColor.primaryColor,
+                            color: Theme.of(context).primaryColor,
                         strokeWidth: 2,
                         value: downloadProgress.progress,
                       ),
@@ -198,9 +199,9 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                   SizedBox(width: size.width * 0.18),
                   SelectableText(
                     widget.allDetail.name,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 17,
-                      color: Color(0xff7D7C7C),
+                      color: Theme.of(context).primaryColor.withOpacity(.5),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -220,9 +221,9 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                   SizedBox(width: size.width * 0.05),
                   SelectableText(
                     widget.allDetail.department,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 17,
-                      color: Color(0xff7D7C7C),
+                      color: Theme.of(context).primaryColor.withOpacity(.5),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -243,9 +244,9 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                   Flexible(
                     child: SelectableText(
                       widget.allDetail.email,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 17,
-                        color: Color(0xff7D7C7C),
+                        color: Theme.of(context).primaryColor.withOpacity(.5),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -267,9 +268,9 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                   Flexible(
                     child: SelectableText(
                       widget.allDetail.mobile.toString(),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 17,
-                        color: Color(0xff7D7C7C),
+                        color: Theme.of(context).primaryColor.withOpacity(.5),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -291,9 +292,9 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                   Flexible(
                     child: SelectableText(
                       d24,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 17,
-                        color: Color(0xff7D7C7C),
+                        color: Theme.of(context).primaryColor.withOpacity(.5),
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -319,9 +320,13 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                       controller: punchIn,
                       readOnly: true,
                       onTap: () => _startTimePicker(context),
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor.withOpacity(.5),
+                        fontWeight: FontWeight.w500,
+                      ),
                       decoration: InputDecoration(
-                        labelStyle: const TextStyle(
-                          color: Colors.black,
+                        labelStyle: TextStyle(
+                          color: Theme.of(context).primaryColor,
                         ),
                         border: myInputBorder(),
                         enabledBorder: myInputBorder(),
@@ -352,9 +357,13 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                       controller: punchOut,
                       readOnly: true,
                       onTap: () => _endTimePicker(context),
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor.withOpacity(.5),
+                        fontWeight: FontWeight.w500,
+                      ),
                       decoration: InputDecoration(
-                        labelStyle: const TextStyle(
-                          color: Colors.black,
+                        labelStyle: TextStyle(
+                          color: Theme.of(context).primaryColor,
                         ),
                         border: myInputBorder(),
                         enabledBorder: myInputBorder(),
@@ -367,15 +376,15 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
                 ],
               ),
               const Gap(60),
-              SizedBox(
-                height: MediaQuery.sizeOf(context).height * 0.06,
-                width: MediaQuery.sizeOf(context).width * 0.6,
-                child: AppButton(
+              AppButton(
                   onPressed: setTimingForStaffs,
-                  child: const Text(
+                  child: Text(
                     'Update time',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).primaryColor,
+                    ),
                   ),
-                ),
               ),
             ],
           ),
@@ -387,7 +396,7 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
   UnderlineInputBorder myInputBorder() {
     return UnderlineInputBorder(
       borderSide: BorderSide(
-        color: Colors.black.withOpacity(0.3),
+        color: Theme.of(context).primaryColor.withOpacity(.3),
         width: 2,
       ),
     );
@@ -396,7 +405,7 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
   UnderlineInputBorder myFocusBorder() {
     return UnderlineInputBorder(
       borderSide: BorderSide(
-        color: Colors.black.withOpacity(0.3),
+        color: Theme.of(context).primaryColor.withOpacity(.3),
         width: 2,
       ),
     );
@@ -405,7 +414,7 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
   UnderlineInputBorder myDisabledBorder() {
     return UnderlineInputBorder(
       borderSide: BorderSide(
-        color: Colors.black.withOpacity(0.3),
+        color: Theme.of(context).primaryColor.withOpacity(.3),
         width: 2,
       ),
     );
@@ -414,7 +423,7 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
   UnderlineInputBorder myErrorBorder() {
     return UnderlineInputBorder(
       borderSide: BorderSide(
-        color: Colors.red.withOpacity(0.5),
+        color: Colors.red.withOpacity(.5),
         width: 2,
       ),
     );

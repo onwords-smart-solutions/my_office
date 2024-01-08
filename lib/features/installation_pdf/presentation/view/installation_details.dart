@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
@@ -20,10 +21,26 @@ class _InstallationDetailsState extends State<InstallationDetails> {
   final formKey = GlobalKey<FormState>();
 
   List<AjaxListModel> ajaxDeviceDetails = [];
+  DateTime dateStamp = DateTime.now();
+  void dateTime() async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2023),
+      lastDate: DateTime(2100),
+    );
+    if (pickedDate != null) {
+      setState(() {
+        dateStamp = pickedDate;
+      });
+      print('Selected date is $dateStamp');
+    } else {
+      print('Date is not selected');
+    }
+  }
 
   TextEditingController customerIdController = TextEditingController();
   TextEditingController customerNameController = TextEditingController();
-  TextEditingController dateController = TextEditingController();
   TextEditingController dateOfInstallationController = TextEditingController();
   TextEditingController phoneNumController = TextEditingController();
   TextEditingController addressController = TextEditingController();
@@ -59,9 +76,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
   List<String> teamMembersName = [];
   List<String> extraDevice = [];
   List<String> lightBoard8ChannelDetails = [];
+  List<String> heavyAndFanBoardDetails = [];
   List<String> lightBoard4ChannelDetails = [];
-  List<String> heavyBoard2Channel = [];
-  List<String> fanBoard = [];
 
   String selectedGAType = '';
   String needApp = '';
@@ -98,16 +114,19 @@ class _InstallationDetailsState extends State<InstallationDetails> {
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color(0xffDDE6E8),
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         title: const Text(
           'Installation Details',
           style: TextStyle(
             fontWeight: FontWeight.w500,
+              fontSize: 25,
           ),
         ),
       ),
-      backgroundColor: const Color(0xffDDE6E8),
       body: Form(
         key: formKey,
         child: Stack(
@@ -144,130 +163,118 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       right: 15,
       child: teamMembersName.isEmpty
           ? const SizedBox()
-          // : GestureDetector(
           : ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: Material(
-                child: InkWell(
-                  highlightColor: Colors.cyanAccent.withAlpha(100),
-                  splashColor: Colors.black,
-                  onTap: () async {
-                    if (formKey.currentState!.validate()) {
-                      InstallationDetailsScreen data =
-                          InstallationDetailsScreen(
-                        customerName: customerNameController.text,
-                        id: customerIdController.text,
-                        number: int.parse(phoneNumController.text),
-                        address: addressController.text,
-                        // entryDate: DateTime.parse(dateController.text),
-                        installationDate:
-                            DateTime.parse(dateOfInstallationController.text),
-                        needApp: needApp.toString(),
-                        email: emailController.text,
-                        password: passwordsController.text,
-                        gateType: selectedGAType.toString(),
-                        motorId: motorModelNumController.text.toUpperCase(),
-                        extraRemote: extraRemoteController.text.isNotEmpty
-                            ? int.parse(extraRemoteController.text)
-                            : 0,
-                        r1: r1.toString(),
-                        r2: r2.toString(),
-                        r3: r3.toString(),
-                        r4: r4.toString(),
-                        nameList: teamMembersName.toList(),
-                        deviceList: extraDevice.toList(),
-                        userID: userIdController.text,
-                        routerID: routerUidController.text,
-                        routerPassword: routerPasswordController.text,
-                        wifiName: wifiNameController.text,
-                        wifiPassword: wifiPasswordNameController.text,
-                        server: serverController.text,
-                        portForwarding: portForwarding.toString(),
-                        localIp: localIpController.text.isNotEmpty
-                            ? double.parse(localIpController.text.toString())
-                            : 0,
-                        staticIp: staticIpController.text.isNotEmpty
-                            ? double.parse(staticIpController.text)
-                            : 0,
-                        serverPort: serverPortController.text.isNotEmpty
-                            ? double.parse(serverPortController.text)
-                            : 0,
-                        needSmartHome: needSmartHome,
-                        voiceConfig: voiceConfig,
-                        voiceUID: voiceConfigUIDController.text,
-                        voicePass: voiceConfigPassController.text,
-                        bSNL: bSNL,
-                        bSNLUid: bSNLUIDController.text,
-                        bSNLPass: bSNLPassController.text,
-                        channel8List: lightBoard8ChannelDetails.toList(),
-                        channel4List: lightBoard4ChannelDetails.toList(),
-                        heavyR1: heavyLoadR1Controller.text,
-                        heavyR2: heavyLoadR2Controller.text,
-                        fanR1: fanR1Controller.text,
-                        fanR2: fanR2Controller.text,
-                        ajaxProductList: ajaxDeviceDetails,
-                        needAjax: needAjax,
-                        needGate: needGate,
-                        ajaxUId: ajaxAccountUidController.text,
-                        motorBrand: motorBrandNameController.text,
-                      );
+        borderRadius: BorderRadius.circular(30),
+        child: Material(
+          child: InkWell(
+            onTap: () async {
+              if (formKey.currentState!.validate()) {
+                InstallationDetailsScreen data =
+                InstallationDetailsScreen(
+                  customerName: customerNameController.text,
+                  id: customerIdController.text,
+                  number: int.parse(phoneNumController.text),
+                  address: addressController.text,
+                  entryDate: dateStamp,
+                  installationDate:
+                  DateTime.parse(dateOfInstallationController.text),
+                  needApp: needApp.toString(),
+                  email: emailController.text,
+                  password: passwordsController.text,
+                  gateType: selectedGAType.toString(),
+                  motorId: motorModelNumController.text.toUpperCase(),
+                  extraRemote: extraRemoteController.text.isNotEmpty
+                      ? int.parse(extraRemoteController.text)
+                      : 0,
+                  r1: r1.toString(),
+                  r2: r2.toString(),
+                  r3: r3.toString(),
+                  r4: r4.toString(),
+                  nameList: teamMembersName.toList(),
+                  deviceList: extraDevice.toList(),
+                  userID: userIdController.text,
+                  routerID: routerUidController.text,
+                  routerPassword: routerPasswordController.text,
+                  wifiName: wifiNameController.text,
+                  wifiPassword: wifiPasswordNameController.text,
+                  server: serverController.text,
+                  portForwarding: portForwarding.toString(),
+                  localIp: localIpController.text.isNotEmpty
+                      ? double.parse(localIpController.text.toString())
+                      : 0,
+                  staticIp: staticIpController.text.isNotEmpty
+                      ? double.parse(staticIpController.text)
+                      : 0,
+                  serverPort: serverPortController.text.isNotEmpty
+                      ? double.parse(serverPortController.text)
+                      : 0,
+                  needSmartHome: needSmartHome,
+                  voiceConfig: voiceConfig,
+                  voiceUID: voiceConfigUIDController.text,
+                  voicePass: voiceConfigPassController.text,
+                  bSNL: bSNL,
+                  bSNLUid: bSNLUIDController.text,
+                  bSNLPass: bSNLPassController.text,
+                  channel8List: lightBoard8ChannelDetails.toList(),
+                  channel4List: lightBoard4ChannelDetails.toList(),
+                  heavyAndFanBoardDetails: heavyAndFanBoardDetails.toList(),
+                  ajaxProductList: ajaxDeviceDetails,
+                  needAjax: needAjax,
+                  needGate: needGate,
+                  ajaxUId: ajaxAccountUidController.text,
+                  motorBrand: motorBrandNameController.text,
+                );
 
-                      final pdfFile = await data.generate(ajaxDeviceDetails);
-                      final dir = await getExternalStorageDirectory();
-                      final file = File(
-                        "${dir!.path}/${customerNameController.text}.pdf",
-                      );
+                final pdfFile = await data.generate(ajaxDeviceDetails);
+                final dir = await getExternalStorageDirectory();
+                final file = File(
+                  "${dir!.path}/${customerNameController.text}.pdf",
+                );
 
-                      file.writeAsBytesSync(
-                        pdfFile.readAsBytesSync(),
-                        flush: true,
-                      );
+                file.writeAsBytesSync(
+                  pdfFile.readAsBytesSync(),
+                  flush: true,
+                );
 
-                      OpenFile.open(file.path).then((value) {
-                        // Navigator.pop(context);
-                      });
-                      // log(teamMembersName.length.toString());
-                    } else {
-                      const snackBar = SnackBar(
-                        content: Center(
-                          child: Text('Fill Required Field'),
-                        ),
-                        backgroundColor: (Colors.redAccent),
-                        // action: SnackBarAction(
-                        //   label: 'dismiss',
-                        //   onPressed: () {
-                        //   },
-                        // ),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                    }
-                  },
-                  // child: Container(
-                  child: Ink(
-                    height: size.height * 0.06,
-                    width: size.width * 0.3,
-                    decoration: BoxDecoration(
-                      color: const Color(0xff5AC8FA),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Icon(
-                          Icons.save,
-                        ),
-                        Text(
-                          'Save',
-                          style: TextStyle(
-                            fontSize: 18,
-                          ),
-                        ),
-                      ],
+                OpenFile.open(file.path).then((value) {
+                  // Navigator.pop(context);
+                });
+                // log(teamMembersName.length.toString());
+              } else {
+                CustomSnackBar.showErrorSnackbar(
+                    message: 'Fill the required fields',
+                    context: context,
+                );
+              }
+            },
+            child: Ink(
+              height: size.height * 0.06,
+              width: size.width * 0.3,
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor.withOpacity(.2),
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Icon(
+                    Icons.save,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  Text(
+                    'Save',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
-                ),
+                ],
               ),
             ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -278,17 +285,19 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: ExpansionTile(
-          collapsedBackgroundColor: const Color(0xff5AC8FA).withAlpha(100),
-          title: const Text(
-            "Other Device",
+          collapsedBackgroundColor: Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
+          title: Text(
+            "Other Devices",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
+              color: Theme.of(context).primaryColor,
             ),
           ),
-          leading: const Icon(
+          leading: Icon(
             Icons.devices,
-            color: Colors.black,
+            color: Theme.of(context).primaryColor,
           ),
           //add icon
           children: [
@@ -309,15 +318,15 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        const Text(
+                        Text(
                           'Add Other Device Name',
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Theme.of(context).primaryColor,
                             fontSize: 16,
                           ),
                         ),
                         CircleAvatar(
-                          backgroundColor: const Color(0xff5AC8FA),
+                          backgroundColor: Theme.of(context).primaryColor,
                           radius: 20,
                           child: Center(
                             child: IconButton(
@@ -330,7 +339,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                     textInputType: TextInputType.text,
                                     textInputAction: TextInputAction.done,
                                     hintName: 'Device Name',
-                                    icon: const Icon(Icons.person_2),
+                                    icon: Icon(Icons.person_2, color: Theme.of(context).primaryColor,),
                                     maxLength: 50,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
@@ -343,109 +352,121 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                   extraDevice,
                                 );
                               },
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.add,
                                 size: 20,
+                                color: Theme.of(context).scaffoldBackgroundColor,
                               ),
                             ),
                           ),
                         ),
                       ],
                     ),
-                
-                    const Divider(
+
+                    Divider(
                       endIndent: 1,
                       indent: 1,
-                      color: Colors.black,
+                      color: Theme.of(context).primaryColor,
                     ),
                     SizedBox(
                       height: size.height * 0.2,
                       child: extraDevice.isNotEmpty
                           ? ListView.builder(
-                              itemCount: extraDevice.length,
-                              itemBuilder: (context, int index) {
-                                return Center(
-                                  child: ListTile(
-                                    leading: Text(
-                                      "${index + 1} : ",
-                                      style: const TextStyle(
-                                        fontSize: 15,
+                        itemCount: extraDevice.length,
+                        itemBuilder: (context, int index) {
+                          return Center(
+                            child: ListTile(
+                              leading: Text(
+                                "${index + 1} : ",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                              title: Text(
+                                extraDevice[index].toString(),
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                              trailing: IconButton(
+                                icon: Icon(
+                                  Icons.close,
+                                  size: 18,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => AlertDialog(
+                                      surfaceTintColor: Colors.transparent,
+                                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                                      title: Text(
+                                        'Delete this name?\n${extraDevice[index]}',
+                                        style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                        textAlign: TextAlign.center,
                                       ),
-                                    ),
-                                    title: Text(
-                                      extraDevice[index].toString(),
-                                      style: const TextStyle(),
-                                    ),
-                                    trailing: IconButton(
-                                      icon: const Icon(
-                                        Icons.close,
-                                        size: 18,
-                                      ),
-                                      onPressed: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (_) => AlertDialog(
-                                            title: Text(
-                                              'Delete this name?\n${extraDevice[index]}',
-                                              style: const TextStyle(),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                            content: SizedBox(
-                                              height: size.height * 0.05,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.spaceAround,
-                                                children: [
-                                                  ActionChip(
-                                                    onPressed: () {
-                                                      extraDevice.removeAt(index);
-                                                      Navigator.pop(context);
-                                                      setState(() {});
-                                                    },
-                                                    // backgroundColor:
-                                                    // Colors.red.shade400,
-                                                    label: const Text(
-                                                      'Yes',
-                                                      style: TextStyle(
-                                                        color: Colors.red,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  ActionChip(
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    // backgroundColor:
-                                                    // Colors.blue.shade400,
-                                                    label: const Text(
-                                                      'No',
-                                                      style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
+                                      content: SizedBox(
+                                        height: size.height * 0.05,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                          children: [
+                                            ActionChip(
+                                              onPressed: () {
+                                                extraDevice.removeAt(index);
+                                                Navigator.pop(context);
+                                                setState(() {});
+                                              },
+                                              // backgroundColor:
+                                              // Colors.red.shade400,
+                                              label: Text(
+                                                'Yes',
+                                                style: TextStyle(
+                                                  color: Theme.of(context).primaryColor,
+                                                  fontWeight:
+                                                  FontWeight.w500,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        );
-                                      },
+                                            ActionChip(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              // backgroundColor:
+                                              // Colors.blue.shade400,
+                                              label: Text(
+                                                'No',
+                                                style: TextStyle(
+                                                  color: Theme.of(context).primaryColor,
+                                                  fontWeight:
+                                                  FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                            )
-                          : const Center(
-                              child: Text(
-                                'No Device Added',
-                                style:
-                                    TextStyle(fontSize: 17),
+                                  );
+                                },
                               ),
                             ),
+                          );
+                        },
+                      )
+                          : Center(
+                        child: Text(
+                          'No Device Added',
+                          style:
+                          TextStyle(
+                            color: Theme.of(context).primaryColor,
+                              fontSize: 17,
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -464,17 +485,19 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: ExpansionTile(
-          collapsedBackgroundColor: const Color(0xff5AC8FA).withAlpha(100),
-          title: const Text(
+          collapsedBackgroundColor: Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
+          title: Text(
             "Team Members Name",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
+              color: Theme.of(context).primaryColor,
             ),
           ),
-          leading: const Icon(
+          leading:  Icon(
             Icons.group_add,
-            color: Colors.black,
+            color: Theme.of(context).primaryColor,
           ),
           //add icon
           children: [
@@ -486,7 +509,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 borderRadius: BorderRadius.circular(20),
                 // border: Border.all(color: Colors.black12, width: .5),
               ),
-              child: SingleChildScrollView( 
+              child: SingleChildScrollView(
                 child: Column(
                   children: [
                     ///Add Team Members
@@ -496,15 +519,15 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        const Text(
+                         Text(
                           'Add Team Members Name',
                           style: TextStyle(
-                            color: Colors.black,
+                            color: Theme.of(context).primaryColor,
                             fontSize: 16,
                           ),
                         ),
                         CircleAvatar(
-                          backgroundColor: const Color(0xff5AC8FA),
+                          backgroundColor: Theme.of(context).primaryColor,
                           radius: 20,
                           child: Center(
                             child: IconButton(
@@ -517,7 +540,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                     textInputType: TextInputType.text,
                                     textInputAction: TextInputAction.done,
                                     hintName: 'Person Name',
-                                    icon: const Icon(Icons.person_2),
+                                    icon: Icon(Icons.person_2, color: Theme.of(context).primaryColor,),
                                     maxLength: 50,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
@@ -530,110 +553,122 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                   teamMembersName,
                                 );
                               },
-                              icon: const Icon(
+                              icon: Icon(
                                 Icons.add,
                                 size: 20,
+                                color: Theme.of(context).scaffoldBackgroundColor,
                               ),
                             ),
                           ),
                         ),
                       ],
                     ),
-                
-                    const Divider(
+
+                     Divider(
                       endIndent: 1,
                       indent: 1,
-                      color: Colors.black,
+                      color: Theme.of(context).primaryColor,
                     ),
                     SizedBox(
                       height: size.height * 0.2,
                       child: teamMembersName.isNotEmpty
                           ? ListView.builder(
-                              itemCount: teamMembersName.length,
-                              itemBuilder: (context, int index) {
-                                return Center(
-                                  child: ListTile(
-                                    leading: Text(
-                                      "${index + 1} : ",
-                                      style: const TextStyle(
-                                        fontSize: 15,
+                        itemCount: teamMembersName.length,
+                        itemBuilder: (context, int index) {
+                          return Center(
+                            child: ListTile(
+                              leading: Text(
+                                "${index + 1} : ",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                              title: Text(
+                                teamMembersName[index].toString(),
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                              trailing: IconButton(
+                                icon: Icon(
+                                  Icons.close,
+                                  size: 18,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => AlertDialog(
+                                      surfaceTintColor: Colors.transparent,
+                                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                                      title: Text(
+                                        'Delete this name?\n${teamMembersName[index]}',
+                                        style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                        textAlign: TextAlign.center,
                                       ),
-                                    ),
-                                    title: Text(
-                                      teamMembersName[index].toString(),
-                                      style: const TextStyle(),
-                                    ),
-                                    trailing: IconButton(
-                                      icon: const Icon(
-                                        Icons.close,
-                                        size: 18,
-                                      ),
-                                      onPressed: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (_) => AlertDialog(
-                                            title: Text(
-                                              'Delete this name?\n${teamMembersName[index]}',
-                                              style: const TextStyle(),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                            content: SizedBox(
-                                              height: size.height * 0.1,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.spaceAround,
-                                                children: [
-                                                  ActionChip(
-                                                    onPressed: () {
-                                                      teamMembersName
-                                                          .removeAt(index);
-                                                      Navigator.pop(context);
-                                                      setState(() {});
-                                                    },
-                                                    // backgroundColor:
-                                                    // Colors.red.shade400,
-                                                    label: const Text(
-                                                      'Yes',
-                                                      style: TextStyle(
-                                                        color: Colors.red,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  ActionChip(
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    // backgroundColor:
-                                                    // Colors.blue.shade400,
-                                                    label: const Text(
-                                                      'No',
-                                                      style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
+                                      content: SizedBox(
+                                        height: size.height * 0.1,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                          children: [
+                                            ActionChip(
+                                              onPressed: () {
+                                                teamMembersName
+                                                    .removeAt(index);
+                                                Navigator.pop(context);
+                                                setState(() {});
+                                              },
+                                              // backgroundColor:
+                                              // Colors.red.shade400,
+                                              label: Text(
+                                                'Yes',
+                                                style: TextStyle(
+                                                  color: Theme.of(context).primaryColor,
+                                                  fontWeight:
+                                                  FontWeight.w500,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        );
-                                      },
+                                            ActionChip(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              // backgroundColor:
+                                              // Colors.blue.shade400,
+                                              label:  Text(
+                                                'No',
+                                                style: TextStyle(
+                                                  color: Theme.of(context).primaryColor,
+                                                  fontWeight:
+                                                  FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                            )
-                          : const Center(
-                              child: Text(
-                                'No Members Added',
-                                style:
-                                    TextStyle( fontSize: 17),
+                                  );
+                                },
                               ),
                             ),
+                          );
+                        },
+                      )
+                          : Center(
+                        child: Text(
+                          'No Members Added',
+                          style:
+                          TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 17,
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -652,17 +687,19 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: ExpansionTile(
-          collapsedBackgroundColor: const Color(0xff5AC8FA).withAlpha(100),
-          title: const Text(
+          collapsedBackgroundColor: Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
+          title: Text(
             "Ajax Details",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
+              color: Theme.of(context).primaryColor,
             ),
           ),
-          leading: const Icon(
+          leading:  Icon(
             Icons.security,
-            color: Colors.black,
+            color: Theme.of(context).primaryColor,
           ),
           //add icon
           children: [
@@ -683,15 +720,15 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      const Text(
+                       Text(
                         'Add Ajax Item Details',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Theme.of(context).primaryColor,
                           fontSize: 16,
                         ),
                       ),
                       CircleAvatar(
-                        backgroundColor: const Color(0xff5AC8FA),
+                        backgroundColor: Theme.of(context).primaryColor,
                         radius: 20,
                         child: Center(
                           child: IconButton(
@@ -699,18 +736,20 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                               showDialog(
                                 context: context,
                                 builder: (_) => AlertDialog(
-                                  // title: const Text('Enter Person Name'),
-                                  title: const Text(
+                                  surfaceTintColor: Colors.transparent,
+                                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                                  title: Text(
                                     'Title',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w500,
+                                      color: Theme.of(context).primaryColor,
                                     ),
                                   ),
                                   content: SizedBox(
                                     height: size.height * 0.3,
                                     child: Column(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      MainAxisAlignment.center,
                                       children: [
                                         // TextFormField(
                                         //   textCapitalization: TextCapitalization.sentences,
@@ -720,14 +759,14 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                         //   maxLength: 200,
                                         //   // enabled: isEnable,
                                         //   style: TextStyle(
-                                        //       color: Colors.black,),
+                                        //       color: Theme.of(context).primaryColor,),
                                         //   decoration: InputDecoration(
                                         //     counterText: '',
                                         //     prefixIcon: Icon(Icons.person),
                                         //     hintText: "User ID",
                                         //     labelText: 'User ID',
                                         //     labelStyle: TextStyle(
-                                        //         color: Colors.black, ),
+                                        //         color: Theme.of(context).primaryColor, ),
                                         //     hintStyle: TextStyle(
                                         //         color: Colors.black.withOpacity(0.6),
                                         //         ),
@@ -744,7 +783,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                           textInputType: TextInputType.text,
                                           textInputAction: TextInputAction.next,
                                           hintName: 'Product Name',
-                                          icon: const Icon(Icons.person_2),
+                                          icon: Icon(Icons.person_2,color: Theme.of(context).primaryColor,),
                                           maxLength: 100,
                                         ).textInputField(context),
                                         SizedBox(height: size.height * 0.01),
@@ -754,23 +793,23 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                           textInputType: TextInputType.number,
                                           textInputAction: TextInputAction.done,
                                           hintName: 'Quantity',
-                                          icon: const Icon(Icons.person_2),
+                                          icon: Icon(Icons.person_2,color: Theme.of(context).primaryColor),
                                           maxLength: 3,
                                         ).textInputField(context),
                                         SizedBox(height: size.height * 0.01),
 
                                         ActionChip(
-                                          // backgroundColor:
-                                          // Colors.blue.withOpacity(.95),
+                                          surfaceTintColor: Colors.transparent,
+                                          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                                           onPressed: () {
                                             if (ajaxItemController
-                                                    .text.isNotEmpty &&
+                                                .text.isNotEmpty &&
                                                 ajaxItemCountController
                                                     .text.isNotEmpty) {
                                               ajaxDeviceDetails.addAll({
                                                 AjaxListModel(
                                                   productName:
-                                                      ajaxItemController.text,
+                                                  ajaxItemController.text,
                                                   qty: int.parse(
                                                     ajaxItemCountController
                                                         .text,
@@ -784,24 +823,17 @@ class _InstallationDetailsState extends State<InstallationDetails> {
 
                                               log(ajaxDeviceDetails.toString());
                                             } else {
-                                              const snackBar = SnackBar(
-                                                content: Center(
-                                                  child: Text(
-                                                    'This field is empty',
-                                                  ),
-                                                ),
-                                                backgroundColor:
-                                                    (Colors.redAccent),
+                                              CustomSnackBar.showErrorSnackbar(
+                                                  message:  'This field is empty',
+                                                  context: context,
                                               );
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(snackBar);
                                             }
                                             setState(() {});
                                           },
-                                          label: const Text(
+                                          label:  Text(
                                             'Add',
                                             style: TextStyle(
-                                              color: Colors.black,
+                                              color: Theme.of(context).primaryColor,
                                               fontSize: 18,
                                             ),
                                           ),
@@ -812,9 +844,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                 ),
                               );
                             },
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.add,
                               size: 20,
+                              color: Theme.of(context).scaffoldBackgroundColor,
                             ),
                           ),
                         ),
@@ -822,10 +855,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     ],
                   ),
 
-                  const Divider(
+                   Divider(
                     endIndent: 1,
                     indent: 1,
-                    color: Colors.black,
+                    color: Theme.of(context).primaryColor,
                   ),
                   SizedBox(
                     height: size.height * 0.3,
@@ -833,15 +866,16 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                       // padding: const EdgeInsets.all(20.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
+                        color: Theme.of(context).primaryColor.withOpacity(.1),
                       ),
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 tableHeading(150, 'Items', true),
-                                tableHeading(130, 'Qty', true),
+                                tableHeading(130, 'Quantity', true),
                               ],
                             ),
 
@@ -868,7 +902,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                     padding: const EdgeInsets.all(0),
                                     child: Table(
                                       border: TableBorder.all(
-                                        color: Colors.black,
+                                        color: Theme.of(context).primaryColor,
                                         width: .1,
                                       ),
                                       children: [
@@ -903,17 +937,19 @@ class _InstallationDetailsState extends State<InstallationDetails> {
           child: Center(
             child: Text(
               title,
-              style: const TextStyle(),
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+              ),
             ),
           ),
         ),
         isTrue
-            ? const VerticalDivider(
-                color: Colors.black,
-                endIndent: 23,
-                indent: 23,
-                thickness: 2,
-              )
+            ? VerticalDivider(
+          color: Theme.of(context).primaryColor,
+          endIndent: 23,
+          indent: 23,
+          thickness: 2,
+        )
             : const SizedBox(),
       ],
     );
@@ -922,9 +958,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
   TableRow createTableRow(List<String> cells, {bool isHeader = false}) =>
       TableRow(
         children: cells.map(
-          (cell) {
+              (cell) {
             final style = TextStyle(
               fontWeight: isHeader ? FontWeight.bold : FontWeight.w500,
+            color: Theme.of(context).primaryColor,
             );
             return Padding(
               padding: const EdgeInsets.all(5),
@@ -946,17 +983,19 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: ExpansionTile(
-          collapsedBackgroundColor: const Color(0xff5AC8FA).withAlpha(100),
-          title: const Text(
+          collapsedBackgroundColor: Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
+          title: Text(
             "Light Board 8 Channel",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
+              color: Theme.of(context).primaryColor,
             ),
           ),
-          leading: const Icon(
+          leading: Icon(
             Icons.lightbulb_outline_rounded,
-            color: Colors.black,
+            color: Theme.of(context).primaryColor,
           ),
           //add icon
           children: [
@@ -976,15 +1015,15 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      const Text(
+                      Text(
                         'Add Light Board 8 Channel Details',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Theme.of(context).primaryColor,
                           fontSize: 15,
                         ),
                       ),
                       CircleAvatar(
-                        backgroundColor: const Color(0xff5AC8FA),
+                        backgroundColor: Theme.of(context).primaryColor,
                         radius: 20,
                         child: Center(
                           child: IconButton(
@@ -997,7 +1036,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                   textInputType: TextInputType.text,
                                   textInputAction: TextInputAction.done,
                                   hintName: 'Type here',
-                                  icon: const Icon(Icons.person_2),
+                                  icon: Icon(Icons.person_2, color: Theme.of(context).primaryColor,),
                                   maxLength: 50,
                                   validator: (value) {
                                     if (value == null ||
@@ -1012,111 +1051,118 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                 lightBoard8ChannelDetails,
                               );
                             },
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.add,
                               size: 20,
+                              color: Theme.of(context).scaffoldBackgroundColor,
                             ),
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const Divider(
+                  Divider(
                     endIndent: 1,
                     indent: 1,
-                    color: Colors.black,
+                    color: Theme.of(context).primaryColor,
                   ),
                   SizedBox(
                     height: size.height * 0.2,
                     child: lightBoard8ChannelDetails.isNotEmpty
                         ? ListView.builder(
-                            itemCount: lightBoard8ChannelDetails.length,
-                            itemBuilder: (context, int index) {
-                              return Center(
-                                child: ListTile(
-                                  leading: Text(
-                                    "R${index + 1} : ",
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  title: Text(
-                                    lightBoard8ChannelDetails[index].toString(),
-                                    style: const TextStyle(),
-                                  ),
-                                  trailing: IconButton(
-                                    icon: const Icon(
-                                      Icons.close,
-                                      size: 18,
-                                    ),
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (_) => AlertDialog(
-                                          title: Text(
-                                            'Delete this name?\n${lightBoard8ChannelDetails[index]}',
-                                            style: const TextStyle(),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          content: SizedBox(
-                                            height: size.height * 0.07,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: [
-                                                ActionChip(
-                                                  onPressed: () {
-                                                    lightBoard8ChannelDetails
-                                                        .removeAt(index);
-                                                    Navigator.pop(context);
-                                                    setState(() {});
-                                                  },
-                                                  // backgroundColor:
-                                                  // Colors.red.shade400,
-                                                  label: const Text(
-                                                    'Yes',
-                                                    style: TextStyle(
-                                                      color: Colors.red,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                    ),
-                                                  ),
-                                                ),
-                                                ActionChip(
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  // backgroundColor:
-                                                  // Colors.blue.shade400,
-                                                  label: const Text(
-                                                    'No',
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              );
-                            },
-                          )
-                        : const Center(
-                            child: Text(
-                              'List is Empty',
+                      itemCount: lightBoard8ChannelDetails.length,
+                      itemBuilder: (context, int index) {
+                        return Center(
+                          child: ListTile(
+                            leading: Text(
+                              "R${index + 1} : ",
                               style: TextStyle(
-                                fontSize: 17,
-                                color: Colors.black,
+                                fontSize: 15,
+                                color: Theme.of(context).primaryColor,
                               ),
                             ),
+                            title: Text(
+                              lightBoard8ChannelDetails[index].toString(),
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(
+                                Icons.close,
+                                size: 18,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => AlertDialog(
+                                    surfaceTintColor: Colors.transparent,
+                                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                                    title: Text(
+                                      'Delete this name?\n${lightBoard8ChannelDetails[index]}',
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    content: SizedBox(
+                                      height: size.height * 0.07,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                        children: [
+                                          ActionChip(
+                                            onPressed: () {
+                                              lightBoard8ChannelDetails
+                                                  .removeAt(index);
+                                              Navigator.pop(context);
+                                              setState(() {});
+                                            },
+                                            // backgroundColor:
+                                            // Colors.red.shade400,
+                                            label: Text(
+                                              'Yes',
+                                              style: TextStyle(
+                                                color: Theme.of(context).primaryColor,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                          ActionChip(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            // backgroundColor:
+                                            // Colors.blue.shade400,
+                                            label: Text(
+                                              'No',
+                                              style: TextStyle(
+                                                color: Theme.of(context).primaryColor,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
                           ),
+                        );
+                      },
+                    )
+                        : Center(
+                      child: Text(
+                        'List is Empty',
+                        style: TextStyle(
+                          fontSize: 17,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -1134,17 +1180,19 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: ExpansionTile(
-          collapsedBackgroundColor: const Color(0xff5AC8FA).withAlpha(100),
-          title: const Text(
+          collapsedBackgroundColor: Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
+          title: Text(
             "Light Board 4 Channel",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
+              color: Theme.of(context).primaryColor,
             ),
           ),
-          leading: const Icon(
+          leading: Icon(
             Icons.light,
-            color: Colors.black,
+            color: Theme.of(context).primaryColor,
           ),
           //add icon
           children: [
@@ -1164,15 +1212,15 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      const Text(
+                      Text(
                         'Add Light Board 4 Channel Details',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Theme.of(context).primaryColor,
                           fontSize: 15,
                         ),
                       ),
                       CircleAvatar(
-                        backgroundColor: const Color(0xff5AC8FA),
+                        backgroundColor: Theme.of(context).primaryColor,
                         radius: 20,
                         child: Center(
                           child: IconButton(
@@ -1185,7 +1233,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                   textInputType: TextInputType.text,
                                   textInputAction: TextInputAction.done,
                                   hintName: 'Type here',
-                                  icon: const Icon(Icons.person_2),
+                                  icon: Icon(Icons.person_2, color: Theme.of(context).primaryColor,),
                                   maxLength: 50,
                                   validator: (value) {
                                     if (value == null ||
@@ -1200,108 +1248,118 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                 lightBoard4ChannelDetails,
                               );
                             },
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.add,
                               size: 20,
+                              color: Theme.of(context).scaffoldBackgroundColor,
                             ),
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const Divider(
+                  Divider(
                     endIndent: 1,
                     indent: 1,
-                    color: Colors.black,
+                    color: Theme.of(context).primaryColor,
                   ),
                   SizedBox(
                     height: size.height * 0.2,
                     child: lightBoard4ChannelDetails.isNotEmpty
                         ? ListView.builder(
-                            itemCount: lightBoard4ChannelDetails.length,
-                            itemBuilder: (context, int index) {
-                              return Center(
-                                child: ListTile(
-                                  leading: Text(
-                                    "R${index + 1} : ",
-                                    style: const TextStyle(
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  title: Text(
-                                    lightBoard4ChannelDetails[index].toString(),
-                                    style: const TextStyle(),
-                                  ),
-                                  trailing: IconButton(
-                                    icon: const Icon(
-                                      Icons.close,
-                                      size: 18,
-                                    ),
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (_) => AlertDialog(
-                                          title: Text(
-                                            'Delete this name?\n${lightBoard4ChannelDetails[index]}',
-                                            textAlign: TextAlign.center,
-                                          ),
-                                          content: SizedBox(
-                                            height: size.height * 0.07,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceAround,
-                                              children: [
-                                                ActionChip(
-                                                  onPressed: () {
-                                                    lightBoard4ChannelDetails
-                                                        .removeAt(index);
-                                                    Navigator.pop(context);
-                                                    setState(() {});
-                                                  },
-                                                  label: const Text(
-                                                    'Yes',
-                                                    style: TextStyle(
-                                                      color: Colors.red,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                    ),
-                                                  ),
-                                                ),
-                                                ActionChip(
-                                                  onPressed: () {
-                                                    Navigator.pop(context);
-                                                  },
-                                                  // backgroundColor:
-                                                  // Colors.blue.shade400,
-                                                  label: const Text(
-                                                    'No',
-                                                    style: TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              );
-                            },
-                          )
-                        : const Center(
-                            child: Text(
-                              'List is Empty',
+                      itemCount: lightBoard4ChannelDetails.length,
+                      itemBuilder: (context, int index) {
+                        return Center(
+                          child: ListTile(
+                            leading: Text(
+                              "R${index + 1} : ",
                               style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 17,
+                                fontSize: 15,
+                                color: Theme.of(context).primaryColor,
                               ),
                             ),
+                            title: Text(
+                              lightBoard4ChannelDetails[index].toString(),
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(
+                                Icons.close,
+                                size: 18,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => AlertDialog(
+                                    surfaceTintColor: Colors.transparent,
+                                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                                    title: Text(
+                                      'Delete this name?\n${lightBoard4ChannelDetails[index]}',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                    content: SizedBox(
+                                      height: size.height * 0.07,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                        children: [
+                                          ActionChip(
+                                            onPressed: () {
+                                              lightBoard4ChannelDetails
+                                                  .removeAt(index);
+                                              Navigator.pop(context);
+                                              setState(() {});
+                                            },
+                                            label: Text(
+                                              'Yes',
+                                              style: TextStyle(
+                                                color: Theme.of(context).primaryColor,
+                                                fontWeight:
+                                                FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                          ActionChip(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            // backgroundColor:
+                                            // Colors.blue.shade400,
+                                            label: Text(
+                                              'No',
+                                              style: TextStyle(
+                                                color: Theme.of(context).primaryColor,
+                                                fontWeight:
+                                                FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
                           ),
+                        );
+                      },
+                    )
+                        : Center(
+                      child: Text(
+                        'List is Empty',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 17,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -1319,17 +1377,19 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: ExpansionTile(
-          collapsedBackgroundColor: const Color(0xff5AC8FA).withAlpha(100),
-          title: const Text(
+          collapsedBackgroundColor: Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
+          title: Text(
             "Gate Details",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
+              color: Theme.of(context).primaryColor,
             ),
           ),
-          leading: const Icon(
+          leading: Icon(
             Icons.door_sliding_outlined,
-            color: Colors.black,
+            color: Theme.of(context).primaryColor,
           ),
           //add icon
           // childrenPadding: EdgeInsets.only(left:60), //children padding
@@ -1344,7 +1404,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     textInputType: TextInputType.text,
                     textInputAction: TextInputAction.next,
                     hintName: 'Motor Model Id',
-                    icon: const Icon(Icons.numbers),
+                    icon: Icon(Icons.numbers, color: Theme.of(context).primaryColor,),
                     maxLength: 100,
                     validator: (value) {
                       if (value == null || value.isEmpty && needGate == 'Yes') {
@@ -1365,7 +1425,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     textInputType: TextInputType.number,
                     textInputAction: TextInputAction.next,
                     hintName: 'Extra remote',
-                    icon: const Icon(Icons.settings_remote),
+                    icon: Icon(Icons.settings_remote, color: Theme.of(context).primaryColor,),
                     maxLength: 100,
                     validator: (value) {
                       if (value == null || value.isEmpty && needGate == 'Yes') {
@@ -1388,7 +1448,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.name,
               textInputAction: TextInputAction.next,
               hintName: 'Motor brand name',
-              icon: const Icon(Icons.brightness_auto),
+              icon: Icon(Icons.brightness_auto, color: Theme.of(context).primaryColor,),
               maxLength: 100,
               validator: (value) {
                 if (value == null || value.isEmpty && needGate == 'Yes') {
@@ -1403,20 +1463,23 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               'Gate Type',
               DropdownButtonFormField<String>(
                 value: selectedGAType.isNotEmpty ? selectedGAType : null,
-                style: const TextStyle(
-                  color: CupertinoColors.label,
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
                   fontSize: 16,
                 ),
-                hint: const Text(
+                hint: Text(
                   "Gate Type",
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                  ),
                 ),
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(10.0),
                   border: myInputBorder(),
                   enabledBorder: myInputBorder(),
                   hintStyle: TextStyle(
-                    color: Colors.black.withOpacity(.2),
-                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context).primaryColor.withOpacity(.2),
+                    fontWeight: FontWeight.w500,
                   ),
                   fillColor: Colors.transparent,
                   focusColor: Colors.transparent,
@@ -1440,7 +1503,9 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     value: value,
                     child: Text(
                       value,
-                      style: const TextStyle(),
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
                   );
                 }).toList(),
@@ -1460,20 +1525,23 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                           'R1',
                           DropdownButtonFormField<String>(
                             value: r1.isNotEmpty ? r1 : null,
-                            style: const TextStyle(
-                              color: CupertinoColors.label,
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
                               fontSize: 16,
                             ),
-                            hint: const Text(
+                            hint: Text(
                               "R1",
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
                             decoration: InputDecoration(
                               contentPadding: const EdgeInsets.all(10.0),
                               border: myInputBorder(),
                               enabledBorder: myInputBorder(),
                               hintStyle: TextStyle(
-                                color: Colors.black.withOpacity(.2),
-                                fontWeight: FontWeight.w600,
+                                color: Theme.of(context).primaryColor.withOpacity(.2),
+                                fontWeight: FontWeight.w500,
                               ),
                               fillColor: Colors.transparent,
                               focusColor: Colors.transparent,
@@ -1498,7 +1566,9 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                 value: value,
                                 child: Text(
                                   value,
-                                  style: const TextStyle(),
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                  ),
                                 ),
                               );
                             }).toList(),
@@ -1513,12 +1583,15 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                           'R2',
                           DropdownButtonFormField<String>(
                             value: r2.isNotEmpty ? r2 : null,
-                            style: const TextStyle(
-                              color: CupertinoColors.label,
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
                               fontSize: 16,
                             ),
-                            hint: const Text(
+                            hint: Text(
                               "R2",
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
                             decoration: InputDecoration(
                               contentPadding: const EdgeInsets.all(10.0),
@@ -1529,8 +1602,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                               // hoverColor: Colors.black,
                               focusedBorder: myFocusBorder(),
                               hintStyle: TextStyle(
-                                color: Colors.black.withOpacity(.2),
-                                fontWeight: FontWeight.w600,
+                                color: Theme.of(context).primaryColor.withOpacity(.2),
+                                fontWeight: FontWeight.w500,
                               ),
                               // isDense: true,
                             ),
@@ -1571,20 +1644,23 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                           'R3',
                           DropdownButtonFormField<String>(
                             value: r3.isNotEmpty ? r3 : null,
-                            style: const TextStyle(
-                              color: CupertinoColors.label,
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
                               fontSize: 16,
                             ),
-                            hint: const Text(
+                            hint: Text(
                               "R3",
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
                             decoration: InputDecoration(
                               contentPadding: const EdgeInsets.all(10.0),
                               border: myInputBorder(),
                               enabledBorder: myInputBorder(),
                               hintStyle: TextStyle(
-                                color: Colors.black.withOpacity(.2),
-                                fontWeight: FontWeight.w600,
+                                color: Theme.of(context).primaryColor.withOpacity(.2),
+                                fontWeight: FontWeight.w500,
                               ),
                               fillColor: Colors.transparent,
                               focusColor: Colors.transparent,
@@ -1609,7 +1685,9 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                 value: value,
                                 child: Text(
                                   value,
-                                  style: const TextStyle(),
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                  ),
                                 ),
                               );
                             }).toList(),
@@ -1626,12 +1704,15 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                           'R4',
                           DropdownButtonFormField<String>(
                             value: r4.isNotEmpty ? r4 : null,
-                            style: const TextStyle(
-                              color: CupertinoColors.label,
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
                               fontSize: 16,
                             ),
-                            hint: const Text(
+                            hint: Text(
                               "R4",
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                              ),
                             ),
                             decoration: InputDecoration(
                               contentPadding: const EdgeInsets.all(10.0),
@@ -1642,8 +1723,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                               // hoverColor: Colors.black,
                               focusedBorder: myFocusBorder(),
                               hintStyle: TextStyle(
-                                color: Colors.black.withOpacity(.2),
-                                fontWeight: FontWeight.w600,
+                                color: Theme.of(context).primaryColor.withOpacity(.2),
+                                fontWeight: FontWeight.w500,
                               ),
                               // isDense: true,
                             ),
@@ -1664,7 +1745,9 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                 value: value,
                                 child: Text(
                                   value,
-                                  style: const TextStyle(),
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                  ),
                                 ),
                               );
                             }).toList(),
@@ -1694,17 +1777,19 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: ExpansionTile(
-          collapsedBackgroundColor: const Color(0xff5AC8FA).withAlpha(100),
-          title: const Text(
+          collapsedBackgroundColor: Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
+          title: Text(
             "Router and Wifi Details",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
+              color: Theme.of(context).primaryColor,
             ),
           ),
-          leading: const Icon(
+          leading: Icon(
             Icons.router,
-            color: Colors.black,
+            color: Theme.of(context).primaryColor,
           ),
           children: [
             /// Router id
@@ -1713,7 +1798,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
               hintName: 'Router ID',
-              icon: const Icon(Icons.router),
+              icon: Icon(Icons.router,color: Theme.of(context).primaryColor,),
               maxLength: 100,
               validator: (value) {
                 if (value == null || value.isEmpty && needSmartHome == 'Yes') {
@@ -1729,7 +1814,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.text,
               textInputAction: TextInputAction.next,
               hintName: 'Router Password',
-              icon: const Icon(Icons.password),
+              icon: Icon(Icons.password,color: Theme.of(context).primaryColor,),
               maxLength: 100,
               validator: (value) {
                 if (value == null || value.isEmpty && needSmartHome == 'Yes') {
@@ -1745,7 +1830,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
               hintName: 'Wifi Name',
-              icon: const Icon(Icons.wifi),
+              icon: Icon(Icons.wifi,color: Theme.of(context).primaryColor,),
               maxLength: 100,
               validator: (value) {
                 if (value == null || value.isEmpty && needSmartHome == 'Yes') {
@@ -1761,7 +1846,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.text,
               textInputAction: TextInputAction.next,
               hintName: 'Wifi Password',
-              icon: const Icon(Icons.password),
+              icon: Icon(Icons.password,color: Theme.of(context).primaryColor,),
               maxLength: 100,
               validator: (value) {
                 if (value == null || value.isEmpty && needSmartHome == 'Yes') {
@@ -1783,17 +1868,19 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: ExpansionTile(
-          collapsedBackgroundColor: const Color(0xff5AC8FA).withAlpha(100),
-          title: const Text(
+          collapsedBackgroundColor: Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
+          title: Text(
             "Server Details",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
+              color: Theme.of(context).primaryColor,
             ),
           ),
-          leading: const Icon(
+          leading: Icon(
             Icons.dataset_linked_outlined,
-            color: Colors.black,
+            color: Theme.of(context).primaryColor,
           ),
           children: [
             /// Server
@@ -1802,7 +1889,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.text,
               textInputAction: TextInputAction.next,
               hintName: 'Server',
-              icon: const Icon(Icons.router),
+              icon: Icon(Icons.router,color: Theme.of(context).primaryColor,),
               maxLength: 30,
               validator: (value) {
                 if (value == null || value.isEmpty && needSmartHome == 'Yes') {
@@ -1818,7 +1905,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.number,
               textInputAction: TextInputAction.next,
               hintName: 'Local IP',
-              icon: const Icon(Icons.dataset_outlined),
+              icon: Icon(Icons.dataset_outlined,color: Theme.of(context).primaryColor,),
               maxLength: 30,
               validator: (value) {
                 if (value == null || value.isEmpty && needSmartHome == 'Yes') {
@@ -1834,7 +1921,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.number,
               textInputAction: TextInputAction.next,
               hintName: 'Static IP',
-              icon: const Icon(Icons.dataset_outlined),
+              icon: Icon(Icons.dataset_outlined,color: Theme.of(context).primaryColor,),
               maxLength: 30,
               validator: (value) {
                 if (value == null || value.isEmpty && needSmartHome == 'Yes') {
@@ -1850,7 +1937,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.number,
               textInputAction: TextInputAction.next,
               hintName: 'Server Port',
-              icon: const Icon(Icons.portable_wifi_off),
+              icon: Icon(Icons.portable_wifi_off,color: Theme.of(context).primaryColor,),
               maxLength: 30,
               validator: (value) {
                 if (value == null || value.isEmpty && needSmartHome == 'Yes') {
@@ -1864,12 +1951,15 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               'Port Forwarding',
               DropdownButtonFormField<String>(
                 value: portForwarding.isNotEmpty ? portForwarding : null,
-                style: const TextStyle(
-                  color: CupertinoColors.label,
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
                   fontSize: 16,
                 ),
-                hint: const Text(
+                hint: Text(
                   'Port Forwarding',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor.withOpacity(.5),
+                  ),
                 ),
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(10.0),
@@ -1880,8 +1970,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   // hoverColor: Colors.black,
                   focusedBorder: myFocusBorder(),
                   hintStyle: TextStyle(
-                    color: Colors.black.withOpacity(.2),
-                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context).primaryColor.withOpacity(.2),
+                    fontWeight: FontWeight.w500,
                   ),
                   // isDense: true,
                 ),
@@ -1898,12 +1988,14 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   });
                 },
                 items:
-                    optionValue.map<DropdownMenuItem<String>>((String value) {
+                optionValue.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(
                       value,
-                      style: const TextStyle(),
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
                   );
                 }).toList(),
@@ -1916,12 +2008,15 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               'Voice Config',
               DropdownButtonFormField<String>(
                 value: voiceConfig.isNotEmpty ? voiceConfig : null,
-                style: const TextStyle(
-                  color: CupertinoColors.label,
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
                   fontSize: 16,
                 ),
-                hint: const Text(
+                hint: Text(
                   'Voice Config',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor.withOpacity(.5),
+                  ),
                 ),
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(10.0),
@@ -1932,8 +2027,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   // hoverColor: Colors.black,
                   focusedBorder: myFocusBorder(),
                   hintStyle: TextStyle(
-                    color: Colors.black.withOpacity(.2),
-                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context).primaryColor.withOpacity(.2),
+                    fontWeight: FontWeight.w500,
                   ),
                   // isDense: true,
                 ),
@@ -1950,12 +2045,14 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   });
                 },
                 items:
-                    optionValue.map<DropdownMenuItem<String>>((String value) {
+                optionValue.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(
                       value,
-                      style: const TextStyle(),
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
                   );
                 }).toList(),
@@ -1972,7 +2069,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 textInputType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 hintName: 'Voice Config UID',
-                icon: const Icon(Icons.wifi),
+                icon: Icon(Icons.wifi,color: Theme.of(context).primaryColor,),
                 maxLength: 100,
                 validator: (value) {
                   if (value == null || value.isEmpty && voiceConfig == 'Yes') {
@@ -1989,7 +2086,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 textInputType: TextInputType.text,
                 textInputAction: TextInputAction.next,
                 hintName: 'Voice Config Password',
-                icon: const Icon(Icons.password),
+                icon: Icon(Icons.password,color: Theme.of(context).primaryColor,),
                 maxLength: 100,
                 validator: (value) {
                   if (value == null || value.isEmpty && voiceConfig == 'Yes') {
@@ -2003,12 +2100,15 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               'B_S_N_L',
               DropdownButtonFormField<String>(
                 value: bSNL.isNotEmpty ? bSNL : null,
-                style: const TextStyle(
-                  color: CupertinoColors.label,
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
                   fontSize: 16,
                 ),
-                hint: const Text(
+                hint: Text(
                   'B_S_N_L',
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor.withOpacity(.5),
+                  ),
                 ),
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(10.0),
@@ -2019,8 +2119,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   // hoverColor: Colors.black,
                   focusedBorder: myFocusBorder(),
                   hintStyle: TextStyle(
-                    color: Colors.black.withOpacity(.2),
-                    fontWeight: FontWeight.w600,
+                    color: Theme.of(context).primaryColor.withOpacity(.2),
+                    fontWeight: FontWeight.w500,
                   ),
                   // isDense: true,
                 ),
@@ -2037,12 +2137,14 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   });
                 },
                 items:
-                    optionValue.map<DropdownMenuItem<String>>((String value) {
+                optionValue.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(
                       value,
-                      style: const TextStyle(),
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
                   );
                 }).toList(),
@@ -2054,13 +2156,13 @@ class _InstallationDetailsState extends State<InstallationDetails> {
 
             if (bSNL == 'Yes')
 
-              /// bSNL UID
+            /// bSNL UID
               CustomTextField(
                 controller: bSNLUIDController,
                 textInputType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 hintName: 'B_S_N_L UID',
-                icon: const Icon(Icons.wifi),
+                icon: Icon(Icons.wifi,color: Theme.of(context).primaryColor,),
                 maxLength: 100,
                 validator: (value) {
                   if (value == null || value.isEmpty && bSNL == 'Yes') {
@@ -2077,7 +2179,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 textInputType: TextInputType.text,
                 textInputAction: TextInputAction.next,
                 hintName: 'B_S_N_L Password',
-                icon: const Icon(Icons.password),
+                icon: Icon(Icons.password,color: Theme.of(context).primaryColor,),
                 maxLength: 100,
                 validator: (value) {
                   if (value == null || value.isEmpty && bSNL == 'Yes') {
@@ -2099,120 +2201,188 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: ExpansionTile(
-          collapsedBackgroundColor: const Color(0xff5AC8FA).withAlpha(100),
-          title: const Text(
+          collapsedBackgroundColor: Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
+          title: Text(
             "Heavy and Fan Board Details",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
+              color: Theme.of(context).primaryColor,
             ),
           ),
-          leading: const Icon(
+          leading: Icon(
             Icons.mode_fan_off_outlined,
-            color: Colors.black,
+            color: Theme.of(context).primaryColor,
           ),
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                /// Heavy R1
-                Expanded(
-                  child: textWithDropDown(
-                    'Heavy R1 Board',
-                    CustomTextField(
-                      controller: heavyLoadR1Controller,
-                      textInputType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      hintName: 'Heavy Board R1',
-                      icon: const Icon(Icons.router),
-                      maxLength: 30,
-                      validator: (value) {
-                        if (value == null ||
-                            value.isEmpty && needSmartHome == 'Yes') {
-                          return 'This field is required';
-                        }
-                        return null;
-                      },
-                    ).textInputField(context),
+            //heavy and fan board list
+            Container(
+              height: size.height * 0.4,
+              decoration: BoxDecoration(
+                // color: Colors.blueGrey.withAlpha(50),
+                borderRadius: BorderRadius.circular(20),
+                // border: Border.all(color: Colors.black12, width: .5),
+              ),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: size.height * 0.01,
                   ),
-                ),
-                SizedBox(
-                  width: size.height * 0.01,
-                ),
-
-                /// Heavy R2
-                Expanded(
-                  child: textWithDropDown(
-                    'Heavy Board R2',
-                    CustomTextField(
-                      controller: heavyLoadR2Controller,
-                      textInputType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      hintName: 'Heavy Board R2',
-                      icon: const Icon(Icons.router),
-                      maxLength: 30,
-                      validator: (value) {
-                        if (value == null ||
-                            value.isEmpty && needSmartHome == 'Yes') {
-                          return 'This field is required';
-                        }
-                        return null;
-                      },
-                    ).textInputField(context),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        'Add Heavy and Fan board Details',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 15,
+                        ),
+                      ),
+                      CircleAvatar(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        radius: 20,
+                        child: Center(
+                          child: IconButton(
+                            onPressed: () {
+                              addDataToList(
+                                context,
+                                'Heavy and Fan board',
+                                CustomTextField(
+                                  controller: addDataToListController,
+                                  textInputType: TextInputType.text,
+                                  textInputAction: TextInputAction.done,
+                                  hintName: 'Type here',
+                                  icon: Icon(Icons.person_2, color: Theme.of(context).primaryColor,),
+                                  maxLength: 50,
+                                  validator: (value) {
+                                    if (value == null ||
+                                        value.isEmpty &&
+                                            needSmartHome == 'Yes') {
+                                      return 'This field is required';
+                                    }
+                                    return null;
+                                  },
+                                ).textInputField(context),
+                                addDataToListController,
+                                heavyAndFanBoardDetails,
+                              );
+                            },
+                            icon: Icon(
+                              Icons.add,
+                              size: 20,
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                /// Fan R1
-                Expanded(
-                  child: textWithDropDown(
-                    'Fan S1',
-                    CustomTextField(
-                      controller: fanR1Controller,
-                      textInputType: TextInputType.text,
-                      textInputAction: TextInputAction.next,
-                      hintName: 'Fan S1',
-                      icon: const Icon(Icons.router),
-                      maxLength: 30,
-                      validator: (value) {
-                        if (value == null ||
-                            value.isEmpty && needSmartHome == 'Yes') {
-                          return 'This field is required';
-                        }
-                        return null;
-                      },
-                    ).textInputField(context),
+                  Divider(
+                    endIndent: 1,
+                    indent: 1,
+                    color: Theme.of(context).primaryColor,
                   ),
-                ),
-                SizedBox(
-                  width: size.height * 0.01,
-                ),
-
-                /// Fan R2
-                Expanded(
-                  child: textWithDropDown(
-                    'Fan S2',
-                    CustomTextField(
-                      controller: fanR2Controller,
-                      textInputType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      hintName: 'Fan S2',
-                      icon: const Icon(Icons.router),
-                      maxLength: 30,
-                      validator: (value) {
-                        if (value == null ||
-                            value.isEmpty && needSmartHome == 'Yes') {
-                          return 'This field is required';
-                        }
-                        return null;
+                  SizedBox(
+                    height: size.height * 0.2,
+                    child: heavyAndFanBoardDetails.isNotEmpty
+                        ? ListView.builder(
+                      itemCount: heavyAndFanBoardDetails.length,
+                      itemBuilder: (context, int index) {
+                        return Center(
+                          child: ListTile(
+                            leading: Text(
+                              "R${index + 1} : ",
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                            title: Text(
+                              heavyAndFanBoardDetails[index].toString(),
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                            trailing: IconButton(
+                              icon: Icon(
+                                Icons.close,
+                                size: 18,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => AlertDialog(
+                                    surfaceTintColor: Colors.transparent,
+                                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                                    title: Text(
+                                      'Delete this name?\n${heavyAndFanBoardDetails[index]}',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                    content: SizedBox(
+                                      height: size.height * 0.07,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                        children: [
+                                          ActionChip(
+                                            onPressed: () {
+                                              heavyAndFanBoardDetails
+                                                  .removeAt(index);
+                                              Navigator.pop(context);
+                                              setState(() {});
+                                            },
+                                            label: Text(
+                                              'Yes',
+                                              style: TextStyle(
+                                                color: Theme.of(context).primaryColor,
+                                                fontWeight:
+                                                FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                          ActionChip(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            // backgroundColor:
+                                            // Colors.blue.shade400,
+                                            label: Text(
+                                              'No',
+                                              style: TextStyle(
+                                                color: Theme.of(context).primaryColor,
+                                                fontWeight:
+                                                FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        );
                       },
-                    ).textInputField(context),
+                    )
+                        : Center(
+                      child: Text(
+                        'List is Empty',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 17,
+                        ),
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
@@ -2227,26 +2397,61 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: ExpansionTile(
-          collapsedBackgroundColor: const Color(0xff5AC8FA).withAlpha(100),
-          title: const Text(
+          collapsedBackgroundColor: Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
+          title: Text(
             "Customer Details",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
+              color: Theme.of(context).primaryColor,
             ),
           ),
-          leading: const Icon(
+          leading: Icon(
             Icons.contact_page_outlined,
-            color: Colors.black,
+            color: Theme.of(context).primaryColor,
           ),
           children: [
-            /// Customer Name.....................
+
+            const Text(
+              'Pdf date',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 17,
+              ),
+            ),
+            const Gap(5),
+            ///Pdf Header date
+            ListTile(
+              tileColor: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+                side: BorderSide(color: Theme.of(context).primaryColor.withOpacity(.3), width: 2),
+              ),
+              autofocus: false,
+              onTap: dateTime,
+              trailing: IconButton(
+                onPressed: dateTime,
+                icon: Icon(
+                  Icons.date_range,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+              title: Text(
+                DateFormat('yyyy-MM-dd').format(dateStamp),
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+            ),
+
+            /// Customer Name
             CustomTextField(
               controller: customerNameController,
               textInputType: TextInputType.text,
               textInputAction: TextInputAction.next,
               hintName: 'Customer Name',
-              icon: const Icon(Icons.person),
+              icon: Icon(Icons.person,color: Theme.of(context).primaryColor),
               maxLength: 100,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -2262,7 +2467,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.text,
               textInputAction: TextInputAction.next,
               hintName: 'Customer ID',
-              icon: const Icon(Icons.numbers),
+              icon: Icon(Icons.numbers,color: Theme.of(context).primaryColor),
               maxLength: 100,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -2278,7 +2483,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.number,
               textInputAction: TextInputAction.next,
               hintName: 'Phone number',
-              icon: const Icon(Icons.phone),
+              icon: Icon(Icons.phone,color: Theme.of(context).primaryColor),
               maxLength: 10,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -2296,7 +2501,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
               hintName: 'Email',
-              icon: const Icon(Icons.mail_outline_rounded),
+              icon: Icon(Icons.mail_outline_rounded,color: Theme.of(context).primaryColor ),
               maxLength: 150,
               // validator: (value) {
               //   if (value == null || value.isEmpty) {
@@ -2312,7 +2517,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.text,
               textInputAction: TextInputAction.done,
               hintName: 'Address',
-              icon: const Icon(Icons.location_city),
+              icon: Icon(Icons.location_city,color: Theme.of(context).primaryColor),
               maxLength: 100,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -2323,6 +2528,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
             ).textInputField(context),
             SizedBox(height: size.height * 0.01),
 
+            ///Installation date
             Container(
               height: size.height * 0.07,
               decoration: BoxDecoration(
@@ -2333,14 +2539,15 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 textInputAction: TextInputAction.done,
                 maxLength: 15,
                 readOnly: true,
+                style: TextStyle(color: Theme.of(context).primaryColor),
                 decoration: InputDecoration(
                   counterText: '',
                   hintText: 'Installation Date',
                   hintStyle: const TextStyle(
                     color: Colors.grey,
                   ),
-                  labelStyle: const TextStyle(
-                    color: Colors.black,
+                  labelStyle: TextStyle(
+                    color: Theme.of(context).primaryColor,
                   ),
                   border: myInputBorder(),
                   enabledBorder: myInputBorder(),
@@ -2365,7 +2572,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
 
                   if (pickedDate != null) {
                     String formattedDate =
-                        DateFormat('yyyy-MM-dd').format(pickedDate);
+                    DateFormat('yyyy-MM-dd').format(pickedDate);
                     setState(() {
                       dateOfInstallationController.text =
                           formattedDate; //set output date to TextField value.
@@ -2390,13 +2597,15 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     'Smart Home',
                     DropdownButtonFormField<String>(
                       value: needSmartHome.isNotEmpty ? needSmartHome : null,
-                      style: const TextStyle(
-                        color: CupertinoColors.label,
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
                         fontSize: 8,
                       ),
-                      hint: const Text(
+                      hint: Text(
                         "Need Smart Home",
-                        style: TextStyle(),
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.all(10.0),
@@ -2404,7 +2613,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         enabledBorder: myInputBorder(),
                         hintStyle: TextStyle(
                           fontSize: 8,
-                          color: Colors.black.withOpacity(.2),
+                          color: Theme.of(context).primaryColor.withOpacity(.2),
                         ),
                         fillColor: Colors.transparent,
                         focusColor: Colors.transparent,
@@ -2429,8 +2638,9 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                           value: value,
                           child: Text(
                             value,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 10,
+                              color: Theme.of(context).primaryColor,
                             ),
                           ),
                         );
@@ -2448,13 +2658,15 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     'Gate',
                     DropdownButtonFormField<String>(
                       value: needGate.isNotEmpty ? needGate : null,
-                      style: const TextStyle(
-                        color: CupertinoColors.label,
-                        fontSize: 10,
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 8,
                       ),
-                      hint: const Text(
+                      hint: Text(
                         "Need Gate",
-                        style: TextStyle(),
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.all(10.0),
@@ -2465,8 +2677,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         // hoverColor: Colors.black,
                         focusedBorder: myFocusBorder(),
                         hintStyle: TextStyle(
-                          color: Colors.black.withOpacity(.2),
-                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context).primaryColor.withOpacity(.2),
+                          fontWeight: FontWeight.w500,
                         ),
                         // isDense: true,
                       ),
@@ -2487,14 +2699,16 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                           value: value,
                           child: Text(
                             value,
-                            style: const TextStyle(fontWeight: FontWeight.w600),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                              color: Theme.of(context).primaryColor,
+                            ),
                           ),
                         );
                       }).toList(),
                     ),
                   ),
                 ),
-
                 SizedBox(
                   width: size.width * 0.02,
                 ),
@@ -2505,13 +2719,15 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     'Ajax',
                     DropdownButtonFormField<String>(
                       value: needAjax.isNotEmpty ? needAjax : null,
-                      style: const TextStyle(
-                        color: CupertinoColors.label,
-                        fontSize: 10,
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 8,
                       ),
-                      hint: const Text(
+                      hint: Text(
                         "Need Ajax",
-                        style: TextStyle(),
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.all(10.0),
@@ -2522,8 +2738,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         // hoverColor: Colors.black,
                         focusedBorder: myFocusBorder(),
                         hintStyle: TextStyle(
-                          color: Colors.black.withOpacity(.2),
-                          fontWeight: FontWeight.w600,
+                          color: Theme.of(context).primaryColor.withOpacity(.2),
+                          fontWeight: FontWeight.w500,
                         ),
                         // isDense: true,
                       ),
@@ -2544,6 +2760,9 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                           value: value,
                           child: Text(
                             value,
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                            ),
                           ),
                         );
                       }).toList(),
@@ -2557,52 +2776,55 @@ class _InstallationDetailsState extends State<InstallationDetails> {
             ),
             needGate == 'Yes'
                 ? textWithDropDown(
-                    'Need App',
-                    DropdownButtonFormField<String>(
-                      value: needApp.isNotEmpty ? needApp : null,
-                      style: const TextStyle(
-                        color: CupertinoColors.label,
-                        fontSize: 16,
-                      ),
-                      hint: const Text(
-                        "Need App",
-                      ),
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.all(10.0),
-                        border: myInputBorder(),
-                        enabledBorder: myInputBorder(),
-                        fillColor: Colors.transparent,
-                        focusColor: Colors.transparent,
-                        // hoverColor: Colors.black,
-                        focusedBorder: myFocusBorder(),
-                        hintStyle: TextStyle(
-                          color: Colors.black.withOpacity(.2),
-                          fontWeight: FontWeight.w600,
-                        ),
-                        // isDense: true,
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Select an option Yes or No';
-                        }
-                        return null;
-                      },
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          needApp = newValue!;
-                        });
-                      },
-                      items: optionValue
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                          ),
-                        );
-                      }).toList(),
+              'Need App',
+              DropdownButtonFormField<String>(
+                value: needApp.isNotEmpty ? needApp : null,
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                  fontSize: 16,
+                ),
+                hint: Text(
+                  "Need App",
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor.withOpacity(.5),
+                  ),
+                ),
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.all(10.0),
+                  border: myInputBorder(),
+                  enabledBorder: myInputBorder(),
+                  fillColor: Colors.transparent,
+                  focusColor: Colors.transparent,
+                  // hoverColor: Colors.black,
+                  focusedBorder: myFocusBorder(),
+                  hintStyle: TextStyle(
+                    color: Theme.of(context).primaryColor.withOpacity(.2),
+                    fontWeight: FontWeight.w500,
+                  ),
+                  // isDense: true,
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Select an option Yes or No';
+                  }
+                  return null;
+                },
+                onChanged: (String? newValue) {
+                  setState(() {
+                    needApp = newValue!;
+                  });
+                },
+                items: optionValue
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
                     ),
-                  )
+                  );
+                }).toList(),
+              ),
+            )
                 : const SizedBox(),
             SizedBox(
               height: size.height * 0.02,
@@ -2610,9 +2832,11 @@ class _InstallationDetailsState extends State<InstallationDetails> {
             if (needSmartHome == 'Yes' || needApp == 'Yes')
               Column(
                 children: [
-                  const Text(
+                  Text(
                     'App Details',
-                    style: TextStyle(),
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                    ),
                   ),
 
                   /// Email id
@@ -2621,7 +2845,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     textInputType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
                     hintName: 'App User ID',
-                    icon: const Icon(Icons.email),
+                    icon: Icon(Icons.email, color: Theme.of(context).primaryColor,),
                     maxLength: 100,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -2637,7 +2861,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     textInputType: TextInputType.text,
                     textInputAction: TextInputAction.done,
                     hintName: 'Password',
-                    icon: const Icon(Icons.password),
+                    icon: Icon(Icons.password, color: Theme.of(context).primaryColor,),
                     maxLength: 100,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -2652,13 +2876,13 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               const SizedBox(),
             if (needAjax == 'Yes')
 
-              /// Email
+            /// Email
               CustomTextField(
                 controller: ajaxAccountUidController,
                 textInputType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 hintName: 'Ajax Account Uid',
-                icon: const Icon(Icons.numbers),
+                icon: Icon(Icons.numbers,color: Theme.of(context).primaryColor,),
                 maxLength: 100,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -2679,28 +2903,34 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       children: [
         Text(
           "  $title",
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 15,
+            color: Theme.of(context).primaryColor,
           ),
         ),
+        const Gap(5),
         ClipRRect(borderRadius: BorderRadius.circular(15), child: widget),
       ],
     );
   }
 
   Future<dynamic> addDataToList(
-    BuildContext context,
-    String title,
-    Widget widget,
-    TextEditingController textEditingController,
-    List list,
-  ) {
+      BuildContext context,
+      String title,
+      Widget widget,
+      TextEditingController textEditingController,
+      List list,
+      ) {
     return showDialog(
       context: context,
       builder: (_) => AlertDialog(
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Text(
           title,
-          style: const TextStyle(),
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+          ),
         ),
         content: SizedBox(
           height: 150,
@@ -2709,6 +2939,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
             children: [
               widget,
               ActionChip(
+                surfaceTintColor: Colors.transparent,
+                backgroundColor: Theme.of(context).primaryColor.withOpacity(.3),
                 onPressed: () {
                   if (textEditingController.text.isNotEmpty) {
                     list.add(textEditingController.text);
@@ -2722,10 +2954,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   }
                   setState(() {});
                 },
-                label: const Text(
+                label: Text(
                   'Add',
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Theme.of(context).primaryColor,
                     fontSize: 18,
                   ),
                 ),
@@ -2740,21 +2972,21 @@ class _InstallationDetailsState extends State<InstallationDetails> {
   OutlineInputBorder myInputBorder() {
     return OutlineInputBorder(
       borderRadius: const BorderRadius.all(
-        Radius.circular(20),
+        Radius.circular(15),
       ),
       borderSide: BorderSide(
-        color: Colors.black.withOpacity(0.5),
-        width: 1.5,
+        color: Theme.of(context).primaryColor.withOpacity(.3),
+        width: 2,
       ),
     );
   }
 
   OutlineInputBorder myFocusBorder() {
     return OutlineInputBorder(
-      borderRadius: const BorderRadius.all(Radius.circular(20)),
+      borderRadius: const BorderRadius.all(Radius.circular(15)),
       borderSide: BorderSide(
-        color: Colors.black.withOpacity(0.5),
-        width: 1.5,
+        color: Theme.of(context).primaryColor.withOpacity(.3),
+        width: 2,
       ),
     );
   }
@@ -2776,12 +3008,12 @@ class AjaxListModel {
   }
 
   factory AjaxListModel.fromJson(Map<String, dynamic> json) => AjaxListModel(
-        productName: json["product Name"],
-        qty: json["Qty"],
-      );
+    productName: json["product Name"],
+    qty: json["Qty"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "product Name": productName,
-        "Qty": qty,
-      };
+    "product Name": productName,
+    "Qty": qty,
+  };
 }

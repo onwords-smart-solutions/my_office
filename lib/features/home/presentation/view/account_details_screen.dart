@@ -7,10 +7,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/features/home/presentation/view/profile_image_viewer.dart';
+import 'package:my_office/features/theme/presentation/provider/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../../core/config/theme.dart';
 import '../../../../core/utilities/constants/app_color.dart';
 import '../../../../core/utilities/constants/app_version.dart';
 import '../../../../core/utilities/custom_widgets/custom_image_cropper.dart';
@@ -75,10 +74,10 @@ class _AccountScreenState extends State<AccountScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: Theme.of(context).primaryColor,),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text('Profile', style: TextStyle()),
+        title: Text('Profile', style: TextStyle(fontWeight: FontWeight.w500,fontSize: 25, color: Theme.of(context).primaryColor)),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -166,7 +165,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                                   downloadProgress,
                                                 ) =>
                                                     CircularProgressIndicator(
-                                                  color: AppColor.primaryColor,
+                                                  color: Theme.of(context).primaryColor,
+                                                  strokeWidth: 2.0,
                                                   value:
                                                       downloadProgress.progress,
                                                 ),
@@ -185,7 +185,13 @@ class _AccountScreenState extends State<AccountScreen> {
                               TextButton(
                                 onPressed: () =>
                                     pickImage(userProvider.user!.uid, size),
-                                child: const Text('Edit'),
+                                child: const Text(
+                                    'Edit',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 17,
+                                ),
+                                ),
                               ),
                               Text(
                                 userProvider.user!.name,
@@ -226,6 +232,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     await pref.clear();
                     if(!mounted) return;
                     Provider.of<AuthenticationProvider>(context, listen: false).clearUser();
+                    Provider.of<ThemeProvider>(context,listen: false).clearAppTheme();
                     navigator.pushAndRemoveUntil(
                       MaterialPageRoute(builder: (_) => const LoginScreen()),
                       (route) => false,

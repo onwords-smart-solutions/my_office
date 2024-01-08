@@ -11,11 +11,15 @@ class CreateAccountCase {
     required String name,
     required String email,
     required String dep,
+    required int phone,
+    required DateTime dob,
   }) async {
     return hrAccessRepository.createAccount(
       name: name,
       email: email,
       dep: dep,
+      phone: phone,
+      dob: dob,
     );
   }
 }

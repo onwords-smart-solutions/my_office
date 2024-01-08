@@ -73,25 +73,6 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   late WorkEntryRepository workEntryRepository =
       WorkEntryRepoImpl(workEntryFbDataSource: workEntryFbDataSource);
 
-  void _initSpeech() async {
-    isListening = await _speechToText.initialize();
-    setState(() {});
-  }
-
-  void _startListening() async {
-    await _speechToText.listen(onResult: _onSpeechResult);
-  }
-
-  void _stopListening() async {
-    await _speechToText.stop();
-  }
-
-  void _onSpeechResult(SpeechRecognitionResult result) {
-    setState(() {
-      _workController.text = result.recognizedWords;
-    });
-  }
-
   todayDate() {
     var now = DateTime.now();
     var formatterDate = DateFormat('yyy-MM-dd');
@@ -218,7 +199,6 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
 
   @override
   void initState() {
-    _initSpeech();
     _tabController = TabController(length: 2, vsync: this);
     todayDate();
     getWorkDone();
@@ -237,7 +217,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
     final width = MediaQuery.of(context).size.width;
     return MainTemplate(
       key: formKey,
-      subtitle: 'Update your works here!!',
+      subtitle: 'Work entry',
       templateBody: bodyContent(height, width),
       bgColor: AppColor.backGroundColor,
     );
@@ -263,15 +243,8 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                   padding: const EdgeInsets.all(5),
                   height: height * 0.08,
                   decoration: BoxDecoration(
-                    color: AppColor.backGroundColor,
                     borderRadius: BorderRadius.circular(10),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black12,
-                        offset: Offset(-6.0, 6.0),
-                        blurRadius: 5,
-                      ),
-                    ],
+                    color: Theme.of(context).primaryColor.withOpacity(.1),
                   ),
                   child: tabBarContainer(height, width),
                 ),
@@ -294,22 +267,26 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
 
   Widget tabBarContainer(double height, double width) {
     return TabBar(
+      splashFactory: NoSplash.splashFactory,
+      overlayColor: MaterialStateProperty.resolveWith (
+            (Set  states) {
+          return states.contains(MaterialState.focused) ? null : Colors.transparent;
+        },
+      ),
       controller: _tabController,
       physics: const BouncingScrollPhysics(),
       indicator: BoxDecoration(
-        // color: Color(0xffDDE6E8),
-        gradient: const LinearGradient(
-          colors: [
-            Color(0xffD136D4),
-            Color(0xff7652B2),
-          ],
-        ),
+        color: Theme.of(context).primaryColor.withOpacity(.2),
         borderRadius: BorderRadius.circular(10.0),
       ),
-      unselectedLabelColor: Colors.black,
+      unselectedLabelColor: Theme.of(context).primaryColor,
       automaticIndicatorColorAdjustment: true,
-      labelStyle: const TextStyle(
+      dividerColor: Colors.transparent,
+      labelStyle: TextStyle(
         fontSize: 17,
+        color: Theme.of(context).primaryColor,
+        fontWeight: FontWeight.w500,
+        fontFamily: "SF Pro",
       ),
       tabs: [
         Container(
@@ -318,11 +295,12 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
-          child: const Center(
+          child: Center(
             child: Text(
               'Work Entry',
               style: TextStyle(
                 fontSize: 17,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           ),
@@ -333,11 +311,12 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
           ),
-          child: const Center(
+          child: Center(
             child: Text(
               'Work History',
               style: TextStyle(
                 fontSize: 17,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           ),
@@ -367,9 +346,9 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
   Widget tabBarViewFirstScreen(double height, double width) {
     return isLoading
         ? Center(
-            child: Lottie.asset(
-              'assets/animations/new_loading.json',
-            ),
+      child:  Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ?
+      Lottie.asset('assets/animations/loading_light_theme.json'):
+      Lottie.asset('assets/animations/loading_dark_theme.json'),
           )
         : Padding(
             padding: const EdgeInsets.all(08),
@@ -383,8 +362,8 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
                         color: _workController.text.isEmpty
-                            ? Colors.black26
-                            : Colors.green,
+                            ? Theme.of(context).primaryColor.withOpacity(.3)
+                            : Theme.of(context).primaryColor.withOpacity(.5),
                         width: 2,
                       ),
                     ),
@@ -411,7 +390,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                           colorValue: timeOfStart.toString().isEmpty
                               ? a = false
                               : a = true,
-                          icon: const Icon(Icons.alarm),
+                          icon: Icon(Icons.alarm, color: Theme.of(context).primaryColor,),
                           val: "${timeOfStart!.isEmpty ? '--' : timeOfStart}",
                         ),
                         ButtonWidget(
@@ -422,7 +401,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                           colorValue: timeOfEnd.toString().isEmpty
                               ? b = false
                               : b = true,
-                          icon: const Icon(Icons.alarm),
+                          icon: Icon(Icons.alarm,color: Theme.of(context).primaryColor,),
                           val: "${timeOfEnd!.isEmpty ? '--' : timeOfEnd}",
                         ),
                         GestureDetector(
@@ -444,29 +423,38 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                                   ],
                                 ),
                                 showCloseIcon: true,
+                                closeIcon: Icon(Icons.close, color: Theme.of(context).primaryColor,),
+                                btnOkColor: Theme.of(context).primaryColor.withOpacity(.2),
                                 body: TextFormField(
                                   inputFormatters: [
                                     LengthLimitingTextInputFormatter(3),
                                   ],
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     height: 1,
-                                    color: Colors.black,
+                                    color:Theme.of(context).primaryColor,
                                   ),
                                   controller: _percentController,
                                   keyboardType: TextInputType.number,
                                   textInputAction: TextInputAction.done,
                                   decoration: InputDecoration(
                                     // fillColor: const Color(0xffFBF8FF),
-                                    hintStyle: const TextStyle(
-                                      fontSize: 16, color: Colors.black54,
-                                      // (0xffFBF8FF)
+                                    hintStyle: TextStyle(
+                                      fontSize: 16,
+                                      color: Theme.of(context).primaryColor.withOpacity(.4),
                                     ),
                                     contentPadding: const EdgeInsets.all(20),
-                                    hintText: '       Percent of Completed',
-                                    filled: true,
+                                    hintText: '       Completed percentage',
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(20),
-                                      borderSide: BorderSide.none,
+                                      borderSide: BorderSide(color: Theme.of(context).primaryColor.withOpacity(.2),width:2),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(color: Theme.of(context).primaryColor.withOpacity(.2)),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                      borderSide: BorderSide(color: Theme.of(context).primaryColor.withOpacity(.4),width: 2),
                                     ),
                                   ),
                                   validator: (value) {
@@ -478,8 +466,9 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                                   },
                                 ),
                                 btnOkText: 'Done',
-                                buttonsTextStyle: const TextStyle(
+                                buttonsTextStyle: TextStyle(
                                   fontSize: 17,
+                                  color: Theme.of(context).primaryColor,
                                 ),
                                 btnOkOnPress: () {
                                   setState(() {
@@ -500,8 +489,8 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: _percentController.text.isEmpty
-                                    ? Colors.black26
-                                    : Colors.green,
+                                    ? Theme.of(context).primaryColor.withOpacity(.3)
+                                    : Theme.of(context).primaryColor.withOpacity(.5),
                                 width: 2,
                               ),
                               borderRadius: BorderRadius.circular(10),
@@ -509,16 +498,21 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                const Icon(Icons.percent),
+                                Icon(Icons.percent, color: Theme.of(context).primaryColor,),
                                 Text(
                                   _percentController.text.isEmpty
                                       ? '--'
                                       : _percentController.text,
-                                  style: const TextStyle(),
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
+                                  ),
                                 ),
-                                const Text(
+                                Text(
                                   'Percentage',
-                                  style: TextStyle(),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
                                 ),
                               ],
                             ),
@@ -622,7 +616,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                           }
                         } else {
                           CustomSnackBar.showErrorSnackbar(
-                            message: 'Please fill all the fields!',
+                            message: 'Please fill all the fields!!',
                             context: context,
                           );
                         }
@@ -634,18 +628,15 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                       width: width * 0.9,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        gradient: const LinearGradient(
-                          colors: [
-                            Color(0xffD136D4),
-                            Color(0xff7652B2),
-                          ],
-                        ),
+                       color: Theme.of(context).primaryColor.withOpacity(.2),
                       ),
                       child: Center(
                         child: Text(
                           'Submit',
                           style: TextStyle(
                             fontSize: height * 0.025,
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
@@ -673,15 +664,8 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                 // padding: EdgeInsets.only(right: width * 0.05, left: width * 0.05),
                 margin: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: AppColor.backGroundColor,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      offset: const Offset(-0.0, 5.0),
-                      blurRadius: 8,
-                    ),
-                  ],
-                  borderRadius: BorderRadius.circular(11),
+                  color: Theme.of(context).primaryColor.withOpacity(.1),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
                   children: [
@@ -693,12 +677,7 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
                       width: width * 0.88,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        gradient: LinearGradient(
-                          colors: [
-                            const Color(0xffD136D4).withOpacity(0.09),
-                            const Color(0xff7652B2).withOpacity(0.3),
-                          ],
-                        ),
+                        color: Theme.of(context).primaryColor.withOpacity(.2),
                       ),
                       child: SingleChildScrollView(
                         physics: const BouncingScrollPhysics(),
@@ -750,10 +729,14 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
               );
             },
           )
-        : const Center(
+        : Center(
             child: Text(
               'No Works Completed!!',
-              style: TextStyle(fontSize: 17),
+              style: TextStyle(
+                  fontSize: 20,
+              fontWeight: FontWeight.w500,
+              color: Theme.of(context).primaryColor,
+              ),
             ),
           );
   }
@@ -764,13 +747,16 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       animationDuration: 1000,
       lineHeight: height * 0.023,
       percent: val,
-      backgroundColor: Colors.black.withOpacity(0.05),
-      // progressColor: Colors.cyan,
-      linearGradient:
-          const LinearGradient(colors: [Color(0xff21d4fd), Color(0xffb721ff)]),
+      barRadius: const Radius.circular(10),
+      backgroundColor: Theme.of(context).primaryColor.withOpacity(.4),
+      progressColor: Theme.of(context).scaffoldBackgroundColor,
       center: Text(
         percentage,
-        style: const TextStyle(fontSize: 17),
+        style: TextStyle(
+            color: Theme.of(context).primaryColor,
+            fontSize: 17,
+          fontWeight: FontWeight.w500,
+        ),
       ),
     );
   }
@@ -780,7 +766,11 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
       padding: const EdgeInsets.all(8),
       child: SelectableText(
         name,
-        style: TextStyle(fontSize: size, color: Colors.black),
+        style: TextStyle(
+            fontSize: size,
+            color: Theme.of(context).primaryColor,
+          fontWeight: FontWeight.w500,
+        ),
       ),
     );
   }
@@ -813,35 +803,21 @@ class _WorkEntryScreenState extends State<WorkEntryScreen>
         },
         style: TextStyle(
           fontSize: height * 0.02,
-          color: Colors.black,
+          color: Theme.of(context).primaryColor,
         ),
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: hintName,
-          prefixIcon: IconButton(
-            icon: Icon(
-              _speechToText.isNotListening ? Icons.mic_off_rounded : Icons.mic,
-            ),
-            onPressed: () {
-              setState(() {
-                _speechToText.isNotListening
-                    ? _startListening()
-                    : _stopListening();
-              });
-            },
-          ),
           hintStyle: TextStyle(
-            color: Colors.black.withOpacity(0.5),
+            color: Theme.of(context).primaryColor.withOpacity(.3),
           ),
-          filled: true,
-          // fillColor: Colors.transparent,
           contentPadding:
               const EdgeInsets.only(left: 14.0, bottom: 6.0, top: 8.0),
           focusedBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.transparent),
             borderRadius: BorderRadius.circular(10.0),
           ),
-          enabledBorder: UnderlineInputBorder(
+          enabledBorder: OutlineInputBorder(
             borderSide: const BorderSide(color: Colors.transparent),
             borderRadius: BorderRadius.circular(10.0),
           ),
@@ -881,7 +857,8 @@ class ButtonWidget extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: colorValue ? Colors.green : Colors.black26,
+            color: colorValue ? Theme.of(context).primaryColor.withOpacity(.5)
+                  : Theme.of(context).primaryColor.withOpacity(.3),
             width: 2,
           ),
         ),
@@ -891,9 +868,16 @@ class ButtonWidget extends StatelessWidget {
             icon,
             Text(
               val,
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+              ),
             ),
             Text(
               title,
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ],
         ),

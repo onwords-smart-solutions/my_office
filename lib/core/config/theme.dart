@@ -11,6 +11,7 @@ class AppTheme {
       secondary: const Color(0xff2e2f33),
       background: const Color(0xFF1F1F1F),
       surface: const Color(0xff31343b),
+      onSurface: Colors.white,
     ),
 
     listTileTheme: const ListTileThemeData(
@@ -24,6 +25,7 @@ class AppTheme {
     ),
     primaryColor: Colors.white,
     appBarTheme: const AppBarTheme(
+      surfaceTintColor: Colors.transparent,
       backgroundColor: Color(0xFF1F1F1F),
       foregroundColor: Colors.white,
     ),
@@ -50,15 +52,31 @@ class AppTheme {
         fontFamily: 'SF Pro',
       ),
     ),
-    datePickerTheme: DatePickerThemeData(
-      backgroundColor: Colors.white,
-      dayBackgroundColor: MaterialStateProperty.resolveWith((states) {
-        if (states.contains(MaterialState.selected)) {
-          return Colors.deepPurple;
-        }
-        return Colors.transparent;
-      },
+    timePickerTheme: TimePickerThemeData(
+      elevation: 0.5,
+      backgroundColor: const Color(0xff2e2f33),
+      dayPeriodColor: MaterialStateColor.resolveWith(
+            (states) => states.contains(MaterialState.selected) ? AppColor.primaryColor : Colors.black54,
       ),
+      dayPeriodTextColor: Colors.white,
+      hourMinuteColor: MaterialStateColor.resolveWith(
+            (states) => states.contains(MaterialState.selected) ? AppColor.primaryColor : Colors.black54,
+      ),
+      hourMinuteTextColor: Colors.white,
+      dialHandColor: AppColor.primaryColor,
+      dialBackgroundColor: Colors.black54,
+      dialTextColor: Colors.white,
+      helpTextStyle: const TextStyle(fontSize: 14, color: Colors.white),
+      entryModeIconColor: AppColor.primaryColor,
+    ),
+    datePickerTheme: DatePickerThemeData(
+      weekdayStyle: const TextStyle(color: Colors.white),
+      headerForegroundColor: Colors.white,
+      dayForegroundColor: MaterialStateColor.resolveWith((states) => Colors.white),
+      todayForegroundColor: MaterialStateColor.resolveWith((states) => Colors.white),
+      backgroundColor: const Color(0xff31343b),
+      elevation: .5,
+      yearForegroundColor: MaterialStateColor.resolveWith((states) => Colors.white),
     ),
   );
 
@@ -74,6 +92,7 @@ class AppTheme {
     ),
     primaryColor: Colors.black,
     appBarTheme: const AppBarTheme(
+      surfaceTintColor: Colors.transparent,
       backgroundColor: Color(0xffffffff),
       foregroundColor: Colors.black,
     ),
@@ -114,15 +133,28 @@ class AppTheme {
         fontFamily: 'SF Pro',
       ),
     ),
-    datePickerTheme: DatePickerThemeData(
-      backgroundColor: Colors.white,
-      dayBackgroundColor: MaterialStateProperty.resolveWith((states) {
-        if (states.contains(MaterialState.selected)) {
-          return Colors.deepPurple;
-        }
-        return Colors.transparent;
-      },
+    timePickerTheme: TimePickerThemeData(
+      elevation: 0.5,
+      backgroundColor: const Color(0xfff2f5fc),
+      dayPeriodColor: MaterialStateColor.resolveWith(
+            (states) => states.contains(MaterialState.selected) ? AppColor.primaryColor : Colors.white,
       ),
+      dayPeriodTextColor: Colors.black,
+      hourMinuteColor: MaterialStateColor.resolveWith(
+            (states) => states.contains(MaterialState.selected) ? AppColor.primaryColor : Colors.white,
+      ),
+      hourMinuteTextColor: Colors.black,
+      dialHandColor: AppColor.primaryColor,
+      dialBackgroundColor: Colors.white,
+      dialTextColor: Colors.black,
+      helpTextStyle: const TextStyle(fontSize: 14, color: Colors.black),
+      entryModeIconColor: AppColor.primaryColor,
+    ),
+    datePickerTheme: DatePickerThemeData(
+      headerForegroundColor: Colors.black,
+      backgroundColor: AppColor.backGroundColor,
+      elevation: .5,
+      yearForegroundColor: MaterialStateColor.resolveWith((states) => Colors.black),
     ),
   );
 }

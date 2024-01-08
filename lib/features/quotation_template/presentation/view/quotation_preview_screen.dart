@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:my_office/core/utilities/custom_widgets/custom_alert_text_field.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_app_button.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_text_field.dart';
 import 'package:my_office/features/quotation_template/presentation/view_model/quotation_template_pdf.dart';
@@ -105,11 +106,10 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColor.backGroundColor,
         title: const Text(
-          'Preview of Document',
+          'Document preview',
           style: TextStyle(
-            fontSize: 22,
+            fontSize: 25,
           ),
         ),
         centerTitle: true,
@@ -144,6 +144,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
             right: 0,
             bottom: 0,
             child: Container(
+              color: Theme.of(context).scaffoldBackgroundColor,
             ),
           ),
           Positioned(
@@ -166,7 +167,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                       height: height * .2,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Colors.black26, width: 2),
+                        border: Border.all(color: Theme.of(context).primaryColor.withOpacity(.2), width: 2),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -181,10 +182,10 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                             ),
                             child: Column(
                               children: [
-                                const Text(
+                                Text(
                                   'Customer Details',
                                   style: TextStyle(
-                                    color: Colors.black,
+                                      color: Theme.of(context).primaryColor,
                                   ),
                                 ),
                                 createCustomerDetails(
@@ -227,8 +228,8 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                               ],
                             ),
                           ),
-                          const VerticalDivider(
-                            color: Colors.black,
+                          VerticalDivider(
+                            color: Theme.of(context).primaryColor.withOpacity(.3),
                             width: 1,
                           ),
                           Container(
@@ -242,23 +243,23 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text(
+                                Text(
                                   '      Document Details',
                                   style: TextStyle(
-                                    color: Colors.black,
+                                      color: Theme.of(context).primaryColor,
                                   ),
                                 ),
                                 Text(
                                   ' Doc-Type : #${customerDetails.docType}',
-                                  style: const TextStyle(
-                                    color: Colors.black,
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
                                     fontSize: 10,
                                   ),
                                 ),
                                 Text(
                                   ' Category : ${customerDetails.docCategory}',
-                                  style: const TextStyle(
-                                    color: Colors.black,
+                                  style: TextStyle(
+                                    color: Theme.of(context).primaryColor,
                                     fontSize: 10,
                                   ),
                                 ),
@@ -268,8 +269,8 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                         ],
                       ),
                     ),
-                    const Divider(
-                      color: Colors.black,
+                    Divider(
+                      color: Theme.of(context).primaryColor.withOpacity(.2),
                       indent: 5,
                       endIndent: 5,
                       thickness: 1,
@@ -287,8 +288,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                             width: width * 1,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
-                              color:
-                                  CupertinoColors.systemGrey.withOpacity(0.4),
+                              color: Theme.of(context).primaryColor.withOpacity(.1),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -323,8 +323,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                             width: width * 1,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
-                              color:
-                                  CupertinoColors.systemGrey.withOpacity(0.4),
+                              color: Theme.of(context).primaryColor.withOpacity(.1),
                             ),
                             child: ListView.builder(
                               scrollDirection: Axis.vertical,
@@ -350,8 +349,8 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                               },
                             ),
                           ),
-                          const Divider(
-                            color: Colors.black,
+                          Divider(
+                            color: Theme.of(context).primaryColor.withOpacity(.2),
                             indent: 5,
                             endIndent: 5,
                             thickness: 1,
@@ -361,8 +360,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20),
-                              border:
-                                  Border.all(color: Colors.black12, width: 2),
+                              border: Border.all(color: Theme.of(context).primaryColor.withOpacity(.2), width: 2),
                             ),
                             child: Column(
                               children: [
@@ -408,19 +406,11 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                                 addProducts,
                               );
                             },
-                            child: Container(
-                              width: width * 0.5,
-                              height: height * .06,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  'Save',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                ),
+                            child: Text(
+                              'Save',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: Theme.of(context).primaryColor,
                               ),
                             ),
                           ),
@@ -454,13 +444,15 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
           child: Center(
             child: Text(
               title,
-              style: const TextStyle(),
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+              ),
             ),
           ),
         ),
         isTrue
-            ? const VerticalDivider(
-                color: Colors.black,
+            ? VerticalDivider(
+          color: Theme.of(context).primaryColor.withOpacity(.1),
                 endIndent: 23,
                 indent: 23,
                 thickness: 2,
@@ -479,7 +471,9 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
               child: Center(
                 child: Text(
                   cell,
-                  style: const TextStyle(),
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                  ),
                 ),
               ),
             );
@@ -504,8 +498,8 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
             width: 60,
             child: Text(
               key,
-              style: const TextStyle(
-                color: Colors.black,
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
                 fontSize: 10,
               ),
             ),
@@ -517,8 +511,8 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
               physics: const BouncingScrollPhysics(),
               child: Text(
                 value,
-                style: const TextStyle(
-                  color: Colors.black,
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
                   fontSize: 10,
                 ),
               ),
@@ -545,8 +539,8 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
             width: width * 0.2,
             child: Text(
               key,
-              style: const TextStyle(
-                color: Colors.black,
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
                 fontSize: 12,
               ),
             ),
@@ -560,8 +554,8 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
             child: Text(
               value,
               textAlign: TextAlign.end,
-              style: const TextStyle(
-                color: Colors.black,
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
                 fontSize: 10,
               ),
             ),
@@ -590,19 +584,22 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                 child: CupertinoAlertDialog(
                   title: const Text(
                     "Document Details\n",
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                    ),
                   ),
                   content: Material(
                     color: Colors.transparent,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CustomTextField(
+                        CustomAlertTextField(
                           controller: fileNameController,
                           textInputType: TextInputType.name,
                           textInputAction: TextInputAction.done,
                           hintName: 'File Name',
-                          icon: const Icon(Icons.file_present),
+                          icon: const Icon(Icons.file_present, color: Colors.black,),
                           maxLength: 10,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -642,9 +639,11 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
                             context: context,
                             barrierDismissible: true,
                             builder: (context) {
-                              return const Center(
+                              return Center(
                                 child: SizedBox(
-                                  child: CircularProgressIndicator(),
+                                  child: CircularProgressIndicator(
+                                      color: Theme.of(context).primaryColor,
+                                  ),
                                 ),
                               );
                             },
@@ -694,7 +693,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
     return OutlineInputBorder(
       borderRadius: const BorderRadius.all(Radius.circular(20)),
       borderSide: BorderSide(
-        color: Colors.black.withOpacity(0.3),
+        color: Theme.of(context).primaryColor.withOpacity(.3),
         width: 2,
       ),
     );
@@ -706,7 +705,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
         Radius.circular(20),
       ),
       borderSide: BorderSide(
-        color: Colors.black.withOpacity(0.3),
+        color: Theme.of(context).primaryColor.withOpacity(.3),
         width: 2,
       ),
     );
@@ -718,7 +717,7 @@ class _InvoicePreviewScreenState extends State<InvoicePreviewScreen> {
         Radius.circular(20),
       ),
       borderSide: BorderSide(
-        color: Colors.black.withOpacity(0.3),
+        color: Theme.of(context).primaryColor.withOpacity(.3),
         width: 2,
       ),
     );

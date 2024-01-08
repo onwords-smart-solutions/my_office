@@ -48,13 +48,9 @@ Future<void> main() async {
   await Firebase.initializeApp();
   await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
   await di.init();
-  FlutterError.onError = (errorDetails) {
-    FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-  };
-  PlatformDispatcher.instance.onError = (error, stack) {
-    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-    return true;
-  };
+
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitDown,
     DeviceOrientation.portraitUp,
@@ -144,6 +140,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     _notificationService.initializePlatformNotifications();
     _initUserData();
+   Provider.of<ThemeProvider>(context,listen: false).loadThemeFromLocal();
     super.initState();
   }
 
@@ -202,10 +199,16 @@ class InitialScreenState extends State<InitialScreen>
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Colors.black,
+    return Scaffold(
       body: Center(
-        child: Text('Loading...'),
+        child: Text(
+            'Loading data..',
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 20,
+          color: Theme.of(context).primaryColor,
+        ),
+        ),
       ),
     );
   }
@@ -273,10 +276,14 @@ class Loading extends StatelessWidget {
                   (route) => false,
                 );
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurple,
+              child: Text(
+                  'Reset session',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+                color: Theme.of(context).primaryColor,
               ),
-              child: const Text('Reset session'),
+              ),
             ),
           ),
         ],

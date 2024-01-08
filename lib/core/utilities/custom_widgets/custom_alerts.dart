@@ -16,8 +16,22 @@ class CustomAlerts {
         return WillPopScope(
           onWillPop: () async => false,
           child: AlertDialog(
-            title: Text(title),
-            content: Text(content),
+            surfaceTintColor: Colors.transparent,
+            title: Text(
+                title,
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w700,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+            content: Text(
+                content,
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
             actions: [
               if (cancelButton != null) cancelButton,
               actionButton,

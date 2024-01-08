@@ -16,7 +16,7 @@ class _AllSuggestionsState extends State<AllSuggestions> {
   @override
   Widget build(BuildContext context) {
     return MainTemplate(
-      subtitle: 'Date Specific Suggestion!!',
+      subtitle: 'Suggestion',
       templateBody: viewAllSuggestions(),
       bgColor: AppColor.backGroundColor,
     );
@@ -45,8 +45,8 @@ class _AllSuggestionsState extends State<AllSuggestions> {
         },
         border: TableBorder.all(
           borderRadius: BorderRadius.circular(10),
-          color: AppColor.primaryColor,
-          width: 1.5,
+          color: Theme.of(context).primaryColor.withOpacity(.2),
+          width: 2,
         ),
         children: [
           TableRow(
@@ -59,7 +59,9 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                 child: Text(
                   "Date",
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15,
                   ),
                 ),
               ),
@@ -67,7 +69,9 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                 padding: const EdgeInsets.all(10),
                 child: SelectableText(
                   widget.fullSuggestions['date'].toString(),
-                  style: const TextStyle(
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 15,
                   ),
                 ),
               ),
@@ -83,7 +87,9 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                 child: Text(
                   "Is Read",
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15,
                   ),
                 ),
               ),
@@ -91,7 +97,9 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                 padding: const EdgeInsets.all(10),
                 child: SelectableText(
                   widget.fullSuggestions['isread'].toString(),
-                  style: const TextStyle(
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 15,
                   ),
                 ),
               ),
@@ -107,7 +115,9 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                 child: Text(
                   "Time",
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15,
                   ),
                 ),
               ),
@@ -115,7 +125,9 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                 padding: const EdgeInsets.all(10),
                 child: SelectableText(
                   widget.fullSuggestions['time'].toString(),
-                  style: const TextStyle(
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 15,
                   ),
                 ),
               ),
@@ -136,8 +148,8 @@ class _AllSuggestionsState extends State<AllSuggestions> {
         },
         border: TableBorder.all(
           borderRadius: BorderRadius.circular(10),
-          color: AppColor.primaryColor,
-          width: 1.5,
+          color: Theme.of(context).primaryColor.withOpacity(.2),
+          width: 2,
         ),
         children: [
           TableRow(
@@ -150,7 +162,9 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                 child: Text(
                   "Message:",
                   style: TextStyle(
-                    color: AppColor.primaryColor,
+                    color: Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15,
                   ),
                 ),
               ),
@@ -165,7 +179,9 @@ class _AllSuggestionsState extends State<AllSuggestions> {
                 padding: const EdgeInsets.all(10),
                 child: SelectableText(
                   widget.fullSuggestions['message'].toString(),
-                  style: const TextStyle(
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 15,
                   ),
                 ),
               ),
