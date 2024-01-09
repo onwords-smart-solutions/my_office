@@ -82,7 +82,7 @@ As, I have mentioned above this project is structured with Clean architecture pr
 
 ### Version history and Releases
 
-* Android : 3.0.4+13 - Refreshment choice, Create staff account and Installation pdf updates.
+* Android : 4.0.0+14 - Theme switching option update.
 * iOS : 2.1.7. 
 
 

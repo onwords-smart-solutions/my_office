@@ -364,11 +364,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         content: message.notification!.body.toString(),
         actionButton: TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: Text(
+          child: const Text(
               'Ok',
             style: TextStyle(
               fontWeight: FontWeight.w500,
-              color: Theme.of(context).primaryColor,
+              fontSize: 16,
             ),
           ),
         ),
@@ -508,11 +508,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             ),
             actions: [
               if (user.user!.dep == "APP")
-                FilledButton(
-                  child: Text(
+                TextButton(
+                  child: const Text(
                     'Ignore',
                     style: TextStyle(
-                        color: Theme.of(context).primaryColor,
                         fontWeight: FontWeight.w500,
                       fontSize: 16,
                     ),
@@ -564,12 +563,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     "You are currently using an outdated version. Update the app to use the latest features..",
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
-                      fontSize: 16,
                       color: Theme.of(context).primaryColor,
                     ),
                   ),
             actions: [
-              FilledButton(
+              TextButton(
                 onPressed: () async {
                   final url = Uri.parse(
                     Platform.isIOS
@@ -585,12 +583,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     throw 'Could not launch $url';
                   }
                 },
-                child: Text(
+                child: const Text(
                     "Update",
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 16,
-                    color: Theme.of(context).primaryColor,
                   ),
                 ),
               ),

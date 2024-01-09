@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:firebase_database/firebase_database.dart';
@@ -15,8 +16,12 @@ class SearchLeadsFbDataSourceImpl implements SearchLeadsFbDataSource {
     DatabaseEvent customerEvent = await ref.child('customer').once();
     List<Map<Object?, Object?>> customers = [];
     for (var customer in customerEvent.snapshot.children) {
-      final data = customer.value as Map<Object?, Object?>;
-      customers.add(data);
+     try{
+       final data = customer.value as Map<Object?, Object?>;
+       customers.add(data);
+     }catch(e){
+       log('Exception caught in Customer leads $e');
+     }
     }
     return customers;
   }

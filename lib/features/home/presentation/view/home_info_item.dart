@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:my_office/features/home/data/data_source/home_fb_data_source.dart';
 import 'package:my_office/features/home/data/data_source/home_fb_data_source_impl.dart';
@@ -129,7 +130,7 @@ class _InfoItemState extends State<InfoItem> {
             borderRadius: BorderRadius.circular(30.0),
             boxShadow: const [
               BoxShadow(
-                color: Colors.black38,
+                color: Colors.black26,
                 blurRadius: 10.0,
                 spreadRadius: 5.0,
                 offset: Offset(5, 5),
@@ -212,73 +213,75 @@ class _InfoItemState extends State<InfoItem> {
 
   Widget _prEmployeeOfTheWeek() {
     final size = MediaQuery.sizeOf(context);
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text(
-          'Employee of the Week',
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
-            color: Colors.tealAccent,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Column(
+        children: [
+          const Text(
+            'Employee of the week',
+            style: TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
+              color: Colors.white,
+            ),
           ),
-        ),
-        Expanded(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                height: size.width * .15,
-                width: size.width * .15,
-                margin: const EdgeInsets.only(right: 8.0),
-                clipBehavior: Clip.hardEdge,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                ),
-                child: CachedNetworkImage(
-                  imageUrl: employeeOfTheWeek!.url,
-                  fit: BoxFit.cover,
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      CircularProgressIndicator(
-                    value: downloadProgress.progress,
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  height: size.width * .15,
+                  width: size.width * .15,
+                  margin: const EdgeInsets.only(right: 8.0),
+                  clipBehavior: Clip.hardEdge,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
                   ),
-                  errorWidget: (context, url, error) => const Icon(
-                    Icons.error,
-                    color: Colors.red,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      employeeOfTheWeek!.name,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
-                        color: Colors.white,
-                      ),
+                  child: CachedNetworkImage(
+                    imageUrl: employeeOfTheWeek!.url,
+                    fit: BoxFit.cover,
+                    progressIndicatorBuilder: (context, url, downloadProgress) =>
+                        CircularProgressIndicator(
+                      value: downloadProgress.progress,
                     ),
-                    const SizedBox(height: 5),
-                    Flexible(
-                      child: Text(
-                        reason!,
+                    errorWidget: (context, url, error) => const Icon(
+                      Icons.error,
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        employeeOfTheWeek!.name,
                         style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18,
                           color: Colors.white,
                         ),
                       ),
-                    ),
-                  ],
+                     const Gap(2),
+                      Flexible(
+                        child: Text(
+                          reason!,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

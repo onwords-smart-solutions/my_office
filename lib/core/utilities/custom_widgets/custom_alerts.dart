@@ -20,7 +20,7 @@ class CustomAlerts {
             title: Text(
                 title,
               style: TextStyle(
-                fontSize: 17,
+                fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: Theme.of(context).primaryColor,
               ),

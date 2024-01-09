@@ -13,7 +13,6 @@ class AppTheme {
       surface: const Color(0xff31343b),
       onSurface: Colors.white,
     ),
-
     listTileTheme: const ListTileThemeData(
       titleTextStyle: TextStyle(
         inherit: true,
@@ -100,7 +99,6 @@ class AppTheme {
       selectionColor: AppColor.primaryColor,
       selectionHandleColor: AppColor.primaryColor,
     ),
-
     listTileTheme: const ListTileThemeData(
       titleTextStyle: TextStyle(
         inherit: true,

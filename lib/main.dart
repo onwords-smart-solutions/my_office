@@ -251,7 +251,7 @@ class Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ValueNotifier<bool> isShown = ValueNotifier(false);
-    Future.delayed(const Duration(seconds: 10), () => isShown.value = true);
+    Future.delayed(const Duration(seconds: 12), () => isShown.value = true);
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
