@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -155,15 +156,15 @@ class InvAndQtnPdf {
                                 style: const TextStyle(fontSize: 10),
                               ),
                     SizedBox(height: 3),
-                    customerDetails.docType == 'QUOTATION' ?
-                    Text(
-                      'Valid till : ${formatDate(seventhDate)}',
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ) :
-                  SizedBox.shrink(),
+                    customerDetails.docType == 'QUOTATION'
+                        ? Text(
+                            'Valid till : ${formatDate(seventhDate)}',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        : SizedBox.shrink(),
                   ],
                 ),
               ),
@@ -455,7 +456,27 @@ class InvAndQtnPdf {
               : Text(''),
           Divider(),
           SizedBox(height: 2 * PdfPageFormat.mm),
-          buildBodyText('In Sync with the Smarter World', true),
+          pw.RichText(
+            text: pw.TextSpan(
+              text: 'In Sync ',
+              style: pw.TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  color: PdfColors.red,
+              ),
+              // Red color
+              children: [
+                pw.TextSpan(
+                  text: 'with the Smarter World',
+                  style: pw.TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: PdfColors.black,
+                  ), // Blue color
+                ),
+              ],
+            ),
+          ),
           SizedBox(height: 1 * PdfPageFormat.mm),
           // buildSimpleText(title: 'Paypal', value: invoice.supplier.paymentInfo),
         ],
@@ -501,7 +522,7 @@ class InvAndQtnPdf {
                       SizedBox(height: 5),
                       buildBodyText('Warranty:', true),
                       buildBodyText(
-                        'Service and replacement warranty will be provided for the products up to 1 year from the date of installation.',
+                        'Service warranty will be provided for the products up to 1 year from the date of installation.',
                         false,
                       ),
                       SizedBox(height: 3),
@@ -545,7 +566,7 @@ class InvAndQtnPdf {
                       SizedBox(height: 3),
                       buildBodyText('Cancellation of Order: ', true),
                       buildBodyText(
-                        'If the Order placed is cancelled by Client then the cancellation charges of 30% of the Order value shall be charged as  a Termination fee.',
+                        'If the Order placed is cancelled then the cancellation charges of 30% of the Order value shall be charged as  a Termination fee.',
                         false,
                       ),
                       SizedBox(height: 3),
@@ -737,7 +758,7 @@ class InvAndQtnPdf {
                           SizedBox(height: 5),
                           buildBodyText('Warranty:', true),
                           buildBodyText(
-                            'Service and replacement warranty will be provided for the products up to 1 year from the date of installation.',
+                            'Service warranty will be provided for the products up to 1 year from the date of installation.',
                             false,
                           ),
                           SizedBox(height: 5),
@@ -770,7 +791,7 @@ class InvAndQtnPdf {
                           SizedBox(height: 5),
                           buildBodyText('Cancellation of Order: ', true),
                           buildBodyText(
-                            'If the Order placed is cancelled by Client then the cancellation charges of 30% of the Order value shall be charged as  a Termination fee.',
+                            'If the Order placed is cancelled then the cancellation charges of 30% of the Order value shall be charged as  a Termination fee.',
                             false,
                           ),
                           SizedBox(height: 5),

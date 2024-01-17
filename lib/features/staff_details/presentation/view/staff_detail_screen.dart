@@ -31,7 +31,7 @@ class _StaffDetailsState extends State<StaffDetails> {
     'INSTALLATION',
     'HR',
     'MANAGEMENT',
-    'OFFICE STAFF',
+    'BRAVO',
   ];
 
   @override

@@ -44,7 +44,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
     'Installation',
     'HR',
     'PR',
-    'Office staff',
+    'Bravo',
   ];
 
   late final AttendanceFbDataSource _attendanceFbDataSource =
@@ -362,13 +362,13 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
                                             )
                                                 .toList();
                                       }else if (_dropDown[i] ==
-                                          'Office staff') {
+                                          'Bravo') {
                                         _sortedList.value =
                                             _punchingDetails.value
                                                 .where(
                                                   (element) => element
                                                   .department
-                                                  .contains('OFFICE STAFF'),
+                                                  .contains('BRAVO'),
                                             )
                                                 .toList();
                                       }

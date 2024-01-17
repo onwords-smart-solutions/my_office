@@ -265,6 +265,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
       'Phone number',
       'Rating',
       'Reminder date',
+      'Gate',
+      'Secondary number',
     ];
 
     return StreamBuilder(
@@ -286,6 +288,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
             data['phone_number'].toString(),
             data['rating'].toString(),
             widget.reminder,
+            data['gate_type'].toString(),
+            data['work_phone_number'].toString(),
           ];
 
           return ListView.builder(

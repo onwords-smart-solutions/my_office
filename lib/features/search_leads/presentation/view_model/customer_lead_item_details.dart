@@ -65,7 +65,7 @@ class _CustomerItemState extends State<CustomerItem>
       }
     }
 
-    Color tileColor = Theme.of(context).primaryColor;
+    Color tileColor = Theme.of(context).primaryColor.withOpacity(.1);
     Color nobColor = AppColor.primaryColor;
     final size = MediaQuery.of(context).size;
     List<String> fields = [
@@ -77,6 +77,8 @@ class _CustomerItemState extends State<CustomerItem>
       'Created date',
       'Lead in charge',
       'Status',
+      'Gate',
+      'Secondary number',
       'Note',
       'Note updated',
       'Reminder date',
@@ -90,6 +92,8 @@ class _CustomerItemState extends State<CustomerItem>
       widget.customerInfo['created_date'].toString(),
       widget.customerInfo['LeadIncharge'].toString(),
       widget.customerInfo['customer_state'].toString(),
+      widget.customerInfo['gate_type'].toString(),
+      widget.customerInfo['work_phone_number'].toString(),
       lastNote,
       lastNoteDate,
       fullReminder,
