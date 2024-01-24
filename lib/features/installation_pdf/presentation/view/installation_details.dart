@@ -978,6 +978,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
 
   Widget light8ChannelDetails(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
+    bool snackbarShown = false;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: ClipRRect(
@@ -1067,91 +1068,104 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     color: Theme.of(context).primaryColor,
                   ),
                   SizedBox(
-                    height: size.height * 0.2,
+                    height: size.height * 0.3,
                     child: lightBoard8ChannelDetails.isNotEmpty
                         ? ListView.builder(
                       itemCount: lightBoard8ChannelDetails.length,
                       itemBuilder: (context, int index) {
-                        return Center(
-                          child: ListTile(
-                            leading: Text(
-                              "R${index + 1} : ",
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Theme.of(context).primaryColor,
+                        if(index < 8){
+                          return Center(
+                            child: ListTile(
+                              leading: Text(
+                                "R${index + 1} : ",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Theme.of(context).primaryColor,
+                                ),
                               ),
-                            ),
-                            title: Text(
-                              lightBoard8ChannelDetails[index].toString(),
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
+                              title: Text(
+                                lightBoard8ChannelDetails[index].toString(),
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                ),
                               ),
-                            ),
-                            trailing: IconButton(
-                              icon: Icon(
-                                Icons.close,
-                                size: 18,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (_) => AlertDialog(
-                                    surfaceTintColor: Colors.transparent,
-                                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                                    title: Text(
-                                      'Delete this name?\n${lightBoard8ChannelDetails[index]}',
-                                      style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
+                              trailing: IconButton(
+                                icon: Icon(
+                                  Icons.close,
+                                  size: 18,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => AlertDialog(
+                                      surfaceTintColor: Colors.transparent,
+                                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                                      title: Text(
+                                        'Delete this name?\n${lightBoard8ChannelDetails[index]}',
+                                        style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                        textAlign: TextAlign.center,
                                       ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    content: SizedBox(
-                                      height: size.height * 0.07,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                        children: [
-                                          ActionChip(
-                                            onPressed: () {
-                                              lightBoard8ChannelDetails
-                                                  .removeAt(index);
-                                              Navigator.pop(context);
-                                              setState(() {});
-                                            },
-                                            // backgroundColor:
-                                            // Colors.red.shade400,
-                                            label: Text(
-                                              'Yes',
-                                              style: TextStyle(
-                                                color: Theme.of(context).primaryColor,
-                                                fontWeight: FontWeight.w500,
+                                      content: SizedBox(
+                                        height: size.height * 0.07,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                          children: [
+                                            ActionChip(
+                                              onPressed: () {
+                                                lightBoard8ChannelDetails
+                                                    .removeAt(index);
+                                                Navigator.pop(context);
+                                                setState(() {});
+                                              },
+                                              // backgroundColor:
+                                              // Colors.red.shade400,
+                                              label: Text(
+                                                'Yes',
+                                                style: TextStyle(
+                                                  color: Theme.of(context).primaryColor,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          ActionChip(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            // backgroundColor:
-                                            // Colors.blue.shade400,
-                                            label: Text(
-                                              'No',
-                                              style: TextStyle(
-                                                color: Theme.of(context).primaryColor,
-                                                fontWeight: FontWeight.w500,
+                                            ActionChip(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              // backgroundColor:
+                                              // Colors.blue.shade400,
+                                              label: Text(
+                                                'No',
+                                                style: TextStyle(
+                                                  color: Theme.of(context).primaryColor,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              },
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        }else if(!snackbarShown){
+                          snackbarShown = true;
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            CustomSnackBar.showErrorSnackbar(
+                              message: 'You have exceeded the limit',
+                              context: context,
+                            );
+                          });
+                          return const SizedBox.shrink();
+                        }else{
+                          return null;
+                        }
                       },
                     )
                         : Center(
@@ -1174,6 +1188,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
   }
 
   Widget light4ChannelDetails(BuildContext context) {
+    bool snackbarShown = false;
     final size = MediaQuery.sizeOf(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -1264,91 +1279,104 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     color: Theme.of(context).primaryColor,
                   ),
                   SizedBox(
-                    height: size.height * 0.2,
+                    height: size.height * 0.3,
                     child: lightBoard4ChannelDetails.isNotEmpty
                         ? ListView.builder(
                       itemCount: lightBoard4ChannelDetails.length,
                       itemBuilder: (context, int index) {
-                        return Center(
-                          child: ListTile(
-                            leading: Text(
-                              "R${index + 1} : ",
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Theme.of(context).primaryColor,
+                        if(index < 4){
+                          return Center(
+                            child: ListTile(
+                              leading: Text(
+                                "R${index + 1} : ",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Theme.of(context).primaryColor,
+                                ),
                               ),
-                            ),
-                            title: Text(
-                              lightBoard4ChannelDetails[index].toString(),
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
+                              title: Text(
+                                lightBoard4ChannelDetails[index].toString(),
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                ),
                               ),
-                            ),
-                            trailing: IconButton(
-                              icon: Icon(
-                                Icons.close,
-                                size: 18,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (_) => AlertDialog(
-                                    surfaceTintColor: Colors.transparent,
-                                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                                    title: Text(
-                                      'Delete this name?\n${lightBoard4ChannelDetails[index]}',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
+                              trailing: IconButton(
+                                icon: Icon(
+                                  Icons.close,
+                                  size: 18,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => AlertDialog(
+                                      surfaceTintColor: Colors.transparent,
+                                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                                      title: Text(
+                                        'Delete this name?\n${lightBoard4ChannelDetails[index]}',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                        ),
                                       ),
-                                    ),
-                                    content: SizedBox(
-                                      height: size.height * 0.07,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                        children: [
-                                          ActionChip(
-                                            onPressed: () {
-                                              lightBoard4ChannelDetails
-                                                  .removeAt(index);
-                                              Navigator.pop(context);
-                                              setState(() {});
-                                            },
-                                            label: Text(
-                                              'Yes',
-                                              style: TextStyle(
-                                                color: Theme.of(context).primaryColor,
-                                                fontWeight:
-                                                FontWeight.w500,
+                                      content: SizedBox(
+                                        height: size.height * 0.07,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                          children: [
+                                            ActionChip(
+                                              onPressed: () {
+                                                lightBoard4ChannelDetails
+                                                    .removeAt(index);
+                                                Navigator.pop(context);
+                                                setState(() {});
+                                              },
+                                              label: Text(
+                                                'Yes',
+                                                style: TextStyle(
+                                                  color: Theme.of(context).primaryColor,
+                                                  fontWeight:
+                                                  FontWeight.w500,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          ActionChip(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            // backgroundColor:
-                                            // Colors.blue.shade400,
-                                            label: Text(
-                                              'No',
-                                              style: TextStyle(
-                                                color: Theme.of(context).primaryColor,
-                                                fontWeight:
-                                                FontWeight.w500,
+                                            ActionChip(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              // backgroundColor:
+                                              // Colors.blue.shade400,
+                                              label: Text(
+                                                'No',
+                                                style: TextStyle(
+                                                  color: Theme.of(context).primaryColor,
+                                                  fontWeight:
+                                                  FontWeight.w500,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              },
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        }else if(!snackbarShown){
+                          snackbarShown = true;
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            CustomSnackBar.showErrorSnackbar(
+                              message: 'You have exceeded the limit',
+                              context: context,
+                            );
+                          });
+                          return const SizedBox.shrink();
+                        }else{
+                          return null;
+                        }
                       },
                     )
                         : Center(
@@ -2195,6 +2223,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
   }
 
   Widget heavyAndFanDetails(BuildContext context) {
+    bool snackbarShown = false;
     final size = MediaQuery.sizeOf(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -2218,7 +2247,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
           children: [
             //heavy and fan board list
             Container(
-              height: size.height * 0.4,
+              height: size.height * 0.3,
               decoration: BoxDecoration(
                 // color: Colors.blueGrey.withAlpha(50),
                 borderRadius: BorderRadius.circular(20),
@@ -2289,86 +2318,99 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         ? ListView.builder(
                       itemCount: heavyAndFanBoardDetails.length,
                       itemBuilder: (context, int index) {
-                        return Center(
-                          child: ListTile(
-                            leading: Text(
-                              "R${index + 1} : ",
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Theme.of(context).primaryColor,
+                        if(index < 2){
+                          return Center(
+                            child: ListTile(
+                              leading: Text(
+                                "R${index + 1} : ",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Theme.of(context).primaryColor,
+                                ),
                               ),
-                            ),
-                            title: Text(
-                              heavyAndFanBoardDetails[index].toString(),
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
+                              title: Text(
+                                heavyAndFanBoardDetails[index].toString(),
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                ),
                               ),
-                            ),
-                            trailing: IconButton(
-                              icon: Icon(
-                                Icons.close,
-                                size: 18,
-                                color: Theme.of(context).primaryColor,
-                              ),
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (_) => AlertDialog(
-                                    surfaceTintColor: Colors.transparent,
-                                    backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                                    title: Text(
-                                      'Delete this name?\n${heavyAndFanBoardDetails[index]}',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
+                              trailing: IconButton(
+                                icon: Icon(
+                                  Icons.close,
+                                  size: 18,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => AlertDialog(
+                                      surfaceTintColor: Colors.transparent,
+                                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                                      title: Text(
+                                        'Delete this name?\n${heavyAndFanBoardDetails[index]}',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Theme.of(context).primaryColor,
+                                        ),
                                       ),
-                                    ),
-                                    content: SizedBox(
-                                      height: size.height * 0.07,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                        children: [
-                                          ActionChip(
-                                            onPressed: () {
-                                              heavyAndFanBoardDetails
-                                                  .removeAt(index);
-                                              Navigator.pop(context);
-                                              setState(() {});
-                                            },
-                                            label: Text(
-                                              'Yes',
-                                              style: TextStyle(
-                                                color: Theme.of(context).primaryColor,
-                                                fontWeight:
-                                                FontWeight.w500,
+                                      content: SizedBox(
+                                        height: size.height * 0.07,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                          children: [
+                                            ActionChip(
+                                              onPressed: () {
+                                                heavyAndFanBoardDetails
+                                                    .removeAt(index);
+                                                Navigator.pop(context);
+                                                setState(() {});
+                                              },
+                                              label: Text(
+                                                'Yes',
+                                                style: TextStyle(
+                                                  color: Theme.of(context).primaryColor,
+                                                  fontWeight:
+                                                  FontWeight.w500,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                          ActionChip(
-                                            onPressed: () {
-                                              Navigator.pop(context);
-                                            },
-                                            // backgroundColor:
-                                            // Colors.blue.shade400,
-                                            label: Text(
-                                              'No',
-                                              style: TextStyle(
-                                                color: Theme.of(context).primaryColor,
-                                                fontWeight:
-                                                FontWeight.w500,
+                                            ActionChip(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              // backgroundColor:
+                                              // Colors.blue.shade400,
+                                              label: Text(
+                                                'No',
+                                                style: TextStyle(
+                                                  color: Theme.of(context).primaryColor,
+                                                  fontWeight:
+                                                  FontWeight.w500,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                );
-                              },
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        }else if(!snackbarShown){
+                          snackbarShown = true;
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            CustomSnackBar.showErrorSnackbar(
+                              message: 'You have exceeded the limit',
+                              context: context,
+                            );
+                          });
+                          return const SizedBox.shrink();
+                        }else{
+                          return null;
+                        }
                       },
                     )
                         : Center(

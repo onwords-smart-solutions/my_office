@@ -114,7 +114,13 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
                 staff.uid == '5cM1kyNARSS3yKiO8EB0o1E9eiA3') {
               allAccess.add(menuItems);
             }
-          } else if (menuItems.title != MenuTitle.viewSuggestions &&
+          } else if(menuItems.title == MenuTitle.saleCount){
+            if (staff.uid == 'pztngdZPCPQrEvmI37b3gf3w33d2' ||
+                staff.uid == 'x7RbfotHBpfr7JZ88P9eABWtcQM2') {
+              allAccess.add(menuItems);
+            }
+          }
+          else if (menuItems.title != MenuTitle.viewSuggestions &&
               menuItems.title != MenuTitle.staffDetail &&
               menuItems.title != MenuTitle.employeeOfTheWeek &&
               menuItems.title != MenuTitle.prDashboard &&
@@ -190,7 +196,46 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
             allAccess.add(menuItems);
           }
         }
-        //adding for everyone
+        //adding access for lokesh
+        else if(staff.uid == 'lloBhjn2aSRijD33pDeH5Bn2aJD3'){
+          if (menuItems.title == MenuTitle.workEntry ||
+              menuItems.title == MenuTitle.refreshment ||
+              menuItems.title == MenuTitle.leavePortal ||
+              menuItems.title == MenuTitle.searchLead ||
+              menuItems.title == MenuTitle.prVisit ||
+              menuItems.title == MenuTitle.suggestion ||
+              menuItems.title == MenuTitle.createInvoice ||
+              menuItems.title == MenuTitle.prWorkDone ||
+              menuItems.title == MenuTitle.salesPoint ||
+              menuItems.title == MenuTitle.scanQR ||
+              menuItems.title == MenuTitle.prReminder ||
+              menuItems.title == MenuTitle.quotationTemplate ||
+              menuItems.title == MenuTitle.paySlip ||
+              menuItems.title == MenuTitle.saleCount) {
+            allAccess.add(menuItems);
+          }
+        }
+        //adding access for bravo
+        else if (staff.dep.toLowerCase() == 'bravo') {
+          if (menuItems.title == MenuTitle.workEntry ||
+              menuItems.title == MenuTitle.refreshment ||
+              menuItems.title == MenuTitle.leavePortal ||
+              menuItems.title == MenuTitle.searchLead ||
+              menuItems.title == MenuTitle.prVisit ||
+              menuItems.title == MenuTitle.suggestion ||
+              menuItems.title == MenuTitle.createInvoice ||
+              menuItems.title == MenuTitle.prWorkDone ||
+              menuItems.title == MenuTitle.salesPoint ||
+              menuItems.title == MenuTitle.scanQR ||
+              menuItems.title == MenuTitle.prReminder ||
+              menuItems.title == MenuTitle.quotationTemplate ||
+              menuItems.title == MenuTitle.paySlip ||
+              menuItems.title == MenuTitle.attendance ||
+              menuItems.title == MenuTitle.foodCount) {
+            allAccess.add(menuItems);
+          }
+        }
+        //adding access for everyone
         else {
           if (menuItems.title == MenuTitle.workEntry ||
               menuItems.title == MenuTitle.refreshment ||

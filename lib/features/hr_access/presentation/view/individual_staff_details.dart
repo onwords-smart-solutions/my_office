@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
-import '../../../../core/utilities/constants/app_color.dart';
 import '../../../../core/utilities/custom_widgets/custom_app_button.dart';
 import '../../../../core/utilities/custom_widgets/custom_snack_bar.dart';
 import '../../data/data_source/hr_access_fb_data_source.dart';
@@ -40,6 +39,7 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
   late UpdateTimingForEmployeesCase updateTimingForEmployeesCase =
       UpdateTimingForEmployeesCase(hrAccessRepository: hrAccessRepository);
 
+  //Init state function to fetch timing and leads
   void hrSetTimingForEmployees() {
     setState(() {
       punchIn.text = widget.allDetail.punchIn;
@@ -49,6 +49,7 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
     log('Punch out time : ${widget.allDetail.punchOut}');
   }
 
+  //Check in time for employees
   Future<void> _startTimePicker(BuildContext context) async {
     TimeOfDay startTime = TimeOfDay(
       hour: int.parse(widget.allDetail.punchIn.split(':').first),
@@ -75,6 +76,7 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
     }
   }
 
+  //Check out time for employees
   Future<void> _endTimePicker(BuildContext context) async {
     TimeOfDay endTime = TimeOfDay(
       hour: int.parse(widget.allDetail.punchOut.split(':').first),
@@ -101,6 +103,7 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
     }
   }
 
+  //Update timing in Database
   Future<void> setTimingForStaffs() async {
     await updateTimingForEmployeesCase.execute(
       uid: widget.allDetail.uid,
@@ -112,9 +115,9 @@ class _IndividualStaffDetailState extends State<IndividualStaffDetail> {
     data.punchIn = punchIn.text;
     data.punchOut = punchOut.text;
     if (!mounted) return;
+    Navigator.pop(context);
     CustomSnackBar.showSuccessSnackbar(
-      message:
-          'Timing for ${widget.allDetail.name} Punch in : ${punchIn.text} & Punch out : ${punchOut.text}',
+      message: 'Timing has been updated',
       context: context,
     );
   }

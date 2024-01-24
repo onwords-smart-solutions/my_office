@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -15,6 +16,7 @@ import 'package:my_office/features/home/data/repository/home_repo_impl.dart';
 import 'package:my_office/features/home/domain/repository/home_repository.dart';
 import 'package:my_office/features/home/presentation/provider/home_provider.dart';
 import 'package:my_office/features/home/presentation/view/account_details_screen.dart';
+import 'package:my_office/features/leads_achieved/presentation/view/view_leads_achieved_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -66,6 +68,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     _getStaffAccess();
     _getNetworkStatus();
     _notificationService.storeFCM(context: context);
+    _notificationService.initPushNotification();
     _notificationService.initFCMNotifications();
     _setNotification();
     _setupFCMListener(context);
@@ -104,7 +107,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               progressIndicatorBuilder:
                                   (context, url, downloadProgress) =>
                                       CircularProgressIndicator(
-                                        color: Theme.of(context).primaryColor,
+                                color: Theme.of(context).primaryColor,
                                 value: downloadProgress.progress,
                               ),
                               errorWidget: (context, url, error) => const Icon(
@@ -197,9 +200,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       ? Theme.of(context).scaffoldBackgroundColor ==
                               const Color(0xFF1F1F1F)
                           ? Lottie.asset(
-                              'assets/animations/loading_light_theme.json',)
+                              'assets/animations/loading_light_theme.json',
+                            )
                           : Lottie.asset(
-                              'assets/animations/loading_dark_theme.json',)
+                              'assets/animations/loading_dark_theme.json',
+                            )
                       : Consumer<AuthenticationProvider>(
                           builder: (ctx, userProvider, child) {
                             return GridView.builder(
@@ -258,8 +263,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           fillColor: Theme.of(context).primaryColor.withOpacity(.1),
           hintText: 'Search',
           hintStyle: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: Theme.of(context).primaryColor,),
+            fontWeight: FontWeight.w500,
+            color: Theme.of(context).primaryColor,
+          ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15.0),
             borderSide: BorderSide.none,
@@ -343,11 +349,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               }
             },
             child: Text(
-                'Try again',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: Theme.of(context).primaryColor,
-            ),
+              'Try again',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context).primaryColor,
+              ),
             ),
           ),
           barrierDismissible: false,
@@ -358,22 +364,33 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
 
   void _setupFCMListener(BuildContext context) {
     FirebaseMessaging.onMessage.listen((message) {
-      CustomAlerts.showAlertDialog(
-        context: context,
-        title: message.notification!.title.toString(),
-        content: message.notification!.body.toString(),
-        actionButton: TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text(
-              'Ok',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 16,
+      log('Message is ${message.notification!.body.toString()}');
+      if (message.data['type'] == NotificationType.saleCount) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => ViewLeadsAchievedScreen(
+              content: message,
             ),
           ),
-        ),
-        barrierDismissible: true,
-      );
+        );
+      } else {
+        CustomAlerts.showAlertDialog(
+          context: context,
+          title: message.notification!.title.toString(),
+          content: message.notification!.body.toString(),
+          actionButton: TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text(
+              'Ok',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          barrierDismissible: true,
+        );
+      }
     });
   }
 
@@ -492,7 +509,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           child: AlertDialog(
             surfaceTintColor: Colors.transparent,
             title: Text(
-                "App usage restricted",
+              "App usage restricted",
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.w700,
@@ -502,8 +519,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             content: Text(
               "Kindly bare with this alert, App team is fixing the bug, Until then you are not able to access the app.",
               style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: Theme.of(context).primaryColor,
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context).primaryColor,
               ),
             ),
             actions: [
@@ -512,7 +529,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   child: const Text(
                     'Ignore',
                     style: TextStyle(
-                        fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w500,
                       fontSize: 16,
                     ),
                   ),
@@ -537,7 +554,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           child: AlertDialog(
             surfaceTintColor: Colors.transparent,
             title: Text(
-                "New Update Available",
+              "New Update Available",
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.w700,
@@ -584,7 +601,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   }
                 },
                 child: const Text(
-                    "Update",
+                  "Update",
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 16,

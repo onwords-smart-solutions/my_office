@@ -82,7 +82,7 @@ As, I have mentioned above this project is structured with Clean architecture pr
 
 ### Version history and Releases
 
-* Android : 4.0.1+11 - Made changes in Attendance, Quotation and Invoice and Search leads.
+* Android : 4.0.3+17 - Added Sale count notification.
 * iOS : 2.1.7. 
 
 

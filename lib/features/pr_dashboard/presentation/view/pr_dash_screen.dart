@@ -183,9 +183,7 @@ class _PrDashboardState extends State<PrDashboard> {
                 child: Text(
                   'Update',
                   style: TextStyle(
-                    fontWeight: FontWeight.w500,
                     color: Theme.of(context).primaryColor,
-                    fontSize: 17,
                   ),
                 ),
             ),

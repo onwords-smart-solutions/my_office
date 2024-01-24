@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:my_office/features/auth/presentation/provider/authentication_provider.dart';
+import 'package:my_office/features/home/presentation/view/home_screen.dart';
+import 'package:my_office/features/leads_achieved/presentation/view/view_leads_achieved_screen.dart';
 import 'package:my_office/features/notifications/data/data_source/notification_fb_data_source_impl.dart';
 import 'package:my_office/features/notifications/data/data_source/user_fb_data_source.dart';
 import 'package:my_office/features/notifications/data/data_source/user_fb_data_source_impl.dart';
@@ -26,6 +28,7 @@ class NotificationType {
   static const leaveNotification = 'leaveApplied';
   static const leaveRespond = 'leaveResponse';
   static const suggestion = 'suggestion';
+  static const saleCount = 'saleCount';
 }
 
 //Notification repository
@@ -46,7 +49,7 @@ Future<void> handleBackgroundMessage(RemoteMessage message) async {
 }
 
 class NotificationService {
-  Future<void> initPushNotifications() async {
+  Future<void> initPushNotification() async {
     await notificationRepository.initNotifications();
     notificationRepository
         .onMessageOpenedAppStream()
@@ -58,22 +61,16 @@ class NotificationService {
   void _onNotificationClick(RemoteMessage? message) {
     if (message == null) return;
     try {
-      if (message.data['type'] == NotificationType.leaveNotification) {
-        // navigationKey.currentState!.push(
-        //   MaterialPageRoute(
-        //     builder: (_) => const LeaveApprovalScreen(),
-        //   ),
-        // );
-      } else if (message.data['type'] == NotificationType.leaveRespond) {
-        // navigationKey.currentState!.push(
-        //   MaterialPageRoute(
-        //     builder: (_) => const LeaveApplyScreen(),
-        //   ),
-        // );
-      } else if (message.data['type'] == NotificationType.suggestion) {
+     if (message.data['type'] == NotificationType.suggestion) {
         navigationKey.currentState!.push(
           MaterialPageRoute(
             builder: (_) => const ViewSuggestions(),
+          ),
+        );
+      } else if (message.data['type'] == NotificationType.saleCount) {
+        navigationKey.currentState!.push(
+          MaterialPageRoute(
+              builder: (_) => ViewLeadsAchievedScreen(content: message,),
           ),
         );
       }

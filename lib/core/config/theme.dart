@@ -32,6 +32,7 @@ class AppTheme {
       selectionColor: AppColor.primaryColor,
       selectionHandleColor: AppColor.primaryColor,
     ),
+    elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple.shade300)),
     filledButtonTheme: FilledButtonThemeData(style: FilledButton.styleFrom(backgroundColor: AppColor.primaryColor)),
     textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(foregroundColor: AppColor.primaryColor)),
     textTheme: const TextTheme(
@@ -108,6 +109,7 @@ class AppTheme {
         fontSize: 15.0,
       ),
     ),
+    elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple.shade300)),
     filledButtonTheme: FilledButtonThemeData(
       style: FilledButton.styleFrom(
         backgroundColor: AppColor.primaryColor,
