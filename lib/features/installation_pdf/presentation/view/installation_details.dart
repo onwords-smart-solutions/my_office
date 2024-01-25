@@ -22,6 +22,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
 
   List<AjaxListModel> ajaxDeviceDetails = [];
   DateTime dateStamp = DateTime.now();
+
   void dateTime() async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -75,9 +76,12 @@ class _InstallationDetailsState extends State<InstallationDetails> {
 
   List<String> teamMembersName = [];
   List<String> extraDevice = [];
-  List<String> lightBoard8ChannelDetails = [];
-  List<String> heavyAndFanBoardDetails = [];
+  List<String> lightBoard8ChannelDetailsModule1 = [];
+  List<String> lightBoard8ChannelDetailsModule2 = [];
+  List<String> heavyBoardDetails = [];
+  List<String> fanBoardDetails = [];
   List<String> lightBoard4ChannelDetails = [];
+  List<String> lightBoard3ChannelDetails = [];
 
   String selectedGAType = '';
   String needApp = '';
@@ -123,7 +127,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
           'Installation Details',
           style: TextStyle(
             fontWeight: FontWeight.w500,
-              fontSize: 25,
+            fontSize: 25,
           ),
         ),
       ),
@@ -138,9 +142,14 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 if (needSmartHome == 'Yes') wifiAndRouterDetails(context),
                 if (needSmartHome == 'Yes') serverDetails(context),
                 if (needGate == 'Yes') gateDetails(context),
-                if (needSmartHome == 'Yes') light8ChannelDetails(context),
+                if (needSmartHome == 'Yes')
+                  light8ChannelDetailsModule1(context),
+                if (needSmartHome == 'Yes')
+                  light8ChannelDetailsModule2(context),
                 if (needSmartHome == 'Yes') light4ChannelDetails(context),
-                if (needSmartHome == 'Yes') heavyAndFanDetails(context),
+                if (needSmartHome == 'Yes') light3ChannelDetails(context),
+                if (needSmartHome == 'Yes') heavyDetails(context),
+                if (needSmartHome == 'Yes') fanDetails(context),
                 if (needAjax == 'Yes') ajaxItemDetails(context),
                 crewMembersDetails(context),
                 otherDeviceDetails(context),
@@ -164,117 +173,122 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       child: teamMembersName.isEmpty
           ? const SizedBox()
           : ClipRRect(
-        borderRadius: BorderRadius.circular(30),
-        child: Material(
-          child: InkWell(
-            onTap: () async {
-              if (formKey.currentState!.validate()) {
-                InstallationDetailsScreen data =
-                InstallationDetailsScreen(
-                  customerName: customerNameController.text,
-                  id: customerIdController.text,
-                  number: int.parse(phoneNumController.text),
-                  address: addressController.text,
-                  entryDate: dateStamp,
-                  installationDate:
-                  DateTime.parse(dateOfInstallationController.text),
-                  needApp: needApp.toString(),
-                  email: emailController.text,
-                  password: passwordsController.text,
-                  gateType: selectedGAType.toString(),
-                  motorId: motorModelNumController.text.toUpperCase(),
-                  extraRemote: extraRemoteController.text.isNotEmpty
-                      ? int.parse(extraRemoteController.text)
-                      : 0,
-                  r1: r1.toString(),
-                  r2: r2.toString(),
-                  r3: r3.toString(),
-                  r4: r4.toString(),
-                  nameList: teamMembersName.toList(),
-                  deviceList: extraDevice.toList(),
-                  userID: userIdController.text,
-                  routerID: routerUidController.text,
-                  routerPassword: routerPasswordController.text,
-                  wifiName: wifiNameController.text,
-                  wifiPassword: wifiPasswordNameController.text,
-                  server: serverController.text,
-                  portForwarding: portForwarding.toString(),
-                  localIp: localIpController.text.isNotEmpty
-                      ? double.parse(localIpController.text.toString())
-                      : 0,
-                  staticIp: staticIpController.text.isNotEmpty
-                      ? double.parse(staticIpController.text)
-                      : 0,
-                  serverPort: serverPortController.text.isNotEmpty
-                      ? double.parse(serverPortController.text)
-                      : 0,
-                  needSmartHome: needSmartHome,
-                  voiceConfig: voiceConfig,
-                  voiceUID: voiceConfigUIDController.text,
-                  voicePass: voiceConfigPassController.text,
-                  bSNL: bSNL,
-                  bSNLUid: bSNLUIDController.text,
-                  bSNLPass: bSNLPassController.text,
-                  channel8List: lightBoard8ChannelDetails.toList(),
-                  channel4List: lightBoard4ChannelDetails.toList(),
-                  heavyAndFanBoardDetails: heavyAndFanBoardDetails.toList(),
-                  ajaxProductList: ajaxDeviceDetails,
-                  needAjax: needAjax,
-                  needGate: needGate,
-                  ajaxUId: ajaxAccountUidController.text,
-                  motorBrand: motorBrandNameController.text,
-                );
+              borderRadius: BorderRadius.circular(30),
+              child: Material(
+                child: InkWell(
+                  onTap: () async {
+                    if (formKey.currentState!.validate()) {
+                      InstallationDetailsScreen data =
+                          InstallationDetailsScreen(
+                        customerName: customerNameController.text,
+                        id: customerIdController.text,
+                        number: int.parse(phoneNumController.text),
+                        address: addressController.text,
+                        entryDate: dateStamp,
+                        installationDate:
+                            DateTime.parse(dateOfInstallationController.text),
+                        needApp: needApp.toString(),
+                        email: emailController.text,
+                        password: passwordsController.text,
+                        gateType: selectedGAType.toString(),
+                        motorId: motorModelNumController.text.toUpperCase(),
+                        extraRemote: extraRemoteController.text.isNotEmpty
+                            ? int.parse(extraRemoteController.text)
+                            : 0,
+                        r1: r1.toString(),
+                        r2: r2.toString(),
+                        r3: r3.toString(),
+                        r4: r4.toString(),
+                        nameList: teamMembersName.toList(),
+                        deviceList: extraDevice.toList(),
+                        userID: userIdController.text,
+                        routerID: routerUidController.text,
+                        routerPassword: routerPasswordController.text,
+                        wifiName: wifiNameController.text,
+                        wifiPassword: wifiPasswordNameController.text,
+                        server: serverController.text,
+                        portForwarding: portForwarding.toString(),
+                        localIp: localIpController.text.isNotEmpty
+                            ? double.parse(localIpController.text.toString())
+                            : 0,
+                        staticIp: staticIpController.text.isNotEmpty
+                            ? double.parse(staticIpController.text)
+                            : 0,
+                        serverPort: serverPortController.text.isNotEmpty
+                            ? double.parse(serverPortController.text)
+                            : 0,
+                        needSmartHome: needSmartHome,
+                        voiceConfig: voiceConfig,
+                        voiceUID: voiceConfigUIDController.text,
+                        voicePass: voiceConfigPassController.text,
+                        bSNL: bSNL,
+                        bSNLUid: bSNLUIDController.text,
+                        bSNLPass: bSNLPassController.text,
+                        channel8ListModule1:
+                            lightBoard8ChannelDetailsModule1.toList(),
+                        channel8ListModule2:
+                            lightBoard8ChannelDetailsModule2.toList(),
+                        channel4List: lightBoard4ChannelDetails.toList(),
+                        channel3List: lightBoard3ChannelDetails.toList(),
+                        heavyBoardDetails: heavyBoardDetails.toList(),
+                        fanBoardDetails: fanBoardDetails.toList(),
+                        ajaxProductList: ajaxDeviceDetails,
+                        needAjax: needAjax,
+                        needGate: needGate,
+                        ajaxUId: ajaxAccountUidController.text,
+                        motorBrand: motorBrandNameController.text,
+                      );
 
-                final pdfFile = await data.generate(ajaxDeviceDetails);
-                final dir = await getExternalStorageDirectory();
-                final file = File(
-                  "${dir!.path}/${customerNameController.text}.pdf",
-                );
+                      final pdfFile = await data.generate(ajaxDeviceDetails);
+                      final dir = await getExternalStorageDirectory();
+                      final file = File(
+                        "${dir!.path}/${customerNameController.text}.pdf",
+                      );
 
-                file.writeAsBytesSync(
-                  pdfFile.readAsBytesSync(),
-                  flush: true,
-                );
+                      file.writeAsBytesSync(
+                        pdfFile.readAsBytesSync(),
+                        flush: true,
+                      );
 
-                OpenFile.open(file.path).then((value) {
-                  // Navigator.pop(context);
-                });
-                // log(teamMembersName.length.toString());
-              } else {
-                CustomSnackBar.showErrorSnackbar(
-                    message: 'Fill the required fields',
-                    context: context,
-                );
-              }
-            },
-            child: Ink(
-              height: size.height * 0.06,
-              width: size.width * 0.3,
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor.withOpacity(.2),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Icon(
-                    Icons.save,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  Text(
-                    'Save',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: Theme.of(context).primaryColor,
+                      OpenFile.open(file.path).then((value) {
+                        // Navigator.pop(context);
+                      });
+                      // log(teamMembersName.length.toString());
+                    } else {
+                      CustomSnackBar.showErrorSnackbar(
+                        message: 'Fill the required fields',
+                        context: context,
+                      );
+                    }
+                  },
+                  child: Ink(
+                    height: size.height * 0.06,
+                    width: size.width * 0.3,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor.withOpacity(.2),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Icon(
+                          Icons.save,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        Text(
+                          'Save',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                            color: Theme.of(context).primaryColor,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
             ),
-          ),
-        ),
-      ),
     );
   }
 
@@ -285,7 +299,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: ExpansionTile(
-          collapsedBackgroundColor: Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedBackgroundColor:
+              Theme.of(context).primaryColor.withOpacity(.2),
           collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
           title: Text(
             "Other Devices",
@@ -339,7 +354,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                     textInputType: TextInputType.text,
                                     textInputAction: TextInputAction.done,
                                     hintName: 'Device Name',
-                                    icon: Icon(Icons.person_2, color: Theme.of(context).primaryColor,),
+                                    icon: Icon(
+                                      Icons.person_2,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
                                     maxLength: 50,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
@@ -350,12 +368,14 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                   ).textInputField(context),
                                   addDataToListController,
                                   extraDevice,
+                                  50,
                                 );
                               },
                               icon: Icon(
                                 Icons.add,
                                 size: 20,
-                                color: Theme.of(context).scaffoldBackgroundColor,
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
                               ),
                             ),
                           ),
@@ -372,101 +392,107 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                       height: size.height * 0.2,
                       child: extraDevice.isNotEmpty
                           ? ListView.builder(
-                        itemCount: extraDevice.length,
-                        itemBuilder: (context, int index) {
-                          return Center(
-                            child: ListTile(
-                              leading: Text(
-                                "${index + 1} : ",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                              title: Text(
-                                extraDevice[index].toString(),
-                                style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                              trailing: IconButton(
-                                icon: Icon(
-                                  Icons.close,
-                                  size: 18,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (_) => AlertDialog(
-                                      surfaceTintColor: Colors.transparent,
-                                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                                      title: Text(
-                                        'Delete this name?\n${extraDevice[index]}',
-                                        style: TextStyle(
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      content: SizedBox(
-                                        height: size.height * 0.05,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                          children: [
-                                            ActionChip(
-                                              onPressed: () {
-                                                extraDevice.removeAt(index);
-                                                Navigator.pop(context);
-                                                setState(() {});
-                                              },
-                                              // backgroundColor:
-                                              // Colors.red.shade400,
-                                              label: Text(
-                                                'Yes',
-                                                style: TextStyle(
-                                                  color: Theme.of(context).primaryColor,
-                                                  fontWeight:
-                                                  FontWeight.w500,
-                                                ),
-                                              ),
-                                            ),
-                                            ActionChip(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              // backgroundColor:
-                                              // Colors.blue.shade400,
-                                              label: Text(
-                                                'No',
-                                                style: TextStyle(
-                                                  color: Theme.of(context).primaryColor,
-                                                  fontWeight:
-                                                  FontWeight.w500,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                              itemCount: extraDevice.length,
+                              itemBuilder: (context, int index) {
+                                return Center(
+                                  child: ListTile(
+                                    leading: Text(
+                                      "${index + 1} : ",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Theme.of(context).primaryColor,
                                       ),
                                     ),
-                                  );
-                                },
+                                    title: Text(
+                                      extraDevice[index].toString(),
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                    trailing: IconButton(
+                                      icon: Icon(
+                                        Icons.close,
+                                        size: 18,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (_) => AlertDialog(
+                                            surfaceTintColor:
+                                                Colors.transparent,
+                                            backgroundColor: Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                            title: Text(
+                                              'Delete this name?\n${extraDevice[index]}',
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            content: SizedBox(
+                                              height: size.height * 0.05,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  ActionChip(
+                                                    onPressed: () {
+                                                      extraDevice
+                                                          .removeAt(index);
+                                                      Navigator.pop(context);
+                                                      setState(() {});
+                                                    },
+                                                    // backgroundColor:
+                                                    // Colors.red.shade400,
+                                                    label: Text(
+                                                      'Yes',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  ActionChip(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    // backgroundColor:
+                                                    // Colors.blue.shade400,
+                                                    label: Text(
+                                                      'No',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
+                          : Center(
+                              child: Text(
+                                'No Device Added',
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontSize: 17,
+                                ),
                               ),
                             ),
-                          );
-                        },
-                      )
-                          : Center(
-                        child: Text(
-                          'No Device Added',
-                          style:
-                          TextStyle(
-                            color: Theme.of(context).primaryColor,
-                              fontSize: 17,
-                          ),
-                        ),
-                      ),
                     ),
                   ],
                 ),
@@ -485,7 +511,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: ExpansionTile(
-          collapsedBackgroundColor: Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedBackgroundColor:
+              Theme.of(context).primaryColor.withOpacity(.2),
           collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
           title: Text(
             "Team Members Name",
@@ -495,7 +522,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               color: Theme.of(context).primaryColor,
             ),
           ),
-          leading:  Icon(
+          leading: Icon(
             Icons.group_add,
             color: Theme.of(context).primaryColor,
           ),
@@ -519,7 +546,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                         Text(
+                        Text(
                           'Add Team Members Name',
                           style: TextStyle(
                             color: Theme.of(context).primaryColor,
@@ -540,7 +567,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                     textInputType: TextInputType.text,
                                     textInputAction: TextInputAction.done,
                                     hintName: 'Person Name',
-                                    icon: Icon(Icons.person_2, color: Theme.of(context).primaryColor,),
+                                    icon: Icon(
+                                      Icons.person_2,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
                                     maxLength: 50,
                                     validator: (value) {
                                       if (value == null || value.isEmpty) {
@@ -551,12 +581,14 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                   ).textInputField(context),
                                   addDataToListController,
                                   teamMembersName,
+                                  30,
                                 );
                               },
                               icon: Icon(
                                 Icons.add,
                                 size: 20,
-                                color: Theme.of(context).scaffoldBackgroundColor,
+                                color:
+                                    Theme.of(context).scaffoldBackgroundColor,
                               ),
                             ),
                           ),
@@ -564,7 +596,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                       ],
                     ),
 
-                     Divider(
+                    Divider(
                       endIndent: 1,
                       indent: 1,
                       color: Theme.of(context).primaryColor,
@@ -573,102 +605,107 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                       height: size.height * 0.2,
                       child: teamMembersName.isNotEmpty
                           ? ListView.builder(
-                        itemCount: teamMembersName.length,
-                        itemBuilder: (context, int index) {
-                          return Center(
-                            child: ListTile(
-                              leading: Text(
-                                "${index + 1} : ",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                              title: Text(
-                                teamMembersName[index].toString(),
-                                style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                              trailing: IconButton(
-                                icon: Icon(
-                                  Icons.close,
-                                  size: 18,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (_) => AlertDialog(
-                                      surfaceTintColor: Colors.transparent,
-                                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                                      title: Text(
-                                        'Delete this name?\n${teamMembersName[index]}',
-                                        style: TextStyle(
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      content: SizedBox(
-                                        height: size.height * 0.1,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                          children: [
-                                            ActionChip(
-                                              onPressed: () {
-                                                teamMembersName
-                                                    .removeAt(index);
-                                                Navigator.pop(context);
-                                                setState(() {});
-                                              },
-                                              // backgroundColor:
-                                              // Colors.red.shade400,
-                                              label: Text(
-                                                'Yes',
-                                                style: TextStyle(
-                                                  color: Theme.of(context).primaryColor,
-                                                  fontWeight:
-                                                  FontWeight.w500,
-                                                ),
-                                              ),
-                                            ),
-                                            ActionChip(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              // backgroundColor:
-                                              // Colors.blue.shade400,
-                                              label:  Text(
-                                                'No',
-                                                style: TextStyle(
-                                                  color: Theme.of(context).primaryColor,
-                                                  fontWeight:
-                                                  FontWeight.w500,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                              itemCount: teamMembersName.length,
+                              itemBuilder: (context, int index) {
+                                return Center(
+                                  child: ListTile(
+                                    leading: Text(
+                                      "${index + 1} : ",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Theme.of(context).primaryColor,
                                       ),
                                     ),
-                                  );
-                                },
+                                    title: Text(
+                                      teamMembersName[index].toString(),
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                    trailing: IconButton(
+                                      icon: Icon(
+                                        Icons.close,
+                                        size: 18,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (_) => AlertDialog(
+                                            surfaceTintColor:
+                                                Colors.transparent,
+                                            backgroundColor: Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                            title: Text(
+                                              'Delete this name?\n${teamMembersName[index]}',
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            content: SizedBox(
+                                              height: size.height * 0.1,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  ActionChip(
+                                                    onPressed: () {
+                                                      teamMembersName
+                                                          .removeAt(index);
+                                                      Navigator.pop(context);
+                                                      setState(() {});
+                                                    },
+                                                    // backgroundColor:
+                                                    // Colors.red.shade400,
+                                                    label: Text(
+                                                      'Yes',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  ActionChip(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    // backgroundColor:
+                                                    // Colors.blue.shade400,
+                                                    label: Text(
+                                                      'No',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                );
+                              },
+                            )
+                          : Center(
+                              child: Text(
+                                'No Members Added',
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                  fontSize: 17,
+                                ),
                               ),
                             ),
-                          );
-                        },
-                      )
-                          : Center(
-                        child: Text(
-                          'No Members Added',
-                          style:
-                          TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 17,
-                          ),
-                        ),
-                      ),
                     ),
                   ],
                 ),
@@ -687,7 +724,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: ExpansionTile(
-          collapsedBackgroundColor: Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedBackgroundColor:
+              Theme.of(context).primaryColor.withOpacity(.2),
           collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
           title: Text(
             "Ajax Details",
@@ -697,7 +735,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               color: Theme.of(context).primaryColor,
             ),
           ),
-          leading:  Icon(
+          leading: Icon(
             Icons.security,
             color: Theme.of(context).primaryColor,
           ),
@@ -720,7 +758,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                       Text(
+                      Text(
                         'Add Ajax Item Details',
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
@@ -737,7 +775,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                 context: context,
                                 builder: (_) => AlertDialog(
                                   surfaceTintColor: Colors.transparent,
-                                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                                  backgroundColor:
+                                      Theme.of(context).scaffoldBackgroundColor,
                                   title: Text(
                                     'Title',
                                     style: TextStyle(
@@ -749,7 +788,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                     height: size.height * 0.3,
                                     child: Column(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.center,
+                                          MainAxisAlignment.center,
                                       children: [
                                         // TextFormField(
                                         //   textCapitalization: TextCapitalization.sentences,
@@ -783,7 +822,11 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                           textInputType: TextInputType.text,
                                           textInputAction: TextInputAction.next,
                                           hintName: 'Product Name',
-                                          icon: Icon(Icons.person_2,color: Theme.of(context).primaryColor,),
+                                          icon: Icon(
+                                            Icons.person_2,
+                                            color:
+                                                Theme.of(context).primaryColor,
+                                          ),
                                           maxLength: 100,
                                         ).textInputField(context),
                                         SizedBox(height: size.height * 0.01),
@@ -793,23 +836,26 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                           textInputType: TextInputType.number,
                                           textInputAction: TextInputAction.done,
                                           hintName: 'Quantity',
-                                          icon: Icon(Icons.person_2,color: Theme.of(context).primaryColor),
+                                          icon: Icon(Icons.person_2,
+                                              color: Theme.of(context)
+                                                  .primaryColor,),
                                           maxLength: 3,
                                         ).textInputField(context),
                                         SizedBox(height: size.height * 0.01),
 
                                         ActionChip(
                                           surfaceTintColor: Colors.transparent,
-                                          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                                          backgroundColor: Theme.of(context)
+                                              .scaffoldBackgroundColor,
                                           onPressed: () {
                                             if (ajaxItemController
-                                                .text.isNotEmpty &&
+                                                    .text.isNotEmpty &&
                                                 ajaxItemCountController
                                                     .text.isNotEmpty) {
                                               ajaxDeviceDetails.addAll({
                                                 AjaxListModel(
                                                   productName:
-                                                  ajaxItemController.text,
+                                                      ajaxItemController.text,
                                                   qty: int.parse(
                                                     ajaxItemCountController
                                                         .text,
@@ -824,16 +870,17 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                               log(ajaxDeviceDetails.toString());
                                             } else {
                                               CustomSnackBar.showErrorSnackbar(
-                                                  message:  'This field is empty',
-                                                  context: context,
+                                                message: 'This field is empty',
+                                                context: context,
                                               );
                                             }
                                             setState(() {});
                                           },
-                                          label:  Text(
+                                          label: Text(
                                             'Add',
                                             style: TextStyle(
-                                              color: Theme.of(context).primaryColor,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
                                               fontSize: 18,
                                             ),
                                           ),
@@ -855,7 +902,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     ],
                   ),
 
-                   Divider(
+                  Divider(
                     endIndent: 1,
                     indent: 1,
                     color: Theme.of(context).primaryColor,
@@ -945,11 +992,11 @@ class _InstallationDetailsState extends State<InstallationDetails> {
         ),
         isTrue
             ? VerticalDivider(
-          color: Theme.of(context).primaryColor,
-          endIndent: 23,
-          indent: 23,
-          thickness: 2,
-        )
+                color: Theme.of(context).primaryColor,
+                endIndent: 23,
+                indent: 23,
+                thickness: 2,
+              )
             : const SizedBox(),
       ],
     );
@@ -958,10 +1005,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
   TableRow createTableRow(List<String> cells, {bool isHeader = false}) =>
       TableRow(
         children: cells.map(
-              (cell) {
+          (cell) {
             final style = TextStyle(
               fontWeight: isHeader ? FontWeight.bold : FontWeight.w500,
-            color: Theme.of(context).primaryColor,
+              color: Theme.of(context).primaryColor,
             );
             return Padding(
               padding: const EdgeInsets.all(5),
@@ -976,7 +1023,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
         ).toList(),
       );
 
-  Widget light8ChannelDetails(BuildContext context) {
+  Widget light8ChannelDetailsModule1(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     bool snackbarShown = false;
     return Padding(
@@ -984,10 +1031,11 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: ExpansionTile(
-          collapsedBackgroundColor: Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedBackgroundColor:
+              Theme.of(context).primaryColor.withOpacity(.2),
           collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
           title: Text(
-            "Light Board 8 Channel",
+            "Light Board 8 Channel Module 1",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
@@ -1037,7 +1085,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                   textInputType: TextInputType.text,
                                   textInputAction: TextInputAction.done,
                                   hintName: 'Type here',
-                                  icon: Icon(Icons.person_2, color: Theme.of(context).primaryColor,),
+                                  icon: Icon(
+                                    Icons.person_2,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
                                   maxLength: 50,
                                   validator: (value) {
                                     if (value == null ||
@@ -1049,7 +1100,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                   },
                                 ).textInputField(context),
                                 addDataToListController,
-                                lightBoard8ChannelDetails,
+                                lightBoard8ChannelDetailsModule1,
+                                8,
                               );
                             },
                             icon: Icon(
@@ -1069,114 +1121,350 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   ),
                   SizedBox(
                     height: size.height * 0.3,
-                    child: lightBoard8ChannelDetails.isNotEmpty
+                    child: lightBoard8ChannelDetailsModule1.isNotEmpty
                         ? ListView.builder(
-                      itemCount: lightBoard8ChannelDetails.length,
-                      itemBuilder: (context, int index) {
-                        if(index < 8){
-                          return Center(
-                            child: ListTile(
-                              leading: Text(
-                                "R${index + 1} : ",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                              title: Text(
-                                lightBoard8ChannelDetails[index].toString(),
-                                style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                              trailing: IconButton(
-                                icon: Icon(
-                                  Icons.close,
-                                  size: 18,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (_) => AlertDialog(
-                                      surfaceTintColor: Colors.transparent,
-                                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                                      title: Text(
-                                        'Delete this name?\n${lightBoard8ChannelDetails[index]}',
-                                        style: TextStyle(
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      content: SizedBox(
-                                        height: size.height * 0.07,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                          children: [
-                                            ActionChip(
-                                              onPressed: () {
-                                                lightBoard8ChannelDetails
-                                                    .removeAt(index);
-                                                Navigator.pop(context);
-                                                setState(() {});
-                                              },
-                                              // backgroundColor:
-                                              // Colors.red.shade400,
-                                              label: Text(
-                                                'Yes',
-                                                style: TextStyle(
-                                                  color: Theme.of(context).primaryColor,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ),
-                                            ActionChip(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              // backgroundColor:
-                                              // Colors.blue.shade400,
-                                              label: Text(
-                                                'No',
-                                                style: TextStyle(
-                                                  color: Theme.of(context).primaryColor,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                            itemCount: lightBoard8ChannelDetailsModule1.length,
+                            itemBuilder: (context, int index) {
+                              if (index < 8) {
+                                return Center(
+                                  child: ListTile(
+                                    leading: Text(
+                                      "R${index + 1} : ",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Theme.of(context).primaryColor,
                                       ),
                                     ),
+                                    title: Text(
+                                      lightBoard8ChannelDetailsModule1[index]
+                                          .toString(),
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                    trailing: IconButton(
+                                      icon: Icon(
+                                        Icons.close,
+                                        size: 18,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (_) => AlertDialog(
+                                            surfaceTintColor:
+                                                Colors.transparent,
+                                            backgroundColor: Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                            title: Text(
+                                              'Delete this name?\n${lightBoard8ChannelDetailsModule1[index]}',
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            content: SizedBox(
+                                              height: size.height * 0.07,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  ActionChip(
+                                                    onPressed: () {
+                                                      lightBoard8ChannelDetailsModule1
+                                                          .removeAt(index);
+                                                      Navigator.pop(context);
+                                                      setState(() {});
+                                                    },
+                                                    // backgroundColor:
+                                                    // Colors.red.shade400,
+                                                    label: Text(
+                                                      'Yes',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  ActionChip(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    // backgroundColor:
+                                                    // Colors.blue.shade400,
+                                                    label: Text(
+                                                      'No',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                );
+                              } else if (index == 8 && !snackbarShown) {
+                                snackbarShown = true;
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  CustomSnackBar.showErrorSnackbar(
+                                    message: 'You have exceeded the limit',
+                                    context: context,
                                   );
-                                },
+                                });
+                                return const SizedBox.shrink();
+                              } else {
+                                return null;
+                              }
+                            },
+                          )
+                        : Center(
+                            child: Text(
+                              'List is Empty',
+                              style: TextStyle(
+                                fontSize: 17,
+                                color: Theme.of(context).primaryColor,
                               ),
                             ),
-                          );
-                        }else if(!snackbarShown){
-                          snackbarShown = true;
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            CustomSnackBar.showErrorSnackbar(
-                              message: 'You have exceeded the limit',
-                              context: context,
-                            );
-                          });
-                          return const SizedBox.shrink();
-                        }else{
-                          return null;
-                        }
-                      },
-                    )
-                        : Center(
-                      child: Text(
-                        'List is Empty',
+                          ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget light8ChannelDetailsModule2(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+    bool snackbarShown = false;
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: ExpansionTile(
+          collapsedBackgroundColor:
+              Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
+          title: Text(
+            "Light Board 8 Channel Module 2",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+          leading: Icon(
+            Icons.lightbulb,
+            color: Theme.of(context).primaryColor,
+          ),
+          //add icon
+          children: [
+            ///lightList
+            Container(
+              height: size.height * 0.4,
+              decoration: BoxDecoration(
+                // color: Colors.blueGrey.withAlpha(50),
+                borderRadius: BorderRadius.circular(20),
+                // border: Border.all(color: Colors.black12, width: .5),
+              ),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: size.height * 0.02,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        'Add Light Board 8 Channel Details',
                         style: TextStyle(
-                          fontSize: 17,
                           color: Theme.of(context).primaryColor,
+                          fontSize: 15,
                         ),
                       ),
-                    ),
+                      CircleAvatar(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        radius: 20,
+                        child: Center(
+                          child: IconButton(
+                            onPressed: () {
+                              addDataToList(
+                                context,
+                                'Light 8 Channel',
+                                CustomTextField(
+                                  controller: addDataToListController,
+                                  textInputType: TextInputType.text,
+                                  textInputAction: TextInputAction.done,
+                                  hintName: 'Type here',
+                                  icon: Icon(
+                                    Icons.person_2,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                  maxLength: 50,
+                                  validator: (value) {
+                                    if (value == null ||
+                                        value.isEmpty &&
+                                            needSmartHome == 'Yes') {
+                                      return 'This field is required';
+                                    }
+                                    return null;
+                                  },
+                                ).textInputField(context),
+                                addDataToListController,
+                                lightBoard8ChannelDetailsModule2,
+                                8,
+                              );
+                            },
+                            icon: Icon(
+                              Icons.add,
+                              size: 20,
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    endIndent: 1,
+                    indent: 1,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  SizedBox(
+                    height: size.height * 0.3,
+                    child: lightBoard8ChannelDetailsModule2.isNotEmpty
+                        ? ListView.builder(
+                            itemCount: lightBoard8ChannelDetailsModule2.length,
+                            itemBuilder: (context, int index) {
+                              if (index < 8) {
+                                return Center(
+                                  child: ListTile(
+                                    leading: Text(
+                                      "R${index + 1} : ",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                    title: Text(
+                                      lightBoard8ChannelDetailsModule2[index]
+                                          .toString(),
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                    trailing: IconButton(
+                                      icon: Icon(
+                                        Icons.close,
+                                        size: 18,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (_) => AlertDialog(
+                                            surfaceTintColor:
+                                                Colors.transparent,
+                                            backgroundColor: Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                            title: Text(
+                                              'Delete this name?\n${lightBoard8ChannelDetailsModule2[index]}',
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            content: SizedBox(
+                                              height: size.height * 0.07,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  ActionChip(
+                                                    onPressed: () {
+                                                      lightBoard8ChannelDetailsModule2
+                                                          .removeAt(index);
+                                                      Navigator.pop(context);
+                                                      setState(() {});
+                                                    },
+                                                    // backgroundColor:
+                                                    // Colors.red.shade400,
+                                                    label: Text(
+                                                      'Yes',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  ActionChip(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    // backgroundColor:
+                                                    // Colors.blue.shade400,
+                                                    label: Text(
+                                                      'No',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                );
+                              } else if (index == 8 && !snackbarShown) {
+                                snackbarShown = true;
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  CustomSnackBar.showErrorSnackbar(
+                                    message: 'You have exceeded the limit',
+                                    context: context,
+                                  );
+                                });
+                                return const SizedBox.shrink();
+                              } else {
+                                return null;
+                              }
+                            },
+                          )
+                        : Center(
+                            child: Text(
+                              'List is Empty',
+                              style: TextStyle(
+                                fontSize: 17,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                            ),
+                          ),
                   ),
                 ],
               ),
@@ -1195,7 +1483,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: ExpansionTile(
-          collapsedBackgroundColor: Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedBackgroundColor:
+              Theme.of(context).primaryColor.withOpacity(.2),
           collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
           title: Text(
             "Light Board 4 Channel",
@@ -1248,7 +1537,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                   textInputType: TextInputType.text,
                                   textInputAction: TextInputAction.done,
                                   hintName: 'Type here',
-                                  icon: Icon(Icons.person_2, color: Theme.of(context).primaryColor,),
+                                  icon: Icon(
+                                    Icons.person_2,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
                                   maxLength: 50,
                                   validator: (value) {
                                     if (value == null ||
@@ -1261,6 +1553,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                 ).textInputField(context),
                                 addDataToListController,
                                 lightBoard4ChannelDetails,
+                                4,
                               );
                             },
                             icon: Icon(
@@ -1282,112 +1575,344 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     height: size.height * 0.3,
                     child: lightBoard4ChannelDetails.isNotEmpty
                         ? ListView.builder(
-                      itemCount: lightBoard4ChannelDetails.length,
-                      itemBuilder: (context, int index) {
-                        if(index < 4){
-                          return Center(
-                            child: ListTile(
-                              leading: Text(
-                                "R${index + 1} : ",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                              title: Text(
-                                lightBoard4ChannelDetails[index].toString(),
-                                style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                              trailing: IconButton(
-                                icon: Icon(
-                                  Icons.close,
-                                  size: 18,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (_) => AlertDialog(
-                                      surfaceTintColor: Colors.transparent,
-                                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                                      title: Text(
-                                        'Delete this name?\n${lightBoard4ChannelDetails[index]}',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                      ),
-                                      content: SizedBox(
-                                        height: size.height * 0.07,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                          children: [
-                                            ActionChip(
-                                              onPressed: () {
-                                                lightBoard4ChannelDetails
-                                                    .removeAt(index);
-                                                Navigator.pop(context);
-                                                setState(() {});
-                                              },
-                                              label: Text(
-                                                'Yes',
-                                                style: TextStyle(
-                                                  color: Theme.of(context).primaryColor,
-                                                  fontWeight:
-                                                  FontWeight.w500,
-                                                ),
-                                              ),
-                                            ),
-                                            ActionChip(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              // backgroundColor:
-                                              // Colors.blue.shade400,
-                                              label: Text(
-                                                'No',
-                                                style: TextStyle(
-                                                  color: Theme.of(context).primaryColor,
-                                                  fontWeight:
-                                                  FontWeight.w500,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                            itemCount: lightBoard4ChannelDetails.length,
+                            itemBuilder: (context, int index) {
+                              if (index < 4) {
+                                return Center(
+                                  child: ListTile(
+                                    leading: Text(
+                                      "R${index + 1} : ",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Theme.of(context).primaryColor,
                                       ),
                                     ),
+                                    title: Text(
+                                      lightBoard4ChannelDetails[index]
+                                          .toString(),
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                    trailing: IconButton(
+                                      icon: Icon(
+                                        Icons.close,
+                                        size: 18,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (_) => AlertDialog(
+                                            surfaceTintColor:
+                                                Colors.transparent,
+                                            backgroundColor: Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                            title: Text(
+                                              'Delete this name?\n${lightBoard4ChannelDetails[index]}',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                            ),
+                                            content: SizedBox(
+                                              height: size.height * 0.07,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  ActionChip(
+                                                    onPressed: () {
+                                                      lightBoard4ChannelDetails
+                                                          .removeAt(index);
+                                                      Navigator.pop(context);
+                                                      setState(() {});
+                                                    },
+                                                    label: Text(
+                                                      'Yes',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  ActionChip(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    // backgroundColor:
+                                                    // Colors.blue.shade400,
+                                                    label: Text(
+                                                      'No',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                );
+                              } else if (index == 4 && !snackbarShown) {
+                                snackbarShown = true;
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  CustomSnackBar.showErrorSnackbar(
+                                    message: 'You have exceeded the limit',
+                                    context: context,
                                   );
-                                },
+                                });
+                                return const SizedBox.shrink();
+                              } else {
+                                return null;
+                              }
+                            },
+                          )
+                        : Center(
+                            child: Text(
+                              'List is Empty',
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 17,
                               ),
                             ),
-                          );
-                        }else if(!snackbarShown){
-                          snackbarShown = true;
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            CustomSnackBar.showErrorSnackbar(
-                              message: 'You have exceeded the limit',
-                              context: context,
-                            );
-                          });
-                          return const SizedBox.shrink();
-                        }else{
-                          return null;
-                        }
-                      },
-                    )
-                        : Center(
-                      child: Text(
-                        'List is Empty',
+                          ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget light3ChannelDetails(BuildContext context) {
+    bool snackbarShown = false;
+    final size = MediaQuery.sizeOf(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: ExpansionTile(
+          collapsedBackgroundColor:
+              Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
+          title: Text(
+            "Light Board 3 Channel",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+          leading: Icon(
+            Icons.lightbulb_circle_sharp,
+            color: Theme.of(context).primaryColor,
+          ),
+          //add icon
+          children: [
+            ///lightList
+            Container(
+              height: size.height * 0.4,
+              decoration: BoxDecoration(
+                // color: Colors.blueGrey.withAlpha(50),
+                borderRadius: BorderRadius.circular(20),
+                // border: Border.all(color: Colors.black12, width: .5),
+              ),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: size.height * 0.01,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        'Add Light Board 3 Channel Details',
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
-                          fontSize: 17,
+                          fontSize: 15,
                         ),
                       ),
-                    ),
+                      CircleAvatar(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        radius: 20,
+                        child: Center(
+                          child: IconButton(
+                            onPressed: () {
+                              addDataToList(
+                                context,
+                                'Light 3 Channel',
+                                CustomTextField(
+                                  controller: addDataToListController,
+                                  textInputType: TextInputType.text,
+                                  textInputAction: TextInputAction.done,
+                                  hintName: 'Type here',
+                                  icon: Icon(
+                                    Icons.person_2,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                  maxLength: 50,
+                                  validator: (value) {
+                                    if (value == null ||
+                                        value.isEmpty &&
+                                            needSmartHome == 'Yes') {
+                                      return 'This field is required';
+                                    }
+                                    return null;
+                                  },
+                                ).textInputField(context),
+                                addDataToListController,
+                                lightBoard3ChannelDetails,
+                                3,
+                              );
+                            },
+                            icon: Icon(
+                              Icons.add,
+                              size: 20,
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    endIndent: 1,
+                    indent: 1,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  SizedBox(
+                    height: size.height * 0.3,
+                    child: lightBoard3ChannelDetails.isNotEmpty
+                        ? ListView.builder(
+                            itemCount: lightBoard3ChannelDetails.length,
+                            itemBuilder: (context, int index) {
+                              if (index < 3) {
+                                return Center(
+                                  child: ListTile(
+                                    leading: Text(
+                                      "R${index + 1} : ",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                    title: Text(
+                                      lightBoard3ChannelDetails[index]
+                                          .toString(),
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                    trailing: IconButton(
+                                      icon: Icon(
+                                        Icons.close,
+                                        size: 18,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (_) => AlertDialog(
+                                            surfaceTintColor:
+                                                Colors.transparent,
+                                            backgroundColor: Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                            title: Text(
+                                              'Delete this name?\n${lightBoard3ChannelDetails[index]}',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                            ),
+                                            content: SizedBox(
+                                              height: size.height * 0.07,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  ActionChip(
+                                                    onPressed: () {
+                                                      lightBoard3ChannelDetails
+                                                          .removeAt(index);
+                                                      Navigator.pop(context);
+                                                      setState(() {});
+                                                    },
+                                                    label: Text(
+                                                      'Yes',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  ActionChip(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    // backgroundColor:
+                                                    // Colors.blue.shade400,
+                                                    label: Text(
+                                                      'No',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                );
+                              } else if (index == 3 && !snackbarShown) {
+                                snackbarShown = true;
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  CustomSnackBar.showErrorSnackbar(
+                                    message: 'You have exceeded the limit',
+                                    context: context,
+                                  );
+                                });
+                                return const SizedBox.shrink();
+                              } else {
+                                return null;
+                              }
+                            },
+                          )
+                        : Center(
+                            child: Text(
+                              'List is Empty',
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 17,
+                              ),
+                            ),
+                          ),
                   ),
                 ],
               ),
@@ -1405,7 +1930,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: ExpansionTile(
-          collapsedBackgroundColor: Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedBackgroundColor:
+              Theme.of(context).primaryColor.withOpacity(.2),
           collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
           title: Text(
             "Gate Details",
@@ -1432,7 +1958,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     textInputType: TextInputType.text,
                     textInputAction: TextInputAction.next,
                     hintName: 'Motor Model Id',
-                    icon: Icon(Icons.numbers, color: Theme.of(context).primaryColor,),
+                    icon: Icon(
+                      Icons.numbers,
+                      color: Theme.of(context).primaryColor,
+                    ),
                     maxLength: 100,
                     validator: (value) {
                       if (value == null || value.isEmpty && needGate == 'Yes') {
@@ -1453,7 +1982,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     textInputType: TextInputType.number,
                     textInputAction: TextInputAction.next,
                     hintName: 'Extra remote',
-                    icon: Icon(Icons.settings_remote, color: Theme.of(context).primaryColor,),
+                    icon: Icon(
+                      Icons.settings_remote,
+                      color: Theme.of(context).primaryColor,
+                    ),
                     maxLength: 100,
                     validator: (value) {
                       if (value == null || value.isEmpty && needGate == 'Yes') {
@@ -1476,7 +2008,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.name,
               textInputAction: TextInputAction.next,
               hintName: 'Motor brand name',
-              icon: Icon(Icons.brightness_auto, color: Theme.of(context).primaryColor,),
+              icon: Icon(
+                Icons.brightness_auto,
+                color: Theme.of(context).primaryColor,
+              ),
               maxLength: 100,
               validator: (value) {
                 if (value == null || value.isEmpty && needGate == 'Yes') {
@@ -1568,7 +2103,9 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                               border: myInputBorder(),
                               enabledBorder: myInputBorder(),
                               hintStyle: TextStyle(
-                                color: Theme.of(context).primaryColor.withOpacity(.2),
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(.2),
                                 fontWeight: FontWeight.w500,
                               ),
                               fillColor: Colors.transparent,
@@ -1630,7 +2167,9 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                               // hoverColor: Colors.black,
                               focusedBorder: myFocusBorder(),
                               hintStyle: TextStyle(
-                                color: Theme.of(context).primaryColor.withOpacity(.2),
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(.2),
                                 fontWeight: FontWeight.w500,
                               ),
                               // isDense: true,
@@ -1687,7 +2226,9 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                               border: myInputBorder(),
                               enabledBorder: myInputBorder(),
                               hintStyle: TextStyle(
-                                color: Theme.of(context).primaryColor.withOpacity(.2),
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(.2),
                                 fontWeight: FontWeight.w500,
                               ),
                               fillColor: Colors.transparent,
@@ -1751,7 +2292,9 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                               // hoverColor: Colors.black,
                               focusedBorder: myFocusBorder(),
                               hintStyle: TextStyle(
-                                color: Theme.of(context).primaryColor.withOpacity(.2),
+                                color: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(.2),
                                 fontWeight: FontWeight.w500,
                               ),
                               // isDense: true,
@@ -1805,7 +2348,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: ExpansionTile(
-          collapsedBackgroundColor: Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedBackgroundColor:
+              Theme.of(context).primaryColor.withOpacity(.2),
           collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
           title: Text(
             "Router and Wifi Details",
@@ -1826,7 +2370,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
               hintName: 'Router ID',
-              icon: Icon(Icons.router,color: Theme.of(context).primaryColor,),
+              icon: Icon(
+                Icons.router,
+                color: Theme.of(context).primaryColor,
+              ),
               maxLength: 100,
               validator: (value) {
                 if (value == null || value.isEmpty && needSmartHome == 'Yes') {
@@ -1842,7 +2389,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.text,
               textInputAction: TextInputAction.next,
               hintName: 'Router Password',
-              icon: Icon(Icons.password,color: Theme.of(context).primaryColor,),
+              icon: Icon(
+                Icons.password,
+                color: Theme.of(context).primaryColor,
+              ),
               maxLength: 100,
               validator: (value) {
                 if (value == null || value.isEmpty && needSmartHome == 'Yes') {
@@ -1858,7 +2408,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
               hintName: 'Wifi Name',
-              icon: Icon(Icons.wifi,color: Theme.of(context).primaryColor,),
+              icon: Icon(
+                Icons.wifi,
+                color: Theme.of(context).primaryColor,
+              ),
               maxLength: 100,
               validator: (value) {
                 if (value == null || value.isEmpty && needSmartHome == 'Yes') {
@@ -1874,7 +2427,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.text,
               textInputAction: TextInputAction.next,
               hintName: 'Wifi Password',
-              icon: Icon(Icons.password,color: Theme.of(context).primaryColor,),
+              icon: Icon(
+                Icons.password,
+                color: Theme.of(context).primaryColor,
+              ),
               maxLength: 100,
               validator: (value) {
                 if (value == null || value.isEmpty && needSmartHome == 'Yes') {
@@ -1896,7 +2452,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: ExpansionTile(
-          collapsedBackgroundColor: Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedBackgroundColor:
+              Theme.of(context).primaryColor.withOpacity(.2),
           collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
           title: Text(
             "Server Details",
@@ -1917,7 +2474,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.text,
               textInputAction: TextInputAction.next,
               hintName: 'Server',
-              icon: Icon(Icons.router,color: Theme.of(context).primaryColor,),
+              icon: Icon(
+                Icons.router,
+                color: Theme.of(context).primaryColor,
+              ),
               maxLength: 30,
               validator: (value) {
                 if (value == null || value.isEmpty && needSmartHome == 'Yes') {
@@ -1933,7 +2493,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.number,
               textInputAction: TextInputAction.next,
               hintName: 'Local IP',
-              icon: Icon(Icons.dataset_outlined,color: Theme.of(context).primaryColor,),
+              icon: Icon(
+                Icons.dataset_outlined,
+                color: Theme.of(context).primaryColor,
+              ),
               maxLength: 30,
               validator: (value) {
                 if (value == null || value.isEmpty && needSmartHome == 'Yes') {
@@ -1949,7 +2512,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.number,
               textInputAction: TextInputAction.next,
               hintName: 'Static IP',
-              icon: Icon(Icons.dataset_outlined,color: Theme.of(context).primaryColor,),
+              icon: Icon(
+                Icons.dataset_outlined,
+                color: Theme.of(context).primaryColor,
+              ),
               maxLength: 30,
               validator: (value) {
                 if (value == null || value.isEmpty && needSmartHome == 'Yes') {
@@ -1965,7 +2531,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.number,
               textInputAction: TextInputAction.next,
               hintName: 'Server Port',
-              icon: Icon(Icons.portable_wifi_off,color: Theme.of(context).primaryColor,),
+              icon: Icon(
+                Icons.portable_wifi_off,
+                color: Theme.of(context).primaryColor,
+              ),
               maxLength: 30,
               validator: (value) {
                 if (value == null || value.isEmpty && needSmartHome == 'Yes') {
@@ -2016,7 +2585,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   });
                 },
                 items:
-                optionValue.map<DropdownMenuItem<String>>((String value) {
+                    optionValue.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(
@@ -2073,7 +2642,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   });
                 },
                 items:
-                optionValue.map<DropdownMenuItem<String>>((String value) {
+                    optionValue.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(
@@ -2097,7 +2666,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 textInputType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 hintName: 'Voice Config UID',
-                icon: Icon(Icons.wifi,color: Theme.of(context).primaryColor,),
+                icon: Icon(
+                  Icons.wifi,
+                  color: Theme.of(context).primaryColor,
+                ),
                 maxLength: 100,
                 validator: (value) {
                   if (value == null || value.isEmpty && voiceConfig == 'Yes') {
@@ -2114,7 +2686,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 textInputType: TextInputType.text,
                 textInputAction: TextInputAction.next,
                 hintName: 'Voice Config Password',
-                icon: Icon(Icons.password,color: Theme.of(context).primaryColor,),
+                icon: Icon(
+                  Icons.password,
+                  color: Theme.of(context).primaryColor,
+                ),
                 maxLength: 100,
                 validator: (value) {
                   if (value == null || value.isEmpty && voiceConfig == 'Yes') {
@@ -2165,7 +2740,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   });
                 },
                 items:
-                optionValue.map<DropdownMenuItem<String>>((String value) {
+                    optionValue.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(
@@ -2184,13 +2759,16 @@ class _InstallationDetailsState extends State<InstallationDetails> {
 
             if (bSNL == 'Yes')
 
-            /// bSNL UID
+              /// bSNL UID
               CustomTextField(
                 controller: bSNLUIDController,
                 textInputType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 hintName: 'B_S_N_L UID',
-                icon: Icon(Icons.wifi,color: Theme.of(context).primaryColor,),
+                icon: Icon(
+                  Icons.wifi,
+                  color: Theme.of(context).primaryColor,
+                ),
                 maxLength: 100,
                 validator: (value) {
                   if (value == null || value.isEmpty && bSNL == 'Yes') {
@@ -2207,7 +2785,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 textInputType: TextInputType.text,
                 textInputAction: TextInputAction.next,
                 hintName: 'B_S_N_L Password',
-                icon: Icon(Icons.password,color: Theme.of(context).primaryColor,),
+                icon: Icon(
+                  Icons.password,
+                  color: Theme.of(context).primaryColor,
+                ),
                 maxLength: 100,
                 validator: (value) {
                   if (value == null || value.isEmpty && bSNL == 'Yes') {
@@ -2222,7 +2803,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
     );
   }
 
-  Widget heavyAndFanDetails(BuildContext context) {
+  Widget heavyDetails(BuildContext context) {
     bool snackbarShown = false;
     final size = MediaQuery.sizeOf(context);
     return Padding(
@@ -2230,10 +2811,233 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: ExpansionTile(
-          collapsedBackgroundColor: Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedBackgroundColor:
+              Theme.of(context).primaryColor.withOpacity(.2),
           collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
           title: Text(
-            "Heavy and Fan Board Details",
+            "Heavy Board Details",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+          leading: Icon(
+            Icons.developer_board_rounded,
+            color: Theme.of(context).primaryColor,
+          ),
+          children: [
+            //heavy and fan board list
+            Container(
+              height: size.height * 0.3,
+              decoration: BoxDecoration(
+                // color: Colors.blueGrey.withAlpha(50),
+                borderRadius: BorderRadius.circular(20),
+                // border: Border.all(color: Colors.black12, width: .5),
+              ),
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: size.height * 0.01,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        'Add Heavy board Details',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 15,
+                        ),
+                      ),
+                      CircleAvatar(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        radius: 20,
+                        child: Center(
+                          child: IconButton(
+                            onPressed: () {
+                              addDataToList(
+                                context,
+                                'Heavy board',
+                                CustomTextField(
+                                  controller: addDataToListController,
+                                  textInputType: TextInputType.text,
+                                  textInputAction: TextInputAction.done,
+                                  hintName: 'Type here',
+                                  icon: Icon(
+                                    Icons.person_2,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                  maxLength: 50,
+                                  validator: (value) {
+                                    if (value == null ||
+                                        value.isEmpty &&
+                                            needSmartHome == 'Yes') {
+                                      return 'This field is required';
+                                    }
+                                    return null;
+                                  },
+                                ).textInputField(context),
+                                addDataToListController,
+                                heavyBoardDetails,
+                                2,
+                              );
+                            },
+                            icon: Icon(
+                              Icons.add,
+                              size: 20,
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Divider(
+                    endIndent: 1,
+                    indent: 1,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  SizedBox(
+                    height: size.height * 0.2,
+                    child: heavyBoardDetails.isNotEmpty
+                        ? ListView.builder(
+                            itemCount: heavyBoardDetails.length,
+                            itemBuilder: (context, int index) {
+                              if (index < 2) {
+                                return Center(
+                                  child: ListTile(
+                                    leading: Text(
+                                      "R${index + 1} : ",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                    title: Text(
+                                      heavyBoardDetails[index].toString(),
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                    trailing: IconButton(
+                                      icon: Icon(
+                                        Icons.close,
+                                        size: 18,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (_) => AlertDialog(
+                                            surfaceTintColor:
+                                                Colors.transparent,
+                                            backgroundColor: Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                            title: Text(
+                                              'Delete this name?\n${heavyBoardDetails[index]}',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                            ),
+                                            content: SizedBox(
+                                              height: size.height * 0.07,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  ActionChip(
+                                                    onPressed: () {
+                                                      heavyBoardDetails
+                                                          .removeAt(index);
+                                                      Navigator.pop(context);
+                                                      setState(() {});
+                                                    },
+                                                    label: Text(
+                                                      'Yes',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  ActionChip(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    // backgroundColor:
+                                                    // Colors.blue.shade400,
+                                                    label: Text(
+                                                      'No',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                );
+                              } else if (!snackbarShown) {
+                                snackbarShown = true;
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  CustomSnackBar.showErrorSnackbar(
+                                    message: 'You have exceeded the limit',
+                                    context: context,
+                                  );
+                                });
+                                return const SizedBox.shrink();
+                              } else {
+                                return null;
+                              }
+                            },
+                          )
+                        : Center(
+                            child: Text(
+                              'List is Empty',
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 17,
+                              ),
+                            ),
+                          ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget fanDetails(BuildContext context) {
+    bool snackbarShown = false;
+    final size = MediaQuery.sizeOf(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: ExpansionTile(
+          collapsedBackgroundColor:
+              Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
+          title: Text(
+            "Fan Board Details",
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w500,
@@ -2262,7 +3066,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Text(
-                        'Add Heavy and Fan board Details',
+                        'Add Fan board Details',
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
                           fontSize: 15,
@@ -2276,13 +3080,16 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                             onPressed: () {
                               addDataToList(
                                 context,
-                                'Heavy and Fan board',
+                                'Fan board',
                                 CustomTextField(
                                   controller: addDataToListController,
                                   textInputType: TextInputType.text,
                                   textInputAction: TextInputAction.done,
                                   hintName: 'Type here',
-                                  icon: Icon(Icons.person_2, color: Theme.of(context).primaryColor,),
+                                  icon: Icon(
+                                    Icons.person_2,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
                                   maxLength: 50,
                                   validator: (value) {
                                     if (value == null ||
@@ -2294,7 +3101,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                   },
                                 ).textInputField(context),
                                 addDataToListController,
-                                heavyAndFanBoardDetails,
+                                fanBoardDetails,
+                                2,
                               );
                             },
                             icon: Icon(
@@ -2314,114 +3122,121 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                   ),
                   SizedBox(
                     height: size.height * 0.2,
-                    child: heavyAndFanBoardDetails.isNotEmpty
+                    child: fanBoardDetails.isNotEmpty
                         ? ListView.builder(
-                      itemCount: heavyAndFanBoardDetails.length,
-                      itemBuilder: (context, int index) {
-                        if(index < 2){
-                          return Center(
-                            child: ListTile(
-                              leading: Text(
-                                "R${index + 1} : ",
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                              title: Text(
-                                heavyAndFanBoardDetails[index].toString(),
-                                style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                              ),
-                              trailing: IconButton(
-                                icon: Icon(
-                                  Icons.close,
-                                  size: 18,
-                                  color: Theme.of(context).primaryColor,
-                                ),
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (_) => AlertDialog(
-                                      surfaceTintColor: Colors.transparent,
-                                      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                                      title: Text(
-                                        'Delete this name?\n${heavyAndFanBoardDetails[index]}',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-                                      ),
-                                      content: SizedBox(
-                                        height: size.height * 0.07,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                          children: [
-                                            ActionChip(
-                                              onPressed: () {
-                                                heavyAndFanBoardDetails
-                                                    .removeAt(index);
-                                                Navigator.pop(context);
-                                                setState(() {});
-                                              },
-                                              label: Text(
-                                                'Yes',
-                                                style: TextStyle(
-                                                  color: Theme.of(context).primaryColor,
-                                                  fontWeight:
-                                                  FontWeight.w500,
-                                                ),
-                                              ),
-                                            ),
-                                            ActionChip(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              // backgroundColor:
-                                              // Colors.blue.shade400,
-                                              label: Text(
-                                                'No',
-                                                style: TextStyle(
-                                                  color: Theme.of(context).primaryColor,
-                                                  fontWeight:
-                                                  FontWeight.w500,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                            itemCount: fanBoardDetails.length,
+                            itemBuilder: (context, int index) {
+                              if (index < 2) {
+                                return Center(
+                                  child: ListTile(
+                                    leading: Text(
+                                      "R${index + 1} : ",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Theme.of(context).primaryColor,
                                       ),
                                     ),
+                                    title: Text(
+                                      fanBoardDetails[index].toString(),
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                    ),
+                                    trailing: IconButton(
+                                      icon: Icon(
+                                        Icons.close,
+                                        size: 18,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (_) => AlertDialog(
+                                            surfaceTintColor:
+                                                Colors.transparent,
+                                            backgroundColor: Theme.of(context)
+                                                .scaffoldBackgroundColor,
+                                            title: Text(
+                                              'Delete this name?\n${fanBoardDetails[index]}',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .primaryColor,
+                                              ),
+                                            ),
+                                            content: SizedBox(
+                                              height: size.height * 0.07,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceAround,
+                                                children: [
+                                                  ActionChip(
+                                                    onPressed: () {
+                                                      fanBoardDetails
+                                                          .removeAt(index);
+                                                      Navigator.pop(context);
+                                                      setState(() {});
+                                                    },
+                                                    label: Text(
+                                                      'Yes',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  ActionChip(
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    // backgroundColor:
+                                                    // Colors.blue.shade400,
+                                                    label: Text(
+                                                      'No',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .primaryColor,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                );
+                              } else if (index == 2 && !snackbarShown) {
+                                snackbarShown = true;
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  CustomSnackBar.showErrorSnackbar(
+                                    message: 'You have exceeded the limit',
+                                    context: context,
                                   );
-                                },
+                                });
+                                return const SizedBox.shrink();
+                              } else {
+                                return const SizedBox.shrink();
+                              }
+                            },
+                          )
+                        : Center(
+                            child: Text(
+                              'List is Empty',
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 17,
                               ),
                             ),
-                          );
-                        }else if(!snackbarShown){
-                          snackbarShown = true;
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            CustomSnackBar.showErrorSnackbar(
-                              message: 'You have exceeded the limit',
-                              context: context,
-                            );
-                          });
-                          return const SizedBox.shrink();
-                        }else{
-                          return null;
-                        }
-                      },
-                    )
-                        : Center(
-                      child: Text(
-                        'List is Empty',
-                        style: TextStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: 17,
-                        ),
-                      ),
-                    ),
+                          ),
                   ),
                 ],
               ),
@@ -2439,7 +3254,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: ExpansionTile(
-          collapsedBackgroundColor: Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedBackgroundColor:
+              Theme.of(context).primaryColor.withOpacity(.2),
           collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
           title: Text(
             "Customer Details",
@@ -2454,7 +3270,6 @@ class _InstallationDetailsState extends State<InstallationDetails> {
             color: Theme.of(context).primaryColor,
           ),
           children: [
-
             const Text(
               'Pdf date',
               style: TextStyle(
@@ -2463,12 +3278,15 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               ),
             ),
             const Gap(5),
+
             ///Pdf Header date
             ListTile(
               tileColor: Colors.transparent,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
-                side: BorderSide(color: Theme.of(context).primaryColor.withOpacity(.3), width: 2),
+                side: BorderSide(
+                    color: Theme.of(context).primaryColor.withOpacity(.3),
+                    width: 2,),
               ),
               autofocus: false,
               onTap: dateTime,
@@ -2493,7 +3311,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.text,
               textInputAction: TextInputAction.next,
               hintName: 'Customer Name',
-              icon: Icon(Icons.person,color: Theme.of(context).primaryColor),
+              icon: Icon(Icons.person, color: Theme.of(context).primaryColor),
               maxLength: 100,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -2509,7 +3327,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.text,
               textInputAction: TextInputAction.next,
               hintName: 'Customer ID',
-              icon: Icon(Icons.numbers,color: Theme.of(context).primaryColor),
+              icon: Icon(Icons.numbers, color: Theme.of(context).primaryColor),
               maxLength: 100,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -2525,7 +3343,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.number,
               textInputAction: TextInputAction.next,
               hintName: 'Phone number',
-              icon: Icon(Icons.phone,color: Theme.of(context).primaryColor),
+              icon: Icon(Icons.phone, color: Theme.of(context).primaryColor),
               maxLength: 10,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -2543,7 +3361,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.emailAddress,
               textInputAction: TextInputAction.next,
               hintName: 'Email',
-              icon: Icon(Icons.mail_outline_rounded,color: Theme.of(context).primaryColor ),
+              icon: Icon(Icons.mail_outline_rounded,
+                  color: Theme.of(context).primaryColor,),
               maxLength: 150,
               // validator: (value) {
               //   if (value == null || value.isEmpty) {
@@ -2559,7 +3378,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               textInputType: TextInputType.text,
               textInputAction: TextInputAction.done,
               hintName: 'Address',
-              icon: Icon(Icons.location_city,color: Theme.of(context).primaryColor),
+              icon: Icon(Icons.location_city,
+                  color: Theme.of(context).primaryColor,),
               maxLength: 100,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -2614,7 +3434,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
 
                   if (pickedDate != null) {
                     String formattedDate =
-                    DateFormat('yyyy-MM-dd').format(pickedDate);
+                        DateFormat('yyyy-MM-dd').format(pickedDate);
                     setState(() {
                       dateOfInstallationController.text =
                           formattedDate; //set output date to TextField value.
@@ -2742,7 +3562,7 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                           child: Text(
                             value,
                             style: TextStyle(
-                                fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w600,
                               color: Theme.of(context).primaryColor,
                             ),
                           ),
@@ -2818,55 +3638,55 @@ class _InstallationDetailsState extends State<InstallationDetails> {
             ),
             needGate == 'Yes'
                 ? textWithDropDown(
-              'Need App',
-              DropdownButtonFormField<String>(
-                value: needApp.isNotEmpty ? needApp : null,
-                style: TextStyle(
-                  color: Theme.of(context).primaryColor,
-                  fontSize: 16,
-                ),
-                hint: Text(
-                  "Need App",
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColor.withOpacity(.5),
-                  ),
-                ),
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.all(10.0),
-                  border: myInputBorder(),
-                  enabledBorder: myInputBorder(),
-                  fillColor: Colors.transparent,
-                  focusColor: Colors.transparent,
-                  // hoverColor: Colors.black,
-                  focusedBorder: myFocusBorder(),
-                  hintStyle: TextStyle(
-                    color: Theme.of(context).primaryColor.withOpacity(.2),
-                    fontWeight: FontWeight.w500,
-                  ),
-                  // isDense: true,
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Select an option Yes or No';
-                  }
-                  return null;
-                },
-                onChanged: (String? newValue) {
-                  setState(() {
-                    needApp = newValue!;
-                  });
-                },
-                items: optionValue
-                    .map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
+                    'Need App',
+                    DropdownButtonFormField<String>(
+                      value: needApp.isNotEmpty ? needApp : null,
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 16,
+                      ),
+                      hint: Text(
+                        "Need App",
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor.withOpacity(.5),
+                        ),
+                      ),
+                      decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.all(10.0),
+                        border: myInputBorder(),
+                        enabledBorder: myInputBorder(),
+                        fillColor: Colors.transparent,
+                        focusColor: Colors.transparent,
+                        // hoverColor: Colors.black,
+                        focusedBorder: myFocusBorder(),
+                        hintStyle: TextStyle(
+                          color: Theme.of(context).primaryColor.withOpacity(.2),
+                          fontWeight: FontWeight.w500,
+                        ),
+                        // isDense: true,
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Select an option Yes or No';
+                        }
+                        return null;
+                      },
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          needApp = newValue!;
+                        });
+                      },
+                      items: optionValue
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                          ),
+                        );
+                      }).toList(),
                     ),
-                  );
-                }).toList(),
-              ),
-            )
+                  )
                 : const SizedBox(),
             SizedBox(
               height: size.height * 0.02,
@@ -2887,7 +3707,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     textInputType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
                     hintName: 'App User ID',
-                    icon: Icon(Icons.email, color: Theme.of(context).primaryColor,),
+                    icon: Icon(
+                      Icons.email,
+                      color: Theme.of(context).primaryColor,
+                    ),
                     maxLength: 100,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -2903,7 +3726,10 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                     textInputType: TextInputType.text,
                     textInputAction: TextInputAction.done,
                     hintName: 'Password',
-                    icon: Icon(Icons.password, color: Theme.of(context).primaryColor,),
+                    icon: Icon(
+                      Icons.password,
+                      color: Theme.of(context).primaryColor,
+                    ),
                     maxLength: 100,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -2918,13 +3744,16 @@ class _InstallationDetailsState extends State<InstallationDetails> {
               const SizedBox(),
             if (needAjax == 'Yes')
 
-            /// Email
+              /// Email
               CustomTextField(
                 controller: ajaxAccountUidController,
                 textInputType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
                 hintName: 'Ajax Account Uid',
-                icon: Icon(Icons.numbers,color: Theme.of(context).primaryColor,),
+                icon: Icon(
+                  Icons.numbers,
+                  color: Theme.of(context).primaryColor,
+                ),
                 maxLength: 100,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
@@ -2957,12 +3786,14 @@ class _InstallationDetailsState extends State<InstallationDetails> {
   }
 
   Future<dynamic> addDataToList(
-      BuildContext context,
-      String title,
-      Widget widget,
-      TextEditingController textEditingController,
-      List list,
-      ) {
+    BuildContext context,
+    String title,
+    Widget widget,
+    TextEditingController textEditingController,
+    List list,
+    int totalIndex,
+  ) {
+    log('Total index is $totalIndex & List length is ${list.length}');
     return showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -2985,9 +3816,18 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 backgroundColor: Theme.of(context).primaryColor.withOpacity(.3),
                 onPressed: () {
                   if (textEditingController.text.isNotEmpty) {
-                    list.add(textEditingController.text);
-                    textEditingController.clear();
-                    Navigator.pop(context);
+                    if (list.length < totalIndex) {
+                      list.add(textEditingController.text);
+                      textEditingController.clear();
+                      Navigator.pop(context);
+                    } else {
+                      CustomSnackBar.showErrorSnackbar(
+                        message: 'You have exceeded the limit',
+                        context: context,
+                      );
+                      textEditingController.clear();
+                      Navigator.pop(context);
+                    }
                   } else {
                     CustomSnackBar.showErrorSnackbar(
                       message: 'This field is empty',
@@ -3050,12 +3890,12 @@ class AjaxListModel {
   }
 
   factory AjaxListModel.fromJson(Map<String, dynamic> json) => AjaxListModel(
-    productName: json["product Name"],
-    qty: json["Qty"],
-  );
+        productName: json["product Name"],
+        qty: json["Qty"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "product Name": productName,
-    "Qty": qty,
-  };
+        "product Name": productName,
+        "Qty": qty,
+      };
 }

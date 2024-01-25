@@ -30,10 +30,13 @@ class InstallationDetailsScreen {
   late String r4;
   late List<String> nameList;
   late List<String> deviceList;
-  late List<String> channel8List;
+  late List<String> channel8ListModule1;
+  late List<String> channel8ListModule2;
   late List<String> channel4List;
+  late List<String> channel3List;
   late List ajaxProductList;
-  late List heavyAndFanBoardDetails;
+  late List heavyBoardDetails;
+  late List fanBoardDetails;
   late String ajaxUId;
 
   late String routerID;
@@ -92,9 +95,12 @@ class InstallationDetailsScreen {
     required this.bSNL,
     required this.bSNLUid,
     required this.bSNLPass,
-    required this.channel8List,
+    required this.channel8ListModule1,
+    required this.channel8ListModule2,
     required this.channel4List,
-    required this.heavyAndFanBoardDetails,
+    required this.channel3List,
+    required this.heavyBoardDetails,
+    required this.fanBoardDetails,
     required this.ajaxUId,
     required this.ajaxProductList,
     required this.motorBrand,
@@ -114,11 +120,17 @@ class InstallationDetailsScreen {
           SizedBox(height: 1 * PdfPageFormat.mm),
           if(needSmartHome == 'Yes') routerAndServerDetails(),
           SizedBox(height: 1 * PdfPageFormat.mm),
-          if(needSmartHome == 'Yes')channel8List.isEmpty ? SizedBox() : light8ChannelOutputs(),
+          if(needSmartHome == 'Yes')channel8ListModule1.isEmpty ? SizedBox() : light8ChannelOutputsModule1(),
+          SizedBox(height: 1 * PdfPageFormat.mm),
+          if(needSmartHome == 'Yes')channel8ListModule2.isEmpty ? SizedBox() : light8ChannelOutputsModule2(),
           SizedBox(height: 1 * PdfPageFormat.mm),
           if(needSmartHome == 'Yes') channel4List.isEmpty ? SizedBox() : light4ChannelOutputs(),
           SizedBox(height: 1 * PdfPageFormat.mm),
-          if(needSmartHome == 'Yes') heavyAndFanBoardDetails.isEmpty ? SizedBox() : heavyAndFanBoard(),
+          if(needSmartHome == 'Yes') channel3List.isEmpty ? SizedBox() : light3ChannelOutputs(),
+          SizedBox(height: 1 * PdfPageFormat.mm),
+          if(needSmartHome == 'Yes') heavyBoardDetails.isEmpty ? SizedBox() : heavyBoard(),
+          SizedBox(height: 1 * PdfPageFormat.mm),
+          if(needSmartHome == 'Yes') fanBoardDetails.isEmpty ? SizedBox() : fanBoard(),
           if(needAjax == "Yes") productTable(productDetailsModel),
           if(needGate == "Yes") gateChannelOutputs(),
           SizedBox(height: 1 * PdfPageFormat.mm),
@@ -252,23 +264,45 @@ class InstallationDetailsScreen {
     ),
   ],);
 
-  Widget light8ChannelOutputs() => Column(children: [
+  Widget light8ChannelOutputsModule1() => Column(children: [
     Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       height: 30,
       width: double.infinity,
       decoration: BoxDecoration(
         color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
-      child: Center(child: buildBodyText('Light 8 Channel', true)),
+      child: Center(child: buildBodyText('Light 8 Channel Module 1', true)),
     ),
     SizedBox(
       height: 100,
       child: GridView(
         crossAxisCount: 2,
         children: List.generate(
-          channel8List.length,
+          channel8ListModule1.length,
               (index) => createText(
-            "R${index + 1}", channel8List[index], false, 13, 0, 8,),
+            "R${index + 1}", channel8ListModule1[index], false, 13, 0, 8,),
+        ),
+      ),
+    ),
+  ],);
+
+  Widget light8ChannelOutputsModule2() => Column(children: [
+    Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      height: 30,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
+      child: Center(child: buildBodyText('Light 8 Channel Module 2', true)),
+    ),
+    SizedBox(
+      height: 100,
+      child: GridView(
+        crossAxisCount: 2,
+        children: List.generate(
+          channel8ListModule2.length,
+              (index) => createText(
+            "R${index + 1}", channel8ListModule2[index], false, 13, 0, 8,),
         ),
       ),
     ),
@@ -295,23 +329,66 @@ class InstallationDetailsScreen {
     ),
   ],);
 
-  Widget heavyAndFanBoard() => Column(children: [
+  Widget light3ChannelOutputs() => Column(children: [
     Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
       height: 30,
       width: double.infinity,
       decoration: BoxDecoration(
         color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
-      child: Center(child: buildBodyText('Heavy and Fan Board', true)),
+      child: Center(child: buildBodyText('Light 3 Channel', true)),
     ),
     SizedBox(
       height: 80,
       child: GridView(
         crossAxisCount: 2,
         children: List.generate(
-          heavyAndFanBoardDetails.length,
+          channel3List.length,
               (index) => createText(
-            "R${index + 1}", heavyAndFanBoardDetails[index], false, 13, 0, 8,),
+            "R${index + 1}", channel3List[index], false, 13, 0, 8,),
+        ),
+      ),
+    ),
+  ],);
+
+  Widget heavyBoard() => Column(children: [
+    Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      height: 30,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
+      child: Center(child: buildBodyText('Heavy Board', true)),
+    ),
+    SizedBox(
+      height: 80,
+      child: GridView(
+        crossAxisCount: 2,
+        children: List.generate(
+          heavyBoardDetails.length,
+              (index) => createText(
+            "R${index + 1}", heavyBoardDetails[index], false, 13, 0, 8,),
+        ),
+      ),
+    ),
+  ],);
+
+  Widget fanBoard() => Column(children: [
+    Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      height: 30,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: PdfColors.red500, borderRadius: BorderRadius.circular(5),),
+      child: Center(child: buildBodyText('Fan Board', true)),
+    ),
+    SizedBox(
+      height: 80,
+      child: GridView(
+        crossAxisCount: 2,
+        children: List.generate(
+          fanBoardDetails.length,
+              (index) => createText(
+            "R${index + 1}", fanBoardDetails[index], false, 13, 0, 8,),
         ),
       ),
     ),
@@ -474,6 +551,7 @@ class InstallationDetailsScreen {
     style: TextStyle(
       fontSize: 16,
       fontWeight: isHead ? FontWeight.bold : FontWeight.normal,
+      color: isHead ? PdfColors.white : PdfColors.black,
     ),);
 
   Widget createText(String title, String subTitle, bool isHead, double size,

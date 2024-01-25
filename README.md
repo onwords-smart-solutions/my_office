@@ -82,7 +82,7 @@ As, I have mentioned above this project is structured with Clean architecture pr
 
 ### Version history and Releases
 
-* Android : 4.0.3+17 - Added Sale count notification.
+* Android : 4.0.4+18 - Bug fix in Search leads and additional data for Installation Pdf.
 * iOS : 2.1.7. 
 
 

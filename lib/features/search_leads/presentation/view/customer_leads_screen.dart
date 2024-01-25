@@ -161,7 +161,11 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
               currentCustomerList.add(data);
             }
           } else if (sortOption == 'New leads') {
-            if (data['notes'].toString().toLowerCase() == 'null') {
+            if (data['notes'].toString().toLowerCase() == 'null' ||
+                data['customer_state']
+                    .toString()
+                    .toLowerCase()
+                    .contains('new leads')) {
               currentCustomerList.add(data);
             }
           } else if (sortOption == 'Black dots') {
@@ -221,13 +225,13 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
   // PR STAFF NAMES & CUSTOMER DETAILS FETCHING AND ASSIGNING
   void fetchInitialData() async {
     try {
-       allCustomer = await searchLeadsRepository.getCustomers();
+      allCustomer = await searchLeadsRepository.getCustomers();
       getCustomerDetail(
         createdBy: widget.selectedStaff != null
             ? widget.selectedStaff!
             : selectedStaff == ''
-            ? widget.staffInfo.name
-            : selectedStaff,
+                ? widget.staffInfo.name
+                : selectedStaff,
         sortChoice: sortOption,
         ascending: isAscending,
       );
@@ -236,7 +240,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
         staffs = fetchedPRStaffNames;
         isLoading = false;
       });
-      if(widget.query != null){
+      if (widget.query != null) {
         searchUser(widget.query!);
       }
     } catch (e) {
@@ -296,7 +300,9 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
         padding: const EdgeInsets.only(left: 10.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Theme.of(context).primaryColor.withOpacity(.3), width: 1.0),
+          border: Border.all(
+              color: Theme.of(context).primaryColor.withOpacity(.3),
+              width: 1.0),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -324,7 +330,6 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                   fontSize: 15,
                   color: Theme.of(context).primaryColor,
                 ),
-
               ),
             ),
             VerticalDivider(
@@ -498,8 +503,9 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                       Text(
                         _selectedCustomers.length.toString(),
                         style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontWeight: FontWeight.w500,),
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       Checkbox(
                         value: isSelectAll,
@@ -550,7 +556,10 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                             isLeadChange = false;
                           });
                         },
-                        icon: Icon(Icons.close, color: Theme.of(context).primaryColor,),
+                        icon: Icon(
+                          Icons.close,
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
                     ],
                   ),
@@ -568,8 +577,9 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
         Color containerColor = sortOption == sortList[i]
             ? const Color(0xff8355B7)
             : Theme.of(context).scaffoldBackgroundColor;
-        Color textColor =
-            sortOption == sortList[i] ? Theme.of(context).primaryColor : Theme.of(context).primaryColor;
+        Color textColor = sortOption == sortList[i]
+            ? Theme.of(context).primaryColor
+            : Theme.of(context).primaryColor;
 
         return GestureDetector(
           onTap: () {
@@ -586,7 +596,9 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
             decoration: BoxDecoration(
               color: containerColor,
               borderRadius: BorderRadius.circular(50.0),
-              border: Border.all(width: 1.0, color: Theme.of(context).primaryColor.withOpacity(.2)),
+              border: Border.all(
+                  width: 1.0,
+                  color: Theme.of(context).primaryColor.withOpacity(.2)),
             ),
             child: Center(
               child: Text(
@@ -608,9 +620,11 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
     return query == ''
         ? isLoading
             ? Center(
-      child: Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ?
-             Lottie.asset('assets/animations/loading_light_theme.json'):
-             Lottie.asset('assets/animations/loading_dark_theme.json'),)
+                child: Theme.of(context).scaffoldBackgroundColor ==
+                        const Color(0xFF1F1F1F)
+                    ? Lottie.asset('assets/animations/loading_light_theme.json')
+                    : Lottie.asset('assets/animations/loading_dark_theme.json'),
+              )
             : currentCustomerList.isNotEmpty
                 ? Column(
                     children: [
@@ -659,7 +673,9 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                                   decoration: BoxDecoration(
                                     color:
                                         isSelected(currentCustomerList[index])
-                                            ? Theme.of(context).primaryColor.withOpacity(.5)
+                                            ? Theme.of(context)
+                                                .primaryColor
+                                                .withOpacity(.5)
                                             : null,
                                   ),
                                   child: Opacity(
@@ -738,7 +754,8 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
     for (var customer in _selectedCustomers) {
       //UPDATING LEAD CHANGE IN FIREBASE
       await searchLeadsRepository.updateCustomerLead(
-          customer['phone_number'].toString(), staff,
+        customer['phone_number'].toString(),
+        staff,
       );
 
       final index = allCustomer.indexWhere(
