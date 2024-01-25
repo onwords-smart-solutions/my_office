@@ -104,7 +104,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               progressIndicatorBuilder:
                                   (context, url, downloadProgress) =>
                                       CircularProgressIndicator(
-                                        color: Theme.of(context).primaryColor,
+                                color: Theme.of(context).primaryColor,
                                 value: downloadProgress.progress,
                               ),
                               errorWidget: (context, url, error) => const Icon(
@@ -197,9 +197,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                       ? Theme.of(context).scaffoldBackgroundColor ==
                               const Color(0xFF1F1F1F)
                           ? Lottie.asset(
-                              'assets/animations/loading_light_theme.json',)
+                              'assets/animations/loading_light_theme.json',
+                            )
                           : Lottie.asset(
-                              'assets/animations/loading_dark_theme.json',)
+                              'assets/animations/loading_dark_theme.json',
+                            )
                       : Consumer<AuthenticationProvider>(
                           builder: (ctx, userProvider, child) {
                             return GridView.builder(
@@ -258,8 +260,9 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           fillColor: Theme.of(context).primaryColor.withOpacity(.1),
           hintText: 'Search',
           hintStyle: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: Theme.of(context).primaryColor,),
+            fontWeight: FontWeight.w500,
+            color: Theme.of(context).primaryColor,
+          ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15.0),
             borderSide: BorderSide.none,
@@ -343,11 +346,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               }
             },
             child: Text(
-                'Try again',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: Theme.of(context).primaryColor,
-            ),
+              'Try again',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context).primaryColor,
+              ),
             ),
           ),
           barrierDismissible: false,
@@ -365,7 +368,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         actionButton: TextButton(
           onPressed: () => Navigator.of(context).pop(),
           child: const Text(
-              'Ok',
+            'Ok',
             style: TextStyle(
               fontWeight: FontWeight.w500,
               fontSize: 16,
@@ -390,14 +393,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   Future<void> _checkAppVersion() async {
     try {
       final data = await homeRepository.checkAppVersion();
-      final updatedVersion = data['versionNumber'];
-      final updates = data['updates'].toString();
-      final restrictApp = data['restrictApp'];
-      if (AppVersion.androidAppDbVersion != updatedVersion) {
+      final updatedVersion = data['iosVersionNumber'];
+      final updates = data['iosUpdates'].toString();
+      if (AppVersion.iosAppDbVersion != updatedVersion) {
         _showUpdateAppDialog(updates);
-      }
-      if (AppVersion.restrictAndroidApp == restrictApp) {
-        _showAppRestrictDialog();
       }
     } catch (e) {
       Exception('Error caught while checking App version $e');
@@ -492,7 +491,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           child: AlertDialog(
             surfaceTintColor: Colors.transparent,
             title: Text(
-                "App usage restricted",
+              "App usage restricted",
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.w700,
@@ -502,8 +501,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             content: Text(
               "Kindly bare with this alert, App team is fixing the bug, Until then you are not able to access the app.",
               style: TextStyle(
-              fontWeight: FontWeight.w500,
-              color: Theme.of(context).primaryColor,
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context).primaryColor,
               ),
             ),
             actions: [
@@ -512,7 +511,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   child: const Text(
                     'Ignore',
                     style: TextStyle(
-                        fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w500,
                       fontSize: 16,
                     ),
                   ),
@@ -537,7 +536,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           child: AlertDialog(
             surfaceTintColor: Colors.transparent,
             title: Text(
-                "New Update Available",
+              "New Update Available",
               style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.w700,
@@ -584,7 +583,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   }
                 },
                 child: const Text(
-                    "Update",
+                  "Update",
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 16,

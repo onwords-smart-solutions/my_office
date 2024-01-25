@@ -1,13 +1,10 @@
-import 'dart:developer';
-import 'dart:ui';
+
 import 'package:after_layout/after_layout.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/features/auth/presentation/provider/authentication_provider.dart';
 import 'package:my_office/features/create_lead/presentation/provider/create_lead_provider.dart';
@@ -49,10 +46,7 @@ Future<void> main() async {
 
   await Firebase.initializeApp(
       name: "admin-console", options: DefaultFirebaseOptions.currentPlatform);
-  await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
   await di.init();
-
-  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitDown,
@@ -144,28 +138,27 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     _notificationService.initializePlatformNotifications();
     _initUserData();
-   Provider.of<ThemeProvider>(context,listen: false).loadThemeFromLocal();
+    Provider.of<ThemeProvider>(context, listen: false).loadThemeFromLocal();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeProvider>(
-      builder: (ctx, themeProvider, child){
-       return MaterialApp(
-          navigatorKey: navigationKey,
-          title: 'My Office',
-          darkTheme: AppTheme.darkTheme,
-          theme: AppTheme.lightTheme,
-          themeMode: themeProvider.themeMode,
-          home: const InitialScreen(),
-          routes: {
-            //   '/visitResume': (_) => const VisitFromScreen(),
-            '/invoiceGenerator': (_) => const ClientDetails(),
-          },
-        );
-      }
-    );
+    return Consumer<ThemeProvider>(builder: (ctx, themeProvider, child) {
+      return MaterialApp(
+        navigatorKey: navigationKey,
+        title: 'My Office',
+        darkTheme: AppTheme.darkTheme,
+        theme: AppTheme.lightTheme,
+        themeMode: themeProvider.themeMode,
+        debugShowCheckedModeBanner: false,
+        home: const InitialScreen(),
+        routes: {
+          //   '/visitResume': (_) => const VisitFromScreen(),
+          '/invoiceGenerator': (_) => const ClientDetails(),
+        },
+      );
+    });
   }
 }
 
@@ -205,12 +198,12 @@ class InitialScreenState extends State<InitialScreen>
     return Scaffold(
       body: Center(
         child: Text(
-            'Loading data..',
-        style: TextStyle(
-          fontWeight: FontWeight.w500,
-          fontSize: 20,
-          color: Theme.of(context).primaryColor,
-        ),
+          'Loading data..',
+          style: TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 20,
+            color: Theme.of(context).primaryColor,
+          ),
         ),
       ),
     );
@@ -259,9 +252,9 @@ class Loading extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ?
-          Lottie.asset('assets/animations/loading_light_theme.json'):
-              Lottie.asset('assets/animations/loading_dark_theme.json'),
+          Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F)
+              ? Lottie.asset('assets/animations/loading_light_theme.json')
+              : Lottie.asset('assets/animations/loading_dark_theme.json'),
           ValueListenableBuilder(
             valueListenable: isShown,
             builder: (ctx, isVisible, child) {
@@ -281,12 +274,12 @@ class Loading extends StatelessWidget {
                 );
               },
               child: Text(
-                  'Reset session',
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 16,
-                color: Theme.of(context).primaryColor,
-              ),
+                'Reset session',
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                  color: Theme.of(context).primaryColor,
+                ),
               ),
             ),
           ),

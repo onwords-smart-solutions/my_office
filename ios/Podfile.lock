@@ -687,6 +687,9 @@ PODS:
     - FirebaseAuth (~> 10.18.0)
   - Firebase/CoreOnly (10.18.0):
     - FirebaseCore (= 10.18.0)
+  - Firebase/Crashlytics (10.18.0):
+    - Firebase/CoreOnly
+    - FirebaseCrashlytics (~> 10.18.0)
   - Firebase/Database (10.18.0):
     - Firebase/CoreOnly
     - FirebaseDatabase (~> 10.18.0)
@@ -706,8 +709,12 @@ PODS:
     - Firebase/Auth (= 10.18.0)
     - firebase_core
     - Flutter
-  - firebase_core (2.23.0):
+  - firebase_core (2.24.2):
     - Firebase/CoreOnly (= 10.18.0)
+    - Flutter
+  - firebase_crashlytics (3.4.8):
+    - Firebase/Crashlytics (= 10.18.0)
+    - firebase_core
     - Flutter
   - firebase_database (10.3.5):
     - Firebase/Database (= 10.18.0)
@@ -744,6 +751,14 @@ PODS:
     - FirebaseCore (~> 10.0)
   - FirebaseCoreInternal (10.20.0):
     - "GoogleUtilities/NSData+zlib (~> 7.8)"
+  - FirebaseCrashlytics (10.18.0):
+    - FirebaseCore (~> 10.5)
+    - FirebaseInstallations (~> 10.0)
+    - FirebaseSessions (~> 10.5)
+    - GoogleDataTransport (~> 9.2)
+    - GoogleUtilities/Environment (~> 7.8)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+    - PromisesObjC (~> 2.1)
   - FirebaseDatabase (10.18.0):
     - FirebaseAppCheckInterop (~> 10.17)
     - FirebaseCore (~> 10.0)
@@ -788,6 +803,14 @@ PODS:
     - GoogleUtilities/Reachability (~> 7.8)
     - GoogleUtilities/UserDefaults (~> 7.8)
     - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FirebaseSessions (10.20.0):
+    - FirebaseCore (~> 10.5)
+    - FirebaseCoreExtension (~> 10.0)
+    - FirebaseInstallations (~> 10.0)
+    - GoogleDataTransport (~> 9.2)
+    - GoogleUtilities/Environment (~> 7.10)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+    - PromisesSwift (~> 2.1)
   - FirebaseSharedSwift (10.20.0)
   - FirebaseStorage (10.18.0):
     - FirebaseAppCheckInterop (~> 10.0)
@@ -796,8 +819,6 @@ PODS:
     - FirebaseCoreExtension (~> 10.0)
     - GTMSessionFetcher/Core (< 4.0, >= 2.1)
   - Flutter (1.0.0)
-  - flutter_downloader (0.0.1):
-    - Flutter
   - flutter_dynamic_icon (0.0.1):
     - Flutter
   - flutter_local_notifications (0.0.1):
@@ -911,6 +932,8 @@ PODS:
   - printing (1.0.0):
     - Flutter
   - PromisesObjC (2.3.1)
+  - PromisesSwift (2.3.1):
+    - PromisesObjC (= 2.3.1)
   - qr_code_scanner (0.2.0):
     - Flutter
     - MTBBarcodeScanner
@@ -921,6 +944,8 @@ PODS:
   - SDWebImage (5.18.10):
     - SDWebImage/Core (= 5.18.10)
   - SDWebImage/Core (5.18.10)
+  - share_plus (0.0.1):
+    - Flutter
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -944,12 +969,12 @@ DEPENDENCIES:
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
+  - firebase_crashlytics (from `.symlinks/plugins/firebase_crashlytics/ios`)
   - firebase_database (from `.symlinks/plugins/firebase_database/ios`)
   - firebase_in_app_messaging (from `.symlinks/plugins/firebase_in_app_messaging/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
-  - flutter_downloader (from `.symlinks/plugins/flutter_downloader/ios`)
   - flutter_dynamic_icon (from `.symlinks/plugins/flutter_dynamic_icon/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - flutter_pdfview (from `.symlinks/plugins/flutter_pdfview/ios`)
@@ -961,6 +986,7 @@ DEPENDENCIES:
   - printing (from `.symlinks/plugins/printing/ios`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
   - rive_common (from `.symlinks/plugins/rive_common/ios`)
+  - share_plus (from `.symlinks/plugins/share_plus/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - speech_to_text (from `.symlinks/plugins/speech_to_text/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
@@ -980,12 +1006,14 @@ SPEC REPOS:
     - FirebaseCore
     - FirebaseCoreExtension
     - FirebaseCoreInternal
+    - FirebaseCrashlytics
     - FirebaseDatabase
     - FirebaseFirestore
     - FirebaseFirestoreInternal
     - FirebaseInAppMessaging
     - FirebaseInstallations
     - FirebaseMessaging
+    - FirebaseSessions
     - FirebaseSharedSwift
     - FirebaseStorage
     - FMDB
@@ -998,6 +1026,7 @@ SPEC REPOS:
     - MTBBarcodeScanner
     - nanopb
     - PromisesObjC
+    - PromisesSwift
     - ReachabilitySwift
     - RecaptchaInterop
     - SDWebImage
@@ -1021,6 +1050,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
+  firebase_crashlytics:
+    :path: ".symlinks/plugins/firebase_crashlytics/ios"
   firebase_database:
     :path: ".symlinks/plugins/firebase_database/ios"
   firebase_in_app_messaging:
@@ -1031,8 +1062,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_storage/ios"
   Flutter:
     :path: Flutter
-  flutter_downloader:
-    :path: ".symlinks/plugins/flutter_downloader/ios"
   flutter_dynamic_icon:
     :path: ".symlinks/plugins/flutter_dynamic_icon/ios"
   flutter_local_notifications:
@@ -1055,6 +1084,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/qr_code_scanner/ios"
   rive_common:
     :path: ".symlinks/plugins/rive_common/ios"
+  share_plus:
+    :path: ".symlinks/plugins/share_plus/ios"
   shared_preferences_foundation:
     :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   speech_to_text:
@@ -1077,7 +1108,8 @@ SPEC CHECKSUMS:
   file_picker: ce3938a0df3cc1ef404671531facef740d03f920
   Firebase: 414ad272f8d02dfbf12662a9d43f4bba9bec2a06
   firebase_auth: 88053a759923970e580789d167a43b6031568ef5
-  firebase_core: 29d66baf806970cda37c93621b27cd369b27db1b
+  firebase_core: 0af4a2b24f62071f9bf283691c0ee41556dcb3f5
+  firebase_crashlytics: 55714f63ae0973c54b3a721c451ae5f815086c1f
   firebase_database: 82e9b8a8beab85b4758b3a901085f5f0fe3b2738
   firebase_in_app_messaging: aff20ed81dabd5a184004363b9fad935ce4ce50b
   firebase_messaging: 0a39f2514e1f27b0274b0d2fa99048f57856ee7c
@@ -1089,16 +1121,17 @@ SPEC CHECKSUMS:
   FirebaseCore: 2322423314d92f946219c8791674d2f3345b598f
   FirebaseCoreExtension: 0659f035b88c5a7a15a9763c48c2e6ca8c0a2977
   FirebaseCoreInternal: efeeb171ac02d623bdaefe121539939821e10811
+  FirebaseCrashlytics: 86d5bce01f42fa1db265f87ff1d591f04db610ec
   FirebaseDatabase: ac770bf7525ff0340b105166037036c0e46c2c7e
   FirebaseFirestore: 171bcbb57a1a348dd171a0d5e382c03ef85a77bb
   FirebaseFirestoreInternal: 0dc0762afd68192e9d45c31d3dd3017accc84333
   FirebaseInAppMessaging: 50716c86fe3bfe83e588ad5d313521ab1b7f9b7f
   FirebaseInstallations: 558b1da7d65afeb996fd5c814332f013234ece4e
   FirebaseMessaging: 9bc34a98d2e0237e1b121915120d4d48ddcf301e
+  FirebaseSessions: 2f348975f6d1c139231c180e12194161da2e0cd6
   FirebaseSharedSwift: 2fbf73618288b7a36b2014b957745dcdd781389e
   FirebaseStorage: 8333c4b183764cdd170d9539a61322b71c23adff
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  flutter_downloader: b7301ae057deadd4b1650dc7c05375f10ff12c39
   flutter_dynamic_icon: fb0cd2f84c817c1a0ddbbc383fbebec3cd5e88d8
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   flutter_pdfview: 25f53dd6097661e6395b17de506e6060585946bd
@@ -1118,11 +1151,13 @@ SPEC CHECKSUMS:
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   printing: 233e1b73bd1f4a05615548e9b5a324c98588640b
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
+  PromisesSwift: 28dca69a9c40779916ac2d6985a0192a5cb4a265
   qr_code_scanner: bb67d64904c3b9658ada8c402e8b4d406d5d796e
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
   RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
   rive_common: 8a159d68033a8b073e5853acc50f03aa486a2888
   SDWebImage: fc8f2d48bbfd72ef39d70e981bd24a3f3be53fec
+  share_plus: c3fef564749587fc939ef86ffb283ceac0baf9f5
   shared_preferences_foundation: 5b919d13b803cadd15ed2dc053125c68730e5126
   speech_to_text: b43a7d99aef037bd758ed8e45d79bbac035d2dfe
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
