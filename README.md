@@ -82,7 +82,7 @@ As, I have mentioned above this project is structured with Clean architecture pr
 
 ### Version history and Releases
 
-* Android : 4.0.4+18 - Bug fix in Search leads and additional data for Installation Pdf.
+* Android : 4.0.5+19 - Modified Invoice generator with additional data.
 * iOS : 2.1.7. 
 
 

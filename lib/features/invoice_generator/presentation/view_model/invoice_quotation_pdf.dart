@@ -93,6 +93,7 @@ class InvAndQtnPdf {
           SizedBox(height: 0.3 * PdfPageFormat.cm),
           Divider(),
           buildTermsAndConditions(clientModel),
+          buildGateDetails(clientModel),
         ],
         footer: (context) => buildFooter(clientModel, needGst),
       ),
@@ -481,6 +482,41 @@ class InvAndQtnPdf {
           // buildSimpleText(title: 'Paypal', value: invoice.supplier.paymentInfo),
         ],
       );
+
+  Widget buildGateDetails(InvoiceGeneratorModel gateDetails) =>
+  Column(
+    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      gateDetails.docCategory == 'GA' ?
+          Container(
+            child: Column(
+              children: [
+                buildBodyText('Swing Gate', true),
+                SizedBox(height: 5),
+                buildBodyText(
+                  '1. The uninterruptible power supply (UPS) line must be installed to the location of the control board.\n'
+                      '2. Separate 4-core cables (1 sqmm) must be laid from the control board to both sides of the pillar for each motor.\n'
+                      '3. A strong and consistent Wi-Fi connection must be provided by the customer.\n'
+                      '4. If a safety sensor is included in the quotation, individual 4-core cables (1 sqmm) must be laid from the control board to both pillars at a height of 2 feet from the ground.',
+                  false,
+                ),
+                SizedBox(height: 10),
+                buildBodyText('Sliding Gate', true),
+                SizedBox(height: 5),
+                buildBodyText(
+                  '1. A concrete foundation with dimensions of length (L) x breadth (B) 1.5 x 1.5 feet and a depth of 1 foot must be constructed near the opening end pillar to ensure safety.\n'
+                      '2. Sensors must be installed on both sides of the pillar at a height of 2 feet from the ground, and individual 4-core cables (1 sqmm) must be laid from both sensors to the concrete foundation.\n'
+                      '3. A UPS line must be installed to the concrete foundation.\n'
+                      '4. A strong and consistent Wi-Fi connection must be provided by the customer.',
+                  false,
+                ),
+                SizedBox(height: 10),
+              ],
+            ),
+          ) : SizedBox.shrink(),
+    ],
+  );
 
   Widget buildTermsAndConditions(
     InvoiceGeneratorModel customerDetails,
