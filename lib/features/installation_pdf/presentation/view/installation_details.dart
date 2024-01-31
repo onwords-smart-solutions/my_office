@@ -21,6 +21,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
   final formKey = GlobalKey<FormState>();
 
   List<AjaxListModel> ajaxDeviceDetails = [];
+  List<ProductListModel> productDetails = [];
+
   DateTime dateStamp = DateTime.now();
 
   void dateTime() async {
@@ -72,6 +74,8 @@ class _InstallationDetailsState extends State<InstallationDetails> {
   TextEditingController ajaxAccountUidController = TextEditingController();
   TextEditingController ajaxItemController = TextEditingController();
   TextEditingController ajaxItemCountController = TextEditingController();
+  TextEditingController productItemController = TextEditingController();
+  TextEditingController productItemCountController = TextEditingController();
   TextEditingController motorBrandNameController = TextEditingController();
 
   List<String> teamMembersName = [];
@@ -142,14 +146,13 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                 if (needSmartHome == 'Yes') wifiAndRouterDetails(context),
                 if (needSmartHome == 'Yes') serverDetails(context),
                 if (needGate == 'Yes') gateDetails(context),
-                if (needSmartHome == 'Yes')
-                  light8ChannelDetailsModule1(context),
-                if (needSmartHome == 'Yes')
-                  light8ChannelDetailsModule2(context),
-                if (needSmartHome == 'Yes') light4ChannelDetails(context),
-                if (needSmartHome == 'Yes') light3ChannelDetails(context),
-                if (needSmartHome == 'Yes') heavyDetails(context),
-                if (needSmartHome == 'Yes') fanDetails(context),
+                if (needSmartHome == 'Yes') smartHomeProductDetails(context),
+                // if (needSmartHome == 'Yes') light8ChannelDetailsModule1(context),
+                // if (needSmartHome == 'Yes') light8ChannelDetailsModule2(context),
+                // if (needSmartHome == 'Yes') light4ChannelDetails(context),
+                // if (needSmartHome == 'Yes') light3ChannelDetails(context),
+                // if (needSmartHome == 'Yes') heavyDetails(context),
+                // if (needSmartHome == 'Yes') fanDetails(context),
                 if (needAjax == 'Yes') ajaxItemDetails(context),
                 crewMembersDetails(context),
                 otherDeviceDetails(context),
@@ -233,13 +236,14 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                         heavyBoardDetails: heavyBoardDetails.toList(),
                         fanBoardDetails: fanBoardDetails.toList(),
                         ajaxProductList: ajaxDeviceDetails,
+                        smartHomeProductList: productDetails,
                         needAjax: needAjax,
                         needGate: needGate,
                         ajaxUId: ajaxAccountUidController.text,
                         motorBrand: motorBrandNameController.text,
                       );
 
-                      final pdfFile = await data.generate(ajaxDeviceDetails);
+                      final pdfFile = await data.generate(ajaxDeviceDetails, productDetails);
                       final dir = await getExternalStorageDirectory();
                       final file = File(
                         "${dir!.path}/${customerNameController.text}.pdf",
@@ -944,6 +948,263 @@ class _InstallationDetailsState extends State<InstallationDetails> {
                                   final data = [
                                     ajaxDeviceDetails[index].productName,
                                     ajaxDeviceDetails[index].qty.toString(),
+                                  ];
+                                  return Padding(
+                                    padding: const EdgeInsets.all(0),
+                                    child: Table(
+                                      border: TableBorder.all(
+                                        color: Theme.of(context).primaryColor,
+                                        width: .1,
+                                      ),
+                                      children: [
+                                        createTableRow(data),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget smartHomeProductDetails(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: ExpansionTile(
+          collapsedBackgroundColor:
+          Theme.of(context).primaryColor.withOpacity(.2),
+          collapsedIconColor: Theme.of(context).primaryColor.withOpacity(.5),
+          title: Text(
+            "Product Details",
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+          leading: Icon(
+            Icons.production_quantity_limits_rounded,
+            color: Theme.of(context).primaryColor,
+          ),
+          //add icon
+          children: [
+            ///Team MembersList
+            Container(
+              height: size.height * 0.4,
+              decoration: BoxDecoration(
+                // color: Colors.blueGrey.withAlpha(50),
+                borderRadius: BorderRadius.circular(20),
+                // border: Border.all(color: Colors.black12, width: .5),
+              ),
+              child: Column(
+                children: [
+                  ///Add Team Members
+                  SizedBox(
+                    height: size.height * 0.01,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text(
+                        'Add Product Details',
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 16,
+                        ),
+                      ),
+                      CircleAvatar(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        radius: 20,
+                        child: Center(
+                          child: IconButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (_) => AlertDialog(
+                                  surfaceTintColor: Colors.transparent,
+                                  backgroundColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
+                                  title: Text(
+                                    'Products',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                  ),
+                                  content: SizedBox(
+                                    height: size.height * 0.3,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                      children: [
+                                        // TextFormField(
+                                        //   textCapitalization: TextCapitalization.sentences,
+                                        //   controller: ajaxItemController,
+                                        //   textInputAction: TextInputAction.next,
+                                        //   keyboardType: TextInputType.text,
+                                        //   maxLength: 200,
+                                        //   // enabled: isEnable,
+                                        //   style: TextStyle(
+                                        //       color: Theme.of(context).primaryColor,),
+                                        //   decoration: InputDecoration(
+                                        //     counterText: '',
+                                        //     prefixIcon: Icon(Icons.person),
+                                        //     hintText: "User ID",
+                                        //     labelText: 'User ID',
+                                        //     labelStyle: TextStyle(
+                                        //         color: Theme.of(context).primaryColor, ),
+                                        //     hintStyle: TextStyle(
+                                        //         color: Colors.black.withOpacity(0.6),
+                                        //         ),
+                                        //     border: myInputBorder(),
+                                        //     enabledBorder: myInputBorder(),
+                                        //     focusedBorder: myFocusBorder(),
+                                        //     // disabledBorder: myDisabledBorder(),
+                                        //   ),
+                                        //   // validator: validator,
+                                        //   // onTap: onTap,
+                                        // ),
+                                        CustomTextField(
+                                          controller: productItemController,
+                                          textInputType: TextInputType.text,
+                                          textInputAction: TextInputAction.next,
+                                          hintName: 'Product Name',
+                                          icon: Icon(
+                                            Icons.person_2,
+                                            color:
+                                            Theme.of(context).primaryColor,
+                                          ),
+                                          maxLength: 100,
+                                        ).textInputField(context),
+                                        SizedBox(height: size.height * 0.01),
+
+                                        CustomTextField(
+                                          controller: productItemCountController,
+                                          textInputType: TextInputType.number,
+                                          textInputAction: TextInputAction.done,
+                                          hintName: 'Quantity',
+                                          icon: Icon(Icons.format_list_numbered_rounded,
+                                            color: Theme.of(context)
+                                                .primaryColor,),
+                                          maxLength: 3,
+                                        ).textInputField(context),
+                                        SizedBox(height: size.height * 0.01),
+
+                                        ActionChip(
+                                          surfaceTintColor: Colors.transparent,
+                                          backgroundColor: Theme.of(context)
+                                              .scaffoldBackgroundColor,
+                                          onPressed: () {
+                                            if (productItemController
+                                                .text.isNotEmpty &&
+                                                productItemCountController
+                                                    .text.isNotEmpty) {
+                                              productDetails.addAll({
+                                                ProductListModel(
+                                                  productName:
+                                                  productItemController.text,
+                                                  qty: int.parse(
+                                                    productItemCountController
+                                                        .text,
+                                                  ),
+                                                ),
+                                              });
+                                              Navigator.pop(context);
+
+                                              productItemCountController.clear();
+                                              productItemController.clear();
+
+                                              log(productDetails.toString());
+                                            } else {
+                                              CustomSnackBar.showErrorSnackbar(
+                                                message: 'This field is empty',
+                                                context: context,
+                                              );
+                                            }
+                                            setState(() {});
+                                          },
+                                          label: Text(
+                                            'Add',
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                              fontSize: 18,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                            icon: Icon(
+                              Icons.add,
+                              size: 20,
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  Divider(
+                    endIndent: 1,
+                    indent: 1,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  SizedBox(
+                    height: size.height * 0.3,
+                    child: Container(
+                      // padding: const EdgeInsets.all(20.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Theme.of(context).primaryColor.withOpacity(.1),
+                      ),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                tableHeading(150, 'Items', true),
+                                tableHeading(130, 'Quantity', true),
+                              ],
+                            ),
+
+                            /// TABLE CONTENT
+                            SizedBox(
+                              // margin: const EdgeInsets.only(top: 3),
+                              height: 160,
+                              width: double.infinity,
+                              // decoration: BoxDecoration(
+                              //   // borderRadius: BorderRadius.circular(20),
+                              //   color: CupertinoColors.systemGrey
+                              //       .withOpacity(0.4),
+                              // ),
+                              child: ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                physics: const BouncingScrollPhysics(),
+                                itemCount: productDetails.length,
+                                itemBuilder: (BuildContext context, index) {
+                                  final data = [
+                                    productDetails[index].productName,
+                                    productDetails[index].qty.toString(),
                                   ];
                                   return Padding(
                                     padding: const EdgeInsets.all(0),
@@ -3898,4 +4159,30 @@ class AjaxListModel {
         "product Name": productName,
         "Qty": qty,
       };
+}
+
+class ProductListModel {
+  String productName;
+  int qty;
+
+  ProductListModel({
+    required this.productName,
+    required this.qty,
+  });
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return 'product : $productName, qty : $qty';
+  }
+
+  factory ProductListModel.fromJson(Map<String, dynamic> json) => ProductListModel(
+    productName: json["product Name"],
+    qty: json["Qty"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "product Name": productName,
+    "Qty": qty,
+  };
 }

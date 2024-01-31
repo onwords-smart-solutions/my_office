@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -52,6 +51,18 @@ class InvAndQtnPdf {
     var paidImage = pw.MemoryImage(
       (await rootBundle.load('assets/paid.png')).buffer.asUint8List(),
     );
+    var slidingImage = pw.MemoryImage(
+      (await rootBundle.load('assets/images/pdf_sliding_gate.png')).buffer.asUint8List(),
+    );
+    var swingImage = pw.MemoryImage(
+      (await rootBundle.load('assets/images/pdf_swing_gate.png')).buffer.asUint8List(),
+    );
+    var slidingDetailImage = pw.MemoryImage(
+      (await rootBundle.load('assets/images/pdf_sliding_gate_details.png')).buffer.asUint8List(),
+    );
+    var swingDetailImage = pw.MemoryImage(
+      (await rootBundle.load('assets/images/pdf_swing_gate_details.png')).buffer.asUint8List(),
+    );
     final qrImage = pw.MemoryImage(pic);
 
     pdf.addPage(
@@ -92,8 +103,8 @@ class InvAndQtnPdf {
           ),
           SizedBox(height: 0.3 * PdfPageFormat.cm),
           Divider(),
+          buildGateDetails(clientModel, slidingImage,swingImage,slidingDetailImage, swingDetailImage),
           buildTermsAndConditions(clientModel),
-          buildGateDetails(clientModel),
         ],
         footer: (context) => buildFooter(clientModel, needGst),
       ),
@@ -483,7 +494,13 @@ class InvAndQtnPdf {
         ],
       );
 
-  Widget buildGateDetails(InvoiceGeneratorModel gateDetails) =>
+  Widget buildGateDetails(
+      InvoiceGeneratorModel gateDetails,
+      MemoryImage slidingImage,
+      MemoryImage swingImage,
+      MemoryImage slidingDetailImage,
+      MemoryImage swingDetailImage,
+      ) =>
   Column(
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -502,6 +519,26 @@ class InvAndQtnPdf {
                   false,
                 ),
                 SizedBox(height: 10),
+                Container(
+                  height: 150,
+                  child:  pw.Stack(
+                    children: [
+                      pw.Align(
+                        alignment: Alignment.centerLeft,
+                        child: pw.Image(
+                          swingImage,
+                        ),
+                      ),
+                      pw.Align(
+                        alignment: Alignment.centerRight,
+                        child: pw.Image(
+                          swingDetailImage,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 30),
                 buildBodyText('Sliding Gate', true),
                 SizedBox(height: 5),
                 buildBodyText(
@@ -512,6 +549,28 @@ class InvAndQtnPdf {
                   false,
                 ),
                 SizedBox(height: 10),
+                Container(
+                  height: 160,
+                  child:  pw.Stack(
+                    children: [
+                     pw.Align(
+                       alignment: Alignment.centerLeft,
+                       child:  pw.Image(
+                         slidingImage,
+                       ),
+                     ),
+                     Container(
+                       height: 100,
+                       child:  pw.Align(
+                         alignment: Alignment.centerRight,
+                         child:  pw.Image(
+                           slidingDetailImage,
+                         ),
+                       ),
+                     ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ) : SizedBox.shrink(),

@@ -35,6 +35,7 @@ class InstallationDetailsScreen {
   late List<String> channel4List;
   late List<String> channel3List;
   late List ajaxProductList;
+  late List smartHomeProductList;
   late List heavyBoardDetails;
   late List fanBoardDetails;
   late String ajaxUId;
@@ -103,10 +104,11 @@ class InstallationDetailsScreen {
     required this.fanBoardDetails,
     required this.ajaxUId,
     required this.ajaxProductList,
+    required this.smartHomeProductList,
     required this.motorBrand,
   });
 
-  Future<File> generate(List<AjaxListModel> productDetailsModel,) async {
+  Future<File> generate(List<AjaxListModel> productDetailsModel, List<ProductListModel> productDetails,) async {
     final pdf = Document();
 
     var assetImage = pw.MemoryImage(
@@ -131,7 +133,8 @@ class InstallationDetailsScreen {
           if(needSmartHome == 'Yes') heavyBoardDetails.isEmpty ? SizedBox() : heavyBoard(),
           SizedBox(height: 1 * PdfPageFormat.mm),
           if(needSmartHome == 'Yes') fanBoardDetails.isEmpty ? SizedBox() : fanBoard(),
-          if(needAjax == "Yes") productTable(productDetailsModel),
+          if(needSmartHome == 'Yes') smartHomeProductTable(productDetails),
+          if(needAjax == "Yes") ajaxProductTable(productDetailsModel),
           if(needGate == "Yes") gateChannelOutputs(),
           SizedBox(height: 1 * PdfPageFormat.mm),
           deviceList.isEmpty ? SizedBox() : deviceNameList(),
@@ -500,8 +503,8 @@ class InstallationDetailsScreen {
   ],);
 
 
-  Widget productTable(List<AjaxListModel> productDetailsModel) {
-    final headers = ['Products Name', 'Quantity',];
+  Widget ajaxProductTable(List<AjaxListModel> productDetailsModel) {
+    final headers = ['Ajax Products Name', 'Quantity',];
 
     final data = productDetailsModel.map((item) {
       return [
@@ -517,8 +520,51 @@ class InstallationDetailsScreen {
       border: const TableBorder(
       ),
       headerStyle: TextStyle(
-        fontWeight: FontWeight.bold, fontSize: 10, color: PdfColors.white,),
-      headerDecoration: const BoxDecoration(color: PdfColors.red700),
+        fontWeight: FontWeight.bold, fontSize: 12, color: PdfColors.white,),
+      headerDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: PdfColors.red500,
+      ),
+      cellHeight: 25,
+      columnWidths: {
+        0: const FixedColumnWidth(230.0), // fixed to 100 width
+        1: const FlexColumnWidth(50.0),
+        2: const FixedColumnWidth(80.0), //fixed to 100 width
+        3: const FixedColumnWidth(80.0), //fixed to 100 width
+      },
+      cellAlignments: {
+        0: Alignment.centerLeft,
+        1: Alignment.centerRight,
+        2: Alignment.centerRight,
+        3: Alignment.centerRight,
+        4: Alignment.centerRight,
+        5: Alignment.centerRight,
+      },
+      oddRowDecoration: const BoxDecoration(color: PdfColors.red50),);
+  }
+
+  Widget smartHomeProductTable(List<ProductListModel> productDetails) {
+    final headers = ['Smart Home Products Name', 'Quantity',];
+
+    final data = productDetails.map((item) {
+      return [
+        item.productName,
+        item.qty,
+
+      ];
+    }).toList();
+    return  TableHelper.fromTextArray(
+      headers: headers,
+      data: data,
+      cellStyle: const TextStyle(fontSize: 9),
+      border: const TableBorder(
+      ),
+      headerStyle: TextStyle(
+        fontWeight: FontWeight.bold, fontSize: 12, color: PdfColors.white,),
+      headerDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: PdfColors.red500,
+      ),
       cellHeight: 25,
       columnWidths: {
         0: const FixedColumnWidth(230.0), // fixed to 100 width

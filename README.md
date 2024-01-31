@@ -82,7 +82,7 @@ As, I have mentioned above this project is structured with Clean architecture pr
 
 ### Version history and Releases
 
-* Android : 4.0.5+20 - Modified Invoice generator with additional data.
+* Android : 4.0.6+22 - Modified Invoice generator and Installation pdf.
 * iOS : 2.1.7. 
 
 
