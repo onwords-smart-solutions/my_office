@@ -28,4 +28,6 @@ abstract class HomeFbDataSource {
   Future<Map<Object?, Object?>> getEmployeeOfWeek();
 
   Future<Map<Object?, Object?>> getAllStaffDetails(String uid);
+
+  Future<UserEntity?> salesData(String userId);
 }

@@ -42,3 +42,42 @@ class CustomAlerts {
     );
   }
 }
+
+class CustomPRAlerts {
+  static void showAlertDialog({
+    required BuildContext context,
+    required String title,
+    required Widget content,
+    required Widget actionButton,
+    Widget? cancelButton,
+    required bool barrierDismissible,
+  }) {
+    showDialog(
+      barrierDismissible: barrierDismissible,
+      context: context,
+      builder: (ctx) {
+        return PopScope(
+         canPop: false,
+          child: AlertDialog(
+            surfaceTintColor: Colors.transparent,
+            title: Center(
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.purpleAccent,
+                ),
+              ),
+            ),
+            content: content,
+            actions: [
+              if (cancelButton != null) cancelButton,
+              actionButton,
+            ],
+          ),
+        );
+      },
+    );
+  }
+}

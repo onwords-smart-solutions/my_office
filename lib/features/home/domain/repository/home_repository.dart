@@ -29,4 +29,6 @@ abstract class HomeRepository{
   Future<Map<Object?, Object?>> checkAppVersion();
 
   Future<EmployeeOfWeekData> getEmployeeOfTheWeek();
+
+  Future<UserEntity?> salesData(String userId);
 }

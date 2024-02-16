@@ -62,6 +62,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   void initState() {
     final context = this.context;
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    final user = Provider.of<AuthenticationProvider>(context, listen: false);
+    homeRepository.salesData(user.user!.uid);
     _getInfoItemDetails();
     _motivationIndex = homeProvider.getRandomNumber();
     _checkAppVersion();
@@ -72,6 +74,11 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     _notificationService.initFCMNotifications();
     _setNotification();
     _setupFCMListener(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if(user.user!.dep == 'PR'){
+        buildPRDashboard();
+      }
+    });
     super.initState();
   }
 
@@ -279,7 +286,51 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     );
   }
 
-  // FUNCTIONS
+  //FUNCTIONS
+
+  //PR sale pop up dialog
+  buildPRDashboard() async {
+    final context = this.context;
+    final user = Provider.of<AuthenticationProvider>(context, listen: false);
+    final salesData = await homeRepository.salesData(user.user!.uid);
+    return CustomPRAlerts.showAlertDialog(
+              context: context,
+              title: 'Sale status',
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Your sale target - ${salesData?.saleTarget}',
+                    style: TextStyle(
+                         fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                    ),
+                  ),
+                  Text(
+                    'Sale achieved - ${salesData?.saleAchieved}' ,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+              actionButton: FilledButton.tonal(
+                onPressed: () =>
+                    Navigator.of(context).pop(),
+                child: Text(
+                  'Ok',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+              ),
+              barrierDismissible: true,
+          );
+  }
+
+  //Getting staff access
   _getStaffAccess() async {
     BuildContext context = this.context;
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
@@ -298,7 +349,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     }
   }
 
-  //CHECKING INTERNET CONNECTIVITY
+  //Checking internet connectivity
   Future<void> _getNetworkStatus() async {
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.wifi ||
@@ -327,6 +378,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     _getConnectivityStream();
   }
 
+  //Checking connectivity status
   _getConnectivityStream() {
     subscription = Connectivity()
         .onConnectivityChanged
@@ -362,6 +414,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     });
   }
 
+  //Setting FCM messages
   void _setupFCMListener(BuildContext context) {
     FirebaseMessaging.onMessage.listen((message) {
       log('Message is ${message.notification!.body.toString()}');
@@ -394,7 +447,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     });
   }
 
-  //SETTING NOTIFICATION FOR REFRESHMENT
+  //Setting notification for refreshment
   _setNotification() async {
     final pref = await SharedPreferences.getInstance();
     final isNotificationSet = pref.getString('NotificationSetTime') ?? '';
@@ -403,7 +456,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     );
   }
 
-  //CHECKING APP VERSION
+  //Checking app version
   Future<void> _checkAppVersion() async {
     try {
       final data = await homeRepository.checkAppVersion();
@@ -421,7 +474,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     }
   }
 
-  //info details functions
+  //Info details functions
   _getInfoItemDetails() async {
     final context = this.context;
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);

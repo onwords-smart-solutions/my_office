@@ -8,9 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:my_office/core/utilities/constants/app_color.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_app_button.dart';
-import 'package:my_office/core/utilities/custom_widgets/custom_text_field.dart';
 import 'package:my_office/features/auth/presentation/provider/authentication_provider.dart';
 import 'package:my_office/features/invoice_generator/data/data_source/invoice_generator_fb_data_source.dart';
 import 'package:my_office/features/invoice_generator/data/data_source/invoice_generator_fb_data_source_impl.dart';
@@ -912,25 +910,27 @@ class _InvoiceGeneratorPreviewScreenState
                                 );
 
                                 var invoice = {
-                                  'Customer_name': clientModel.name,
-                                  'Status': 'Processing',
-                                  'TimeStamp': myTimeStamp.seconds,
-                                  'CreatedBy': staffInfo!.email,
-                                  'mobile_number': clientModel.phone,
-                                  'document_link': downloadUrl,
-                                  'installation_document_link':
-                                      downloadUrlInstallation,
+                                  'customerName': clientModel.name,
+                                  'mobileNumber': clientModel.phone,
+                                  'createdBy': staffInfo!.name,
+                                  'invoiceAmount': grandTotal.toInt().toDouble(),
+                                  'status': 'Processing',
+                                  'timeStamp': myTimeStamp.seconds,
+                                  'documentLink': downloadUrl,
+                                  'installationDocumentLink': downloadUrlInstallation,
                                 };
                                 var proformaInvoice = {
-                                  'Customer_name': clientModel.name,
+                                  'customerName': clientModel.name,
                                   'id': "#$id",
-                                  'Status': 'Processing',
-                                  'TimeStamp': myTimeStamp.seconds,
-                                  'CreatedBy': staffInfo!.email,
-                                  'mobile_number': clientModel.phone,
-                                  'document_link': downloadUrl,
-                                  'installation_document_link':
-                                      downloadUrlInstallation,
+                                  'mobileNumber': clientModel.phone,
+                                  'createdBy': staffInfo!.name,
+                                  'totalAmount': grandTotal.toInt().toDouble(),
+                                  'advancedAmount': widget.advanceAmount,
+                                  'balanceAmount': finalTotal.toInt().toDouble(),
+                                  'status': 'Processing',
+                                  'timeStamp': myTimeStamp.seconds,
+                                  'documentLink': downloadUrl,
+                                  'installationDocumentLink': downloadUrlInstallation,
                                 };
 
                                 void saveDocument(
@@ -977,12 +977,13 @@ class _InvoiceGeneratorPreviewScreenState
                               );
 
                               var quotation = {
-                                'Customer_name': clientModel.name,
-                                'Status': 'Processing',
-                                'TimeStamp': myTimeStamp.seconds,
-                                'CreatedBy': staffInfo!.email,
-                                'mobile_number': clientModel.phone,
-                                'document_link': downloadUrl,
+                                'customerName': clientModel.name,
+                                'mobileNumber': clientModel.phone,
+                                'createdBy': staffInfo!.name,
+                                'quoteAmount' : grandTotal.toInt().toDouble(),
+                                'status': 'Processing',
+                                'timeStamp': myTimeStamp.seconds,
+                                'documentLink': downloadUrl,
                               };
 
                               Future<void> createQuotation(

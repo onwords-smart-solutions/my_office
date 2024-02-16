@@ -17,15 +17,15 @@ class LeadsAchievedViewModel{
   Future<void> sendLeadsAchievedNotification(String title, String body, String name) async {
     List<String> members = [
       '58JIRnAbechEMJl8edlLvRzHcW52',
-      'Ae6DcpP2XmbtEf88OA8oSHQVpFB2',
-      'Vhbt8jIAfiaV1HxuWERLqJh7dbj2',
+      // 'Ae6DcpP2XmbtEf88OA8oSHQVpFB2',
+      // 'Vhbt8jIAfiaV1HxuWERLqJh7dbj2',
     ];
     final mgmt = await leadsAchievedRepository.getManagementList();
     final pr = await leadsAchievedRepository.allPr();
 
     List<String> names = [];
-    names.addAll(mgmt);
-    names.addAll(pr);
+    // names.addAll(mgmt);
+    // names.addAll(pr);
 
     final ids = await _firebaseService.getUserId(userNames: names);
     members.addAll(ids);

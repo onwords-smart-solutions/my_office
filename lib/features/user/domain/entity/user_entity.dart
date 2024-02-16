@@ -7,6 +7,8 @@ class UserEntity {
   int mobile;
   String url;
   String uniqueId;
+  String? saleAchieved;
+  String? saleTarget;
 
   UserEntity({
     required this.uid,
@@ -17,5 +19,7 @@ class UserEntity {
     required this.mobile,
     required this.url,
     required this.uniqueId,
+    this.saleAchieved,
+    this.saleTarget,
   });
 }
