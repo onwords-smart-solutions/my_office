@@ -82,7 +82,7 @@ As, I have mentioned above this project is structured with Clean architecture pr
 
 ### Version history and Releases
 
-* Android : 4.0.7+23 - Added sale status for PR and added amount details of Invoice generator in database.
+* Android : 4.0.8+24 - Minor leads fix.
 * iOS : 2.1.7. 
 
 

@@ -292,6 +292,18 @@ class _CustomerItemState extends State<CustomerItem>
               nobColor: nobColor,
               size: size,
             ),
+            buildField(
+              field: fields[011],
+              value: values[011],
+              nobColor: nobColor,
+              size: size,
+            ),
+            buildField(
+              field: fields[012],
+              value: values[012],
+              nobColor: nobColor,
+              size: size,
+            ),
           ],
         ),
       ),

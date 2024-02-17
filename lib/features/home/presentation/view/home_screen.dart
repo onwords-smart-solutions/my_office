@@ -463,8 +463,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       final updatedVersion = data['versionNumber'];
       final updates = data['updates'].toString();
       final restrictApp = data['restrictApp'];
-      if (AppVersion.androidAppDbVersion != updatedVersion) {
-        _showUpdateAppDialog(updates);
+      final forceUpdateApp = data['androidForceUpdate'];
+      if (AppVersion.androidAppDbVersion != updatedVersion &&
+          AppVersion.androidForceUpdate == forceUpdateApp) {
+          _showUpdateAppDialog(updates);
       }
       if (AppVersion.restrictAndroidApp == restrictApp) {
         _showAppRestrictDialog();
@@ -570,7 +572,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
               ),
             ),
             content: Text(
-              "Kindly bare with this alert, App team is fixing the bug, Until then you are not able to access the app.",
+              "Kindly bare with this alert, App team is working on the solution, Until then you are not able to access the app.",
               style: TextStyle(
                 fontWeight: FontWeight.w500,
                 color: Theme.of(context).primaryColor,

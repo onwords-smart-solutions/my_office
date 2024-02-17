@@ -164,6 +164,13 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
             staff.dep.toLowerCase() == 'app') {
           allAccess.add(menuItems);
         }
+        // //restricting pr limited access to Solar account
+        // else if(staff.dep.toLowerCase() == 'pr' && staff.uid == 'ajckJI82Y4Uk6780vpSMmyo3ylr2'){
+        //   if(menuItems.title == MenuTitle.searchLead ||
+        //       menuItems.title == MenuTitle.createInvoice){
+        //     allAccess.add(menuItems);
+        //   }
+        // }
         //adding for pr access
         else if (staff.dep.toLowerCase() == 'pr') {
           if (menuItems.title == MenuTitle.workEntry ||

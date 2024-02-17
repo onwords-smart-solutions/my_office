@@ -338,6 +338,8 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
               endIndent: 5.0,
               color: Theme.of(context).primaryColor.withOpacity(.4),
             ),
+            widget.staffInfo.uid == 'ajckJI82Y4Uk6780vpSMmyo3ylr2' ?
+                const SizedBox.shrink() :
             buildDropDown(),
 
             IconButton(
