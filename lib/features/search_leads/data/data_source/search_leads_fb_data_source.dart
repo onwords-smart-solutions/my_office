@@ -23,7 +23,11 @@ abstract class SearchLeadsFbDataSource {
 
   Future<void> updateNotes(String path, Map<String, dynamic> data);
 
-  Future<http.Response> postFeedback(Map<String, dynamic> body, String bearerToken, String customerWhatsAppNumber);
+  Future<http.Response> postFeedback(Map<String, dynamic> body,
+      String bearerToken, String customerWhatsAppNumber);
 
+  Future<void> getBucketList();
+
+  Future <void> updateBucketList(String mobile, String user, String oldUser);
 }
 

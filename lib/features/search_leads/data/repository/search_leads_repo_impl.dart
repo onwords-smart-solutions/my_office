@@ -215,4 +215,14 @@ class SearchLeadsRepoImpl implements SearchLeadsRepository {
       throw Exception('Failed to send feedback. Status code: ${response.statusCode}');
     }
   }
+
+  @override
+  Future<void> getBucketList() {
+    return searchLeadsFbDataSource.getBucketList();
+  }
+
+  @override
+  Future<void> updateBucketList(String mobile, String user, String oldUser) {
+    return searchLeadsFbDataSource.updateBucketList(mobile, user, oldUser);
+  }
 }

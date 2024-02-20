@@ -54,9 +54,8 @@ class _InfoItemState extends State<InfoItem> {
 
       try {
         _pageController.animateToPage(
-          currentIndex,
-          duration: const Duration(milliseconds: 800),
-          curve: Curves.easeInOut,
+          currentIndex, duration: const Duration(milliseconds: 1000),
+          curve: Curves.easeOut,
         );
       } catch (e, s) {
         print("Error: $e");

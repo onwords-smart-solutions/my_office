@@ -759,6 +759,11 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
         customer['phone_number'].toString(),
         staff,
       );
+      await searchLeadsRepository.updateBucketList(
+        customer['phone_number'].toString(),
+        staff,
+        selectedStaff,
+      );
 
       final index = allCustomer.indexWhere(
         (element) => element['phone_number'] == customer['phone_number'],
