@@ -760,9 +760,9 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
         staff,
       );
       await searchLeadsRepository.updateBucketList(
-        customer['phone_number'].toString(),
-        staff,
-        selectedStaff,
+        mobile: customer['phone_number'].toString(),
+        user: staff,
+        oldUser: selectedStaff,
       );
 
       final index = allCustomer.indexWhere(

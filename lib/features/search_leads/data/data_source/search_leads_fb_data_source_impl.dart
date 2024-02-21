@@ -107,25 +107,16 @@ class SearchLeadsFbDataSourceImpl implements SearchLeadsFbDataSource {
   }
 
   @override
-  Future<void> getBucketList() async {
-    ref.child('Bucket').once().then((value) {
-      if (value.snapshot.exists) {
-        for (var user in value.snapshot.children) {
-          for (var bucket in user.children) {
-            final bucketData = bucket.value as Map<Object?, Object?>;
-            log('Bucket data is $bucketData');
-          }
-        }
-      }
-    });
-  }
-
-  @override
-  Future <void> updateBucketList(String mobile, String user, String oldUser) async {
+  Future <void> updateBucketList({required String mobile, required String user, required String oldUser}) async {
     var bucketName = await _determineBucketName(user);
-    log('Bucket name is $bucketName');
+    String oldBucketName = await _determineOldBucketName(mobile, oldUser);
+
+    if (oldBucketName.isNotEmpty) {
+      await removeDataAndUpdateCounter(oldBucketName, oldUser, mobile);
+    }
     try{
       final size = '${bucketName.values.first+1}'.padLeft(2, '0');
+      log('Bucket name : $bucketName Bucket size : $size');
       await ref
           .child('Bucket/$user/${bucketName.keys.first}/$size')
           .set(mobile);
@@ -160,10 +151,80 @@ class SearchLeadsFbDataSourceImpl implements SearchLeadsFbDataSource {
      if(counter > 0 && bucketName.isEmpty){
        final num ='${counter+1}';
        bucketName = 'Bucket${num.padLeft(2,'0')}';
-     } else if(bucketName.isEmpty){
-       bucketName = 'Bucket01';
      }
     }
+    if(bucketName.isEmpty){
+      bucketName = 'Bucket01';
+    }
     return {bucketName:currentBucketSize};
+  }
+
+  Future<void> removeDataAndUpdateCounter(String oldBucketName, String oldUser, String mobile) async {
+    // 1. Find and Remove Mobile Number
+    final oldDataRef = ref.child('Bucket/$oldUser/$oldBucketName');
+    final oldDataSnapshot = await oldDataRef.get();
+
+    if (oldDataSnapshot.exists) {
+      String? removedIndex;
+      for (final child in oldDataSnapshot.children) {
+        if (child.value == mobile) {
+          oldDataRef.child(child.key!).remove();
+          removedIndex = child.key;
+          break;
+        }
+      }
+
+      // 2. Rearrange Indices (if necessary)
+      if (removedIndex != null) {
+        await rearrangeBucketIndices(oldBucketName, oldUser, removedIndex);
+      }
+
+      // 3. Update Counter
+      final counterPath = 'Bucket/$oldUser/Counter/$oldBucketName';
+      final counterSnapshot = await ref.child(counterPath).get();
+
+      if (counterSnapshot.exists) {
+        final currentCount = counterSnapshot.value as int;
+        if(currentCount == 1){
+          await ref.child(counterPath).remove();
+        }else{
+          await ref.child(counterPath).set(currentCount - 1);
+        }
+      }
+    }
+  }
+
+  Future<String> _determineOldBucketName(String mobile, String oldUser) async {
+    final bucketSnapshot = await ref.child('Bucket/$oldUser').get();
+    if (bucketSnapshot.exists) {
+      for (final bucketChild in bucketSnapshot.children) { // Iterate over buckets
+        final bucketData = bucketChild.value as Map;
+
+        if (bucketData.containsValue(mobile)) {
+          return bucketChild.key ?? ''; // Return bucket name if found
+        }
+      }
+    }
+    return ''; // Mobile number not found in any of oldUser's buckets
+  }
+
+    // Helper for Rearrangement
+  Future<void> rearrangeBucketIndices(
+      String bucketName,
+      String user,
+      String removedIndex
+      ) async {
+    int indexToShift = int.parse(removedIndex) + 1;
+    final bucketRef = ref.child('Bucket/$user/$bucketName');
+    await bucketRef.once().then((value) async {
+      if(value.snapshot.exists){
+       await bucketRef.remove();
+       int counter = 1;
+       for(final item in value.snapshot.children){
+         await bucketRef.child(counter.toString().padLeft(2, '0')).set(item.value);
+         counter+= 1;
+       }
+      }
+    });
   }
 }

@@ -26,7 +26,5 @@ abstract class SearchLeadsRepository {
 
   Future<void> sendFeedback(Map<String, dynamic> body, String bearerToken, String customerWhatsAppNumber);
 
-  Future<void> getBucketList();
-
-  Future <void> updateBucketList(String mobile, String user,String oldUser);
+  Future <void> updateBucketList({required String mobile, required String user, required String oldUser});
 }

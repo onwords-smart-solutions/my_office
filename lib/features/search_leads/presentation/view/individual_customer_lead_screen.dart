@@ -128,7 +128,6 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
       dropDownValue = widget.customerStatus;
       super.initState();
     }
-    searchLeadsRepository.getBucketList();
     leadName = widget.leadName;
   }
 
@@ -632,9 +631,9 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           leadName,
         );
         await searchLeadsRepository.updateBucketList(
-          widget.customerInfo['phone_number'].toString(),
-          leadName,
-          widget.customerInfo['LeadIncharge'].toString(),
+         mobile: widget.customerInfo['phone_number'].toString(),
+          user: leadName,
+          oldUser: widget.customerInfo['LeadIncharge'].toString(),
         );
       } catch (e) {
         Exception('Error caught while changing lead names!! $e');
