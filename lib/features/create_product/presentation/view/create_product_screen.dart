@@ -74,21 +74,19 @@ class _CreateNewProductState extends State<CreateNewProduct> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: const Color(0xffDDE6E8),
       appBar: AppBar(
         centerTitle: true,
-        iconTheme: const IconThemeData(
-          color: Colors.black, //change your color here
-        ),
         title: const Text(
-          'New Products',
+          'Create New Product',
           style: TextStyle(
-            color: Colors.black,
-            fontSize: 23,
-            fontWeight: FontWeight.w700,
+            fontSize: 25,
+            fontWeight: FontWeight.w500,
           ),
         ),
-        backgroundColor: const Color(0xffDDE6E8),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         elevation: 0,
       ),
       body: Form(
@@ -182,16 +180,17 @@ class _CreateNewProductState extends State<CreateNewProduct> {
                           margin: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
-                            color: CupertinoColors.systemGrey.withOpacity(0.4),
+                            color: Theme.of(context).primaryColor.withOpacity(.2),
                           ),
-                          child: const SizedBox(
+                          child: SizedBox(
                             height: 50,
                             child: Center(
                               child: Text(
                                 'Create Product',
                                 style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w700,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w500,
+                                  color: Theme.of(context).primaryColor,
                                 ),
                               ),
                             ),
@@ -222,9 +221,9 @@ class _CreateNewProductState extends State<CreateNewProduct> {
       children: [
         Text(
           '    $name',
-          style: const TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w700,
+          style: TextStyle(
+            color: Theme.of(context).primaryColor,
+            fontWeight: FontWeight.w500,
             fontSize: 17,
           ),
         ),
@@ -233,21 +232,21 @@ class _CreateNewProductState extends State<CreateNewProduct> {
           margin: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            color: CupertinoColors.systemGrey.withOpacity(0.4),
+            color: Theme.of(context).primaryColor.withOpacity(.2),
           ),
           child: TextFormField(
             textInputAction: textInputAction,
             keyboardType: textInputType,
             controller: controller,
-            style: const TextStyle(color: Colors.black),
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(8),
               border: InputBorder.none,
               hintText: name,
-              hintStyle: const TextStyle(
+              hintStyle: TextStyle(
                 fontSize: 16,
-                color: Colors.black54,
+                color: Theme.of(context).primaryColor.withOpacity(.4),
               ),
+              errorStyle: const TextStyle(color: Colors.red,),
             ),
             validator: (value) {
               if (value!.isEmpty) {

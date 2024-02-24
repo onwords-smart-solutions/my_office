@@ -65,7 +65,7 @@ class _CustomerItemState extends State<CustomerItem>
       }
     }
 
-    Color tileColor = Colors.white;
+    Color tileColor = Theme.of(context).primaryColor.withOpacity(.1);
     Color nobColor = AppColor.primaryColor;
     final size = MediaQuery.of(context).size;
     List<String> fields = [
@@ -77,6 +77,8 @@ class _CustomerItemState extends State<CustomerItem>
       'Created date',
       'Lead in charge',
       'Status',
+      'Gate',
+      'Secondary number',
       'Note',
       'Note updated',
       'Reminder date',
@@ -90,6 +92,8 @@ class _CustomerItemState extends State<CustomerItem>
       widget.customerInfo['created_date'].toString(),
       widget.customerInfo['LeadIncharge'].toString(),
       widget.customerInfo['customer_state'].toString(),
+      widget.customerInfo['gate_type'].toString(),
+      widget.customerInfo['work_phone_number'].toString(),
       lastNote,
       lastNoteDate,
       fullReminder,
@@ -104,56 +108,56 @@ class _CustomerItemState extends State<CustomerItem>
             .toString()
             .toLowerCase()
             .contains('onwords')) {
-      tileColor = const Color(0xffF55F5F);
-      nobColor = Colors.white60;
+      tileColor = const Color(0xffBF3131);
+      nobColor = Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ? Colors.black26 : Colors.white70;
     } else if (widget.customerInfo['customer_state']
         .toString()
         .toLowerCase()
         .contains('following up')) {
-      tileColor = const Color(0xff91F291);
-      nobColor = Colors.white60;
+      tileColor = const Color(0xff4F6F52);
+      nobColor = Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ? Colors.black26 : Colors.white70;
     } else if (widget.customerInfo['customer_state']
         .toString()
         .toLowerCase()
         .contains('delayed')) {
-      tileColor = const Color(0xffFFA500);
-      nobColor = Colors.white60;
+      tileColor = const Color(0xffE36414);
+      nobColor = Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ? Colors.black26 : Colors.white70;
     } else if (widget.customerInfo['customer_state']
         .toString()
         .toLowerCase()
         .contains('advanced')) {
-      tileColor = const Color(0xfff1f7b5);
-      nobColor = Colors.black38;
+      tileColor = const Color(0xff4B527E);
+      nobColor = Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ? Colors.black26 : Colors.white70;
     } else if (widget.customerInfo['customer_state']
         .toString()
         .toLowerCase()
         .contains('b2b')) {
-      tileColor = const Color(0xff9ea1d4);
-      nobColor = Colors.white;
+      tileColor = const Color(0xff994D1C);
+      nobColor = Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ? Colors.black26 : Colors.white70;
     } else if (widget.customerInfo['customer_state']
         .toString()
         .toLowerCase()
         .contains('under construction')) {
-      tileColor = const Color(0xffa8d1d1);
-      nobColor = Colors.black38;
+      tileColor = const Color(0xff706233);
+      nobColor = Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ? Colors.black26 : Colors.white70;
     } else if (widget.customerInfo['customer_state']
         .toString()
         .toLowerCase()
         .contains('installation completed')) {
-      tileColor = const Color(0xff16f0b6);
-      nobColor = Colors.white70;
+      tileColor = const Color(0xff9D44C0);
+      nobColor = Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ? Colors.black26 : Colors.white70;
     } else if (widget.customerInfo['customer_state']
         .toString()
         .toLowerCase()
         .contains('product')) {
-      tileColor = const Color(0xfff3c8a3);
-      nobColor = Colors.white70;
+      tileColor = const Color(0xffC23373);
+      nobColor = Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ? Colors.black26 : Colors.white70;
     } else if (widget.customerInfo['customer_state']
         .toString()
         .toLowerCase()
         .contains('others')) {
-      tileColor = const Color(0xffd1ed8e);
-      nobColor = Colors.white70;
+      tileColor = const Color(0xff61677A);
+      nobColor = Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ? Colors.black26 : Colors.white70;
     } else if (widget.customerInfo['customer_state']
             .toString()
             .toLowerCase()
@@ -162,32 +166,32 @@ class _CustomerItemState extends State<CustomerItem>
             .toString()
             .toLowerCase()
             .contains('hot lead'))) {
-      tileColor = const Color(0xff9681EB);
-      nobColor = Colors.white70;
+      tileColor = const Color(0xff7C73C0);
+      nobColor = Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ? Colors.black26 : Colors.white70;
     } else if (widget.customerInfo['customer_state']
         .toString()
         .toLowerCase()
         .contains('visited')) {
-      tileColor = const Color(0xffE966A0);
-      nobColor = Colors.white70;
+      tileColor = const Color(0xff1D5D9B);
+      nobColor = Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ? Colors.black26 : Colors.white70;
     } else if (widget.customerInfo['customer_state']
         .toString()
         .toLowerCase()
         .contains('need to visit')) {
       tileColor = const Color(0xffC38154);
-      nobColor = Colors.white70;
+      nobColor = Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ? Colors.black26 : Colors.white70;
     } else if (widget.customerInfo['customer_state']
         .toString()
         .toLowerCase()
         .contains('quotation')) {
-      tileColor = const Color(0xff62B6B7);
-      nobColor = Colors.white70;
+      tileColor = const Color(0xffA4907C);
+      nobColor = Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ? Colors.black26 : Colors.white70;
     } else if (widget.customerInfo['customer_state']
         .toString()
         .toLowerCase()
         .contains('new leads')) {
-      tileColor = const Color(0xff31C6D4);
-      nobColor = Colors.black26;
+      tileColor = const Color(0xffCD5C08);
+      nobColor = Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ? Colors.black26 : Colors.white70;
     }
     return GestureDetector(
       onTap: widget.isLeadChange
@@ -285,6 +289,18 @@ class _CustomerItemState extends State<CustomerItem>
             buildField(
               field: fields[010],
               value: values[010],
+              nobColor: nobColor,
+              size: size,
+            ),
+            buildField(
+              field: fields[011],
+              value: values[011],
+              nobColor: nobColor,
+              size: size,
+            ),
+            buildField(
+              field: fields[012],
+              value: values[012],
               nobColor: nobColor,
               size: size,
             ),

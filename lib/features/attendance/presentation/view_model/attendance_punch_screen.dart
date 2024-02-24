@@ -30,116 +30,114 @@ class AttendancePunchItem extends StatelessWidget {
       int.parse(formattedMinute),
     );
 
-    if (punchDetail.isProxy) {
-      icon = Icons.phone_android_rounded;
-    }
+      if (punchDetail.isProxy) {
+        icon = Icons.phone_android_rounded;
+      }
 
-    if (punchDetail.checkOutTime != null) {
-      endTime = punchDetail.checkOutTime!;
-    }
+      if (punchDetail.checkOutTime != null) {
+        endTime = punchDetail.checkOutTime!;
+      }
 
-    if (punchDetail.checkInTime == null) {
-      topContainerColor = Colors.grey;
-      status = 'Absent today';
-    } else if (punchDetail.checkInTime!
-        .difference(
-      DateTime(
-        punchDetail.checkInTime!.year,
-        punchDetail.checkInTime!.month,
-        punchDetail.checkInTime!.day,
-        int.parse(formattedHour),
-        int.parse(formattedMinute),
-      ),
-    )
-        .inMinutes >
-        20) {
-      topContainerColor = Colors.red.shade400;
-      status = 'Late by ${punchDetail.checkInTime!.difference(
-        DateTime(
-          punchDetail.checkInTime!.year,
-          punchDetail.checkInTime!.month,
-          punchDetail.checkInTime!.day,
-          int.parse(formattedHour),
-          int.parse(formattedMinute),
-        ),
-      ).inMinutes} mins';
-    }
-    else if (punchDetail.checkInTime!
-        .difference(
-      DateTime(
-        punchDetail.checkInTime!.year,
-        punchDetail.checkInTime!.month,
-        punchDetail.checkInTime!.day,
-        int.parse(formattedHour),
-        int.parse(formattedMinute),
-      ),
-    )
-        .inMinutes >
-        10 &&
-        punchInTime
-            .difference(
-          DateTime(
-            punchInTime.year,
-            punchInTime.month,
-            punchInTime.day,
-            int.parse(formattedHour),
-            int.parse(formattedMinute),
-          ).add(const Duration(minutes: 20)),
-        )
-            .inMinutes <=
-            0) {
-      topContainerColor = Colors.orangeAccent.shade400;
-      status = 'Late by ${punchDetail.checkInTime!.difference(
-        DateTime(
-          punchDetail.checkInTime!.year,
-          punchDetail.checkInTime!.month,
-          punchDetail.checkInTime!.day,
-          int.parse(formattedHour),
-          int.parse(formattedMinute),
-        ),
-      ).inMinutes} mins';
-    }
-    else if ( punchDetail.checkInTime!
-                .difference(
-                  DateTime(
-                    punchDetail.checkInTime!.year,
-                    punchDetail.checkInTime!.month,
-                    punchDetail.checkInTime!.day,
-                    int.parse(formattedHour),
-                    int.parse(formattedMinute),
-                  ),
-                )
-                .inMinutes >
-            0 &&
-       punchInTime
-                .difference(
-                  DateTime(
-                    punchInTime.year,
-                    punchInTime.month,
-                    punchInTime.day,
-                    int.parse(formattedHour),
-                    int.parse(formattedMinute),
-                  ).add(const Duration(minutes: 10)),
-                )
-                .inMinutes <=
-            0) {
-      topContainerColor = Colors.amber.shade500;
-      status = 'Late by ${punchDetail.checkInTime!.difference(
-            DateTime(
-              punchDetail.checkInTime!.year,
-              punchDetail.checkInTime!.month,
-              punchDetail.checkInTime!.day,
-              int.parse(formattedHour),
-              int.parse(formattedMinute),
-            ),
-          ).inMinutes} mins';
-    }
+      if (punchDetail.checkInTime == null) {
+        topContainerColor = Colors.grey;
+        status = 'Absent today';
+      } else if (punchDetail.checkInTime!
+              .difference(
+                DateTime(
+                  punchDetail.checkInTime!.year,
+                  punchDetail.checkInTime!.month,
+                  punchDetail.checkInTime!.day,
+                  int.parse(formattedHour),
+                  int.parse(formattedMinute),
+                ),
+              )
+              .inMinutes >
+          20) {
+        topContainerColor = Colors.red.shade400;
+        status = 'Late by ${punchDetail.checkInTime!.difference(
+              DateTime(
+                punchDetail.checkInTime!.year,
+                punchDetail.checkInTime!.month,
+                punchDetail.checkInTime!.day,
+                int.parse(formattedHour),
+                int.parse(formattedMinute),
+              ),
+            ).inMinutes} mins';
+      } else if (punchDetail.checkInTime!
+                  .difference(
+                    DateTime(
+                      punchDetail.checkInTime!.year,
+                      punchDetail.checkInTime!.month,
+                      punchDetail.checkInTime!.day,
+                      int.parse(formattedHour),
+                      int.parse(formattedMinute),
+                    ),
+                  )
+                  .inMinutes >
+              10 &&
+          punchInTime
+                  .difference(
+                    DateTime(
+                      punchInTime.year,
+                      punchInTime.month,
+                      punchInTime.day,
+                      int.parse(formattedHour),
+                      int.parse(formattedMinute),
+                    ).add(const Duration(minutes: 20)),
+                  )
+                  .inMinutes <=
+              0) {
+        topContainerColor = Colors.orangeAccent.shade400;
+        status = 'Late by ${punchDetail.checkInTime!.difference(
+              DateTime(
+                punchDetail.checkInTime!.year,
+                punchDetail.checkInTime!.month,
+                punchDetail.checkInTime!.day,
+                int.parse(formattedHour),
+                int.parse(formattedMinute),
+              ),
+            ).inMinutes} mins';
+      } else if (punchDetail.checkInTime!
+                  .difference(
+                    DateTime(
+                      punchDetail.checkInTime!.year,
+                      punchDetail.checkInTime!.month,
+                      punchDetail.checkInTime!.day,
+                      int.parse(formattedHour),
+                      int.parse(formattedMinute),
+                    ),
+                  )
+                  .inMinutes >
+              0 &&
+          punchInTime
+                  .difference(
+                    DateTime(
+                      punchInTime.year,
+                      punchInTime.month,
+                      punchInTime.day,
+                      int.parse(formattedHour),
+                      int.parse(formattedMinute),
+                    ).add(const Duration(minutes: 10)),
+                  )
+                  .inMinutes <=
+              0) {
+        topContainerColor = Colors.amber.shade500;
+        status = 'Late by ${punchDetail.checkInTime!.difference(
+              DateTime(
+                punchDetail.checkInTime!.year,
+                punchDetail.checkInTime!.month,
+                punchDetail.checkInTime!.day,
+                int.parse(formattedHour),
+                int.parse(formattedMinute),
+              ),
+            ).inMinutes} mins';
+      }
 
     return Container(
       margin: const EdgeInsets.only(bottom: 15.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15.0),
-        color: Colors.white,
+        color: Theme.of(context).primaryColor.withOpacity(.1),
       ),
       child: Row(
         children: [
@@ -154,18 +152,19 @@ class AttendancePunchItem extends StatelessWidget {
                       Flexible(
                         child: Text(
                           punchDetail.name,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontWeight: FontWeight.w700,
                             fontSize: 20.0,
+                            color: Theme.of(context).primaryColor,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       Text(
                         ' (${punchDetail.department})',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.w700,
-                          color: Colors.black54,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ],
@@ -173,14 +172,18 @@ class AttendancePunchItem extends StatelessWidget {
                   if (punchDetail.checkInTime != null)
                     Text(
                       'Check In : ${timeFormat(punchDetail.checkInTime!)}',
-                      style: const TextStyle(),
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
                   if (punchDetail.checkInTime != null)
                     Text(
                       punchDetail.checkOutTime == null
                           ? 'Check Out : No entry'
                           : 'Check Out : ${timeFormat(punchDetail.checkOutTime!)}',
-                      style: const TextStyle(),
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
                 ],
               ),
@@ -204,8 +207,9 @@ class AttendancePunchItem extends StatelessWidget {
                 ),
                 Text(
                   'Duration : ${duration(punchDetail.checkInTime!, endTime)}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.w700,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
               ],

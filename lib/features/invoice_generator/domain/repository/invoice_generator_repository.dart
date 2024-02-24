@@ -13,7 +13,7 @@ abstract class InvoiceGeneratorRepository {
 
   Future<List<String>> getGeneratedIds();
 
-  Future<String> uploadDocumentAndGetUrl(String path, File file);
+  Future<String> uploadDocumentAndGetUrl({required String path, required File file});
 
   Future<String> uploadInstallationInvoice(File installationPdfFile, String docCategory, DateTime date, int docLen);
 

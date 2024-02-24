@@ -169,4 +169,9 @@ class HomeRepoImpl implements HomeRepository {
       rethrow;
     }
   }
+
+  @override
+  Future<UserEntity?> salesData(String userId) {
+    return _homeFbDataSource.salesData(userId);
+  }
 }

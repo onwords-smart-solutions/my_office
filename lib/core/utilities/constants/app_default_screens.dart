@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_office/features/attendance/presentation/view/attendance_screen.dart';
+import 'package:my_office/features/leads_achieved/presentation/view/leads_achieved_screen.dart';
 import 'package:my_office/features/pay_slip/presentation/view/pay_slip_screen.dart';
 import '../../../features/create_lead/presentation/view/create_lead_screen.dart';
 import '../../../features/create_product/presentation/view/create_product_screen.dart';
@@ -59,10 +60,11 @@ class MenuTitle {
   static const String installationPDF = 'Installation PDF';
   static const String proxyAttendance = 'Proxy Attendance';
   static const String prDashboard = 'PR Dashboard';
-  static const String employeeOfTheWeek = 'Best employee';
+  static const String employeeOfTheWeek = 'Best Employee';
   static const String hrAccess = 'HR Access';
   static const String paySlip = 'Pay Slip';
   static const String createAccount = 'Create Account';
+  static const String saleCount = 'Sale Count';
 }
 
 class AppDefaults {
@@ -185,6 +187,10 @@ class AppDefaults {
         title: MenuTitle.createAccount,
         image: 'assets/create_account.png',
     ),
+    StaffAccessModel(
+        title: MenuTitle.saleCount,
+        image: 'assets/images/leads_achieved.png',
+    ),
   ];
 
   static Widget getPage(String title, UserEntity staffInfo) {
@@ -303,7 +309,10 @@ class AppDefaults {
         page = PaySlip(user: staffInfo);
         break;
       case MenuTitle.createAccount:
-        page = CreateAccount();
+        page = const CreateAccount();
+        break;
+      case MenuTitle.saleCount:
+        page = const LeadsAchieved();
         break;
     }
     return page;

@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.onwords.office",
+  "applicationId": "com.office.onwords",
   "variantName": "debug",
   "elements": [
     {

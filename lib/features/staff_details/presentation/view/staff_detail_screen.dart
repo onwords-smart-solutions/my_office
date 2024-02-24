@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/core/utilities/constants/app_color.dart';
 import 'package:my_office/features/staff_details/presentation/provider/staff_detail_provider.dart';
@@ -30,7 +31,7 @@ class _StaffDetailsState extends State<StaffDetails> {
     'INSTALLATION',
     'HR',
     'MANAGEMENT',
-    'OFFICE STAFF',
+    'BRAVO',
   ];
 
   @override
@@ -43,7 +44,7 @@ class _StaffDetailsState extends State<StaffDetails> {
   @override
   Widget build(BuildContext context) {
     return MainTemplate(
-      subtitle: 'Onwords staff details',
+      subtitle: 'Staff details',
       templateBody: buildEmployeeNames(),
       bgColor: AppColor.backGroundColor,
     );
@@ -79,12 +80,14 @@ class _StaffDetailsState extends State<StaffDetails> {
                           children: [
                             Text(
                               'Total staffs: ${allStaffs.length}',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 17,
                                 fontWeight: FontWeight.w700,
+                                color: Theme.of(context).primaryColor,
                               ),
                             ),
                             PopupMenuButton(
+                              surfaceTintColor: Colors.transparent,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -96,8 +99,9 @@ class _StaffDetailsState extends State<StaffDetails> {
                                   return PopupMenuItem(
                                     child: Text(
                                       dropDown[i],
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 16,
+                                        color: Theme.of(context).primaryColor,
                                       ),
                                     ),
                                     onTap: () {
@@ -111,11 +115,12 @@ class _StaffDetailsState extends State<StaffDetails> {
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  const Icon(CupertinoIcons.sort_down),
+                                  Icon(CupertinoIcons.sort_down, color: Theme.of(context).primaryColor,),
                                   Text(
                                     department,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontWeight: FontWeight.w500,
+                                      color: Theme.of(context).primaryColor,
                                     ),
                                   ),
                                 ],
@@ -131,7 +136,7 @@ class _StaffDetailsState extends State<StaffDetails> {
                           scrollDirection: Axis.horizontal,
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
-                            childAspectRatio: 1.14 / 1.1,
+                            childAspectRatio: 1.14 / 1,
                             crossAxisCount: 4,
                             crossAxisSpacing: 2,
                             mainAxisSpacing: 1,
@@ -152,21 +157,25 @@ class _StaffDetailsState extends State<StaffDetails> {
                                   context: context,
                                   builder: (ctx) {
                                     return AlertDialog(
+                                      surfaceTintColor: Colors.transparent,
                                       title: const Text(
                                         '⚠️Warning!!!',
                                         style: TextStyle(
-                                          fontSize: 17,
+                                          fontSize: 18,
                                           color: CupertinoColors.destructiveRed,
-                                          fontWeight: FontWeight.w500,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: 'SF Pro',
                                         ),
                                       ),
                                       content: RichText(
                                         text: TextSpan(
                                           text:
                                               'Do you want to delete all details of ',
-                                          style: const TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.black,
+                                          style: TextStyle(
+                                            fontSize: 17,
+                                            color: Theme.of(context).primaryColor,
+                                            fontWeight: FontWeight.w500,
+                                            fontFamily: 'SF Pro',
                                           ),
                                           children: [
                                             TextSpan(
@@ -175,127 +184,107 @@ class _StaffDetailsState extends State<StaffDetails> {
                                                 fontSize: 17,
                                                 color: Colors.red,
                                                 fontWeight: FontWeight.w500,
+                                                fontFamily: 'SF Pro',
                                               ),
                                             ),
-                                            const TextSpan(
+                                            TextSpan(
                                               text: ' from Onwords database?',
                                               style: TextStyle(
-                                                fontSize: 15,
+                                                fontSize: 17,
+                                                color: Theme.of(context).primaryColor,
+                                                fontWeight: FontWeight.w500,
+                                                fontFamily: 'SF Pro',
                                               ),
                                             ),
                                           ],
                                         ),
                                       ),
                                       actions: [
-                                        Container(
-                                          height: size.height * 0.05,
-                                          width: size.width * 0.3,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          ),
-                                          child: FilledButton.tonal(
-                                            child: const Text(
-                                              'Yes',
-                                              style: TextStyle(
-                                                fontSize: 17,
-                                                fontWeight: FontWeight.w500,
-                                                color: CupertinoColors
-                                                    .destructiveRed,
-                                              ),
+                                        FilledButton.tonal(
+                                          child: Text(
+                                            'Yes',
+                                            style: TextStyle(
+                                              fontSize: 17,
+                                              fontWeight: FontWeight.w500,
+                                              color: Theme.of(context).primaryColor,
                                             ),
-                                            onPressed: () async {
-                                              await staffProvider
-                                                  .removeStaffDetails(
-                                                allStaffs[i].uid,
-                                              );
-                                              staffProvider.getAllStaffNames();
-                                              if (!mounted) return;
-                                              Navigator.of(context).pop();
-                                            },
                                           ),
+                                          onPressed: () async {
+                                            await staffProvider
+                                                .removeStaffDetails(
+                                              allStaffs[i].uid,
+                                            );
+                                            staffProvider.getAllStaffNames();
+                                            if (!mounted) return;
+                                            Navigator.of(context).pop();
+                                          },
                                         ),
-                                        Container(
-                                          height: size.height * 0.05,
-                                          width: size.width * 0.2,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          ),
-                                          child: FilledButton.tonal(
-                                            child: const Text(
-                                              'No',
-                                              style: TextStyle(
-                                                color: CupertinoColors.black,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 17,
-                                              ),
+                                        FilledButton.tonal(
+                                          child: Text(
+                                            'No',
+                                            style: TextStyle(
+                                              color: Theme.of(context).primaryColor,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 17,
                                             ),
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
                                           ),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
                                         ),
                                       ],
                                     );
                                   },
                                 );
                               },
-                              child: Column(
-                                children: [
-                                  Text(
-                                    allStaffs[i].name,
-                                    style: TextStyle(
-                                      color: department == "APP"
-                                          ? const Color(0xff6527BE)
-                                          : department == 'RND'
-                                              ? const Color(0xff0EA293)
-                                              : department == 'MEDIA'
-                                                  ? const Color(0xffDB005B)
-                                                  : department == 'WEB'
-                                                      ? const Color(0xff9A208C)
-                                                      : department == 'PR'
-                                                          ? const Color(
-                                                              0xffF24C3D)
-                                                          : Colors.black,
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      allStaffs[i].name,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: Theme.of(context).primaryColor,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: size.height * 0.13,
-                                    width: size.width * 0.24,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: allStaffs[i].profileImage!.isEmpty
-                                          ? const Image(
-                                              image: AssetImage(
-                                                  'assets/profile_pic.png'),
-                                            )
-                                          : CachedNetworkImage(
-                                              imageUrl:
-                                                  allStaffs[i].profileImage!,
-                                              fit: BoxFit.cover,
-                                              progressIndicatorBuilder: (
-                                                context,
-                                                url,
-                                                downloadProgress,
-                                              ) =>
-                                                  CircularProgressIndicator(
-                                                color: AppColor.primaryColor,
-                                                strokeWidth: 2,
-                                                value:
-                                                    downloadProgress.progress,
-                                              ),
-                                              errorWidget:
-                                                  (context, url, error) =>
-                                                      const Image(
+                                    const Gap(10),
+                                    SizedBox(
+                                      height: size.height * 0.13,
+                                      width: size.width * 0.24,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(15),
+                                        child: allStaffs[i].profileImage!.isEmpty
+                                            ? const Image(
                                                 image: AssetImage(
-                                                  'assets/profile_pic.png',
+                                                    'assets/profile_pic.png',),
+                                              )
+                                            : CachedNetworkImage(
+                                                imageUrl:
+                                                    allStaffs[i].profileImage!,
+                                                fit: BoxFit.cover,
+                                                progressIndicatorBuilder: (
+                                                  context,
+                                                  url,
+                                                  downloadProgress,
+                                                ) =>
+                                                    CircularProgressIndicator(
+                                                  color: Theme.of(context).primaryColor,
+                                                  strokeWidth: 2,
+                                                  value:
+                                                      downloadProgress.progress,
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        const Image(
+                                                  image: AssetImage(
+                                                    'assets/profile_pic.png',
+                                                  ),
                                                 ),
                                               ),
-                                            ),
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             );
                           },

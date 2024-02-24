@@ -8,9 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:my_office/core/utilities/constants/app_color.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_app_button.dart';
-import 'package:my_office/core/utilities/custom_widgets/custom_text_field.dart';
 import 'package:my_office/features/auth/presentation/provider/authentication_provider.dart';
 import 'package:my_office/features/invoice_generator/data/data_source/invoice_generator_fb_data_source.dart';
 import 'package:my_office/features/invoice_generator/data/data_source/invoice_generator_fb_data_source_impl.dart';
@@ -23,6 +21,7 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import '../../../../core/utilities/custom_widgets/custom_alert_text_field.dart';
 import '../../../../core/utilities/custom_widgets/custom_pdf_utils.dart';
 import '../../../home/presentation/view/home_screen.dart';
 import 'dart:ui' as ui;
@@ -183,21 +182,19 @@ class _InvoiceGeneratorPreviewScreenState
           'Preview of Document',
           style: TextStyle(
             fontSize: 22,
-            color: Colors.white,
           ),
         ),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: AppColor.primaryColor,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios_new, ),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.calendar_today_rounded, color: Colors.white),
+            icon: const Icon(Icons.calendar_today_rounded, ),
             onPressed: () async {
               DateTime? pickDate = await showDatePicker(
                 context: context,
@@ -242,7 +239,7 @@ class _InvoiceGeneratorPreviewScreenState
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Container(
-                color: AppColor.backGroundColor,
+                color: Theme.of(context).scaffoldBackgroundColor,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -256,7 +253,7 @@ class _InvoiceGeneratorPreviewScreenState
                         height: height * .2,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.black26, width: 2),
+                          border: Border.all(color: Theme.of(context).primaryColor.withOpacity(.2), width: 2),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -270,11 +267,12 @@ class _InvoiceGeneratorPreviewScreenState
                                 //     color: Colors.black26, width: 1)
                               ),
                               child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
-                                  const Text(
+                                   Text(
                                     'Customer Details',
                                     style: TextStyle(
-                                      color: Colors.black,
+                                      color: Theme.of(context).primaryColor,
                                     ),
                                   ),
                                   createCustomerDetails(
@@ -317,8 +315,8 @@ class _InvoiceGeneratorPreviewScreenState
                                 ],
                               ),
                             ),
-                            const VerticalDivider(
-                              color: Colors.black,
+                             VerticalDivider(
+                              color: Theme.of(context).primaryColor.withOpacity(.4),
                               width: 1,
                             ),
                             Container(
@@ -327,36 +325,36 @@ class _InvoiceGeneratorPreviewScreenState
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 // border: Border.all(
-                                //     color: Colors.black26, width: 1)
+                                //     color: Theme.of(context).primaryColor, width: 1,),
                               ),
                               child: Column(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text(
+                                  Text(
                                     '      Document Details',
                                     style: TextStyle(
-                                      color: Colors.black,
+                                      color: Theme.of(context).primaryColor,
                                     ),
                                   ),
                                   Text(
                                     ' Date of Document : ${documentDateController.text.isNotEmpty ? documentDateController.text : "Select Date"}',
-                                    style: const TextStyle(
-                                      color: Colors.black,
+                                    style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
                                       fontSize: 10,
                                     ),
                                   ),
                                   Text(
                                     ' Doc-Type : #${customerDetails.docType}',
-                                    style: const TextStyle(
-                                      color: Colors.black,
+                                    style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
                                       fontSize: 10,
                                     ),
                                   ),
                                   Text(
                                     ' Category : ${customerDetails.docCategory}',
-                                    style: const TextStyle(
-                                      color: Colors.black,
+                                    style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
                                       fontSize: 10,
                                     ),
                                   ),
@@ -366,8 +364,8 @@ class _InvoiceGeneratorPreviewScreenState
                           ],
                         ),
                       ),
-                      const Divider(
-                        color: Colors.black,
+                       Divider(
+                        color: Theme.of(context).primaryColor,
                         indent: 5,
                         endIndent: 5,
                         thickness: 1,
@@ -386,8 +384,7 @@ class _InvoiceGeneratorPreviewScreenState
                               width: width * 1,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(12),
-                                color:
-                                    CupertinoColors.systemGrey.withOpacity(0.4),
+                                color: Theme.of(context).primaryColor.withOpacity(.1),
                               ),
                               child: Row(
                                 mainAxisAlignment:
@@ -428,8 +425,7 @@ class _InvoiceGeneratorPreviewScreenState
                               width: width * 1,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
-                                color:
-                                    CupertinoColors.systemGrey.withOpacity(0.4),
+                                color: Theme.of(context).primaryColor.withOpacity(.1),
                               ),
                               child: ListView.builder(
                                 scrollDirection: Axis.vertical,
@@ -452,7 +448,6 @@ class _InvoiceGeneratorPreviewScreenState
                                     padding: const EdgeInsets.all(0),
                                     child: Table(
                                       // border: TableBorder.all(color: Colors.black),
-
                                       children: [
                                         createTableRow(data),
                                       ],
@@ -461,8 +456,8 @@ class _InvoiceGeneratorPreviewScreenState
                                 },
                               ),
                             ),
-                            const Divider(
-                              color: Colors.black,
+                            Divider(
+                              color: Theme.of(context).primaryColor,
                               indent: 5,
                               endIndent: 5,
                               thickness: 1,
@@ -472,8 +467,7 @@ class _InvoiceGeneratorPreviewScreenState
                               padding: const EdgeInsets.all(10),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
-                                border:
-                                    Border.all(color: Colors.black12, width: 2),
+                                border: Border.all(color: Theme.of(context).primaryColor.withOpacity(.2), width: 2),
                               ),
                               child: Column(
                                 children: [
@@ -535,20 +529,21 @@ class _InvoiceGeneratorPreviewScreenState
                             ),
 
                             /// PDF BUTTON
-                            SizedBox(
-                              width: width * .5,
-                              height: height * .06,
-                              child: AppButton(
-                                child: const Text('Save'),
-                                onPressed: () {
-                                  getDocLength();
-                                  _showDialog(
-                                    context,
-                                    customerDetails,
-                                    productDetails,
-                                  );
-                                },
-                              ),
+                            AppButton(
+                              child: Text(
+                                'Save',
+                                style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                color: Theme.of(context).primaryColor,
+                              ),),
+                              onPressed: () {
+                                getDocLength();
+                                _showDialog(
+                                  context,
+                                  customerDetails,
+                                  productDetails,
+                                );
+                              },
                             ),
                             const SizedBox(
                               height: 20,
@@ -581,13 +576,15 @@ class _InvoiceGeneratorPreviewScreenState
           child: Center(
             child: Text(
               title,
-              style: const TextStyle(),
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+              ),
             ),
           ),
         ),
         isTrue
-            ? const VerticalDivider(
-                color: Colors.black,
+            ? VerticalDivider(
+                color: Theme.of(context).primaryColor,
                 endIndent: 23,
                 indent: 23,
                 thickness: 2,
@@ -603,6 +600,7 @@ class _InvoiceGeneratorPreviewScreenState
           (cell) {
             final style = TextStyle(
               fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
+              color: Theme.of(context).primaryColor,
             );
             return Padding(
               padding: const EdgeInsets.all(8),
@@ -634,8 +632,8 @@ class _InvoiceGeneratorPreviewScreenState
             width: 60,
             child: Text(
               key,
-              style: const TextStyle(
-                color: Colors.black,
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
                 fontSize: 10,
               ),
             ),
@@ -647,8 +645,8 @@ class _InvoiceGeneratorPreviewScreenState
               physics: const BouncingScrollPhysics(),
               child: Text(
                 value,
-                style: const TextStyle(
-                  color: Colors.black,
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
                   fontSize: 10,
                 ),
               ),
@@ -675,8 +673,8 @@ class _InvoiceGeneratorPreviewScreenState
             width: 150,
             child: Text(
               key,
-              style: const TextStyle(
-                color: Colors.black,
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
                 fontSize: 12,
               ),
             ),
@@ -688,8 +686,8 @@ class _InvoiceGeneratorPreviewScreenState
             child: Text(
               value,
               textAlign: TextAlign.end,
-              style: const TextStyle(
-                color: Colors.black,
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
                 fontSize: 10,
               ),
             ),
@@ -716,10 +714,10 @@ class _InvoiceGeneratorPreviewScreenState
               child: Form(
                 key: formKey,
                 child: CupertinoAlertDialog(
-                  title: Text(
+                  title: const Text(
                     "Document Details\n",
                     style: TextStyle(
-                      color: AppColor.primaryColor,
+                      color: Colors.black,
                       fontSize: 16,
                     ),
                   ),
@@ -728,12 +726,12 @@ class _InvoiceGeneratorPreviewScreenState
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CustomTextField(
+                        CustomAlertTextField(
                           controller: fileNameController,
                           textInputType: TextInputType.name,
                           textInputAction: TextInputAction.done,
                           hintName: 'File Name',
-                          icon: const Icon(Icons.file_present),
+                          icon: const Icon(Icons.file_present, color: Colors.black,),
                           maxLength: 30,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -741,7 +739,7 @@ class _InvoiceGeneratorPreviewScreenState
                             }
                             return null;
                           },
-                        ).textInputField(),
+                        ).textInputField(context),
                         const SizedBox(
                           height: 5,
                         ),
@@ -758,12 +756,12 @@ class _InvoiceGeneratorPreviewScreenState
                           height: 10,
                         ),
                         clientModel.docType != 'QUOTATION'
-                            ?  CustomTextField(
+                            ?  CustomAlertTextField(
                           controller: estimateDateController,
                           textInputType: TextInputType.none,
                           textInputAction: TextInputAction.done,
                           hintName: 'Estimated Date',
-                          icon: const Icon(Icons.date_range),
+                          icon: const Icon(Icons.date_range, color: Colors.black,),
                           maxLength: 15,
                           readOnly: true,
                           validator: (value) {
@@ -791,7 +789,7 @@ class _InvoiceGeneratorPreviewScreenState
                               });
                             }
                           },
-                        ).textInputField()
+                        ).textInputField(context)
                             : const SizedBox(),
                       ], //
                     ),
@@ -888,7 +886,10 @@ class _InvoiceGeneratorPreviewScreenState
                                     '${clientModel.docType}/${clientModel.docType == "INVOICE" ? "INV" : "PRO_INV"}${clientModel.docCategory}-${Utils.formatDummyDate(date)}${docLen.toString()}';
                                 var downloadUrl =
                                     await invoiceGeneratorRepository
-                                        .uploadDocumentAndGetUrl(path, pdfFile);
+                                        .uploadDocumentAndGetUrl(
+                                        path: path,
+                                        file: pdfFile,
+                                    );
 
                                 /// INSTALLATION-INVOICE......
                                 final installationPdfFile =
@@ -909,25 +910,27 @@ class _InvoiceGeneratorPreviewScreenState
                                 );
 
                                 var invoice = {
-                                  'Customer_name': clientModel.name,
-                                  'Status': 'Processing',
-                                  'TimeStamp': myTimeStamp.seconds,
-                                  'CreatedBy': staffInfo!.email,
-                                  'mobile_number': clientModel.phone,
-                                  'document_link': downloadUrl,
-                                  'installation_document_link':
-                                      downloadUrlInstallation,
+                                  'customerName': clientModel.name,
+                                  'mobileNumber': clientModel.phone,
+                                  'createdBy': staffInfo!.name,
+                                  'invoiceAmount': grandTotal.toInt().toDouble(),
+                                  'status': 'Processing',
+                                  'timeStamp': myTimeStamp.seconds,
+                                  'documentLink': downloadUrl,
+                                  'installationDocumentLink': downloadUrlInstallation,
                                 };
                                 var proformaInvoice = {
-                                  'Customer_name': clientModel.name,
+                                  'customerName': clientModel.name,
                                   'id': "#$id",
-                                  'Status': 'Processing',
-                                  'TimeStamp': myTimeStamp.seconds,
-                                  'CreatedBy': staffInfo!.email,
-                                  'mobile_number': clientModel.phone,
-                                  'document_link': downloadUrl,
-                                  'installation_document_link':
-                                      downloadUrlInstallation,
+                                  'mobileNumber': clientModel.phone,
+                                  'createdBy': staffInfo!.name,
+                                  'totalAmount': grandTotal.toInt().toDouble(),
+                                  'advancedAmount': widget.advanceAmount,
+                                  'balanceAmount': finalTotal.toInt().toDouble(),
+                                  'status': 'Processing',
+                                  'timeStamp': myTimeStamp.seconds,
+                                  'documentLink': downloadUrl,
+                                  'installationDocumentLink': downloadUrlInstallation,
                                 };
 
                                 void saveDocument(
@@ -974,12 +977,13 @@ class _InvoiceGeneratorPreviewScreenState
                               );
 
                               var quotation = {
-                                'Customer_name': clientModel.name,
-                                'Status': 'Processing',
-                                'TimeStamp': myTimeStamp.seconds,
-                                'CreatedBy': staffInfo!.email,
-                                'mobile_number': clientModel.phone,
-                                'document_link': downloadUrl,
+                                'customerName': clientModel.name,
+                                'mobileNumber': clientModel.phone,
+                                'createdBy': staffInfo!.name,
+                                'quoteAmount' : grandTotal.toInt().toDouble(),
+                                'status': 'Processing',
+                                'timeStamp': myTimeStamp.seconds,
+                                'documentLink': downloadUrl,
                               };
 
                               Future<void> createQuotation(

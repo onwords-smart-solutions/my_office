@@ -161,7 +161,11 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
               currentCustomerList.add(data);
             }
           } else if (sortOption == 'New leads') {
-            if (data['notes'].toString().toLowerCase() == 'null') {
+            if (data['notes'].toString().toLowerCase() == 'null' ||
+                data['customer_state']
+                    .toString()
+                    .toLowerCase()
+                    .contains('new leads')) {
               currentCustomerList.add(data);
             }
           } else if (sortOption == 'Black dots') {
@@ -221,13 +225,13 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
   // PR STAFF NAMES & CUSTOMER DETAILS FETCHING AND ASSIGNING
   void fetchInitialData() async {
     try {
-       allCustomer = await searchLeadsRepository.getCustomers();
+      allCustomer = await searchLeadsRepository.getCustomers();
       getCustomerDetail(
         createdBy: widget.selectedStaff != null
             ? widget.selectedStaff!
             : selectedStaff == ''
-            ? widget.staffInfo.name
-            : selectedStaff,
+                ? widget.staffInfo.name
+                : selectedStaff,
         sortChoice: sortOption,
         ascending: isAscending,
       );
@@ -236,7 +240,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
         staffs = fetchedPRStaffNames;
         isLoading = false;
       });
-      if(widget.query != null){
+      if (widget.query != null) {
         searchUser(widget.query!);
       }
     } catch (e) {
@@ -260,7 +264,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
   @override
   Widget build(BuildContext context) {
     return MainTemplate(
-      subtitle: 'Search leads here!!',
+      subtitle: 'Search leads',
       templateBody: buildScreen(),
       bgColor: AppColor.backGroundColor,
     );
@@ -295,9 +299,10 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
         height: 40.0,
         padding: const EdgeInsets.only(left: 10.0),
         decoration: BoxDecoration(
-          color: AppColor.backGroundColor,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: const Color(0xffA4A1A6), width: 1.0),
+          border: Border.all(
+              color: Theme.of(context).primaryColor.withOpacity(.3),
+              width: 1.0),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -306,8 +311,9 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
             //Search bar
             Expanded(
               child: CupertinoSearchTextField(
-                backgroundColor: const Color(0xffF1F2F8),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                itemColor: Theme.of(context).primaryColor.withOpacity(.4),
                 prefixIcon: Image.asset(
                   'assets/search.png',
                   scale: 4.5,
@@ -320,18 +326,20 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                 onChanged: (value) {
                   searchUser(value.toString());
                 },
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 15,
-                  color: Colors.black,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
             ),
-            const VerticalDivider(
+            VerticalDivider(
               thickness: 1,
               indent: 5.0,
               endIndent: 5.0,
-              color: Color(0xffA4A1A6),
+              color: Theme.of(context).primaryColor.withOpacity(.4),
             ),
+            widget.staffInfo.uid == 'ajckJI82Y4Uk6780vpSMmyo3ylr2' ?
+                const SizedBox.shrink() :
             buildDropDown(),
 
             IconButton(
@@ -361,6 +369,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
 
   Widget buildDropDown() {
     return PopupMenuButton(
+      surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       position: PopupMenuPosition.under,
       elevation: 10.0,
@@ -371,8 +380,9 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
             return PopupMenuItem(
               child: Text(
                 staffs[index],
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 15,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
               onTap: () {
@@ -387,8 +397,9 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
           return PopupMenuItem(
             child: Text(
               staffs[index],
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 15,
+                color: Theme.of(context).primaryColor,
               ),
             ),
             onTap: () {
@@ -410,6 +421,8 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
 
   Widget buildSortDropDown() {
     return PopupMenuButton(
+      surfaceTintColor: Colors.transparent,
+      color: Theme.of(context).primaryColor.withOpacity(.1),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       position: PopupMenuPosition.under,
       elevation: 10.0,
@@ -419,7 +432,9 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
           return PopupMenuItem(
             child: Text(
               sortList[index],
-              style: const TextStyle(),
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+              ),
             ),
             onTap: () {
               getCustomerDetail(
@@ -456,9 +471,10 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
               ),
               child: Text(
                 'Leads of $selectedStaff',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14.0,
-                  color: Color(0xffF1F2F8),
+                  color: Theme.of(context).primaryColor,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
@@ -473,20 +489,25 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
             },
             icon: const Icon(
               CupertinoIcons.xmark_octagon_fill,
-              size: 20.0,
+              size: 22.0,
             ),
             color: Colors.red,
           ),
           if (isLeadChange)
             isDataLoading
-                ? const Center(
-                    child: CircularProgressIndicator(),
+                ? Center(
+                    child: CircularProgressIndicator(
+                      color: Theme.of(context).primaryColor,
+                    ),
                   )
                 : Row(
                     children: [
                       Text(
                         _selectedCustomers.length.toString(),
-                        style: const TextStyle(fontWeight: FontWeight.w500),
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       Checkbox(
                         value: isSelectAll,
@@ -503,6 +524,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                         },
                       ),
                       PopupMenuButton(
+                        surfaceTintColor: Colors.transparent,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
@@ -514,8 +536,9 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                             return PopupMenuItem(
                               child: Text(
                                 staffs[index],
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontWeight: FontWeight.w500,
+                                  color: Theme.of(context).primaryColor,
                                 ),
                               ),
                               onTap: () => changeLead(staffs[index]),
@@ -535,7 +558,10 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                             isLeadChange = false;
                           });
                         },
-                        icon: const Icon(Icons.close),
+                        icon: Icon(
+                          Icons.close,
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
                     ],
                   ),
@@ -552,9 +578,10 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
       itemBuilder: (ctx, i) {
         Color containerColor = sortOption == sortList[i]
             ? const Color(0xff8355B7)
-            : const Color(0xffF1F2F8);
-        Color textColor =
-            sortOption == sortList[i] ? Colors.white : const Color(0xff8355B7);
+            : Theme.of(context).scaffoldBackgroundColor;
+        Color textColor = sortOption == sortList[i]
+            ? Theme.of(context).primaryColor
+            : Theme.of(context).primaryColor;
 
         return GestureDetector(
           onTap: () {
@@ -571,7 +598,9 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
             decoration: BoxDecoration(
               color: containerColor,
               borderRadius: BorderRadius.circular(50.0),
-              border: Border.all(width: 1.0, color: const Color(0xff8355B7)),
+              border: Border.all(
+                  width: 1.0,
+                  color: Theme.of(context).primaryColor.withOpacity(.2)),
             ),
             child: Center(
               child: Text(
@@ -579,6 +608,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                 style: TextStyle(
                   fontSize: 13.0,
                   color: textColor,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
             ),
@@ -591,15 +621,21 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
   Widget buildCustomerList() {
     return query == ''
         ? isLoading
-            ? Center(child: Lottie.asset("assets/animations/new_loading.json"))
+            ? Center(
+                child: Theme.of(context).scaffoldBackgroundColor ==
+                        const Color(0xFF1F1F1F)
+                    ? Lottie.asset('assets/animations/loading_light_theme.json')
+                    : Lottie.asset('assets/animations/loading_dark_theme.json'),
+              )
             : currentCustomerList.isNotEmpty
                 ? Column(
                     children: [
                       Text(
                         'Total Count :${currentCustomerList.length}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 15,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                       Expanded(
@@ -639,8 +675,9 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                                   decoration: BoxDecoration(
                                     color:
                                         isSelected(currentCustomerList[index])
-                                            ? AppColor.primaryColor
-                                                .withOpacity(.8)
+                                            ? Theme.of(context)
+                                                .primaryColor
+                                                .withOpacity(.5)
                                             : null,
                                   ),
                                   child: Opacity(
@@ -663,11 +700,13 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                       ),
                     ],
                   )
-                : const Center(
+                : Center(
                     child: Text(
                       'No leads found!!',
                       style: TextStyle(
                         fontSize: 17.0,
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                   )
@@ -687,7 +726,10 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                 padding: const EdgeInsets.only(top: 10.0),
                 child: Text(
                   'No result for $query',
-                  style: const TextStyle(),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).primaryColor,
+                  ),
                 ),
               );
   }
@@ -714,7 +756,13 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
     for (var customer in _selectedCustomers) {
       //UPDATING LEAD CHANGE IN FIREBASE
       await searchLeadsRepository.updateCustomerLead(
-          customer['phone_number'].toString(), staff,
+        customer['phone_number'].toString(),
+        staff,
+      );
+      await searchLeadsRepository.updateBucketList(
+        mobile: customer['phone_number'].toString(),
+        user: staff,
+        oldUser: selectedStaff,
       );
 
       final index = allCustomer.indexWhere(

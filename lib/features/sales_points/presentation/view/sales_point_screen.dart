@@ -111,18 +111,18 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        iconTheme: const IconThemeData(
-          color: Colors.black,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
+        title: Text(
           'Points Calculations',
           style: TextStyle(
-            color: Colors.black,
+            color: Theme.of(context).primaryColor,
             fontWeight: FontWeight.w500,
-            fontSize: 23,
+            fontSize: 25,
           ),
         ),
-        backgroundColor: const Color(0xffEEEEEE),
         elevation: 0,
       ),
       body: Form(
@@ -132,7 +132,6 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
             children: [
               AnimatedContainer(
                 padding: const EdgeInsets.all(10),
-                // color: Colors.black,
                 duration: const Duration(milliseconds: 500),
                 height: getPointsStatus == false ? height * 1 : height * 0.0,
                 child: SingleChildScrollView(
@@ -155,30 +154,42 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 18.0),
                                 child: DropDownTextField(
-                                  textStyle: const TextStyle(
+                                  textStyle: TextStyle(
                                     fontSize: 17,
+                                    color: Theme.of(context).primaryColor,
+                                    fontWeight: FontWeight.w500,
                                   ),
-                                  listTextStyle: const TextStyle(
+                                  listTextStyle: TextStyle(
                                     fontSize: 17,
+                                    color: Theme.of(context).primaryColor,
                                   ),
                                   controller: itemNameController,
                                   clearOption: true,
                                   enableSearch: true,
                                   dropDownIconProperty: IconProperty(
                                     icon: Icons.arrow_drop_down_circle,
-                                    color: Colors.black,
+                                    color: Theme.of(context).primaryColor.withOpacity(.5),
                                   ),
                                   clearIconProperty: IconProperty(
-                                    color: Colors.black,
+                                    color: Theme.of(context).primaryColor.withOpacity(.5),
                                     icon: Icons.clear,
                                   ),
-                                  dropdownColor: const Color(0xffDDE6E8),
-                                  // searchDecoration:InputDecoration(hintText: "Select Product"),
-                                  textFieldDecoration: const InputDecoration(
+                                  dropdownColor: Theme.of(context).scaffoldBackgroundColor,
+                                  searchDecoration: InputDecoration(
+                                    hintText: "Select Product",
+                                    hintStyle: TextStyle(
+                                      color: Theme.of(context).primaryColor.withOpacity(.5),
+                                    ),
+                                    labelStyle: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                  ),
+                                  textFieldDecoration: InputDecoration(
                                     border: InputBorder.none,
-                                    hintText: '     Select Product',
+                                    hintText: '   Select Product',
                                     hintStyle: TextStyle(
                                       fontSize: 17,
+                                      color: Theme.of(context).primaryColor.withOpacity(.5),
                                     ),
                                   ),
                                   validator: (value) {
@@ -220,17 +231,19 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                     const EdgeInsets.symmetric(horizontal: 8.0),
                                 child: Center(
                                   child: TextFormField(
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 16,
+                                      color: Theme.of(context).primaryColor,
                                     ),
                                     textAlign: TextAlign.center,
                                     textInputAction: TextInputAction.done,
                                     keyboardType: TextInputType.number,
-                                    decoration: const InputDecoration(
+                                    decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText: 'Quantity of Product',
                                       hintStyle: TextStyle(
                                         fontSize: 17,
+                                        color: Theme.of(context).primaryColor.withOpacity(.5),
                                       ),
                                     ),
                                     controller: quantityController,
@@ -351,6 +364,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                     style: TextStyle(
                                       fontWeight: FontWeight.w500,
                                       fontSize: height * 0.021,
+                                      color: Theme.of(context).primaryColor,
                                     ),
                                   ),
                                 ),
@@ -389,11 +403,13 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                           'Name',
                                           style: TextStyle(
                                             fontSize: height * 0.017,
+                                            color: Theme.of(context).primaryColor,
+                                            fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ),
                                       VerticalDivider(
-                                        color: Colors.black.withOpacity(0.4),
+                                        color: Theme.of(context).primaryColor.withOpacity(.4),
                                         endIndent: 25,
                                         indent: 25,
                                         thickness: 3,
@@ -404,11 +420,13 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                           'Quantity',
                                           style: TextStyle(
                                             fontSize: height * 0.017,
+                                            color: Theme.of(context).primaryColor,
+                                            fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ),
                                       VerticalDivider(
-                                        color: Colors.black.withOpacity(0.4),
+                                        color: Theme.of(context).primaryColor.withOpacity(.4),
                                         endIndent: 25,
                                         indent: 25,
                                         thickness: 3,
@@ -419,11 +437,13 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                           'Rate',
                                           style: TextStyle(
                                             fontSize: height * 0.017,
+                                            color: Theme.of(context).primaryColor,
+                                            fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ),
                                       VerticalDivider(
-                                        color: Colors.black.withOpacity(0.4),
+                                        color: Theme.of(context).primaryColor.withOpacity(.4),
                                         endIndent: 25,
                                         indent: 25,
                                         thickness: 3,
@@ -434,6 +454,8 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                           'Total',
                                           style: TextStyle(
                                             fontSize: height * 0.017,
+                                            color: Theme.of(context).primaryColor,
+                                            fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ),
@@ -510,6 +532,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                         style: TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: height * 0.025,
+                                          color: Theme.of(context).primaryColor,
                                         ),
                                       ),
                                     ),
@@ -575,8 +598,10 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                 width: width * .85,
                                 child: Center(
                                   child: TextFormField(
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 16,
+                                      color: Theme.of(context).primaryColor,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                     textInputAction: TextInputAction.done,
                                     validator: (value) {
@@ -598,10 +623,14 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                     textAlign: TextAlign.center,
                                     decoration: InputDecoration(
                                       border: InputBorder.none,
+                                      labelStyle: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                      ),
                                       hintText:
                                           'Enter below ${maximumDiscount.toString()} %',
-                                      hintStyle: const TextStyle(
+                                      hintStyle: TextStyle(
                                         fontSize: 17,
+                                        color: Theme.of(context).primaryColor.withOpacity(.4),
                                       ),
                                     ),
                                     controller: percentageController,
@@ -649,6 +678,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
                                 style: TextStyle(
                                   fontSize: height * 0.027,
                                   fontWeight: FontWeight.w500,
+                                  color: Theme.of(context).primaryColor,
                                 ),
                               ),
                             ),
@@ -673,15 +703,17 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
         child: ListTile(
           title: Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w500,
+              color: Theme.of(context).primaryColor,
             ),
           ),
           trailing: Text(
             value,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 14,
+              color: Theme.of(context).primaryColor,
             ),
           ),
         ),
@@ -695,7 +727,7 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: CupertinoColors.systemGrey.withOpacity(0.4),
+        color: Theme.of(context).primaryColor.withOpacity(.1),
       ),
       child: widget,
     );
@@ -705,7 +737,8 @@ class _PointCalculationsScreenState extends State<PointCalculationsScreen> {
         children: cells.map(
           (cell) {
             final style = TextStyle(
-              fontWeight: isHeader ? FontWeight.bold : FontWeight.normal,
+              fontWeight: isHeader ? FontWeight.bold : FontWeight.w500,
+              color: Theme.of(context).primaryColor,
             );
             return Padding(
               padding: const EdgeInsets.all(10),
@@ -770,7 +803,6 @@ class _PointViewState extends State<PointView> {
         return true;
       },
       child: Scaffold(
-        backgroundColor: const Color(0xff282C35),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -778,8 +810,9 @@ class _PointViewState extends State<PointView> {
             Text(
               'You have got',
               style: TextStyle(
-                color: Colors.white,
                 fontSize: height * 0.05,
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context).primaryColor,
               ),
             ),
             Text(
@@ -787,13 +820,15 @@ class _PointViewState extends State<PointView> {
               style: TextStyle(
                 color: Colors.amber,
                 fontSize: height * 0.05,
+                fontWeight: FontWeight.w500,
               ),
             ),
             Text(
               'points👍',
               style: TextStyle(
-                color: Colors.white,
                 fontSize: height * 0.05,
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context).primaryColor,
               ),
             ),
             SizedBox(height: height * 0.3),
@@ -810,7 +845,7 @@ class _PointViewState extends State<PointView> {
                   width: width * 0.5,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: CupertinoColors.systemPurple,
+                    color: Theme.of(context).primaryColor.withOpacity(.1),
                   ),
                   child: CupertinoButton(
                     onPressed: () {
@@ -823,7 +858,7 @@ class _PointViewState extends State<PointView> {
                       style: TextStyle(
                         fontSize: height * 0.035,
                         fontWeight: FontWeight.w500,
-                        color: const Color(0xffDDE6E8),
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                   ),

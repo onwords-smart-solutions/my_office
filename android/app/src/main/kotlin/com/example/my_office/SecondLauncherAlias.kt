@@ -1,4 +1,4 @@
-package  com.onwords.office.launcherAlias
+package  com.office.onwords.launcherAlias
 
 class SecondLauncherAlias{
 

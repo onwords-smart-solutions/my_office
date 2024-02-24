@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/features/refreshment/presentation/view/refreshment_details_screen.dart';
 import 'package:my_office/features/refreshment/presentation/view/swipeable_button_screen.dart';
@@ -20,6 +22,7 @@ class RefreshmentScreen extends StatefulWidget {
 class _RefreshmentScreenState extends State<RefreshmentScreen> {
   final DateTime _now = DateTime.now();
   late Timer _timer;
+  String selectedDrink = '';
 
   // notifiers
   final ValueNotifier<String> _currentBgImage = ValueNotifier('assets/tea.jpg');
@@ -74,11 +77,16 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
                     leading: IconButton.filled(
                       onPressed: () => Navigator.of(context).pop(),
                       style: IconButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.deepPurple,
+                        backgroundColor: Theme.of(context)
+                            .scaffoldBackgroundColor
+                            .withOpacity(.4),
+                        foregroundColor: Theme.of(context).primaryColor,
                       ),
-                      icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                      color: Colors.white,
+                      icon: Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        color: Theme.of(context).primaryColor,
+                        size: 25,
+                      ),
                     ),
                     elevation: 0,
                     pinned: true,
@@ -96,14 +104,13 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
                           );
                         },
                         style: IconButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.deepPurple,
+                          backgroundColor: Theme.of(context)
+                              .scaffoldBackgroundColor
+                              .withOpacity(.4),
+                          foregroundColor: Theme.of(context).primaryColor,
                         ),
-                        icon: Image.asset(
-                          'assets/count.png',
-                          scale: 6.0,
-                        ),
-                        color: Colors.white,
+                        icon: const Icon(CupertinoIcons.doc_append),
+                        color: Theme.of(context).primaryColor,
                       ),
                     ],
                   ),
@@ -126,38 +133,37 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
                                       'Refreshment Portal',
                                       style: TextStyle(
                                         fontWeight: FontWeight.w500,
-                                        color: Colors.deepPurple.shade800,
+                                        color: Theme.of(context).primaryColor,
                                         fontSize: 25.0,
                                       ),
                                     ),
                                   ),
                                 ),
                                 SizedBox(height: size.height * .06),
-                                const Text(
+                                Text(
                                   'Wait until Refreshment timing...',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w700,
                                     fontSize: 20.0,
-                                    color: Colors.black,
+                                    color: Theme.of(context).primaryColor,
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
                                 const SizedBox(height: 15.0),
                                 RichText(
-                                  text: const TextSpan(
+                                  text: TextSpan(
                                     children: [
                                       TextSpan(
-                                        text:
-                                            'Morning refreshment - ',
+                                        text: 'Morning refreshment - ',
                                         style: TextStyle(
-                                          color: Colors.black,
+                                          color: Theme.of(context).primaryColor,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
-                                      TextSpan(
+                                      const TextSpan(
                                         text: '(09:00 AM - 10:45 AM)',
                                         style: TextStyle(
-                                          color: Colors.purple,
+                                          color: Colors.orangeAccent,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
@@ -166,19 +172,19 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
                                 ),
                                 const SizedBox(height: 10),
                                 RichText(
-                                  text: const TextSpan(
+                                  text: TextSpan(
                                     children: [
                                       TextSpan(
                                         text: 'Evening refreshment - ',
                                         style: TextStyle(
-                                          color: Colors.black,
+                                          color: Theme.of(context).primaryColor,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
-                                      TextSpan(
+                                      const TextSpan(
                                         text: '(2:00 PM - 3:30 PM)',
                                         style: TextStyle(
-                                          color: Colors.purple,
+                                          color: Colors.orangeAccent,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
@@ -196,38 +202,113 @@ class _RefreshmentScreenState extends State<RefreshmentScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const SizedBox(height: 20.0),
-                                Text(
-                                  'Refreshment Portal',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.deepPurple.shade800,
-                                    fontSize: 25.0,
+                                Center(
+                                  child: Text(
+                                    'Refreshment Portal',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: Theme.of(context).primaryColor,
+                                      fontSize: 25.0,
+                                    ),
                                   ),
                                 ),
-                                SizedBox(height: size.height * .06),
+                                SizedBox(height: size.height * .01),
                                 if (isMng || isEvg) ...[
-                                  SwipeableButton(
-                                    message: 'Slide to have a Tea',
-                                    type: 'Tea',
-                                    name: widget.name,
+                                  RadioListTile(
+                                    title: Text(
+                                      'Tea',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    value: 'Tea',
+                                    groupValue: selectedDrink,
+                                    activeColor: Colors.purple,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedDrink = value!;
+                                      });
+                                    },
                                   ),
-                                  const SizedBox(height: 30.0),
-                                  SwipeableButton(
-                                    message: 'Slide to have a Coffee',
-                                    type: 'Coffee',
-                                    name: widget.name,
+                                  RadioListTile(
+                                    title: Text(
+                                      'Coffee',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    value: 'Coffee',
+                                    groupValue: selectedDrink,
+                                    activeColor: Colors.blueAccent,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedDrink = value!;
+                                      });
+                                    },
                                   ),
-                                  const SizedBox(height: 30.0),
-                                  SwipeableButton(
-                                    message: 'Slide to have a Milk',
-                                    type: 'Milk',
-                                    name: widget.name,
+                                  RadioListTile(
+                                    title: Text(
+                                      'Milk',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    value: 'Milk',
+                                    groupValue: selectedDrink,
+                                    activeColor: Colors.orangeAccent,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedDrink = value!;
+                                      });
+                                    },
                                   ),
+                                  const Gap(10),
+                                  if (selectedDrink == 'Tea')
+                                    SwipeableButton(
+                                      message: 'Slide to have a Tea',
+                                      type: 'Tea',
+                                      name: widget.name,
+                                    ),
+                                  if (selectedDrink == 'Coffee')
+                                    SwipeableButton(
+                                      message: 'Slide to have a Coffee',
+                                      type: 'Coffee',
+                                      name: widget.name,
+                                    ),
+                                  if (selectedDrink == 'Milk')
+                                    SwipeableButton(
+                                      message: 'Slide to have a Milk',
+                                      type: 'Milk',
+                                      name: widget.name,
+                                    ),
                                 ],
+                                //   SwipeableButton(
+                                //     message: 'Slide to have a Tea',
+                                //     type: 'Tea',
+                                //     name: widget.name,
+                                //   ),
+                                //   const SizedBox(height: 30.0),
+                                //   SwipeableButton(
+                                //     message: 'Slide to have a Coffee',
+                                //     type: 'Coffee',
+                                //     name: widget.name,
+                                //   ),
+                                //   const SizedBox(height: 30.0),
+                                //   SwipeableButton(
+                                //     message: 'Slide to have a Milk',
+                                //     type: 'Milk',
+                                //     name: widget.name,
+                                //   ),
                                 const SizedBox(height: 30.0),
                                 if (isMng)
                                   SwipeableButton(
-                                    message: 'Slide to order Food',
+                                    message: 'Slide to order a Food',
                                     type: 'Food',
                                     name: widget.name,
                                   ),

@@ -14,19 +14,19 @@ class ProfileImageViewer extends StatelessWidget {
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
       extendBodyBehindAppBar: true,
-      backgroundColor: const Color(0xff252525),
       appBar: AppBar(
-        backgroundColor: const Color(0xff252525).withOpacity(.8),
         title: Text(
           name,
-          style: const TextStyle(color: Colors.white),
+          style: TextStyle(
+            fontSize: 25,
+            fontWeight: FontWeight.w500,
+            color: Theme.of(context).primaryColor,
+          ),
         ),
         centerTitle: true,
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
-          icon: const Icon(Icons.arrow_back_ios_new_rounded),
-          color: Colors.white,
-          splashRadius: 20.0,
+          icon: Icon(Icons.arrow_back_ios_new_rounded,color: Theme.of(context).primaryColor,),
         ),
       ),
       body: SizedBox.expand(
@@ -35,7 +35,7 @@ class ProfileImageViewer extends StatelessWidget {
             child: Hero(
               tag: 'profile',
               child: SizedBox(
-                height: size.height * .5,
+                height: size.height * .6,
                 width: size.width,
                 child: url.isEmpty
                     ? const Image(image: AssetImage('assets/profile_icon.jpg'))

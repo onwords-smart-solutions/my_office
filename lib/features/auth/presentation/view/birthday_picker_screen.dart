@@ -81,7 +81,6 @@ class BirthdayPickerScreen extends StatelessWidget {
                         color: birthday == null ? Colors.grey : Colors.black,
                       ),
                     ),
-                    tileColor: Colors.white,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),
@@ -104,7 +103,6 @@ class BirthdayPickerScreen extends StatelessWidget {
                                     width: 30.0,
                                     height: 30.0,
                                     child: CircularProgressIndicator(
-                                      color: Colors.white,
                                       strokeWidth: 2.0,
                                     ),
                                   ),
@@ -162,7 +160,6 @@ class BirthdayPickerScreen extends StatelessWidget {
         padding: const EdgeInsets.all(20.0),
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.vertical(top: Radius.circular(30.0)),
-          color: Colors.white,
         ),
         margin: EdgeInsets.only(
           bottom: MediaQuery.of(ctx).viewInsets.bottom,

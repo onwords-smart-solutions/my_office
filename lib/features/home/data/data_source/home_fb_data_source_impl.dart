@@ -40,7 +40,7 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
 
   @override
   Future<Either<ErrorResponse, List<String>>>
-      getInstallationMemberList() async {
+  getInstallationMemberList() async {
     List<String> names = [];
     try {
       await ref.child('special_access/installation').once().then((value) {
@@ -114,7 +114,13 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
                 staff.uid == '5cM1kyNARSS3yKiO8EB0o1E9eiA3') {
               allAccess.add(menuItems);
             }
-          } else if (menuItems.title != MenuTitle.viewSuggestions &&
+          } else if (menuItems.title == MenuTitle.saleCount) {
+            if (staff.uid == 'pztngdZPCPQrEvmI37b3gf3w33d2' ||
+                staff.uid == 'x7RbfotHBpfr7JZ88P9eABWtcQM2') {
+              allAccess.add(menuItems);
+            }
+          }
+          else if (menuItems.title != MenuTitle.viewSuggestions &&
               menuItems.title != MenuTitle.staffDetail &&
               menuItems.title != MenuTitle.employeeOfTheWeek &&
               menuItems.title != MenuTitle.prDashboard &&
@@ -158,6 +164,13 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
             staff.dep.toLowerCase() == 'app') {
           allAccess.add(menuItems);
         }
+        // //restricting pr limited access to Solar account
+        // else if(staff.dep.toLowerCase() == 'pr' && staff.uid == 'ajckJI82Y4Uk6780vpSMmyo3ylr2'){
+        //   if(menuItems.title == MenuTitle.searchLead ||
+        //       menuItems.title == MenuTitle.createInvoice){
+        //     allAccess.add(menuItems);
+        //   }
+        // }
         //adding for pr access
         else if (staff.dep.toLowerCase() == 'pr') {
           if (menuItems.title == MenuTitle.workEntry ||
@@ -190,7 +203,46 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
             allAccess.add(menuItems);
           }
         }
-        //adding for everyone
+        //adding access for lokesh
+        else if (staff.uid == 'lloBhjn2aSRijD33pDeH5Bn2aJD3') {
+          if (menuItems.title == MenuTitle.workEntry ||
+              menuItems.title == MenuTitle.refreshment ||
+              menuItems.title == MenuTitle.leavePortal ||
+              menuItems.title == MenuTitle.searchLead ||
+              menuItems.title == MenuTitle.prVisit ||
+              menuItems.title == MenuTitle.suggestion ||
+              menuItems.title == MenuTitle.createInvoice ||
+              menuItems.title == MenuTitle.prWorkDone ||
+              menuItems.title == MenuTitle.salesPoint ||
+              menuItems.title == MenuTitle.scanQR ||
+              menuItems.title == MenuTitle.prReminder ||
+              menuItems.title == MenuTitle.quotationTemplate ||
+              menuItems.title == MenuTitle.paySlip ||
+              menuItems.title == MenuTitle.saleCount) {
+            allAccess.add(menuItems);
+          }
+        }
+        //adding access for bravo
+        else if (staff.dep.toLowerCase() == 'bravo') {
+          if (menuItems.title == MenuTitle.workEntry ||
+              menuItems.title == MenuTitle.refreshment ||
+              menuItems.title == MenuTitle.leavePortal ||
+              menuItems.title == MenuTitle.searchLead ||
+              menuItems.title == MenuTitle.prVisit ||
+              menuItems.title == MenuTitle.suggestion ||
+              menuItems.title == MenuTitle.createInvoice ||
+              menuItems.title == MenuTitle.prWorkDone ||
+              menuItems.title == MenuTitle.salesPoint ||
+              menuItems.title == MenuTitle.scanQR ||
+              menuItems.title == MenuTitle.prReminder ||
+              menuItems.title == MenuTitle.quotationTemplate ||
+              menuItems.title == MenuTitle.paySlip ||
+              menuItems.title == MenuTitle.attendance ||
+              menuItems.title == MenuTitle.foodCount) {
+            allAccess.add(menuItems);
+          }
+        }
+        //adding access for everyone
         else {
           if (menuItems.title == MenuTitle.workEntry ||
               menuItems.title == MenuTitle.refreshment ||
@@ -234,6 +286,8 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
                 ? 0
                 : int.parse(entry['mobile'].toString()),
             uniqueId: '',
+            saleAchieved: entry['leads_achieved'].toString(),
+            saleTarget: entry['leads_target'].toString(),
           );
           staffs.add(staffEntry);
         }
@@ -272,16 +326,14 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
   }
 
   @override
-  Future<Map<Object?, Object?>?> fetchAttendanceData(
-    String staffId,
-    DateTime date,
-  ) async {
+  Future<Map<Object?, Object?>?> fetchAttendanceData(String staffId,
+      DateTime date,) async {
     String yearFormat = DateFormat('yyyy').format(date);
     String monthFormat = DateFormat('MM').format(date);
     String dateFormat = DateFormat('dd').format(date);
 
     final attendanceRef =
-        ref.child('attendance/$yearFormat/$monthFormat/$dateFormat/$staffId');
+    ref.child('attendance/$yearFormat/$monthFormat/$dateFormat/$staffId');
     DatabaseEvent event = await attendanceRef.once();
 
     if (event.snapshot.exists) {
@@ -312,5 +364,49 @@ class HomeFbDataSourceImpl implements HomeFbDataSource {
   Future<Map<Object?, Object?>> getAllStaffDetails(String uid) async {
     final snapshot = await ref.child('staff/$uid').once();
     return snapshot.snapshot.value as Map<Object?, Object?>;
+  }
+
+  @override
+  Future<UserEntity?> salesData(String userId) async {
+    try {
+      UserEntity? result;
+      await FirebaseDatabase.instance.ref('staff/$userId').once().then((staff) async {
+        if(staff.snapshot.exists){
+          var entry = staff.snapshot.value as Map<Object?, Object?>;
+          final staffEntry = UserEntity(
+            uid: userId,
+            dep: entry['department'].toString(),
+            name: entry['name'].toString(),
+            email: entry['email'].toString(),
+            url: entry['profileImage'] == null
+                ? ''
+                : entry['profileImage'].toString(),
+            dob: entry['dob'] == null ? 0 : int.parse(entry['dob'].toString()),
+            mobile: entry['mobile'] == null
+                ? 0
+                : int.parse(entry['mobile'].toString()),
+            uniqueId: '',
+            saleAchieved: entry['leads_achieved'].toString(),
+            saleTarget: entry['leads_target'].toString(),
+          );
+          result = UserEntity(
+            uid: staffEntry.uid,
+            dep: staffEntry.dep,
+            email: staffEntry.email,
+            name: staffEntry.name,
+            dob: staffEntry.dob,
+            mobile: staffEntry.mobile,
+            url: staffEntry.url,
+            uniqueId: staffEntry.uniqueId,
+            saleTarget: staffEntry.saleTarget,
+            saleAchieved: staffEntry.saleAchieved,
+          );
+        }
+        });
+      return result;
+    } catch (e) {
+      print('Error caught while getting PR sale data: $e');
+      rethrow;
+    }
   }
 }

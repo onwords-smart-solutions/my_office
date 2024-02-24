@@ -36,26 +36,22 @@ class _ScanQRScreenState extends State<ScanQRScreen> {
     }
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Scan to get PR points',
+        title: Text(
+          'Scan for PR points',
           style: TextStyle(
             fontWeight: FontWeight.w500,
-            fontSize: 22,
-            color: Colors.white,
+            fontSize: 25,
+            color: Theme.of(context).primaryColor,
           ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () => Navigator.of(context).pop(),
         ),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.black,
         automaticallyImplyLeading: false,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
-        ),
       ),
-      backgroundColor: Colors.black,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -74,9 +70,9 @@ class _ScanQRScreenState extends State<ScanQRScreen> {
           ),
           AnimatedContainer(
             duration: const Duration(milliseconds: 500),
-            decoration: const BoxDecoration(
-              color: Color(0xff3b444b),
-              borderRadius: BorderRadius.only(
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor.withOpacity(.1),
+              borderRadius: const BorderRadius.only(
                 topRight: Radius.circular(
                   20,
                 ),
@@ -95,13 +91,15 @@ class _ScanQRScreenState extends State<ScanQRScreen> {
                           style: const TextStyle(
                             fontSize: 22,
                             color: CupertinoColors.activeOrange,
+                            fontWeight: FontWeight.w500,
                           ),
                         )
-                      : const Text(
+                      : Text(
                           'Scan a QR code',
                           style: TextStyle(
                             fontSize: 20,
-                            color: Colors.white,
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                 ),
@@ -113,10 +111,10 @@ class _ScanQRScreenState extends State<ScanQRScreen> {
                         result = null;
                       });
                     },
-                    child: const Text(
+                    child: Text(
                       'Done',
                       style: TextStyle(
-                        fontSize: 20,
+                        color: Theme.of(context).primaryColor,
                         fontWeight: FontWeight.w500,
                       ),
                     ),

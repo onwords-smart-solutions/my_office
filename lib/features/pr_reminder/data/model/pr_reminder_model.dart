@@ -13,6 +13,8 @@ class PrReminderModel {
   String rating;
   String state;
   String updatedBy;
+  String gate;
+  String secondaryNumber;
 
   PrReminderModel({
     required this.customerName,
@@ -29,6 +31,8 @@ class PrReminderModel {
     required this.customerId,
     required this.enquiredFor,
     required this.rating,
+    required this.gate,
+    required this.secondaryNumber,
   });
 
   factory PrReminderModel.fromMap(Map<Object?, Object?> prData) {
@@ -47,6 +51,8 @@ class PrReminderModel {
       rating: prData['Rating'].toString(),
       state: prData['State'].toString(),
       updatedBy: prData['Updated_by'].toString(),
+      gate: prData['Gate_type'].toString(),
+      secondaryNumber: prData['Work_phone_number'].toString(),
     );
   }
 }

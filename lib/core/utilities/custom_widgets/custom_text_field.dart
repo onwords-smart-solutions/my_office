@@ -30,9 +30,9 @@ class CustomTextField {
     this.textCapitalizationWords,
   });
 
-  Widget textInputField() {
+  Widget textInputField(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
+      margin: const EdgeInsets.symmetric(vertical: 10),
       child: TextFormField(
         textCapitalization: textCapitalizationWords ?? TextCapitalization.sentences,
         controller: controller,
@@ -40,24 +40,24 @@ class CustomTextField {
         keyboardType: textInputType,
         maxLength: maxLength,
         enabled: isEnable,
-        style: const TextStyle(
-          color: Colors.black,
+        style: TextStyle(
+          color: Theme.of(context).primaryColor,
         ),
         decoration: InputDecoration(
           counterText: '',
           prefixIcon: icon,
           hintText: hintName,
           labelText: hintName,
-          labelStyle: const TextStyle(
-            color: Colors.black,
+          labelStyle: TextStyle(
+            color: Theme.of(context).primaryColor,
           ),
           hintStyle: TextStyle(
-            color: Colors.black.withOpacity(0.6),
+          color: Theme.of(context).primaryColor.withOpacity(.3),
           ),
-          border: myInputBorder(),
-          enabledBorder: myInputBorder(),
-          focusedBorder: myFocusBorder(),
-          disabledBorder: myDisabledBorder(),
+          border: myInputBorder(context),
+          enabledBorder: myInputBorder(context),
+          focusedBorder: myFocusBorder(context),
+          disabledBorder: myDisabledBorder(context),
           errorBorder: myErrorBorder(),
         ),
         validator: validator,
@@ -66,35 +66,35 @@ class CustomTextField {
     );
   }
 
-  OutlineInputBorder myInputBorder() {
+  OutlineInputBorder myInputBorder(BuildContext context) {
     return OutlineInputBorder(
       borderRadius: const BorderRadius.all(Radius.circular(12)),
       borderSide: BorderSide(
-        color: Colors.black.withOpacity(0.3),
+        color: Theme.of(context).primaryColor.withOpacity(0.3),
         width: 2,
       ),
     );
   }
 
-  OutlineInputBorder myFocusBorder() {
+  OutlineInputBorder myFocusBorder(BuildContext context) {
     return OutlineInputBorder(
       borderRadius: const BorderRadius.all(
         Radius.circular(12),
       ),
       borderSide: BorderSide(
-        color: Colors.black.withOpacity(0.3),
+        color: Theme.of(context).primaryColor.withOpacity(0.3),
         width: 2,
       ),
     );
   }
 
-  OutlineInputBorder myDisabledBorder() {
+  OutlineInputBorder myDisabledBorder(BuildContext context) {
     return OutlineInputBorder(
       borderRadius: const BorderRadius.all(
         Radius.circular(12),
       ),
       borderSide: BorderSide(
-        color: Colors.black.withOpacity(0.3),
+        color: Theme.of(context).primaryColor.withOpacity(0.3),
         width: 2,
       ),
     );

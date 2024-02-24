@@ -1,7 +1,9 @@
 import 'dart:developer';
+import 'dart:ui';
 import 'package:after_layout/after_layout.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,6 +23,7 @@ import 'package:my_office/features/auth/presentation/view/birthday_picker_screen
 import 'package:my_office/firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'core/config/theme.dart';
 import 'features/auth/data/data_source/auth_fb_data_souce_impl.dart';
 import 'features/auth/data/data_source/auth_fb_data_source.dart';
 import 'features/auth/data/data_source/auth_local_data_source.dart';
@@ -35,6 +38,7 @@ import 'features/invoice_generator/presentation/provider/invoice_generator_provi
 import 'features/invoice_generator/presentation/view/client_details_screen.dart';
 import 'features/notifications/presentation/notification_view_model.dart';
 import 'features/quotation_template/presentation/provider/invoice_provider.dart';
+import 'features/theme/presentation/provider/theme_provider.dart';
 
 /// version: 1.1.3+16 Updated On (14/03/2023)
 
@@ -47,6 +51,8 @@ Future<void> main() async {
       name: "admin-console", options: DefaultFirebaseOptions.currentPlatform);
   await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
   await di.init();
+
+  // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitDown,
@@ -87,6 +93,9 @@ Future<void> main() async {
           ),
           ChangeNotifierProvider<FeedbackButtonProvider>(
             create: (_) => di.sl<FeedbackButtonProvider>(),
+          ),
+          ChangeNotifierProvider<ThemeProvider>(
+            create: (_) => di.sl<ThemeProvider>(),
           ),
         ],
         child: const MyApp(),
@@ -135,24 +144,27 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     _notificationService.initializePlatformNotifications();
     _initUserData();
+   Provider.of<ThemeProvider>(context,listen: false).loadThemeFromLocal();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      navigatorKey: navigationKey,
-      title: 'My Office',
-      theme: ThemeData(
-        primarySwatch: Colors.amber,
-        scaffoldBackgroundColor: const Color(0xffEEEEEE),
-        fontFamily: 'Roboto',
-      ),
-      home: const InitialScreen(),
-      routes: {
-        //   '/visitResume': (_) => const VisitFromScreen(),
-        '/invoiceGenerator': (_) => const ClientDetails(),
-      },
+    return Consumer<ThemeProvider>(
+      builder: (ctx, themeProvider, child){
+       return MaterialApp(
+          navigatorKey: navigationKey,
+          title: 'My Office',
+          darkTheme: AppTheme.darkTheme,
+          theme: AppTheme.lightTheme,
+          themeMode: themeProvider.themeMode,
+          home: const InitialScreen(),
+          routes: {
+            //   '/visitResume': (_) => const VisitFromScreen(),
+            '/invoiceGenerator': (_) => const ClientDetails(),
+          },
+        );
+      }
     );
   }
 }
@@ -190,10 +202,16 @@ class InitialScreenState extends State<InitialScreen>
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Colors.black,
+    return Scaffold(
       body: Center(
-        child: Text('Loading...'),
+        child: Text(
+            'Loading data..',
+        style: TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 20,
+          color: Theme.of(context).primaryColor,
+        ),
+        ),
       ),
     );
   }
@@ -236,12 +254,14 @@ class Loading extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ValueNotifier<bool> isShown = ValueNotifier(false);
-    Future.delayed(const Duration(seconds: 10), () => isShown.value = true);
+    Future.delayed(const Duration(seconds: 12), () => isShown.value = true);
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Lottie.asset('assets/animations/new_loading.json'),
+          Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ?
+          Lottie.asset('assets/animations/loading_light_theme.json'):
+              Lottie.asset('assets/animations/loading_dark_theme.json'),
           ValueListenableBuilder(
             valueListenable: isShown,
             builder: (ctx, isVisible, child) {
@@ -260,11 +280,14 @@ class Loading extends StatelessWidget {
                   (route) => false,
                 );
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurple,
-                foregroundColor: Colors.white,
+              child: Text(
+                  'Reset session',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+                color: Theme.of(context).primaryColor,
               ),
-              child: const Text('Reset session'),
+              ),
             ),
           ),
         ],

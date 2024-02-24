@@ -13,5 +13,7 @@ abstract class HrAccessFbDataSource {
     required String name,
     required String email,
     required String dep,
+    required int phone,
+    required DateTime dob,
   });
 }

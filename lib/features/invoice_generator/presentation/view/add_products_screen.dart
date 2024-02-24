@@ -1,7 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_office/core/utilities/constants/app_color.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_app_button.dart';
 import 'package:my_office/features/invoice_generator/presentation/provider/invoice_generator_provider.dart';
 import 'package:my_office/features/invoice_generator/presentation/view/product_details_screen.dart';
@@ -35,14 +34,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
           'Product Table',
           style: TextStyle(
             fontSize: 22,
-            color: Colors.white,
           ),
         ),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: AppColor.primaryColor,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios_new, ),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -63,7 +60,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   margin: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    color: CupertinoColors.systemGrey.withOpacity(0.4),
+                    color: Theme.of(context).primaryColor.withOpacity(.1),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -83,7 +80,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   margin: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color: CupertinoColors.systemGrey.withOpacity(0.4),
+                    color: Theme.of(context).primaryColor.withOpacity(.1),
                   ),
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,
@@ -132,13 +129,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   child: Row(
                     children: [
                       const SizedBox(width: 20),
-                      Icon(Icons.info, color: Colors.black.withOpacity(0.4)),
+                      Icon(Icons.info, color: Theme.of(context).primaryColor.withOpacity(.5)),
                       const SizedBox(width: 5),
                       Text(
                         'Tap on the product to delete..',
                         style: TextStyle(
                           fontSize: 15,
-                          color: Colors.black.withOpacity(0.4),
+                          color: Theme.of(context).primaryColor.withOpacity(.5),
                         ),
                       ),
                     ],
@@ -159,7 +156,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                         .getProductDetails
                         .isNotEmpty
                     ? AppButton(
-                        child: const Text('Next'),
+                        child: Text('Next', style: TextStyle(fontWeight: FontWeight.w500, color: Theme.of(context).primaryColor),),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -173,12 +170,12 @@ class _AddProductScreenState extends State<AddProductScreen> {
               ),
               const Spacer(),
               FloatingActionButton(
-                backgroundColor: AppColor.primaryColor,
+                backgroundColor: Colors.deepPurple.shade300,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(100),
                 ),
-                child: const Center(
-                  child: Icon(Icons.add, color: Colors.white),
+                child: Center(
+                  child: Icon(Icons.add, color: Theme.of(context).primaryColor,),
                 ),
                 onPressed: () {
                   Navigator.push(
@@ -232,8 +229,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
         children: cells.map(
           (cell) {
             final style = TextStyle(
-              fontWeight: isHeader ? FontWeight.bold : FontWeight.w600,
-              fontSize: 15,
+              fontWeight: isHeader ? FontWeight.bold : FontWeight.w500,
             );
             return Padding(
               padding: const EdgeInsets.all(8),
@@ -270,6 +266,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       'Do you want to delete this product?',
                       style: TextStyle(
                         fontSize: 17,
+                        color: Colors.black,
                       ),
                     ),
                   ),

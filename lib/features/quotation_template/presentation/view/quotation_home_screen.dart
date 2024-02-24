@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_office/core/utilities/constants/app_color.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_app_button.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_text_field.dart';
 import 'package:my_office/features/quotation_template/presentation/view/quotation_preview_screen.dart';
@@ -51,7 +50,6 @@ class _Client1DetailsState extends State<Client1Details> {
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColor.backGroundColor,
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios_new,
@@ -61,9 +59,9 @@ class _Client1DetailsState extends State<Client1Details> {
           },
         ),
         title: const Text(
-          'Client Details',
+          'Quotation template',
           style: TextStyle(
-            fontSize: 22,
+            fontSize: 25,
           ),
         ),
         centerTitle: true,
@@ -91,7 +89,7 @@ class _Client1DetailsState extends State<Client1Details> {
                           textInputType: TextInputType.name,
                           textInputAction: TextInputAction.next,
                           hintName: 'Client Name',
-                          icon: const Icon(Icons.person),
+                          icon: Icon(Icons.person, color: Theme.of(context).primaryColor),
                           maxLength: 50,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -99,16 +97,14 @@ class _Client1DetailsState extends State<Client1Details> {
                             }
                             return null;
                           },
-                        ).textInputField(),
-                        SizedBox(
-                          height: size.height * 0.02,
-                        ),
+                        ).textInputField(context),
+
                         CustomTextField(
                           controller: clientStreet,
                           textInputType: TextInputType.name,
                           textInputAction: TextInputAction.next,
                           hintName: 'Client Location',
-                          icon: const Icon(Icons.location_on),
+                          icon: Icon(Icons.location_on, color: Theme.of(context).primaryColor),
                           maxLength: 50,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -116,16 +112,14 @@ class _Client1DetailsState extends State<Client1Details> {
                             }
                             return null;
                           },
-                        ).textInputField(),
-                        SizedBox(
-                          height: size.height * 0.02,
-                        ),
+                        ).textInputField(context),
+
                         CustomTextField(
                           controller: clientAddress,
                           textInputType: TextInputType.name,
                           textInputAction: TextInputAction.next,
                           hintName: 'Client Address',
-                          icon: const Icon(Icons.location_city),
+                          icon: Icon(Icons.location_city, color: Theme.of(context).primaryColor),
                           maxLength: 100,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -133,16 +127,14 @@ class _Client1DetailsState extends State<Client1Details> {
                             }
                             return null;
                           },
-                        ).textInputField(),
-                        SizedBox(
-                          height: size.height * 0.02,
-                        ),
+                        ).textInputField(context),
+
                         CustomTextField(
                           controller: clientPhone,
                           textInputType: TextInputType.number,
                           textInputAction: TextInputAction.done,
                           hintName: 'Phone Number',
-                          icon: const Icon(Icons.call),
+                          icon: Icon(Icons.call, color: Theme.of(context).primaryColor),
                           maxLength: 10,
                           validator: (value) {
                             if (value == null ||
@@ -152,18 +144,16 @@ class _Client1DetailsState extends State<Client1Details> {
                             }
                             return null;
                           },
-                        ).textInputField(),
-                        SizedBox(
-                          height: size.height * 0.02,
-                        ),
+                        ).textInputField(context),
+
                         CustomTextField(
                           controller: clientGst,
                           textInputType: TextInputType.name,
                           textInputAction: TextInputAction.done,
                           hintName: 'GST (optional)',
-                          icon: const Icon(Icons.comment_bank),
+                          icon: Icon(Icons.comment_bank, color: Theme.of(context).primaryColor),
                           maxLength: 20,
-                        ).textInputField(),
+                        ).textInputField(context),
                         SizedBox(
                           height: size.height * 0.02,
                         ),
@@ -173,12 +163,16 @@ class _Client1DetailsState extends State<Client1Details> {
                             SizedBox(
                               width: size.width * 0.4,
                               child: DropdownButtonFormField<String>(
-                                style: const TextStyle(
-                                  color: CupertinoColors.label,
+                                dropdownColor: Theme.of(context).scaffoldBackgroundColor,
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
                                   fontSize: 16,
                                 ),
-                                hint: const Text(
+                                hint: Text(
                                   "Category",
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                  ),
                                 ),
                                 decoration: InputDecoration(
                                   contentPadding: const EdgeInsets.all(5.0),
@@ -186,9 +180,8 @@ class _Client1DetailsState extends State<Client1Details> {
                                   enabledBorder: myInputBorder(),
                                   fillColor: Colors.transparent,
                                   focusColor: Colors.transparent,
-                                  // hoverColor: Colors.black,
                                   focusedBorder: myFocusBorder(),
-                                  errorStyle: const TextStyle(),
+                                  errorBorder: myErrorBorder(),
                                 ),
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -207,8 +200,9 @@ class _Client1DetailsState extends State<Client1Details> {
                                     value: value,
                                     child: Text(
                                       value,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w600,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                          color: Theme.of(context).primaryColor,
                                       ),
                                     ),
                                   );
@@ -247,19 +241,11 @@ class _Client1DetailsState extends State<Client1Details> {
                       );
                     }
                   },
-                  child: Container(
-                    width: size.width * 0.5,
-                    height: size.height * .06,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Next',
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
-                      ),
+                  child: Text(
+                    'Next',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                        color: Theme.of(context).primaryColor,
                     ),
                   ),
                 ),
@@ -275,8 +261,8 @@ class _Client1DetailsState extends State<Client1Details> {
     return OutlineInputBorder(
       borderRadius: const BorderRadius.all(Radius.circular(15)),
       borderSide: BorderSide(
-        color: Colors.black.withOpacity(0.5),
-        width: 1.5,
+        color: Theme.of(context).primaryColor.withOpacity(.3),
+        width: 2,
       ),
     );
   }
@@ -285,9 +271,19 @@ class _Client1DetailsState extends State<Client1Details> {
     return OutlineInputBorder(
       borderRadius: const BorderRadius.all(Radius.circular(15)),
       borderSide: BorderSide(
-        color: Colors.black.withOpacity(0.5),
-        width: 1.5,
+        color: Theme.of(context).primaryColor.withOpacity(.3),
+        width: 2,
       ),
+    );
+  }
+
+  OutlineInputBorder myErrorBorder(){
+    return OutlineInputBorder(
+    borderRadius: const BorderRadius.all(Radius.circular(15)),
+    borderSide: BorderSide(
+      color: Colors.red.withOpacity(0.5),
+      width: 2,
+    ),
     );
   }
 }

@@ -1,6 +1,5 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
@@ -32,8 +31,6 @@ class _PaySlipState extends State<PaySlip> {
   ];
 
   final Map<String, String> paySlipData = {};
-
-  static const platform = MethodChannel('com.dynamicIcon');
 
   Future<void> getPaySlipsPdf(String year) async {
     setState(() {
@@ -68,6 +65,15 @@ class _PaySlipState extends State<PaySlip> {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        title: const Text('Pay slips', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 25),),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 25,),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
       body: SafeArea(
         minimum: const EdgeInsets.only(left: 5, right: 5, bottom: 5),
         child: SingleChildScrollView(
@@ -75,45 +81,11 @@ class _PaySlipState extends State<PaySlip> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Gap(20),
-              Padding(
-                padding: const EdgeInsets.only(left: 5),
-                child: RichText(
-                  text: TextSpan(
-                    children: [
-                      const TextSpan(
-                        text: 'Hi,',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
-                          fontSize: 22,
-                        ),
-                      ),
-                      TextSpan(
-                        text: ' ${widget.user.name}',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
-                          color: Colors.deepPurple,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const Gap(5),
-              const Padding(
-                padding: EdgeInsets.only(left: 5),
-                child: Text(
-                  'Get your Pay slips here!',
-                  style: TextStyle(fontWeight: FontWeight.w500),
-                ),
-              ),
-              const Gap(20),
+              const Gap(30),
               Stack(
                 children: [
                   Container(
-                    height: size.height * .15,
+                    height: size.height * .2,
                     width: double.infinity,
                     margin: const EdgeInsets.symmetric(
                       horizontal: 6.0,
@@ -126,20 +98,20 @@ class _PaySlipState extends State<PaySlip> {
                       children: [
                         Positioned(
                           left: 10,
-                          top: 25,
+                          top: 30,
                           child: Text(
-                            '"If to love each other is the job,\nthen the happy life is the\n salary"',
+                            '"A lot of people work to earn.\nAnd, while at it, \nthey forget to learn."',
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
-                              fontSize: 17,
+                              fontSize: 20,
                               color: Colors.white,
                             ),
                           ),
                         ),
                         Positioned(
-                          right: -10,
-                          top: 5,
-                          bottom: 10,
+                          right: -25,
+                          top: 25,
+                          bottom: 0,
                           child: Image(
                             image: AssetImage(
                               'assets/pay_slip_screen.png',
@@ -151,55 +123,7 @@ class _PaySlipState extends State<PaySlip> {
                   ),
                 ],
               ),
-
               const Gap(20),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton.icon(
-                    onPressed: () async {
-                      await platform.invokeMethod('launcherfirst');
-                    },
-                    icon: const Icon(
-                      Icons.android,
-                      color: Colors.red,
-                    ),
-                    label: const Text(
-                      'One',
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  ),
-                  TextButton.icon(
-                    onPressed: () async {
-                      await platform.invokeMethod('launchersecond');
-                    },
-                    icon: const Icon(
-                      Icons.android,
-                      color: Colors.blue,
-                    ),
-                    label: const Text(
-                      'Two',
-                      style: TextStyle(color: Colors.blue),
-                    ),
-                  ),
-                  TextButton.icon(
-                    onPressed: () async {
-                      await platform.invokeMethod('default');
-                    },
-                    icon: const Icon(
-                      Icons.restore,
-                      color: Colors.black,
-                    ),
-                    label: const Text(
-                      'Restore',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ],
-              ),
-
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -208,13 +132,16 @@ class _PaySlipState extends State<PaySlip> {
               ),
               isLoading
                   ? Center(
-                      child: Lottie.asset('assets/animations/new_loading.json'))
+                      child:  Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ?
+                      Lottie.asset('assets/animations/loading_light_theme.json'):
+                      Lottie.asset('assets/animations/loading_dark_theme.json'),)
                   : Center(
                       child: paySlipData.isEmpty
-                          ? const Text(
+                          ? Text(
                               'No Pay slips available!!',
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
+                                color: Theme.of(context).primaryColor,
                                 fontSize: 17,
                               ),
                             )
@@ -230,12 +157,14 @@ class _PaySlipState extends State<PaySlip> {
                                         paySlipData.keys.elementAt(index);
                                     String downloadUrl = paySlipData[month]!;
                                     return Card(
-                                      elevation: 5,
+                                      surfaceTintColor: Colors.transparent,
+                                      color: Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ? Colors.grey.withOpacity(.2) : Colors.grey.shade300,
                                       child: ListTile(
                                         title: Text(
                                           '$month PAY SLIP',
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontWeight: FontWeight.w500,
+                                            color: Theme.of(context).primaryColor,
                                           ),
                                         ),
                                         onTap: () {
@@ -267,8 +196,8 @@ class _PaySlipState extends State<PaySlip> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: PopupMenuButton(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         position: PopupMenuPosition.under,
         elevation: 10.0,
         itemBuilder: (ctx) => List.generate(
@@ -277,7 +206,7 @@ class _PaySlipState extends State<PaySlip> {
             return PopupMenuItem(
               child: Text(
                 year[index],
-                style: const TextStyle(fontSize: 15),
+                style: TextStyle(fontSize: 15, color: Theme.of(context).primaryColor,),
               ),
               onTap: () {
                 setState(() {
@@ -291,13 +220,14 @@ class _PaySlipState extends State<PaySlip> {
         icon: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.calendar_month_rounded, color: Colors.deepPurple),
+            Icon(Icons.calendar_month_rounded,color: Theme.of(context).primaryColor,),
+            const Gap(5),
             Text(
               selectedYear,
-              style: const TextStyle(
+              style: TextStyle(
                 fontWeight: FontWeight.w500,
                 fontSize: 16.0,
-                color: Colors.deepPurple,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           ],

@@ -49,12 +49,6 @@ import 'package:my_office/features/hr_access/domain/repository/hr_access_reposit
 import 'package:my_office/features/hr_access/domain/use_case/all_staff_details_use_case.dart';
 import 'package:my_office/features/hr_access/domain/use_case/create_account_use_case.dart';
 import 'package:my_office/features/hr_access/domain/use_case/update_timing_for_employees_use_case.dart';
-import 'package:my_office/features/leave_approval/data/data_source/leave_approval_fb_data_source.dart';
-import 'package:my_office/features/leave_approval/data/data_source/leave_approval_fb_data_source_impl.dart';
-import 'package:my_office/features/leave_approval/data/repository/leave_approval_repo_impl.dart';
-import 'package:my_office/features/leave_approval/domain/repository/leave_approval_repository.dart';
-import 'package:my_office/features/leave_approval/domain/use_case/change_leave_request_use_case.dart';
-import 'package:my_office/features/leave_approval/domain/use_case/check_leave_status_use_case.dart';
 import 'package:my_office/features/pr_dashboard/data/data_source/pr_dash_fb_data_source.dart';
 import 'package:my_office/features/pr_dashboard/domain/repository/pr_dash_repository.dart';
 import 'package:my_office/features/pr_dashboard/domain/use_case/pr_dashboard_details_use_case.dart';
@@ -100,6 +94,7 @@ import 'package:my_office/features/suggestions/data/data_source/suggestion_fb_da
 import 'package:my_office/features/suggestions/data/repository/suggestion_repo_impl.dart';
 import 'package:my_office/features/suggestions/domain/repository/suggestion_repository.dart';
 import 'package:my_office/features/suggestions/domain/use_case/add_suggestion_use_case.dart';
+import 'package:my_office/features/theme/data/repository/theme_repository_impl.dart';
 import 'package:my_office/features/view_suggestions/data/data_source/view_suggestion_fb_data_source.dart';
 import 'package:my_office/features/view_suggestions/data/data_source/view_suggestion_fb_data_source_impl.dart';
 import 'package:my_office/features/view_suggestions/data/repository/view_suggestion_repo_impl.dart';
@@ -124,6 +119,13 @@ import '../../features/home/presentation/provider/home_provider.dart';
 import '../../features/pr_dashboard/data/data_source/pr_dash_fb_data_source_impl.dart';
 import '../../features/pr_dashboard/data/repository/pr_dash_repo_impl.dart';
 import '../../features/pr_reminder/domain/use_case/get_pr_reminders_use_case.dart';
+import '../../features/theme/data/local_data_source/theme_local_data_source.dart';
+import '../../features/theme/data/local_data_source/theme_local_data_source_impl.dart';
+import '../../features/theme/domain/repository/theme_repository.dart';
+import '../../features/theme/domain/use_case/get_app_theme_use_case.dart';
+import '../../features/theme/domain/use_case/reset_app_theme_use_case.dart';
+import '../../features/theme/domain/use_case/update_app_theme_use_case.dart';
+import '../../features/theme/presentation/provider/theme_provider.dart';
 
 final sl = GetIt.instance;
 
@@ -201,6 +203,15 @@ Future<void> init() async {
   ///FEEDBACK BUTTON PROVIDER
   sl.registerFactory<FeedbackButtonProvider>(
         () => FeedbackButtonProvider(),
+  );
+
+  ///THEME PROVIDER
+  sl.registerFactory<ThemeProvider>(
+        () => ThemeProvider(
+          sl.call(),
+          sl.call(),
+          sl.call(),
+        ),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ USE CASES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
@@ -310,16 +321,6 @@ Future<void> init() async {
     () => GetPrRemindersCase(prReminderRepository: sl.call()),
   );
 
-  ///CHECK LEAVE APPROVAL STATUS
-  sl.registerLazySingleton<CheckLeaveStatusCase>(
-    () => CheckLeaveStatusCase(leaveApprovalRepository: sl.call()),
-  );
-
-  ///CHANGE LEAVE REQUEST STATUS
-  sl.registerLazySingleton<ChangeLeaveRequestCase>(
-    () => ChangeLeaveRequestCase(leaveApprovalRepository: sl.call()),
-  );
-
   ///ALL STAFF NAMES
   sl.registerLazySingleton<StaffDetailCase>(
     () => StaffDetailCase(staffDetailRepository: sl.call()),
@@ -363,6 +364,21 @@ Future<void> init() async {
   ///CREATE STAFF ACCOUNT
   sl.registerLazySingleton<CreateAccountCase>(
         () => CreateAccountCase(hrAccessRepository: sl.call()),
+  );
+
+  ///GET APP THEME USE CASE
+  sl.registerLazySingleton<GetAppThemeUseCase>(
+        () => GetAppThemeUseCase(themeRepository: sl.call()),
+  );
+
+  ///RESET APP THEME USE CASE
+  sl.registerLazySingleton<ResetAppThemeUseCase>(
+        () => ResetAppThemeUseCase(themeRepository: sl.call()),
+  );
+
+  ///UPDATE APP THEME USE CASE
+  sl.registerLazySingleton<UpdateAppThemeUseCase>(
+        () => UpdateAppThemeUseCase(themeRepository: sl.call()),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ REPOSITORIES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
@@ -417,11 +433,6 @@ Future<void> init() async {
     () => PrReminderRepoImpl(sl.call()),
   );
 
-  ///LEAVE APPROVAL SCREEN
-  sl.registerLazySingleton<LeaveApprovalRepository>(
-    () => LeaveApprovalRepoImpl(sl.call()),
-  );
-
   ///STAFF DETAILS SCREEN
   sl.registerLazySingleton<StaffDetailRepository>(
     () => StaffDetailRepoImpl(staffDetailFbDataSource: sl.call()),
@@ -465,6 +476,11 @@ Future<void> init() async {
   ///HR ACCESS REPOSITORY
   sl.registerLazySingleton<HrAccessRepository>(
         () => HrAccessRepoImpl(sl.call()),
+  );
+
+  ///THEME REPOSITORY
+  sl.registerLazySingleton<ThemeRepository>(
+        () => ThemeRepositoryImpl(localDataSource: sl.call(),),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DATA SOURCE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
@@ -519,11 +535,6 @@ Future<void> init() async {
     () => PrReminderFbDataSourceImpl(),
   );
 
-  ///LEAVE APPROVAL SCREEN
-  sl.registerLazySingleton<LeaveApprovalFbDataSource>(
-    () => LeaveApprovalFbDataSourceImpl(),
-  );
-
   ///ADD SUGGESTION SCREEN
   sl.registerLazySingleton<SuggestionFbDataSource>(
     () => SuggestionFbDataSourceImpl(),
@@ -572,6 +583,11 @@ Future<void> init() async {
   ///HR ACCESS STAFFS SCREEN
   sl.registerLazySingleton<HrAccessFbDataSource>(
         () => HrAccessFbDataSourceImpl(),
+  );
+
+  ///THEME DATA SCREEN
+  sl.registerLazySingleton<ThemeLocalDataSource>(
+        () => ThemeLocalDataSourceImpl(),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ EXTERNAL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //

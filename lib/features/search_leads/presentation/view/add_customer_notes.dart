@@ -100,22 +100,19 @@ class _AddNotesState extends State<AddNotes> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: const Color(0xffF1F2F8),
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(
             Icons.arrow_back_ios_rounded,
-            color: Colors.white,
           ),
-          splashRadius: 20.0,
         ),
         centerTitle: true,
-        title: const Text(
+        title: Text(
           'Notes and Audio',
           style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
+            fontSize: 25,
+            color: Theme.of(context).primaryColor,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -124,12 +121,6 @@ class _AddNotesState extends State<AddNotes> {
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(20),
               bottomRight: Radius.circular(20),
-            ),
-            gradient: LinearGradient(
-              colors: [
-                Color(0xffD136D4),
-                Color(0xff7652B2),
-              ],
             ),
           ),
         ),
@@ -146,13 +137,14 @@ class _AddNotesState extends State<AddNotes> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            const Padding(
-              padding: EdgeInsets.all(8.0),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
               child: Text(
                 "Add notes ",
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
-                  fontSize: 16,
+                  fontSize: 18,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
             ),
@@ -163,9 +155,10 @@ class _AddNotesState extends State<AddNotes> {
                 maxLines: 4,
                 textCapitalization: TextCapitalization.sentences,
                 textInputAction: TextInputAction.done,
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 16,
+                  color: Theme.of(context).primaryColor,
                 ),
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
@@ -173,33 +166,34 @@ class _AddNotesState extends State<AddNotes> {
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: CupertinoColors.systemPurple,
+                    borderSide: BorderSide(
+                      color: Theme.of(context).primaryColor.withOpacity(.5),
                       width: 2,
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: CupertinoColors.systemGrey,
+                    borderSide: BorderSide(
+                      color: Theme.of(context).primaryColor.withOpacity(.3),
                       width: 2,
                     ),
                   ),
                   hintText: 'Enter your notes here..',
-                  hintStyle: const TextStyle(
-                    color: CupertinoColors.systemGrey,
+                  hintStyle: TextStyle(
+                    color: Theme.of(context).primaryColor.withOpacity(.4),
                     fontSize: 16,
                   ),
                 ),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
               child: Text(
                 'Set Reminder',
                 style: TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.w500,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
             ),
@@ -228,36 +222,37 @@ class _AddNotesState extends State<AddNotes> {
                 },
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.all(10),
-                  prefixIcon: const Icon(
+                  prefixIcon: Icon(
                     CupertinoIcons.calendar,
-                    color: CupertinoColors.systemPurple,
+                    color: Theme.of(context).primaryColor,
                   ),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  focusedBorder: OutlineInputBorder(
+                  enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: CupertinoColors.systemPurple,
+                    borderSide: BorderSide(
+                      color: Theme.of(context).primaryColor.withOpacity(.3),
                       width: 2,
                     ),
                   ),
-                  enabledBorder: OutlineInputBorder(
+                  focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: CupertinoColors.systemGrey,
+                    borderSide: BorderSide(
+                      color: Theme.of(context).primaryColor.withOpacity(.5),
                       width: 2,
                     ),
                   ),
                   hintText: 'Tap to pick a date',
-                  hintStyle: const TextStyle(
+                  hintStyle: TextStyle(
                     fontSize: 16,
-                    color: CupertinoColors.systemGrey,
+                    color: Theme.of(context).primaryColor.withOpacity(.4),
                   ),
                 ),
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
             ),
@@ -270,10 +265,11 @@ class _AddNotesState extends State<AddNotes> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: const Text(
+                child: Text(
                   'Pick audio file',
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
               ),
@@ -335,7 +331,13 @@ class _AddNotesState extends State<AddNotes> {
             Center(
               child: AppButton(
                 onPressed: saveData,
-                child: const Text('Submit'),
+                child: Text(
+                    'Submit',
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: Theme.of(context).primaryColor,
+                ),
+                ),
               ),
             ),
           ],

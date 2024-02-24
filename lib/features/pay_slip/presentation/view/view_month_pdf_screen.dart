@@ -4,6 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:gap/gap.dart';
 
 class ViewMonthPdf extends StatefulWidget {
   final String name;
@@ -16,6 +17,7 @@ class ViewMonthPdf extends StatefulWidget {
 
 }
 class _ViewMonthPdfState extends State<ViewMonthPdf> {
+  final ReceivePort _port = ReceivePort();
 
   Future<String?> chooseDownloadDirectory(BuildContext context) async {
     try {
@@ -39,6 +41,7 @@ class _ViewMonthPdfState extends State<ViewMonthPdf> {
         showNotification: true,
         openFileFromNotification: true,
       );
+      await FlutterDownloader.open(taskId: taskId!);
       print(taskId);
     }
   }
@@ -52,6 +55,7 @@ class _ViewMonthPdfState extends State<ViewMonthPdf> {
 
   @override
   void initState() {
+    IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
     FlutterDownloader.registerCallback(downloadCallback);
     super.initState();
   }
@@ -64,15 +68,24 @@ class _ViewMonthPdfState extends State<ViewMonthPdf> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
     return Scaffold(
-      body: Center(
-        child: const PDF(
-          swipeHorizontal: true,
-        ).cachedFromUrl(widget.pdf),
+      appBar: AppBar(
+        title: Text(widget.month, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 22),),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 25,),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
+      body: const PDF(
+        fitPolicy: FitPolicy.BOTH,
+        swipeHorizontal: true,
+      ).cachedFromUrl(widget.pdf),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Theme.of(context).cardColor,
         tooltip: 'Download Pay slip',
-        child: const Icon(Icons.download),
+        child: Icon(Icons.download, color: Theme.of(context).primaryColor,),
         onPressed: (){
           downloadFile(widget.pdf, '${widget.name} ${widget.month} Pay slip ${DateTime.now().millisecondsSinceEpoch}.pdf', context);
         },

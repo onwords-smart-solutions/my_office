@@ -82,8 +82,8 @@ As, I have mentioned above this project is structured with Clean architecture pr
 
 ### Version history and Releases
 
-* Android : 2.1.6+6 - Added month wise Food count details and removed excess Proxy attendance access for staffs.
-* iOS : 2.0.12+87. 
+* Android : 4.0.9+25 - Added bucket option for PR's.
+* iOS : 2.1.7. 
 
 
 

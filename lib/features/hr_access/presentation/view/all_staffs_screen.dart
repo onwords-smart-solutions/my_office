@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:my_office/core/utilities/constants/app_color.dart';
 import 'package:my_office/features/hr_access/data/data_source/hr_access_fb_data_source.dart';
 import 'package:my_office/features/hr_access/data/data_source/hr_access_fb_data_source_impl.dart';
 import 'package:my_office/features/hr_access/data/repository/hr_access_repo_impl.dart';
@@ -37,7 +36,7 @@ class _AllStaffsState extends State<AllStaffs> {
     'PR',
     'HR',
     'MANAGEMENT',
-    'OFFICE STAFF',
+    'BRAVO',
   ];
   bool isLoading = false;
   String department = 'ALL';
@@ -66,12 +65,11 @@ class _AllStaffsState extends State<AllStaffs> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.backGroundColor,
       appBar: AppBar(
-        backgroundColor: AppColor.backGroundColor,
         leading: IconButton(
           icon: const Icon(
             CupertinoIcons.chevron_back,
+            size: 30,
           ),
           onPressed: () {
             Navigator.of(context).pop();
@@ -81,13 +79,17 @@ class _AllStaffsState extends State<AllStaffs> {
           'Employee details',
           style: TextStyle(
             fontWeight: FontWeight.w500,
+            fontSize: 25,
           ),
         ),
         centerTitle: true,
       ),
       body: isLoading
           ? Center(
-              child: Lottie.asset('assets/animations/new_loading.json'),
+              child: Theme.of(context).scaffoldBackgroundColor ==
+                      const Color(0xFF1F1F1F)
+                  ? Lottie.asset('assets/animations/loading_light_theme.json')
+                  : Lottie.asset('assets/animations/loading_dark_theme.json'),
             )
           : Column(
               children: [
@@ -101,15 +103,17 @@ class _AllStaffsState extends State<AllStaffs> {
                         alignment: AlignmentDirectional.topStart,
                         child: Text(
                           'Total staffs : ${sortEmployees.length}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
+                            color: Theme.of(context).primaryColor,
                           ),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: PopupMenuButton(
+                          surfaceTintColor: Colors.transparent,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -121,8 +125,9 @@ class _AllStaffsState extends State<AllStaffs> {
                               return PopupMenuItem(
                                 child: Text(
                                   dep[i],
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.w500,
+                                    color: Theme.of(context).primaryColor,
                                   ),
                                 ),
                                 onTap: () {
@@ -132,9 +137,11 @@ class _AllStaffsState extends State<AllStaffs> {
                                       sortEmployees = employeeDetails;
                                     } else {
                                       sortEmployees = employeeDetails
-                                          .where((element) =>
-                                              element.department == department,
-                                      )
+                                          .where(
+                                            (element) =>
+                                                element.department ==
+                                                department,
+                                          )
                                           .toList();
                                     }
                                   });
@@ -145,11 +152,12 @@ class _AllStaffsState extends State<AllStaffs> {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(CupertinoIcons.sort_down),
+                              Icon(CupertinoIcons.sort_down,color: Theme.of(context).primaryColor,),
                               Text(
                                 department,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontWeight: FontWeight.w500,
+                                  color: Theme.of(context).primaryColor,
                                 ),
                               ),
                             ],
@@ -165,11 +173,11 @@ class _AllStaffsState extends State<AllStaffs> {
                     itemCount: sortEmployees.length,
                     itemBuilder: (context, index) {
                       return Card(
+                        surfaceTintColor: Colors.transparent,
+                        color: Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ? Colors.grey.withOpacity(.2) : Colors.grey.shade300,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5),
                         ),
-                        elevation: 5,
-                        color: Colors.white,
                         child: ListTile(
                           leading: Container(
                             width: 40.0,
@@ -185,8 +193,7 @@ class _AllStaffsState extends State<AllStaffs> {
                                     ),
                                   )
                                 : CachedNetworkImage(
-                                    imageUrl:
-                                    sortEmployees[index].profilePic!,
+                                    imageUrl: sortEmployees[index].profilePic!,
                                     fit: BoxFit.cover,
                                     progressIndicatorBuilder: (
                                       context,
@@ -194,7 +201,7 @@ class _AllStaffsState extends State<AllStaffs> {
                                       downloadProgress,
                                     ) =>
                                         CircularProgressIndicator(
-                                      color: AppColor.primaryColor,
+                                          color: Theme.of(context).primaryColor,
                                       value: downloadProgress.progress,
                                     ),
                                     errorWidget: (context, url, error) =>
@@ -204,8 +211,20 @@ class _AllStaffsState extends State<AllStaffs> {
                                     ),
                                   ),
                           ),
-                          title: Text(sortEmployees[index].name),
-                          trailing: Text(sortEmployees[index].department),
+                          title: Text(
+                              sortEmployees[index].name,
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 16,
+                          ),
+                          ),
+                          trailing: Text(
+                              sortEmployees[index].department,
+                            style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 12,
+                            ),
+                          ),
                           onTap: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(

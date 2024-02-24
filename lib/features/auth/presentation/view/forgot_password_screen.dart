@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:my_office/core/utilities/constants/app_color.dart';
+import 'package:my_office/core/utilities/custom_widgets/custom_text_field.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/utilities/custom_widgets/custom_snack_bar.dart';
 import '../provider/authentication_provider.dart';
@@ -22,43 +24,42 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: AppColor.backGroundColor,
       body: Form(
         key: formKey,
         child: Stack(
           children: [
             ///Center Image...
             Positioned(
-              top: height * 0.5,
-              left: width * 0.30,
+              top: height * 0.02,
+              left: width * 0.10,
               // right: width * 0.0,
-              child: Image.asset(
-                'assets/forget password.png',
-                scale: 4.5,
+              child: SvgPicture.asset(
+                'assets/images/forgot_password.svg',
+                height: height * .4,
               ),
             ),
 
             ///Top Text...
             Positioned(
-              top: height * 0.1,
+              top: height * 0.4,
               left: width * 0.05,
               // right: width*0.0,
               child: RichText(
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: 'Forgot\nPassword?\n',
+                      text: 'Forgot Password!!\n',
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
-                        color: Colors.black,
                         fontSize: height * 0.035,
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                     TextSpan(
                       text: 'Please enter your Mail id below',
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
-                        color: Colors.black,
+                        color: Theme.of(context).primaryColor,
                         fontSize: height * 0.020,
                       ),
                     ),
@@ -69,33 +70,26 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
 
             /// TextFields And Submit Button...
             Positioned(
-              top: height * 0.3,
+              top: height * 0.5,
               left: width * 0.05,
               right: width * 0.05,
               bottom: 0,
-              child: Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      // color: Colors.black,
-                      border: Border.all(
-                        color: Colors.black,
-                      ),
-                      borderRadius: BorderRadius.circular(20),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    CustomTextField(
+                      controller: emailEditingController,
+                      textInputType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.done,
+                      hintName: 'Email Id',
+                      maxLength: 100,
+                      icon: Icon(Icons.email, color: Theme.of(context).primaryColor,),
+                    ).textInputField(context),
+                    SizedBox(
+                      height: height * 0.05,
                     ),
-                    child: textFiledWidget(
-                      height,
-                      TextInputType.emailAddress,
-                      TextInputAction.done,
-                      'Email Id',
-                      emailEditingController,
-                      const Icon(Icons.person_outlined),
-                    ),
-                  ),
-                  SizedBox(
-                    height: height * 0.05,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
 
@@ -156,7 +150,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
             name,
             style: TextStyle(
               fontWeight: FontWeight.w500,
-              color: AppColor.backGroundColor,
+              color: Theme.of(context).primaryColor,
               fontSize: height * 0.030,
             ),
           ),
@@ -182,15 +176,13 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
         keyboardType: textInputType,
         style: TextStyle(
           fontSize: height * 0.02,
-          color: Colors.black,
+          color: Theme.of(context).primaryColor,
           fontWeight: FontWeight.w500,
         ),
         decoration: InputDecoration(
           prefixIcon: icon,
           border: InputBorder.none,
           hintText: hintName,
-          filled: true,
-          fillColor: AppColor.backGroundColor,
           contentPadding:
               const EdgeInsets.only(left: 14.0, bottom: 6.0, top: 8.0),
           focusedBorder: OutlineInputBorder(

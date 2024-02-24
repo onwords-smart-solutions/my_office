@@ -4,11 +4,10 @@ import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:install_plugin_v2/install_plugin_v2.dart';
+import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/core/utilities/constants/app_version.dart';
 import 'package:my_office/features/home/data/data_source/home_fb_data_source.dart';
@@ -17,10 +16,10 @@ import 'package:my_office/features/home/data/repository/home_repo_impl.dart';
 import 'package:my_office/features/home/domain/repository/home_repository.dart';
 import 'package:my_office/features/home/presentation/provider/home_provider.dart';
 import 'package:my_office/features/home/presentation/view/account_details_screen.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:my_office/features/leads_achieved/presentation/view/view_leads_achieved_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../../core/utilities/custom_widgets/custom_alerts.dart';
 import '../../../../core/utilities/custom_widgets/custom_search_delegate.dart';
 import '../../../../core/utilities/custom_widgets/custom_snack_bar.dart';
@@ -63,15 +62,23 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   void initState() {
     final context = this.context;
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
+    final user = Provider.of<AuthenticationProvider>(context, listen: false);
+    homeRepository.salesData(user.user!.uid);
     _getInfoItemDetails();
     _motivationIndex = homeProvider.getRandomNumber();
-    // _checkAppVersion();
+    _checkAppVersion();
     _getStaffAccess();
     _getNetworkStatus();
     _notificationService.storeFCM(context: context);
+    _notificationService.initPushNotification();
     _notificationService.initFCMNotifications();
     _setNotification();
     _setupFCMListener(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if(user.user!.dep == 'PR'){
+        buildPRDashboard();
+      }
+    });
     super.initState();
   }
 
@@ -84,8 +91,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
             ? const Text('No user found!')
             : Scaffold(
                 appBar: AppBar(
-                  surfaceTintColor: Colors.white,
-                  backgroundColor: Colors.white,
                   leading: GestureDetector(
                     onTap: () {
                       HapticFeedback.mediumImpact();
@@ -109,6 +114,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                               progressIndicatorBuilder:
                                   (context, url, downloadProgress) =>
                                       CircularProgressIndicator(
+                                color: Theme.of(context).primaryColor,
                                 value: downloadProgress.progress,
                               ),
                               errorWidget: (context, url, error) => const Icon(
@@ -122,16 +128,25 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Image.asset(
-                        'assets/onwords.png',
-                        height: 14,
-                        fit: BoxFit.cover,
-                      ),
+                      Theme.of(context).scaffoldBackgroundColor ==
+                              const Color(0xFF1F1F1F)
+                          ? Image.asset(
+                              'assets/images/onwords_light.png',
+                              height: 14,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.asset(
+                              'assets/images/onwords_dark.png',
+                              height: 14,
+                              fit: BoxFit.cover,
+                            ),
+                      const Gap(2),
                       Text(
                         'Hello, ${userProvider.user!.name}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 25.0,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ],
@@ -175,14 +190,13 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                   );
                 },
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
                 child: Text(
                   'Utilities',
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 20.0,
-                    color: Colors.black38.withOpacity(.7),
                   ),
                 ),
               ),
@@ -190,10 +204,14 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
                 valueListenable: _staffAccess,
                 builder: (ctx, staffAccess, child) {
                   return staffAccess.isEmpty
-                      ? Lottie.asset(
-                          'assets/animations/new_loading.json',
-                          height: size.height * .6,
-                        )
+                      ? Theme.of(context).scaffoldBackgroundColor ==
+                              const Color(0xFF1F1F1F)
+                          ? Lottie.asset(
+                              'assets/animations/loading_light_theme.json',
+                            )
+                          : Lottie.asset(
+                              'assets/animations/loading_dark_theme.json',
+                            )
                       : Consumer<AuthenticationProvider>(
                           builder: (ctx, userProvider, child) {
                             return GridView.builder(
@@ -229,7 +247,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   Widget _search(Size size, AuthenticationProvider userProvider) {
     return Container(
       padding: const EdgeInsets.all(20.0),
-      color: Colors.white,
       child: TextField(
         onTap: () {
           HapticFeedback.mediumImpact();
@@ -243,14 +260,19 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         },
         readOnly: true,
         decoration: InputDecoration(
-          suffixIcon: const Icon(CupertinoIcons.search, color: Colors.grey),
+          suffixIcon: Icon(
+            CupertinoIcons.search,
+            color: Theme.of(context).primaryColor,
+          ),
           contentPadding:
               const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
           filled: true,
-          fillColor: Theme.of(context).scaffoldBackgroundColor,
+          fillColor: Theme.of(context).primaryColor.withOpacity(.1),
           hintText: 'Search',
-          hintStyle:
-              const TextStyle(fontWeight: FontWeight.w500, color: Colors.grey),
+          hintStyle: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: Theme.of(context).primaryColor,
+          ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15.0),
             borderSide: BorderSide.none,
@@ -264,7 +286,51 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     );
   }
 
-  // FUNCTIONS
+  //FUNCTIONS
+
+  //PR sale pop up dialog
+  buildPRDashboard() async {
+    final context = this.context;
+    final user = Provider.of<AuthenticationProvider>(context, listen: false);
+    final salesData = await homeRepository.salesData(user.user!.uid);
+    return CustomPRAlerts.showAlertDialog(
+              context: context,
+              title: 'Sale status',
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Your sale target - ${salesData?.saleTarget}',
+                    style: TextStyle(
+                         fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                    ),
+                  ),
+                  Text(
+                    'Sale achieved - ${salesData?.saleAchieved}' ,
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                    ),
+                  ),
+                ],
+              ),
+              actionButton: FilledButton.tonal(
+                onPressed: () =>
+                    Navigator.of(context).pop(),
+                child: Text(
+                  'Ok',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+              ),
+              barrierDismissible: true,
+          );
+  }
+
+  //Getting staff access
   _getStaffAccess() async {
     BuildContext context = this.context;
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
@@ -283,7 +349,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     }
   }
 
-  //CHECKING INTERNET CONNECTIVITY
+  //Checking internet connectivity
   Future<void> _getNetworkStatus() async {
     final connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.wifi ||
@@ -296,8 +362,8 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       if (!mounted) return;
       CustomAlerts.showAlertDialog(
         context: context,
-        title: 'Check your network connection',
-        content: 'Unable to connect to the network at this moment',
+        title: 'Check your Network connection',
+        content: 'Unable to connect to the network at this moment!!',
         actionButton: TextButton(
           onPressed: () {
             if (_haveNetwork.value) {
@@ -312,6 +378,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     _getConnectivityStream();
   }
 
+  //Checking connectivity status
   _getConnectivityStream() {
     subscription = Connectivity()
         .onConnectivityChanged
@@ -325,15 +392,21 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         _haveNetwork.value = false;
         CustomAlerts.showAlertDialog(
           context: context,
-          title: 'Check your network connection',
-          content: 'Unable to connect to the network at this moment',
-          actionButton: TextButton(
+          title: 'Check your Network connection',
+          content: 'Unable to connect to the network at this moment!!',
+          actionButton: FilledButton.tonal(
             onPressed: () {
               if (_haveNetwork.value) {
                 Navigator.of(context).pop();
               }
             },
-            child: const Text('Try again'),
+            child: Text(
+              'Try again',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
           ),
           barrierDismissible: false,
         );
@@ -341,23 +414,40 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     });
   }
 
+  //Setting FCM messages
   void _setupFCMListener(BuildContext context) {
     FirebaseMessaging.onMessage.listen((message) {
-      log("notification ${message.notification!.title}");
-      CustomAlerts.showAlertDialog(
-        context: context,
-        title: message.notification!.title.toString(),
-        content: message.notification!.body.toString(),
-        actionButton: TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Ok'),
-        ),
-        barrierDismissible: true,
-      );
+      log('Message is ${message.notification!.body.toString()}');
+      if (message.data['type'] == NotificationType.saleCount) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => ViewLeadsAchievedScreen(
+              content: message,
+            ),
+          ),
+        );
+      } else {
+        CustomAlerts.showAlertDialog(
+          context: context,
+          title: message.notification!.title.toString(),
+          content: message.notification!.body.toString(),
+          actionButton: TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text(
+              'Ok',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+              ),
+            ),
+          ),
+          barrierDismissible: true,
+        );
+      }
     });
   }
 
-  //SETTING NOTIFICATION FOR REFRESHMENT
+  //Setting notification for refreshment
   _setNotification() async {
     final pref = await SharedPreferences.getInstance();
     final isNotificationSet = pref.getString('NotificationSetTime') ?? '';
@@ -366,21 +456,27 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     );
   }
 
-  //CHECKING APP VERSION
+  //Checking app version
   Future<void> _checkAppVersion() async {
     try {
       final data = await homeRepository.checkAppVersion();
       final updatedVersion = data['versionNumber'];
       final updates = data['updates'].toString();
-      if (AppVersion.androidAppDbVersion != updatedVersion) {
-        _showUpdateAppDialog(updates);
+      final restrictApp = data['restrictApp'];
+      final forceUpdateApp = data['androidForceUpdate'];
+      if (AppVersion.androidAppDbVersion != updatedVersion &&
+          AppVersion.androidForceUpdate == forceUpdateApp) {
+          _showUpdateAppDialog(updates);
+      }
+      if (AppVersion.restrictAndroidApp == restrictApp) {
+        _showAppRestrictDialog();
       }
     } catch (e) {
-      // Handle exception
+      Exception('Error caught while checking App version $e');
     }
   }
 
-  //info details functions
+  //Info details functions
   _getInfoItemDetails() async {
     final context = this.context;
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
@@ -434,169 +530,144 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
         );
         _entryDetail.value = data;
         _endTime.value = now;
-      } else if (now.minute != _endTime.value.minute &&
+      } else if (_entryDetail.value != null &&
+          now.minute != _endTime.value.minute &&
           _entryDetail.value!.checkOutTime == null) {
         _endTime.value = now;
         _endTime.notifyListeners();
-        final data = await homeProvider.getPunchingTime(
-          userProvider.user!.uid,
-          userProvider.user!.name,
-          userProvider.user!.dep,
-        );
-        if (data != null && data.checkInTime != null) {
-          _entryDetail.value = data;
-          _entryDetail.notifyListeners();
+        try {
+          final data = await homeProvider.getPunchingTime(
+            userProvider.user!.uid,
+            userProvider.user!.name,
+            userProvider.user!.dep,
+          );
+          if (data != null && data.checkInTime != null) {
+            _entryDetail.value = data;
+            _entryDetail.notifyListeners();
+          }
+        } catch (e) {
+          'Error is $e';
         }
       }
     });
   }
 
+  //App restrict alert dialog
+  Future<void> _showAppRestrictDialog() async {
+    final user = Provider.of<AuthenticationProvider>(context, listen: false);
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return PopScope(
+          canPop: false,
+          child: AlertDialog(
+            surfaceTintColor: Colors.transparent,
+            title: Text(
+              "App usage restricted",
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.w700,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+            content: Text(
+              "Kindly bare with this alert, App team is working on the solution, Until then you are not able to access the app.",
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+            actions: [
+              if (user.user!.dep == "APP")
+                TextButton(
+                  child: const Text(
+                    'Ignore',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                    ),
+                  ),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  //App update alert dialog
   Future<void> _showUpdateAppDialog(String message) async {
     final notes = message.split('/');
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        bool isUpdating = false;
-        return WillPopScope(
-          child: StatefulBuilder(
-            builder: (BuildContext context, setState) => ValueListenableBuilder(
-              valueListenable: _totalMB,
-              builder: (ctx, totalMb, child) {
-                return ValueListenableBuilder(
-                  valueListenable: _downloadedMB,
-                  builder: (ctx, downloadedMb, child) {
-                    return AlertDialog(
-                      title: isUpdating
-                          ? Text(
-                              totalMb <= 0.0
-                                  ? 'Downloading.. 0%'
-                                  : 'Downloading.. ${((downloadedMb / totalMb) * 100).round()} %',
-                              style: const TextStyle(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.deepPurple,
-                              ),
-                            )
-                          : const Text("New Update Available!!"),
-                      content: isUpdating
-                          ? Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Text(
-                                  'While prompted to update press Update',
-                                  style: TextStyle(fontSize: 15.0),
-                                ),
-                                const SizedBox(height: 20.0),
-                                LinearProgressIndicator(
-                                  minHeight: 5.0,
-                                  value: totalMb <= 0.0
-                                      ? 0.0
-                                      : (downloadedMb / totalMb),
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                                const SizedBox(height: 5.0),
-                                Align(
-                                  alignment: AlignmentDirectional.centerEnd,
-                                  child: Text(
-                                    totalMb <= 0.0
-                                        ? 'calculating'
-                                        : '${downloadedMb.round()} MB / ${totalMb.round()} MB',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 12.0,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )
-                          : message.isNotEmpty
-                              ? Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: List.generate(
-                                    notes.length,
-                                    (index) => Text(
-                                      notes[index],
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : const Text(
-                                  "You are currently using an outdated version. Update the app to use the latest features..",
-                                  style: TextStyle(fontSize: 16.0),
-                                ),
-                      actions: [
-                        isUpdating
-                            ? const SizedBox.shrink()
-                            : TextButton(
-                                onPressed: () async {
-                                  final permission = await Permission
-                                      .requestInstallPackages.isGranted;
-                                  if (permission) {
-                                    setState(() {
-                                      isUpdating = true;
-                                    });
-                                    _onClickInstallApk();
-                                  } else {
-                                    await Permission.requestInstallPackages
-                                        .request();
-                                  }
-                                },
-                                child: const Text("Update Now"),
-                              ),
-                      ],
-                    );
-                  },
-                );
-              },
+        return PopScope(
+          canPop: false,
+          child: AlertDialog(
+            surfaceTintColor: Colors.transparent,
+            title: Text(
+              "New Update Available",
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.w700,
+                color: Theme.of(context).primaryColor,
+              ),
             ),
+            content: message.isNotEmpty
+                ? Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: List.generate(
+                      notes.length,
+                      (index) => Text(
+                        notes[index],
+                        style: TextStyle(
+                          color: Theme.of(context).primaryColor,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  )
+                : Text(
+                    "You are currently using an outdated version. Update the app to use the latest features..",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+            actions: [
+              TextButton(
+                onPressed: () async {
+                  final url = Uri.parse(
+                    Platform.isIOS
+                        ? 'https://www.apple.com/in/app-store/'
+                        : "https://play.google.com/store/apps/details?id=com.office.onwords",
+                  );
+                  if (await canLaunchUrl(url)) {
+                    await launchUrl(
+                      url,
+                      mode: LaunchMode.externalNonBrowserApplication,
+                    );
+                  } else {
+                    throw 'Could not launch $url';
+                  }
+                },
+                child: const Text(
+                  "Update",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ],
           ),
-          onWillPop: () async {
-            return false;
-          },
         );
       },
     );
-  }
-
-  Future<void> _onClickInstallApk() async {
-    final resultPath =
-        FirebaseStorage.instance.ref('MY OFFICE APK/app-release.apk');
-    final appDocDir = await getExternalStorageDirectory();
-    final String appDocPath = appDocDir!.path;
-    final File tempFile = File('$appDocPath/MY_OFFICE_UPDATED.apk');
-    try {
-      resultPath.writeToFile(tempFile).snapshotEvents.listen((event) async {
-        if (event.totalBytes != -1) {
-          _totalMB.value = bytesToMB(event.totalBytes);
-        }
-        _downloadedMB.value = bytesToMB(event.bytesTransferred);
-
-        if (_totalMB.value == _downloadedMB.value) {
-          await tempFile.create();
-          await InstallPlugin.installApk(tempFile.path, 'com.onwords.office')
-              .then((result) {})
-              .catchError((error) {
-            Navigator.of(context).pop();
-            CustomSnackBar.showErrorSnackbar(
-              message: 'Unable to update my office. Try again',
-              context: context,
-            );
-          });
-        }
-      });
-    } on FirebaseException {
-      if (!mounted) return;
-      Navigator.of(context).pop();
-      CustomSnackBar.showErrorSnackbar(
-        message: 'Unable to update my office. Try again',
-        context: context,
-      );
-    }
   }
 
   @override
@@ -605,8 +676,6 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     _totalMB.dispose();
     _downloadedMB.dispose();
     _haveNetwork.dispose();
-    _endTime.dispose();
-    _entryDetail.dispose();
     _bdayStaffs.dispose();
     subscription.cancel();
     super.dispose();

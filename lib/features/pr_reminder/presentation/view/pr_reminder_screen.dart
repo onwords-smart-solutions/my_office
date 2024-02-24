@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/core/utilities/constants/app_color.dart';
@@ -61,7 +62,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
   @override
   Widget build(BuildContext context) {
     return MainTemplate(
-      subtitle: 'Look up your Reminders!',
+      subtitle: 'PR Reminders',
       templateBody: buildReminder(),
       bgColor: AppColor.backGroundColor,
     );
@@ -102,17 +103,17 @@ class _ReminderScreenState extends State<ReminderScreen> {
                 },
                 child: Icon(
                   CupertinoIcons.calendar_badge_plus,
-                  color: CupertinoColors.activeOrange,
+                  color: Theme.of(context).primaryColor,
                   size: height * 0.04,
                 ),
               ),
               SizedBox(width: width * 0.03),
               Text(
                 '$selectedDate',
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 17,
-                  color: CupertinoColors.systemPurple,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
             ],
@@ -121,17 +122,19 @@ class _ReminderScreenState extends State<ReminderScreen> {
         SizedBox(height: height * 0.01),
         Text(
           'Total reminders : ${filteredReminders.length}',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.w500,
+            color: Theme.of(context).primaryColor,
           ),
         ),
+        const Gap(10),
         reminderProvider.isLoading
             ? Expanded(
                 child: Center(
-                  child: Lottie.asset(
-                    "assets/animations/new_loading.json",
-                  ),
+                  child: Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ?
+                  Lottie.asset('assets/animations/loading_light_theme.json'):
+                  Lottie.asset('assets/animations/loading_dark_theme.json'),
                 ),
               )
             : filteredReminders.isNotEmpty
@@ -147,20 +150,13 @@ class _ReminderScreenState extends State<ReminderScreen> {
                               Container(
                                 margin: const EdgeInsets.all(5),
                                 decoration: BoxDecoration(
-                                  color: AppColor.backGroundColor,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.2),
-                                      offset: const Offset(0.0, 2.0),
-                                      blurRadius: 8,
-                                    ),
-                                  ],
+                                  color: Theme.of(context).primaryColor.withOpacity(.1),
                                   borderRadius: BorderRadius.circular(15),
                                 ),
                                 child: ListTile(
-                                  leading: const Icon(
+                                  leading: Icon(
                                     CupertinoIcons.person_2_fill,
-                                    color: CupertinoColors.systemPurple,
+                                    color: Theme.of(context).primaryColor,
                                   ),
                                   trailing: CupertinoButton(
                                     pressedOpacity: 0.5,
@@ -173,12 +169,14 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                         context: context,
                                         builder: (ctx) {
                                           return AlertDialog(
-                                            title: const Text(
+                                            surfaceTintColor: Colors.transparent,
+                                            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                                            title: Text(
                                               'Do you want to delete the reminder?',
                                               style: TextStyle(
                                                 fontSize: 18,
                                                 fontWeight: FontWeight.w500,
-                                                color: CupertinoColors.label,
+                                               color: Theme.of(context).primaryColor,
                                               ),
                                             ),
                                             actions: [
@@ -189,15 +187,14 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                                   borderRadius:
                                                       BorderRadius.circular(20),
                                                 ),
-                                                child: MaterialButton(
-                                                  child: const Text(
+                                                child: TextButton(
+                                                  child: Text(
                                                     'Yes',
                                                     style: TextStyle(
                                                       fontSize: 17,
                                                       fontWeight:
                                                           FontWeight.w500,
-                                                      color: CupertinoColors
-                                                          .destructiveRed,
+                                                      color: Theme.of(context).primaryColor,
                                                     ),
                                                   ),
                                                   onPressed: () async {
@@ -226,12 +223,11 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                                   borderRadius:
                                                       BorderRadius.circular(20),
                                                 ),
-                                                child: MaterialButton(
-                                                  child: const Text(
+                                                child: TextButton(
+                                                  child: Text(
                                                     'No',
                                                     style: TextStyle(
-                                                      color:
-                                                          CupertinoColors.black,
+                                                      color:Theme.of(context).primaryColor,
                                                       fontWeight:
                                                           FontWeight.w500,
                                                       fontSize: 17,
@@ -250,8 +246,9 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                   ),
                                   title: Text(
                                     filteredReminders[i].customerName,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 17,
+                                      color: Theme.of(context).primaryColor,
                                     ),
                                   ),
                                   onTap: () {
@@ -277,21 +274,23 @@ class _ReminderScreenState extends State<ReminderScreen> {
                   )
                 : Expanded(
                     child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Lottie.asset(
-                            'assets/animations/no_data.json',
-                            height: 300.0,
-                          ),
-                          const Text(
-                            'No reminders set😞',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 20,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Lottie.asset(
+                              'assets/animations/no_data.json',
+                              height: 300.0,
                             ),
-                          ),
-                        ],
+                            Text(
+                              'No reminders set😞',
+                              style: TextStyle(
+                                color: Theme.of(context).primaryColor,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -306,8 +305,9 @@ class _ReminderScreenState extends State<ReminderScreen> {
       child: Row(
         children: [
           PopupMenuButton(
+            surfaceTintColor: Colors.transparent,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(15),
             ),
             position: PopupMenuPosition.under,
             elevation: 10,
@@ -320,19 +320,26 @@ class _ReminderScreenState extends State<ReminderScreen> {
               return staffNames.map((String name) {
                 return PopupMenuItem<String>(
                   value: name,
-                  child: Text(name, style: const TextStyle(fontSize: 16)),
+                  child: Text(
+                      name,
+                      style: TextStyle(
+                          fontSize: 16,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                  ),
                 );
               }).toList();
             },
-            icon: const Icon(CupertinoIcons.sort_down),
+            icon: Icon(
+                CupertinoIcons.sort_down, color: Theme.of(context).primaryColor,),
           ),
           Text(
             names,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 15,
+              color: Theme.of(context).primaryColor,
             ),
           ),
-          // ... the rest of your row
         ],
       ),
     );

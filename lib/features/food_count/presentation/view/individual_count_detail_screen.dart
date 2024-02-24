@@ -14,6 +14,10 @@ class _CountDetailScreenState extends State<CountDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
         title: Text(
           widget.allFoodCountList.name,
           style: const TextStyle(
@@ -30,9 +34,13 @@ class _CountDetailScreenState extends State<CountDetailScreen> {
       itemCount: widget.allFoodCountList.foodDates.length,
       itemBuilder: (ctx, i){
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 20,vertical: 7),
           child: Text(
             '${widget.allFoodCountList.foodDates[i]}',
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 16,
+            ),
           ),
         );
       },

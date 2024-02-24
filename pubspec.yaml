@@ -2,7 +2,7 @@ name: my_office
 description: A new Flutter project.
 publish_to: 'none'
 
-version: 2.1.7+7
+version: 4.0.9+25
 
 environment:
   sdk: '>=2.18.6 <3.0.0'
@@ -47,7 +47,6 @@ dependencies:
   swipeable_button_view:
   flutter_dynamic_icon:
   confetti:
-  install_plugin_v2:
   qr_flutter: ^4.1.0
   qr_code_scanner: ^1.0.1
   permission_handler:
@@ -72,6 +71,7 @@ dependencies:
   gap: ^3.0.1
   flutter_cached_pdfview: ^0.4.2
   flutter_downloader: ^1.11.5
+  firebase_crashlytics: ^3.4.8
 
 dev_dependencies:
   flutter_test:
@@ -85,7 +85,7 @@ flutter:
     - assets/
     - assets/animations/
     - assets/visit/
-    - assets/wake_word/Onyx_en_android_v2_2_0.ppn
+    - assets/images/
 
   fonts:
     - family: Roboto
@@ -96,3 +96,10 @@ flutter:
          - asset: assets/fonts/Roboto-Bold.ttf
            weight: 700
 
+    - family: SF Pro
+      fonts:
+        - asset: assets/fonts/SFPRODISPLAYREGULAR.OTF
+        - asset: assets/fonts/SFPRODISPLAYMEDIUM.OTF
+          weight: 500
+        - asset: assets/fonts/SFPRODISPLAYBOLD.OTF
+          weight: 700

@@ -33,11 +33,18 @@ class _CustomImageCropperState extends State<CustomImageCropper> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
         elevation: 0.0,
-        title: const Text(
+        title: Text(
           'Move and Scale',
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontWeight: FontWeight.w500,
+            color: Theme.of(context).primaryColor,
+            fontSize: 25,
+          ),
+        ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () => Navigator.of(context).pop(),
         ),
         centerTitle: true,
         automaticallyImplyLeading: false,
@@ -95,11 +102,12 @@ class _CustomImageCropperState extends State<CustomImageCropper> {
                       style: TextButton.styleFrom(
                         foregroundColor: Theme.of(context).primaryColor,
                       ),
-                      child: const Text(
+                      child: Text(
                         'Cancel',
                         style: TextStyle(
                           fontSize: 16.0,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -110,11 +118,12 @@ class _CustomImageCropperState extends State<CustomImageCropper> {
                       style: TextButton.styleFrom(
                         foregroundColor: Theme.of(context).primaryColor,
                       ),
-                      child: const Text(
+                      child:  Text(
                         'Choose',
                         style: TextStyle(
                           fontSize: 16.0,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                     ),
@@ -163,19 +172,19 @@ class _CustomImageCropperState extends State<CustomImageCropper> {
               borderRadius: BorderRadius.circular(15.0),
               color: Theme.of(context).colorScheme.surface,
             ),
-            child: const Column(
+            child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                CircularProgressIndicator.adaptive(
+                const CircularProgressIndicator.adaptive(
                   valueColor: AlwaysStoppedAnimation(Colors.deepPurple),
                   strokeWidth: 2.0,
                 ),
-                SizedBox(height: 10.0),
+                const SizedBox(height: 10.0),
                 Text(
                   'Saving',
                   style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
               ],

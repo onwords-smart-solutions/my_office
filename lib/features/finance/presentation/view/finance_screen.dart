@@ -3,12 +3,14 @@ import 'dart:developer';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:my_office/core/utilities/constants/app_color.dart';
+import 'package:my_office/core/utilities/constants/app_main_template.dart';
 import 'package:my_office/features/finance/data/data_source/finance_fb_data_source.dart';
 import 'package:my_office/features/finance/data/data_source/finance_fb_data_source_impl.dart';
 import 'package:my_office/features/finance/data/repository/finance_repo_impl.dart';
-import '../../../../core/utilities/constants/app_screen_template.dart';
 import '../../data/model/expense_model.dart';
 import '../../data/model/income_model.dart';
 import '../../domain/repository/finance_repository.dart';
@@ -100,9 +102,10 @@ class _FinanceScreenState extends State<FinanceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenTemplate(
-      bodyTemplate: buildFinanceScreen(),
-      title: 'Financial Analyzing',
+    return MainTemplate(
+      templateBody: buildFinanceScreen(),
+      subtitle: 'Financial Analyzing',
+      bgColor: AppColor.backGroundColor,
     );
   }
 
@@ -118,107 +121,112 @@ class _FinanceScreenState extends State<FinanceScreen> {
     }
     return isLoading
         ? Center(
-            child: Lottie.asset(
-              "assets/animations/new_loading.json",
-            ),
+            child:
+        Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ?
+        Lottie.asset('assets/animations/loading_light_theme.json'):
+        Lottie.asset('assets/animations/loading_dark_theme.json'),
           )
         : Padding(
             padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            text: 'Profit with salary : ',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.black,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: profitWithSalary.toString(),
-                                style: TextStyle(
-                                  color:
-                                      profitWithSalary.toString().contains('-')
-                                          ? Colors.red
-                                          : Colors.green,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                ),
+            child: SingleChildScrollView( 
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              text: 'Profit with salary : ',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Theme.of(context).primaryColor,
                               ),
-                            ],
-                          ),
-                        ),
-                        RichText(
-                          text: TextSpan(
-                            text: 'Profit without salary : ',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.black,
-                            ),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: profitWithOutSalary.toString(),
-                                style: TextStyle(
-                                  color: profitWithOutSalary
-                                          .toString()
-                                          .contains('-')
-                                      ? Colors.red
-                                      : Colors.green,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 15,
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: profitWithSalary.toString(),
+                                  style: TextStyle(
+                                    color:
+                                        profitWithSalary.toString().contains('-')
+                                            ? Colors.red
+                                            : Colors.green,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 15,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    FilledButton.tonal(
-                      onPressed: () {
-                        datePicker();
-                      },
-                      child: SizedBox(
-                        height: height * 0.05,
-                        width: width * 0.17,
-                        child: Center(
-                          child: Text(
-                            '$selectedYear/$selectedMonth',
-                            style: const TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
+                          RichText(
+                            text: TextSpan(
+                              text: 'Profit without salary : ',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Theme.of(context).primaryColor,
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: profitWithOutSalary.toString(),
+                                  style: TextStyle(
+                                    color: profitWithOutSalary
+                                            .toString()
+                                            .contains('-')
+                                        ? Colors.red
+                                        : Colors.green,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      FilledButton.tonal(
+                        onPressed: () {
+                          datePicker();
+                        },
+                        child: SizedBox(
+                          height: height * 0.05,
+                          width: width * 0.17,
+                          child: Center(
+                            child: Text(
+                              '$selectedYear/$selectedMonth',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Theme.of(context).primaryColor,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                           ),
                         ),
                       ),
+                    ],
+                  ),
+                  Gap(height * .04),
+                  buildButton(
+                    name: 'Income - $totalIncome',
+                    image: Image.asset(
+                      'assets/income.png',
+                      scale: 3,
                     ),
-                  ],
-                ),
-                buildButton(
-                  name: 'Income - $totalIncome',
-                  image: Image.asset(
-                    'assets/income.png',
-                    scale: 3,
+                    page: IncomeScreen(allIncome: allIncome),
                   ),
-                  page: IncomeScreen(allIncome: allIncome),
-                ),
-                buildButton(
-                  name: 'Expense - $totalExpense',
-                  image: Image.asset(
-                    'assets/expense.png',
-                    scale: 3,
+                  Gap(height * .05),
+                  buildButton(
+                    name: 'Expense - $totalExpense',
+                    image: Image.asset(
+                      'assets/expense.png',
+                      scale: 3,
+                    ),
+                    page: ExpenseScreen(allExpense: allExpense),
                   ),
-                  page: ExpenseScreen(allExpense: allExpense),
-                ),
-              ],
+                ],
+              ),
             ),
           );
   }
@@ -240,28 +248,24 @@ class _FinanceScreenState extends State<FinanceScreen> {
         width: width * 1,
         padding: const EdgeInsets.symmetric(vertical: 20.0),
         decoration: BoxDecoration(
-          color: const Color(0xffDAD6EE),
+          color: Theme.of(context).primaryColor.withOpacity(.1),
           borderRadius: BorderRadius.circular(20),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black26,
-              offset: Offset(3.0, 3.0),
-              blurRadius: 3,
-            ),
-          ],
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Center(child: image),
-            AutoSizeText(
-              name,
-              style: const TextStyle(
-                color: Colors.black,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Center(child: image),
+              const Gap(10),
+              AutoSizeText(
+                name,
+                style: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                ),
+                minFontSize: 20,
               ),
-              minFontSize: 20,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

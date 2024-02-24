@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:my_office/core/utilities/constants/app_color.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_app_button.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_text_field.dart';
@@ -73,15 +74,14 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Discount and Amount Info',
-          style: TextStyle(fontSize: 22, color: Colors.white),
+          style: TextStyle(fontSize: 22, color: Theme.of(context).primaryColor),
         ),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: AppColor.primaryColor,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          icon: Icon(Icons.arrow_back_ios_new, color: Theme.of(context).primaryColor ),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -109,7 +109,7 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                         decoration: BoxDecoration(
                           // color: Colors.blueGrey,
                           border: Border.all(
-                            color: Colors.black.withOpacity(0.3),
+                            color:Theme.of(context).primaryColor.withOpacity(.5),
                             width: 2,
                           ),
                           borderRadius: BorderRadius.circular(20),
@@ -149,7 +149,6 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                             height: height * .16,
                             width: width * .5,
                             decoration: BoxDecoration(
-                              // color: Colors.blueGrey,
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Column(
@@ -157,20 +156,20 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                                 Text(
                                   'Available Discount - $discountPercentage %',
                                   style: TextStyle(
-                                    color: AppColor.primaryColor,
+                                    color: Theme.of(context).primaryColor,
                                     fontSize: 15,
                                   ),
                                 ),
-                                const SizedBox(height: 15),
+                                const SizedBox(height: 5),
                                 Expanded(
                                   child: CustomTextField(
                                     controller: discountController,
                                     textInputType: TextInputType.number,
                                     textInputAction: TextInputAction.done,
                                     hintName: 'Fill below $discountPercentage%',
-                                    icon: const Icon(
+                                    icon: Icon(
                                       Icons.percent,
-                                      color: Colors.black,
+                                      color: Theme.of(context).primaryColor,
                                     ),
                                     maxLength: 3,
                                     validator: (value) {
@@ -186,23 +185,21 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                                       }
                                       return null;
                                     },
-                                  ).textInputField(),
+                                  ).textInputField(context),
                                 ),
                               ],
                             ),
                           ),
-
                           /// NEED GST
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             height: height * .078,
                             decoration: BoxDecoration(
-                              // color: Colors.blueGrey,
                               border: Border.all(
-                                color: Colors.black.withOpacity(0.3),
+                                color: Theme.of(context).primaryColor.withOpacity(.3),
                                 width: 2,
                               ),
-                              borderRadius: BorderRadius.circular(20),
+                              borderRadius: BorderRadius.circular(15),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -211,10 +208,11 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                                   "GST Need : ",
                                   style: TextStyle(
                                     fontSize: height * 0.019,
-                                    color: Colors.black,
+                                    color: Theme.of(context).primaryColor,
                                   ),
                                 ),
                                 Checkbox(
+                                  checkColor: Theme.of(context).primaryColor,
                                   value: gstNeed,
                                   onChanged: (val) {
                                     setState(() {
@@ -234,15 +232,15 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                           ? Container(
                               height: height * .15,
                               decoration: BoxDecoration(
-                                // color: Colors.blueGrey,
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Column(
                                 children: [
-                                  const Text(
+                                  Text(
                                     'Advanced Amount',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w500,
+                                      color: Theme.of(context).primaryColor,
                                       fontSize: 16,
                                     ),
                                   ),
@@ -252,9 +250,9 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                                     textInputType: TextInputType.number,
                                     textInputAction: TextInputAction.done,
                                     hintName: 'Advance',
-                                    icon: const Icon(
+                                    icon: Icon(
                                       Icons.money,
-                                      color: Colors.black,
+                                      color: Theme.of(context).primaryColor,
                                     ),
                                     maxLength: 10,
                                     // validator: (value) {
@@ -263,7 +261,7 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                                     //   }
                                     //   return null;
                                     // },
-                                  ).textInputField(),
+                                  ).textInputField(context),
                                 ],
                               ),
                             )
@@ -272,7 +270,11 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
                   ),
                 ),
                 AppButton(
-                  child: const Text('Next'),
+                  child: Text('Next',
+                    style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).primaryColor,
+                  ),),
                   onPressed: () {
                     if (formKey.currentState!.validate()) {
                       discountAmount = int.parse(maxTotalAmount.toString()) *
@@ -328,16 +330,17 @@ class _InvoiceTypeAndDetailsState extends State<InvoiceTypeAndDetails> {
         child: ListTile(
           title: Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.w500,
+              color: Theme.of(context).primaryColor,
             ),
           ),
           trailing: Text(
             value,
-            style: const TextStyle(
+            style: TextStyle(
               fontWeight: FontWeight.w500,
               fontSize: 15,
-              color: CupertinoColors.systemPurple,
+              color: Theme.of(context).primaryColor,
             ),
           ),
         ),

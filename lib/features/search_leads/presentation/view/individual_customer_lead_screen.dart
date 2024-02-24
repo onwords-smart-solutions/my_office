@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_app_button.dart';
 import 'package:my_office/core/utilities/custom_widgets/custom_snack_bar.dart';
 import 'package:provider/provider.dart';
@@ -134,21 +135,12 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: const Color(0xffF1F2F8),
       appBar: AppBar(
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(20),
               bottomRight: Radius.circular(20),
-            ),
-            gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: <Color>[
-                Color(0xffD136D4),
-                Color(0xff7652B2),
-              ],
             ),
           ),
         ),
@@ -163,15 +155,14 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(
             Icons.arrow_back_ios_rounded,
-            color: Colors.white,
           ),
-          splashRadius: 20.0,
         ),
         title: Text(
           widget.customerInfo['name'].toString(),
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 18.0,
+          style: TextStyle(
+            fontSize: 22.0,
+            fontWeight: FontWeight.w500,
+            color: Theme.of(context).primaryColor,
           ),
         ),
         titleSpacing: 0.0,
@@ -184,8 +175,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
             },
             icon: const Icon(
               CupertinoIcons.bag_fill_badge_plus,
-              color: Colors.white,
               size: 30,
+              color: Colors.purpleAccent,
             ),
           ),
           IconButton(
@@ -274,6 +265,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
       'Phone number',
       'Rating',
       'Reminder date',
+      'Gate',
+      'Secondary number',
     ];
 
     return StreamBuilder(
@@ -295,6 +288,8 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
             data['phone_number'].toString(),
             data['rating'].toString(),
             widget.reminder,
+            data['gate_type'].toString(),
+            data['work_phone_number'].toString(),
           ];
 
           return ListView.builder(
@@ -330,14 +325,16 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
             //Dropdown to change "State" of customers
             DropdownButton(
               value: dropDownValue,
-              elevation: 12,
               borderRadius: BorderRadius.circular(15),
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 17,
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+                fontFamily: "SF Pro",
               ),
-              icon: const Icon(
+              icon: Icon(
                 Icons.arrow_drop_down_circle_outlined,
+                color: Theme.of(context).primaryColor.withOpacity(.5),
               ),
               onChanged: (String? value) {
                 setState(() {
@@ -348,13 +345,21 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
               items: list.map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
-                  child: Text(value),
+                  child: Text(
+                      value,
+                  style: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                    fontFamily: "SF Pro",
+                    fontSize: 16,
+                  ),
+                  ),
                 );
               }).toList(),
             ),
           ],
         ),
 
+        const Gap(10),
         //Feedback button
         Align(
           alignment: AlignmentDirectional.center,
@@ -368,12 +373,17 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                       onPressed: () {
                         feedbackApiPost(context);
                       },
-                      child: const Text('Feedback'),
+                      child: Text('Feedback',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Theme.of(context).primaryColor,
+                      ),),
                     );
             },
           ),
         ),
 
+        const Gap(10),
         //Dropdown for changing lead in charge
         widget.currentStaffName == 'Anitha' ||
                 widget.currentStaffName == 'Devendiran' ||
@@ -383,6 +393,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(12),
                   child: PopupMenuButton(
+                    surfaceTintColor: Colors.transparent,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -394,8 +405,10 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                         return PopupMenuItem(
                           child: Text(
                             widget.prStaffNames[index],
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(context).primaryColor,
                             ),
                           ),
                           onTap: () {
@@ -409,11 +422,12 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                     ),
                     child: Row(
                       children: [
-                        const Text(
+                        Text(
                           'Lead in charge -',
                           style: TextStyle(
-                            fontSize: 19,
-                            color: Colors.purple,
+                            fontSize: 18,
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                         SizedBox(width: width * 0.03),
@@ -423,12 +437,14 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
-                            color: Colors.grey.withOpacity(0.4),
+                            color: Theme.of(context).primaryColor.withOpacity(.1),
                           ),
                           child: Text(
                             leadName,
-                            style: const TextStyle(
-                              fontSize: 16,
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w500,
+                              color: Theme.of(context).primaryColor,
                             ),
                           ),
                         ),
@@ -613,6 +629,11 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
         await searchLeadsRepository.updateLead(
           widget.customerInfo['phone_number'].toString(),
           leadName,
+        );
+        await searchLeadsRepository.updateBucketList(
+         mobile: widget.customerInfo['phone_number'].toString(),
+          user: leadName,
+          oldUser: widget.customerInfo['LeadIncharge'].toString(),
         );
       } catch (e) {
         Exception('Error caught while changing lead names!! $e');

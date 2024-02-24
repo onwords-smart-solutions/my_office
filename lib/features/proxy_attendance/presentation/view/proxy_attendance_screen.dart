@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/core/utilities/constants/app_color.dart';
@@ -100,7 +101,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
   @override
   Widget build(BuildContext context) {
     return MainTemplate(
-      subtitle: 'Proxy attendance for employees',
+      subtitle: 'Proxy attendance',
       templateBody: buildProxyAttendance(),
       bgColor: AppColor.backGroundColor,
     );
@@ -112,9 +113,9 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
-            child: Lottie.asset(
-              'assets/animations/new_loading.json',
-            ),
+            child:  Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ?
+            Lottie.asset('assets/animations/loading_light_theme.json'):
+            Lottie.asset('assets/animations/loading_dark_theme.json'),
           );
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
@@ -126,16 +127,13 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                   value: staff,
                   label: staff.name,
                   style: ButtonStyle(
-                    shape: MaterialStateProperty.resolveWith((states) {
-                      OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                      );
-                      return null;
-                    }),
                     textStyle: MaterialStateProperty.resolveWith(
                           (states) =>
-                      const TextStyle(
+                              TextStyle(
                         fontSize: 17,
+                                color: Theme.of(context).scaffoldBackgroundColor,
+                                fontFamily: 'SF Pro',
+                                fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
@@ -162,8 +160,8 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
               children: [
                 SizedBox(
                   height: height * 0.3,
-                  child: const Image(
-                    image: AssetImage('assets/proxy_screen.png'),
+                  child: SvgPicture.asset(
+                    'assets/images/proxy_attendance_screen.svg',
                   ),
                 ),
                 SizedBox(height: height * 0.02),
@@ -172,44 +170,49 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                   width: width * 0.9,
                   inputDecorationTheme: InputDecorationTheme(
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: const BorderSide(color: Colors.black),
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(color:Theme.of(context).primaryColor.withOpacity(.3),width: 2),
                     ),
-                    labelStyle: const TextStyle(),
+                    labelStyle:  TextStyle(
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    hintStyle: TextStyle(
+                      color: Theme.of(context).primaryColor.withOpacity(.4),
+                    ),
                     contentPadding: const EdgeInsets.all(15),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: const BorderSide(color: Colors.black),
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(color:Theme.of(context).primaryColor.withOpacity(.3),width: 2),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: const BorderSide(color: Colors.black),
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(color:Theme.of(context).primaryColor.withOpacity(.3),width: 2),
                     ),
                     errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(15),
                       borderSide: const BorderSide(color: Colors.red),
                     ),
-                    errorStyle: const TextStyle(),
+                    errorStyle: const TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                   requestFocusOnTap: true,
-                  menuHeight: height * 0.4,
+                  menuHeight: height * 0.3,
                   menuStyle: MenuStyle(
+                    surfaceTintColor: MaterialStateColor.resolveWith((states) => Colors.transparent),
                     backgroundColor: MaterialStateProperty.resolveWith(
-                          (states) => Colors.purple.shade50,
-                    ),
-                    padding: MaterialStateProperty.resolveWith(
                           (states) =>
-                      const EdgeInsets.symmetric(horizontal: 10),
+                             Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ? Colors.grey.shade800 : Colors.grey.shade200,
                     ),
-                    elevation:
-                    MaterialStateProperty.resolveWith((states) => 10),
                   ),
-                  textStyle: const TextStyle(),
+                  textStyle: TextStyle(
+                    color: Theme.of(context).primaryColor,
+                  ),
                   enableFilter: true,
                   hintText: 'Staff name',
-                  // errorText: 'Select a staff name',
                   controller: _nameController,
-                  label: const Text('Staff name'),
+                  label: Text('Staff name', style: TextStyle(fontWeight: FontWeight.w500, color: Theme.of(context).primaryColor),),
                   dropdownMenuEntries: staffNames,
                   onSelected: (ProxyAttendanceModel? name) {
                     FocusScope.of(context).unfocus();
@@ -223,8 +226,8 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                 ListTile(
                   tileColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    side: const BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(15),
+                    side: BorderSide(color:Theme.of(context).primaryColor.withOpacity(.3),width: 2),
                   ),
                   autofocus: false,
                   onTap: timePicker,
@@ -233,7 +236,7 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                         ? 'Select time'
                         : DateFormat('hh:mm a').format(initialTime!),
                     style: TextStyle(
-                      color: initialTime == null ? Colors.grey : Colors.black,
+                      color: initialTime == null ? Colors.grey : Theme.of(context).primaryColor,
                     ),
                   ),
                 ),
@@ -242,8 +245,8 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                 ListTile(
                   tileColor: Colors.transparent,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    side: const BorderSide(color: Colors.black),
+                    borderRadius: BorderRadius.circular(15),
+                    side: BorderSide(color:Theme.of(context).primaryColor.withOpacity(.3),width: 2),
                   ),
                   autofocus: false,
                   onTap: dateTime,
@@ -251,16 +254,13 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                     onPressed: dateTime,
                     icon: Icon(
                       Icons.date_range,
-                      color: Theme
-                          .of(context)
-                          .colorScheme
-                          .primary,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                   title: Text(
                     DateFormat('yyyy-MM-dd').format(dateStamp),
-                    style: const TextStyle(
-                      color: Colors.black,
+                    style:  TextStyle(
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                 ),
@@ -275,31 +275,27 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                     autofocus: false,
                     keyboardType: TextInputType.name,
                     maxLines: 2,
-                    style: const TextStyle(
-                      // height: height * 0.0025,
-                      color: Colors.black,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
                     ),
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.all(15),
                       border: InputBorder.none,
                       hintText: 'Reason for Proxy entry..',
                       hintStyle: const TextStyle(
-                        // height: height * 0.005,
                         color: Colors.grey,
                       ),
-                      filled: true,
-                      fillColor: AppColor.backGroundColor,
                       focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.black),
-                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color:Theme.of(context).primaryColor.withOpacity(.3),width: 2),
+                        borderRadius: BorderRadius.circular(15),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Colors.black),
-                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(color:Theme.of(context).primaryColor.withOpacity(.3),width: 2),
+                        borderRadius: BorderRadius.circular(15),
                       ),
                       errorBorder: OutlineInputBorder(
                         borderSide: const BorderSide(color: Colors.red),
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(15),
                       ),
                     ),
                   ),
@@ -320,14 +316,16 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
                 //confirmation slider
                 ConfirmationSlider(
                   height: 60,
-                  backgroundColor: AppColor.backGroundColor,
-                  foregroundColor: AppColor.backGroundColor,
                   backgroundShape: BorderRadius.circular(40),
+                  foregroundColor: Colors.transparent,
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ? Colors.grey.shade800 : Colors.grey.shade200,
                   onConfirmation: () {
                     saveToDb();
                   },
-                  textStyle: const TextStyle(
-                    fontSize: 16,
+                  textStyle: TextStyle(
+                    fontSize: 17,
+                      color:Theme.of(context).primaryColor,
+                    fontWeight: FontWeight.w500,
                   ),
                   text: 'SLIDE TO CONFIRM',
                   sliderButtonContent: const Icon(
@@ -355,8 +353,9 @@ class _ProxyAttendanceState extends State<ProxyAttendance> {
               padding: const EdgeInsets.all(8.0),
               child: ChoiceChip(
                 label: Text(_choiceChipsList[i].label),
-                labelStyle: const TextStyle(color: Colors.white),
-                backgroundColor: _choiceChipsList[i].color,
+                labelStyle: TextStyle(
+                  color: Theme.of(context).primaryColor,
+                ),
                 selected: _selectedIndex == i,
                 selectedColor: Colors.purple,
                 showCheckmark: false,

@@ -117,23 +117,29 @@ class SearchLeadsRepoImpl implements SearchLeadsRepository {
   }) async {
     String reminderPath =
         'customer_reminders/$dateStamp/${customerInfo['phone_number']}';
-    Map<String, dynamic> reminderData = {
-      'Customer_name': customerInfo['name'],
-      'City': customerInfo['city'],
-      'Customer_id': customerInfo['customer_id'],
-      'Lead_in_charge': customerInfo['LeadIncharge'],
-      'Created_by': customerInfo['created_by'],
-      'Created_date': customerInfo['created_date'],
-      'Created_time': customerInfo['created_time'],
-      'State': customerInfo['customer_state'],
-      'Data_fetched_by': customerInfo['data_fetched_by'],
-      'Email_id': customerInfo['email_id'],
-      'Enquired_for': customerInfo['inquired_for'],
-      'Rating': customerInfo['rating'],
-      'Phone_number': customerInfo['phone_number'],
-      'Updated_by': currentStaffName,
-    };
-    await searchLeadsFbDataSource.updateReminder(reminderPath, reminderData);
+    try{
+      Map<String, dynamic> reminderData = {
+        'Customer_name': customerInfo['name'],
+        'City': customerInfo['city'],
+        'Customer_id': customerInfo['customer_id'],
+        'Lead_in_charge': customerInfo['LeadIncharge'],
+        'Created_by': customerInfo['created_by'],
+        'Created_date': customerInfo['created_date'],
+        'Created_time': customerInfo['created_time'],
+        'State': customerInfo['customer_state'],
+        'Data_fetched_by': customerInfo['data_fetched_by'],
+        'Email_id': customerInfo['email_id'],
+        'Enquired_for': customerInfo['inquired_for'],
+        'Rating': customerInfo['rating'],
+        'Phone_number': customerInfo['phone_number'],
+        'Updated_by': currentStaffName,
+        'Gate_type': customerInfo['gate_type'],
+        'Secondary_number': customerInfo['work_phone_number'],
+      };
+      await searchLeadsFbDataSource.updateReminder(reminderPath, reminderData);
+    }catch(e){
+      'Exception caught in adding reminder';
+    }
   }
 
   Future<void> _uploadAudioAndSaveNote(
@@ -208,5 +214,10 @@ class SearchLeadsRepoImpl implements SearchLeadsRepository {
     if (response.statusCode != 200) {
       throw Exception('Failed to send feedback. Status code: ${response.statusCode}');
     }
+  }
+
+  @override
+  Future<void> updateBucketList({required String mobile, required String user, required String oldUser}) {
+    return searchLeadsFbDataSource.updateBucketList(mobile: mobile, user: user, oldUser: oldUser);
   }
 }

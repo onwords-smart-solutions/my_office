@@ -16,23 +16,27 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FilledButton.tonal(
-      onPressed: onPressed,
-      style: FilledButton.styleFrom(
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+    final size = MediaQuery.sizeOf(context);
+    return SizedBox(
+      height: size.height * .062,
+      width: size.width * .9,
+      child: FilledButton.tonal(
+        onPressed: onPressed,
+        style: FilledButton.styleFrom(
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          backgroundColor: Colors.deepPurple.shade300,
+          textStyle: TextStyle(
+            fontWeight: FontWeight.w500,
+            color: textColor,
+            fontFamily: "SF Pro",
+            fontSize: 20,
+          ),
         ),
-        shadowColor: const Color(0xffF1EAFF),
-        backgroundColor: const Color(0xffE5D4FF),
-        foregroundColor: const Color(0xff5B0888),
-        textStyle: TextStyle(
-          fontWeight: FontWeight.w500,
-          color: textColor,
-          fontSize: 15,
-        ),
+        child: child,
       ),
-      child: child,
     );
   }
 }

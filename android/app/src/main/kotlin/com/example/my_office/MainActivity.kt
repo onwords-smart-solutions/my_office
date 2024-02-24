@@ -1,10 +1,10 @@
-package com.onwords.office
+package com.office.onwords
 
 import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.pm.PackageManager
 import androidx.annotation.NonNull
-import com.onwords.office.helper.AppSharedPref
+import com.office.onwords.helper.AppSharedPref
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel

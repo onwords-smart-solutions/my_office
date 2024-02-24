@@ -23,8 +23,8 @@ class MainTemplate extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        // title: Text(subtitle!, style: const TextStyle(fontWeight: FontWeight.w500),),
-        // centerTitle: true,
+        title: Text(subtitle!, style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 25),),
+        centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
           onPressed: () => Navigator.of(context).pop(),
@@ -64,7 +64,6 @@ class MainTemplate extends StatelessWidget {
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.deepPurple,
-              foregroundColor: Colors.white,
             ),
             child: const Text('Reset session'),
           ),

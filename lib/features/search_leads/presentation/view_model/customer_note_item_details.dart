@@ -80,10 +80,7 @@ class _NoteItemState extends State<NoteItem> {
       margin: const EdgeInsets.symmetric(horizontal: 5.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(.3), blurRadius: 5.0),
-        ],
-        color: Colors.white,
+        color: Theme.of(context).primaryColor.withOpacity(.1),
       ),
       child: Column(
         children: [
@@ -94,9 +91,10 @@ class _NoteItemState extends State<NoteItem> {
               //Staff name
               Text(
                 widget.updatedStaff,
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 14.0,
+                  color: Theme.of(context).primaryColor,
                 ),
               ),
 
@@ -106,14 +104,16 @@ class _NoteItemState extends State<NoteItem> {
                 children: [
                   Text(
                     widget.updatedDate,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12.0,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                   Text(
                     widget.updatedTime,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12.0,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                 ],
@@ -129,8 +129,9 @@ class _NoteItemState extends State<NoteItem> {
               children: [
                 SelectableText(
                   widget.note,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14.0,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
                 //Adding audio of calls
