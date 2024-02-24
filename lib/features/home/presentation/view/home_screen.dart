@@ -66,7 +66,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     homeRepository.salesData(user.user!.uid);
     _getInfoItemDetails();
     _motivationIndex = homeProvider.getRandomNumber();
-    _checkAppVersion();
+    // _checkAppVersion();
     _getStaffAccess();
     _getNetworkStatus();
     _notificationService.storeFCM(context: context);

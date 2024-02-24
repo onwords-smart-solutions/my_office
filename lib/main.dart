@@ -3,11 +3,9 @@ import 'dart:ui';
 import 'package:after_layout/after_layout.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_office/features/auth/presentation/provider/authentication_provider.dart';
 import 'package:my_office/features/create_lead/presentation/provider/create_lead_provider.dart';
@@ -49,7 +47,6 @@ Future<void> main() async {
 
   await Firebase.initializeApp(
       name: "admin-console", options: DefaultFirebaseOptions.currentPlatform);
-  await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
   await di.init();
 
   // FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;

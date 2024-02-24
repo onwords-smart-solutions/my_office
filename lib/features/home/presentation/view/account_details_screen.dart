@@ -32,7 +32,7 @@ class _AccountScreenState extends State<AccountScreen> {
     final pickedFile =
         await picker.pickImage(source: ImageSource.gallery, imageQuality: 100);
     if (pickedFile != null) {
-      if(!mounted) return;
+      if (!mounted) return;
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (_) =>
@@ -46,7 +46,7 @@ class _AccountScreenState extends State<AccountScreen> {
     final pickedFile =
         await picker.pickImage(source: ImageSource.camera, imageQuality: 100);
     if (pickedFile != null) {
-      if(!mounted) return;
+      if (!mounted) return;
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (_) =>
@@ -74,10 +74,17 @@ class _AccountScreenState extends State<AccountScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios_new_rounded, color: Theme.of(context).primaryColor,),
+          icon: Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Theme.of(context).primaryColor,
+          ),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text('Profile', style: TextStyle(fontWeight: FontWeight.w500,fontSize: 25, color: Theme.of(context).primaryColor)),
+        title: Text('Profile',
+            style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 25,
+                color: Theme.of(context).primaryColor)),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -111,17 +118,18 @@ class _AccountScreenState extends State<AccountScreen> {
                         : Column(
                             children: [
                               const SizedBox(height: 20.0),
-                             Theme.of(context).scaffoldBackgroundColor == const Color(0xFF1F1F1F) ?
-                              Image.asset(
-                                'assets/images/onwords_light.png',
-                                height: 20,
-                                fit: BoxFit.cover,
-                              ):
-                              Image.asset(
-                                'assets/images/onwords_dark.png',
-                                height: 20,
-                                fit: BoxFit.cover,
-                              ),
+                              Theme.of(context).scaffoldBackgroundColor ==
+                                      const Color(0xFF1F1F1F)
+                                  ? Image.asset(
+                                      'assets/images/onwords_light.png',
+                                      height: 20,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.asset(
+                                      'assets/images/onwords_dark.png',
+                                      height: 20,
+                                      fit: BoxFit.cover,
+                                    ),
                               const Gap(10),
                               Stack(
                                 alignment: AlignmentDirectional.center,
@@ -157,7 +165,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                                 ),
                                               )
                                             : CachedNetworkImage(
-                                                imageUrl: userProvider.user!.url,
+                                                imageUrl:
+                                                    userProvider.user!.url,
                                                 fit: BoxFit.cover,
                                                 progressIndicatorBuilder: (
                                                   context,
@@ -165,7 +174,8 @@ class _AccountScreenState extends State<AccountScreen> {
                                                   downloadProgress,
                                                 ) =>
                                                     CircularProgressIndicator(
-                                                  color: Theme.of(context).primaryColor,
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
                                                   strokeWidth: 2.0,
                                                   value:
                                                       downloadProgress.progress,
@@ -186,11 +196,11 @@ class _AccountScreenState extends State<AccountScreen> {
                                 onPressed: () =>
                                     pickImage(userProvider.user!.uid, size),
                                 child: const Text(
-                                    'Edit',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 17,
-                                ),
+                                  'Edit',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 17,
+                                  ),
                                 ),
                               ),
                               Text(
@@ -230,9 +240,11 @@ class _AccountScreenState extends State<AccountScreen> {
                     await FirebaseAuth.instance.signOut();
                     final pref = await SharedPreferences.getInstance();
                     await pref.clear();
-                    if(!mounted) return;
-                    Provider.of<AuthenticationProvider>(context, listen: false).clearUser();
-                    Provider.of<ThemeProvider>(context,listen: false).clearAppTheme();
+                    if (!mounted) return;
+                    Provider.of<AuthenticationProvider>(context, listen: false)
+                        .clearUser();
+                    Provider.of<ThemeProvider>(context, listen: false)
+                        .clearAppTheme();
                     navigator.pushAndRemoveUntil(
                       MaterialPageRoute(builder: (_) => const LoginScreen()),
                       (route) => false,
@@ -251,9 +263,8 @@ class _AccountScreenState extends State<AccountScreen> {
                     Positioned(
                       top: 20.0,
                       child: Text(
-                        'Version : ${AppVersion.androidAppShowVersion}',
-                        style:
-                            const TextStyle(fontSize: 13.0),
+                        'Version : ${Platform.isIOS ? AppVersion.iosAppShowVersion : AppVersion.androidAppShowVersion}',
+                        style: const TextStyle(fontSize: 13.0),
                       ),
                     ),
                     //bottom style
