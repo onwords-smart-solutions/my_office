@@ -460,16 +460,10 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   Future<void> _checkAppVersion() async {
     try {
       final data = await homeRepository.checkAppVersion();
-      final updatedVersion = data['versionNumber'];
-      final updates = data['updates'].toString();
-      final restrictApp = data['restrictApp'];
-      final forceUpdateApp = data['androidForceUpdate'];
-      if (AppVersion.androidAppDbVersion != updatedVersion &&
-          AppVersion.androidForceUpdate == forceUpdateApp) {
-          _showUpdateAppDialog(updates);
-      }
-      if (AppVersion.restrictAndroidApp == restrictApp) {
-        _showAppRestrictDialog();
+      final updatedVersion = data['iosVersionNumber'];
+      final updates = data['iosUpdates'].toString();
+      if (AppVersion.iosAppDbVersion != updatedVersion) {
+        _showUpdateAppDialog(updates);
       }
     } catch (e) {
       Exception('Error caught while checking App version $e');
