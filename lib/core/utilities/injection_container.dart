@@ -49,6 +49,15 @@ import 'package:my_office/features/hr_access/domain/repository/hr_access_reposit
 import 'package:my_office/features/hr_access/domain/use_case/all_staff_details_use_case.dart';
 import 'package:my_office/features/hr_access/domain/use_case/create_account_use_case.dart';
 import 'package:my_office/features/hr_access/domain/use_case/update_timing_for_employees_use_case.dart';
+import 'package:my_office/features/pr_bucket/data/data_source/pr_bucket_fb_data_source.dart';
+import 'package:my_office/features/pr_bucket/data/data_source/pr_bucket_fb_data_source_impl.dart';
+import 'package:my_office/features/pr_bucket/data/repository/pr_bucket_repo_impl.dart';
+import 'package:my_office/features/pr_bucket/domain/repository/pr_bucket_repository.dart';
+import 'package:my_office/features/pr_bucket/domain/use_case/bucket_values_case.dart';
+import 'package:my_office/features/pr_bucket/domain/use_case/get_bucket_names_case.dart';
+import 'package:my_office/features/pr_bucket/domain/use_case/get_customer_data_case.dart';
+import 'package:my_office/features/pr_bucket/domain/use_case/get_pr_names_case.dart';
+import 'package:my_office/features/pr_bucket/presentation/provider/pr_bucket_provider.dart';
 import 'package:my_office/features/pr_dashboard/data/data_source/pr_dash_fb_data_source.dart';
 import 'package:my_office/features/pr_dashboard/domain/repository/pr_dash_repository.dart';
 import 'package:my_office/features/pr_dashboard/domain/use_case/pr_dashboard_details_use_case.dart';
@@ -212,6 +221,16 @@ Future<void> init() async {
           sl.call(),
           sl.call(),
         ),
+  );
+
+  ///PR BUCKET PROVIDER
+  sl.registerFactory<PrBucketProvider>(
+        () => PrBucketProvider(
+          sl.call(),
+          sl.call(),
+          sl.call(),
+          sl.call(),
+    ),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ USE CASES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
@@ -381,6 +400,26 @@ Future<void> init() async {
         () => UpdateAppThemeUseCase(themeRepository: sl.call()),
   );
 
+  ///PR BUCKET STAFF NAMES USE CASE
+  sl.registerLazySingleton<GetPrNamesCase>(
+        () => GetPrNamesCase(prBucketRepository: sl.call()),
+  );
+
+  ///PR BUCKET NAMES USE CASE
+  sl.registerLazySingleton<GetBucketNamesCase>(
+        () => GetBucketNamesCase(prBucketRepository: sl.call()),
+  );
+
+  ///PR BUCKET VALUES USE CASE
+  sl.registerLazySingleton<BucketValuesCase>(
+        () => BucketValuesCase(prBucketRepository: sl.call()),
+  );
+
+  ///GET CUSTOMER DATA USE CASE
+  sl.registerLazySingleton<GetCustomerDataCase>(
+        () => GetCustomerDataCase(prBucketRepository: sl.call()),
+  );
+
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ REPOSITORIES ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
 
   ///AUTH
@@ -481,6 +520,11 @@ Future<void> init() async {
   ///THEME REPOSITORY
   sl.registerLazySingleton<ThemeRepository>(
         () => ThemeRepositoryImpl(localDataSource: sl.call(),),
+  );
+
+  ///PR BUCKET REPOSITORY
+  sl.registerLazySingleton<PrBucketRepository>(
+        () => PrBucketRepoImpl(prBucketFbDataSource: sl.call(),),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ DATA SOURCE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //
@@ -588,6 +632,11 @@ Future<void> init() async {
   ///THEME DATA SCREEN
   sl.registerLazySingleton<ThemeLocalDataSource>(
         () => ThemeLocalDataSourceImpl(),
+  );
+
+  ///PR BUCKET DATA SOURCE
+  sl.registerLazySingleton<PrBucketFbDataSource>(
+        () => PrBucketFbDataSourceImpl(),
   );
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ EXTERNAL ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ //

@@ -14,6 +14,7 @@ import '../../../features/hr_access/presentation/view/all_staffs_screen.dart';
 import '../../../features/hr_access/presentation/view/create_account_screen.dart';
 import '../../../features/installation_pdf/presentation/view/installation_details.dart';
 import '../../../features/invoice_generator/presentation/view/client_details_screen.dart';
+import '../../../features/pr_bucket/presentation/view/pr_staffs_name_screen.dart';
 import '../../../features/pr_dashboard/presentation/view/pr_dash_screen.dart';
 import '../../../features/pr_reminder/presentation/view/pr_reminder_screen.dart';
 import '../../../features/proxy_attendance/presentation/view/proxy_attendance_screen.dart';
@@ -65,6 +66,7 @@ class MenuTitle {
   static const String paySlip = 'Pay Slip';
   static const String createAccount = 'Create Account';
   static const String saleCount = 'Sale Count';
+  static const String prBucket = 'PR Bucket';
 }
 
 class AppDefaults {
@@ -191,6 +193,10 @@ class AppDefaults {
         title: MenuTitle.saleCount,
         image: 'assets/images/leads_achieved.png',
     ),
+    StaffAccessModel(
+        title: MenuTitle.prBucket,
+        image: 'assets/images/pr_bucket.png',
+    ),
   ];
 
   static Widget getPage(String title, UserEntity staffInfo) {
@@ -314,6 +320,8 @@ class AppDefaults {
       case MenuTitle.saleCount:
         page = const LeadsAchieved();
         break;
+      case MenuTitle.prBucket:
+        page = const PrStaffNames();
     }
     return page;
   }

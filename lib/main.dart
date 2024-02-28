@@ -14,6 +14,7 @@ import 'package:my_office/features/create_lead/presentation/provider/create_lead
 import 'package:my_office/features/create_product/presentation/provider/create_product_provider.dart';
 import 'package:my_office/features/employee_of_the_week/presentation/provider/employee_of_the_week_provider.dart';
 import 'package:my_office/features/home/presentation/provider/home_provider.dart';
+import 'package:my_office/features/pr_bucket/presentation/provider/pr_bucket_provider.dart';
 import 'package:my_office/features/pr_reminder/presentation/provider/pr_reminder_provider.dart';
 import 'package:my_office/features/proxy_attendance/presentation/provider/proxy_attendance_provider.dart';
 import 'package:my_office/features/search_leads/presentation/provider/feedback_button_provider.dart';
@@ -93,6 +94,9 @@ Future<void> main() async {
           ),
           ChangeNotifierProvider<ThemeProvider>(
             create: (_) => di.sl<ThemeProvider>(),
+          ),
+          ChangeNotifierProvider<PrBucketProvider>(
+            create: (_) => di.sl<PrBucketProvider>(),
           ),
         ],
         child: const MyApp(),

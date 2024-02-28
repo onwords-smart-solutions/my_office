@@ -59,7 +59,7 @@ dependencies:
   speech_to_text: ^6.3.0
   firebase_in_app_messaging: ^0.7.3+4
   http:
-  syncfusion_flutter_charts:
+  syncfusion_flutter_charts: ^24.2.8
   printing: ^5.11.0
   page_transition: ^2.0.9
   crop_your_image: ^0.7.5
