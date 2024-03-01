@@ -5,7 +5,7 @@ class GetCustomerDataCase{
 
   GetCustomerDataCase({required this.prBucketRepository});
 
-  Future<List<dynamic>> execute(mobile) async{
-    return prBucketRepository.getCustomerData(mobile);
+  Future<List<dynamic>> execute(String prName, String bucketName) async{
+    return prBucketRepository.getCustomerState(prName, bucketName);
   }
 }

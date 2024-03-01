@@ -17,11 +17,12 @@ class PrBucketValues extends StatefulWidget {
 }
 
 class _PrBucketValuesState extends State<PrBucketValues> {
-  List<String> selectedValues = [];
+  List<dynamic> states = [];
 
   @override
   void initState() {
     fetchBucketValues();
+    fetchCustomerState();
     super.initState();
   }
 
@@ -29,6 +30,12 @@ class _PrBucketValuesState extends State<PrBucketValues> {
     final provider = Provider.of<PrBucketProvider>(context, listen: false);
     provider.bucketDataValues(widget.prName, widget.bucketName);
   }
+
+  Future<List<dynamic>> fetchCustomerState()async {
+      final provider = Provider.of<PrBucketProvider>(context, listen: false);
+      states = await provider.allCustomerData(widget.prName, widget.bucketName);
+      return states;
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -48,28 +55,17 @@ class _PrBucketValuesState extends State<PrBucketValues> {
         ),
       ),
       body: getBucketValues(),
-      floatingActionButton: Consumer<PrBucketProvider>(
-        builder: (context, bucketValue, child) {
-          return FloatingActionButton(
+      floatingActionButton: FloatingActionButton(
             onPressed: () {
-              if (bucketValue.bucketValues.isEmpty) {
-                return;
-              }
-              List<String> allValues = bucketValue.bucketValues.map((item) {
-                List<String> parts = item.split(" - ");
-                return parts[1];
-              }).toList();
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => PrBucketChartData(mobile: allValues),
+                  builder: (_) => PrBucketChartData(states: states),
                 ),
               );
             },
             child: const Icon(Icons.add_chart),
-          );
-        },
-      ),
+          ),
     );
   }
 
@@ -88,10 +84,6 @@ class _PrBucketValuesState extends State<PrBucketValues> {
           return ListView.builder(
             itemCount: bucketValue.bucketValues.length,
             itemBuilder: ((ctx, index) {
-              String mergedData = bucketValue.bucketValues[index];
-              List<String> parts = mergedData.split(" - ");
-              String key = parts[0];
-              String value = parts[1];
               return Card(
                 surfaceTintColor: Colors.transparent,
                 color: Theme.of(context).scaffoldBackgroundColor ==
@@ -109,15 +101,6 @@ class _PrBucketValuesState extends State<PrBucketValues> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  onTap: () {
-                    setState(() {
-                      if (selectedValues.contains(value)) {
-                        selectedValues.remove(value);
-                      } else {
-                        selectedValues.add(value);
-                      }
-                    });
-                  },
                 ),
               );
             }),

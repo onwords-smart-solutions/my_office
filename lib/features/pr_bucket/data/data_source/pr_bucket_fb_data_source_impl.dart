@@ -86,11 +86,7 @@ class PrBucketFbDataSourceImpl extends PrBucketFbDataSource{
                 for(var bucketValues in value.children){
                   if(buckets!.contains(bucketName.trim())){
                     final dataKey = bucketValues.key;
-                    final dataValue = bucketValues.value;
-
-                    //to get both key and value pairs
-                    String formattedData = "$dataKey   -   $dataValue";
-                    bucketData.add(formattedData);
+                        bucketData.add(dataKey);
                   }
                 }
               }
@@ -125,5 +121,37 @@ class PrBucketFbDataSourceImpl extends PrBucketFbDataSource{
       log('Customer data error : $e');
     }
     return customerData;
+  }
+
+  @override
+  Future<List<dynamic>> getCustomerState(String prName, String bucketName) async{
+    DatabaseEvent custState = await ref.child('Bucket').once();
+    List<dynamic> state = [];
+    try{
+      if(custState.snapshot.exists){
+        for(var key in custState.snapshot.children){
+          //to get PR staff names
+          final staffName = key.key;
+          for(var value in key.children){
+            if(staffName!.contains(prName)){
+
+              //to get PR bucket names
+              final buckets = value.key;
+              for(var bucketValues in value.children){
+                if(buckets!.contains(bucketName.trim())){
+                  final stateValue = bucketValues.value as Map<Object?, Object?>;
+                  final value = stateValue.values.first;
+                  log('State values are $value');
+                  state.add(value);
+                }
+              }
+            }
+          }
+        }
+      }
+    }catch(e){
+      log('Customer state error : $e');
+    }
+    return state;
   }
 }

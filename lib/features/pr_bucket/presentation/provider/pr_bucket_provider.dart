@@ -47,10 +47,11 @@ class PrBucketProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  Future<void> allCustomerData(dynamic mobile)async{
+  Future<List<dynamic>> allCustomerData(String prName, String bucketName)async{
     _isLoading = true;
-    _getCustomerData = await getCustomerDataCase.execute(mobile);
+    _getCustomerData = await getCustomerDataCase.execute(prName, bucketName);
     _isLoading = false;
+    return _getCustomerData;
     notifyListeners();
   }
 }

@@ -25,4 +25,9 @@ class PrBucketRepoImpl extends PrBucketRepository{
   Future<List<dynamic>> getCustomerData(mobile) async{
     return prBucketFbDataSource.getCustomerData(mobile);
   }
+
+  @override
+  Future<List> getCustomerState(String prName, String bucketName) {
+   return prBucketFbDataSource.getCustomerState(prName, bucketName);
+  }
 }
