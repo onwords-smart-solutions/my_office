@@ -217,7 +217,12 @@ class SearchLeadsRepoImpl implements SearchLeadsRepository {
   }
 
   @override
-  Future<void> updateBucketList({required String mobile, required String user, required String oldUser}) {
-    return searchLeadsFbDataSource.updateBucketList(mobile: mobile, user: user, oldUser: oldUser);
+  Future<void> updateBucketList({required String mobile, required String user, required String oldUser,required String state}) {
+    return searchLeadsFbDataSource.updateBucketList(mobile: mobile, user: user, oldUser: oldUser, state: state);
+  }
+
+  @override
+  Future<void> updateState({required String mobile, required String user, required String newState}) {
+   return searchLeadsFbDataSource.updateState(mobile: mobile, user: user, newState: newState);
   }
 }

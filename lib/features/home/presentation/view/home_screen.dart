@@ -465,7 +465,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
       final restrictApp = data['restrictApp'];
       final forceUpdateApp = data['androidForceUpdate'];
       if (AppVersion.androidAppDbVersion != updatedVersion &&
-          AppVersion.androidForceUpdate == forceUpdateApp) {
+          AppVersion. androidForceUpdate == forceUpdateApp) {
           _showUpdateAppDialog(updates);
       }
       if (AppVersion.restrictAndroidApp == restrictApp) {

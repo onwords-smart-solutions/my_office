@@ -612,6 +612,11 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
           widget.customerInfo['phone_number'].toString(),
           dropDownValue,
         );
+        await searchLeadsRepository.updateState(
+          mobile: widget.customerInfo['phone_number'].toString(),
+          user: leadName,
+          newState: dropDownValue,
+        );
       } catch (e) {
         Exception('Error caught while changing customer lead state!! $e');
       }
@@ -634,6 +639,7 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
          mobile: widget.customerInfo['phone_number'].toString(),
           user: leadName,
           oldUser: widget.customerInfo['LeadIncharge'].toString(),
+          state: widget.customerInfo['customer_state'].toString(),
         );
       } catch (e) {
         Exception('Error caught while changing lead names!! $e');

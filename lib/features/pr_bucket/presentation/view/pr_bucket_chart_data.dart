@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class PrBucketChartData extends StatefulWidget {
-  final List<dynamic> states;
+  final Map<String, List<Map<String, String>>> states;
 
   const PrBucketChartData({super.key, required this.states});
 
@@ -14,14 +14,18 @@ class PrBucketChartData extends StatefulWidget {
 }
 
 class _PrBucketChartDataState extends State<PrBucketChartData> {
-
-  List<ChartData> calculateChartData(List<dynamic> states) {
+  int totalCount = 0;
+  List<ChartData> calculateChartData(Map<String, List<Map<String, String>>> states) {
     Map<String, int> stateCounts = {};
-    for (var state in states) {
-      stateCounts[state] = (stateCounts[state] ?? 0) + 1;
+    List<Map<String, String>> stateList = [];
+    for (final bucket in states.values){
+      stateList.addAll(bucket);
+    }
+    for(final state in stateList){
+      stateCounts[state.values.first] = (stateCounts[state.values.first] ?? 0) + 1;
     }
     return stateCounts.entries.map(
-            (entry) => ChartData(entry.key, entry.value, _getRandomColor()),
+          (entry) => ChartData(entry.key, entry.value, _getRandomColor()),
     ).toList();
   }
 
@@ -30,14 +34,21 @@ class _PrBucketChartDataState extends State<PrBucketChartData> {
   }
 
   @override
+  void initState() {
+   for (final bucket in widget.states.values){
+     totalCount+= bucket.length;
+   }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     List<ChartData> chartData = calculateChartData(widget.states);
-    print('Pie chart data is ${widget.states}');
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'Total - ${widget.states.length}',
+          'Total - $totalCount',
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w500,

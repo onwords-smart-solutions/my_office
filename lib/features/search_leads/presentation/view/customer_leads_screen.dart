@@ -763,6 +763,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
         mobile: customer['phone_number'].toString(),
         user: staff,
         oldUser: selectedStaff,
+        state: customer['customer_state'].toString(),
       );
 
       final index = allCustomer.indexWhere(

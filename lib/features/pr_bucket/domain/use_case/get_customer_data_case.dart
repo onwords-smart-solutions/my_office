@@ -5,7 +5,7 @@ class GetCustomerDataCase{
 
   GetCustomerDataCase({required this.prBucketRepository});
 
-  Future<List<dynamic>> execute(String prName, String bucketName) async{
-    return prBucketRepository.getCustomerState(prName, bucketName);
+  Future<Map<String, List<Map<String, String>>>> execute(String prName) async{
+    return prBucketRepository.getCustomerState(prName);
   }
 }

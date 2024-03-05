@@ -82,7 +82,7 @@ As, I have mentioned above this project is structured with Clean architecture pr
 
 ### Version history and Releases
 
-* Android : 4.0.9+25 - Added bucket option for PR's.
+* Android : 4.0.11+27 - Bucket view modification form Leads screen.
 * iOS : 2.1.7. 
 
 

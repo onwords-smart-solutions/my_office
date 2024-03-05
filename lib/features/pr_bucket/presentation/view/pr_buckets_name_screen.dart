@@ -1,8 +1,6 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:my_office/core/utilities/constants/app_color.dart';
-import 'package:my_office/core/utilities/constants/app_main_template.dart';
 import 'package:my_office/features/pr_bucket/presentation/provider/pr_bucket_provider.dart';
 import 'package:my_office/features/pr_bucket/presentation/view/pr_bucket_chart_data.dart';
 import 'package:my_office/features/pr_bucket/presentation/view/pr_bucket_values_screen.dart';
@@ -18,36 +16,24 @@ class PrBucketNames extends StatefulWidget {
 }
 
 class _PrBucketNamesState extends State<PrBucketNames> {
-  List<dynamic> customerState = [];
+  Map<String, List<Map<String, String>>> customerState = {};
 
   @override
   void initState() {
-    fetchPrBuckets();
     fetchCustomerState();
     super.initState();
   }
 
-  void fetchPrBuckets() {
+  Future <void> fetchCustomerState() async {
+    customerState.clear();
     final provider = Provider.of<PrBucketProvider>(context, listen: false);
-    provider.prBucketNames(widget.staffName);
-  }
-
-
-  Future<List<dynamic>> fetchCustomerState() async {
-    final provider = Provider.of<PrBucketProvider>(context, listen: false);
-    final bucketNames = provider.bucketNames;
-    for (String bucketName in bucketNames) {
-      List<String> keyValueData = bucketName.split('-');
-      final key = keyValueData[0];
-      final value = keyValueData[1];
-      List<dynamic> states = await provider.allCustomerData(widget.staffName, key);
-      customerState.addAll(states);
-    }
-    return customerState;
+    customerState = await provider.allCustomerData(widget.staffName);
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<PrBucketProvider>(context,listen: false);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -64,7 +50,9 @@ class _PrBucketNamesState extends State<PrBucketNames> {
         ),
       ),
       body: getPrBucketNames(),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: Consumer<PrBucketProvider>(
+        builder: ((context, bucket, child) {
+          return bucket.isLoading? const CircularProgressIndicator() :FloatingActionButton(
             onPressed: () {
               Navigator.push(
                 context,
@@ -74,7 +62,9 @@ class _PrBucketNamesState extends State<PrBucketNames> {
               );
             },
             child: const Icon(Icons.add_chart),
-          ),
+          );
+        }),
+      ),
     );
   }
 
@@ -84,19 +74,17 @@ class _PrBucketNamesState extends State<PrBucketNames> {
         builder: (context, bucketNames, child) {
           if (bucketNames.isLoading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (bucketNames.bucketNames.isEmpty) {
-            return const Center(
-              child: Text('No bucket names found'),
-            );
           } else {
             return ListView.builder(
               shrinkWrap: true,
-              itemCount: bucketNames.bucketNames.length,
+              itemCount: customerState.keys
+                  .toList()
+                  .length,
               itemBuilder: ((ctx, index) {
-                List<String> keyValueData = bucketNames.bucketNames[index]
+                List<String> keyValueData = customerState.keys.toList()[index]
                     .split('-');
                 String dataKey = keyValueData[0];
-                String dataValue = keyValueData[1];
+                // String dataValue = keyValueData[1];
                 return Card(
                   surfaceTintColor: Colors.transparent,
                   color: Theme
@@ -110,20 +98,24 @@ class _PrBucketNamesState extends State<PrBucketNames> {
                   ),
                   child: ListTile(
                     title: Text(
-                      bucketNames.bucketNames[index],
+                      '${customerState.keys
+                          .toList()[index]} - ${customerState[customerState.keys
+                          .toList()[index]]!.length}',
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     onTap: () {
+                      log('Customer state is ${customerState}');
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (_) =>
                               PrBucketValues(
-                                prName: widget.staffName,
                                 bucketName: dataKey,
+                                bucketValue: customerState[customerState.keys
+                                    .toList()[index]]!,
                               ),
                         ),
                       );
@@ -135,5 +127,5 @@ class _PrBucketNamesState extends State<PrBucketNames> {
           }
         },
       );
-    }
   }
+}
