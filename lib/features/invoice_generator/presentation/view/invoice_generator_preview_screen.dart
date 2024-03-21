@@ -427,24 +427,19 @@ class _InvoiceGeneratorPreviewScreenState
                                 borderRadius: BorderRadius.circular(20),
                                 color: Theme.of(context).primaryColor.withOpacity(.1),
                               ),
-                              child: ListView.builder(
+                              child: ReorderableListView.builder(
                                 scrollDirection: Axis.vertical,
                                 physics: const BouncingScrollPhysics(),
                                 itemCount: productDetails.length,
                                 itemBuilder: (BuildContext context, index) {
                                   final data = [
                                     productDetails[index].productName,
-                                    productDetails[index]
-                                        .productQuantity
-                                        .toString(),
-                                    productDetails[index]
-                                        .productPrice
-                                        .toString(),
-                                    productDetails[index]
-                                        .subTotalList
-                                        .toString(),
+                                    productDetails[index].productQuantity.toString(),
+                                    productDetails[index].productPrice.toString(),
+                                    productDetails[index].subTotalList.toString(),
                                   ];
                                   return Padding(
+                                    key: Key('$index'),
                                     padding: const EdgeInsets.all(0),
                                     child: Table(
                                       // border: TableBorder.all(color: Colors.black),
@@ -453,6 +448,15 @@ class _InvoiceGeneratorPreviewScreenState
                                       ],
                                     ),
                                   );
+                                },
+                                onReorder: (int oldIndex, int newIndex) {
+                                  setState(() {
+                                    if (oldIndex < newIndex) {
+                                      newIndex -= 1;
+                                    }
+                                    final item = productDetails.removeAt(oldIndex);
+                                    productDetails.insert(newIndex, item);
+                                  });
                                 },
                               ),
                             ),

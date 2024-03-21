@@ -14,7 +14,6 @@ class PrStaffNames extends StatefulWidget {
 }
 
 class _PrStaffNamesState extends State<PrStaffNames> {
-
   @override
   void initState() {
     super.initState();

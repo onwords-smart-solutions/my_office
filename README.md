@@ -82,7 +82,7 @@ As, I have mentioned above this project is structured with Clean architecture pr
 
 ### Version history and Releases
 
-* Android : 4.0.11+27 - Bucket view modification form Leads screen.
+* Android : 4.0.13+29 - Quotation and Invoice rearranging option.
 * iOS : 2.1.7. 
 
 

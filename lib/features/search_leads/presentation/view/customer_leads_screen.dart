@@ -658,6 +658,7 @@ class _SearchLeadsScreenState extends State<SearchLeadsScreen> {
                                 onLongPress: () {
                                   if (widget.staffInfo.name == 'Anitha' ||
                                       widget.staffInfo.name == 'Devendiran' ||
+                                      widget.staffInfo.name == 'Jibin K John' ||
                                       widget.staffInfo.name == 'Rajkannan B' ||
                                       widget.staffInfo.name == 'Logesh P') {
                                     setState(() {
